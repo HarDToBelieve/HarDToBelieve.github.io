@@ -1,0 +1,198 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>rtp_transceiver_interface.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/rtp_transceiver_interface.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::RtpTransceiverInit,webrtc::RtpTransceiverInterface "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/rtp_transceiver_interface.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>WebKitBuild</a>/<a href='../../../../..'>Debug</a>/<a href='../../../..'>usr</a>/<a href='../../..'>local</a>/<a href='../..'>include</a>/<a href='..'>webrtc</a>/<a href='./'>api</a>/<a href='rtp_transceiver_interface.h.html'>rtp_transceiver_interface.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2017 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/API_RTP_TRANSCEIVER_INTERFACE_H_">API_RTP_TRANSCEIVER_INTERFACE_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/API_RTP_TRANSCEIVER_INTERFACE_H_" data-ref="_M/API_RTP_TRANSCEIVER_INTERFACE_H_">API_RTP_TRANSCEIVER_INTERFACE_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;string&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;vector&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../../absl/base/attributes.h.html">"absl/base/attributes.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../../absl/types/optional.h.html">"absl/types/optional.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="array_view.h.html">"api/array_view.h"</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="media_types.h.html">"api/media_types.h"</a></u></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="rtp_parameters.h.html">"api/rtp_parameters.h"</a></u></td></tr>
+<tr><th id="22">22</th><td><u>#include <a href="rtp_receiver_interface.h.html">"api/rtp_receiver_interface.h"</a></u></td></tr>
+<tr><th id="23">23</th><td><u>#include <a href="rtp_sender_interface.h.html">"api/rtp_sender_interface.h"</a></u></td></tr>
+<tr><th id="24">24</th><td><u>#include <a href="rtp_transceiver_direction.h.html">"api/rtp_transceiver_direction.h"</a></u></td></tr>
+<tr><th id="25">25</th><td><u>#include <a href="scoped_refptr.h.html">"api/scoped_refptr.h"</a></u></td></tr>
+<tr><th id="26">26</th><td><u>#include <a href="../rtc_base/ref_count.h.html">"rtc_base/ref_count.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#include <a href="../rtc_base/system/rtc_export.h.html">"rtc_base/system/rtc_export.h"</a></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><i>// Structure for initializing an RtpTransceiver in a call to</i></td></tr>
+<tr><th id="32">32</th><td><i>// PeerConnectionInterface::AddTransceiver.</i></td></tr>
+<tr><th id="33">33</th><td><i>// <a href="https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiverinit">https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiverinit</a></i></td></tr>
+<tr><th id="34">34</th><td><b>struct</b> <a class="macro" href="../rtc_base/system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <dfn class="type def" id="webrtc::RtpTransceiverInit" title='webrtc::RtpTransceiverInit' data-ref="webrtc::RtpTransceiverInit" data-ref-filename="webrtc..RtpTransceiverInit">RtpTransceiverInit</dfn> final {</td></tr>
+<tr><th id="35">35</th><td>  <dfn class="decl fn" id="_ZN6webrtc18RtpTransceiverInitC1Ev" title='webrtc::RtpTransceiverInit::RtpTransceiverInit' data-ref="_ZN6webrtc18RtpTransceiverInitC1Ev" data-ref-filename="_ZN6webrtc18RtpTransceiverInitC1Ev">RtpTransceiverInit</dfn>();</td></tr>
+<tr><th id="36">36</th><td>  <dfn class="decl fn" id="_ZN6webrtc18RtpTransceiverInitC1ERKS0_" title='webrtc::RtpTransceiverInit::RtpTransceiverInit' data-ref="_ZN6webrtc18RtpTransceiverInitC1ERKS0_" data-ref-filename="_ZN6webrtc18RtpTransceiverInitC1ERKS0_">RtpTransceiverInit</dfn>(<em>const</em> <a class="type" href="#webrtc::RtpTransceiverInit" title='webrtc::RtpTransceiverInit' data-ref="webrtc::RtpTransceiverInit" data-ref-filename="webrtc..RtpTransceiverInit">RtpTransceiverInit</a>&amp;);</td></tr>
+<tr><th id="37">37</th><td>  <dfn class="decl fn" id="_ZN6webrtc18RtpTransceiverInitD1Ev" title='webrtc::RtpTransceiverInit::~RtpTransceiverInit' data-ref="_ZN6webrtc18RtpTransceiverInitD1Ev" data-ref-filename="_ZN6webrtc18RtpTransceiverInitD1Ev">~RtpTransceiverInit</dfn>();</td></tr>
+<tr><th id="38">38</th><td>  <i>// Direction of the RtpTransceiver. See RtpTransceiverInterface::direction().</i></td></tr>
+<tr><th id="39">39</th><td>  <a class="type" href="../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCUtils.h.html#webrtc::RtpTransceiverDirection" title='webrtc::RtpTransceiverDirection' data-ref="webrtc::RtpTransceiverDirection" data-ref-filename="webrtc..RtpTransceiverDirection">RtpTransceiverDirection</a> <dfn class="decl field" id="webrtc::RtpTransceiverInit::direction" title='webrtc::RtpTransceiverInit::direction' data-ref="webrtc::RtpTransceiverInit::direction" data-ref-filename="webrtc..RtpTransceiverInit..direction">direction</dfn> = <a class="type" href="../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCUtils.h.html#webrtc::RtpTransceiverDirection" title='webrtc::RtpTransceiverDirection' data-ref="webrtc::RtpTransceiverDirection" data-ref-filename="webrtc..RtpTransceiverDirection">RtpTransceiverDirection</a>::<a class="enum" href="rtp_transceiver_direction.h.html#webrtc::RtpTransceiverDirection::kSendRecv" title='webrtc::RtpTransceiverDirection::kSendRecv' data-ref="webrtc::RtpTransceiverDirection::kSendRecv" data-ref-filename="webrtc..RtpTransceiverDirection..kSendRecv">kSendRecv</a>;</td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td>  <i>// The added RtpTransceiver will be added to these streams.</i></td></tr>
+<tr><th id="42">42</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&gt; <dfn class="decl field" id="webrtc::RtpTransceiverInit::stream_ids" title='webrtc::RtpTransceiverInit::stream_ids' data-ref="webrtc::RtpTransceiverInit::stream_ids" data-ref-filename="webrtc..RtpTransceiverInit..stream_ids">stream_ids</dfn>;</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td>  <i>// TODO(bugs.webrtc.org/7600): Not implemented.</i></td></tr>
+<tr><th id="45">45</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<a class="type" href="rtp_parameters.h.html#webrtc::RtpEncodingParameters" title='webrtc::RtpEncodingParameters' data-ref="webrtc::RtpEncodingParameters" data-ref-filename="webrtc..RtpEncodingParameters">RtpEncodingParameters</a>&gt; <dfn class="decl field" id="webrtc::RtpTransceiverInit::send_encodings" title='webrtc::RtpTransceiverInit::send_encodings' data-ref="webrtc::RtpTransceiverInit::send_encodings" data-ref-filename="webrtc..RtpTransceiverInit..send_encodings">send_encodings</dfn>;</td></tr>
+<tr><th id="46">46</th><td>};</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td><i>// The RtpTransceiverInterface maps to the RTCRtpTransceiver defined by the</i></td></tr>
+<tr><th id="49">49</th><td><i>// WebRTC specification. A transceiver represents a combination of an RtpSender</i></td></tr>
+<tr><th id="50">50</th><td><i>// and an RtpReceiver than share a common mid. As defined in JSEP, an</i></td></tr>
+<tr><th id="51">51</th><td><i>// RtpTransceiver is said to be associated with a media description if its mid</i></td></tr>
+<tr><th id="52">52</th><td><i>// property is non-null; otherwise, it is said to be disassociated.</i></td></tr>
+<tr><th id="53">53</th><td><i>// JSEP: <a href="https://tools.ietf.org/html/draft-ietf-rtcweb-jsep-24">https://tools.ietf.org/html/draft-ietf-rtcweb-jsep-24</a></i></td></tr>
+<tr><th id="54">54</th><td><i>//</i></td></tr>
+<tr><th id="55">55</th><td><i>// Note that RtpTransceivers are only supported when using PeerConnection with</i></td></tr>
+<tr><th id="56">56</th><td><i>// Unified Plan SDP.</i></td></tr>
+<tr><th id="57">57</th><td><i>//</i></td></tr>
+<tr><th id="58">58</th><td><i>// This class is thread-safe.</i></td></tr>
+<tr><th id="59">59</th><td><i>//</i></td></tr>
+<tr><th id="60">60</th><td><i>// WebRTC specification for RTCRtpTransceiver, the JavaScript analog:</i></td></tr>
+<tr><th id="61">61</th><td><i>// <a href="https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver">https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver</a></i></td></tr>
+<tr><th id="62">62</th><td><b>class</b> <a class="macro" href="../rtc_base/system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <dfn class="type def" id="webrtc::RtpTransceiverInterface" title='webrtc::RtpTransceiverInterface' data-ref="webrtc::RtpTransceiverInterface" data-ref-filename="webrtc..RtpTransceiverInterface">RtpTransceiverInterface</dfn> : <b>public</b> <span class="namespace">rtc::</span><a class="type" href="../rtc_base/ref_count.h.html#rtc::RefCountInterface" title='rtc::RefCountInterface' data-ref="rtc::RefCountInterface" data-ref-filename="rtc..RefCountInterface">RefCountInterface</a> {</td></tr>
+<tr><th id="63">63</th><td> <b>public</b>:</td></tr>
+<tr><th id="64">64</th><td>  <i>// Media type of the transceiver. Any sender(s)/receiver(s) will have this</i></td></tr>
+<tr><th id="65">65</th><td><i>  // type as well.</i></td></tr>
+<tr><th id="66">66</th><td>  <b>virtual</b> <span class="namespace">cricket::</span><a class="type" href="media_types.h.html#cricket::MediaType" title='cricket::MediaType' data-ref="cricket::MediaType" data-ref-filename="cricket..MediaType">MediaType</a> <dfn class="virtual decl fn" id="_ZNK6webrtc23RtpTransceiverInterface10media_typeEv" title='webrtc::RtpTransceiverInterface::media_type' data-ref="_ZNK6webrtc23RtpTransceiverInterface10media_typeEv" data-ref-filename="_ZNK6webrtc23RtpTransceiverInterface10media_typeEv">media_type</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td>  <i>// The mid attribute is the mid negotiated and present in the local and</i></td></tr>
+<tr><th id="69">69</th><td><i>  // remote descriptions. Before negotiation is complete, the mid value may be</i></td></tr>
+<tr><th id="70">70</th><td><i>  // null. After rollbacks, the value may change from a non-null value to null.</i></td></tr>
+<tr><th id="71">71</th><td><i>  // <a href="https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-mid">https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-mid</a></i></td></tr>
+<tr><th id="72">72</th><td>  <b>virtual</b> <span class="namespace">absl::</span><span class='type' title='std::__1::optional' data-ref="std::__1::optional" data-ref-filename="std..__1..optional">optional</span>&lt;<span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&gt; <dfn class="virtual decl fn" id="_ZNK6webrtc23RtpTransceiverInterface3midEv" title='webrtc::RtpTransceiverInterface::mid' data-ref="_ZNK6webrtc23RtpTransceiverInterface3midEv" data-ref-filename="_ZNK6webrtc23RtpTransceiverInterface3midEv">mid</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td>  <i>// The sender attribute exposes the RtpSender corresponding to the RTP media</i></td></tr>
+<tr><th id="75">75</th><td><i>  // that may be sent with the transceiver's mid. The sender is always present,</i></td></tr>
+<tr><th id="76">76</th><td><i>  // regardless of the direction of media.</i></td></tr>
+<tr><th id="77">77</th><td><i>  // <a href="https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-sender">https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-sender</a></i></td></tr>
+<tr><th id="78">78</th><td>  <b>virtual</b> <span class="namespace">rtc::</span><a class="type" href="scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;<a class="type" href="rtp_sender_interface.h.html#webrtc::RtpSenderInterface" title='webrtc::RtpSenderInterface' data-ref="webrtc::RtpSenderInterface" data-ref-filename="webrtc..RtpSenderInterface">RtpSenderInterface</a>&gt; <dfn class="virtual decl fn" id="_ZNK6webrtc23RtpTransceiverInterface6senderEv" title='webrtc::RtpTransceiverInterface::sender' data-ref="_ZNK6webrtc23RtpTransceiverInterface6senderEv" data-ref-filename="_ZNK6webrtc23RtpTransceiverInterface6senderEv">sender</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td>  <i>// The receiver attribute exposes the RtpReceiver corresponding to the RTP</i></td></tr>
+<tr><th id="81">81</th><td><i>  // media that may be received with the transceiver's mid. The receiver is</i></td></tr>
+<tr><th id="82">82</th><td><i>  // always present, regardless of the direction of media.</i></td></tr>
+<tr><th id="83">83</th><td><i>  // <a href="https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-receiver">https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-receiver</a></i></td></tr>
+<tr><th id="84">84</th><td>  <b>virtual</b> <span class="namespace">rtc::</span><a class="type" href="scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;<a class="type" href="rtp_receiver_interface.h.html#webrtc::RtpReceiverInterface" title='webrtc::RtpReceiverInterface' data-ref="webrtc::RtpReceiverInterface" data-ref-filename="webrtc..RtpReceiverInterface">RtpReceiverInterface</a>&gt; <dfn class="virtual decl fn" id="_ZNK6webrtc23RtpTransceiverInterface8receiverEv" title='webrtc::RtpTransceiverInterface::receiver' data-ref="_ZNK6webrtc23RtpTransceiverInterface8receiverEv" data-ref-filename="_ZNK6webrtc23RtpTransceiverInterface8receiverEv">receiver</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>  <i>// The stopped attribute indicates that the sender of this transceiver will no</i></td></tr>
+<tr><th id="87">87</th><td><i>  // longer send, and that the receiver will no longer receive. It is true if</i></td></tr>
+<tr><th id="88">88</th><td><i>  // either stop has been called or if setting the local or remote description</i></td></tr>
+<tr><th id="89">89</th><td><i>  // has caused the RtpTransceiver to be stopped.</i></td></tr>
+<tr><th id="90">90</th><td><i>  // <a href="https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-stopped">https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-stopped</a></i></td></tr>
+<tr><th id="91">91</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZNK6webrtc23RtpTransceiverInterface7stoppedEv" title='webrtc::RtpTransceiverInterface::stopped' data-ref="_ZNK6webrtc23RtpTransceiverInterface7stoppedEv" data-ref-filename="_ZNK6webrtc23RtpTransceiverInterface7stoppedEv">stopped</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="92">92</th><td></td></tr>
+<tr><th id="93">93</th><td>  <i>// The stopping attribute indicates that the user has indicated that the</i></td></tr>
+<tr><th id="94">94</th><td><i>  // sender of this transceiver will stop sending, and that the receiver will</i></td></tr>
+<tr><th id="95">95</th><td><i>  // no longer receive. It is always true if stopped() is true.</i></td></tr>
+<tr><th id="96">96</th><td><i>  // If stopping() is true and stopped() is false, it means that the</i></td></tr>
+<tr><th id="97">97</th><td><i>  // transceiver's stop() method has been called, but the negotiation with</i></td></tr>
+<tr><th id="98">98</th><td><i>  // the other end for shutting down the transceiver is not yet done.</i></td></tr>
+<tr><th id="99">99</th><td><i>  // <a href="https://w3c.github.io/webrtc-pc/#dfn-stopping-0">https://w3c.github.io/webrtc-pc/#dfn-stopping-0</a></i></td></tr>
+<tr><th id="100">100</th><td><i>  // TODO(hta): Remove default implementation.</i></td></tr>
+<tr><th id="101">101</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZNK6webrtc23RtpTransceiverInterface8stoppingEv" title='webrtc::RtpTransceiverInterface::stopping' data-ref="_ZNK6webrtc23RtpTransceiverInterface8stoppingEv" data-ref-filename="_ZNK6webrtc23RtpTransceiverInterface8stoppingEv">stopping</dfn>() <em>const</em>;</td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td>  <i>// The direction attribute indicates the preferred direction of this</i></td></tr>
+<tr><th id="104">104</th><td><i>  // transceiver, which will be used in calls to CreateOffer and CreateAnswer.</i></td></tr>
+<tr><th id="105">105</th><td><i>  // <a href="https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-direction">https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-direction</a></i></td></tr>
+<tr><th id="106">106</th><td>  <b>virtual</b> <a class="type" href="../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCUtils.h.html#webrtc::RtpTransceiverDirection" title='webrtc::RtpTransceiverDirection' data-ref="webrtc::RtpTransceiverDirection" data-ref-filename="webrtc..RtpTransceiverDirection">RtpTransceiverDirection</a> <dfn class="virtual decl fn" id="_ZNK6webrtc23RtpTransceiverInterface9directionEv" title='webrtc::RtpTransceiverInterface::direction' data-ref="_ZNK6webrtc23RtpTransceiverInterface9directionEv" data-ref-filename="_ZNK6webrtc23RtpTransceiverInterface9directionEv">direction</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="107">107</th><td></td></tr>
+<tr><th id="108">108</th><td>  <i>// Sets the preferred direction of this transceiver. An update of</i></td></tr>
+<tr><th id="109">109</th><td><i>  // directionality does not take effect immediately. Instead, future calls to</i></td></tr>
+<tr><th id="110">110</th><td><i>  // CreateOffer and CreateAnswer mark the corresponding media descriptions as</i></td></tr>
+<tr><th id="111">111</th><td><i>  // sendrecv, sendonly, recvonly, or inactive.</i></td></tr>
+<tr><th id="112">112</th><td><i>  // <a href="https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-direction">https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-direction</a></i></td></tr>
+<tr><th id="113">113</th><td><i>  // TODO(hta): Deprecate SetDirection without error and rename</i></td></tr>
+<tr><th id="114">114</th><td><i>  // SetDirectionWithError to SetDirection, remove default implementations.</i></td></tr>
+<tr><th id="115">115</th><td>  <a class="macro" href="../../absl/base/attributes.h.html#645" title="__attribute__((deprecated(&quot;Use SetDirectionWithError instead&quot;)))" data-ref="_M/ABSL_DEPRECATED">ABSL_DEPRECATED</a>(<q>"Use SetDirectionWithError instead"</q>)</td></tr>
+<tr><th id="116">116</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc23RtpTransceiverInterface12SetDirectionENS_23RtpTransceiverDirectionE" title='webrtc::RtpTransceiverInterface::SetDirection' data-ref="_ZN6webrtc23RtpTransceiverInterface12SetDirectionENS_23RtpTransceiverDirectionE" data-ref-filename="_ZN6webrtc23RtpTransceiverInterface12SetDirectionENS_23RtpTransceiverDirectionE">SetDirection</dfn>(<a class="type" href="../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCUtils.h.html#webrtc::RtpTransceiverDirection" title='webrtc::RtpTransceiverDirection' data-ref="webrtc::RtpTransceiverDirection" data-ref-filename="webrtc..RtpTransceiverDirection">RtpTransceiverDirection</a> <dfn class="local col9 decl" id="1829new_direction" title='new_direction' data-type='webrtc::RtpTransceiverDirection' data-ref="1829new_direction" data-ref-filename="1829new_direction">new_direction</dfn>);</td></tr>
+<tr><th id="117">117</th><td>  <b>virtual</b> <a class="type" href="rtc_error.h.html#webrtc::RTCError" title='webrtc::RTCError' data-ref="webrtc::RTCError" data-ref-filename="webrtc..RTCError">RTCError</a> <dfn class="virtual decl fn" id="_ZN6webrtc23RtpTransceiverInterface21SetDirectionWithErrorENS_23RtpTransceiverDirectionE" title='webrtc::RtpTransceiverInterface::SetDirectionWithError' data-ref="_ZN6webrtc23RtpTransceiverInterface21SetDirectionWithErrorENS_23RtpTransceiverDirectionE" data-ref-filename="_ZN6webrtc23RtpTransceiverInterface21SetDirectionWithErrorENS_23RtpTransceiverDirectionE">SetDirectionWithError</dfn>(<a class="type" href="../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCUtils.h.html#webrtc::RtpTransceiverDirection" title='webrtc::RtpTransceiverDirection' data-ref="webrtc::RtpTransceiverDirection" data-ref-filename="webrtc..RtpTransceiverDirection">RtpTransceiverDirection</a> <dfn class="local col0 decl" id="1830new_direction" title='new_direction' data-type='webrtc::RtpTransceiverDirection' data-ref="1830new_direction" data-ref-filename="1830new_direction">new_direction</dfn>);</td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td>  <i>// The current_direction attribute indicates the current direction negotiated</i></td></tr>
+<tr><th id="120">120</th><td><i>  // for this transceiver. If this transceiver has never been represented in an</i></td></tr>
+<tr><th id="121">121</th><td><i>  // offer/answer exchange, or if the transceiver is stopped, the value is null.</i></td></tr>
+<tr><th id="122">122</th><td><i>  // <a href="https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-currentdirection">https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-currentdirection</a></i></td></tr>
+<tr><th id="123">123</th><td>  <b>virtual</b> <span class="namespace">absl::</span><span class='type' title='std::__1::optional' data-ref="std::__1::optional" data-ref-filename="std..__1..optional">optional</span>&lt;<a class="type" href="../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCUtils.h.html#webrtc::RtpTransceiverDirection" title='webrtc::RtpTransceiverDirection' data-ref="webrtc::RtpTransceiverDirection" data-ref-filename="webrtc..RtpTransceiverDirection">RtpTransceiverDirection</a>&gt; <dfn class="virtual decl fn" id="_ZNK6webrtc23RtpTransceiverInterface17current_directionEv" title='webrtc::RtpTransceiverInterface::current_direction' data-ref="_ZNK6webrtc23RtpTransceiverInterface17current_directionEv" data-ref-filename="_ZNK6webrtc23RtpTransceiverInterface17current_directionEv">current_direction</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="124">124</th><td></td></tr>
+<tr><th id="125">125</th><td>  <i>// An internal slot designating for which direction the relevant</i></td></tr>
+<tr><th id="126">126</th><td><i>  // PeerConnection events have been fired. This is to ensure that events like</i></td></tr>
+<tr><th id="127">127</th><td><i>  // OnAddTrack only get fired once even if the same session description is</i></td></tr>
+<tr><th id="128">128</th><td><i>  // applied again.</i></td></tr>
+<tr><th id="129">129</th><td><i>  // Exposed in the public interface for use by Chromium.</i></td></tr>
+<tr><th id="130">130</th><td>  <b>virtual</b> <span class="namespace">absl::</span><span class='type' title='std::__1::optional' data-ref="std::__1::optional" data-ref-filename="std..__1..optional">optional</span>&lt;<a class="type" href="../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCUtils.h.html#webrtc::RtpTransceiverDirection" title='webrtc::RtpTransceiverDirection' data-ref="webrtc::RtpTransceiverDirection" data-ref-filename="webrtc..RtpTransceiverDirection">RtpTransceiverDirection</a>&gt; <dfn class="virtual decl fn" id="_ZNK6webrtc23RtpTransceiverInterface15fired_directionEv" title='webrtc::RtpTransceiverInterface::fired_direction' data-ref="_ZNK6webrtc23RtpTransceiverInterface15fired_directionEv" data-ref-filename="_ZNK6webrtc23RtpTransceiverInterface15fired_directionEv">fired_direction</dfn>() <em>const</em>;</td></tr>
+<tr><th id="131">131</th><td></td></tr>
+<tr><th id="132">132</th><td>  <i>// Initiates a stop of the transceiver.</i></td></tr>
+<tr><th id="133">133</th><td><i>  // The stop is complete when stopped() returns true.</i></td></tr>
+<tr><th id="134">134</th><td><i>  // A stopped transceiver can be reused for a different track.</i></td></tr>
+<tr><th id="135">135</th><td><i>  // <a href="https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-stop">https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-stop</a></i></td></tr>
+<tr><th id="136">136</th><td><i>  // TODO(hta): Rename to Stop() when users of the non-standard Stop() are</i></td></tr>
+<tr><th id="137">137</th><td><i>  // updated.</i></td></tr>
+<tr><th id="138">138</th><td>  <b>virtual</b> <a class="type" href="rtc_error.h.html#webrtc::RTCError" title='webrtc::RTCError' data-ref="webrtc::RTCError" data-ref-filename="webrtc..RTCError">RTCError</a> <dfn class="virtual decl fn" id="_ZN6webrtc23RtpTransceiverInterface12StopStandardEv" title='webrtc::RtpTransceiverInterface::StopStandard' data-ref="_ZN6webrtc23RtpTransceiverInterface12StopStandardEv" data-ref-filename="_ZN6webrtc23RtpTransceiverInterface12StopStandardEv">StopStandard</dfn>();</td></tr>
+<tr><th id="139">139</th><td></td></tr>
+<tr><th id="140">140</th><td>  <i>// Stops a transceiver immediately, without waiting for signalling.</i></td></tr>
+<tr><th id="141">141</th><td><i>  // This is an internal function, and is exposed for historical reasons.</i></td></tr>
+<tr><th id="142">142</th><td><i>  // <a href="https://w3c.github.io/webrtc-pc/#dfn-stop-the-rtcrtptransceiver">https://w3c.github.io/webrtc-pc/#dfn-stop-the-rtcrtptransceiver</a></i></td></tr>
+<tr><th id="143">143</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc23RtpTransceiverInterface12StopInternalEv" title='webrtc::RtpTransceiverInterface::StopInternal' data-ref="_ZN6webrtc23RtpTransceiverInterface12StopInternalEv" data-ref-filename="_ZN6webrtc23RtpTransceiverInterface12StopInternalEv">StopInternal</dfn>();</td></tr>
+<tr><th id="144">144</th><td>  <a class="macro" href="../../absl/base/attributes.h.html#645" title="__attribute__((deprecated(&quot;Use StopStandard instead&quot;)))" data-ref="_M/ABSL_DEPRECATED">ABSL_DEPRECATED</a>(<q>"Use StopStandard instead"</q>) <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc23RtpTransceiverInterface4StopEv" title='webrtc::RtpTransceiverInterface::Stop' data-ref="_ZN6webrtc23RtpTransceiverInterface4StopEv" data-ref-filename="_ZN6webrtc23RtpTransceiverInterface4StopEv">Stop</dfn>();</td></tr>
+<tr><th id="145">145</th><td></td></tr>
+<tr><th id="146">146</th><td>  <i>// The SetCodecPreferences method overrides the default codec preferences used</i></td></tr>
+<tr><th id="147">147</th><td><i>  // by WebRTC for this transceiver.</i></td></tr>
+<tr><th id="148">148</th><td><i>  // <a href="https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-setcodecpreferences">https://w3c.github.io/webrtc-pc/#dom-rtcrtptransceiver-setcodecpreferences</a></i></td></tr>
+<tr><th id="149">149</th><td>  <b>virtual</b> <a class="type" href="rtc_error.h.html#webrtc::RTCError" title='webrtc::RTCError' data-ref="webrtc::RTCError" data-ref-filename="webrtc..RTCError">RTCError</a> <dfn class="virtual decl fn" id="_ZN6webrtc23RtpTransceiverInterface19SetCodecPreferencesEN3rtc9ArrayViewINS_18RtpCodecCapabilityELln4711EEE" title='webrtc::RtpTransceiverInterface::SetCodecPreferences' data-ref="_ZN6webrtc23RtpTransceiverInterface19SetCodecPreferencesEN3rtc9ArrayViewINS_18RtpCodecCapabilityELln4711EEE" data-ref-filename="_ZN6webrtc23RtpTransceiverInterface19SetCodecPreferencesEN3rtc9ArrayViewINS_18RtpCodecCapabilityELln4711EEE">SetCodecPreferences</dfn>(</td></tr>
+<tr><th id="150">150</th><td>      <span class="namespace">rtc::</span><a class="type" href="array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<a class="type" href="rtp_parameters.h.html#webrtc::RtpCodecCapability" title='webrtc::RtpCodecCapability' data-ref="webrtc::RtpCodecCapability" data-ref-filename="webrtc..RtpCodecCapability">RtpCodecCapability</a>&gt; <dfn class="local col1 decl" id="1831codecs" title='codecs' data-type='rtc::ArrayView&lt;RtpCodecCapability&gt;' data-ref="1831codecs" data-ref-filename="1831codecs">codecs</dfn>);</td></tr>
+<tr><th id="151">151</th><td>  <b>virtual</b> <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<a class="type" href="rtp_parameters.h.html#webrtc::RtpCodecCapability" title='webrtc::RtpCodecCapability' data-ref="webrtc::RtpCodecCapability" data-ref-filename="webrtc..RtpCodecCapability">RtpCodecCapability</a>&gt; <dfn class="virtual decl fn" id="_ZNK6webrtc23RtpTransceiverInterface17codec_preferencesEv" title='webrtc::RtpTransceiverInterface::codec_preferences' data-ref="_ZNK6webrtc23RtpTransceiverInterface17codec_preferencesEv" data-ref-filename="_ZNK6webrtc23RtpTransceiverInterface17codec_preferencesEv">codec_preferences</dfn>() <em>const</em>;</td></tr>
+<tr><th id="152">152</th><td></td></tr>
+<tr><th id="153">153</th><td>  <i>// Readonly attribute which contains the set of header extensions that was set</i></td></tr>
+<tr><th id="154">154</th><td><i>  // with SetOfferedRtpHeaderExtensions, or a default set if it has not been</i></td></tr>
+<tr><th id="155">155</th><td><i>  // called.</i></td></tr>
+<tr><th id="156">156</th><td><i>  // <a href="https://w3c.github.io/webrtc-extensions/#rtcrtptransceiver-interface">https://w3c.github.io/webrtc-extensions/#rtcrtptransceiver-interface</a></i></td></tr>
+<tr><th id="157">157</th><td>  <b>virtual</b> <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<a class="type" href="rtp_parameters.h.html#webrtc::RtpHeaderExtensionCapability" title='webrtc::RtpHeaderExtensionCapability' data-ref="webrtc::RtpHeaderExtensionCapability" data-ref-filename="webrtc..RtpHeaderExtensionCapability">RtpHeaderExtensionCapability</a>&gt; <dfn class="virtual decl fn" id="_ZNK6webrtc23RtpTransceiverInterface23HeaderExtensionsToOfferEv" title='webrtc::RtpTransceiverInterface::HeaderExtensionsToOffer' data-ref="_ZNK6webrtc23RtpTransceiverInterface23HeaderExtensionsToOfferEv" data-ref-filename="_ZNK6webrtc23RtpTransceiverInterface23HeaderExtensionsToOfferEv">HeaderExtensionsToOffer</dfn>()</td></tr>
+<tr><th id="158">158</th><td>      <em>const</em>;</td></tr>
+<tr><th id="159">159</th><td></td></tr>
+<tr><th id="160">160</th><td>  <i>// Readonly attribute which is either empty if negotation has not yet</i></td></tr>
+<tr><th id="161">161</th><td><i>  // happened, or a vector of the negotiated header extensions.</i></td></tr>
+<tr><th id="162">162</th><td><i>  // <a href="https://w3c.github.io/webrtc-extensions/#rtcrtptransceiver-interface">https://w3c.github.io/webrtc-extensions/#rtcrtptransceiver-interface</a></i></td></tr>
+<tr><th id="163">163</th><td>  <b>virtual</b> <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<a class="type" href="rtp_parameters.h.html#webrtc::RtpHeaderExtensionCapability" title='webrtc::RtpHeaderExtensionCapability' data-ref="webrtc::RtpHeaderExtensionCapability" data-ref-filename="webrtc..RtpHeaderExtensionCapability">RtpHeaderExtensionCapability</a>&gt; <dfn class="virtual decl fn" id="_ZNK6webrtc23RtpTransceiverInterface26HeaderExtensionsNegotiatedEv" title='webrtc::RtpTransceiverInterface::HeaderExtensionsNegotiated' data-ref="_ZNK6webrtc23RtpTransceiverInterface26HeaderExtensionsNegotiatedEv" data-ref-filename="_ZNK6webrtc23RtpTransceiverInterface26HeaderExtensionsNegotiatedEv">HeaderExtensionsNegotiated</dfn>()</td></tr>
+<tr><th id="164">164</th><td>      <em>const</em>;</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td>  <i>// The SetOfferedRtpHeaderExtensions method modifies the next SDP negotiation</i></td></tr>
+<tr><th id="167">167</th><td><i>  // so that it negotiates use of header extensions which are not kStopped.</i></td></tr>
+<tr><th id="168">168</th><td><i>  // <a href="https://w3c.github.io/webrtc-extensions/#rtcrtptransceiver-interface">https://w3c.github.io/webrtc-extensions/#rtcrtptransceiver-interface</a></i></td></tr>
+<tr><th id="169">169</th><td>  <b>virtual</b> <span class="namespace">webrtc::</span><a class="type" href="rtc_error.h.html#webrtc::RTCError" title='webrtc::RTCError' data-ref="webrtc::RTCError" data-ref-filename="webrtc..RTCError">RTCError</a> <dfn class="virtual decl fn" id="_ZN6webrtc23RtpTransceiverInterface29SetOfferedRtpHeaderExtensionsEN3rtc9ArrayViewIKNS_28RtpHeaderExtensionCapabilityELln4711EEE" title='webrtc::RtpTransceiverInterface::SetOfferedRtpHeaderExtensions' data-ref="_ZN6webrtc23RtpTransceiverInterface29SetOfferedRtpHeaderExtensionsEN3rtc9ArrayViewIKNS_28RtpHeaderExtensionCapabilityELln4711EEE" data-ref-filename="_ZN6webrtc23RtpTransceiverInterface29SetOfferedRtpHeaderExtensionsEN3rtc9ArrayViewIKNS_28RtpHeaderExtensionCapabilityELln4711EEE">SetOfferedRtpHeaderExtensions</dfn>(</td></tr>
+<tr><th id="170">170</th><td>      <span class="namespace">rtc::</span><a class="type" href="array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<em>const</em> <a class="type" href="rtp_parameters.h.html#webrtc::RtpHeaderExtensionCapability" title='webrtc::RtpHeaderExtensionCapability' data-ref="webrtc::RtpHeaderExtensionCapability" data-ref-filename="webrtc..RtpHeaderExtensionCapability">RtpHeaderExtensionCapability</a>&gt;</td></tr>
+<tr><th id="171">171</th><td>          <dfn class="local col2 decl" id="1832header_extensions_to_offer" title='header_extensions_to_offer' data-type='rtc::ArrayView&lt;const RtpHeaderExtensionCapability&gt;' data-ref="1832header_extensions_to_offer" data-ref-filename="1832header_extensions_to_offer">header_extensions_to_offer</dfn>);</td></tr>
+<tr><th id="172">172</th><td></td></tr>
+<tr><th id="173">173</th><td> <b>protected</b>:</td></tr>
+<tr><th id="174">174</th><td>  <dfn class="virtual decl def fn" id="_ZN6webrtc23RtpTransceiverInterfaceD1Ev" title='webrtc::RtpTransceiverInterface::~RtpTransceiverInterface' data-ref="_ZN6webrtc23RtpTransceiverInterfaceD1Ev" data-ref-filename="_ZN6webrtc23RtpTransceiverInterfaceD1Ev">~RtpTransceiverInterface</dfn>() override = <b>default</b>;</td></tr>
+<tr><th id="175">175</th><td>};</td></tr>
+<tr><th id="176">176</th><td></td></tr>
+<tr><th id="177">177</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="178">178</th><td></td></tr>
+<tr><th id="179">179</th><td><u>#<span data-ppcond="11">endif</span>  // API_RTP_TRANSCEIVER_INTERFACE_H_</u></td></tr>
+<tr><th id="180">180</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

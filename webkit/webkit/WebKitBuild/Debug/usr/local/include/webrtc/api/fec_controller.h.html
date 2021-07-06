@@ -1,0 +1,111 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>fec_controller.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/fec_controller.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::FecController,webrtc::FecControllerFactoryInterface,webrtc::VCMProtectionCallback "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/fec_controller.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>WebKitBuild</a>/<a href='../../../../..'>Debug</a>/<a href='../../../..'>usr</a>/<a href='../../..'>local</a>/<a href='../..'>include</a>/<a href='..'>webrtc</a>/<a href='./'>api</a>/<a href='fec_controller.h.html'>fec_controller.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2016 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/API_FEC_CONTROLLER_H_">API_FEC_CONTROLLER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/API_FEC_CONTROLLER_H_" data-ref="_M/API_FEC_CONTROLLER_H_">API_FEC_CONTROLLER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;vector&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="video/video_frame_type.h.html">"api/video/video_frame_type.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../modules/include/module_fec_types.h.html">"modules/include/module_fec_types.h"</a></u></td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="21">21</th><td><i>// TODO(yinwa): work in progress. API in class FecController should not be</i></td></tr>
+<tr><th id="22">22</th><td><i>// used by other users until this comment is removed.</i></td></tr>
+<tr><th id="23">23</th><td><i></i></td></tr>
+<tr><th id="24">24</th><td><i>// Callback class used for telling the user about how to configure the FEC,</i></td></tr>
+<tr><th id="25">25</th><td><i>// and the rates sent the last second is returned to the VCM.</i></td></tr>
+<tr><th id="26">26</th><td><b>class</b> <dfn class="type def" id="webrtc::VCMProtectionCallback" title='webrtc::VCMProtectionCallback' data-ref="webrtc::VCMProtectionCallback" data-ref-filename="webrtc..VCMProtectionCallback">VCMProtectionCallback</dfn> {</td></tr>
+<tr><th id="27">27</th><td> <b>public</b>:</td></tr>
+<tr><th id="28">28</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZN6webrtc21VCMProtectionCallback17ProtectionRequestEPKNS_19FecProtectionParamsES3_PjS4_S4_" title='webrtc::VCMProtectionCallback::ProtectionRequest' data-ref="_ZN6webrtc21VCMProtectionCallback17ProtectionRequestEPKNS_19FecProtectionParamsES3_PjS4_S4_" data-ref-filename="_ZN6webrtc21VCMProtectionCallback17ProtectionRequestEPKNS_19FecProtectionParamsES3_PjS4_S4_">ProtectionRequest</dfn>(<em>const</em> <a class="type" href="../modules/include/module_fec_types.h.html#webrtc::FecProtectionParams" title='webrtc::FecProtectionParams' data-ref="webrtc::FecProtectionParams" data-ref-filename="webrtc..FecProtectionParams">FecProtectionParams</a>* <dfn class="local col2 decl" id="672delta_params" title='delta_params' data-type='const webrtc::FecProtectionParams *' data-ref="672delta_params" data-ref-filename="672delta_params">delta_params</dfn>,</td></tr>
+<tr><th id="29">29</th><td>                                <em>const</em> <a class="type" href="../modules/include/module_fec_types.h.html#webrtc::FecProtectionParams" title='webrtc::FecProtectionParams' data-ref="webrtc::FecProtectionParams" data-ref-filename="webrtc..FecProtectionParams">FecProtectionParams</a>* <dfn class="local col3 decl" id="673key_params" title='key_params' data-type='const webrtc::FecProtectionParams *' data-ref="673key_params" data-ref-filename="673key_params">key_params</dfn>,</td></tr>
+<tr><th id="30">30</th><td>                                <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span>* <dfn class="local col4 decl" id="674sent_video_rate_bps" title='sent_video_rate_bps' data-type='uint32_t *' data-ref="674sent_video_rate_bps" data-ref-filename="674sent_video_rate_bps">sent_video_rate_bps</dfn>,</td></tr>
+<tr><th id="31">31</th><td>                                <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span>* <dfn class="local col5 decl" id="675sent_nack_rate_bps" title='sent_nack_rate_bps' data-type='uint32_t *' data-ref="675sent_nack_rate_bps" data-ref-filename="675sent_nack_rate_bps">sent_nack_rate_bps</dfn>,</td></tr>
+<tr><th id="32">32</th><td>                                <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span>* <dfn class="local col6 decl" id="676sent_fec_rate_bps" title='sent_fec_rate_bps' data-type='uint32_t *' data-ref="676sent_fec_rate_bps" data-ref-filename="676sent_fec_rate_bps">sent_fec_rate_bps</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td> <b>protected</b>:</td></tr>
+<tr><th id="35">35</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc21VCMProtectionCallbackD1Ev" title='webrtc::VCMProtectionCallback::~VCMProtectionCallback' data-ref="_ZN6webrtc21VCMProtectionCallbackD1Ev" data-ref-filename="_ZN6webrtc21VCMProtectionCallbackD1Ev">~VCMProtectionCallback</dfn>() {}</td></tr>
+<tr><th id="36">36</th><td>};</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><i>// FecController calculates how much of the allocated network</i></td></tr>
+<tr><th id="39">39</th><td><i>// capacity that can be used by an encoder and how much that</i></td></tr>
+<tr><th id="40">40</th><td><i>// is needed for redundant packets such as FEC and NACK. It uses an</i></td></tr>
+<tr><th id="41">41</th><td><i>// implementation of |VCMProtectionCallback| to set new FEC parameters and get</i></td></tr>
+<tr><th id="42">42</th><td><i>// the bitrate currently used for FEC and NACK.</i></td></tr>
+<tr><th id="43">43</th><td><i>// Usage:</i></td></tr>
+<tr><th id="44">44</th><td><i>// Setup by calling SetProtectionMethod and SetEncodingData.</i></td></tr>
+<tr><th id="45">45</th><td><i>// For each encoded image, call UpdateWithEncodedData.</i></td></tr>
+<tr><th id="46">46</th><td><i>// Each time the bandwidth estimate change, call UpdateFecRates. UpdateFecRates</i></td></tr>
+<tr><th id="47">47</th><td><i>// will return the bitrate that can be used by an encoder.</i></td></tr>
+<tr><th id="48">48</th><td><i>// A lock is used to protect internal states, so methods can be called on an</i></td></tr>
+<tr><th id="49">49</th><td><i>// arbitrary thread.</i></td></tr>
+<tr><th id="50">50</th><td><b>class</b> <dfn class="type def" id="webrtc::FecController" title='webrtc::FecController' data-ref="webrtc::FecController" data-ref-filename="webrtc..FecController">FecController</dfn> {</td></tr>
+<tr><th id="51">51</th><td> <b>public</b>:</td></tr>
+<tr><th id="52">52</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc13FecControllerD1Ev" title='webrtc::FecController::~FecController' data-ref="_ZN6webrtc13FecControllerD1Ev" data-ref-filename="_ZN6webrtc13FecControllerD1Ev">~FecController</dfn>() {}</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc13FecController21SetProtectionCallbackEPNS_21VCMProtectionCallbackE" title='webrtc::FecController::SetProtectionCallback' data-ref="_ZN6webrtc13FecController21SetProtectionCallbackEPNS_21VCMProtectionCallbackE" data-ref-filename="_ZN6webrtc13FecController21SetProtectionCallbackEPNS_21VCMProtectionCallbackE">SetProtectionCallback</dfn>(</td></tr>
+<tr><th id="55">55</th><td>      <a class="type" href="#webrtc::VCMProtectionCallback" title='webrtc::VCMProtectionCallback' data-ref="webrtc::VCMProtectionCallback" data-ref-filename="webrtc..VCMProtectionCallback">VCMProtectionCallback</a>* <dfn class="local col7 decl" id="677protection_callback" title='protection_callback' data-type='webrtc::VCMProtectionCallback *' data-ref="677protection_callback" data-ref-filename="677protection_callback">protection_callback</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="56">56</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc13FecController19SetProtectionMethodEbb" title='webrtc::FecController::SetProtectionMethod' data-ref="_ZN6webrtc13FecController19SetProtectionMethodEbb" data-ref-filename="_ZN6webrtc13FecController19SetProtectionMethodEbb">SetProtectionMethod</dfn>(<em>bool</em> <dfn class="local col8 decl" id="678enable_fec" title='enable_fec' data-type='bool' data-ref="678enable_fec" data-ref-filename="678enable_fec">enable_fec</dfn>, <em>bool</em> <dfn class="local col9 decl" id="679enable_nack" title='enable_nack' data-type='bool' data-ref="679enable_nack" data-ref-filename="679enable_nack">enable_nack</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>  <i>// Informs loss protectoin logic of initial encoding state.</i></td></tr>
+<tr><th id="59">59</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc13FecController15SetEncodingDataEmmmm" title='webrtc::FecController::SetEncodingData' data-ref="_ZN6webrtc13FecController15SetEncodingDataEmmmm" data-ref-filename="_ZN6webrtc13FecController15SetEncodingDataEmmmm">SetEncodingData</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="680width" title='width' data-type='size_t' data-ref="680width" data-ref-filename="680width">width</dfn>,</td></tr>
+<tr><th id="60">60</th><td>                               <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="681height" title='height' data-type='size_t' data-ref="681height" data-ref-filename="681height">height</dfn>,</td></tr>
+<tr><th id="61">61</th><td>                               <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="682num_temporal_layers" title='num_temporal_layers' data-type='size_t' data-ref="682num_temporal_layers" data-ref-filename="682num_temporal_layers">num_temporal_layers</dfn>,</td></tr>
+<tr><th id="62">62</th><td>                               <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="683max_payload_size" title='max_payload_size' data-type='size_t' data-ref="683max_payload_size" data-ref-filename="683max_payload_size">max_payload_size</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td>  <i>// Returns target rate for the encoder given the channel parameters.</i></td></tr>
+<tr><th id="65">65</th><td><i>  // Inputs:  estimated_bitrate_bps - the estimated network bitrate in bits/s.</i></td></tr>
+<tr><th id="66">66</th><td><i>  //          actual_framerate - encoder frame rate.</i></td></tr>
+<tr><th id="67">67</th><td><i>  //          fraction_lost - packet loss rate in % in the network.</i></td></tr>
+<tr><th id="68">68</th><td><i>  //          loss_mask_vector - packet loss mask since last time this method</i></td></tr>
+<tr><th id="69">69</th><td><i>  //          was called. round_trip_time_ms - round trip time in milliseconds.</i></td></tr>
+<tr><th id="70">70</th><td>  <b>virtual</b> <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="virtual decl fn" id="_ZN6webrtc13FecController14UpdateFecRatesEjihNSt3__16vectorIbNS1_9allocatorIbEEEEx" title='webrtc::FecController::UpdateFecRates' data-ref="_ZN6webrtc13FecController14UpdateFecRatesEjihNSt3__16vectorIbNS1_9allocatorIbEEEEx" data-ref-filename="_ZN6webrtc13FecController14UpdateFecRatesEjihNSt3__16vectorIbNS1_9allocatorIbEEEEx">UpdateFecRates</dfn>(<span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col4 decl" id="684estimated_bitrate_bps" title='estimated_bitrate_bps' data-type='uint32_t' data-ref="684estimated_bitrate_bps" data-ref-filename="684estimated_bitrate_bps">estimated_bitrate_bps</dfn>,</td></tr>
+<tr><th id="71">71</th><td>                                  <em>int</em> <dfn class="local col5 decl" id="685actual_framerate" title='actual_framerate' data-type='int' data-ref="685actual_framerate" data-ref-filename="685actual_framerate">actual_framerate</dfn>,</td></tr>
+<tr><th id="72">72</th><td>                                  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col6 decl" id="686fraction_lost" title='fraction_lost' data-type='uint8_t' data-ref="686fraction_lost" data-ref-filename="686fraction_lost">fraction_lost</dfn>,</td></tr>
+<tr><th id="73">73</th><td>                                  <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<em>bool</em>&gt; <dfn class="local col7 decl" id="687loss_mask_vector" title='loss_mask_vector' data-type='std::vector&lt;bool&gt;' data-ref="687loss_mask_vector" data-ref-filename="687loss_mask_vector">loss_mask_vector</dfn>,</td></tr>
+<tr><th id="74">74</th><td>                                  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col8 decl" id="688round_trip_time_ms" title='round_trip_time_ms' data-type='int64_t' data-ref="688round_trip_time_ms" data-ref-filename="688round_trip_time_ms">round_trip_time_ms</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td>  <i>// Informs of encoded output.</i></td></tr>
+<tr><th id="77">77</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc13FecController21UpdateWithEncodedDataEmNS_14VideoFrameTypeE" title='webrtc::FecController::UpdateWithEncodedData' data-ref="_ZN6webrtc13FecController21UpdateWithEncodedDataEmNS_14VideoFrameTypeE" data-ref-filename="_ZN6webrtc13FecController21UpdateWithEncodedDataEmNS_14VideoFrameTypeE">UpdateWithEncodedData</dfn>(</td></tr>
+<tr><th id="78">78</th><td>      <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="689encoded_image_length" title='encoded_image_length' data-type='size_t' data-ref="689encoded_image_length" data-ref-filename="689encoded_image_length">encoded_image_length</dfn>,</td></tr>
+<tr><th id="79">79</th><td>      <a class="type" href="video/video_frame_type.h.html#webrtc::VideoFrameType" title='webrtc::VideoFrameType' data-ref="webrtc::VideoFrameType" data-ref-filename="webrtc..VideoFrameType">VideoFrameType</a> <dfn class="local col0 decl" id="690encoded_image_frametype" title='encoded_image_frametype' data-type='webrtc::VideoFrameType' data-ref="690encoded_image_frametype" data-ref-filename="690encoded_image_frametype">encoded_image_frametype</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>  <i>// Returns whether this FEC Controller needs Loss Vector Mask as input.</i></td></tr>
+<tr><th id="82">82</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZN6webrtc13FecController17UseLossVectorMaskEv" title='webrtc::FecController::UseLossVectorMask' data-ref="_ZN6webrtc13FecController17UseLossVectorMaskEv" data-ref-filename="_ZN6webrtc13FecController17UseLossVectorMaskEv">UseLossVectorMask</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="83">83</th><td>};</td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td><b>class</b> <dfn class="type def" id="webrtc::FecControllerFactoryInterface" title='webrtc::FecControllerFactoryInterface' data-ref="webrtc::FecControllerFactoryInterface" data-ref-filename="webrtc..FecControllerFactoryInterface">FecControllerFactoryInterface</dfn> {</td></tr>
+<tr><th id="86">86</th><td> <b>public</b>:</td></tr>
+<tr><th id="87">87</th><td>  <b>virtual</b> <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="#webrtc::FecController" title='webrtc::FecController' data-ref="webrtc::FecController" data-ref-filename="webrtc..FecController">FecController</a>&gt; <dfn class="virtual decl fn" id="_ZN6webrtc29FecControllerFactoryInterface19CreateFecControllerEv" title='webrtc::FecControllerFactoryInterface::CreateFecController' data-ref="_ZN6webrtc29FecControllerFactoryInterface19CreateFecControllerEv" data-ref-filename="_ZN6webrtc29FecControllerFactoryInterface19CreateFecControllerEv">CreateFecController</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="88">88</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc29FecControllerFactoryInterfaceD1Ev" title='webrtc::FecControllerFactoryInterface::~FecControllerFactoryInterface' data-ref="_ZN6webrtc29FecControllerFactoryInterfaceD1Ev" data-ref-filename="_ZN6webrtc29FecControllerFactoryInterfaceD1Ev">~FecControllerFactoryInterface</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="89">89</th><td>};</td></tr>
+<tr><th id="90">90</th><td></td></tr>
+<tr><th id="91">91</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="92">92</th><td><u>#<span data-ppcond="11">endif</span>  // API_FEC_CONTROLLER_H_</u></td></tr>
+<tr><th id="93">93</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

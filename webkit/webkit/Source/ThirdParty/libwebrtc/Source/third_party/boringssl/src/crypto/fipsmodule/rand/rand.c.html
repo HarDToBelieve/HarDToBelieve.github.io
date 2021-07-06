@@ -1,0 +1,476 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>rand.c source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/rand/rand.c] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rand_thread_state "/>
+<link rel="stylesheet" href="../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/rand/rand.c'; var root_path = '../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../..'>Source</a>/<a href='../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../..'>libwebrtc</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>third_party</a>/<a href='../../../..'>boringssl</a>/<a href='../../..'>src</a>/<a href='../..'>crypto</a>/<a href='..'>fipsmodule</a>/<a href='./'>rand</a>/<a href='rand.c.html'>rand.c</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/* Copyright (c) 2014, Google Inc.</i></td></tr>
+<tr><th id="2">2</th><td><i> *</i></td></tr>
+<tr><th id="3">3</th><td><i> * Permission to use, copy, modify, and/or distribute this software for any</i></td></tr>
+<tr><th id="4">4</th><td><i> * purpose with or without fee is hereby granted, provided that the above</i></td></tr>
+<tr><th id="5">5</th><td><i> * copyright notice and this permission notice appear in all copies.</i></td></tr>
+<tr><th id="6">6</th><td><i> *</i></td></tr>
+<tr><th id="7">7</th><td><i> * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES</i></td></tr>
+<tr><th id="8">8</th><td><i> * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF</i></td></tr>
+<tr><th id="9">9</th><td><i> * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="10">10</th><td><i> * SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES</i></td></tr>
+<tr><th id="11">11</th><td><i> * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION</i></td></tr>
+<tr><th id="12">12</th><td><i> * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN</i></td></tr>
+<tr><th id="13">13</th><td><i> * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */</i></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><u>#include <a href="../../../include/openssl/rand.h.html">&lt;openssl/rand.h&gt;</a></u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;assert.h&gt;</u></td></tr>
+<tr><th id="18">18</th><td><u>#include &lt;limits.h&gt;</u></td></tr>
+<tr><th id="19">19</th><td><u>#include &lt;string.h&gt;</u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><u>#<span data-ppcond="21">if</span> defined(<span class="macro" data-ref="_M/BORINGSSL_FIPS">BORINGSSL_FIPS</span>)</u></td></tr>
+<tr><th id="22">22</th><td><u>#include &lt;unistd.h&gt;</u></td></tr>
+<tr><th id="23">23</th><td><u>#<span data-ppcond="21">endif</span></u></td></tr>
+<tr><th id="24">24</th><td></td></tr>
+<tr><th id="25">25</th><td><u>#include <a href="../../../include/openssl/chacha.h.html">&lt;openssl/chacha.h&gt;</a></u></td></tr>
+<tr><th id="26">26</th><td><u>#include <a href="../../../include/openssl/cpu.h.html">&lt;openssl/cpu.h&gt;</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#include <a href="../../../include/openssl/mem.h.html">&lt;openssl/mem.h&gt;</a></u></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="../../../include/openssl/type_check.h.html">&lt;openssl/type_check.h&gt;</a></u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="internal.h.html">"internal.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="fork_detect.h.html">"fork_detect.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="../../internal.h.html">"../../internal.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#include <a href="../delocate.h.html">"../delocate.h"</a></u></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><i  data-doc="kReseedInterval">// It's assumed that the operating system always has an unfailing source of</i></td></tr>
+<tr><th id="37">37</th><td><i  data-doc="kReseedInterval">// entropy which is accessed via |CRYPTO_sysrand[_for_seed]|. (If the operating</i></td></tr>
+<tr><th id="38">38</th><td><i  data-doc="kReseedInterval">// system entropy source fails, it's up to |CRYPTO_sysrand| to abort the</i></td></tr>
+<tr><th id="39">39</th><td><i  data-doc="kReseedInterval">// process—we don't try to handle it.)</i></td></tr>
+<tr><th id="40">40</th><td><i  data-doc="kReseedInterval">//</i></td></tr>
+<tr><th id="41">41</th><td><i  data-doc="kReseedInterval">// In addition, the hardware may provide a low-latency RNG. Intel's rdrand</i></td></tr>
+<tr><th id="42">42</th><td><i  data-doc="kReseedInterval">// instruction is the canonical example of this. When a hardware RNG is</i></td></tr>
+<tr><th id="43">43</th><td><i  data-doc="kReseedInterval">// available we don't need to worry about an RNG failure arising from fork()ing</i></td></tr>
+<tr><th id="44">44</th><td><i  data-doc="kReseedInterval">// the process or moving a VM, so we can keep thread-local RNG state and use it</i></td></tr>
+<tr><th id="45">45</th><td><i  data-doc="kReseedInterval">// as an additional-data input to CTR-DRBG.</i></td></tr>
+<tr><th id="46">46</th><td><i  data-doc="kReseedInterval">//</i></td></tr>
+<tr><th id="47">47</th><td><i  data-doc="kReseedInterval">// (We assume that the OS entropy is safe from fork()ing and VM duplication.</i></td></tr>
+<tr><th id="48">48</th><td><i  data-doc="kReseedInterval">// This might be a bit of a leap of faith, esp on Windows, but there's nothing</i></td></tr>
+<tr><th id="49">49</th><td><i  data-doc="kReseedInterval">// that we can do about it.)</i></td></tr>
+<tr><th id="50">50</th><td><i  data-doc="kReseedInterval"></i></td></tr>
+<tr><th id="51">51</th><td><i  data-doc="kReseedInterval">// kReseedInterval is the number of generate calls made to CTR-DRBG before</i></td></tr>
+<tr><th id="52">52</th><td><i  data-doc="kReseedInterval">// reseeding.</i></td></tr>
+<tr><th id="53">53</th><td><em>static</em> <em>const</em> <em>unsigned</em> <dfn class="tu decl def" id="kReseedInterval" title='kReseedInterval' data-type='const unsigned int' data-ref="kReseedInterval" data-ref-filename="kReseedInterval">kReseedInterval</dfn> = <var>4096</var>;</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><i>// CRNGT_BLOCK_SIZE is the number of bytes in a “block” for the purposes of the</i></td></tr>
+<tr><th id="56">56</th><td><i>// continuous random number generator test in FIPS 140-2, section 4.9.2.</i></td></tr>
+<tr><th id="57">57</th><td><u>#define <dfn class="macro" id="_M/CRNGT_BLOCK_SIZE" data-ref="_M/CRNGT_BLOCK_SIZE">CRNGT_BLOCK_SIZE</dfn> 16</u></td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><i>// rand_thread_state contains the per-thread state for the RNG.</i></td></tr>
+<tr><th id="60">60</th><td><b>struct</b> <dfn class="type def" id="rand_thread_state" title='rand_thread_state' data-ref="rand_thread_state" data-ref-filename="rand_thread_state">rand_thread_state</dfn> {</td></tr>
+<tr><th id="61">61</th><td>  <a class="typedef" href="internal.h.html#CTR_DRBG_STATE" title='CTR_DRBG_STATE' data-type='struct CTR_DRBG_STATE' data-ref="CTR_DRBG_STATE" data-ref-filename="CTR_DRBG_STATE">CTR_DRBG_STATE</a> <dfn class="tu decl field" id="rand_thread_state::drbg" title='rand_thread_state::drbg' data-type='CTR_DRBG_STATE' data-ref="rand_thread_state::drbg" data-ref-filename="rand_thread_state..drbg">drbg</dfn>;</td></tr>
+<tr><th id="62">62</th><td>  <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="tu decl field" id="rand_thread_state::fork_generation" title='rand_thread_state::fork_generation' data-type='uint64_t' data-ref="rand_thread_state::fork_generation" data-ref-filename="rand_thread_state..fork_generation">fork_generation</dfn>;</td></tr>
+<tr><th id="63">63</th><td>  <i  data-doc="rand_thread_state::calls">// calls is the number of generate calls made on |drbg| since it was last</i></td></tr>
+<tr><th id="64">64</th><td><i  data-doc="rand_thread_state::calls">  // (re)seeded. This is bound by |kReseedInterval|.</i></td></tr>
+<tr><th id="65">65</th><td>  <em>unsigned</em> <dfn class="tu decl field" id="rand_thread_state::calls" title='rand_thread_state::calls' data-type='unsigned int' data-ref="rand_thread_state::calls" data-ref-filename="rand_thread_state..calls">calls</dfn>;</td></tr>
+<tr><th id="66">66</th><td>  <i  data-doc="rand_thread_state::last_block_valid">// last_block_valid is non-zero iff |last_block| contains data from</i></td></tr>
+<tr><th id="67">67</th><td><i  data-doc="rand_thread_state::last_block_valid">  // |get_seed_entropy|.</i></td></tr>
+<tr><th id="68">68</th><td>  <em>int</em> <dfn class="tu decl field" id="rand_thread_state::last_block_valid" title='rand_thread_state::last_block_valid' data-type='int' data-ref="rand_thread_state::last_block_valid" data-ref-filename="rand_thread_state..last_block_valid">last_block_valid</dfn>;</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td><u>#<span data-ppcond="70">if</span> defined(<span class="macro" data-ref="_M/BORINGSSL_FIPS">BORINGSSL_FIPS</span>)</u></td></tr>
+<tr><th id="71">71</th><td>  <i>// last_block contains the previous block from |get_seed_entropy|.</i></td></tr>
+<tr><th id="72">72</th><td>  uint8_t last_block[CRNGT_BLOCK_SIZE];</td></tr>
+<tr><th id="73">73</th><td>  <i>// next and prev form a NULL-terminated, double-linked list of all states in</i></td></tr>
+<tr><th id="74">74</th><td><i>  // a process.</i></td></tr>
+<tr><th id="75">75</th><td>  <b>struct</b> rand_thread_state *next, *prev;</td></tr>
+<tr><th id="76">76</th><td><u>#<span data-ppcond="70">endif</span></u></td></tr>
+<tr><th id="77">77</th><td>};</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td><u>#<span data-ppcond="79">if</span> defined(<span class="macro" data-ref="_M/BORINGSSL_FIPS">BORINGSSL_FIPS</span>)</u></td></tr>
+<tr><th id="80">80</th><td><i>// thread_states_list is the head of a linked-list of all |rand_thread_state|</i></td></tr>
+<tr><th id="81">81</th><td><i>// objects in the process, one per thread. This is needed because FIPS requires</i></td></tr>
+<tr><th id="82">82</th><td><i>// that they be zeroed on process exit, but thread-local destructors aren't</i></td></tr>
+<tr><th id="83">83</th><td><i>// called when the whole process is exiting.</i></td></tr>
+<tr><th id="84">84</th><td>DEFINE_BSS_GET(<b>struct</b> rand_thread_state *, thread_states_list);</td></tr>
+<tr><th id="85">85</th><td>DEFINE_STATIC_MUTEX(thread_states_list_lock);</td></tr>
+<tr><th id="86">86</th><td>DEFINE_STATIC_MUTEX(state_clear_all_lock);</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td><em>static</em> <em>void</em> rand_thread_state_clear_all(<em>void</em>) <b>__attribute__</b>((destructor));</td></tr>
+<tr><th id="89">89</th><td><em>static</em> <em>void</em> rand_thread_state_clear_all(<em>void</em>) {</td></tr>
+<tr><th id="90">90</th><td>  CRYPTO_STATIC_MUTEX_lock_write(thread_states_list_lock_bss_get());</td></tr>
+<tr><th id="91">91</th><td>  CRYPTO_STATIC_MUTEX_lock_write(state_clear_all_lock_bss_get());</td></tr>
+<tr><th id="92">92</th><td>  <b>for</b> (<b>struct</b> rand_thread_state *cur = *thread_states_list_bss_get();</td></tr>
+<tr><th id="93">93</th><td>       cur != NULL; cur = cur-&gt;next) {</td></tr>
+<tr><th id="94">94</th><td>    CTR_DRBG_clear(&amp;cur-&gt;drbg);</td></tr>
+<tr><th id="95">95</th><td>  }</td></tr>
+<tr><th id="96">96</th><td>  <i>// The locks are deliberately left locked so that any threads that are still</i></td></tr>
+<tr><th id="97">97</th><td><i>  // running will hang if they try to call |RAND_bytes|.</i></td></tr>
+<tr><th id="98">98</th><td>}</td></tr>
+<tr><th id="99">99</th><td><u>#<span data-ppcond="79">endif</span></u></td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td><i  data-doc="rand_thread_state_free">// rand_thread_state_free frees a |rand_thread_state|. This is called when a</i></td></tr>
+<tr><th id="102">102</th><td><i  data-doc="rand_thread_state_free">// thread exits.</i></td></tr>
+<tr><th id="103">103</th><td><em>static</em> <em>void</em> <dfn class="tu decl def fn" id="rand_thread_state_free" title='rand_thread_state_free' data-type='void rand_thread_state_free(void * state_in)' data-ref="rand_thread_state_free" data-ref-filename="rand_thread_state_free">rand_thread_state_free</dfn>(<em>void</em> *<dfn class="local col1 decl" id="1state_in" title='state_in' data-type='void *' data-ref="1state_in" data-ref-filename="1state_in">state_in</dfn>) {</td></tr>
+<tr><th id="104">104</th><td>  <b>struct</b> <a class="type" href="#rand_thread_state" title='rand_thread_state' data-ref="rand_thread_state" data-ref-filename="rand_thread_state">rand_thread_state</a> *<dfn class="local col2 decl" id="2state" title='state' data-type='struct rand_thread_state *' data-ref="2state" data-ref-filename="2state">state</dfn> = <a class="local col1 ref" href="#1state_in" title='state_in' data-ref="1state_in" data-ref-filename="1state_in">state_in</a>;</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td>  <b>if</b> (<a class="local col1 ref" href="#1state_in" title='state_in' data-ref="1state_in" data-ref-filename="1state_in">state_in</a> == <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>) {</td></tr>
+<tr><th id="107">107</th><td>    <b>return</b>;</td></tr>
+<tr><th id="108">108</th><td>  }</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td><u>#<span data-ppcond="110">if</span> defined(<span class="macro" data-ref="_M/BORINGSSL_FIPS">BORINGSSL_FIPS</span>)</u></td></tr>
+<tr><th id="111">111</th><td>  CRYPTO_STATIC_MUTEX_lock_write(thread_states_list_lock_bss_get());</td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td>  <b>if</b> (state-&gt;prev != NULL) {</td></tr>
+<tr><th id="114">114</th><td>    state-&gt;prev-&gt;next = state-&gt;next;</td></tr>
+<tr><th id="115">115</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="116">116</th><td>    *thread_states_list_bss_get() = state-&gt;next;</td></tr>
+<tr><th id="117">117</th><td>  }</td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td>  <b>if</b> (state-&gt;next != NULL) {</td></tr>
+<tr><th id="120">120</th><td>    state-&gt;next-&gt;prev = state-&gt;prev;</td></tr>
+<tr><th id="121">121</th><td>  }</td></tr>
+<tr><th id="122">122</th><td></td></tr>
+<tr><th id="123">123</th><td>  CRYPTO_STATIC_MUTEX_unlock_write(thread_states_list_lock_bss_get());</td></tr>
+<tr><th id="124">124</th><td></td></tr>
+<tr><th id="125">125</th><td>  CTR_DRBG_clear(&amp;state-&gt;drbg);</td></tr>
+<tr><th id="126">126</th><td><u>#<span data-ppcond="110">endif</span></u></td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td>  <a class="ref fn" href="../../../include/openssl/mem.h.html#OPENSSL_free" title='OPENSSL_free' data-ref="OPENSSL_free" data-ref-filename="OPENSSL_free">OPENSSL_free</a>(<a class="local col2 ref" href="#2state" title='state' data-ref="2state" data-ref-filename="2state">state</a>);</td></tr>
+<tr><th id="129">129</th><td>}</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td><u>#<span data-ppcond="131">if</span> defined(<span class="macro" data-ref="_M/OPENSSL_X86_64">OPENSSL_X86_64</span>) &amp;&amp; !defined(<span class="macro" data-ref="_M/OPENSSL_NO_ASM">OPENSSL_NO_ASM</span>) &amp;&amp; \</u></td></tr>
+<tr><th id="132">132</th><td><u>    !defined(<span class="macro" data-ref="_M/BORINGSSL_UNSAFE_DETERMINISTIC_MODE">BORINGSSL_UNSAFE_DETERMINISTIC_MODE</span>)</u></td></tr>
+<tr><th id="133">133</th><td><i>// rdrand should only be called if either |have_rdrand| or |have_fast_rdrand|</i></td></tr>
+<tr><th id="134">134</th><td><i>// returned true.</i></td></tr>
+<tr><th id="135">135</th><td><em>static</em> <em>int</em> rdrand(uint8_t *buf, <em>const</em> size_t len) {</td></tr>
+<tr><th id="136">136</th><td>  <em>const</em> size_t len_multiple8 = len &amp; ~<var>7</var>;</td></tr>
+<tr><th id="137">137</th><td>  <b>if</b> (!CRYPTO_rdrand_multiple8_buf(buf, len_multiple8)) {</td></tr>
+<tr><th id="138">138</th><td>    <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="139">139</th><td>  }</td></tr>
+<tr><th id="140">140</th><td>  <em>const</em> size_t remainder = len - len_multiple8;</td></tr>
+<tr><th id="141">141</th><td></td></tr>
+<tr><th id="142">142</th><td>  <b>if</b> (remainder != <var>0</var>) {</td></tr>
+<tr><th id="143">143</th><td>    assert(remainder &lt; <var>8</var>);</td></tr>
+<tr><th id="144">144</th><td></td></tr>
+<tr><th id="145">145</th><td>    uint8_t rand_buf[<var>8</var>];</td></tr>
+<tr><th id="146">146</th><td>    <b>if</b> (!CRYPTO_rdrand(rand_buf)) {</td></tr>
+<tr><th id="147">147</th><td>      <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="148">148</th><td>    }</td></tr>
+<tr><th id="149">149</th><td>    OPENSSL_memcpy(buf + len_multiple8, rand_buf, remainder);</td></tr>
+<tr><th id="150">150</th><td>  }</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td>  <b>return</b> <var>1</var>;</td></tr>
+<tr><th id="153">153</th><td>}</td></tr>
+<tr><th id="154">154</th><td></td></tr>
+<tr><th id="155">155</th><td><u>#<span data-ppcond="131">else</span></u></td></tr>
+<tr><th id="156">156</th><td></td></tr>
+<tr><th id="157">157</th><td><em>static</em> <em>int</em> <dfn class="tu decl def fn" id="rdrand" title='rdrand' data-type='int rdrand(uint8_t * buf, size_t len)' data-ref="rdrand" data-ref-filename="rdrand">rdrand</dfn>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col3 decl" id="3buf" title='buf' data-type='uint8_t *' data-ref="3buf" data-ref-filename="3buf">buf</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="4len" title='len' data-type='size_t' data-ref="4len" data-ref-filename="4len">len</dfn>) {</td></tr>
+<tr><th id="158">158</th><td>  <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="159">159</th><td>}</td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td><u>#<span data-ppcond="131">endif</span></u></td></tr>
+<tr><th id="162">162</th><td></td></tr>
+<tr><th id="163">163</th><td><u>#<span data-ppcond="163">if</span> defined(<span class="macro" data-ref="_M/BORINGSSL_FIPS">BORINGSSL_FIPS</span>)</u></td></tr>
+<tr><th id="164">164</th><td></td></tr>
+<tr><th id="165">165</th><td><em>void</em> CRYPTO_get_seed_entropy(uint8_t *out_entropy, size_t out_entropy_len,</td></tr>
+<tr><th id="166">166</th><td>                             <em>int</em> *out_used_cpu) {</td></tr>
+<tr><th id="167">167</th><td>  *out_used_cpu = <var>0</var>;</td></tr>
+<tr><th id="168">168</th><td>  <b>if</b> (have_rdrand() &amp;&amp; rdrand(out_entropy, out_entropy_len)) {</td></tr>
+<tr><th id="169">169</th><td>    *out_used_cpu = <var>1</var>;</td></tr>
+<tr><th id="170">170</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="171">171</th><td>    CRYPTO_sysrand_for_seed(out_entropy, out_entropy_len);</td></tr>
+<tr><th id="172">172</th><td>  }</td></tr>
+<tr><th id="173">173</th><td></td></tr>
+<tr><th id="174">174</th><td><u>#if defined(BORINGSSL_FIPS_BREAK_CRNG)</u></td></tr>
+<tr><th id="175">175</th><td>  <i>// This breaks the "continuous random number generator test" defined in FIPS</i></td></tr>
+<tr><th id="176">176</th><td><i>  // 140-2, section 4.9.2, and implemented in |rand_get_seed|.</i></td></tr>
+<tr><th id="177">177</th><td>  OPENSSL_memset(out_entropy, <var>0</var>, out_entropy_len);</td></tr>
+<tr><th id="178">178</th><td><u>#endif</u></td></tr>
+<tr><th id="179">179</th><td>}</td></tr>
+<tr><th id="180">180</th><td></td></tr>
+<tr><th id="181">181</th><td><i>// In passive entropy mode, entropy is supplied from outside of the module via</i></td></tr>
+<tr><th id="182">182</th><td><i>// |RAND_load_entropy| and is stored in global instance of the following</i></td></tr>
+<tr><th id="183">183</th><td><i>// structure.</i></td></tr>
+<tr><th id="184">184</th><td></td></tr>
+<tr><th id="185">185</th><td><b>struct</b> entropy_buffer {</td></tr>
+<tr><th id="186">186</th><td>  <i>// bytes contains entropy suitable for seeding a DRBG.</i></td></tr>
+<tr><th id="187">187</th><td>  uint8_t bytes[CTR_DRBG_ENTROPY_LEN * BORINGSSL_FIPS_OVERREAD];</td></tr>
+<tr><th id="188">188</th><td>  <i>// bytes_valid indicates the number of bytes of |bytes| that contain valid</i></td></tr>
+<tr><th id="189">189</th><td><i>  // data.</i></td></tr>
+<tr><th id="190">190</th><td>  size_t bytes_valid;</td></tr>
+<tr><th id="191">191</th><td>  <i>// from_cpu is true if any of the contents of |bytes| were obtained directly</i></td></tr>
+<tr><th id="192">192</th><td><i>  // from the CPU.</i></td></tr>
+<tr><th id="193">193</th><td>  <em>int</em> from_cpu;</td></tr>
+<tr><th id="194">194</th><td>};</td></tr>
+<tr><th id="195">195</th><td></td></tr>
+<tr><th id="196">196</th><td>DEFINE_BSS_GET(<b>struct</b> entropy_buffer, entropy_buffer);</td></tr>
+<tr><th id="197">197</th><td>DEFINE_STATIC_MUTEX(entropy_buffer_lock);</td></tr>
+<tr><th id="198">198</th><td></td></tr>
+<tr><th id="199">199</th><td><em>void</em> RAND_load_entropy(<em>const</em> uint8_t *entropy, size_t entropy_len,</td></tr>
+<tr><th id="200">200</th><td>                       <em>int</em> from_cpu) {</td></tr>
+<tr><th id="201">201</th><td>  <b>struct</b> entropy_buffer *<em>const</em> buffer = entropy_buffer_bss_get();</td></tr>
+<tr><th id="202">202</th><td></td></tr>
+<tr><th id="203">203</th><td>  CRYPTO_STATIC_MUTEX_lock_write(entropy_buffer_lock_bss_get());</td></tr>
+<tr><th id="204">204</th><td>  <em>const</em> size_t space = <b>sizeof</b>(buffer-&gt;bytes) - buffer-&gt;bytes_valid;</td></tr>
+<tr><th id="205">205</th><td>  <b>if</b> (entropy_len &gt; space) {</td></tr>
+<tr><th id="206">206</th><td>    entropy_len = space;</td></tr>
+<tr><th id="207">207</th><td>  }</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td>  OPENSSL_memcpy(&amp;buffer-&gt;bytes[buffer-&gt;bytes_valid], entropy, entropy_len);</td></tr>
+<tr><th id="210">210</th><td>  buffer-&gt;bytes_valid += entropy_len;</td></tr>
+<tr><th id="211">211</th><td>  buffer-&gt;from_cpu |= from_cpu &amp;&amp; (entropy_len != <var>0</var>);</td></tr>
+<tr><th id="212">212</th><td>  CRYPTO_STATIC_MUTEX_unlock_write(entropy_buffer_lock_bss_get());</td></tr>
+<tr><th id="213">213</th><td>}</td></tr>
+<tr><th id="214">214</th><td></td></tr>
+<tr><th id="215">215</th><td><i>// get_seed_entropy fills |out_entropy_len| bytes of |out_entropy| from the</i></td></tr>
+<tr><th id="216">216</th><td><i>// global |entropy_buffer|.</i></td></tr>
+<tr><th id="217">217</th><td><em>static</em> <em>void</em> get_seed_entropy(uint8_t *out_entropy, size_t out_entropy_len,</td></tr>
+<tr><th id="218">218</th><td>                             <em>int</em> *out_used_cpu) {</td></tr>
+<tr><th id="219">219</th><td>  <b>struct</b> entropy_buffer *<em>const</em> buffer = entropy_buffer_bss_get();</td></tr>
+<tr><th id="220">220</th><td>  <b>if</b> (out_entropy_len &gt; <b>sizeof</b>(buffer-&gt;bytes)) {</td></tr>
+<tr><th id="221">221</th><td>    abort();</td></tr>
+<tr><th id="222">222</th><td>  }</td></tr>
+<tr><th id="223">223</th><td></td></tr>
+<tr><th id="224">224</th><td>  CRYPTO_STATIC_MUTEX_lock_write(entropy_buffer_lock_bss_get());</td></tr>
+<tr><th id="225">225</th><td>  <b>while</b> (buffer-&gt;bytes_valid &lt; out_entropy_len) {</td></tr>
+<tr><th id="226">226</th><td>    CRYPTO_STATIC_MUTEX_unlock_write(entropy_buffer_lock_bss_get());</td></tr>
+<tr><th id="227">227</th><td>    RAND_need_entropy(out_entropy_len - buffer-&gt;bytes_valid);</td></tr>
+<tr><th id="228">228</th><td>    CRYPTO_STATIC_MUTEX_lock_write(entropy_buffer_lock_bss_get());</td></tr>
+<tr><th id="229">229</th><td>  }</td></tr>
+<tr><th id="230">230</th><td></td></tr>
+<tr><th id="231">231</th><td>  *out_used_cpu = buffer-&gt;from_cpu;</td></tr>
+<tr><th id="232">232</th><td>  OPENSSL_memcpy(out_entropy, buffer-&gt;bytes, out_entropy_len);</td></tr>
+<tr><th id="233">233</th><td>  OPENSSL_memmove(buffer-&gt;bytes, &amp;buffer-&gt;bytes[out_entropy_len],</td></tr>
+<tr><th id="234">234</th><td>                  buffer-&gt;bytes_valid - out_entropy_len);</td></tr>
+<tr><th id="235">235</th><td>  buffer-&gt;bytes_valid -= out_entropy_len;</td></tr>
+<tr><th id="236">236</th><td>  <b>if</b> (buffer-&gt;bytes_valid == <var>0</var>) {</td></tr>
+<tr><th id="237">237</th><td>    buffer-&gt;from_cpu = <var>0</var>;</td></tr>
+<tr><th id="238">238</th><td>  }</td></tr>
+<tr><th id="239">239</th><td></td></tr>
+<tr><th id="240">240</th><td>  CRYPTO_STATIC_MUTEX_unlock_write(entropy_buffer_lock_bss_get());</td></tr>
+<tr><th id="241">241</th><td>}</td></tr>
+<tr><th id="242">242</th><td></td></tr>
+<tr><th id="243">243</th><td><i>// rand_get_seed fills |seed| with entropy and sets |*out_used_cpu| to one if</i></td></tr>
+<tr><th id="244">244</th><td><i>// that entropy came directly from the CPU and zero otherwise.</i></td></tr>
+<tr><th id="245">245</th><td><em>static</em> <em>void</em> rand_get_seed(<b>struct</b> rand_thread_state *state,</td></tr>
+<tr><th id="246">246</th><td>                          uint8_t seed[CTR_DRBG_ENTROPY_LEN],</td></tr>
+<tr><th id="247">247</th><td>                          <em>int</em> *out_used_cpu) {</td></tr>
+<tr><th id="248">248</th><td>  <b>if</b> (!state-&gt;last_block_valid) {</td></tr>
+<tr><th id="249">249</th><td>    <em>int</em> unused;</td></tr>
+<tr><th id="250">250</th><td>    get_seed_entropy(state-&gt;last_block, <b>sizeof</b>(state-&gt;last_block), &amp;unused);</td></tr>
+<tr><th id="251">251</th><td>    state-&gt;last_block_valid = <var>1</var>;</td></tr>
+<tr><th id="252">252</th><td>  }</td></tr>
+<tr><th id="253">253</th><td></td></tr>
+<tr><th id="254">254</th><td>  uint8_t entropy[CTR_DRBG_ENTROPY_LEN * BORINGSSL_FIPS_OVERREAD];</td></tr>
+<tr><th id="255">255</th><td>  get_seed_entropy(entropy, <b>sizeof</b>(entropy), out_used_cpu);</td></tr>
+<tr><th id="256">256</th><td></td></tr>
+<tr><th id="257">257</th><td>  <i>// See FIPS 140-2, section 4.9.2. This is the “continuous random number</i></td></tr>
+<tr><th id="258">258</th><td><i>  // generator test” which causes the program to randomly abort. Hopefully the</i></td></tr>
+<tr><th id="259">259</th><td><i>  // rate of failure is small enough not to be a problem in practice.</i></td></tr>
+<tr><th id="260">260</th><td>  <b>if</b> (CRYPTO_memcmp(state-&gt;last_block, entropy, CRNGT_BLOCK_SIZE) == <var>0</var>) {</td></tr>
+<tr><th id="261">261</th><td>    fprintf(stderr, <q>"CRNGT failed.\n"</q>);</td></tr>
+<tr><th id="262">262</th><td>    BORINGSSL_FIPS_abort();</td></tr>
+<tr><th id="263">263</th><td>  }</td></tr>
+<tr><th id="264">264</th><td></td></tr>
+<tr><th id="265">265</th><td>  OPENSSL_STATIC_ASSERT(<b>sizeof</b>(entropy) % CRNGT_BLOCK_SIZE == <var>0</var>, <q>""</q>);</td></tr>
+<tr><th id="266">266</th><td>  <b>for</b> (size_t i = CRNGT_BLOCK_SIZE; i &lt; <b>sizeof</b>(entropy);</td></tr>
+<tr><th id="267">267</th><td>       i += CRNGT_BLOCK_SIZE) {</td></tr>
+<tr><th id="268">268</th><td>    <b>if</b> (CRYPTO_memcmp(entropy + i - CRNGT_BLOCK_SIZE, entropy + i,</td></tr>
+<tr><th id="269">269</th><td>                      CRNGT_BLOCK_SIZE) == <var>0</var>) {</td></tr>
+<tr><th id="270">270</th><td>      fprintf(stderr, <q>"CRNGT failed.\n"</q>);</td></tr>
+<tr><th id="271">271</th><td>      BORINGSSL_FIPS_abort();</td></tr>
+<tr><th id="272">272</th><td>    }</td></tr>
+<tr><th id="273">273</th><td>  }</td></tr>
+<tr><th id="274">274</th><td>  OPENSSL_memcpy(state-&gt;last_block,</td></tr>
+<tr><th id="275">275</th><td>                 entropy + <b>sizeof</b>(entropy) - CRNGT_BLOCK_SIZE,</td></tr>
+<tr><th id="276">276</th><td>                 CRNGT_BLOCK_SIZE);</td></tr>
+<tr><th id="277">277</th><td></td></tr>
+<tr><th id="278">278</th><td>  OPENSSL_memcpy(seed, entropy, CTR_DRBG_ENTROPY_LEN);</td></tr>
+<tr><th id="279">279</th><td></td></tr>
+<tr><th id="280">280</th><td>  <b>for</b> (size_t i = <var>1</var>; i &lt; BORINGSSL_FIPS_OVERREAD; i++) {</td></tr>
+<tr><th id="281">281</th><td>    <b>for</b> (size_t j = <var>0</var>; j &lt; CTR_DRBG_ENTROPY_LEN; j++) {</td></tr>
+<tr><th id="282">282</th><td>      seed[j] ^= entropy[CTR_DRBG_ENTROPY_LEN * i + j];</td></tr>
+<tr><th id="283">283</th><td>    }</td></tr>
+<tr><th id="284">284</th><td>  }</td></tr>
+<tr><th id="285">285</th><td>}</td></tr>
+<tr><th id="286">286</th><td></td></tr>
+<tr><th id="287">287</th><td><u>#<span data-ppcond="163">else</span></u></td></tr>
+<tr><th id="288">288</th><td></td></tr>
+<tr><th id="289">289</th><td><i  data-doc="rand_get_seed">// rand_get_seed fills |seed| with entropy and sets |*out_used_cpu| to one if</i></td></tr>
+<tr><th id="290">290</th><td><i  data-doc="rand_get_seed">// that entropy came directly from the CPU and zero otherwise.</i></td></tr>
+<tr><th id="291">291</th><td><em>static</em> <em>void</em> <dfn class="tu decl def fn" id="rand_get_seed" title='rand_get_seed' data-type='void rand_get_seed(struct rand_thread_state * state, uint8_t * seed, int * out_used_cpu)' data-ref="rand_get_seed" data-ref-filename="rand_get_seed">rand_get_seed</dfn>(<b>struct</b> <a class="type" href="#rand_thread_state" title='rand_thread_state' data-ref="rand_thread_state" data-ref-filename="rand_thread_state">rand_thread_state</a> *<dfn class="local col5 decl" id="5state" title='state' data-type='struct rand_thread_state *' data-ref="5state" data-ref-filename="5state">state</dfn>,</td></tr>
+<tr><th id="292">292</th><td>                          <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col6 decl" id="6seed" title='seed' data-type='uint8_t *' data-ref="6seed" data-ref-filename="6seed">seed</dfn>[<a class="macro" href="internal.h.html#115" title="48" data-ref="_M/CTR_DRBG_ENTROPY_LEN">CTR_DRBG_ENTROPY_LEN</a>],</td></tr>
+<tr><th id="293">293</th><td>                          <em>int</em> *<dfn class="local col7 decl" id="7out_used_cpu" title='out_used_cpu' data-type='int *' data-ref="7out_used_cpu" data-ref-filename="7out_used_cpu">out_used_cpu</dfn>) {</td></tr>
+<tr><th id="294">294</th><td>  <i>// If not in FIPS mode, we don't overread from the system entropy source and</i></td></tr>
+<tr><th id="295">295</th><td><i>  // we don't depend only on the hardware RDRAND.</i></td></tr>
+<tr><th id="296">296</th><td>  <a class="ref fn" href="internal.h.html#CRYPTO_sysrand" title='CRYPTO_sysrand' data-ref="CRYPTO_sysrand" data-ref-filename="CRYPTO_sysrand">CRYPTO_sysrand</a>(<a class="local col6 ref" href="#6seed" title='seed' data-ref="6seed" data-ref-filename="6seed">seed</a>, <a class="macro" href="internal.h.html#115" title="48" data-ref="_M/CTR_DRBG_ENTROPY_LEN">CTR_DRBG_ENTROPY_LEN</a>);</td></tr>
+<tr><th id="297">297</th><td>  *<a class="local col7 ref" href="#7out_used_cpu" title='out_used_cpu' data-ref="7out_used_cpu" data-ref-filename="7out_used_cpu">out_used_cpu</a> = <var>0</var>;</td></tr>
+<tr><th id="298">298</th><td>}</td></tr>
+<tr><th id="299">299</th><td></td></tr>
+<tr><th id="300">300</th><td><u>#<span data-ppcond="163">endif</span></u></td></tr>
+<tr><th id="301">301</th><td></td></tr>
+<tr><th id="302">302</th><td><em>void</em> <dfn class="decl def fn" id="RAND_bytes_with_additional_data" title='RAND_bytes_with_additional_data' data-ref="RAND_bytes_with_additional_data" data-ref-filename="RAND_bytes_with_additional_data">RAND_bytes_with_additional_data</dfn>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col8 decl" id="8out" title='out' data-type='uint8_t *' data-ref="8out" data-ref-filename="8out">out</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="9out_len" title='out_len' data-type='size_t' data-ref="9out_len" data-ref-filename="9out_len">out_len</dfn>,</td></tr>
+<tr><th id="303">303</th><td>                                     <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col0 decl" id="10user_additional_data" title='user_additional_data' data-type='const uint8_t *' data-ref="10user_additional_data" data-ref-filename="10user_additional_data">user_additional_data</dfn>[<var>32</var>]) {</td></tr>
+<tr><th id="304">304</th><td>  <b>if</b> (<a class="local col9 ref" href="#9out_len" title='out_len' data-ref="9out_len" data-ref-filename="9out_len">out_len</a> == <var>0</var>) {</td></tr>
+<tr><th id="305">305</th><td>    <b>return</b>;</td></tr>
+<tr><th id="306">306</th><td>  }</td></tr>
+<tr><th id="307">307</th><td></td></tr>
+<tr><th id="308">308</th><td>  <em>const</em> <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col1 decl" id="11fork_generation" title='fork_generation' data-type='const uint64_t' data-ref="11fork_generation" data-ref-filename="11fork_generation">fork_generation</dfn> = <a class="ref fn" href="fork_detect.h.html#CRYPTO_get_fork_generation" title='CRYPTO_get_fork_generation' data-ref="CRYPTO_get_fork_generation" data-ref-filename="CRYPTO_get_fork_generation">CRYPTO_get_fork_generation</a>();</td></tr>
+<tr><th id="309">309</th><td></td></tr>
+<tr><th id="310">310</th><td>  <i>// Additional data is mixed into every CTR-DRBG call to protect, as best we</i></td></tr>
+<tr><th id="311">311</th><td><i>  // can, against forks &amp; VM clones. We do not over-read this information and</i></td></tr>
+<tr><th id="312">312</th><td><i>  // don't reseed with it so, from the point of view of FIPS, this doesn't</i></td></tr>
+<tr><th id="313">313</th><td><i>  // provide “prediction resistance”. But, in practice, it does.</i></td></tr>
+<tr><th id="314">314</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col2 decl" id="12additional_data" title='additional_data' data-type='uint8_t [32]' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</dfn>[<var>32</var>];</td></tr>
+<tr><th id="315">315</th><td>  <i>// Intel chips have fast RDRAND instructions while, in other cases, RDRAND can</i></td></tr>
+<tr><th id="316">316</th><td><i>  // be _slower_ than a system call.</i></td></tr>
+<tr><th id="317">317</th><td>  <b>if</b> (!<a class="ref fn" href="internal.h.html#have_fast_rdrand" title='have_fast_rdrand' data-ref="have_fast_rdrand" data-ref-filename="have_fast_rdrand">have_fast_rdrand</a>() ||</td></tr>
+<tr><th id="318">318</th><td>      !<a class="tu ref fn" href="#rdrand" title='rdrand' data-use='c' data-ref="rdrand" data-ref-filename="rdrand">rdrand</a>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>, <b>sizeof</b>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>))) {</td></tr>
+<tr><th id="319">319</th><td>    <i>// Without a hardware RNG to save us from address-space duplication, the OS</i></td></tr>
+<tr><th id="320">320</th><td><i>    // entropy is used. This can be expensive (one read per |RAND_bytes| call)</i></td></tr>
+<tr><th id="321">321</th><td><i>    // and so is disabled when we have fork detection, or if the application has</i></td></tr>
+<tr><th id="322">322</th><td><i>    // promised not to fork.</i></td></tr>
+<tr><th id="323">323</th><td>    <b>if</b> (<a class="local col1 ref" href="#11fork_generation" title='fork_generation' data-ref="11fork_generation" data-ref-filename="11fork_generation">fork_generation</a> != <var>0</var> || <a class="ref fn" href="internal.h.html#rand_fork_unsafe_buffering_enabled" title='rand_fork_unsafe_buffering_enabled' data-ref="rand_fork_unsafe_buffering_enabled" data-ref-filename="rand_fork_unsafe_buffering_enabled">rand_fork_unsafe_buffering_enabled</a>()) {</td></tr>
+<tr><th id="324">324</th><td>      <a class="ref fn" href="../../internal.h.html#OPENSSL_memset" title='OPENSSL_memset' data-ref="OPENSSL_memset" data-ref-filename="OPENSSL_memset">OPENSSL_memset</a>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>, <var>0</var>, <b>sizeof</b>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>));</td></tr>
+<tr><th id="325">325</th><td>    } <b>else</b> <b>if</b> (!<a class="ref fn" href="internal.h.html#have_rdrand" title='have_rdrand' data-ref="have_rdrand" data-ref-filename="have_rdrand">have_rdrand</a>()) {</td></tr>
+<tr><th id="326">326</th><td>      <i>// No alternative so block for OS entropy.</i></td></tr>
+<tr><th id="327">327</th><td>      <a class="ref fn" href="internal.h.html#CRYPTO_sysrand" title='CRYPTO_sysrand' data-ref="CRYPTO_sysrand" data-ref-filename="CRYPTO_sysrand">CRYPTO_sysrand</a>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>, <b>sizeof</b>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>));</td></tr>
+<tr><th id="328">328</th><td>    } <b>else</b> <b>if</b> (!<a class="ref fn" href="internal.h.html#CRYPTO_sysrand_if_available" title='CRYPTO_sysrand_if_available' data-ref="CRYPTO_sysrand_if_available" data-ref-filename="CRYPTO_sysrand_if_available">CRYPTO_sysrand_if_available</a>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>,</td></tr>
+<tr><th id="329">329</th><td>                                            <b>sizeof</b>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>)) &amp;&amp;</td></tr>
+<tr><th id="330">330</th><td>               !<a class="tu ref fn" href="#rdrand" title='rdrand' data-use='c' data-ref="rdrand" data-ref-filename="rdrand">rdrand</a>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>, <b>sizeof</b>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>))) {</td></tr>
+<tr><th id="331">331</th><td>      <i>// RDRAND failed: block for OS entropy.</i></td></tr>
+<tr><th id="332">332</th><td>      <a class="ref fn" href="internal.h.html#CRYPTO_sysrand" title='CRYPTO_sysrand' data-ref="CRYPTO_sysrand" data-ref-filename="CRYPTO_sysrand">CRYPTO_sysrand</a>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>, <b>sizeof</b>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>));</td></tr>
+<tr><th id="333">333</th><td>    }</td></tr>
+<tr><th id="334">334</th><td>  }</td></tr>
+<tr><th id="335">335</th><td></td></tr>
+<tr><th id="336">336</th><td>  <b>for</b> (<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="13i" title='i' data-type='size_t' data-ref="13i" data-ref-filename="13i">i</dfn> = <var>0</var>; <a class="local col3 ref" href="#13i" title='i' data-ref="13i" data-ref-filename="13i">i</a> &lt; <b>sizeof</b>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>); <a class="local col3 ref" href="#13i" title='i' data-ref="13i" data-ref-filename="13i">i</a>++) {</td></tr>
+<tr><th id="337">337</th><td>    <a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>[<a class="local col3 ref" href="#13i" title='i' data-ref="13i" data-ref-filename="13i">i</a>] ^= <a class="local col0 ref" href="#10user_additional_data" title='user_additional_data' data-ref="10user_additional_data" data-ref-filename="10user_additional_data">user_additional_data</a>[<a class="local col3 ref" href="#13i" title='i' data-ref="13i" data-ref-filename="13i">i</a>];</td></tr>
+<tr><th id="338">338</th><td>  }</td></tr>
+<tr><th id="339">339</th><td></td></tr>
+<tr><th id="340">340</th><td>  <b>struct</b> <a class="type" href="#rand_thread_state" title='rand_thread_state' data-ref="rand_thread_state" data-ref-filename="rand_thread_state">rand_thread_state</a> <dfn class="local col4 decl" id="14stack_state" title='stack_state' data-type='struct rand_thread_state' data-ref="14stack_state" data-ref-filename="14stack_state">stack_state</dfn>;</td></tr>
+<tr><th id="341">341</th><td>  <b>struct</b> <a class="type" href="#rand_thread_state" title='rand_thread_state' data-ref="rand_thread_state" data-ref-filename="rand_thread_state">rand_thread_state</a> *<dfn class="local col5 decl" id="15state" title='state' data-type='struct rand_thread_state *' data-ref="15state" data-ref-filename="15state">state</dfn> =</td></tr>
+<tr><th id="342">342</th><td>      <a class="ref fn" href="../../internal.h.html#CRYPTO_get_thread_local" title='CRYPTO_get_thread_local' data-ref="CRYPTO_get_thread_local" data-ref-filename="CRYPTO_get_thread_local">CRYPTO_get_thread_local</a>(<a class="enum" href="../../internal.h.html#OPENSSL_THREAD_LOCAL_RAND" title='OPENSSL_THREAD_LOCAL_RAND' data-ref="OPENSSL_THREAD_LOCAL_RAND" data-ref-filename="OPENSSL_THREAD_LOCAL_RAND">OPENSSL_THREAD_LOCAL_RAND</a>);</td></tr>
+<tr><th id="343">343</th><td></td></tr>
+<tr><th id="344">344</th><td>  <b>if</b> (<a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a> == <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>) {</td></tr>
+<tr><th id="345">345</th><td>    <a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a> = <a class="ref fn" href="../../../include/openssl/mem.h.html#OPENSSL_malloc" title='OPENSSL_malloc' data-ref="OPENSSL_malloc" data-ref-filename="OPENSSL_malloc">OPENSSL_malloc</a>(<b>sizeof</b>(<b>struct</b> <a class="type" href="#rand_thread_state" title='rand_thread_state' data-ref="rand_thread_state" data-ref-filename="rand_thread_state">rand_thread_state</a>));</td></tr>
+<tr><th id="346">346</th><td>    <b>if</b> (<a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a> == <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span> ||</td></tr>
+<tr><th id="347">347</th><td>        !<a class="ref fn" href="../../internal.h.html#CRYPTO_set_thread_local" title='CRYPTO_set_thread_local' data-ref="CRYPTO_set_thread_local" data-ref-filename="CRYPTO_set_thread_local">CRYPTO_set_thread_local</a>(<a class="enum" href="../../internal.h.html#OPENSSL_THREAD_LOCAL_RAND" title='OPENSSL_THREAD_LOCAL_RAND' data-ref="OPENSSL_THREAD_LOCAL_RAND" data-ref-filename="OPENSSL_THREAD_LOCAL_RAND">OPENSSL_THREAD_LOCAL_RAND</a>, <a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>,</td></tr>
+<tr><th id="348">348</th><td>                                 <a class="tu ref fn" href="#rand_thread_state_free" title='rand_thread_state_free' data-use='r' data-ref="rand_thread_state_free" data-ref-filename="rand_thread_state_free">rand_thread_state_free</a>)) {</td></tr>
+<tr><th id="349">349</th><td>      <i>// If the system is out of memory, use an ephemeral state on the</i></td></tr>
+<tr><th id="350">350</th><td><i>      // stack.</i></td></tr>
+<tr><th id="351">351</th><td>      <a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a> = &amp;<a class="local col4 ref" href="#14stack_state" title='stack_state' data-ref="14stack_state" data-ref-filename="14stack_state">stack_state</a>;</td></tr>
+<tr><th id="352">352</th><td>    }</td></tr>
+<tr><th id="353">353</th><td></td></tr>
+<tr><th id="354">354</th><td>    <a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>-&gt;<a class="tu ref field" href="#rand_thread_state::last_block_valid" title='rand_thread_state::last_block_valid' data-use='w' data-ref="rand_thread_state::last_block_valid" data-ref-filename="rand_thread_state..last_block_valid">last_block_valid</a> = <var>0</var>;</td></tr>
+<tr><th id="355">355</th><td>    <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col6 decl" id="16seed" title='seed' data-type='uint8_t [48]' data-ref="16seed" data-ref-filename="16seed">seed</dfn>[<a class="macro" href="internal.h.html#115" title="48" data-ref="_M/CTR_DRBG_ENTROPY_LEN">CTR_DRBG_ENTROPY_LEN</a>];</td></tr>
+<tr><th id="356">356</th><td>    <em>int</em> <dfn class="local col7 decl" id="17used_cpu" title='used_cpu' data-type='int' data-ref="17used_cpu" data-ref-filename="17used_cpu">used_cpu</dfn>;</td></tr>
+<tr><th id="357">357</th><td>    <a class="tu ref fn" href="#rand_get_seed" title='rand_get_seed' data-use='c' data-ref="rand_get_seed" data-ref-filename="rand_get_seed">rand_get_seed</a>(<a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>, <a class="local col6 ref" href="#16seed" title='seed' data-ref="16seed" data-ref-filename="16seed">seed</a>, &amp;<a class="local col7 ref" href="#17used_cpu" title='used_cpu' data-ref="17used_cpu" data-ref-filename="17used_cpu">used_cpu</a>);</td></tr>
+<tr><th id="358">358</th><td></td></tr>
+<tr><th id="359">359</th><td>    <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col8 decl" id="18personalization" title='personalization' data-type='uint8_t [48]' data-ref="18personalization" data-ref-filename="18personalization">personalization</dfn>[<a class="macro" href="internal.h.html#115" title="48" data-ref="_M/CTR_DRBG_ENTROPY_LEN">CTR_DRBG_ENTROPY_LEN</a>];</td></tr>
+<tr><th id="360">360</th><td>    <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="19personalization_len" title='personalization_len' data-type='size_t' data-ref="19personalization_len" data-ref-filename="19personalization_len">personalization_len</dfn> = <var>0</var>;</td></tr>
+<tr><th id="361">361</th><td><u>#<span data-ppcond="361">if</span> defined(<a class="macro" href="internal.h.html#31" data-ref="_M/OPENSSL_URANDOM">OPENSSL_URANDOM</a>)</u></td></tr>
+<tr><th id="362">362</th><td>    <i>// If we used RDRAND, also opportunistically read from the system. This</i></td></tr>
+<tr><th id="363">363</th><td><i>    // avoids solely relying on the hardware once the entropy pool has been</i></td></tr>
+<tr><th id="364">364</th><td><i>    // initialized.</i></td></tr>
+<tr><th id="365">365</th><td>    <b>if</b> (<a class="local col7 ref" href="#17used_cpu" title='used_cpu' data-ref="17used_cpu" data-ref-filename="17used_cpu">used_cpu</a> &amp;&amp;</td></tr>
+<tr><th id="366">366</th><td>        <a class="ref fn" href="internal.h.html#CRYPTO_sysrand_if_available" title='CRYPTO_sysrand_if_available' data-ref="CRYPTO_sysrand_if_available" data-ref-filename="CRYPTO_sysrand_if_available">CRYPTO_sysrand_if_available</a>(<a class="local col8 ref" href="#18personalization" title='personalization' data-ref="18personalization" data-ref-filename="18personalization">personalization</a>, <b>sizeof</b>(<a class="local col8 ref" href="#18personalization" title='personalization' data-ref="18personalization" data-ref-filename="18personalization">personalization</a>))) {</td></tr>
+<tr><th id="367">367</th><td>      <a class="local col9 ref" href="#19personalization_len" title='personalization_len' data-ref="19personalization_len" data-ref-filename="19personalization_len">personalization_len</a> = <b>sizeof</b>(<a class="local col8 ref" href="#18personalization" title='personalization' data-ref="18personalization" data-ref-filename="18personalization">personalization</a>);</td></tr>
+<tr><th id="368">368</th><td>    }</td></tr>
+<tr><th id="369">369</th><td><u>#<span data-ppcond="361">endif</span></u></td></tr>
+<tr><th id="370">370</th><td></td></tr>
+<tr><th id="371">371</th><td>    <b>if</b> (!<a class="ref fn" href="internal.h.html#CTR_DRBG_init" title='CTR_DRBG_init' data-ref="CTR_DRBG_init" data-ref-filename="CTR_DRBG_init">CTR_DRBG_init</a>(&amp;<a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>-&gt;<a class="tu ref field" href="#rand_thread_state::drbg" title='rand_thread_state::drbg' data-use='a' data-ref="rand_thread_state::drbg" data-ref-filename="rand_thread_state..drbg">drbg</a>, <a class="local col6 ref" href="#16seed" title='seed' data-ref="16seed" data-ref-filename="16seed">seed</a>, <a class="local col8 ref" href="#18personalization" title='personalization' data-ref="18personalization" data-ref-filename="18personalization">personalization</a>,</td></tr>
+<tr><th id="372">372</th><td>                       <a class="local col9 ref" href="#19personalization_len" title='personalization_len' data-ref="19personalization_len" data-ref-filename="19personalization_len">personalization_len</a>)) {</td></tr>
+<tr><th id="373">373</th><td>      <span class='ref fn' title='abort' data-ref="abort" data-ref-filename="abort">abort</span>();</td></tr>
+<tr><th id="374">374</th><td>    }</td></tr>
+<tr><th id="375">375</th><td>    <a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>-&gt;<a class="tu ref field" href="#rand_thread_state::calls" title='rand_thread_state::calls' data-use='w' data-ref="rand_thread_state::calls" data-ref-filename="rand_thread_state..calls">calls</a> = <var>0</var>;</td></tr>
+<tr><th id="376">376</th><td>    <a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>-&gt;<a class="tu ref field" href="#rand_thread_state::fork_generation" title='rand_thread_state::fork_generation' data-use='w' data-ref="rand_thread_state::fork_generation" data-ref-filename="rand_thread_state..fork_generation">fork_generation</a> = <a class="local col1 ref" href="#11fork_generation" title='fork_generation' data-ref="11fork_generation" data-ref-filename="11fork_generation">fork_generation</a>;</td></tr>
+<tr><th id="377">377</th><td></td></tr>
+<tr><th id="378">378</th><td><u>#<span data-ppcond="378">if</span> defined(<span class="macro" data-ref="_M/BORINGSSL_FIPS">BORINGSSL_FIPS</span>)</u></td></tr>
+<tr><th id="379">379</th><td>    <b>if</b> (state != &amp;stack_state) {</td></tr>
+<tr><th id="380">380</th><td>      CRYPTO_STATIC_MUTEX_lock_write(thread_states_list_lock_bss_get());</td></tr>
+<tr><th id="381">381</th><td>      <b>struct</b> rand_thread_state **states_list = thread_states_list_bss_get();</td></tr>
+<tr><th id="382">382</th><td>      state-&gt;next = *states_list;</td></tr>
+<tr><th id="383">383</th><td>      <b>if</b> (state-&gt;next != NULL) {</td></tr>
+<tr><th id="384">384</th><td>        state-&gt;next-&gt;prev = state;</td></tr>
+<tr><th id="385">385</th><td>      }</td></tr>
+<tr><th id="386">386</th><td>      state-&gt;prev = NULL;</td></tr>
+<tr><th id="387">387</th><td>      *states_list = state;</td></tr>
+<tr><th id="388">388</th><td>      CRYPTO_STATIC_MUTEX_unlock_write(thread_states_list_lock_bss_get());</td></tr>
+<tr><th id="389">389</th><td>    }</td></tr>
+<tr><th id="390">390</th><td><u>#<span data-ppcond="378">endif</span></u></td></tr>
+<tr><th id="391">391</th><td>  }</td></tr>
+<tr><th id="392">392</th><td></td></tr>
+<tr><th id="393">393</th><td>  <b>if</b> (<a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>-&gt;<a class="tu ref field" href="#rand_thread_state::calls" title='rand_thread_state::calls' data-use='r' data-ref="rand_thread_state::calls" data-ref-filename="rand_thread_state..calls">calls</a> &gt;= <a class="tu ref" href="#kReseedInterval" title='kReseedInterval' data-use='r' data-ref="kReseedInterval" data-ref-filename="kReseedInterval">kReseedInterval</a> ||</td></tr>
+<tr><th id="394">394</th><td>      <a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>-&gt;<a class="tu ref field" href="#rand_thread_state::fork_generation" title='rand_thread_state::fork_generation' data-use='r' data-ref="rand_thread_state::fork_generation" data-ref-filename="rand_thread_state..fork_generation">fork_generation</a> != <a class="local col1 ref" href="#11fork_generation" title='fork_generation' data-ref="11fork_generation" data-ref-filename="11fork_generation">fork_generation</a>) {</td></tr>
+<tr><th id="395">395</th><td>    <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col0 decl" id="20seed" title='seed' data-type='uint8_t [48]' data-ref="20seed" data-ref-filename="20seed">seed</dfn>[<a class="macro" href="internal.h.html#115" title="48" data-ref="_M/CTR_DRBG_ENTROPY_LEN">CTR_DRBG_ENTROPY_LEN</a>];</td></tr>
+<tr><th id="396">396</th><td>    <em>int</em> <dfn class="local col1 decl" id="21used_cpu" title='used_cpu' data-type='int' data-ref="21used_cpu" data-ref-filename="21used_cpu">used_cpu</dfn>;</td></tr>
+<tr><th id="397">397</th><td>    <a class="tu ref fn" href="#rand_get_seed" title='rand_get_seed' data-use='c' data-ref="rand_get_seed" data-ref-filename="rand_get_seed">rand_get_seed</a>(<a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>, <a class="local col0 ref" href="#20seed" title='seed' data-ref="20seed" data-ref-filename="20seed">seed</a>, &amp;<a class="local col1 ref" href="#21used_cpu" title='used_cpu' data-ref="21used_cpu" data-ref-filename="21used_cpu">used_cpu</a>);</td></tr>
+<tr><th id="398">398</th><td><u>#<span data-ppcond="398">if</span> defined(<span class="macro" data-ref="_M/BORINGSSL_FIPS">BORINGSSL_FIPS</span>)</u></td></tr>
+<tr><th id="399">399</th><td>    <i>// Take a read lock around accesses to |state-&gt;drbg|. This is needed to</i></td></tr>
+<tr><th id="400">400</th><td><i>    // avoid returning bad entropy if we race with</i></td></tr>
+<tr><th id="401">401</th><td><i>    // |rand_thread_state_clear_all|.</i></td></tr>
+<tr><th id="402">402</th><td><i>    //</i></td></tr>
+<tr><th id="403">403</th><td><i>    // This lock must be taken after any calls to |CRYPTO_sysrand| to avoid a</i></td></tr>
+<tr><th id="404">404</th><td><i>    // bug on ppc64le. glibc may implement pthread locks by wrapping user code</i></td></tr>
+<tr><th id="405">405</th><td><i>    // in a hardware transaction, but, on some older versions of glibc and the</i></td></tr>
+<tr><th id="406">406</th><td><i>    // kernel, syscalls made with |syscall| did not abort the transaction.</i></td></tr>
+<tr><th id="407">407</th><td>    CRYPTO_STATIC_MUTEX_lock_read(state_clear_all_lock_bss_get());</td></tr>
+<tr><th id="408">408</th><td><u>#<span data-ppcond="398">endif</span></u></td></tr>
+<tr><th id="409">409</th><td>    <b>if</b> (!<a class="ref fn" href="internal.h.html#CTR_DRBG_reseed" title='CTR_DRBG_reseed' data-ref="CTR_DRBG_reseed" data-ref-filename="CTR_DRBG_reseed">CTR_DRBG_reseed</a>(&amp;<a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>-&gt;<a class="tu ref field" href="#rand_thread_state::drbg" title='rand_thread_state::drbg' data-use='a' data-ref="rand_thread_state::drbg" data-ref-filename="rand_thread_state..drbg">drbg</a>, <a class="local col0 ref" href="#20seed" title='seed' data-ref="20seed" data-ref-filename="20seed">seed</a>, <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>, <var>0</var>)) {</td></tr>
+<tr><th id="410">410</th><td>      <span class='ref fn' title='abort' data-ref="abort" data-ref-filename="abort">abort</span>();</td></tr>
+<tr><th id="411">411</th><td>    }</td></tr>
+<tr><th id="412">412</th><td>    <a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>-&gt;<a class="tu ref field" href="#rand_thread_state::calls" title='rand_thread_state::calls' data-use='w' data-ref="rand_thread_state::calls" data-ref-filename="rand_thread_state..calls">calls</a> = <var>0</var>;</td></tr>
+<tr><th id="413">413</th><td>    <a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>-&gt;<a class="tu ref field" href="#rand_thread_state::fork_generation" title='rand_thread_state::fork_generation' data-use='w' data-ref="rand_thread_state::fork_generation" data-ref-filename="rand_thread_state..fork_generation">fork_generation</a> = <a class="local col1 ref" href="#11fork_generation" title='fork_generation' data-ref="11fork_generation" data-ref-filename="11fork_generation">fork_generation</a>;</td></tr>
+<tr><th id="414">414</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="415">415</th><td><u>#<span data-ppcond="415">if</span> defined(<span class="macro" data-ref="_M/BORINGSSL_FIPS">BORINGSSL_FIPS</span>)</u></td></tr>
+<tr><th id="416">416</th><td>    CRYPTO_STATIC_MUTEX_lock_read(state_clear_all_lock_bss_get());</td></tr>
+<tr><th id="417">417</th><td><u>#<span data-ppcond="415">endif</span></u></td></tr>
+<tr><th id="418">418</th><td>  }</td></tr>
+<tr><th id="419">419</th><td></td></tr>
+<tr><th id="420">420</th><td>  <em>int</em> <dfn class="local col2 decl" id="22first_call" title='first_call' data-type='int' data-ref="22first_call" data-ref-filename="22first_call">first_call</dfn> = <var>1</var>;</td></tr>
+<tr><th id="421">421</th><td>  <b>while</b> (<a class="local col9 ref" href="#9out_len" title='out_len' data-ref="9out_len" data-ref-filename="9out_len">out_len</a> &gt; <var>0</var>) {</td></tr>
+<tr><th id="422">422</th><td>    <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="23todo" title='todo' data-type='size_t' data-ref="23todo" data-ref-filename="23todo">todo</dfn> = <a class="local col9 ref" href="#9out_len" title='out_len' data-ref="9out_len" data-ref-filename="9out_len">out_len</a>;</td></tr>
+<tr><th id="423">423</th><td>    <b>if</b> (<a class="local col3 ref" href="#23todo" title='todo' data-ref="23todo" data-ref-filename="23todo">todo</a> &gt; <a class="macro" href="internal.h.html#116" title="65536" data-ref="_M/CTR_DRBG_MAX_GENERATE_LENGTH">CTR_DRBG_MAX_GENERATE_LENGTH</a>) {</td></tr>
+<tr><th id="424">424</th><td>      <a class="local col3 ref" href="#23todo" title='todo' data-ref="23todo" data-ref-filename="23todo">todo</a> = <a class="macro" href="internal.h.html#116" title="65536" data-ref="_M/CTR_DRBG_MAX_GENERATE_LENGTH">CTR_DRBG_MAX_GENERATE_LENGTH</a>;</td></tr>
+<tr><th id="425">425</th><td>    }</td></tr>
+<tr><th id="426">426</th><td></td></tr>
+<tr><th id="427">427</th><td>    <b>if</b> (!<a class="ref fn" href="internal.h.html#CTR_DRBG_generate" title='CTR_DRBG_generate' data-ref="CTR_DRBG_generate" data-ref-filename="CTR_DRBG_generate">CTR_DRBG_generate</a>(&amp;<a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>-&gt;<a class="tu ref field" href="#rand_thread_state::drbg" title='rand_thread_state::drbg' data-use='a' data-ref="rand_thread_state::drbg" data-ref-filename="rand_thread_state..drbg">drbg</a>, <a class="local col8 ref" href="#8out" title='out' data-ref="8out" data-ref-filename="8out">out</a>, <a class="local col3 ref" href="#23todo" title='todo' data-ref="23todo" data-ref-filename="23todo">todo</a>, <a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>,</td></tr>
+<tr><th id="428">428</th><td>                           <a class="local col2 ref" href="#22first_call" title='first_call' data-ref="22first_call" data-ref-filename="22first_call">first_call</a> ? <b>sizeof</b>(<a class="local col2 ref" href="#12additional_data" title='additional_data' data-ref="12additional_data" data-ref-filename="12additional_data">additional_data</a>) : <var>0</var>)) {</td></tr>
+<tr><th id="429">429</th><td>      <span class='ref fn' title='abort' data-ref="abort" data-ref-filename="abort">abort</span>();</td></tr>
+<tr><th id="430">430</th><td>    }</td></tr>
+<tr><th id="431">431</th><td></td></tr>
+<tr><th id="432">432</th><td>    <a class="local col8 ref" href="#8out" title='out' data-ref="8out" data-ref-filename="8out">out</a> += <a class="local col3 ref" href="#23todo" title='todo' data-ref="23todo" data-ref-filename="23todo">todo</a>;</td></tr>
+<tr><th id="433">433</th><td>    <a class="local col9 ref" href="#9out_len" title='out_len' data-ref="9out_len" data-ref-filename="9out_len">out_len</a> -= <a class="local col3 ref" href="#23todo" title='todo' data-ref="23todo" data-ref-filename="23todo">todo</a>;</td></tr>
+<tr><th id="434">434</th><td>    <i>// Though we only check before entering the loop, this cannot add enough to</i></td></tr>
+<tr><th id="435">435</th><td><i>    // overflow a |size_t|.</i></td></tr>
+<tr><th id="436">436</th><td>    <a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>-&gt;<a class="tu ref field" href="#rand_thread_state::calls" title='rand_thread_state::calls' data-use='w' data-ref="rand_thread_state::calls" data-ref-filename="rand_thread_state..calls">calls</a>++;</td></tr>
+<tr><th id="437">437</th><td>    <a class="local col2 ref" href="#22first_call" title='first_call' data-ref="22first_call" data-ref-filename="22first_call">first_call</a> = <var>0</var>;</td></tr>
+<tr><th id="438">438</th><td>  }</td></tr>
+<tr><th id="439">439</th><td></td></tr>
+<tr><th id="440">440</th><td>  <b>if</b> (<a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a> == &amp;<a class="local col4 ref" href="#14stack_state" title='stack_state' data-ref="14stack_state" data-ref-filename="14stack_state">stack_state</a>) {</td></tr>
+<tr><th id="441">441</th><td>    <a class="ref fn" href="internal.h.html#CTR_DRBG_clear" title='CTR_DRBG_clear' data-ref="CTR_DRBG_clear" data-ref-filename="CTR_DRBG_clear">CTR_DRBG_clear</a>(&amp;<a class="local col5 ref" href="#15state" title='state' data-ref="15state" data-ref-filename="15state">state</a>-&gt;<a class="tu ref field" href="#rand_thread_state::drbg" title='rand_thread_state::drbg' data-use='a' data-ref="rand_thread_state::drbg" data-ref-filename="rand_thread_state..drbg">drbg</a>);</td></tr>
+<tr><th id="442">442</th><td>  }</td></tr>
+<tr><th id="443">443</th><td></td></tr>
+<tr><th id="444">444</th><td><u>#<span data-ppcond="444">if</span> defined(<span class="macro" data-ref="_M/BORINGSSL_FIPS">BORINGSSL_FIPS</span>)</u></td></tr>
+<tr><th id="445">445</th><td>  CRYPTO_STATIC_MUTEX_unlock_read(state_clear_all_lock_bss_get());</td></tr>
+<tr><th id="446">446</th><td><u>#<span data-ppcond="444">endif</span></u></td></tr>
+<tr><th id="447">447</th><td>}</td></tr>
+<tr><th id="448">448</th><td></td></tr>
+<tr><th id="449">449</th><td><em>int</em> <dfn class="decl def fn" id="RAND_bytes" title='RAND_bytes' data-ref="RAND_bytes" data-ref-filename="RAND_bytes">RAND_bytes</dfn>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col4 decl" id="24out" title='out' data-type='uint8_t *' data-ref="24out" data-ref-filename="24out">out</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="25out_len" title='out_len' data-type='size_t' data-ref="25out_len" data-ref-filename="25out_len">out_len</dfn>) {</td></tr>
+<tr><th id="450">450</th><td>  <em>static</em> <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col6 decl" id="26kZeroAdditionalData" title='kZeroAdditionalData' data-type='const uint8_t [32]' data-ref="26kZeroAdditionalData" data-ref-filename="26kZeroAdditionalData">kZeroAdditionalData</dfn>[<var>32</var>] = {<var>0</var>};</td></tr>
+<tr><th id="451">451</th><td>  <a class="ref fn" href="#RAND_bytes_with_additional_data" title='RAND_bytes_with_additional_data' data-ref="RAND_bytes_with_additional_data" data-ref-filename="RAND_bytes_with_additional_data">RAND_bytes_with_additional_data</a>(<a class="local col4 ref" href="#24out" title='out' data-ref="24out" data-ref-filename="24out">out</a>, <a class="local col5 ref" href="#25out_len" title='out_len' data-ref="25out_len" data-ref-filename="25out_len">out_len</a>, <a class="local col6 ref" href="#26kZeroAdditionalData" title='kZeroAdditionalData' data-ref="26kZeroAdditionalData" data-ref-filename="26kZeroAdditionalData">kZeroAdditionalData</a>);</td></tr>
+<tr><th id="452">452</th><td>  <b>return</b> <var>1</var>;</td></tr>
+<tr><th id="453">453</th><td>}</td></tr>
+<tr><th id="454">454</th><td></td></tr>
+<tr><th id="455">455</th><td><em>int</em> <dfn class="decl def fn" id="RAND_pseudo_bytes" title='RAND_pseudo_bytes' data-ref="RAND_pseudo_bytes" data-ref-filename="RAND_pseudo_bytes">RAND_pseudo_bytes</dfn>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col7 decl" id="27buf" title='buf' data-type='uint8_t *' data-ref="27buf" data-ref-filename="27buf">buf</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="28len" title='len' data-type='size_t' data-ref="28len" data-ref-filename="28len">len</dfn>) {</td></tr>
+<tr><th id="456">456</th><td>  <b>return</b> <a class="ref fn" href="#RAND_bytes" title='RAND_bytes' data-ref="RAND_bytes" data-ref-filename="RAND_bytes">RAND_bytes</a>(<a class="local col7 ref" href="#27buf" title='buf' data-ref="27buf" data-ref-filename="27buf">buf</a>, <a class="local col8 ref" href="#28len" title='len' data-ref="28len" data-ref-filename="28len">len</a>);</td></tr>
+<tr><th id="457">457</th><td>}</td></tr>
+<tr><th id="458">458</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

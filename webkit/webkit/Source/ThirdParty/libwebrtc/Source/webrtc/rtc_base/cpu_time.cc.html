@@ -1,0 +1,143 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>cpu_time.cc source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/cpu_time.cc] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/cpu_time.cc'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='cpu_time.cc.html'>cpu_time.cc</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2017 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#include <a href="cpu_time.h.html">"rtc_base/cpu_time.h"</a></u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="logging.h.html">"rtc_base/logging.h"</a></u></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="time_utils.h.html">"rtc_base/time_utils.h"</a></u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#<span data-ppcond="16">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_LINUX">WEBRTC_LINUX</span>)</u></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;time.h&gt;</u></td></tr>
+<tr><th id="18">18</th><td><u>#<span data-ppcond="16">elif</span> defined(<span class="macro" data-ref="_M/WEBRTC_MAC">WEBRTC_MAC</span>)</u></td></tr>
+<tr><th id="19">19</th><td><u>#include &lt;mach/mach_init.h&gt;</u></td></tr>
+<tr><th id="20">20</th><td><u>#include &lt;mach/mach_port.h&gt;</u></td></tr>
+<tr><th id="21">21</th><td><u>#include &lt;mach/thread_act.h&gt;</u></td></tr>
+<tr><th id="22">22</th><td><u>#include &lt;mach/thread_info.h&gt;</u></td></tr>
+<tr><th id="23">23</th><td><u>#include &lt;sys/resource.h&gt;</u></td></tr>
+<tr><th id="24">24</th><td><u>#include &lt;sys/times.h&gt;</u></td></tr>
+<tr><th id="25">25</th><td><u>#include &lt;sys/types.h&gt;</u></td></tr>
+<tr><th id="26">26</th><td><u>#include &lt;unistd.h&gt;</u></td></tr>
+<tr><th id="27">27</th><td><u>#<span data-ppcond="16">elif</span> defined(WEBRTC_WIN)</u></td></tr>
+<tr><th id="28">28</th><td><u>#include &lt;windows.h&gt;</u></td></tr>
+<tr><th id="29">29</th><td><u>#<span data-ppcond="16">endif</span></u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#<span data-ppcond="31">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_WIN">WEBRTC_WIN</span>)</u></td></tr>
+<tr><th id="32">32</th><td><b>namespace</b> {</td></tr>
+<tr><th id="33">33</th><td><i>// FILETIME resolution is 100 nanosecs.</i></td></tr>
+<tr><th id="34">34</th><td><em>const</em> int64_t kNanosecsPerFiletime = <var>100</var>;</td></tr>
+<tr><th id="35">35</th><td>}  <i>// namespace</i></td></tr>
+<tr><th id="36">36</th><td><u>#<span data-ppcond="31">endif</span></u></td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl def fn" id="_ZN3rtc22GetProcessCpuTimeNanosEv" title='rtc::GetProcessCpuTimeNanos' data-ref="_ZN3rtc22GetProcessCpuTimeNanosEv" data-ref-filename="_ZN3rtc22GetProcessCpuTimeNanosEv">GetProcessCpuTimeNanos</dfn>() {</td></tr>
+<tr><th id="41">41</th><td><u>#<span data-ppcond="41">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_LINUX">WEBRTC_LINUX</span>)</u></td></tr>
+<tr><th id="42">42</th><td>  <b>struct</b> timespec ts;</td></tr>
+<tr><th id="43">43</th><td>  <b>if</b> (clock_gettime(CLOCK_PROCESS_CPUTIME_ID, &amp;ts) == <var>0</var>) {</td></tr>
+<tr><th id="44">44</th><td>    <b>return</b> ts.tv_sec * kNumNanosecsPerSec + ts.tv_nsec;</td></tr>
+<tr><th id="45">45</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="46">46</th><td>    RTC_LOG_ERR(LS_ERROR) &lt;&lt; <q>"clock_gettime() failed."</q>;</td></tr>
+<tr><th id="47">47</th><td>  }</td></tr>
+<tr><th id="48">48</th><td><u>#<span data-ppcond="41">elif</span> defined(<span class="macro" data-ref="_M/WEBRTC_MAC">WEBRTC_MAC</span>)</u></td></tr>
+<tr><th id="49">49</th><td>  <b>struct</b> <span class='type' title='rusage' data-ref="rusage" data-ref-filename="rusage">rusage</span> <span class='ref fn fake' title='rusage::rusage' data-ref="_ZN6rusageC1Ev" data-ref-filename="_ZN6rusageC1Ev"></span><dfn class="local col1 decl" id="1rusage" title='rusage' data-type='struct rusage' data-ref="1rusage" data-ref-filename="1rusage">rusage</dfn>;</td></tr>
+<tr><th id="50">50</th><td>  <b>if</b> (<span class='ref fn' title='getrusage' data-ref="getrusage" data-ref-filename="getrusage">getrusage</span>(<span class="macro" title="0" data-ref="_M/RUSAGE_SELF">RUSAGE_SELF</span>, &amp;<a class="local col1 ref" href="#1rusage" title='rusage' data-ref="1rusage" data-ref-filename="1rusage">rusage</a>) == <var>0</var>) {</td></tr>
+<tr><th id="51">51</th><td>    <b>return</b> <a class="local col1 ref" href="#1rusage" title='rusage' data-ref="1rusage" data-ref-filename="1rusage">rusage</a>.<span class='ref field' title='rusage::ru_utime' data-ref="rusage::ru_utime" data-ref-filename="rusage..ru_utime">ru_utime</span>.<span class='ref field' title='timeval::tv_sec' data-ref="timeval::tv_sec" data-ref-filename="timeval..tv_sec">tv_sec</span> * <a class="ref" href="time_utils.h.html#rtc::kNumNanosecsPerSec" title='rtc::kNumNanosecsPerSec' data-ref="rtc::kNumNanosecsPerSec" data-ref-filename="rtc..kNumNanosecsPerSec">kNumNanosecsPerSec</a> +</td></tr>
+<tr><th id="52">52</th><td>           <a class="local col1 ref" href="#1rusage" title='rusage' data-ref="1rusage" data-ref-filename="1rusage">rusage</a>.<span class='ref field' title='rusage::ru_utime' data-ref="rusage::ru_utime" data-ref-filename="rusage..ru_utime">ru_utime</span>.<span class='ref field' title='timeval::tv_usec' data-ref="timeval::tv_usec" data-ref-filename="timeval..tv_usec">tv_usec</span> * <a class="ref" href="time_utils.h.html#rtc::kNumNanosecsPerMicrosec" title='rtc::kNumNanosecsPerMicrosec' data-ref="rtc::kNumNanosecsPerMicrosec" data-ref-filename="rtc..kNumNanosecsPerMicrosec">kNumNanosecsPerMicrosec</a>;</td></tr>
+<tr><th id="53">53</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="54">54</th><td>    <a class="macro" href="logging.h.html#670" title="!rtc::LogMessage::IsNoop&lt;::rtc::LS_ERROR&gt;() &amp;&amp; ::rtc::webrtc_logging_impl::LogCall() &amp; ::rtc::webrtc_logging_impl::LogStreamer&lt;&gt;() &lt;&lt; ::rtc::webrtc_logging_impl::LogMetadataErr { {&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/cpu_time.cc&quot;, 54, ::rtc::LS_ERROR}, ::rtc::ERRCTX_ERRNO, ((*__error())) }" data-ref="_M/RTC_LOG_ERR">RTC_LOG_ERR</a>(<a class="enum" href="logging.h.html#rtc::LS_ERROR" title='rtc::LS_ERROR' data-ref="rtc::LS_ERROR" data-ref-filename="rtc..LS_ERROR">LS_ERROR</a>) <a class="ref fn" href="logging.h.html#_ZNK3rtc19webrtc_logging_impl11LogStreamerIJT_DpT0_EElsERKTL0__" title='rtc::webrtc_logging_impl::LogStreamer&lt;type-parameter-0-0, type-parameter-0-1...&gt;::operator&lt;&lt;' data-ref="_ZNK3rtc19webrtc_logging_impl11LogStreamerIJT_DpT0_EElsERKTL0__" data-ref-filename="_ZNK3rtc19webrtc_logging_impl11LogStreamerIJT_DpT0_EElsERKTL0__">&lt;&lt;</a> <q>"getrusage() failed."</q>;</td></tr>
+<tr><th id="55">55</th><td>  }</td></tr>
+<tr><th id="56">56</th><td><u>#<span data-ppcond="41">elif</span> defined(WEBRTC_WIN)</u></td></tr>
+<tr><th id="57">57</th><td>  FILETIME createTime;</td></tr>
+<tr><th id="58">58</th><td>  FILETIME exitTime;</td></tr>
+<tr><th id="59">59</th><td>  FILETIME kernelTime;</td></tr>
+<tr><th id="60">60</th><td>  FILETIME userTime;</td></tr>
+<tr><th id="61">61</th><td>  <b>if</b> (GetProcessTimes(GetCurrentProcess(), &amp;createTime, &amp;exitTime, &amp;kernelTime,</td></tr>
+<tr><th id="62">62</th><td>                      &amp;userTime) != <var>0</var>) {</td></tr>
+<tr><th id="63">63</th><td>    <b>return</b> ((<b>static_cast</b>&lt;uint64_t&gt;(userTime.dwHighDateTime) &lt;&lt; <var>32</var>) +</td></tr>
+<tr><th id="64">64</th><td>            userTime.dwLowDateTime) *</td></tr>
+<tr><th id="65">65</th><td>           kNanosecsPerFiletime;</td></tr>
+<tr><th id="66">66</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="67">67</th><td>    RTC_LOG_ERR(LS_ERROR) &lt;&lt; <q>"GetProcessTimes() failed."</q>;</td></tr>
+<tr><th id="68">68</th><td>  }</td></tr>
+<tr><th id="69">69</th><td><u>#elif defined(WEBRTC_FUCHSIA)</u></td></tr>
+<tr><th id="70">70</th><td>  RTC_LOG_ERR(LS_ERROR) &lt;&lt; <q>"GetProcessCpuTimeNanos() not implemented"</q>;</td></tr>
+<tr><th id="71">71</th><td>  <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="72">72</th><td><u>#else</u></td></tr>
+<tr><th id="73">73</th><td>  <i>// Not implemented yet.</i></td></tr>
+<tr><th id="74">74</th><td>  <b>static_assert</b>(</td></tr>
+<tr><th id="75">75</th><td>      <b>false</b>, <q>"GetProcessCpuTimeNanos() platform support not yet implemented."</q>);</td></tr>
+<tr><th id="76">76</th><td><u>#<span data-ppcond="41">endif</span></u></td></tr>
+<tr><th id="77">77</th><td>  <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="78">78</th><td>}</td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td><span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl def fn" id="_ZN3rtc21GetThreadCpuTimeNanosEv" title='rtc::GetThreadCpuTimeNanos' data-ref="_ZN3rtc21GetThreadCpuTimeNanosEv" data-ref-filename="_ZN3rtc21GetThreadCpuTimeNanosEv">GetThreadCpuTimeNanos</dfn>() {</td></tr>
+<tr><th id="81">81</th><td><u>#<span data-ppcond="81">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_LINUX">WEBRTC_LINUX</span>)</u></td></tr>
+<tr><th id="82">82</th><td>  <b>struct</b> timespec ts;</td></tr>
+<tr><th id="83">83</th><td>  <b>if</b> (clock_gettime(CLOCK_THREAD_CPUTIME_ID, &amp;ts) == <var>0</var>) {</td></tr>
+<tr><th id="84">84</th><td>    <b>return</b> ts.tv_sec * kNumNanosecsPerSec + ts.tv_nsec;</td></tr>
+<tr><th id="85">85</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="86">86</th><td>    RTC_LOG_ERR(LS_ERROR) &lt;&lt; <q>"clock_gettime() failed."</q>;</td></tr>
+<tr><th id="87">87</th><td>  }</td></tr>
+<tr><th id="88">88</th><td><u>#<span data-ppcond="81">elif</span> defined(<span class="macro" data-ref="_M/WEBRTC_MAC">WEBRTC_MAC</span>)</u></td></tr>
+<tr><th id="89">89</th><td>  <span class='typedef' title='mach_port_t' data-type='__darwin_mach_port_t' data-ref="mach_port_t" data-ref-filename="mach_port_t">mach_port_t</span> <dfn class="local col2 decl" id="2thread_port" title='thread_port' data-type='mach_port_t' data-ref="2thread_port" data-ref-filename="2thread_port">thread_port</dfn> = <span class='ref fn' title='mach_thread_self' data-ref="mach_thread_self" data-ref-filename="mach_thread_self">mach_thread_self</span>();</td></tr>
+<tr><th id="90">90</th><td>  <span class='typedef' title='thread_basic_info_data_t' data-type='struct thread_basic_info' data-ref="thread_basic_info_data_t" data-ref-filename="thread_basic_info_data_t">thread_basic_info_data_t</span> <span class='ref fn fake' title='thread_basic_info::thread_basic_info' data-ref="_ZN17thread_basic_infoC1Ev" data-ref-filename="_ZN17thread_basic_infoC1Ev"></span><dfn class="local col3 decl" id="3info" title='info' data-type='thread_basic_info_data_t' data-ref="3info" data-ref-filename="3info">info</dfn>;</td></tr>
+<tr><th id="91">91</th><td>  <span class='typedef' title='mach_msg_type_number_t' data-type='natural_t' data-ref="mach_msg_type_number_t" data-ref-filename="mach_msg_type_number_t">mach_msg_type_number_t</span> <dfn class="local col4 decl" id="4count" title='count' data-type='mach_msg_type_number_t' data-ref="4count" data-ref-filename="4count">count</dfn> = <span class="macro" title="((mach_msg_type_number_t) (sizeof(thread_basic_info_data_t) / sizeof(natural_t)))" data-ref="_M/THREAD_BASIC_INFO_COUNT">THREAD_BASIC_INFO_COUNT</span>;</td></tr>
+<tr><th id="92">92</th><td>  <span class='typedef' title='kern_return_t' data-type='int' data-ref="kern_return_t" data-ref-filename="kern_return_t">kern_return_t</span> <dfn class="local col5 decl" id="5kr" title='kr' data-type='kern_return_t' data-ref="5kr" data-ref-filename="5kr">kr</dfn> =</td></tr>
+<tr><th id="93">93</th><td>      <span class='ref fn' title='thread_info' data-ref="thread_info" data-ref-filename="thread_info">thread_info</span>(<a class="local col2 ref" href="#2thread_port" title='thread_port' data-ref="2thread_port" data-ref-filename="2thread_port">thread_port</a>, <span class="macro" title="3" data-ref="_M/THREAD_BASIC_INFO">THREAD_BASIC_INFO</span>, (<span class='typedef' title='thread_info_t' data-type='integer_t *' data-ref="thread_info_t" data-ref-filename="thread_info_t">thread_info_t</span>)&amp;<a class="local col3 ref" href="#3info" title='info' data-ref="3info" data-ref-filename="3info">info</a>, &amp;<a class="local col4 ref" href="#4count" title='count' data-ref="4count" data-ref-filename="4count">count</a>);</td></tr>
+<tr><th id="94">94</th><td>  <span class='ref fn' title='mach_port_deallocate' data-ref="mach_port_deallocate" data-ref-filename="mach_port_deallocate">mach_port_deallocate</span>(<span class="macro" title="mach_task_self_" data-ref="_M/mach_task_self">mach_task_self</span>(), <a class="local col2 ref" href="#2thread_port" title='thread_port' data-ref="2thread_port" data-ref-filename="2thread_port">thread_port</a>);</td></tr>
+<tr><th id="95">95</th><td>  <b>if</b> (<a class="local col5 ref" href="#5kr" title='kr' data-ref="5kr" data-ref-filename="5kr">kr</a> == <span class="macro" title="0" data-ref="_M/KERN_SUCCESS">KERN_SUCCESS</span>) {</td></tr>
+<tr><th id="96">96</th><td>    <b>return</b> <a class="local col3 ref" href="#3info" title='info' data-ref="3info" data-ref-filename="3info">info</a>.<span class='ref field' title='thread_basic_info::user_time' data-ref="thread_basic_info::user_time" data-ref-filename="thread_basic_info..user_time">user_time</span>.<span class='ref field' title='time_value::seconds' data-ref="time_value::seconds" data-ref-filename="time_value..seconds">seconds</span> * <a class="ref" href="time_utils.h.html#rtc::kNumNanosecsPerSec" title='rtc::kNumNanosecsPerSec' data-ref="rtc::kNumNanosecsPerSec" data-ref-filename="rtc..kNumNanosecsPerSec">kNumNanosecsPerSec</a> +</td></tr>
+<tr><th id="97">97</th><td>           <a class="local col3 ref" href="#3info" title='info' data-ref="3info" data-ref-filename="3info">info</a>.<span class='ref field' title='thread_basic_info::user_time' data-ref="thread_basic_info::user_time" data-ref-filename="thread_basic_info..user_time">user_time</span>.<span class='ref field' title='time_value::microseconds' data-ref="time_value::microseconds" data-ref-filename="time_value..microseconds">microseconds</span> * <a class="ref" href="time_utils.h.html#rtc::kNumNanosecsPerMicrosec" title='rtc::kNumNanosecsPerMicrosec' data-ref="rtc::kNumNanosecsPerMicrosec" data-ref-filename="rtc..kNumNanosecsPerMicrosec">kNumNanosecsPerMicrosec</a>;</td></tr>
+<tr><th id="98">98</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="99">99</th><td>    <a class="macro" href="logging.h.html#670" title="!rtc::LogMessage::IsNoop&lt;::rtc::LS_ERROR&gt;() &amp;&amp; ::rtc::webrtc_logging_impl::LogCall() &amp; ::rtc::webrtc_logging_impl::LogStreamer&lt;&gt;() &lt;&lt; ::rtc::webrtc_logging_impl::LogMetadataErr { {&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/cpu_time.cc&quot;, 99, ::rtc::LS_ERROR}, ::rtc::ERRCTX_ERRNO, ((*__error())) }" data-ref="_M/RTC_LOG_ERR">RTC_LOG_ERR</a>(<a class="enum" href="logging.h.html#rtc::LS_ERROR" title='rtc::LS_ERROR' data-ref="rtc::LS_ERROR" data-ref-filename="rtc..LS_ERROR">LS_ERROR</a>) <a class="ref fn" href="logging.h.html#_ZNK3rtc19webrtc_logging_impl11LogStreamerIJT_DpT0_EElsERKTL0__" title='rtc::webrtc_logging_impl::LogStreamer&lt;type-parameter-0-0, type-parameter-0-1...&gt;::operator&lt;&lt;' data-ref="_ZNK3rtc19webrtc_logging_impl11LogStreamerIJT_DpT0_EElsERKTL0__" data-ref-filename="_ZNK3rtc19webrtc_logging_impl11LogStreamerIJT_DpT0_EElsERKTL0__">&lt;&lt;</a> <q>"thread_info() failed."</q>;</td></tr>
+<tr><th id="100">100</th><td>  }</td></tr>
+<tr><th id="101">101</th><td><u>#<span data-ppcond="81">elif</span> defined(WEBRTC_WIN)</u></td></tr>
+<tr><th id="102">102</th><td>  FILETIME createTime;</td></tr>
+<tr><th id="103">103</th><td>  FILETIME exitTime;</td></tr>
+<tr><th id="104">104</th><td>  FILETIME kernelTime;</td></tr>
+<tr><th id="105">105</th><td>  FILETIME userTime;</td></tr>
+<tr><th id="106">106</th><td>  <b>if</b> (GetThreadTimes(GetCurrentThread(), &amp;createTime, &amp;exitTime, &amp;kernelTime,</td></tr>
+<tr><th id="107">107</th><td>                     &amp;userTime) != <var>0</var>) {</td></tr>
+<tr><th id="108">108</th><td>    <b>return</b> ((<b>static_cast</b>&lt;uint64_t&gt;(userTime.dwHighDateTime) &lt;&lt; <var>32</var>) +</td></tr>
+<tr><th id="109">109</th><td>            userTime.dwLowDateTime) *</td></tr>
+<tr><th id="110">110</th><td>           kNanosecsPerFiletime;</td></tr>
+<tr><th id="111">111</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="112">112</th><td>    RTC_LOG_ERR(LS_ERROR) &lt;&lt; <q>"GetThreadTimes() failed."</q>;</td></tr>
+<tr><th id="113">113</th><td>  }</td></tr>
+<tr><th id="114">114</th><td><u>#elif defined(WEBRTC_FUCHSIA)</u></td></tr>
+<tr><th id="115">115</th><td>  RTC_LOG_ERR(LS_ERROR) &lt;&lt; <q>"GetThreadCpuTimeNanos() not implemented"</q>;</td></tr>
+<tr><th id="116">116</th><td>  <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="117">117</th><td><u>#else</u></td></tr>
+<tr><th id="118">118</th><td>  <i>// Not implemented yet.</i></td></tr>
+<tr><th id="119">119</th><td>  <b>static_assert</b>(</td></tr>
+<tr><th id="120">120</th><td>      <b>false</b>, <q>"GetThreadCpuTimeNanos() platform support not yet implemented."</q>);</td></tr>
+<tr><th id="121">121</th><td><u>#<span data-ppcond="81">endif</span></u></td></tr>
+<tr><th id="122">122</th><td>  <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="123">123</th><td>}</td></tr>
+<tr><th id="124">124</th><td></td></tr>
+<tr><th id="125">125</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="126">126</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

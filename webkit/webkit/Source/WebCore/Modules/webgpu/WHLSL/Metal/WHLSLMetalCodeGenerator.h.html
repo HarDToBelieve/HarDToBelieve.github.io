@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WHLSLMetalCodeGenerator.h source code [webkit/Source/WebCore/Modules/webgpu/WHLSL/Metal/WHLSLMetalCodeGenerator.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="WebCore::WHLSL::Metal::ComputeMetalCode,WebCore::WHLSL::Metal::RenderMetalCode "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebCore/Modules/webgpu/WHLSL/Metal/WHLSLMetalCodeGenerator.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>WebCore</a>/<a href='../../..'>Modules</a>/<a href='../..'>webgpu</a>/<a href='..'>WHLSL</a>/<a href='./'>Metal</a>/<a href='WHLSLMetalCodeGenerator.h.html'>WHLSLMetalCodeGenerator.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2019 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="28">if</span> <a class="macro" href="../../../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(WHLSL_COMPILER)</u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="WHLSLMangledNames.h.html">"WHLSLMangledNames.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="../WHLSLPipelineDescriptor.h.html">"WHLSLPipelineDescriptor.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="../WHLSLSemanticMatcher.h.html">"WHLSLSemanticMatcher.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#include <a href="../../../../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringBuilder.h.html">&lt;wtf/text/StringBuilder.h&gt;</a></u></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><b>namespace</b> <span class="namespace">WebCore</span> {</td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><b>namespace</b> <span class="namespace">WHLSL</span> {</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><b>class</b> <a class="type" href="../WHLSLProgram.h.html#WebCore::WHLSL::Program" title='WebCore::WHLSL::Program' data-ref="WebCore::WHLSL::Program" data-ref-filename="WebCore..WHLSL..Program" id="WebCore::WHLSL::Program">Program</a>;</td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><b>namespace</b> <span class="namespace">Metal</span> {</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><b>struct</b> <dfn class="type def" id="WebCore::WHLSL::Metal::RenderMetalCode" title='WebCore::WHLSL::Metal::RenderMetalCode' data-ref="WebCore::WHLSL::Metal::RenderMetalCode" data-ref-filename="WebCore..WHLSL..Metal..RenderMetalCode">RenderMetalCode</dfn> {</td></tr>
+<tr><th id="44">44</th><td>    <a class="type" href="../../../../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringBuilder.h.html#WTF::StringBuilder" title='WTF::StringBuilder' data-ref="WTF::StringBuilder" data-ref-filename="WTF..StringBuilder">StringBuilder</a> <dfn class="decl field" id="WebCore::WHLSL::Metal::RenderMetalCode::metalSource" title='WebCore::WHLSL::Metal::RenderMetalCode::metalSource' data-ref="WebCore::WHLSL::Metal::RenderMetalCode::metalSource" data-ref-filename="WebCore..WHLSL..Metal..RenderMetalCode..metalSource">metalSource</dfn>;</td></tr>
+<tr><th id="45">45</th><td>    <a class="type" href="WHLSLMangledNames.h.html#WebCore::WHLSL::Metal::MangledFunctionName" title='WebCore::WHLSL::Metal::MangledFunctionName' data-ref="WebCore::WHLSL::Metal::MangledFunctionName" data-ref-filename="WebCore..WHLSL..Metal..MangledFunctionName">MangledFunctionName</a> <dfn class="decl field" id="WebCore::WHLSL::Metal::RenderMetalCode::mangledVertexEntryPointName" title='WebCore::WHLSL::Metal::RenderMetalCode::mangledVertexEntryPointName' data-ref="WebCore::WHLSL::Metal::RenderMetalCode::mangledVertexEntryPointName" data-ref-filename="WebCore..WHLSL..Metal..RenderMetalCode..mangledVertexEntryPointName">mangledVertexEntryPointName</dfn>;</td></tr>
+<tr><th id="46">46</th><td>    <a class="type" href="WHLSLMangledNames.h.html#WebCore::WHLSL::Metal::MangledFunctionName" title='WebCore::WHLSL::Metal::MangledFunctionName' data-ref="WebCore::WHLSL::Metal::MangledFunctionName" data-ref-filename="WebCore..WHLSL..Metal..MangledFunctionName">MangledFunctionName</a> <dfn class="decl field" id="WebCore::WHLSL::Metal::RenderMetalCode::mangledFragmentEntryPointName" title='WebCore::WHLSL::Metal::RenderMetalCode::mangledFragmentEntryPointName' data-ref="WebCore::WHLSL::Metal::RenderMetalCode::mangledFragmentEntryPointName" data-ref-filename="WebCore..WHLSL..Metal..RenderMetalCode..mangledFragmentEntryPointName">mangledFragmentEntryPointName</dfn>;</td></tr>
+<tr><th id="47">47</th><td>};</td></tr>
+<tr><th id="48">48</th><td><i>// Can't fail. Any failure checks need to be done earlier, in the backend-agnostic part of the compiler.</i></td></tr>
+<tr><th id="49">49</th><td><a class="type" href="#WebCore::WHLSL::Metal::RenderMetalCode" title='WebCore::WHLSL::Metal::RenderMetalCode' data-ref="WebCore::WHLSL::Metal::RenderMetalCode" data-ref-filename="WebCore..WHLSL..Metal..RenderMetalCode">RenderMetalCode</a> <dfn class="decl fn" id="_ZN7WebCore5WHLSL5Metal17generateMetalCodeERNS0_7ProgramEONS0_22MatchedRenderSemanticsERN3WTF6VectorINS0_9BindGroupELm0ENS6_15CrashOnOverflowELm16ENS6_10FastMallocEEE" title='WebCore::WHLSL::Metal::generateMetalCode' data-ref="_ZN7WebCore5WHLSL5Metal17generateMetalCodeERNS0_7ProgramEONS0_22MatchedRenderSemanticsERN3WTF6VectorINS0_9BindGroupELm0ENS6_15CrashOnOverflowELm16ENS6_10FastMallocEEE" data-ref-filename="_ZN7WebCore5WHLSL5Metal17generateMetalCodeERNS0_7ProgramEONS0_22MatchedRenderSemanticsERN3WTF6VectorINS0_9BindGroupELm0ENS6_15CrashOnOverflowELm16ENS6_10FastMallocEEE">generateMetalCode</dfn>(<a class="type" href="../WHLSLProgram.h.html#WebCore::WHLSL::Program" title='WebCore::WHLSL::Program' data-ref="WebCore::WHLSL::Program" data-ref-filename="WebCore..WHLSL..Program">Program</a>&amp;, <a class="type" href="../WHLSLSemanticMatcher.h.html#WebCore::WHLSL::MatchedRenderSemantics" title='WebCore::WHLSL::MatchedRenderSemantics' data-ref="WebCore::WHLSL::MatchedRenderSemantics" data-ref-filename="WebCore..WHLSL..MatchedRenderSemantics">MatchedRenderSemantics</a>&amp;&amp; <dfn class="local col3 decl" id="3matchedSemantics" title='matchedSemantics' data-type='WebCore::WHLSL::MatchedRenderSemantics &amp;&amp;' data-ref="3matchedSemantics" data-ref-filename="3matchedSemantics">matchedSemantics</dfn>, <a class="typedef" href="../WHLSLPipelineDescriptor.h.html#WebCore::WHLSL::Layout" title='WebCore::WHLSL::Layout' data-type='Vector&lt;WebCore::WHLSL::BindGroup&gt;' data-ref="WebCore::WHLSL::Layout" data-ref-filename="WebCore..WHLSL..Layout">Layout</a>&amp;);</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><b>struct</b> <dfn class="type def" id="WebCore::WHLSL::Metal::ComputeMetalCode" title='WebCore::WHLSL::Metal::ComputeMetalCode' data-ref="WebCore::WHLSL::Metal::ComputeMetalCode" data-ref-filename="WebCore..WHLSL..Metal..ComputeMetalCode">ComputeMetalCode</dfn> {</td></tr>
+<tr><th id="52">52</th><td>    <a class="type" href="../../../../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringBuilder.h.html#WTF::StringBuilder" title='WTF::StringBuilder' data-ref="WTF::StringBuilder" data-ref-filename="WTF..StringBuilder">StringBuilder</a> <dfn class="decl field" id="WebCore::WHLSL::Metal::ComputeMetalCode::metalSource" title='WebCore::WHLSL::Metal::ComputeMetalCode::metalSource' data-ref="WebCore::WHLSL::Metal::ComputeMetalCode::metalSource" data-ref-filename="WebCore..WHLSL..Metal..ComputeMetalCode..metalSource">metalSource</dfn>;</td></tr>
+<tr><th id="53">53</th><td>    <a class="type" href="WHLSLMangledNames.h.html#WebCore::WHLSL::Metal::MangledFunctionName" title='WebCore::WHLSL::Metal::MangledFunctionName' data-ref="WebCore::WHLSL::Metal::MangledFunctionName" data-ref-filename="WebCore..WHLSL..Metal..MangledFunctionName">MangledFunctionName</a> <dfn class="decl field" id="WebCore::WHLSL::Metal::ComputeMetalCode::mangledEntryPointName" title='WebCore::WHLSL::Metal::ComputeMetalCode::mangledEntryPointName' data-ref="WebCore::WHLSL::Metal::ComputeMetalCode::mangledEntryPointName" data-ref-filename="WebCore..WHLSL..Metal..ComputeMetalCode..mangledEntryPointName">mangledEntryPointName</dfn>;</td></tr>
+<tr><th id="54">54</th><td>};</td></tr>
+<tr><th id="55">55</th><td><i>// Can't fail. Any failure checks need to be done earlier, in the backend-agnostic part of the compiler.</i></td></tr>
+<tr><th id="56">56</th><td><a class="type" href="#WebCore::WHLSL::Metal::ComputeMetalCode" title='WebCore::WHLSL::Metal::ComputeMetalCode' data-ref="WebCore::WHLSL::Metal::ComputeMetalCode" data-ref-filename="WebCore..WHLSL..Metal..ComputeMetalCode">ComputeMetalCode</a> <dfn class="decl fn" id="_ZN7WebCore5WHLSL5Metal17generateMetalCodeERNS0_7ProgramEONS0_23MatchedComputeSemanticsERN3WTF6VectorINS0_9BindGroupELm0ENS6_15CrashOnOverflowELm16ENS6_10FastMallocEEE" title='WebCore::WHLSL::Metal::generateMetalCode' data-ref="_ZN7WebCore5WHLSL5Metal17generateMetalCodeERNS0_7ProgramEONS0_23MatchedComputeSemanticsERN3WTF6VectorINS0_9BindGroupELm0ENS6_15CrashOnOverflowELm16ENS6_10FastMallocEEE" data-ref-filename="_ZN7WebCore5WHLSL5Metal17generateMetalCodeERNS0_7ProgramEONS0_23MatchedComputeSemanticsERN3WTF6VectorINS0_9BindGroupELm0ENS6_15CrashOnOverflowELm16ENS6_10FastMallocEEE">generateMetalCode</dfn>(<a class="type" href="../WHLSLProgram.h.html#WebCore::WHLSL::Program" title='WebCore::WHLSL::Program' data-ref="WebCore::WHLSL::Program" data-ref-filename="WebCore..WHLSL..Program">Program</a>&amp;, <a class="type" href="../WHLSLSemanticMatcher.h.html#WebCore::WHLSL::MatchedComputeSemantics" title='WebCore::WHLSL::MatchedComputeSemantics' data-ref="WebCore::WHLSL::MatchedComputeSemantics" data-ref-filename="WebCore..WHLSL..MatchedComputeSemantics">MatchedComputeSemantics</a>&amp;&amp; <dfn class="local col4 decl" id="4matchedSemantics" title='matchedSemantics' data-type='WebCore::WHLSL::MatchedComputeSemantics &amp;&amp;' data-ref="4matchedSemantics" data-ref-filename="4matchedSemantics">matchedSemantics</dfn>, <a class="typedef" href="../WHLSLPipelineDescriptor.h.html#WebCore::WHLSL::Layout" title='WebCore::WHLSL::Layout' data-type='Vector&lt;WebCore::WHLSL::BindGroup&gt;' data-ref="WebCore::WHLSL::Layout" data-ref-filename="WebCore..WHLSL..Layout">Layout</a>&amp;);</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>}</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td>}</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td>}</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td><u>#<span data-ppcond="28">endif</span> // ENABLE(WHLSL_COMPILER)</u></td></tr>
+<tr><th id="65">65</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource69.cpp.html'>webkit/WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource69.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

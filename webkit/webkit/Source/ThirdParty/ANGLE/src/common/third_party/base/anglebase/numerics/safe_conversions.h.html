@@ -1,0 +1,196 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>safe_conversions.h source code [webkit/Source/ThirdParty/ANGLE/src/common/third_party/base/anglebase/numerics/safe_conversions.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="angle::base::SaturatedCastNaNBehaviorCheck,angle::base::SaturatedCastNaNBehaviorReturnZero,angle::base::StrictNumeric "/>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/ANGLE/src/common/third_party/base/anglebase/numerics/safe_conversions.h'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>ANGLE</a>/<a href='../../../../..'>src</a>/<a href='../../../..'>common</a>/<a href='../../..'>third_party</a>/<a href='../..'>base</a>/<a href='..'>anglebase</a>/<a href='./'>numerics</a>/<a href='safe_conversions.h.html'>safe_conversions.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>// Copyright 2014 The Chromium Authors. All rights reserved.</i></td></tr>
+<tr><th id="2">2</th><td><i>// Use of this source code is governed by a BSD-style license that can be</i></td></tr>
+<tr><th id="3">3</th><td><i>// found in the LICENSE file.</i></td></tr>
+<tr><th id="4">4</th><td></td></tr>
+<tr><th id="5">5</th><td><u>#<span data-ppcond="5">ifndef</span> <span class="macro" data-ref="_M/ANGLEBASE_NUMERICS_SAFE_CONVERSIONS_H_">ANGLEBASE_NUMERICS_SAFE_CONVERSIONS_H_</span></u></td></tr>
+<tr><th id="6">6</th><td><u>#define <dfn class="macro" id="_M/ANGLEBASE_NUMERICS_SAFE_CONVERSIONS_H_" data-ref="_M/ANGLEBASE_NUMERICS_SAFE_CONVERSIONS_H_">ANGLEBASE_NUMERICS_SAFE_CONVERSIONS_H_</dfn></u></td></tr>
+<tr><th id="7">7</th><td></td></tr>
+<tr><th id="8">8</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="9">9</th><td></td></tr>
+<tr><th id="10">10</th><td><u>#include &lt;limits&gt;</u></td></tr>
+<tr><th id="11">11</th><td><u>#include &lt;type_traits&gt;</u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="../logging.h.html">"anglebase/logging.h"</a></u></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="safe_conversions_impl.h.html">"anglebase/numerics/safe_conversions_impl.h"</a></u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><b>namespace</b> <span class="namespace">angle</span></td></tr>
+<tr><th id="17">17</th><td>{</td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><b>namespace</b> <span class="namespace">base</span></td></tr>
+<tr><th id="20">20</th><td>{</td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><i>// Convenience function that returns true if the supplied value is in range</i></td></tr>
+<tr><th id="23">23</th><td><i>// for the destination type.</i></td></tr>
+<tr><th id="24">24</th><td><b>template</b> &lt;<b>typename</b> Dst, <b>typename</b> Src&gt;</td></tr>
+<tr><th id="25">25</th><td><b>constexpr</b> <em>bool</em> <dfn class="decl def fn" id="_ZN5angle4base28IsValueInRangeForNumericTypeET0_" title='angle::base::IsValueInRangeForNumericType' data-ref="_ZN5angle4base28IsValueInRangeForNumericTypeET0_" data-ref-filename="_ZN5angle4base28IsValueInRangeForNumericTypeET0_">IsValueInRangeForNumericType</dfn>(Src <dfn class="local col8 decl" id="78value" title='value' data-type='Src' data-ref="78value" data-ref-filename="78value">value</dfn>)</td></tr>
+<tr><th id="26">26</th><td>{</td></tr>
+<tr><th id="27">27</th><td>    <b>return</b> <span class="namespace">internal::</span>DstRangeRelationToSrcRange&lt;Dst&gt;(<a class="local col8 ref" href="#78value" title='value' data-ref="78value" data-ref-filename="78value">value</a>) == <span class="namespace">internal::</span><a class="enum" href="safe_conversions_impl.h.html#angle::base::internal::RANGE_VALID" title='angle::base::internal::RANGE_VALID' data-ref="angle::base::internal::RANGE_VALID" data-ref-filename="angle..base..internal..RANGE_VALID">RANGE_VALID</a>;</td></tr>
+<tr><th id="28">28</th><td>}</td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><i>// Convenience function for determining if a numeric value is negative without</i></td></tr>
+<tr><th id="31">31</th><td><i>// throwing compiler warnings on: unsigned(value) &lt; 0.</i></td></tr>
+<tr><th id="32">32</th><td><b>template</b> &lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="33">33</th><td><b>constexpr</b> <b>typename</b> <span class="namespace">std::</span><span class='type' title='std::__1::enable_if' data-ref="std::__1::enable_if" data-ref-filename="std..__1..enable_if">enable_if</span>&lt;<span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;T&gt;::is_signed, <em>bool</em>&gt;::type <dfn class="decl def fn" id="_ZN5angle4base15IsValueNegativeET_" title='angle::base::IsValueNegative' data-ref="_ZN5angle4base15IsValueNegativeET_" data-ref-filename="_ZN5angle4base15IsValueNegativeET_">IsValueNegative</dfn>(</td></tr>
+<tr><th id="34">34</th><td>    T <dfn class="local col9 decl" id="79value" title='value' data-type='T' data-ref="79value" data-ref-filename="79value">value</dfn>)</td></tr>
+<tr><th id="35">35</th><td>{</td></tr>
+<tr><th id="36">36</th><td>    <b>static_assert</b>(<span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;T&gt;::is_specialized, <q>"Argument must be numeric."</q>);</td></tr>
+<tr><th id="37">37</th><td>    <b>return</b> <a class="local col9 ref" href="#79value" title='value' data-ref="79value" data-ref-filename="79value">value</a> &lt; <var>0</var>;</td></tr>
+<tr><th id="38">38</th><td>}</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><b>template</b> &lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="41">41</th><td><b>constexpr</b> <b>typename</b> <span class="namespace">std::</span><span class='type' title='std::__1::enable_if' data-ref="std::__1::enable_if" data-ref-filename="std..__1..enable_if">enable_if</span>&lt;!<span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;T&gt;::is_signed, <em>bool</em>&gt;::type <dfn class="decl def fn" id="_ZN5angle4base15IsValueNegativeET_" title='angle::base::IsValueNegative' data-ref="_ZN5angle4base15IsValueNegativeET_" data-ref-filename="_ZN5angle4base15IsValueNegativeET_">IsValueNegative</dfn>(T)</td></tr>
+<tr><th id="42">42</th><td>{</td></tr>
+<tr><th id="43">43</th><td>    <b>static_assert</b>(<span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;T&gt;::is_specialized, <q>"Argument must be numeric."</q>);</td></tr>
+<tr><th id="44">44</th><td>    <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="45">45</th><td>}</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td><i>// checked_cast&lt;&gt; is analogous to static_cast&lt;&gt; for numeric types,</i></td></tr>
+<tr><th id="48">48</th><td><i>// except that it CHECKs that the specified numeric conversion will not</i></td></tr>
+<tr><th id="49">49</th><td><i>// overflow or underflow. NaN source will always trigger a CHECK.</i></td></tr>
+<tr><th id="50">50</th><td><b>template</b> &lt;<b>typename</b> Dst, <b>typename</b> Src&gt;</td></tr>
+<tr><th id="51">51</th><td><b>inline</b> Dst <dfn class="decl def fn" id="_ZN5angle4base12checked_castET0_" title='angle::base::checked_cast' data-ref="_ZN5angle4base12checked_castET0_" data-ref-filename="_ZN5angle4base12checked_castET0_">checked_cast</dfn>(Src <dfn class="local col0 decl" id="80value" title='value' data-type='Src' data-ref="80value" data-ref-filename="80value">value</dfn>)</td></tr>
+<tr><th id="52">52</th><td>{</td></tr>
+<tr><th id="53">53</th><td>    <a class="macro" href="../logging.h.html#18" title="(IsValueInRangeForNumericType&lt;Dst&gt;(value) ? static_cast&lt;void&gt;(0) : (!((::gl::priv::ShouldCreatePlatformLogMessage(::gl::LOG_FATAL))) ? static_cast&lt;void&gt;(0) : ::gl::priv::LogMessageVoidify() &amp; (::gl::LogMessage(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/ANGLE/src/common/third_party/base/anglebase/numerics/safe_conversions.h&quot;, __FUNCTION__, 53, ::gl::LOG_FATAL).stream()) &lt;&lt; &quot;\t! Assert failed in &quot; &lt;&lt; __FUNCTION__ &lt;&lt; &quot; (&quot; &lt;&lt; &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/ANGLE/src/common/third_party/base/anglebase/numerics/safe_conversions.h&quot; &lt;&lt; &quot;:&quot; &lt;&lt; 53 &lt;&lt; &quot;): &quot; &lt;&lt; &quot;IsValueInRangeForNumericType&lt;Dst&gt;(value)&quot;))" data-ref="_M/CHECK">CHECK</a>(IsValueInRangeForNumericType&lt;Dst&gt;(<a class="local col0 ref" href="#80value" title='value' data-ref="80value" data-ref-filename="80value">value</a>));</td></tr>
+<tr><th id="54">54</th><td>    <b>return</b> <b>static_cast</b>&lt;Dst&gt;(<a class="local col0 ref" href="#80value" title='value' data-ref="80value" data-ref-filename="80value">value</a>);</td></tr>
+<tr><th id="55">55</th><td>}</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td><i>// HandleNaN will cause this class to CHECK(false).</i></td></tr>
+<tr><th id="58">58</th><td><b>struct</b> <dfn class="type def" id="angle::base::SaturatedCastNaNBehaviorCheck" title='angle::base::SaturatedCastNaNBehaviorCheck' data-ref="angle::base::SaturatedCastNaNBehaviorCheck" data-ref-filename="angle..base..SaturatedCastNaNBehaviorCheck">SaturatedCastNaNBehaviorCheck</dfn></td></tr>
+<tr><th id="59">59</th><td>{</td></tr>
+<tr><th id="60">60</th><td>    <b>template</b> &lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="61">61</th><td>    <em>static</em> T <dfn class="decl def fn" id="_ZN5angle4base29SaturatedCastNaNBehaviorCheck9HandleNaNEv" title='angle::base::SaturatedCastNaNBehaviorCheck::HandleNaN' data-ref="_ZN5angle4base29SaturatedCastNaNBehaviorCheck9HandleNaNEv" data-ref-filename="_ZN5angle4base29SaturatedCastNaNBehaviorCheck9HandleNaNEv">HandleNaN</dfn>()</td></tr>
+<tr><th id="62">62</th><td>    {</td></tr>
+<tr><th id="63">63</th><td>        <a class="macro" href="../logging.h.html#18" title="(false ? static_cast&lt;void&gt;(0) : (!((::gl::priv::ShouldCreatePlatformLogMessage(::gl::LOG_FATAL))) ? static_cast&lt;void&gt;(0) : ::gl::priv::LogMessageVoidify() &amp; (::gl::LogMessage(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/ANGLE/src/common/third_party/base/anglebase/numerics/safe_conversions.h&quot;, __FUNCTION__, 63, ::gl::LOG_FATAL).stream()) &lt;&lt; &quot;\t! Assert failed in &quot; &lt;&lt; __FUNCTION__ &lt;&lt; &quot; (&quot; &lt;&lt; &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/ANGLE/src/common/third_party/base/anglebase/numerics/safe_conversions.h&quot; &lt;&lt; &quot;:&quot; &lt;&lt; 63 &lt;&lt; &quot;): &quot; &lt;&lt; &quot;false&quot;))" data-ref="_M/CHECK">CHECK</a>(<b>false</b>);</td></tr>
+<tr><th id="64">64</th><td>        <b>return</b> T();</td></tr>
+<tr><th id="65">65</th><td>    }</td></tr>
+<tr><th id="66">66</th><td>};</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td><i>// HandleNaN will return 0 in this case.</i></td></tr>
+<tr><th id="69">69</th><td><b>struct</b> <dfn class="type def" id="angle::base::SaturatedCastNaNBehaviorReturnZero" title='angle::base::SaturatedCastNaNBehaviorReturnZero' data-ref="angle::base::SaturatedCastNaNBehaviorReturnZero" data-ref-filename="angle..base..SaturatedCastNaNBehaviorReturnZero">SaturatedCastNaNBehaviorReturnZero</dfn></td></tr>
+<tr><th id="70">70</th><td>{</td></tr>
+<tr><th id="71">71</th><td>    <b>template</b> &lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="72">72</th><td>    <em>static</em> <b>constexpr</b> T <dfn class="decl def fn" id="_ZN5angle4base34SaturatedCastNaNBehaviorReturnZero9HandleNaNEv" title='angle::base::SaturatedCastNaNBehaviorReturnZero::HandleNaN' data-ref="_ZN5angle4base34SaturatedCastNaNBehaviorReturnZero9HandleNaNEv" data-ref-filename="_ZN5angle4base34SaturatedCastNaNBehaviorReturnZero9HandleNaNEv">HandleNaN</dfn>()</td></tr>
+<tr><th id="73">73</th><td>    {</td></tr>
+<tr><th id="74">74</th><td>        <b>return</b> T();</td></tr>
+<tr><th id="75">75</th><td>    }</td></tr>
+<tr><th id="76">76</th><td>};</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td><b>namespace</b> <span class="namespace">internal</span></td></tr>
+<tr><th id="79">79</th><td>{</td></tr>
+<tr><th id="80">80</th><td><i>// This wrapper is used for C++11 constexpr support by avoiding the declaration</i></td></tr>
+<tr><th id="81">81</th><td><i>// of local variables in the saturated_cast template function.</i></td></tr>
+<tr><th id="82">82</th><td><b>template</b> &lt;<b>typename</b> Dst, <b>class</b> NaNHandler, <b>typename</b> Src&gt;</td></tr>
+<tr><th id="83">83</th><td><b>constexpr</b> Dst <dfn class="decl def fn" id="_ZN5angle4base8internal19saturated_cast_implET1_NS1_15RangeConstraintE" title='angle::base::internal::saturated_cast_impl' data-ref="_ZN5angle4base8internal19saturated_cast_implET1_NS1_15RangeConstraintE" data-ref-filename="_ZN5angle4base8internal19saturated_cast_implET1_NS1_15RangeConstraintE">saturated_cast_impl</dfn>(<em>const</em> Src <dfn class="local col1 decl" id="81value" title='value' data-type='const Src' data-ref="81value" data-ref-filename="81value">value</dfn>, <em>const</em> <a class="type" href="safe_conversions_impl.h.html#angle::base::internal::RangeConstraint" title='angle::base::internal::RangeConstraint' data-ref="angle::base::internal::RangeConstraint" data-ref-filename="angle..base..internal..RangeConstraint">RangeConstraint</a> <dfn class="local col2 decl" id="82constraint" title='constraint' data-type='const angle::base::internal::RangeConstraint' data-ref="82constraint" data-ref-filename="82constraint">constraint</dfn>)</td></tr>
+<tr><th id="84">84</th><td>{</td></tr>
+<tr><th id="85">85</th><td>    <b>return</b> <a class="local col2 ref" href="#82constraint" title='constraint' data-ref="82constraint" data-ref-filename="82constraint">constraint</a> == <a class="enum" href="safe_conversions_impl.h.html#angle::base::internal::RANGE_VALID" title='angle::base::internal::RANGE_VALID' data-ref="angle::base::internal::RANGE_VALID" data-ref-filename="angle..base..internal..RANGE_VALID">RANGE_VALID</a></td></tr>
+<tr><th id="86">86</th><td>               ? <b>static_cast</b>&lt;Dst&gt;(<a class="local col1 ref" href="#81value" title='value' data-ref="81value" data-ref-filename="81value">value</a>)</td></tr>
+<tr><th id="87">87</th><td>               : (<a class="local col2 ref" href="#82constraint" title='constraint' data-ref="82constraint" data-ref-filename="82constraint">constraint</a> == <a class="enum" href="safe_conversions_impl.h.html#angle::base::internal::RANGE_UNDERFLOW" title='angle::base::internal::RANGE_UNDERFLOW' data-ref="angle::base::internal::RANGE_UNDERFLOW" data-ref-filename="angle..base..internal..RANGE_UNDERFLOW">RANGE_UNDERFLOW</a></td></tr>
+<tr><th id="88">88</th><td>                      ? <span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;Dst&gt;::min()</td></tr>
+<tr><th id="89">89</th><td>                      : (<a class="local col2 ref" href="#82constraint" title='constraint' data-ref="82constraint" data-ref-filename="82constraint">constraint</a> == <a class="enum" href="safe_conversions_impl.h.html#angle::base::internal::RANGE_OVERFLOW" title='angle::base::internal::RANGE_OVERFLOW' data-ref="angle::base::internal::RANGE_OVERFLOW" data-ref-filename="angle..base..internal..RANGE_OVERFLOW">RANGE_OVERFLOW</a></td></tr>
+<tr><th id="90">90</th><td>                             ? <span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;Dst&gt;::max()</td></tr>
+<tr><th id="91">91</th><td>                             : (<a class="local col2 ref" href="#82constraint" title='constraint' data-ref="82constraint" data-ref-filename="82constraint">constraint</a> == <a class="enum" href="safe_conversions_impl.h.html#angle::base::internal::RANGE_INVALID" title='angle::base::internal::RANGE_INVALID' data-ref="angle::base::internal::RANGE_INVALID" data-ref-filename="angle..base..internal..RANGE_INVALID">RANGE_INVALID</a></td></tr>
+<tr><th id="92">92</th><td>                                    ? NaNHandler::<b>template</b> HandleNaN&lt;Dst&gt;()</td></tr>
+<tr><th id="93">93</th><td>                                    : (<a class="macro" href="../logging.h.html#23" title="({ do { !((::gl::priv::ShouldCreatePlatformLogMessage(::gl::LOG_FATAL))) ? static_cast&lt;void&gt;(0) : ::gl::priv::LogMessageVoidify() &amp; (::gl::LogMessage(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/ANGLE/src/common/third_party/base/anglebase/numerics/safe_conversions.h&quot;, __FUNCTION__, 93, ::gl::LOG_FATAL).stream()) &lt;&lt; &quot;\t! Unreachable reached: &quot; &lt;&lt; __FUNCTION__ &lt;&lt; &quot;(&quot; &lt;&lt; &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/ANGLE/src/common/third_party/base/anglebase/numerics/safe_conversions.h&quot; &lt;&lt; &quot;:&quot; &lt;&lt; 93 &lt;&lt; &quot;)&quot;; } while (0); })" data-ref="_M/NOTREACHED">NOTREACHED</a>(), <b>static_cast</b>&lt;Dst&gt;(<a class="local col1 ref" href="#81value" title='value' data-ref="81value" data-ref-filename="81value">value</a>)))));</td></tr>
+<tr><th id="94">94</th><td>}</td></tr>
+<tr><th id="95">95</th><td>}  <i>// namespace internal</i></td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td><i>// saturated_cast&lt;&gt; is analogous to static_cast&lt;&gt; for numeric types, except</i></td></tr>
+<tr><th id="98">98</th><td><i>// that the specified numeric conversion will saturate rather than overflow or</i></td></tr>
+<tr><th id="99">99</th><td><i>// underflow. NaN assignment to an integral will defer the behavior to a</i></td></tr>
+<tr><th id="100">100</th><td><i>// specified class. By default, it will return 0.</i></td></tr>
+<tr><th id="101">101</th><td><b>template</b> &lt;<b>typename</b> Dst, <b>class</b> NaNHandler = <a class="type" href="#angle::base::SaturatedCastNaNBehaviorReturnZero" title='angle::base::SaturatedCastNaNBehaviorReturnZero' data-ref="angle::base::SaturatedCastNaNBehaviorReturnZero" data-ref-filename="angle..base..SaturatedCastNaNBehaviorReturnZero">SaturatedCastNaNBehaviorReturnZero</a>, <b>typename</b> Src&gt;</td></tr>
+<tr><th id="102">102</th><td><b>constexpr</b> Dst <dfn class="decl def fn" id="_ZN5angle4base14saturated_castET1_" title='angle::base::saturated_cast' data-ref="_ZN5angle4base14saturated_castET1_" data-ref-filename="_ZN5angle4base14saturated_castET1_">saturated_cast</dfn>(Src <dfn class="local col3 decl" id="83value" title='value' data-type='Src' data-ref="83value" data-ref-filename="83value">value</dfn>)</td></tr>
+<tr><th id="103">103</th><td>{</td></tr>
+<tr><th id="104">104</th><td>    <b>return</b> <span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;Dst&gt;::is_iec559</td></tr>
+<tr><th id="105">105</th><td>               ? <b>static_cast</b>&lt;Dst&gt;(<a class="local col3 ref" href="#83value" title='value' data-ref="83value" data-ref-filename="83value">value</a>)  <i>// Floating point optimization.</i></td></tr>
+<tr><th id="106">106</th><td>               : <span class="namespace">internal::</span>saturated_cast_impl&lt;Dst, NaNHandler&gt;(</td></tr>
+<tr><th id="107">107</th><td>                     <a class="local col3 ref" href="#83value" title='value' data-ref="83value" data-ref-filename="83value">value</a>, <span class="namespace">internal::</span>DstRangeRelationToSrcRange&lt;Dst&gt;(<a class="local col3 ref" href="#83value" title='value' data-ref="83value" data-ref-filename="83value">value</a>));</td></tr>
+<tr><th id="108">108</th><td>}</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td><i>// strict_cast&lt;&gt; is analogous to static_cast&lt;&gt; for numeric types, except that</i></td></tr>
+<tr><th id="111">111</th><td><i>// it will cause a compile failure if the destination type is not large enough</i></td></tr>
+<tr><th id="112">112</th><td><i>// to contain any value in the source type. It performs no runtime checking.</i></td></tr>
+<tr><th id="113">113</th><td><b>template</b> &lt;<b>typename</b> Dst, <b>typename</b> Src&gt;</td></tr>
+<tr><th id="114">114</th><td><b>constexpr</b> Dst <dfn class="decl def fn" id="_ZN5angle4base11strict_castET0_" title='angle::base::strict_cast' data-ref="_ZN5angle4base11strict_castET0_" data-ref-filename="_ZN5angle4base11strict_castET0_">strict_cast</dfn>(Src <dfn class="local col4 decl" id="84value" title='value' data-type='Src' data-ref="84value" data-ref-filename="84value">value</dfn>)</td></tr>
+<tr><th id="115">115</th><td>{</td></tr>
+<tr><th id="116">116</th><td>    <b>static_assert</b>(<span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;Src&gt;::is_specialized, <q>"Argument must be numeric."</q>);</td></tr>
+<tr><th id="117">117</th><td>    <b>static_assert</b>(<span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;Dst&gt;::is_specialized, <q>"Result must be numeric."</q>);</td></tr>
+<tr><th id="118">118</th><td>    <b>static_assert</b>((<span class="namespace">internal::</span><a class="type" href="safe_conversions_impl.h.html#angle::base::internal::StaticDstRangeRelationToSrcRange" title='angle::base::internal::StaticDstRangeRelationToSrcRange' data-ref="angle::base::internal::StaticDstRangeRelationToSrcRange" data-ref-filename="angle..base..internal..StaticDstRangeRelationToSrcRange">StaticDstRangeRelationToSrcRange</a>&lt;Dst, Src&gt;::value ==</td></tr>
+<tr><th id="119">119</th><td>                   <span class="namespace">internal::</span><a class="enum" href="safe_conversions_impl.h.html#angle::base::internal::NUMERIC_RANGE_CONTAINED" title='angle::base::internal::NUMERIC_RANGE_CONTAINED' data-ref="angle::base::internal::NUMERIC_RANGE_CONTAINED" data-ref-filename="angle..base..internal..NUMERIC_RANGE_CONTAINED">NUMERIC_RANGE_CONTAINED</a>),</td></tr>
+<tr><th id="120">120</th><td>                  <q>"The numeric conversion is out of range for this type. You "</q></td></tr>
+<tr><th id="121">121</th><td>                  <q>"should probably use one of the following conversion "</q></td></tr>
+<tr><th id="122">122</th><td>                  <q>"mechanisms on the value you want to pass:\n"</q></td></tr>
+<tr><th id="123">123</th><td>                  <q>"- base::checked_cast\n"</q></td></tr>
+<tr><th id="124">124</th><td>                  <q>"- base::saturated_cast\n"</q></td></tr>
+<tr><th id="125">125</th><td>                  <q>"- base::CheckedNumeric"</q>);</td></tr>
+<tr><th id="126">126</th><td></td></tr>
+<tr><th id="127">127</th><td>    <b>return</b> <b>static_cast</b>&lt;Dst&gt;(<a class="local col4 ref" href="#84value" title='value' data-ref="84value" data-ref-filename="84value">value</a>);</td></tr>
+<tr><th id="128">128</th><td>}</td></tr>
+<tr><th id="129">129</th><td></td></tr>
+<tr><th id="130">130</th><td><i>// StrictNumeric implements compile time range checking between numeric types by</i></td></tr>
+<tr><th id="131">131</th><td><i>// wrapping assignment operations in a strict_cast. This class is intended to be</i></td></tr>
+<tr><th id="132">132</th><td><i>// used for function arguments and return types, to ensure the destination type</i></td></tr>
+<tr><th id="133">133</th><td><i>// can always contain the source type. This is essentially the same as enforcing</i></td></tr>
+<tr><th id="134">134</th><td><i>// -Wconversion in gcc and C4302 warnings on MSVC, but it can be applied</i></td></tr>
+<tr><th id="135">135</th><td><i>// incrementally at API boundaries, making it easier to convert code so that it</i></td></tr>
+<tr><th id="136">136</th><td><i>// compiles cleanly with truncation warnings enabled.</i></td></tr>
+<tr><th id="137">137</th><td><i>// This template should introduce no runtime overhead, but it also provides no</i></td></tr>
+<tr><th id="138">138</th><td><i>// runtime checking of any of the associated mathematical operations. Use</i></td></tr>
+<tr><th id="139">139</th><td><i>// CheckedNumeric for runtime range checks of the actual value being assigned.</i></td></tr>
+<tr><th id="140">140</th><td><b>template</b> &lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="141">141</th><td><b>class</b> <dfn class="type def" id="angle::base::StrictNumeric" title='angle::base::StrictNumeric' data-ref="angle::base::StrictNumeric" data-ref-filename="angle..base..StrictNumeric">StrictNumeric</dfn></td></tr>
+<tr><th id="142">142</th><td>{</td></tr>
+<tr><th id="143">143</th><td>  <b>public</b>:</td></tr>
+<tr><th id="144">144</th><td>    <b>typedef</b> T <dfn class="typedef" id="angle::base::StrictNumeric::type" title='angle::base::StrictNumeric::type' data-type='T' data-ref="angle::base::StrictNumeric::type" data-ref-filename="angle..base..StrictNumeric..type">type</dfn>;</td></tr>
+<tr><th id="145">145</th><td></td></tr>
+<tr><th id="146">146</th><td>    <b>constexpr</b> <dfn class="decl def fn" id="_ZN5angle4base13StrictNumericC1Ev" title='angle::base::StrictNumeric::StrictNumeric&lt;T&gt;' data-ref="_ZN5angle4base13StrictNumericC1Ev" data-ref-filename="_ZN5angle4base13StrictNumericC1Ev">StrictNumeric</dfn>() : <a class="member field" href="#angle::base::StrictNumeric::value_" title='angle::base::StrictNumeric::value_' data-ref="angle::base::StrictNumeric::value_" data-ref-filename="angle..base..StrictNumeric..value_">value_</a>(<var>0</var>) {}</td></tr>
+<tr><th id="147">147</th><td></td></tr>
+<tr><th id="148">148</th><td>    <i>// Copy constructor.</i></td></tr>
+<tr><th id="149">149</th><td>    <b>template</b> &lt;<b>typename</b> Src&gt;</td></tr>
+<tr><th id="150">150</th><td>    <b>constexpr</b> <dfn class="decl def fn" id="_ZN5angle4base13StrictNumericC1ERKNS0_13StrictNumericITL0__EE" title='angle::base::StrictNumeric::StrictNumeric&lt;T&gt;' data-ref="_ZN5angle4base13StrictNumericC1ERKNS0_13StrictNumericITL0__EE" data-ref-filename="_ZN5angle4base13StrictNumericC1ERKNS0_13StrictNumericITL0__EE">StrictNumeric</dfn>(<em>const</em> <a class="type" href="#angle::base::StrictNumeric" title='angle::base::StrictNumeric' data-ref="angle::base::StrictNumeric" data-ref-filename="angle..base..StrictNumeric">StrictNumeric</a>&lt;Src&gt; &amp;<dfn class="local col5 decl" id="85rhs" title='rhs' data-type='const StrictNumeric&lt;Src&gt; &amp;' data-ref="85rhs" data-ref-filename="85rhs">rhs</dfn>) : <a class="member field" href="#angle::base::StrictNumeric::value_" title='angle::base::StrictNumeric::value_' data-ref="angle::base::StrictNumeric::value_" data-ref-filename="angle..base..StrictNumeric..value_">value_</a>(strict_cast&lt;T&gt;(<a class="local col5 ref" href="#85rhs" title='rhs' data-ref="85rhs" data-ref-filename="85rhs">rhs</a>.value_))</td></tr>
+<tr><th id="151">151</th><td>    {}</td></tr>
+<tr><th id="152">152</th><td></td></tr>
+<tr><th id="153">153</th><td>    <i>// This is not an explicit constructor because we implicitly upgrade regular</i></td></tr>
+<tr><th id="154">154</th><td><i>    // numerics to StrictNumerics to make them easier to use.</i></td></tr>
+<tr><th id="155">155</th><td>    <b>template</b> &lt;<b>typename</b> Src&gt;</td></tr>
+<tr><th id="156">156</th><td>    <b>constexpr</b> <dfn class="decl def fn" id="_ZN5angle4base13StrictNumericC1ETL0__" title='angle::base::StrictNumeric::StrictNumeric&lt;T&gt;' data-ref="_ZN5angle4base13StrictNumericC1ETL0__" data-ref-filename="_ZN5angle4base13StrictNumericC1ETL0__">StrictNumeric</dfn>(Src <dfn class="local col6 decl" id="86value" title='value' data-type='Src' data-ref="86value" data-ref-filename="86value">value</dfn>) : <a class="member field" href="#angle::base::StrictNumeric::value_" title='angle::base::StrictNumeric::value_' data-ref="angle::base::StrictNumeric::value_" data-ref-filename="angle..base..StrictNumeric..value_">value_</a>(strict_cast&lt;T&gt;(<a class="local col6 ref" href="#86value" title='value' data-ref="86value" data-ref-filename="86value">value</a>))</td></tr>
+<tr><th id="157">157</th><td>    {}</td></tr>
+<tr><th id="158">158</th><td></td></tr>
+<tr><th id="159">159</th><td>    <i>// The numeric cast operator basically handles all the magic.</i></td></tr>
+<tr><th id="160">160</th><td>    <b>template</b> &lt;<b>typename</b> Dst&gt;</td></tr>
+<tr><th id="161">161</th><td>    <b>constexpr</b> <dfn class="decl def fn" id="_ZNK5angle4base13StrictNumericcvTL0__Ev" title='angle::base::StrictNumeric::operator type-parameter-1-0' data-ref="_ZNK5angle4base13StrictNumericcvTL0__Ev" data-ref-filename="_ZNK5angle4base13StrictNumericcvTL0__Ev"><b>operator</b> Dst</dfn>() <em>const</em></td></tr>
+<tr><th id="162">162</th><td>    {</td></tr>
+<tr><th id="163">163</th><td>        <b>return</b> strict_cast&lt;Dst&gt;(<a class="member field" href="#angle::base::StrictNumeric::value_" title='angle::base::StrictNumeric::value_' data-ref="angle::base::StrictNumeric::value_" data-ref-filename="angle..base..StrictNumeric..value_">value_</a>);</td></tr>
+<tr><th id="164">164</th><td>    }</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td>  <b>private</b>:</td></tr>
+<tr><th id="167">167</th><td>    <em>const</em> T <dfn class="decl field" id="angle::base::StrictNumeric::value_" title='angle::base::StrictNumeric::value_' data-ref="angle::base::StrictNumeric::value_" data-ref-filename="angle..base..StrictNumeric..value_">value_</dfn>;</td></tr>
+<tr><th id="168">168</th><td>};</td></tr>
+<tr><th id="169">169</th><td></td></tr>
+<tr><th id="170">170</th><td><i>// Explicitly make a shorter size_t typedef for convenience.</i></td></tr>
+<tr><th id="171">171</th><td><b>typedef</b> <a class="type" href="#angle::base::StrictNumeric" title='angle::base::StrictNumeric' data-ref="angle::base::StrictNumeric" data-ref-filename="angle..base..StrictNumeric">StrictNumeric</a>&lt;<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span>&gt; <dfn class="typedef" id="angle::base::SizeT" title='angle::base::SizeT' data-type='StrictNumeric&lt;size_t&gt;' data-ref="angle::base::SizeT" data-ref-filename="angle..base..SizeT">SizeT</dfn>;</td></tr>
+<tr><th id="172">172</th><td></td></tr>
+<tr><th id="173">173</th><td>}  <i>// namespace base</i></td></tr>
+<tr><th id="174">174</th><td></td></tr>
+<tr><th id="175">175</th><td>}  <i>// namespace angle</i></td></tr>
+<tr><th id="176">176</th><td></td></tr>
+<tr><th id="177">177</th><td><u>#<span data-ppcond="5">endif</span>  // ANGLEBASE_NUMERICS_SAFE_CONVERSIONS_H_</u></td></tr>
+<tr><th id="178">178</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../Float16ToFloat32.cpp.html'>webkit/Source/ThirdParty/ANGLE/src/common/Float16ToFloat32.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

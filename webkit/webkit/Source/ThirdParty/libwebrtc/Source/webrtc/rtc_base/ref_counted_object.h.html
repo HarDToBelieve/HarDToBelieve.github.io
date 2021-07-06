@@ -1,0 +1,217 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ref_counted_object.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/ref_counted_object.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::FinalRefCountedObject,rtc::Ref,rtc::RefCountedObject "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/ref_counted_object.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='ref_counted_object.h.html'>ref_counted_object.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2016 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td><u>#<span data-ppcond="10">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_REF_COUNTED_OBJECT_H_">RTC_BASE_REF_COUNTED_OBJECT_H_</span></u></td></tr>
+<tr><th id="11">11</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_REF_COUNTED_OBJECT_H_" data-ref="_M/RTC_BASE_REF_COUNTED_OBJECT_H_">RTC_BASE_REF_COUNTED_OBJECT_H_</dfn></u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include &lt;type_traits&gt;</u></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;utility&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="../api/scoped_refptr.h.html">"api/scoped_refptr.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="constructor_magic.h.html">"rtc_base/constructor_magic.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="ref_count.h.html">"rtc_base/ref_count.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="ref_counter.h.html">"rtc_base/ref_counter.h"</a></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><b>template</b> &lt;<b>class</b> T&gt;</td></tr>
+<tr><th id="24">24</th><td><b>class</b> <dfn class="type def" id="rtc::RefCountedObject" title='rtc::RefCountedObject' data-ref="rtc::RefCountedObject" data-ref-filename="rtc..RefCountedObject">RefCountedObject</dfn> : <b>public</b> T {</td></tr>
+<tr><th id="25">25</th><td> <b>public</b>:</td></tr>
+<tr><th id="26">26</th><td>  <dfn class="decl def fn" id="_ZN3rtc16RefCountedObjectC1Ev" title='rtc::RefCountedObject::RefCountedObject&lt;T&gt;' data-ref="_ZN3rtc16RefCountedObjectC1Ev" data-ref-filename="_ZN3rtc16RefCountedObjectC1Ev">RefCountedObject</dfn>() {}</td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td>  <b>template</b> &lt;<b>class</b> P0&gt;</td></tr>
+<tr><th id="29">29</th><td>  <b>explicit</b> <dfn class="decl def fn" id="_ZN3rtc16RefCountedObjectC1EOTL0__" title='rtc::RefCountedObject::RefCountedObject&lt;T&gt;' data-ref="_ZN3rtc16RefCountedObjectC1EOTL0__" data-ref-filename="_ZN3rtc16RefCountedObjectC1EOTL0__">RefCountedObject</dfn>(P0&amp;&amp; <dfn class="local col9 decl" id="19p0" title='p0' data-type='P0 &amp;&amp;' data-ref="19p0" data-ref-filename="19p0">p0</dfn>) : T(<span class="namespace">std::</span>forward&lt;P0&gt;(<a class="local col9 ref" href="#19p0" title='p0' data-ref="19p0" data-ref-filename="19p0">p0</a>)) {}</td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td>  <b>template</b> &lt;<b>class</b> P0, <b>class</b> P1, <b>class</b>... Args&gt;</td></tr>
+<tr><th id="32">32</th><td>  <dfn class="decl def fn" id="_ZN3rtc16RefCountedObjectC1EOTL0__OTL0_0_DpOTL0_1_" title='rtc::RefCountedObject::RefCountedObject&lt;T&gt;' data-ref="_ZN3rtc16RefCountedObjectC1EOTL0__OTL0_0_DpOTL0_1_" data-ref-filename="_ZN3rtc16RefCountedObjectC1EOTL0__OTL0_0_DpOTL0_1_">RefCountedObject</dfn>(P0&amp;&amp; <dfn class="local col0 decl" id="20p0" title='p0' data-type='P0 &amp;&amp;' data-ref="20p0" data-ref-filename="20p0">p0</dfn>, P1&amp;&amp; <dfn class="local col1 decl" id="21p1" title='p1' data-type='P1 &amp;&amp;' data-ref="21p1" data-ref-filename="21p1">p1</dfn>, Args&amp;&amp;... <dfn class="local col2 decl" id="22args" title='args' data-type='Args &amp;&amp;...' data-ref="22args" data-ref-filename="22args">args</dfn>)</td></tr>
+<tr><th id="33">33</th><td>      : T(<span class="namespace">std::</span>forward&lt;P0&gt;(<a class="local col0 ref" href="#20p0" title='p0' data-ref="20p0" data-ref-filename="20p0">p0</a>),</td></tr>
+<tr><th id="34">34</th><td>          <span class="namespace">std::</span>forward&lt;P1&gt;(<a class="local col1 ref" href="#21p1" title='p1' data-ref="21p1" data-ref-filename="21p1">p1</a>),</td></tr>
+<tr><th id="35">35</th><td>          <span class="namespace">std::</span>forward&lt;Args&gt;(<a class="local col2 ref" href="#22args" title='args' data-ref="22args" data-ref-filename="22args">args</a>)...) {}</td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZNK3rtc16RefCountedObject6AddRefEv" title='rtc::RefCountedObject::AddRef' data-ref="_ZNK3rtc16RefCountedObject6AddRefEv" data-ref-filename="_ZNK3rtc16RefCountedObject6AddRefEv">AddRef</dfn>() <em>const</em> override { <a class="member field" href="#rtc::RefCountedObject::ref_count_" title='rtc::RefCountedObject::ref_count_' data-ref="rtc::RefCountedObject::ref_count_" data-ref-filename="rtc..RefCountedObject..ref_count_">ref_count_</a>.<a class="ref fn" href="ref_counter.h.html#_ZN6webrtc11webrtc_impl10RefCounter6IncRefEv" title='webrtc::webrtc_impl::RefCounter::IncRef' data-ref="_ZN6webrtc11webrtc_impl10RefCounter6IncRefEv" data-ref-filename="_ZN6webrtc11webrtc_impl10RefCounter6IncRefEv">IncRef</a>(); }</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td>  <a class="type" href="ref_count.h.html#rtc::RefCountReleaseStatus" title='rtc::RefCountReleaseStatus' data-ref="rtc::RefCountReleaseStatus" data-ref-filename="rtc..RefCountReleaseStatus">RefCountReleaseStatus</a> <dfn class="decl def fn" id="_ZNK3rtc16RefCountedObject7ReleaseEv" title='rtc::RefCountedObject::Release' data-ref="_ZNK3rtc16RefCountedObject7ReleaseEv" data-ref-filename="_ZNK3rtc16RefCountedObject7ReleaseEv">Release</dfn>() <em>const</em> override {</td></tr>
+<tr><th id="40">40</th><td>    <em>const</em> <em>auto</em> <dfn class="local col3 decl" id="23status" title='status' data-type='const rtc::RefCountReleaseStatus' data-ref="23status" data-ref-filename="23status">status</dfn> = <a class="member field" href="#rtc::RefCountedObject::ref_count_" title='rtc::RefCountedObject::ref_count_' data-ref="rtc::RefCountedObject::ref_count_" data-ref-filename="rtc..RefCountedObject..ref_count_">ref_count_</a>.<a class="ref fn" href="ref_counter.h.html#_ZN6webrtc11webrtc_impl10RefCounter6DecRefEv" title='webrtc::webrtc_impl::RefCounter::DecRef' data-ref="_ZN6webrtc11webrtc_impl10RefCounter6DecRefEv" data-ref-filename="_ZN6webrtc11webrtc_impl10RefCounter6DecRefEv">DecRef</a>();</td></tr>
+<tr><th id="41">41</th><td>    <b>if</b> (<a class="local col3 ref" href="#23status" title='status' data-ref="23status" data-ref-filename="23status">status</a> == <a class="type" href="ref_count.h.html#rtc::RefCountReleaseStatus" title='rtc::RefCountReleaseStatus' data-ref="rtc::RefCountReleaseStatus" data-ref-filename="rtc..RefCountReleaseStatus">RefCountReleaseStatus</a>::<a class="enum" href="ref_count.h.html#rtc::RefCountReleaseStatus::kDroppedLastRef" title='rtc::RefCountReleaseStatus::kDroppedLastRef' data-ref="rtc::RefCountReleaseStatus::kDroppedLastRef" data-ref-filename="rtc..RefCountReleaseStatus..kDroppedLastRef">kDroppedLastRef</a>) {</td></tr>
+<tr><th id="42">42</th><td>      <b>delete</b> <b>this</b>;</td></tr>
+<tr><th id="43">43</th><td>    }</td></tr>
+<tr><th id="44">44</th><td>    <b>return</b> <a class="local col3 ref" href="#23status" title='status' data-ref="23status" data-ref-filename="23status">status</a>;</td></tr>
+<tr><th id="45">45</th><td>  }</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td>  <i>// Return whether the reference count is one. If the reference count is used</i></td></tr>
+<tr><th id="48">48</th><td><i>  // in the conventional way, a reference count of 1 implies that the current</i></td></tr>
+<tr><th id="49">49</th><td><i>  // thread owns the reference and no other thread shares it. This call</i></td></tr>
+<tr><th id="50">50</th><td><i>  // performs the test for a reference count of one, and performs the memory</i></td></tr>
+<tr><th id="51">51</th><td><i>  // barrier needed for the owning thread to act on the object, knowing that it</i></td></tr>
+<tr><th id="52">52</th><td><i>  // has exclusive access to the object.</i></td></tr>
+<tr><th id="53">53</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl def fn" id="_ZNK3rtc16RefCountedObject9HasOneRefEv" title='rtc::RefCountedObject::HasOneRef' data-ref="_ZNK3rtc16RefCountedObject9HasOneRefEv" data-ref-filename="_ZNK3rtc16RefCountedObject9HasOneRefEv">HasOneRef</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#rtc::RefCountedObject::ref_count_" title='rtc::RefCountedObject::ref_count_' data-ref="rtc::RefCountedObject::ref_count_" data-ref-filename="rtc..RefCountedObject..ref_count_">ref_count_</a>.<a class="ref fn" href="ref_counter.h.html#_ZNK6webrtc11webrtc_impl10RefCounter9HasOneRefEv" title='webrtc::webrtc_impl::RefCounter::HasOneRef' data-ref="_ZNK6webrtc11webrtc_impl10RefCounter9HasOneRefEv" data-ref-filename="_ZNK6webrtc11webrtc_impl10RefCounter9HasOneRefEv">HasOneRef</a>(); }</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td> <b>protected</b>:</td></tr>
+<tr><th id="56">56</th><td>  <dfn class="decl def fn" id="_ZN3rtc16RefCountedObjectD1Ev" title='rtc::RefCountedObject::~RefCountedObject&lt;T&gt;' data-ref="_ZN3rtc16RefCountedObjectD1Ev" data-ref-filename="_ZN3rtc16RefCountedObjectD1Ev">~RefCountedObject</dfn>() override {}</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>  <em>mutable</em> <span class="namespace">webrtc::webrtc_impl::</span><a class="type" href="ref_counter.h.html#webrtc::webrtc_impl::RefCounter" title='webrtc::webrtc_impl::RefCounter' data-ref="webrtc::webrtc_impl::RefCounter" data-ref-filename="webrtc..webrtc_impl..RefCounter">RefCounter</a> <dfn class="decl field" id="rtc::RefCountedObject::ref_count_" title='rtc::RefCountedObject::ref_count_' data-ref="rtc::RefCountedObject::ref_count_" data-ref-filename="rtc..RefCountedObject..ref_count_">ref_count_</dfn><a class="ref fn" href="ref_counter.h.html#_ZN6webrtc11webrtc_impl10RefCounterC1Ei" title='webrtc::webrtc_impl::RefCounter::RefCounter' data-ref="_ZN6webrtc11webrtc_impl10RefCounterC1Ei" data-ref-filename="_ZN6webrtc11webrtc_impl10RefCounterC1Ei">{</a><var>0</var>};</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td>  <a class="macro" href="constructor_magic.h.html#16" title="RefCountedObject(const RefCountedObject&amp;) = delete; RefCountedObject&amp; operator=(const RefCountedObject&amp;) = delete" data-ref="_M/RTC_DISALLOW_COPY_AND_ASSIGN">RTC_DISALLOW_COPY_AND_ASSIGN</a>(<dfn class="decl def fn" id="_ZN3rtc16RefCountedObjectC1ERKNS_16RefCountedObjectIT_EE" title='rtc::RefCountedObject::RefCountedObject&lt;T&gt;' data-ref="_ZN3rtc16RefCountedObjectC1ERKNS_16RefCountedObjectIT_EE" data-ref-filename="_ZN3rtc16RefCountedObjectC1ERKNS_16RefCountedObjectIT_EE">RefCountedObject</dfn>);</td></tr>
+<tr><th id="61">61</th><td>};</td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><b>template</b> &lt;<b>class</b> T&gt;</td></tr>
+<tr><th id="64">64</th><td><b>class</b> <dfn class="type def" id="rtc::FinalRefCountedObject" title='rtc::FinalRefCountedObject' data-ref="rtc::FinalRefCountedObject" data-ref-filename="rtc..FinalRefCountedObject">FinalRefCountedObject</dfn> final : <b>public</b> T {</td></tr>
+<tr><th id="65">65</th><td> <b>public</b>:</td></tr>
+<tr><th id="66">66</th><td>  <b>using</b> T::T;</td></tr>
+<tr><th id="67">67</th><td>  <i>// Until c++17 compilers are allowed not to inherit the default constructors.</i></td></tr>
+<tr><th id="68">68</th><td><i>  // Thus the default constructors are forwarded explicitly.</i></td></tr>
+<tr><th id="69">69</th><td>  <dfn class="decl def fn" id="_ZN3rtc21FinalRefCountedObjectC1Ev" title='rtc::FinalRefCountedObject::FinalRefCountedObject&lt;T&gt;' data-ref="_ZN3rtc21FinalRefCountedObjectC1Ev" data-ref-filename="_ZN3rtc21FinalRefCountedObjectC1Ev">FinalRefCountedObject</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="70">70</th><td>  <b>explicit</b> <dfn class="decl def fn" id="_ZN3rtc21FinalRefCountedObjectC1ERKT_" title='rtc::FinalRefCountedObject::FinalRefCountedObject&lt;T&gt;' data-ref="_ZN3rtc21FinalRefCountedObjectC1ERKT_" data-ref-filename="_ZN3rtc21FinalRefCountedObjectC1ERKT_">FinalRefCountedObject</dfn>(<em>const</em> T&amp; <dfn class="local col4 decl" id="24other" title='other' data-type='const T &amp;' data-ref="24other" data-ref-filename="24other">other</dfn>) : T(<a class="local col4 ref" href="#24other" title='other' data-ref="24other" data-ref-filename="24other">other</a>) {}</td></tr>
+<tr><th id="71">71</th><td>  <b>explicit</b> <dfn class="decl def fn" id="_ZN3rtc21FinalRefCountedObjectC1EOT_" title='rtc::FinalRefCountedObject::FinalRefCountedObject&lt;T&gt;' data-ref="_ZN3rtc21FinalRefCountedObjectC1EOT_" data-ref-filename="_ZN3rtc21FinalRefCountedObjectC1EOT_">FinalRefCountedObject</dfn>(T&amp;&amp; <dfn class="local col5 decl" id="25other" title='other' data-type='T &amp;&amp;' data-ref="25other" data-ref-filename="25other">other</dfn>) : T(<span class="namespace">std::</span>move(<a class="local col5 ref" href="#25other" title='other' data-ref="25other" data-ref-filename="25other">other</a>)) {}</td></tr>
+<tr><th id="72">72</th><td>  <dfn class="decl def fn" id="_ZN3rtc21FinalRefCountedObjectC1ERKNS_21FinalRefCountedObjectIT_EE" title='rtc::FinalRefCountedObject::FinalRefCountedObject&lt;T&gt;' data-ref="_ZN3rtc21FinalRefCountedObjectC1ERKNS_21FinalRefCountedObjectIT_EE" data-ref-filename="_ZN3rtc21FinalRefCountedObjectC1ERKNS_21FinalRefCountedObjectIT_EE">FinalRefCountedObject</dfn>(<em>const</em> FinalRefCountedObject&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="73">73</th><td>  FinalRefCountedObject&amp; <dfn class="decl def fn" id="_ZN3rtc21FinalRefCountedObjectaSERKNS_21FinalRefCountedObjectIT_EE" title='rtc::FinalRefCountedObject::operator=' data-ref="_ZN3rtc21FinalRefCountedObjectaSERKNS_21FinalRefCountedObjectIT_EE" data-ref-filename="_ZN3rtc21FinalRefCountedObjectaSERKNS_21FinalRefCountedObjectIT_EE"><b>operator</b>=</dfn>(<em>const</em> FinalRefCountedObject&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZNK3rtc21FinalRefCountedObject6AddRefEv" title='rtc::FinalRefCountedObject::AddRef' data-ref="_ZNK3rtc21FinalRefCountedObject6AddRefEv" data-ref-filename="_ZNK3rtc21FinalRefCountedObject6AddRefEv">AddRef</dfn>() <em>const</em> { <a class="member field" href="#rtc::FinalRefCountedObject::ref_count_" title='rtc::FinalRefCountedObject::ref_count_' data-ref="rtc::FinalRefCountedObject::ref_count_" data-ref-filename="rtc..FinalRefCountedObject..ref_count_">ref_count_</a>.<a class="ref fn" href="ref_counter.h.html#_ZN6webrtc11webrtc_impl10RefCounter6IncRefEv" title='webrtc::webrtc_impl::RefCounter::IncRef' data-ref="_ZN6webrtc11webrtc_impl10RefCounter6IncRefEv" data-ref-filename="_ZN6webrtc11webrtc_impl10RefCounter6IncRefEv">IncRef</a>(); }</td></tr>
+<tr><th id="76">76</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZNK3rtc21FinalRefCountedObject7ReleaseEv" title='rtc::FinalRefCountedObject::Release' data-ref="_ZNK3rtc21FinalRefCountedObject7ReleaseEv" data-ref-filename="_ZNK3rtc21FinalRefCountedObject7ReleaseEv">Release</dfn>() <em>const</em> {</td></tr>
+<tr><th id="77">77</th><td>    <b>if</b> (<a class="member field" href="#rtc::FinalRefCountedObject::ref_count_" title='rtc::FinalRefCountedObject::ref_count_' data-ref="rtc::FinalRefCountedObject::ref_count_" data-ref-filename="rtc..FinalRefCountedObject..ref_count_">ref_count_</a>.<a class="ref fn" href="ref_counter.h.html#_ZN6webrtc11webrtc_impl10RefCounter6DecRefEv" title='webrtc::webrtc_impl::RefCounter::DecRef' data-ref="_ZN6webrtc11webrtc_impl10RefCounter6DecRefEv" data-ref-filename="_ZN6webrtc11webrtc_impl10RefCounter6DecRefEv">DecRef</a>() == <a class="type" href="ref_count.h.html#rtc::RefCountReleaseStatus" title='rtc::RefCountReleaseStatus' data-ref="rtc::RefCountReleaseStatus" data-ref-filename="rtc..RefCountReleaseStatus">RefCountReleaseStatus</a>::<a class="enum" href="ref_count.h.html#rtc::RefCountReleaseStatus::kDroppedLastRef" title='rtc::RefCountReleaseStatus::kDroppedLastRef' data-ref="rtc::RefCountReleaseStatus::kDroppedLastRef" data-ref-filename="rtc..RefCountReleaseStatus..kDroppedLastRef">kDroppedLastRef</a>) {</td></tr>
+<tr><th id="78">78</th><td>      <b>delete</b> <b>this</b>;</td></tr>
+<tr><th id="79">79</th><td>    }</td></tr>
+<tr><th id="80">80</th><td>  }</td></tr>
+<tr><th id="81">81</th><td>  <em>bool</em> <dfn class="decl def fn" id="_ZNK3rtc21FinalRefCountedObject9HasOneRefEv" title='rtc::FinalRefCountedObject::HasOneRef' data-ref="_ZNK3rtc21FinalRefCountedObject9HasOneRefEv" data-ref-filename="_ZNK3rtc21FinalRefCountedObject9HasOneRefEv">HasOneRef</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#rtc::FinalRefCountedObject::ref_count_" title='rtc::FinalRefCountedObject::ref_count_' data-ref="rtc::FinalRefCountedObject::ref_count_" data-ref-filename="rtc..FinalRefCountedObject..ref_count_">ref_count_</a>.<a class="ref fn" href="ref_counter.h.html#_ZNK6webrtc11webrtc_impl10RefCounter9HasOneRefEv" title='webrtc::webrtc_impl::RefCounter::HasOneRef' data-ref="_ZNK6webrtc11webrtc_impl10RefCounter9HasOneRefEv" data-ref-filename="_ZNK6webrtc11webrtc_impl10RefCounter9HasOneRefEv">HasOneRef</a>(); }</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td> <b>private</b>:</td></tr>
+<tr><th id="84">84</th><td>  <dfn class="decl def fn" id="_ZN3rtc21FinalRefCountedObjectD1Ev" title='rtc::FinalRefCountedObject::~FinalRefCountedObject&lt;T&gt;' data-ref="_ZN3rtc21FinalRefCountedObjectD1Ev" data-ref-filename="_ZN3rtc21FinalRefCountedObjectD1Ev">~FinalRefCountedObject</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>  <em>mutable</em> <span class="namespace">webrtc::webrtc_impl::</span><a class="type" href="ref_counter.h.html#webrtc::webrtc_impl::RefCounter" title='webrtc::webrtc_impl::RefCounter' data-ref="webrtc::webrtc_impl::RefCounter" data-ref-filename="webrtc..webrtc_impl..RefCounter">RefCounter</a> <dfn class="decl field" id="rtc::FinalRefCountedObject::ref_count_" title='rtc::FinalRefCountedObject::ref_count_' data-ref="rtc::FinalRefCountedObject::ref_count_" data-ref-filename="rtc..FinalRefCountedObject..ref_count_">ref_count_</dfn><a class="ref fn" href="ref_counter.h.html#_ZN6webrtc11webrtc_impl10RefCounterC1Ei" title='webrtc::webrtc_impl::RefCounter::RefCounter' data-ref="_ZN6webrtc11webrtc_impl10RefCounterC1Ei" data-ref-filename="_ZN6webrtc11webrtc_impl10RefCounterC1Ei">{</a><var>0</var>};</td></tr>
+<tr><th id="87">87</th><td>};</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td><i>// General utilities for constructing a reference counted class and the</i></td></tr>
+<tr><th id="90">90</th><td><i>// appropriate reference count implementation for that class.</i></td></tr>
+<tr><th id="91">91</th><td><i>//</i></td></tr>
+<tr><th id="92">92</th><td><i>// These utilities select either the `RefCountedObject` implementation or</i></td></tr>
+<tr><th id="93">93</th><td><i>// `FinalRefCountedObject` depending on whether the to-be-shared class is</i></td></tr>
+<tr><th id="94">94</th><td><i>// derived from the RefCountInterface interface or not (respectively).</i></td></tr>
+<tr><th id="95">95</th><td><i></i></td></tr>
+<tr><th id="96">96</th><td><i>// `make_ref_counted`:</i></td></tr>
+<tr><th id="97">97</th><td><i>//</i></td></tr>
+<tr><th id="98">98</th><td><i>// Use this when you want to construct a reference counted object of type T and</i></td></tr>
+<tr><th id="99">99</th><td><i>// get a `scoped_refptr&lt;&gt;` back. Example:</i></td></tr>
+<tr><th id="100">100</th><td><i>//</i></td></tr>
+<tr><th id="101">101</th><td><i>//   auto p = make_ref_counted&lt;Foo&gt;("bar", 123);</i></td></tr>
+<tr><th id="102">102</th><td><i>//</i></td></tr>
+<tr><th id="103">103</th><td><i>// For a class that inherits from RefCountInterface, this is equivalent to:</i></td></tr>
+<tr><th id="104">104</th><td><i>//</i></td></tr>
+<tr><th id="105">105</th><td><i>//   auto p = scoped_refptr&lt;Foo&gt;(new RefCountedObject&lt;Foo&gt;("bar", 123));</i></td></tr>
+<tr><th id="106">106</th><td><i>//</i></td></tr>
+<tr><th id="107">107</th><td><i>// If the class does not inherit from RefCountInterface, the example is</i></td></tr>
+<tr><th id="108">108</th><td><i>// equivalent to:</i></td></tr>
+<tr><th id="109">109</th><td><i>//</i></td></tr>
+<tr><th id="110">110</th><td><i>//   auto p = scoped_refptr&lt;FinalRefCountedObject&lt;Foo&gt;&gt;(</i></td></tr>
+<tr><th id="111">111</th><td><i>//       new FinalRefCountedObject&lt;Foo&gt;("bar", 123));</i></td></tr>
+<tr><th id="112">112</th><td><i>//</i></td></tr>
+<tr><th id="113">113</th><td><i>// In these cases, `make_ref_counted` reduces the amount of boilerplate code but</i></td></tr>
+<tr><th id="114">114</th><td><i>// also helps with the most commonly intended usage of RefCountedObject whereby</i></td></tr>
+<tr><th id="115">115</th><td><i>// methods for reference counting, are virtual and designed to satisfy the need</i></td></tr>
+<tr><th id="116">116</th><td><i>// of an interface. When such a need does not exist, it is more efficient to use</i></td></tr>
+<tr><th id="117">117</th><td><i>// the `FinalRefCountedObject` template, which does not add the vtable overhead.</i></td></tr>
+<tr><th id="118">118</th><td><i>//</i></td></tr>
+<tr><th id="119">119</th><td><i>// Note that in some cases, using RefCountedObject directly may still be what's</i></td></tr>
+<tr><th id="120">120</th><td><i>// needed.</i></td></tr>
+<tr><th id="121">121</th><td><i></i></td></tr>
+<tr><th id="122">122</th><td><i>// `make_ref_counted` for classes that are convertible to RefCountInterface.</i></td></tr>
+<tr><th id="123">123</th><td><b>template</b> &lt;</td></tr>
+<tr><th id="124">124</th><td>    <b>typename</b> T,</td></tr>
+<tr><th id="125">125</th><td>    <b>typename</b>... Args,</td></tr>
+<tr><th id="126">126</th><td>    <b>typename</b> <span class="namespace">std::</span><span class='type' title='std::__1::enable_if' data-ref="std::__1::enable_if" data-ref-filename="std..__1..enable_if">enable_if</span>&lt;<span class="namespace">std::</span><span class='type' title='std::__1::is_convertible' data-ref="std::__1::is_convertible" data-ref-filename="std..__1..is_convertible">is_convertible</span>&lt;T*, <a class="type" href="ref_count.h.html#rtc::RefCountInterface" title='rtc::RefCountInterface' data-ref="rtc::RefCountInterface" data-ref-filename="rtc..RefCountInterface">RefCountInterface</a>*&gt;::value,</td></tr>
+<tr><th id="127">127</th><td>                            T&gt;::type* = <b>nullptr</b>&gt;</td></tr>
+<tr><th id="128">128</th><td><a class="type" href="../api/scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;T&gt; <dfn class="decl def fn" id="_ZN3rtc16make_ref_countedEDpOT0_" title='rtc::make_ref_counted' data-ref="_ZN3rtc16make_ref_countedEDpOT0_" data-ref-filename="_ZN3rtc16make_ref_countedEDpOT0_">make_ref_counted</dfn>(Args&amp;&amp;... <dfn class="local col6 decl" id="26args" title='args' data-type='Args &amp;&amp;...' data-ref="26args" data-ref-filename="26args">args</dfn>) {</td></tr>
+<tr><th id="129">129</th><td>  <b>return</b> <b>new</b> <a class="type" href="#rtc::RefCountedObject" title='rtc::RefCountedObject' data-ref="rtc::RefCountedObject" data-ref-filename="rtc..RefCountedObject">RefCountedObject</a>&lt;T&gt;(<span class="namespace">std::</span>forward&lt;Args&gt;(<a class="local col6 ref" href="#26args" title='args' data-ref="26args" data-ref-filename="26args">args</a>)...);</td></tr>
+<tr><th id="130">130</th><td>}</td></tr>
+<tr><th id="131">131</th><td></td></tr>
+<tr><th id="132">132</th><td><i>// `make_ref_counted` for complete classes that are not convertible to</i></td></tr>
+<tr><th id="133">133</th><td><i>// RefCountInterface.</i></td></tr>
+<tr><th id="134">134</th><td><b>template</b> &lt;</td></tr>
+<tr><th id="135">135</th><td>    <b>typename</b> T,</td></tr>
+<tr><th id="136">136</th><td>    <b>typename</b>... Args,</td></tr>
+<tr><th id="137">137</th><td>    <b>typename</b> <span class="namespace">std::</span><span class='type' title='std::__1::enable_if' data-ref="std::__1::enable_if" data-ref-filename="std..__1..enable_if">enable_if</span>&lt;!<span class="namespace">std::</span><span class='type' title='std::__1::is_convertible' data-ref="std::__1::is_convertible" data-ref-filename="std..__1..is_convertible">is_convertible</span>&lt;T*, <a class="type" href="ref_count.h.html#rtc::RefCountInterface" title='rtc::RefCountInterface' data-ref="rtc::RefCountInterface" data-ref-filename="rtc..RefCountInterface">RefCountInterface</a>*&gt;::value,</td></tr>
+<tr><th id="138">138</th><td>                            T&gt;::type* = <b>nullptr</b>&gt;</td></tr>
+<tr><th id="139">139</th><td><a class="type" href="../api/scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;<a class="type" href="#rtc::FinalRefCountedObject" title='rtc::FinalRefCountedObject' data-ref="rtc::FinalRefCountedObject" data-ref-filename="rtc..FinalRefCountedObject">FinalRefCountedObject</a>&lt;T&gt;&gt; <dfn class="decl def fn" id="_ZN3rtc16make_ref_countedEDpOT0_" title='rtc::make_ref_counted' data-ref="_ZN3rtc16make_ref_countedEDpOT0_" data-ref-filename="_ZN3rtc16make_ref_countedEDpOT0_">make_ref_counted</dfn>(Args&amp;&amp;... <dfn class="local col7 decl" id="27args" title='args' data-type='Args &amp;&amp;...' data-ref="27args" data-ref-filename="27args">args</dfn>) {</td></tr>
+<tr><th id="140">140</th><td>  <b>return</b> <b>new</b> <a class="type" href="#rtc::FinalRefCountedObject" title='rtc::FinalRefCountedObject' data-ref="rtc::FinalRefCountedObject" data-ref-filename="rtc..FinalRefCountedObject">FinalRefCountedObject</a>&lt;T&gt;(<span class="namespace">std::</span>forward&lt;Args&gt;(<a class="local col7 ref" href="#27args" title='args' data-ref="27args" data-ref-filename="27args">args</a>)...);</td></tr>
+<tr><th id="141">141</th><td>}</td></tr>
+<tr><th id="142">142</th><td></td></tr>
+<tr><th id="143">143</th><td><i>// `Ref&lt;&gt;`, `Ref&lt;&gt;::Type` and `Ref&lt;&gt;::Ptr`:</i></td></tr>
+<tr><th id="144">144</th><td><i>//</i></td></tr>
+<tr><th id="145">145</th><td><i>// `Ref` is a type declaring utility that is compatible with `make_ref_counted`</i></td></tr>
+<tr><th id="146">146</th><td><i>// and can be used in classes and methods where it's more convenient (or</i></td></tr>
+<tr><th id="147">147</th><td><i>// readable) to have the compiler figure out the fully fleshed out type for a</i></td></tr>
+<tr><th id="148">148</th><td><i>// class rather than spell it out verbatim in all places the type occurs (which</i></td></tr>
+<tr><th id="149">149</th><td><i>// can mean maintenance work if the class layout changes).</i></td></tr>
+<tr><th id="150">150</th><td><i>//</i></td></tr>
+<tr><th id="151">151</th><td><i>// Usage examples:</i></td></tr>
+<tr><th id="152">152</th><td><i>//</i></td></tr>
+<tr><th id="153">153</th><td><i>// If you want to declare the parameter type that's always compatible with</i></td></tr>
+<tr><th id="154">154</th><td><i>// this code:</i></td></tr>
+<tr><th id="155">155</th><td><i>//</i></td></tr>
+<tr><th id="156">156</th><td><i>//   Bar(make_ref_counted&lt;Foo&gt;());</i></td></tr>
+<tr><th id="157">157</th><td><i>//</i></td></tr>
+<tr><th id="158">158</th><td><i>// You can use `Ref&lt;&gt;::Ptr` to declare a compatible scoped_refptr type:</i></td></tr>
+<tr><th id="159">159</th><td><i>//</i></td></tr>
+<tr><th id="160">160</th><td><i>//   void Bar(Ref&lt;Foo&gt;::Ptr p);</i></td></tr>
+<tr><th id="161">161</th><td><i>//</i></td></tr>
+<tr><th id="162">162</th><td><i>// This might be more practically useful in templates though.</i></td></tr>
+<tr><th id="163">163</th><td><i>//</i></td></tr>
+<tr><th id="164">164</th><td><i>// In rare cases you might need to be able to declare a parameter that's fully</i></td></tr>
+<tr><th id="165">165</th><td><i>// compatible with the reference counted T type - and just using T* is not</i></td></tr>
+<tr><th id="166">166</th><td><i>// enough. To give a code example, we can declare a function, `Foo` that is</i></td></tr>
+<tr><th id="167">167</th><td><i>// compatible with this code:</i></td></tr>
+<tr><th id="168">168</th><td><i>//   auto p = make_ref_counted&lt;Foo&gt;();</i></td></tr>
+<tr><th id="169">169</th><td><i>//   Foo(p.get());</i></td></tr>
+<tr><th id="170">170</th><td><i>//</i></td></tr>
+<tr><th id="171">171</th><td><i>//   void Foo(Ref&lt;Foo&gt;::Type* foo_ptr);</i></td></tr>
+<tr><th id="172">172</th><td><i>//</i></td></tr>
+<tr><th id="173">173</th><td><i>// Alternatively this would be:</i></td></tr>
+<tr><th id="174">174</th><td><i>//   void Foo(Foo* foo_ptr);</i></td></tr>
+<tr><th id="175">175</th><td><i>// or</i></td></tr>
+<tr><th id="176">176</th><td><i>//   void Foo(FinalRefCountedObject&lt;Foo&gt;* foo_ptr);</i></td></tr>
+<tr><th id="177">177</th><td><i></i></td></tr>
+<tr><th id="178">178</th><td><i>// Declares the approprate reference counted type for T depending on whether</i></td></tr>
+<tr><th id="179">179</th><td><i>// T is convertible to RefCountInterface or not.</i></td></tr>
+<tr><th id="180">180</th><td><i>// For classes that are convertible, the type will simply be T.</i></td></tr>
+<tr><th id="181">181</th><td><i>// For classes that cannot be converted to RefCountInterface, the type will be</i></td></tr>
+<tr><th id="182">182</th><td><i>// FinalRefCountedObject&lt;T&gt;.</i></td></tr>
+<tr><th id="183">183</th><td><i>// This is most useful for declaring a scoped_refptr&lt;T&gt; instance for a class</i></td></tr>
+<tr><th id="184">184</th><td><i>// that may or may not implement a virtual reference counted interface:</i></td></tr>
+<tr><th id="185">185</th><td><i>// * scoped_refptr&lt;Ref&lt;Foo&gt;::Type&gt; my_ptr;</i></td></tr>
+<tr><th id="186">186</th><td><b>template</b> &lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="187">187</th><td><b>struct</b> <dfn class="type def" id="rtc::Ref" title='rtc::Ref' data-ref="rtc::Ref" data-ref-filename="rtc..Ref">Ref</dfn> {</td></tr>
+<tr><th id="188">188</th><td>  <b>typedef</b> <b>typename</b> <span class="namespace">std::</span><span class='type' title='std::__1::conditional' data-ref="std::__1::conditional" data-ref-filename="std..__1..conditional">conditional</span>&lt;</td></tr>
+<tr><th id="189">189</th><td>      <span class="namespace">std::</span><span class='type' title='std::__1::is_convertible' data-ref="std::__1::is_convertible" data-ref-filename="std..__1..is_convertible">is_convertible</span>&lt;T*, <a class="type" href="ref_count.h.html#rtc::RefCountInterface" title='rtc::RefCountInterface' data-ref="rtc::RefCountInterface" data-ref-filename="rtc..RefCountInterface">RefCountInterface</a>*&gt;::value,</td></tr>
+<tr><th id="190">190</th><td>      T,</td></tr>
+<tr><th id="191">191</th><td>      <a class="type" href="#rtc::FinalRefCountedObject" title='rtc::FinalRefCountedObject' data-ref="rtc::FinalRefCountedObject" data-ref-filename="rtc..FinalRefCountedObject">FinalRefCountedObject</a>&lt;T&gt;&gt;::type <dfn class="typedef" id="rtc::Ref::Type" title='rtc::Ref::Type' data-type='typename std::conditional&lt;std::is_convertible&lt;T *, RefCountInterface *&gt;::value, T, FinalRefCountedObject&lt;T&gt;&gt;::type' data-ref="rtc::Ref::Type" data-ref-filename="rtc..Ref..Type">Type</dfn>;</td></tr>
+<tr><th id="192">192</th><td></td></tr>
+<tr><th id="193">193</th><td>  <b>typedef</b> <a class="type" href="../api/scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;<a class="typedef" href="#rtc::Ref::Type" title='rtc::Ref::Type' data-type='typename std::conditional&lt;std::is_convertible&lt;T *, RefCountInterface *&gt;::value, T, FinalRefCountedObject&lt;T&gt;&gt;::type' data-ref="rtc::Ref::Type" data-ref-filename="rtc..Ref..Type">Type</a>&gt; <dfn class="typedef" id="rtc::Ref::Ptr" title='rtc::Ref::Ptr' data-type='scoped_refptr&lt;rtc::Ref::Type&gt;' data-ref="rtc::Ref::Ptr" data-ref-filename="rtc..Ref..Ptr">Ptr</dfn>;</td></tr>
+<tr><th id="194">194</th><td>};</td></tr>
+<tr><th id="195">195</th><td></td></tr>
+<tr><th id="196">196</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="197">197</th><td></td></tr>
+<tr><th id="198">198</th><td><u>#<span data-ppcond="10">endif</span>  // RTC_BASE_REF_COUNTED_OBJECT_H_</u></td></tr>
+<tr><th id="199">199</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../api/audio/echo_detector_creator.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/audio/echo_detector_creator.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

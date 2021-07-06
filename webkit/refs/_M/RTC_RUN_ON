@@ -1,0 +1,338 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/sequence_checker.h' l='107'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/media/base/media_channel.h' l='276' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/media/base/media_channel.h' l='298' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/network.h' l='267' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/network.h' l='272' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/network.h' l='276' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/network.h' l='281' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/network.h' l='287' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/network.h' l='289' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/network.h' l='294' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/network.h' l='296' u='c'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/sequence_checker.h' l='57'>// RTC_RUN_ON/RTC_GUARDED_BY/RTC_DCHECK_RUN_ON macros allows to annotate
+// variables are accessed from same thread/task queue.
+// Using tools designed to check mutexes, it checks at compile time everywhere
+// variable is access, there is a run-time dcheck thread/task queue is correct.
+//
+// class SequenceCheckerExample {
+//  public:
+//   int CalledFromPacer() RTC_RUN_ON(pacer_sequence_checker_) {
+//     return var2_;
+//   }
+//
+//   void CallMeFromPacer() {
+//     RTC_DCHECK_RUN_ON(&amp;pacer_sequence_checker_)
+//        &lt;&lt; &quot;Should be called from pacer&quot;;
+//     CalledFromPacer();
+//   }
+//
+//  private:
+//   int pacer_var_ RTC_GUARDED_BY(pacer_sequence_checker_);
+//   SequenceChecker pacer_sequence_checker_;
+// };
+//
+// class TaskQueueExample {
+//  public:
+//   class Encoder {
+//    public:
+//     rtc::TaskQueueBase&amp; Queue() { return encoder_queue_; }
+//     void Encode() {
+//       RTC_DCHECK_RUN_ON(&amp;encoder_queue_);
+//       DoSomething(var_);
+//     }
+//
+//    private:
+//     rtc::TaskQueueBase&amp; encoder_queue_;
+//     Frame var_ RTC_GUARDED_BY(encoder_queue_);
+//   };
+//
+//   void Encode() {
+//     // Will fail at runtime when DCHECK is enabled:
+//     // encoder_-&gt;Encode();
+//     // Will work:
+//     rtc::scoped_refptr&lt;Encoder&gt; encoder = encoder_;
+//     encoder_-&gt;Queue().PostTask([encoder] { encoder-&gt;Encode(); });
+//   }
+//
+//  private:
+//   rtc::scoped_refptr&lt;Encoder&gt; encoder_;
+// }
+
+// Document if a function expected to be called from same thread/task queue.</doc>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_decoder_impl.h' l='72' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_decoder_impl.h' l='73' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_decoder_impl.h' l='74' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_decoder_impl.h' l='77' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_decoder_impl.h' l='82' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_decoder_impl.h' l='84' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/bitrate_allocator.h' l='144' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.h' l='125' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.h' l='128' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.h' l='130' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.h' l='132' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.h' l='134' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.h' l='136' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.h' l='138' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.h' l='140' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.h' l='141' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.h' l='146' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.h' l='158' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.h' l='161' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/channel_send.cc' l='171' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/adaptation/video_stream_adapter.h' l='175' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/adaptation/video_stream_adapter.h' l='181' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/adaptation/video_stream_adapter.h' l='185' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/adaptation/video_stream_adapter.h' l='188' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/adaptation/video_stream_adapter.h' l='192' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/adaptation/video_stream_adapter.h' l='195' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/adaptation/video_stream_adapter.h' l='197' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/adaptation/video_stream_adapter.h' l='210' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/adaptation/video_stream_adapter.h' l='214' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/adaptation/video_stream_adapter.h' l='220' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/adaptation/resource_adaptation_processor.h' l='130' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/adaptation/resource_adaptation_processor.h' l='139' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/pacing/task_queue_paced_sender.h' l='131' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/rtp_transport_controller_send.h' l='129' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/rtp_transport_controller_send.h' l='131' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/rtp_transport_controller_send.h' l='133' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/rtp_transport_controller_send.h' l='134' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/rtp_transport_controller_send.h' l='140' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/rtp_transport_controller_send.h' l='143' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/rtp_transport_controller_send.h' l='144' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/rtp_transport_controller_send.h' l='145' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/rtp_video_stream_receiver2.h' l='265' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/rtp_video_stream_receiver2.h' l='269' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream2.h' l='162' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream2.h' l='163' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream2.h' l='165' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream2.h' l='167' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream2.h' l='171' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream2.h' l='176' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream2.h' l='178' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream2.h' l='180' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/simulated_network.h' l='96' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='261' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='271' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='276' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='278' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='281' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='283' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='288' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='289' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='292' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='296' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='307' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='312' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='318' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/p2p/base/turn_server.h' l='320' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport.h' l='249' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='217' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='218' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='236' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='237' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='242' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='243' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='244' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='246' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='247' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='248' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='250' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='251' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='252' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='257' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='262' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='266' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='270' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='274' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='283' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='285' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='290' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='296' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='297' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/audio_rtp_receiver.h' l='119' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/audio_rtp_receiver.h' l='120' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/audio_rtp_receiver.h' l='122' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/data_channel_controller.h' l='128' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/data_channel_controller.h' l='132' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='323' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='333' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='336' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='366' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='368' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='373' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='375' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='385' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='388' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='389' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='391' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='426' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='428' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='430' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='433' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='436' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='439' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='441' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='443' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='446' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='447' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_transport_controller.h' l='451' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/dtmf_sender.h' l='79' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/dtmf_sender.h' l='82' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/dtmf_sender.h' l='86' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transmission_manager.h' l='230' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transmission_manager.h' l='235' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transmission_manager.h' l='237' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='217' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='222' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='265' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='270' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='273' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='276' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='279' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='300' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='321' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='337' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='344' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='372' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='377' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='388' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='393' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='407' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='413' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='499' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='433' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='434' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='436' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='464' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='468' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='472' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='475' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='479' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='482' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='489' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='492' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='496' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='503' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='546' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='550' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='552' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='556' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='559' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='562' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='565' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='570' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='580' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='582' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/video_rtp_receiver.h' l='119' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/video_rtp_receiver.h' l='121' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/video_rtp_receiver.h' l='127' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/rtp_video_stream_receiver.h' l='308' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/rtp_video_stream_receiver.h' l='313' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream.h' l='139' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream.h' l='141' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream.h' l='142' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream.h' l='145' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream.h' l='147' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream.h' l='149' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_send_stream_impl.h' l='141' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_send_stream_impl.h' l='148' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.h' l='173' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.h' l='174' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.h' l='187' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.h' l='203' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.h' l='205' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.h' l='207' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.h' l='213' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.h' l='214' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.h' l='220' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.h' l='225' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.h' l='227' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.cc' l='562' u='c'/>
+<dec f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/sequence_checker.h' l='107'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/media/base/media_channel.h' l='276' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/media/base/media_channel.h' l='298' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/network.h' l='267' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/network.h' l='272' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/network.h' l='276' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/network.h' l='281' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/network.h' l='287' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/network.h' l='289' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/network.h' l='294' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/network.h' l='296' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/jsep_transport.h' l='249' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='217' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='218' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='236' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='237' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='242' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='243' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='244' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='246' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='247' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='248' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='250' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='251' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='252' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='257' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='262' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='266' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='270' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='274' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='283' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='285' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='290' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='296' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='297' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/dtmf_sender.h' l='79' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/dtmf_sender.h' l='82' u='c'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/dtmf_sender.h' l='86' u='c'/>
+<doc f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/sequence_checker.h' l='57'>// RTC_RUN_ON/RTC_GUARDED_BY/RTC_DCHECK_RUN_ON macros allows to annotate
+// variables are accessed from same thread/task queue.
+// Using tools designed to check mutexes, it checks at compile time everywhere
+// variable is access, there is a run-time dcheck thread/task queue is correct.
+//
+// class SequenceCheckerExample {
+//  public:
+//   int CalledFromPacer() RTC_RUN_ON(pacer_sequence_checker_) {
+//     return var2_;
+//   }
+//
+//   void CallMeFromPacer() {
+//     RTC_DCHECK_RUN_ON(&amp;pacer_sequence_checker_)
+//        &lt;&lt; &quot;Should be called from pacer&quot;;
+//     CalledFromPacer();
+//   }
+//
+//  private:
+//   int pacer_var_ RTC_GUARDED_BY(pacer_sequence_checker_);
+//   SequenceChecker pacer_sequence_checker_;
+// };
+//
+// class TaskQueueExample {
+//  public:
+//   class Encoder {
+//    public:
+//     rtc::TaskQueueBase&amp; Queue() { return encoder_queue_; }
+//     void Encode() {
+//       RTC_DCHECK_RUN_ON(&amp;encoder_queue_);
+//       DoSomething(var_);
+//     }
+//
+//    private:
+//     rtc::TaskQueueBase&amp; encoder_queue_;
+//     Frame var_ RTC_GUARDED_BY(encoder_queue_);
+//   };
+//
+//   void Encode() {
+//     // Will fail at runtime when DCHECK is enabled:
+//     // encoder_-&gt;Encode();
+//     // Will work:
+//     rtc::scoped_refptr&lt;Encoder&gt; encoder = encoder_;
+//     encoder_-&gt;Queue().PostTask([encoder] { encoder-&gt;Encode(); });
+//   }
+//
+//  private:
+//   rtc::scoped_refptr&lt;Encoder&gt; encoder_;
+// }
+
+// Document if a function expected to be called from same thread/task queue.</doc>

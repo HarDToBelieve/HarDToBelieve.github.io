@@ -1,0 +1,173 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FTPDirectoryParser.h source code [webkit/Source/WebCore/loader/FTPDirectoryParser.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="WebCore::FTPEntryType,WebCore::ListResult,WebCore::ListState "/>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebCore/loader/FTPDirectoryParser.h'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>WebCore</a>/<a href='./'>loader</a>/<a href='FTPDirectoryParser.h.html'>FTPDirectoryParser.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2002 Cyrus Patel &lt;cyp@fb14.uni-mainz.de&gt;</i></td></tr>
+<tr><th id="3">3</th><td><i> *           (C) 2007 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="4">4</th><td><i> *</i></td></tr>
+<tr><th id="5">5</th><td><i> * This library is free software; you can redistribute it and/or</i></td></tr>
+<tr><th id="6">6</th><td><i> * modify it under the terms of the GNU Lesser General Public</i></td></tr>
+<tr><th id="7">7</th><td><i> * License 2.1 as published by the Free Software Foundation.</i></td></tr>
+<tr><th id="8">8</th><td><i> *</i></td></tr>
+<tr><th id="9">9</th><td><i> * This library is distributed in the hope that it will be useful,</i></td></tr>
+<tr><th id="10">10</th><td><i> * but WITHOUT ANY WARRANTY; without even the implied warranty of</i></td></tr>
+<tr><th id="11">11</th><td><i> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</i></td></tr>
+<tr><th id="12">12</th><td><i> * Library General Public License for more details.</i></td></tr>
+<tr><th id="13">13</th><td><i> *</i></td></tr>
+<tr><th id="14">14</th><td><i> * You should have received a copy of the GNU Library General Public License</i></td></tr>
+<tr><th id="15">15</th><td><i> * along with this library; see the file COPYING.LIB.  If not, write to</i></td></tr>
+<tr><th id="16">16</th><td><i> * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,</i></td></tr>
+<tr><th id="17">17</th><td><i> * Boston, MA 02110-1301, USA.</i></td></tr>
+<tr><th id="18">18</th><td><i> */</i></td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><i>/* ParseFTPList() parses lines from an FTP LIST command.</i></td></tr>
+<tr><th id="21">21</th><td><i>**</i></td></tr>
+<tr><th id="22">22</th><td><i>** Written July 2002 by Cyrus Patel &lt;cyp@fb14.uni-mainz.de&gt;</i></td></tr>
+<tr><th id="23">23</th><td><i>** with acknowledgements to squid, lynx, wget and ftpmirror.</i></td></tr>
+<tr><th id="24">24</th><td><i>**</i></td></tr>
+<tr><th id="25">25</th><td><i>** Arguments:</i></td></tr>
+<tr><th id="26">26</th><td><i>**   'line':       line of FTP data connection output. The line is assumed</i></td></tr>
+<tr><th id="27">27</th><td><i>**                 to end at the first '\0' or '\n' or '\r\n'. </i></td></tr>
+<tr><th id="28">28</th><td><i>**   'state':      a structure used internally to track state between </i></td></tr>
+<tr><th id="29">29</th><td><i>**                 lines. Needs to be bzero()'d at LIST begin.</i></td></tr>
+<tr><th id="30">30</th><td><i>**   'result':     where ParseFTPList will store the results of the parse</i></td></tr>
+<tr><th id="31">31</th><td><i>**                 if 'line' is not a comment and is not junk.</i></td></tr>
+<tr><th id="32">32</th><td><i>**</i></td></tr>
+<tr><th id="33">33</th><td><i>** Returns one of the following:</i></td></tr>
+<tr><th id="34">34</th><td><i>**    'd' - LIST line is a directory entry ('result' is valid)</i></td></tr>
+<tr><th id="35">35</th><td><i>**    'f' - LIST line is a file's entry ('result' is valid)</i></td></tr>
+<tr><th id="36">36</th><td><i>**    'l' - LIST line is a symlink's entry ('result' is valid)</i></td></tr>
+<tr><th id="37">37</th><td><i>**    '?' - LIST line is junk. (cwd, non-file/dir/link, etc)</i></td></tr>
+<tr><th id="38">38</th><td><i>**    '"' - its not a LIST line (its a "comment")</i></td></tr>
+<tr><th id="39">39</th><td><i>**</i></td></tr>
+<tr><th id="40">40</th><td><i>** It may be advisable to let the end-user see "comments" (particularly when </i></td></tr>
+<tr><th id="41">41</th><td><i>** the listing results in ONLY such lines) because such a listing may be:</i></td></tr>
+<tr><th id="42">42</th><td><i>** - an unknown LIST format (NLST or "custom" format for example)</i></td></tr>
+<tr><th id="43">43</th><td><i>** - an error msg (EPERM,ENOENT,ENFILE,EMFILE,ENOTDIR,ENOTBLK,EEXDEV etc).</i></td></tr>
+<tr><th id="44">44</th><td><i>** - an empty directory and the 'comment' is a "total 0" line or similar.</i></td></tr>
+<tr><th id="45">45</th><td><i>**   (warning: a "total 0" can also mean the total size is unknown).</i></td></tr>
+<tr><th id="46">46</th><td><i>**</i></td></tr>
+<tr><th id="47">47</th><td><i>** ParseFTPList() supports all known FTP LISTing formats:</i></td></tr>
+<tr><th id="48">48</th><td><i>** - '/bin/ls -l' and all variants (including Hellsoft FTP for NetWare); </i></td></tr>
+<tr><th id="49">49</th><td><i>** - EPLF (Easily Parsable List Format); </i></td></tr>
+<tr><th id="50">50</th><td><i>** - Windows NT's default "DOS-dirstyle";</i></td></tr>
+<tr><th id="51">51</th><td><i>** - OS/2 basic server format LIST format;  </i></td></tr>
+<tr><th id="52">52</th><td><i>** - VMS (MultiNet, UCX, and CMU) LIST format (including multi-line format);</i></td></tr>
+<tr><th id="53">53</th><td><i>** - IBM VM/CMS, VM/ESA LIST format (two known variants);  </i></td></tr>
+<tr><th id="54">54</th><td><i>** - SuperTCP FTP Server for Win16 LIST format;  </i></td></tr>
+<tr><th id="55">55</th><td><i>** - NetManage Chameleon (NEWT) for Win16 LIST format;  </i></td></tr>
+<tr><th id="56">56</th><td><i>** - '/bin/dls' (two known variants, plus multi-line) LIST format;</i></td></tr>
+<tr><th id="57">57</th><td><i>** If there are others, then I'd like to hear about them (send me a sample).</i></td></tr>
+<tr><th id="58">58</th><td><i>**</i></td></tr>
+<tr><th id="59">59</th><td><i>** NLSTings are not supported explicitely because they cannot be machine </i></td></tr>
+<tr><th id="60">60</th><td><i>** parsed consistantly: NLSTings do not have unique characteristics - even </i></td></tr>
+<tr><th id="61">61</th><td><i>** the assumption that there won't be whitespace on the line does not hold</i></td></tr>
+<tr><th id="62">62</th><td><i>** because some nlistings have more than one filename per line and/or</i></td></tr>
+<tr><th id="63">63</th><td><i>** may have filenames that have spaces in them. Moreover, distinguishing</i></td></tr>
+<tr><th id="64">64</th><td><i>** between an error message and an NLST line would require ParseList() to</i></td></tr>
+<tr><th id="65">65</th><td><i>** recognize all the possible strerror() messages in the world.</i></td></tr>
+<tr><th id="66">66</th><td><i>*/</i></td></tr>
+<tr><th id="67">67</th><td><i></i></td></tr>
+<tr><th id="68">68</th><td><i>// This was originally Mozilla code, titled ParseFTPList.h</i></td></tr>
+<tr><th id="69">69</th><td><i>// Original version of this file can currently be found at: <a href="http://mxr.mozilla.org/mozilla1.8/source/netwerk/streamconv/converters/ParseFTPList.h">http://mxr.mozilla.org/mozilla1.8/source/netwerk/streamconv/converters/ParseFTPList.h</a></i></td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><u>#pragma once</u></td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html">&lt;wtf/text/WTFString.h&gt;</a></u></td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td><u>#include &lt;time.h&gt;</u></td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td><u>#define <dfn class="macro" id="_M/SUPPORT_LSL" data-ref="_M/SUPPORT_LSL">SUPPORT_LSL</dfn>  /* Support for /bin/ls -l and dozens of variations therof */</u></td></tr>
+<tr><th id="78">78</th><td><u>#define <dfn class="macro" id="_M/SUPPORT_DLS" data-ref="_M/SUPPORT_DLS">SUPPORT_DLS</dfn>  /* Support for /bin/dls format (very, Very, VERY rare) */</u></td></tr>
+<tr><th id="79">79</th><td><u>#define <dfn class="macro" id="_M/SUPPORT_EPLF" data-ref="_M/SUPPORT_EPLF">SUPPORT_EPLF</dfn> /* Support for Extraordinarily Pathetic List Format */</u></td></tr>
+<tr><th id="80">80</th><td><u>#define <dfn class="macro" id="_M/SUPPORT_DOS" data-ref="_M/SUPPORT_DOS">SUPPORT_DOS</dfn>  /* Support for WinNT server in 'site dirstyle' dos */</u></td></tr>
+<tr><th id="81">81</th><td><u>#define <dfn class="macro" id="_M/SUPPORT_VMS" data-ref="_M/SUPPORT_VMS">SUPPORT_VMS</dfn>  /* Support for VMS (all: MultiNet, UCX, CMU-IP) */</u></td></tr>
+<tr><th id="82">82</th><td><u>#define <dfn class="macro" id="_M/SUPPORT_CMS" data-ref="_M/SUPPORT_CMS">SUPPORT_CMS</dfn>  /* Support for IBM VM/CMS,VM/ESA (z/VM and LISTING forms) */</u></td></tr>
+<tr><th id="83">83</th><td><u>#define <dfn class="macro" id="_M/SUPPORT_OS2" data-ref="_M/SUPPORT_OS2">SUPPORT_OS2</dfn>  /* Support for IBM TCP/IP for OS/2 - FTP Server */</u></td></tr>
+<tr><th id="84">84</th><td><u>#define <dfn class="macro" id="_M/SUPPORT_W16" data-ref="_M/SUPPORT_W16">SUPPORT_W16</dfn>  /* Support for win16 hosts: SuperTCP or NetManage Chameleon */</u></td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td><b>namespace</b> <span class="namespace">WebCore</span> {</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td><b>typedef</b> <b>struct</b> <span class='type' title='tm' data-ref="tm" data-ref-filename="tm">tm</span> <dfn class="typedef" id="WebCore::FTPTime" title='WebCore::FTPTime' data-type='struct tm' data-ref="WebCore::FTPTime" data-ref-filename="WebCore..FTPTime">FTPTime</dfn>;</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td><b>struct</b> <dfn class="type def" id="WebCore::ListState" title='WebCore::ListState' data-ref="WebCore::ListState" data-ref-filename="WebCore..ListState">ListState</dfn> {    </td></tr>
+<tr><th id="91">91</th><td>    <dfn class="decl def fn" id="_ZN7WebCore9ListStateC1Ev" title='WebCore::ListState::ListState' data-ref="_ZN7WebCore9ListStateC1Ev" data-ref-filename="_ZN7WebCore9ListStateC1Ev">ListState</dfn>()</td></tr>
+<tr><th id="92">92</th><td>        : <a class="member field" href="#WebCore::ListState::now" title='WebCore::ListState::now' data-ref="WebCore::ListState::now" data-ref-filename="WebCore..ListState..now">now</a>(<var>0</var>)</td></tr>
+<tr><th id="93">93</th><td>        , <a class="member field" href="#WebCore::ListState::listStyle" title='WebCore::ListState::listStyle' data-ref="WebCore::ListState::listStyle" data-ref-filename="WebCore..ListState..listStyle">listStyle</a>(<var>0</var>)</td></tr>
+<tr><th id="94">94</th><td>        , <a class="member field" href="#WebCore::ListState::parsedOne" title='WebCore::ListState::parsedOne' data-ref="WebCore::ListState::parsedOne" data-ref-filename="WebCore..ListState..parsedOne">parsedOne</a>(<b>false</b>)</td></tr>
+<tr><th id="95">95</th><td>        , <a class="member field" href="#WebCore::ListState::carryBufferLength" title='WebCore::ListState::carryBufferLength' data-ref="WebCore::ListState::carryBufferLength" data-ref-filename="WebCore..ListState..carryBufferLength">carryBufferLength</a>(<var>0</var>)</td></tr>
+<tr><th id="96">96</th><td>        , <a class="member field" href="#WebCore::ListState::numLines" title='WebCore::ListState::numLines' data-ref="WebCore::ListState::numLines" data-ref-filename="WebCore..ListState..numLines">numLines</a>(<var>0</var>)</td></tr>
+<tr><th id="97">97</th><td>    { </td></tr>
+<tr><th id="98">98</th><td>        <span class='ref fn' title='memset' data-ref="memset" data-ref-filename="memset">memset</span>(&amp;<a class="member field" href="#WebCore::ListState::nowFTPTime" title='WebCore::ListState::nowFTPTime' data-ref="WebCore::ListState::nowFTPTime" data-ref-filename="WebCore..ListState..nowFTPTime">nowFTPTime</a>, <var>0</var>, <b>sizeof</b>(<a class="typedef" href="#WebCore::FTPTime" title='WebCore::FTPTime' data-type='struct tm' data-ref="WebCore::FTPTime" data-ref-filename="WebCore..FTPTime">FTPTime</a>));</td></tr>
+<tr><th id="99">99</th><td>    }</td></tr>
+<tr><th id="100">100</th><td>    </td></tr>
+<tr><th id="101">101</th><td>    <em>double</em>      <dfn class="decl field" id="WebCore::ListState::now" title='WebCore::ListState::now' data-ref="WebCore::ListState::now" data-ref-filename="WebCore..ListState..now">now</dfn>;               <i>/* needed for year determination */</i></td></tr>
+<tr><th id="102">102</th><td>    <a class="typedef" href="#WebCore::FTPTime" title='WebCore::FTPTime' data-type='struct tm' data-ref="WebCore::FTPTime" data-ref-filename="WebCore..FTPTime">FTPTime</a>     <dfn class="decl field" id="WebCore::ListState::nowFTPTime" title='WebCore::ListState::nowFTPTime' data-ref="WebCore::ListState::nowFTPTime" data-ref-filename="WebCore..ListState..nowFTPTime">nowFTPTime</dfn>;</td></tr>
+<tr><th id="103">103</th><td>    <em>char</em>        <dfn class="decl field" id="WebCore::ListState::listStyle" title='WebCore::ListState::listStyle' data-ref="WebCore::ListState::listStyle" data-ref-filename="WebCore..ListState..listStyle">listStyle</dfn>;         <i>/* LISTing style */</i></td></tr>
+<tr><th id="104">104</th><td>    <em>bool</em>        <dfn class="decl field" id="WebCore::ListState::parsedOne" title='WebCore::ListState::parsedOne' data-ref="WebCore::ListState::parsedOne" data-ref-filename="WebCore..ListState..parsedOne">parsedOne</dfn>;         <i>/* returned anything yet? */</i></td></tr>
+<tr><th id="105">105</th><td>    <em>char</em>        <dfn class="decl field" id="WebCore::ListState::carryBuffer" title='WebCore::ListState::carryBuffer' data-ref="WebCore::ListState::carryBuffer" data-ref-filename="WebCore..ListState..carryBuffer">carryBuffer</dfn>[<var>84</var>];   <i>/* for VMS multiline */</i></td></tr>
+<tr><th id="106">106</th><td>    <em>int</em>         <dfn class="decl field" id="WebCore::ListState::carryBufferLength" title='WebCore::ListState::carryBufferLength' data-ref="WebCore::ListState::carryBufferLength" data-ref-filename="WebCore..ListState..carryBufferLength">carryBufferLength</dfn>; <i>/* length of name in carry_buf */</i></td></tr>
+<tr><th id="107">107</th><td>    <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span>     <dfn class="decl field" id="WebCore::ListState::numLines" title='WebCore::ListState::numLines' data-ref="WebCore::ListState::numLines" data-ref-filename="WebCore..ListState..numLines">numLines</dfn>;          <i>/* number of lines seen */</i></td></tr>
+<tr><th id="108">108</th><td>};</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td><b>enum</b> <dfn class="type def" id="WebCore::FTPEntryType" title='WebCore::FTPEntryType' data-ref="WebCore::FTPEntryType" data-ref-filename="WebCore..FTPEntryType">FTPEntryType</dfn> {</td></tr>
+<tr><th id="111">111</th><td>    <dfn class="enum" id="WebCore::FTPDirectoryEntry" title='WebCore::FTPDirectoryEntry' data-ref="WebCore::FTPDirectoryEntry" data-ref-filename="WebCore..FTPDirectoryEntry">FTPDirectoryEntry</dfn>,</td></tr>
+<tr><th id="112">112</th><td>    <dfn class="enum" id="WebCore::FTPFileEntry" title='WebCore::FTPFileEntry' data-ref="WebCore::FTPFileEntry" data-ref-filename="WebCore..FTPFileEntry">FTPFileEntry</dfn>,</td></tr>
+<tr><th id="113">113</th><td>    <dfn class="enum" id="WebCore::FTPLinkEntry" title='WebCore::FTPLinkEntry' data-ref="WebCore::FTPLinkEntry" data-ref-filename="WebCore..FTPLinkEntry">FTPLinkEntry</dfn>,</td></tr>
+<tr><th id="114">114</th><td>    <dfn class="enum" id="WebCore::FTPMiscEntry" title='WebCore::FTPMiscEntry' data-ref="WebCore::FTPMiscEntry" data-ref-filename="WebCore..FTPMiscEntry">FTPMiscEntry</dfn>,</td></tr>
+<tr><th id="115">115</th><td>    <dfn class="enum" id="WebCore::FTPJunkEntry" title='WebCore::FTPJunkEntry' data-ref="WebCore::FTPJunkEntry" data-ref-filename="WebCore..FTPJunkEntry">FTPJunkEntry</dfn></td></tr>
+<tr><th id="116">116</th><td>};</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td><b>struct</b> <dfn class="type def" id="WebCore::ListResult" title='WebCore::ListResult' data-ref="WebCore::ListResult" data-ref-filename="WebCore..ListResult">ListResult</dfn></td></tr>
+<tr><th id="119">119</th><td>{</td></tr>
+<tr><th id="120">120</th><td>    <dfn class="decl def fn" id="_ZN7WebCore10ListResultC1Ev" title='WebCore::ListResult::ListResult' data-ref="_ZN7WebCore10ListResultC1Ev" data-ref-filename="_ZN7WebCore10ListResultC1Ev">ListResult</dfn>()</td></tr>
+<tr><th id="121">121</th><td>    { </td></tr>
+<tr><th id="122">122</th><td>        <a class="member fn" href="#_ZN7WebCore10ListResult5clearEv" title='WebCore::ListResult::clear' data-ref="_ZN7WebCore10ListResult5clearEv" data-ref-filename="_ZN7WebCore10ListResult5clearEv">clear</a>();</td></tr>
+<tr><th id="123">123</th><td>    }</td></tr>
+<tr><th id="124">124</th><td>    </td></tr>
+<tr><th id="125">125</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN7WebCore10ListResult5clearEv" title='WebCore::ListResult::clear' data-ref="_ZN7WebCore10ListResult5clearEv" data-ref-filename="_ZN7WebCore10ListResult5clearEv">clear</dfn>()</td></tr>
+<tr><th id="126">126</th><td>    {</td></tr>
+<tr><th id="127">127</th><td>        <a class="member field" href="#WebCore::ListResult::valid" title='WebCore::ListResult::valid' data-ref="WebCore::ListResult::valid" data-ref-filename="WebCore..ListResult..valid">valid</a> = <b>false</b>;</td></tr>
+<tr><th id="128">128</th><td>        <a class="member field" href="#WebCore::ListResult::type" title='WebCore::ListResult::type' data-ref="WebCore::ListResult::type" data-ref-filename="WebCore..ListResult..type">type</a> = <a class="enum" href="#WebCore::FTPJunkEntry" title='WebCore::FTPJunkEntry' data-ref="WebCore::FTPJunkEntry" data-ref-filename="WebCore..FTPJunkEntry">FTPJunkEntry</a>;</td></tr>
+<tr><th id="129">129</th><td>        <a class="member field" href="#WebCore::ListResult::filename" title='WebCore::ListResult::filename' data-ref="WebCore::ListResult::filename" data-ref-filename="WebCore..ListResult..filename">filename</a> = <b>nullptr</b>;</td></tr>
+<tr><th id="130">130</th><td>        <a class="member field" href="#WebCore::ListResult::filenameLength" title='WebCore::ListResult::filenameLength' data-ref="WebCore::ListResult::filenameLength" data-ref-filename="WebCore..ListResult..filenameLength">filenameLength</a> = <var>0</var>;</td></tr>
+<tr><th id="131">131</th><td>        <a class="member field" href="#WebCore::ListResult::linkname" title='WebCore::ListResult::linkname' data-ref="WebCore::ListResult::linkname" data-ref-filename="WebCore..ListResult..linkname">linkname</a> = <b>nullptr</b>;</td></tr>
+<tr><th id="132">132</th><td>        <a class="member field" href="#WebCore::ListResult::linknameLength" title='WebCore::ListResult::linknameLength' data-ref="WebCore::ListResult::linknameLength" data-ref-filename="WebCore..ListResult..linknameLength">linknameLength</a> = <var>0</var>;</td></tr>
+<tr><th id="133">133</th><td>        <a class="member field" href="#WebCore::ListResult::fileSize" title='WebCore::ListResult::fileSize' data-ref="WebCore::ListResult::fileSize" data-ref-filename="WebCore..ListResult..fileSize">fileSize</a>.<a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZN3WTF6String8truncateEj" title='WTF::String::truncate' data-ref="_ZN3WTF6String8truncateEj" data-ref-filename="_ZN3WTF6String8truncateEj">truncate</a>(<var>0</var>);</td></tr>
+<tr><th id="134">134</th><td>        <a class="member field" href="#WebCore::ListResult::caseSensitive" title='WebCore::ListResult::caseSensitive' data-ref="WebCore::ListResult::caseSensitive" data-ref-filename="WebCore..ListResult..caseSensitive">caseSensitive</a> = <b>false</b>;</td></tr>
+<tr><th id="135">135</th><td>        <span class='ref fn' title='memset' data-ref="memset" data-ref-filename="memset">memset</span>(&amp;<a class="member field" href="#WebCore::ListResult::modifiedTime" title='WebCore::ListResult::modifiedTime' data-ref="WebCore::ListResult::modifiedTime" data-ref-filename="WebCore..ListResult..modifiedTime">modifiedTime</a>, <var>0</var>, <b>sizeof</b>(<a class="typedef" href="#WebCore::FTPTime" title='WebCore::FTPTime' data-type='struct tm' data-ref="WebCore::FTPTime" data-ref-filename="WebCore..FTPTime">FTPTime</a>));</td></tr>
+<tr><th id="136">136</th><td>    }</td></tr>
+<tr><th id="137">137</th><td>    </td></tr>
+<tr><th id="138">138</th><td>    <em>bool</em> <dfn class="decl field" id="WebCore::ListResult::valid" title='WebCore::ListResult::valid' data-ref="WebCore::ListResult::valid" data-ref-filename="WebCore..ListResult..valid">valid</dfn>;</td></tr>
+<tr><th id="139">139</th><td>    <a class="type" href="#WebCore::FTPEntryType" title='WebCore::FTPEntryType' data-ref="WebCore::FTPEntryType" data-ref-filename="WebCore..FTPEntryType">FTPEntryType</a> <dfn class="decl field" id="WebCore::ListResult::type" title='WebCore::ListResult::type' data-ref="WebCore::ListResult::type" data-ref-filename="WebCore..ListResult..type">type</dfn>;        </td></tr>
+<tr><th id="140">140</th><td>    </td></tr>
+<tr><th id="141">141</th><td>    <em>const</em> <em>char</em>* <dfn class="decl field" id="WebCore::ListResult::filename" title='WebCore::ListResult::filename' data-ref="WebCore::ListResult::filename" data-ref-filename="WebCore..ListResult..filename">filename</dfn>;</td></tr>
+<tr><th id="142">142</th><td>    <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="WebCore::ListResult::filenameLength" title='WebCore::ListResult::filenameLength' data-ref="WebCore::ListResult::filenameLength" data-ref-filename="WebCore..ListResult..filenameLength">filenameLength</dfn>;</td></tr>
+<tr><th id="143">143</th><td>    </td></tr>
+<tr><th id="144">144</th><td>    <em>const</em> <em>char</em>* <dfn class="decl field" id="WebCore::ListResult::linkname" title='WebCore::ListResult::linkname' data-ref="WebCore::ListResult::linkname" data-ref-filename="WebCore..ListResult..linkname">linkname</dfn>;</td></tr>
+<tr><th id="145">145</th><td>    <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="WebCore::ListResult::linknameLength" title='WebCore::ListResult::linknameLength' data-ref="WebCore::ListResult::linknameLength" data-ref-filename="WebCore..ListResult..linknameLength">linknameLength</dfn>;</td></tr>
+<tr><th id="146">146</th><td>    </td></tr>
+<tr><th id="147">147</th><td>    <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#WTF::String" title='WTF::String' data-ref="WTF::String" data-ref-filename="WTF..String">String</a> <dfn class="decl field" id="WebCore::ListResult::fileSize" title='WebCore::ListResult::fileSize' data-ref="WebCore::ListResult::fileSize" data-ref-filename="WebCore..ListResult..fileSize">fileSize</dfn>;      </td></tr>
+<tr><th id="148">148</th><td>    <a class="typedef" href="#WebCore::FTPTime" title='WebCore::FTPTime' data-type='struct tm' data-ref="WebCore::FTPTime" data-ref-filename="WebCore..FTPTime">FTPTime</a> <dfn class="decl field" id="WebCore::ListResult::modifiedTime" title='WebCore::ListResult::modifiedTime' data-ref="WebCore::ListResult::modifiedTime" data-ref-filename="WebCore..ListResult..modifiedTime">modifiedTime</dfn>; </td></tr>
+<tr><th id="149">149</th><td>    <em>bool</em> <dfn class="decl field" id="WebCore::ListResult::caseSensitive" title='WebCore::ListResult::caseSensitive' data-ref="WebCore::ListResult::caseSensitive" data-ref-filename="WebCore..ListResult..caseSensitive">caseSensitive</dfn>; <i>// file system is definitely case insensitive</i></td></tr>
+<tr><th id="150">150</th><td>};</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td><a class="type" href="#WebCore::FTPEntryType" title='WebCore::FTPEntryType' data-ref="WebCore::FTPEntryType" data-ref-filename="WebCore..FTPEntryType">FTPEntryType</a> <dfn class="decl fn" id="_ZN7WebCore15parseOneFTPLineEPKcRNS_9ListStateERNS_10ListResultE" title='WebCore::parseOneFTPLine' data-ref="_ZN7WebCore15parseOneFTPLineEPKcRNS_9ListStateERNS_10ListResultE" data-ref-filename="_ZN7WebCore15parseOneFTPLineEPKcRNS_9ListStateERNS_10ListResultE">parseOneFTPLine</dfn>(<em>const</em> <em>char</em>* <dfn class="local col8 decl" id="68inputLine" title='inputLine' data-type='const char *' data-ref="68inputLine" data-ref-filename="68inputLine">inputLine</dfn>, <a class="type" href="#WebCore::ListState" title='WebCore::ListState' data-ref="WebCore::ListState" data-ref-filename="WebCore..ListState">ListState</a>&amp;, <a class="type" href="#WebCore::ListResult" title='WebCore::ListResult' data-ref="WebCore::ListResult" data-ref-filename="WebCore..ListResult">ListResult</a>&amp;);</td></tr>
+<tr><th id="153">153</th><td>                 </td></tr>
+<tr><th id="154">154</th><td>} <i>// namespace WebCore</i></td></tr>
+<tr><th id="155">155</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource159.cpp.html'>webkit/WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource159.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

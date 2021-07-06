@@ -1,0 +1,406 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Regress141275.mm source code [webkit/Source/JavaScriptCore/API/tests/Regress141275.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/JavaScriptCore/API/tests/Regress141275.mm'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>JavaScriptCore</a>/<a href='..'>API</a>/<a href='./'>tests</a>/<a href='Regress141275.mm.html'>Regress141275.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2015 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import <a href="../../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#import <a href="Regress141275.h.html">"Regress141275.h"</a></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import &lt;Foundation/Foundation.h&gt;</u></td></tr>
+<tr><th id="30">30</th><td><u>#import &lt;objc/objc.h&gt;</u></td></tr>
+<tr><th id="31">31</th><td><u>#import &lt;objc/runtime.h&gt;</u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><u>#<span data-ppcond="33">if</span> <a class="macro" href="../JSBase.h.html#149" title="1" data-ref="_M/JSC_OBJC_API_ENABLED">JSC_OBJC_API_ENABLED</a></u></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><b>extern</b> <q>"C"</q> <em>void</em> <dfn class="decl fn" id="JSSynchronousGarbageCollectForDebugging" title='JSSynchronousGarbageCollectForDebugging' data-ref="JSSynchronousGarbageCollectForDebugging" data-ref-filename="JSSynchronousGarbageCollectForDebugging">JSSynchronousGarbageCollectForDebugging</dfn>(<a class="typedef" href="../JSBase.h.html#JSContextRef" title='JSContextRef' data-type='const struct OpaqueJSContext *' data-ref="JSContextRef" data-ref-filename="JSContextRef">JSContextRef</a>);</td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><b>extern</b> <em>int</em> <dfn class="decl" id="failed" title='failed' data-ref="failed" data-ref-filename="failed">failed</dfn>;</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><em>static</em> <em>const</em> <span class='typedef' title='NSUInteger' data-type='unsigned long' data-ref="NSUInteger" data-ref-filename="NSUInteger">NSUInteger</span> <dfn class="tu decl def" id="scriptToEvaluate" title='scriptToEvaluate' data-type='const NSUInteger' data-ref="scriptToEvaluate" data-ref-filename="scriptToEvaluate">scriptToEvaluate</dfn> = <var>50</var>;</td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td>@interface JSTEvaluator : NSObject</td></tr>
+<tr><th id="42">42</th><td>- (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)initWithScript:(NSString*)<dfn class="local col1 decl" id="1script" title='script' data-type='NSString *__strong' data-ref="1script" data-ref-filename="1script">script</dfn>;</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td>- (<em>void</em>)insertSignPostWithCompletion:(<em>void</em>(^)(NSError* <dfn class="local col3 decl" id="3error" title='error' data-type='NSError *__strong' data-ref="3error" data-ref-filename="3error">error</dfn>))<dfn class="local col2 decl" id="2completionHandler" title='completionHandler' data-type='void (^__strong)(NSError *__strong)' data-ref="2completionHandler" data-ref-filename="2completionHandler">completionHandler</dfn>;</td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td>- (<em>void</em>)evaluateScript:(NSString*)<dfn class="local col4 decl" id="4script" title='script' data-type='NSString *__strong' data-ref="4script" data-ref-filename="4script">script</dfn> completion:(<em>void</em>(^)(NSError* <dfn class="local col6 decl" id="6error" title='error' data-type='NSError *__strong' data-ref="6error" data-ref-filename="6error">error</dfn>))<dfn class="local col5 decl" id="5completionHandler" title='completionHandler' data-type='void (^__strong)(NSError *__strong)' data-ref="5completionHandler" data-ref-filename="5completionHandler">completionHandler</dfn>;</td></tr>
+<tr><th id="47">47</th><td>- (<em>void</em>)evaluateBlock:(<em>void</em>(^)(JSContext* <dfn class="local col8 decl" id="8context" title='context' data-type='JSContext *__strong' data-ref="8context" data-ref-filename="8context">context</dfn>))<dfn class="local col7 decl" id="7evaluationBlock" title='evaluationBlock' data-type='void (^__strong)(JSContext *__strong)' data-ref="7evaluationBlock" data-ref-filename="7evaluationBlock">evaluationBlock</dfn> completion:(<em>void</em>(^)(NSError* <dfn class="local col0 decl" id="10error" title='error' data-type='NSError *__strong' data-ref="10error" data-ref-filename="10error">error</dfn>))<dfn class="local col9 decl" id="9completionHandler" title='completionHandler' data-type='void (^__strong)(NSError *__strong)' data-ref="9completionHandler" data-ref-filename="9completionHandler">completionHandler</dfn>;</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td>- (<em>void</em>)waitForTasksDoneAndReportResults;</td></tr>
+<tr><th id="50">50</th><td>@end</td></tr>
+<tr><th id="51">51</th><td></td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td><em>static</em> <em>const</em> NSString* <dfn class="tu decl def" id="JSTEvaluatorThreadContextKey" title='JSTEvaluatorThreadContextKey' data-type='const NSString *__strong' data-ref="JSTEvaluatorThreadContextKey" data-ref-filename="JSTEvaluatorThreadContextKey">JSTEvaluatorThreadContextKey</dfn> = @<q>"JSTEvaluatorThreadContextKey"</q>;</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><i>/*</i></td></tr>
+<tr><th id="56">56</th><td><i> * A JSTEvaluatorThreadContext is kept in the thread dictionary of threads used by JSEvaluator.</i></td></tr>
+<tr><th id="57">57</th><td><i> *</i></td></tr>
+<tr><th id="58">58</th><td><i> * This includes the run loop thread, and any threads used by _jsSourcePerformQueue to execute a task.</i></td></tr>
+<tr><th id="59">59</th><td><i> */</i></td></tr>
+<tr><th id="60">60</th><td>@interface JSTEvaluatorThreadContext : NSObject</td></tr>
+<tr><th id="61">61</th><td>@property (weak) JSTEvaluator* <dfn class="local col1 decl field" id="11_evaluator" title='_evaluator' data-type='JSTEvaluator *__weak' data-ref="11_evaluator" data-ref-filename="11_evaluator">evaluator</dfn>;</td></tr>
+<tr><th id="62">62</th><td>@property (strong) JSContext* <dfn class="local col2 decl field" id="12_jsContext" title='_jsContext' data-type='JSContext *__strong' data-ref="12_jsContext" data-ref-filename="12_jsContext">jsContext</dfn>;</td></tr>
+<tr><th id="63">63</th><td>@end</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td>@implementation JSTEvaluatorThreadContext</td></tr>
+<tr><th id="66">66</th><td>@end</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="70">70</th><td><i class="doc"> * A JSTEvaluatorTask is a single task to be executed.</i></td></tr>
+<tr><th id="71">71</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="72">72</th><td><i class="doc"> * JSTEvaluator keeps a list of pending tasks. The run loop thread is repsonsible for feeding pending tasks to the _jsSourcePerformQueue, while respecting sign posts.</i></td></tr>
+<tr><th id="73">73</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="74">74</th><td>@interface JSTEvaluatorTask : NSObject</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td>@property (nonatomic, copy) <em>void</em> (^<dfn class="local col3 decl field" id="23_evaluateBlock" title='_evaluateBlock' data-type='void (^__strong)(JSContext *__strong)' data-ref="23_evaluateBlock" data-ref-filename="23_evaluateBlock">evaluateBlock</dfn>)(JSContext* <dfn class="local col3 decl" id="13jsContext" title='jsContext' data-type='JSContext *__strong' data-ref="13jsContext" data-ref-filename="13jsContext">jsContext</dfn>);</td></tr>
+<tr><th id="77">77</th><td>@property (nonatomic, copy) <em>void</em> (^<dfn class="local col4 decl field" id="24_completionHandler" title='_completionHandler' data-type='void (^__strong)(NSError *__strong)' data-ref="24_completionHandler" data-ref-filename="24_completionHandler">completionHandler</dfn>)(NSError* <dfn class="local col4 decl" id="14error" title='error' data-type='NSError *__strong' data-ref="14error" data-ref-filename="14error">error</dfn>);</td></tr>
+<tr><th id="78">78</th><td>@property (nonatomic, copy) NSError* <dfn class="local col5 decl field" id="25_error" title='_error' data-type='NSError *__strong' data-ref="25_error" data-ref-filename="25_error">error</dfn>;</td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td>+ (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)evaluatorTaskWithEvaluateBlock:(<em>void</em> (^)(JSContext*))<dfn class="local col5 decl" id="15block" title='block' data-type='void (^__strong)(JSContext *__strong)' data-ref="15block" data-ref-filename="15block">block</dfn> completionHandler:(<em>void</em> (^)(NSError* <dfn class="local col7 decl" id="17error" title='error' data-type='NSError *__strong' data-ref="17error" data-ref-filename="17error">error</dfn>))<dfn class="local col6 decl" id="16completionBlock" title='completionBlock' data-type='void (^__strong)(NSError *__strong)' data-ref="16completionBlock" data-ref-filename="16completionBlock">completionBlock</dfn>;</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td>@end</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td>@implementation JSTEvaluatorTask</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>+ (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)evaluatorTaskWithEvaluateBlock:(<em>void</em> (^)(JSContext*))<dfn class="local col8 decl" id="18evaluationBlock" title='evaluationBlock' data-type='void (^__strong)(JSContext *__strong)' data-ref="18evaluationBlock" data-ref-filename="18evaluationBlock">evaluationBlock</dfn> completionHandler:(<em>void</em> (^)(NSError* <dfn class="local col0 decl" id="20error" title='error' data-type='NSError *__strong' data-ref="20error" data-ref-filename="20error">error</dfn>))<dfn class="local col9 decl" id="19completionHandler" title='completionHandler' data-type='void (^__strong)(NSError *__strong)' data-ref="19completionHandler" data-ref-filename="19completionHandler">completionHandler</dfn></td></tr>
+<tr><th id="87">87</th><td>{</td></tr>
+<tr><th id="88">88</th><td>    JSTEvaluatorTask* <dfn class="local col1 decl" id="21task" title='task' data-type='JSTEvaluatorTask *__strong' data-ref="21task" data-ref-filename="21task">task</dfn> = [<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span> <b>new</b>];</td></tr>
+<tr><th id="89">89</th><td>    <a class="local col1 ref" href="#21task" title='task' data-ref="21task" data-ref-filename="21task">task</a>.evaluateBlock = <a class="local col8 ref" href="#18evaluationBlock" title='evaluationBlock' data-ref="18evaluationBlock" data-ref-filename="18evaluationBlock">evaluationBlock</a>;</td></tr>
+<tr><th id="90">90</th><td>    <a class="local col1 ref" href="#21task" title='task' data-ref="21task" data-ref-filename="21task">task</a>.completionHandler = <a class="local col9 ref" href="#19completionHandler" title='completionHandler' data-ref="19completionHandler" data-ref-filename="19completionHandler">completionHandler</a>;</td></tr>
+<tr><th id="91">91</th><td>    <b>return</b> <a class="local col1 ref" href="#21task" title='task' data-ref="21task" data-ref-filename="21task">task</a>;</td></tr>
+<tr><th id="92">92</th><td>}</td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td>@end</td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td>@implementation JSTEvaluator {</td></tr>
+<tr><th id="97">97</th><td>    <span class='typedef' title='dispatch_queue_t' data-type='NSObject&lt;OS_dispatch_queue&gt; *' data-ref="dispatch_queue_t" data-ref-filename="dispatch_queue_t">dispatch_queue_t</span> <dfn class="local col6 decl field" id="26_jsSourcePerformQueue" title='_jsSourcePerformQueue' data-type='__strong dispatch_queue_t' data-ref="26_jsSourcePerformQueue" data-ref-filename="26_jsSourcePerformQueue">_jsSourcePerformQueue</dfn>;</td></tr>
+<tr><th id="98">98</th><td>    <span class='typedef' title='dispatch_semaphore_t' data-type='NSObject&lt;OS_dispatch_semaphore&gt; *' data-ref="dispatch_semaphore_t" data-ref-filename="dispatch_semaphore_t">dispatch_semaphore_t</span> <dfn class="local col7 decl field" id="27_allScriptsDone" title='_allScriptsDone' data-type='__strong dispatch_semaphore_t' data-ref="27_allScriptsDone" data-ref-filename="27_allScriptsDone">_allScriptsDone</dfn>;</td></tr>
+<tr><th id="99">99</th><td>    <span class='typedef' title='CFRunLoopRef' data-type='struct __CFRunLoop *' data-ref="CFRunLoopRef" data-ref-filename="CFRunLoopRef">CFRunLoopRef</span> <dfn class="local col8 decl field" id="28_jsThreadRunLoop" title='_jsThreadRunLoop' data-type='CFRunLoopRef' data-ref="28_jsThreadRunLoop" data-ref-filename="28_jsThreadRunLoop">_jsThreadRunLoop</dfn>;</td></tr>
+<tr><th id="100">100</th><td>    <span class='typedef' title='CFRunLoopSourceRef' data-type='struct __CFRunLoopSource *' data-ref="CFRunLoopSourceRef" data-ref-filename="CFRunLoopSourceRef">CFRunLoopSourceRef</span> <dfn class="local col9 decl field" id="29_jsThreadRunLoopSource" title='_jsThreadRunLoopSource' data-type='CFRunLoopSourceRef' data-ref="29_jsThreadRunLoopSource" data-ref-filename="29_jsThreadRunLoopSource">_jsThreadRunLoopSource</dfn>;</td></tr>
+<tr><th id="101">101</th><td>    JSContext* <dfn class="local col0 decl field" id="30_jsContext" title='_jsContext' data-type='JSContext *__strong' data-ref="30_jsContext" data-ref-filename="30_jsContext">_jsContext</dfn>;</td></tr>
+<tr><th id="102">102</th><td>    NSMutableArray* <dfn class="local col1 decl field" id="31__pendingTasks" title='__pendingTasks' data-type='NSMutableArray *__strong' data-ref="31__pendingTasks" data-ref-filename="31__pendingTasks">__pendingTasks</dfn>;</td></tr>
+<tr><th id="103">103</th><td>}</td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td>- (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)init</td></tr>
+<tr><th id="106">106</th><td>{</td></tr>
+<tr><th id="107">107</th><td>    <span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span> = [super init];</td></tr>
+<tr><th id="108">108</th><td>    <b>if</b> (<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>) {</td></tr>
+<tr><th id="109">109</th><td>        _jsSourcePerformQueue = <span class='ref fn' title='dispatch_queue_create' data-ref="dispatch_queue_create" data-ref-filename="dispatch_queue_create">dispatch_queue_create</span>(<q>"JSTEval"</q>, <span class="macro" title="((__bridge dispatch_queue_attr_t)&amp;(_dispatch_queue_attr_concurrent))" data-ref="_M/DISPATCH_QUEUE_CONCURRENT">DISPATCH_QUEUE_CONCURRENT</span>);</td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td>        _allScriptsDone = <span class='ref fn' title='dispatch_semaphore_create' data-ref="dispatch_semaphore_create" data-ref-filename="dispatch_semaphore_create">dispatch_semaphore_create</span>(<var>0</var>);</td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td>        _jsContext = [JSContext <b>new</b>];</td></tr>
+<tr><th id="114">114</th><td>        _jsContext.name = @<q>"JSTEval"</q>;</td></tr>
+<tr><th id="115">115</th><td>        __pendingTasks = [NSMutableArray <b>new</b>];</td></tr>
+<tr><th id="116">116</th><td></td></tr>
+<tr><th id="117">117</th><td>        NSThread* <dfn class="local col2 decl" id="32jsThread" title='jsThread' data-type='NSThread *__strong' data-ref="32jsThread" data-ref-filename="32jsThread">jsThread</dfn> = [[NSThread alloc] initWithTarget:<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span> selector:@selector(_jsThreadMain) object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="118">118</th><td>        [<a class="local col2 ref" href="#32jsThread" title='jsThread' data-ref="32jsThread" data-ref-filename="32jsThread">jsThread</a> setName:@<q>"JSTEval"</q>];</td></tr>
+<tr><th id="119">119</th><td>        [<a class="local col2 ref" href="#32jsThread" title='jsThread' data-ref="32jsThread" data-ref-filename="32jsThread">jsThread</a> start];</td></tr>
+<tr><th id="120">120</th><td></td></tr>
+<tr><th id="121">121</th><td>    }</td></tr>
+<tr><th id="122">122</th><td>    <b>return</b> <span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>;</td></tr>
+<tr><th id="123">123</th><td>}</td></tr>
+<tr><th id="124">124</th><td></td></tr>
+<tr><th id="125">125</th><td>- (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)initWithScript:(NSString*)<dfn class="local col3 decl" id="33script" title='script' data-type='NSString *__strong' data-ref="33script" data-ref-filename="33script">script</dfn></td></tr>
+<tr><th id="126">126</th><td>{</td></tr>
+<tr><th id="127">127</th><td>    <span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span> = [<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span> init];</td></tr>
+<tr><th id="128">128</th><td>    <b>if</b> (<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>) {</td></tr>
+<tr><th id="129">129</th><td>        <span class="macro" title="__attribute__((__blocks__(byref)))" data-ref="_M/__block">__block</span> NSError* <dfn class="local col4 decl" id="34scriptError" title='scriptError' data-type='NSError *__strong' data-ref="34scriptError" data-ref-filename="34scriptError">scriptError</dfn> = <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="130">130</th><td>        <span class='typedef' title='dispatch_semaphore_t' data-type='NSObject&lt;OS_dispatch_semaphore&gt; *' data-ref="dispatch_semaphore_t" data-ref-filename="dispatch_semaphore_t">dispatch_semaphore_t</span> <dfn class="local col5 decl" id="35dsema" title='dsema' data-type='__strong dispatch_semaphore_t' data-ref="35dsema" data-ref-filename="35dsema">dsema</dfn> = <span class='ref fn' title='dispatch_semaphore_create' data-ref="dispatch_semaphore_create" data-ref-filename="dispatch_semaphore_create">dispatch_semaphore_create</span>(<var>0</var>);</td></tr>
+<tr><th id="131">131</th><td>        [<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span> evaluateScript:<a class="local col3 ref" href="#33script" title='script' data-ref="33script" data-ref-filename="33script">script</a></td></tr>
+<tr><th id="132">132</th><td>            completion:^(NSError* <dfn class="local col6 decl" id="36error" title='error' data-type='NSError *__strong' data-ref="36error" data-ref-filename="36error">error</dfn>) {</td></tr>
+<tr><th id="133">133</th><td>                <a class="local col4 ref" href="#34scriptError" title='scriptError' data-ref="34scriptError" data-ref-filename="34scriptError">scriptError</a> = <a class="local col6 ref" href="#36error" title='error' data-ref="36error" data-ref-filename="36error">error</a>;</td></tr>
+<tr><th id="134">134</th><td>                <span class='ref fn' title='dispatch_semaphore_signal' data-ref="dispatch_semaphore_signal" data-ref-filename="dispatch_semaphore_signal">dispatch_semaphore_signal</span>(<a class="local col5 ref" href="#35dsema" title='dsema' data-ref="35dsema" data-ref-filename="35dsema">dsema</a>);</td></tr>
+<tr><th id="135">135</th><td>            }];</td></tr>
+<tr><th id="136">136</th><td>        <span class='ref fn' title='dispatch_semaphore_wait' data-ref="dispatch_semaphore_wait" data-ref-filename="dispatch_semaphore_wait">dispatch_semaphore_wait</span>(<a class="local col5 ref" href="#35dsema" title='dsema' data-ref="35dsema" data-ref-filename="35dsema">dsema</a>, <span class="macro" title="(~0ull)" data-ref="_M/DISPATCH_TIME_FOREVER">DISPATCH_TIME_FOREVER</span>);</td></tr>
+<tr><th id="137">137</th><td>    }</td></tr>
+<tr><th id="138">138</th><td>    <b>return</b> <span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>;</td></tr>
+<tr><th id="139">139</th><td>}</td></tr>
+<tr><th id="140">140</th><td></td></tr>
+<tr><th id="141">141</th><td>- (<em>void</em>)_accessPendingTasksWithBlock:(<em>void</em>(^)(NSMutableArray* <dfn class="local col8 decl" id="38pendingTasks" title='pendingTasks' data-type='NSMutableArray *__strong' data-ref="38pendingTasks" data-ref-filename="38pendingTasks">pendingTasks</dfn>))<dfn class="local col7 decl" id="37block" title='block' data-type='void (^__strong)(NSMutableArray *__strong)' data-ref="37block" data-ref-filename="37block">block</dfn></td></tr>
+<tr><th id="142">142</th><td>{</td></tr>
+<tr><th id="143">143</th><td>    @synchronized(<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>) {</td></tr>
+<tr><th id="144">144</th><td>        <a class="local col7 ref" href="#37block" title='block' data-ref="37block" data-ref-filename="37block">block</a>(__pendingTasks);</td></tr>
+<tr><th id="145">145</th><td>        <b>if</b> (__pendingTasks.count &gt; <var>0</var>) {</td></tr>
+<tr><th id="146">146</th><td>            <b>if</b> (_jsThreadRunLoop &amp;&amp; _jsThreadRunLoopSource) {</td></tr>
+<tr><th id="147">147</th><td>                <span class='ref fn' title='CFRunLoopSourceSignal' data-ref="CFRunLoopSourceSignal" data-ref-filename="CFRunLoopSourceSignal">CFRunLoopSourceSignal</span>(_jsThreadRunLoopSource);</td></tr>
+<tr><th id="148">148</th><td>                <span class='ref fn' title='CFRunLoopWakeUp' data-ref="CFRunLoopWakeUp" data-ref-filename="CFRunLoopWakeUp">CFRunLoopWakeUp</span>(_jsThreadRunLoop);</td></tr>
+<tr><th id="149">149</th><td>            }</td></tr>
+<tr><th id="150">150</th><td>        }</td></tr>
+<tr><th id="151">151</th><td>    }</td></tr>
+<tr><th id="152">152</th><td>}</td></tr>
+<tr><th id="153">153</th><td></td></tr>
+<tr><th id="154">154</th><td>- (<em>void</em>)insertSignPostWithCompletion:(<em>void</em>(^)(NSError* <dfn class="local col0 decl" id="40error" title='error' data-type='NSError *__strong' data-ref="40error" data-ref-filename="40error">error</dfn>))<dfn class="local col9 decl" id="39completionHandler" title='completionHandler' data-type='void (^__strong)(NSError *__strong)' data-ref="39completionHandler" data-ref-filename="39completionHandler">completionHandler</dfn></td></tr>
+<tr><th id="155">155</th><td>{</td></tr>
+<tr><th id="156">156</th><td>    [<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span> _accessPendingTasksWithBlock:^(NSMutableArray* <dfn class="local col1 decl" id="41pendingTasks" title='pendingTasks' data-type='NSMutableArray *__strong' data-ref="41pendingTasks" data-ref-filename="41pendingTasks">pendingTasks</dfn>) {</td></tr>
+<tr><th id="157">157</th><td>        JSTEvaluatorTask* <dfn class="local col2 decl" id="42task" title='task' data-type='JSTEvaluatorTask *__strong' data-ref="42task" data-ref-filename="42task">task</dfn> = [JSTEvaluatorTask evaluatorTaskWithEvaluateBlock:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span></td></tr>
+<tr><th id="158">158</th><td>            completionHandler:<a class="local col9 ref" href="#39completionHandler" title='completionHandler' data-ref="39completionHandler" data-ref-filename="39completionHandler">completionHandler</a>];</td></tr>
+<tr><th id="159">159</th><td></td></tr>
+<tr><th id="160">160</th><td>        [<a class="local col1 ref" href="#41pendingTasks" title='pendingTasks' data-ref="41pendingTasks" data-ref-filename="41pendingTasks">pendingTasks</a> addObject:<a class="local col2 ref" href="#42task" title='task' data-ref="42task" data-ref-filename="42task">task</a>];</td></tr>
+<tr><th id="161">161</th><td>    }];</td></tr>
+<tr><th id="162">162</th><td>}</td></tr>
+<tr><th id="163">163</th><td></td></tr>
+<tr><th id="164">164</th><td>- (<em>void</em>)evaluateScript:(NSString*)<dfn class="local col3 decl" id="43script" title='script' data-type='NSString *__strong' data-ref="43script" data-ref-filename="43script">script</dfn> completion:(<em>void</em>(^)(NSError* <dfn class="local col5 decl" id="45error" title='error' data-type='NSError *__strong' data-ref="45error" data-ref-filename="45error">error</dfn>))<dfn class="local col4 decl" id="44completionHandler" title='completionHandler' data-type='void (^__strong)(NSError *__strong)' data-ref="44completionHandler" data-ref-filename="44completionHandler">completionHandler</dfn></td></tr>
+<tr><th id="165">165</th><td>{</td></tr>
+<tr><th id="166">166</th><td>    [<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span> evaluateBlock:^(JSContext* <dfn class="local col6 decl" id="46context" title='context' data-type='JSContext *__strong' data-ref="46context" data-ref-filename="46context">context</dfn>) {</td></tr>
+<tr><th id="167">167</th><td>        [<a class="local col6 ref" href="#46context" title='context' data-ref="46context" data-ref-filename="46context">context</a> evaluateScript:<a class="local col3 ref" href="#43script" title='script' data-ref="43script" data-ref-filename="43script">script</a>];</td></tr>
+<tr><th id="168">168</th><td>    } completion:<a class="local col4 ref" href="#44completionHandler" title='completionHandler' data-ref="44completionHandler" data-ref-filename="44completionHandler">completionHandler</a>];</td></tr>
+<tr><th id="169">169</th><td>}</td></tr>
+<tr><th id="170">170</th><td></td></tr>
+<tr><th id="171">171</th><td>- (<em>void</em>)evaluateBlock:(<em>void</em>(^)(JSContext* <dfn class="local col8 decl" id="48context" title='context' data-type='JSContext *__strong' data-ref="48context" data-ref-filename="48context">context</dfn>))<dfn class="local col7 decl" id="47evaluationBlock" title='evaluationBlock' data-type='void (^__strong)(JSContext *__strong)' data-ref="47evaluationBlock" data-ref-filename="47evaluationBlock">evaluationBlock</dfn> completion:(<em>void</em>(^)(NSError* <dfn class="local col0 decl" id="50error" title='error' data-type='NSError *__strong' data-ref="50error" data-ref-filename="50error">error</dfn>))<dfn class="local col9 decl" id="49completionHandler" title='completionHandler' data-type='void (^__strong)(NSError *__strong)' data-ref="49completionHandler" data-ref-filename="49completionHandler">completionHandler</dfn></td></tr>
+<tr><th id="172">172</th><td>{</td></tr>
+<tr><th id="173">173</th><td>    <span class="macro" title="do { if (__builtin_expect(!((evaluationBlock != nullptr)), 0)) { [[NSAssertionHandler currentHandler] handleFailureInMethod:_cmd object:self file:@(&quot;Regress141275.mm&quot;) lineNumber:173 description:(@&quot;Invalid parameter not satisfying: %@&quot;), @&quot;evaluationBlock != nil&quot;]; } } while(0)" data-ref="_M/NSParameterAssert">NSParameterAssert</span>(<a class="local col7 ref" href="#47evaluationBlock" title='evaluationBlock' data-ref="47evaluationBlock" data-ref-filename="47evaluationBlock">evaluationBlock</a> != <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>);</td></tr>
+<tr><th id="174">174</th><td>    [<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span> _accessPendingTasksWithBlock:^(NSMutableArray* <dfn class="local col1 decl" id="51pendingTasks" title='pendingTasks' data-type='NSMutableArray *__strong' data-ref="51pendingTasks" data-ref-filename="51pendingTasks">pendingTasks</dfn>) {</td></tr>
+<tr><th id="175">175</th><td>        JSTEvaluatorTask* <dfn class="local col2 decl" id="52task" title='task' data-type='JSTEvaluatorTask *__strong' data-ref="52task" data-ref-filename="52task">task</dfn> = [JSTEvaluatorTask evaluatorTaskWithEvaluateBlock:<a class="local col7 ref" href="#47evaluationBlock" title='evaluationBlock' data-ref="47evaluationBlock" data-ref-filename="47evaluationBlock">evaluationBlock</a></td></tr>
+<tr><th id="176">176</th><td>            completionHandler:<a class="local col9 ref" href="#49completionHandler" title='completionHandler' data-ref="49completionHandler" data-ref-filename="49completionHandler">completionHandler</a>];</td></tr>
+<tr><th id="177">177</th><td></td></tr>
+<tr><th id="178">178</th><td>        [<a class="local col1 ref" href="#51pendingTasks" title='pendingTasks' data-ref="51pendingTasks" data-ref-filename="51pendingTasks">pendingTasks</a> addObject:<a class="local col2 ref" href="#52task" title='task' data-ref="52task" data-ref-filename="52task">task</a>];</td></tr>
+<tr><th id="179">179</th><td>    }];</td></tr>
+<tr><th id="180">180</th><td>}</td></tr>
+<tr><th id="181">181</th><td></td></tr>
+<tr><th id="182">182</th><td>- (<em>void</em>)waitForTasksDoneAndReportResults</td></tr>
+<tr><th id="183">183</th><td>{</td></tr>
+<tr><th id="184">184</th><td>    NSString* <dfn class="local col3 decl" id="53passFailString" title='passFailString' data-type='NSString *__strong' data-ref="53passFailString" data-ref-filename="53passFailString">passFailString</dfn> = @<q>"PASSED"</q>;</td></tr>
+<tr><th id="185">185</th><td></td></tr>
+<tr><th id="186">186</th><td>    <b>if</b> (!<span class='ref fn' title='dispatch_semaphore_wait' data-ref="dispatch_semaphore_wait" data-ref-filename="dispatch_semaphore_wait">dispatch_semaphore_wait</span>(_allScriptsDone, <span class='ref fn' title='dispatch_time' data-ref="dispatch_time" data-ref-filename="dispatch_time">dispatch_time</span>(<span class="macro" title="(0ull)" data-ref="_M/DISPATCH_TIME_NOW">DISPATCH_TIME_NOW</span>, <var>30</var> * <span class="macro" title="1000000000ull" data-ref="_M/NSEC_PER_SEC">NSEC_PER_SEC</span>))) {</td></tr>
+<tr><th id="187">187</th><td>        <em>int</em> <dfn class="local col4 decl" id="54totalScriptsRun" title='totalScriptsRun' data-type='int' data-ref="54totalScriptsRun" data-ref-filename="54totalScriptsRun">totalScriptsRun</dfn> = [_jsContext[@<q>"counter"</q>] toInt32];</td></tr>
+<tr><th id="188">188</th><td></td></tr>
+<tr><th id="189">189</th><td>        <b>if</b> (<a class="local col4 ref" href="#54totalScriptsRun" title='totalScriptsRun' data-ref="54totalScriptsRun" data-ref-filename="54totalScriptsRun">totalScriptsRun</a> != <a class="tu ref" href="#scriptToEvaluate" title='scriptToEvaluate' data-use='r' data-ref="scriptToEvaluate" data-ref-filename="scriptToEvaluate">scriptToEvaluate</a>) {</td></tr>
+<tr><th id="190">190</th><td>            <a class="local col3 ref" href="#53passFailString" title='passFailString' data-ref="53passFailString" data-ref-filename="53passFailString">passFailString</a> = @<q>"FAILED"</q>;</td></tr>
+<tr><th id="191">191</th><td>            <a class="ref" href="#failed" title='failed' data-ref="failed" data-ref-filename="failed">failed</a> = <var>1</var>;</td></tr>
+<tr><th id="192">192</th><td>        }</td></tr>
+<tr><th id="193">193</th><td></td></tr>
+<tr><th id="194">194</th><td>        <span class='ref fn' title='NSLog' data-ref="NSLog" data-ref-filename="NSLog">NSLog</span>(@<q>"  Ran a total of %d scripts: %@"</q>, <a class="local col4 ref" href="#54totalScriptsRun" title='totalScriptsRun' data-ref="54totalScriptsRun" data-ref-filename="54totalScriptsRun">totalScriptsRun</a>, <a class="local col3 ref" href="#53passFailString" title='passFailString' data-ref="53passFailString" data-ref-filename="53passFailString">passFailString</a>);</td></tr>
+<tr><th id="195">195</th><td>    } <b>else</b> {</td></tr>
+<tr><th id="196">196</th><td>        <a class="local col3 ref" href="#53passFailString" title='passFailString' data-ref="53passFailString" data-ref-filename="53passFailString">passFailString</a> = @<q>"FAILED"</q>;</td></tr>
+<tr><th id="197">197</th><td>        <a class="ref" href="#failed" title='failed' data-ref="failed" data-ref-filename="failed">failed</a> = <var>1</var>;</td></tr>
+<tr><th id="198">198</th><td>        <span class='ref fn' title='NSLog' data-ref="NSLog" data-ref-filename="NSLog">NSLog</span>(@<q>"  Error, timeout waiting for all tasks to complete: %@"</q>, <a class="local col3 ref" href="#53passFailString" title='passFailString' data-ref="53passFailString" data-ref-filename="53passFailString">passFailString</a>);</td></tr>
+<tr><th id="199">199</th><td>    }</td></tr>
+<tr><th id="200">200</th><td>}</td></tr>
+<tr><th id="201">201</th><td></td></tr>
+<tr><th id="202">202</th><td><em>static</em> <em>void</em> <dfn class="tu decl def fn" id="__JSTRunLoopSourceScheduleCallBack" title='__JSTRunLoopSourceScheduleCallBack' data-type='void __JSTRunLoopSourceScheduleCallBack(void * info, CFRunLoopRef rl, CFStringRef )' data-ref="__JSTRunLoopSourceScheduleCallBack" data-ref-filename="__JSTRunLoopSourceScheduleCallBack">__JSTRunLoopSourceScheduleCallBack</dfn>(<em>void</em>* <dfn class="local col1 decl" id="71info" title='info' data-type='void *' data-ref="71info" data-ref-filename="71info">info</dfn>, <span class='typedef' title='CFRunLoopRef' data-type='struct __CFRunLoop *' data-ref="CFRunLoopRef" data-ref-filename="CFRunLoopRef">CFRunLoopRef</span> <dfn class="local col2 decl" id="72rl" title='rl' data-type='CFRunLoopRef' data-ref="72rl" data-ref-filename="72rl">rl</dfn>, <span class='typedef' title='CFStringRef' data-type='const struct __CFString *' data-ref="CFStringRef" data-ref-filename="CFStringRef">CFStringRef</span>)</td></tr>
+<tr><th id="203">203</th><td>{</td></tr>
+<tr><th id="204">204</th><td>    @autoreleasepool {</td></tr>
+<tr><th id="205">205</th><td>        [(<b>__bridge</b> JSTEvaluator*)<a class="local col1 ref" href="#71info" title='info' data-ref="71info" data-ref-filename="71info">info</a> _sourceScheduledOnRunLoop:<a class="local col2 ref" href="#72rl" title='rl' data-ref="72rl" data-ref-filename="72rl">rl</a>];</td></tr>
+<tr><th id="206">206</th><td>    }</td></tr>
+<tr><th id="207">207</th><td>}</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td><em>static</em> <em>void</em> <dfn class="tu decl def fn" id="__JSTRunLoopSourcePerformCallBack" title='__JSTRunLoopSourcePerformCallBack' data-type='void __JSTRunLoopSourcePerformCallBack(void * info)' data-ref="__JSTRunLoopSourcePerformCallBack" data-ref-filename="__JSTRunLoopSourcePerformCallBack">__JSTRunLoopSourcePerformCallBack</dfn>(<em>void</em>* <dfn class="local col3 decl" id="73info" title='info' data-type='void *' data-ref="73info" data-ref-filename="73info">info</dfn> )</td></tr>
+<tr><th id="210">210</th><td>{</td></tr>
+<tr><th id="211">211</th><td>    @autoreleasepool {</td></tr>
+<tr><th id="212">212</th><td>        [(<b>__bridge</b> JSTEvaluator*)<a class="local col3 ref" href="#73info" title='info' data-ref="73info" data-ref-filename="73info">info</a> _sourcePerform];</td></tr>
+<tr><th id="213">213</th><td>    }</td></tr>
+<tr><th id="214">214</th><td>}</td></tr>
+<tr><th id="215">215</th><td></td></tr>
+<tr><th id="216">216</th><td><em>static</em> <em>void</em> <dfn class="tu decl def fn" id="__JSTRunLoopSourceCancelCallBack" title='__JSTRunLoopSourceCancelCallBack' data-type='void __JSTRunLoopSourceCancelCallBack(void * info, CFRunLoopRef rl, CFStringRef )' data-ref="__JSTRunLoopSourceCancelCallBack" data-ref-filename="__JSTRunLoopSourceCancelCallBack">__JSTRunLoopSourceCancelCallBack</dfn>(<em>void</em>* <dfn class="local col4 decl" id="74info" title='info' data-type='void *' data-ref="74info" data-ref-filename="74info">info</dfn>, <span class='typedef' title='CFRunLoopRef' data-type='struct __CFRunLoop *' data-ref="CFRunLoopRef" data-ref-filename="CFRunLoopRef">CFRunLoopRef</span> <dfn class="local col5 decl" id="75rl" title='rl' data-type='CFRunLoopRef' data-ref="75rl" data-ref-filename="75rl">rl</dfn>, <span class='typedef' title='CFStringRef' data-type='const struct __CFString *' data-ref="CFStringRef" data-ref-filename="CFStringRef">CFStringRef</span>)</td></tr>
+<tr><th id="217">217</th><td>{</td></tr>
+<tr><th id="218">218</th><td>    @autoreleasepool {</td></tr>
+<tr><th id="219">219</th><td>        [(<b>__bridge</b> JSTEvaluator*)<a class="local col4 ref" href="#74info" title='info' data-ref="74info" data-ref-filename="74info">info</a> _sourceCanceledOnRunLoop:<a class="local col5 ref" href="#75rl" title='rl' data-ref="75rl" data-ref-filename="75rl">rl</a>];</td></tr>
+<tr><th id="220">220</th><td>    }</td></tr>
+<tr><th id="221">221</th><td>}</td></tr>
+<tr><th id="222">222</th><td></td></tr>
+<tr><th id="223">223</th><td>- (<em>void</em>)_jsThreadMain</td></tr>
+<tr><th id="224">224</th><td>{</td></tr>
+<tr><th id="225">225</th><td>    @autoreleasepool {</td></tr>
+<tr><th id="226">226</th><td>        <em>const</em> <span class='typedef' title='CFIndex' data-type='long' data-ref="CFIndex" data-ref-filename="CFIndex">CFIndex</span> <dfn class="local col5 decl" id="55kRunLoopSourceContextVersion" title='kRunLoopSourceContextVersion' data-type='const CFIndex' data-ref="55kRunLoopSourceContextVersion" data-ref-filename="55kRunLoopSourceContextVersion">kRunLoopSourceContextVersion</dfn> = <var>0</var>;</td></tr>
+<tr><th id="227">227</th><td>        <span class='typedef' title='CFRunLoopSourceContext' data-type='struct CFRunLoopSourceContext' data-ref="CFRunLoopSourceContext" data-ref-filename="CFRunLoopSourceContext">CFRunLoopSourceContext</span> <dfn class="local col6 decl" id="56sourceContext" title='sourceContext' data-type='CFRunLoopSourceContext' data-ref="56sourceContext" data-ref-filename="56sourceContext">sourceContext</dfn> = {</td></tr>
+<tr><th id="228">228</th><td>            <a class="local col5 ref" href="#55kRunLoopSourceContextVersion" title='kRunLoopSourceContextVersion' data-ref="55kRunLoopSourceContextVersion" data-ref-filename="55kRunLoopSourceContextVersion">kRunLoopSourceContextVersion</a>, (<b>__bridge</b> <em>void</em>*)(<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>),</td></tr>
+<tr><th id="229">229</th><td>            <span class="macro" title="__null" data-ref="_M/NULL">NULL</span>, <span class="macro" title="__null" data-ref="_M/NULL">NULL</span>, <span class="macro" title="__null" data-ref="_M/NULL">NULL</span>, <span class="macro" title="__null" data-ref="_M/NULL">NULL</span>, <span class="macro" title="__null" data-ref="_M/NULL">NULL</span>,</td></tr>
+<tr><th id="230">230</th><td>            <a class="tu ref fn" href="#__JSTRunLoopSourceScheduleCallBack" title='__JSTRunLoopSourceScheduleCallBack' data-use='r' data-ref="__JSTRunLoopSourceScheduleCallBack" data-ref-filename="__JSTRunLoopSourceScheduleCallBack">__JSTRunLoopSourceScheduleCallBack</a>,</td></tr>
+<tr><th id="231">231</th><td>            <a class="tu ref fn" href="#__JSTRunLoopSourceCancelCallBack" title='__JSTRunLoopSourceCancelCallBack' data-use='r' data-ref="__JSTRunLoopSourceCancelCallBack" data-ref-filename="__JSTRunLoopSourceCancelCallBack">__JSTRunLoopSourceCancelCallBack</a>,</td></tr>
+<tr><th id="232">232</th><td>            <a class="tu ref fn" href="#__JSTRunLoopSourcePerformCallBack" title='__JSTRunLoopSourcePerformCallBack' data-use='r' data-ref="__JSTRunLoopSourcePerformCallBack" data-ref-filename="__JSTRunLoopSourcePerformCallBack">__JSTRunLoopSourcePerformCallBack</a></td></tr>
+<tr><th id="233">233</th><td>        };</td></tr>
+<tr><th id="234">234</th><td></td></tr>
+<tr><th id="235">235</th><td>        @synchronized(<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>) {</td></tr>
+<tr><th id="236">236</th><td>            _jsThreadRunLoop = <span class='ref fn' title='CFRunLoopGetCurrent' data-ref="CFRunLoopGetCurrent" data-ref-filename="CFRunLoopGetCurrent">CFRunLoopGetCurrent</span>();</td></tr>
+<tr><th id="237">237</th><td>            <span class='ref fn' title='CFRetain' data-ref="CFRetain" data-ref-filename="CFRetain">CFRetain</span>(_jsThreadRunLoop);</td></tr>
+<tr><th id="238">238</th><td></td></tr>
+<tr><th id="239">239</th><td>            _jsThreadRunLoopSource = <span class='ref fn' title='CFRunLoopSourceCreate' data-ref="CFRunLoopSourceCreate" data-ref-filename="CFRunLoopSourceCreate">CFRunLoopSourceCreate</span>(<span class='ref' title='kCFAllocatorDefault' data-ref="kCFAllocatorDefault" data-ref-filename="kCFAllocatorDefault">kCFAllocatorDefault</span>, <var>0</var>, &amp;<a class="local col6 ref" href="#56sourceContext" title='sourceContext' data-ref="56sourceContext" data-ref-filename="56sourceContext">sourceContext</a>);</td></tr>
+<tr><th id="240">240</th><td>            <span class='ref fn' title='CFRunLoopAddSource' data-ref="CFRunLoopAddSource" data-ref-filename="CFRunLoopAddSource">CFRunLoopAddSource</span>(_jsThreadRunLoop, _jsThreadRunLoopSource, <span class='ref' title='kCFRunLoopDefaultMode' data-ref="kCFRunLoopDefaultMode" data-ref-filename="kCFRunLoopDefaultMode">kCFRunLoopDefaultMode</span>);</td></tr>
+<tr><th id="241">241</th><td>        }</td></tr>
+<tr><th id="242">242</th><td></td></tr>
+<tr><th id="243">243</th><td>        <span class='ref fn' title='CFRunLoopRun' data-ref="CFRunLoopRun" data-ref-filename="CFRunLoopRun">CFRunLoopRun</span>();</td></tr>
+<tr><th id="244">244</th><td></td></tr>
+<tr><th id="245">245</th><td>        @synchronized(<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>) {</td></tr>
+<tr><th id="246">246</th><td>            NSMutableDictionary* <dfn class="local col7 decl" id="57threadDict" title='threadDict' data-type='NSMutableDictionary *__strong' data-ref="57threadDict" data-ref-filename="57threadDict">threadDict</dfn> = [[NSThread currentThread] threadDictionary];</td></tr>
+<tr><th id="247">247</th><td>            [<a class="local col7 ref" href="#57threadDict" title='threadDict' data-ref="57threadDict" data-ref-filename="57threadDict">threadDict</a> removeObjectForKey:<a class="local col7 ref" href="#57threadDict" title='threadDict' data-ref="57threadDict" data-ref-filename="57threadDict">threadDict</a>[<a class="tu ref" href="#JSTEvaluatorThreadContextKey" title='JSTEvaluatorThreadContextKey' data-use='r' data-ref="JSTEvaluatorThreadContextKey" data-ref-filename="JSTEvaluatorThreadContextKey">JSTEvaluatorThreadContextKey</a>]];</td></tr>
+<tr><th id="248">248</th><td></td></tr>
+<tr><th id="249">249</th><td>            <span class='ref fn' title='CFRelease' data-ref="CFRelease" data-ref-filename="CFRelease">CFRelease</span>(_jsThreadRunLoopSource);</td></tr>
+<tr><th id="250">250</th><td>            _jsThreadRunLoopSource = <span class="macro" title="__null" data-ref="_M/NULL">NULL</span>;</td></tr>
+<tr><th id="251">251</th><td></td></tr>
+<tr><th id="252">252</th><td>            <span class='ref fn' title='CFRelease' data-ref="CFRelease" data-ref-filename="CFRelease">CFRelease</span>(_jsThreadRunLoop);</td></tr>
+<tr><th id="253">253</th><td>            _jsThreadRunLoop = <span class="macro" title="__null" data-ref="_M/NULL">NULL</span>;</td></tr>
+<tr><th id="254">254</th><td></td></tr>
+<tr><th id="255">255</th><td>            __pendingTasks = <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="256">256</th><td>        }</td></tr>
+<tr><th id="257">257</th><td>    }</td></tr>
+<tr><th id="258">258</th><td>}</td></tr>
+<tr><th id="259">259</th><td></td></tr>
+<tr><th id="260">260</th><td>- (<em>void</em>)_sourceScheduledOnRunLoop:(<span class='typedef' title='CFRunLoopRef' data-type='struct __CFRunLoop *' data-ref="CFRunLoopRef" data-ref-filename="CFRunLoopRef">CFRunLoopRef</span>)<dfn class="local col8 decl" id="58runLoop" title='runLoop' data-type='CFRunLoopRef' data-ref="58runLoop" data-ref-filename="58runLoop">runLoop</dfn></td></tr>
+<tr><th id="261">261</th><td>{</td></tr>
+<tr><th id="262">262</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)runLoop" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col8 ref" href="#58runLoop" title='runLoop' data-ref="58runLoop" data-ref-filename="58runLoop">runLoop</a>);</td></tr>
+<tr><th id="263">263</th><td>    <span class="macro" title="(__builtin_expect(!([[[NSThread currentThread] name] isEqualToString:@&quot;JSTEval&quot;]), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/API/tests/Regress141275.mm&quot;, 263, &quot;[[[NSThread currentThread] name] isEqualToString:@\&quot;JSTEval\&quot;]&quot;) : (void)0)" data-ref="_M/assert">assert</span>([[[NSThread currentThread] name] isEqualToString:@<q>"JSTEval"</q>]);</td></tr>
+<tr><th id="264">264</th><td></td></tr>
+<tr><th id="265">265</th><td>    <i>// Wake up the run loop in case requests were submitted prior to the</i></td></tr>
+<tr><th id="266">266</th><td><i>    // run loop &amp; run loop source getting created.</i></td></tr>
+<tr><th id="267">267</th><td>    <span class='ref fn' title='CFRunLoopSourceSignal' data-ref="CFRunLoopSourceSignal" data-ref-filename="CFRunLoopSourceSignal">CFRunLoopSourceSignal</span>(_jsThreadRunLoopSource);</td></tr>
+<tr><th id="268">268</th><td>    <span class='ref fn' title='CFRunLoopWakeUp' data-ref="CFRunLoopWakeUp" data-ref-filename="CFRunLoopWakeUp">CFRunLoopWakeUp</span>(_jsThreadRunLoop);</td></tr>
+<tr><th id="269">269</th><td>}</td></tr>
+<tr><th id="270">270</th><td></td></tr>
+<tr><th id="271">271</th><td>- (<em>void</em>)_setupEvaluatorThreadContextIfNeeded</td></tr>
+<tr><th id="272">272</th><td>{</td></tr>
+<tr><th id="273">273</th><td>    NSMutableDictionary* <dfn class="local col9 decl" id="59threadDict" title='threadDict' data-type='NSMutableDictionary *__strong' data-ref="59threadDict" data-ref-filename="59threadDict">threadDict</dfn> = [[NSThread currentThread] threadDictionary];</td></tr>
+<tr><th id="274">274</th><td>    JSTEvaluatorThreadContext* <dfn class="local col0 decl" id="60context" title='context' data-type='JSTEvaluatorThreadContext *__strong' data-ref="60context" data-ref-filename="60context">context</dfn> = <a class="local col9 ref" href="#59threadDict" title='threadDict' data-ref="59threadDict" data-ref-filename="59threadDict">threadDict</a>[<a class="tu ref" href="#JSTEvaluatorThreadContextKey" title='JSTEvaluatorThreadContextKey' data-use='r' data-ref="JSTEvaluatorThreadContextKey" data-ref-filename="JSTEvaluatorThreadContextKey">JSTEvaluatorThreadContextKey</a>];</td></tr>
+<tr><th id="275">275</th><td>    <i>// The evaluator may be other evualuator, or nil if this thread has not been used before. Eaither way take ownership.</i></td></tr>
+<tr><th id="276">276</th><td>    <b>if</b> (<a class="local col0 ref" href="#60context" title='context' data-ref="60context" data-ref-filename="60context">context</a>.evaluator != <span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>) {</td></tr>
+<tr><th id="277">277</th><td>        <a class="local col0 ref" href="#60context" title='context' data-ref="60context" data-ref-filename="60context">context</a> = [JSTEvaluatorThreadContext <b>new</b>];</td></tr>
+<tr><th id="278">278</th><td>        <a class="local col0 ref" href="#60context" title='context' data-ref="60context" data-ref-filename="60context">context</a>.evaluator = <span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>;</td></tr>
+<tr><th id="279">279</th><td>        <a class="local col9 ref" href="#59threadDict" title='threadDict' data-ref="59threadDict" data-ref-filename="59threadDict">threadDict</a>[<a class="tu ref" href="#JSTEvaluatorThreadContextKey" title='JSTEvaluatorThreadContextKey' data-use='r' data-ref="JSTEvaluatorThreadContextKey" data-ref-filename="JSTEvaluatorThreadContextKey">JSTEvaluatorThreadContextKey</a>] = <a class="local col0 ref" href="#60context" title='context' data-ref="60context" data-ref-filename="60context">context</a>;</td></tr>
+<tr><th id="280">280</th><td>    }</td></tr>
+<tr><th id="281">281</th><td>}</td></tr>
+<tr><th id="282">282</th><td></td></tr>
+<tr><th id="283">283</th><td>- (<em>void</em>)_callCompletionHandler:(<em>void</em>(^)(NSError* <dfn class="local col2 decl" id="62error" title='error' data-type='NSError *__strong' data-ref="62error" data-ref-filename="62error">error</dfn>))<dfn class="local col1 decl" id="61completionHandler" title='completionHandler' data-type='void (^__strong)(NSError *__strong)' data-ref="61completionHandler" data-ref-filename="61completionHandler">completionHandler</dfn> ifNeededWithError:(NSError*)<dfn class="local col3 decl" id="63error" title='error' data-type='NSError *__strong' data-ref="63error" data-ref-filename="63error">error</dfn></td></tr>
+<tr><th id="284">284</th><td>{</td></tr>
+<tr><th id="285">285</th><td>    <b>if</b> (<a class="local col1 ref" href="#61completionHandler" title='completionHandler' data-ref="61completionHandler" data-ref-filename="61completionHandler">completionHandler</a>) {</td></tr>
+<tr><th id="286">286</th><td>        <span class='ref fn' title='dispatch_async' data-ref="dispatch_async" data-ref-filename="dispatch_async">dispatch_async</span>(<span class='ref fn' title='dispatch_get_global_queue' data-ref="dispatch_get_global_queue" data-ref-filename="dispatch_get_global_queue">dispatch_get_global_queue</span>(<span class="macro" title="0" data-ref="_M/DISPATCH_QUEUE_PRIORITY_DEFAULT">DISPATCH_QUEUE_PRIORITY_DEFAULT</span>, <var>0</var>), ^{</td></tr>
+<tr><th id="287">287</th><td>            <a class="local col1 ref" href="#61completionHandler" title='completionHandler' data-ref="61completionHandler" data-ref-filename="61completionHandler">completionHandler</a>(<a class="local col3 ref" href="#63error" title='error' data-ref="63error" data-ref-filename="63error">error</a>);</td></tr>
+<tr><th id="288">288</th><td>        });</td></tr>
+<tr><th id="289">289</th><td>    }</td></tr>
+<tr><th id="290">290</th><td>}</td></tr>
+<tr><th id="291">291</th><td></td></tr>
+<tr><th id="292">292</th><td>- (<em>void</em>)_sourcePerform</td></tr>
+<tr><th id="293">293</th><td>{</td></tr>
+<tr><th id="294">294</th><td>    <span class="macro" title="(__builtin_expect(!([[[NSThread currentThread] name] isEqualToString:@&quot;JSTEval&quot;]), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/API/tests/Regress141275.mm&quot;, 294, &quot;[[[NSThread currentThread] name] isEqualToString:@\&quot;JSTEval\&quot;]&quot;) : (void)0)" data-ref="_M/assert">assert</span>([[[NSThread currentThread] name] isEqualToString:@<q>"JSTEval"</q>]);</td></tr>
+<tr><th id="295">295</th><td></td></tr>
+<tr><th id="296">296</th><td>    <span class="macro" title="__attribute__((__blocks__(byref)))" data-ref="_M/__block">__block</span> NSArray* <dfn class="local col4 decl" id="64tasks" title='tasks' data-type='NSArray *__strong' data-ref="64tasks" data-ref-filename="64tasks">tasks</dfn> = <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="297">297</th><td>    [<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span> _accessPendingTasksWithBlock:^(NSMutableArray* <dfn class="local col5 decl" id="65pendingTasks" title='pendingTasks' data-type='NSMutableArray *__strong' data-ref="65pendingTasks" data-ref-filename="65pendingTasks">pendingTasks</dfn>) {</td></tr>
+<tr><th id="298">298</th><td>        <i>// No signpost, take all tasks.</i></td></tr>
+<tr><th id="299">299</th><td>        <a class="local col4 ref" href="#64tasks" title='tasks' data-ref="64tasks" data-ref-filename="64tasks">tasks</a> = [<a class="local col5 ref" href="#65pendingTasks" title='pendingTasks' data-ref="65pendingTasks" data-ref-filename="65pendingTasks">pendingTasks</a> copy];</td></tr>
+<tr><th id="300">300</th><td>        [<a class="local col5 ref" href="#65pendingTasks" title='pendingTasks' data-ref="65pendingTasks" data-ref-filename="65pendingTasks">pendingTasks</a> removeAllObjects];</td></tr>
+<tr><th id="301">301</th><td>    }];</td></tr>
+<tr><th id="302">302</th><td></td></tr>
+<tr><th id="303">303</th><td>    <b>if</b> (<a class="local col4 ref" href="#64tasks" title='tasks' data-ref="64tasks" data-ref-filename="64tasks">tasks</a>.count &gt; <var>0</var>) {</td></tr>
+<tr><th id="304">304</th><td>        <b>for</b> (JSTEvaluatorTask* <dfn class="local col6 decl" id="66task" title='task' data-type='JSTEvaluatorTask *const __strong' data-ref="66task" data-ref-filename="66task">task</dfn> in <a class="local col4 ref" href="#64tasks" title='tasks' data-ref="64tasks" data-ref-filename="64tasks">tasks</a>) {</td></tr>
+<tr><th id="305">305</th><td>            <span class='typedef' title='dispatch_block_t' data-type='void (^)()' data-ref="dispatch_block_t" data-ref-filename="dispatch_block_t">dispatch_block_t</span> <dfn class="local col7 decl" id="67block" title='block' data-type='__strong dispatch_block_t' data-ref="67block" data-ref-filename="67block">block</dfn> = ^{</td></tr>
+<tr><th id="306">306</th><td>                NSError* <dfn class="local col8 decl" id="68error" title='error' data-type='NSError *__strong' data-ref="68error" data-ref-filename="68error">error</dfn> = <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="307">307</th><td>                <b>if</b> (<a class="local col6 ref" href="#66task" title='task' data-ref="66task" data-ref-filename="66task">task</a>.evaluateBlock) {</td></tr>
+<tr><th id="308">308</th><td>                    [<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span> _setupEvaluatorThreadContextIfNeeded];</td></tr>
+<tr><th id="309">309</th><td>                    <a class="local col6 ref" href="#66task" title='task' data-ref="66task" data-ref-filename="66task">task</a>.evaluateBlock(<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>-&gt;_jsContext);</td></tr>
+<tr><th id="310">310</th><td>                    <b>if</b> (<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>-&gt;_jsContext.exception) {</td></tr>
+<tr><th id="311">311</th><td>                        <span class='ref fn' title='NSLog' data-ref="NSLog" data-ref-filename="NSLog">NSLog</span>(@<q>"Did fail on JSContext: %@"</q>, <span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>-&gt;_jsContext.name);</td></tr>
+<tr><th id="312">312</th><td>                        NSDictionary* <dfn class="local col9 decl" id="69userInfo" title='userInfo' data-type='NSDictionary *__strong' data-ref="69userInfo" data-ref-filename="69userInfo">userInfo</dfn> = @{ <span class='ref' title='NSLocalizedDescriptionKey' data-ref="NSLocalizedDescriptionKey" data-ref-filename="NSLocalizedDescriptionKey">NSLocalizedDescriptionKey</span> : [<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>-&gt;_jsContext.exception[@<q>"message"</q>] toString] };</td></tr>
+<tr><th id="313">313</th><td>                        <a class="local col8 ref" href="#68error" title='error' data-ref="68error" data-ref-filename="68error">error</a> = [NSError errorWithDomain:@<q>"JSTEvaluator"</q> code:<var>1</var> userInfo:<a class="local col9 ref" href="#69userInfo" title='userInfo' data-ref="69userInfo" data-ref-filename="69userInfo">userInfo</a>];</td></tr>
+<tr><th id="314">314</th><td>                        <span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>-&gt;_jsContext.exception = <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="315">315</th><td>                    }</td></tr>
+<tr><th id="316">316</th><td>                }</td></tr>
+<tr><th id="317">317</th><td>                [<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span> _callCompletionHandler:<a class="local col6 ref" href="#66task" title='task' data-ref="66task" data-ref-filename="66task">task</a>.completionHandler ifNeededWithError:<a class="local col8 ref" href="#68error" title='error' data-ref="68error" data-ref-filename="68error">error</a>];</td></tr>
+<tr><th id="318">318</th><td>            };</td></tr>
+<tr><th id="319">319</th><td></td></tr>
+<tr><th id="320">320</th><td>            <b>if</b> (<a class="local col6 ref" href="#66task" title='task' data-ref="66task" data-ref-filename="66task">task</a>.evaluateBlock)</td></tr>
+<tr><th id="321">321</th><td>                <span class='ref fn' title='dispatch_async' data-ref="dispatch_async" data-ref-filename="dispatch_async">dispatch_async</span>(_jsSourcePerformQueue, <a class="local col7 ref" href="#67block" title='block' data-ref="67block" data-ref-filename="67block">block</a>);</td></tr>
+<tr><th id="322">322</th><td>            <b>else</b></td></tr>
+<tr><th id="323">323</th><td>                <span class='ref fn' title='dispatch_barrier_async' data-ref="dispatch_barrier_async" data-ref-filename="dispatch_barrier_async">dispatch_barrier_async</span>(_jsSourcePerformQueue, <a class="local col7 ref" href="#67block" title='block' data-ref="67block" data-ref-filename="67block">block</a>);</td></tr>
+<tr><th id="324">324</th><td>        }</td></tr>
+<tr><th id="325">325</th><td></td></tr>
+<tr><th id="326">326</th><td>        <span class='ref fn' title='dispatch_barrier_sync' data-ref="dispatch_barrier_sync" data-ref-filename="dispatch_barrier_sync">dispatch_barrier_sync</span>(_jsSourcePerformQueue, ^{</td></tr>
+<tr><th id="327">327</th><td>            <b>if</b> ([<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>-&gt;_jsContext[@<q>"counter"</q>] toInt32] == <a class="tu ref" href="#scriptToEvaluate" title='scriptToEvaluate' data-use='r' data-ref="scriptToEvaluate" data-ref-filename="scriptToEvaluate">scriptToEvaluate</a>)</td></tr>
+<tr><th id="328">328</th><td>                <span class='ref fn' title='dispatch_semaphore_signal' data-ref="dispatch_semaphore_signal" data-ref-filename="dispatch_semaphore_signal">dispatch_semaphore_signal</span>(<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>-&gt;_allScriptsDone);</td></tr>
+<tr><th id="329">329</th><td>        });</td></tr>
+<tr><th id="330">330</th><td>    }</td></tr>
+<tr><th id="331">331</th><td>}</td></tr>
+<tr><th id="332">332</th><td></td></tr>
+<tr><th id="333">333</th><td>- (<em>void</em>)_sourceCanceledOnRunLoop:(<span class='typedef' title='CFRunLoopRef' data-type='struct __CFRunLoop *' data-ref="CFRunLoopRef" data-ref-filename="CFRunLoopRef">CFRunLoopRef</span>)<dfn class="local col0 decl" id="70runLoop" title='runLoop' data-type='CFRunLoopRef' data-ref="70runLoop" data-ref-filename="70runLoop">runLoop</dfn></td></tr>
+<tr><th id="334">334</th><td>{</td></tr>
+<tr><th id="335">335</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)runLoop" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col0 ref" href="#70runLoop" title='runLoop' data-ref="70runLoop" data-ref-filename="70runLoop">runLoop</a>);</td></tr>
+<tr><th id="336">336</th><td>    <span class="macro" title="(__builtin_expect(!([[[NSThread currentThread] name] isEqualToString:@&quot;JSTEval&quot;]), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/API/tests/Regress141275.mm&quot;, 336, &quot;[[[NSThread currentThread] name] isEqualToString:@\&quot;JSTEval\&quot;]&quot;) : (void)0)" data-ref="_M/assert">assert</span>([[[NSThread currentThread] name] isEqualToString:@<q>"JSTEval"</q>]);</td></tr>
+<tr><th id="337">337</th><td></td></tr>
+<tr><th id="338">338</th><td>    @synchronized(<span class='local col2 ref' title='self' data-ref="22self" data-ref-filename="22self">self</span>) {</td></tr>
+<tr><th id="339">339</th><td>        <span class="macro" title="(__builtin_expect(!(_jsThreadRunLoop), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/API/tests/Regress141275.mm&quot;, 339, &quot;_jsThreadRunLoop&quot;) : (void)0)" data-ref="_M/assert">assert</span>(_jsThreadRunLoop);</td></tr>
+<tr><th id="340">340</th><td>        <span class="macro" title="(__builtin_expect(!(_jsThreadRunLoopSource), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/API/tests/Regress141275.mm&quot;, 340, &quot;_jsThreadRunLoopSource&quot;) : (void)0)" data-ref="_M/assert">assert</span>(_jsThreadRunLoopSource);</td></tr>
+<tr><th id="341">341</th><td></td></tr>
+<tr><th id="342">342</th><td>        <span class='ref fn' title='CFRunLoopRemoveSource' data-ref="CFRunLoopRemoveSource" data-ref-filename="CFRunLoopRemoveSource">CFRunLoopRemoveSource</span>(_jsThreadRunLoop, _jsThreadRunLoopSource, <span class='ref' title='kCFRunLoopDefaultMode' data-ref="kCFRunLoopDefaultMode" data-ref-filename="kCFRunLoopDefaultMode">kCFRunLoopDefaultMode</span>);</td></tr>
+<tr><th id="343">343</th><td>        <span class='ref fn' title='CFRunLoopStop' data-ref="CFRunLoopStop" data-ref-filename="CFRunLoopStop">CFRunLoopStop</span>(_jsThreadRunLoop);</td></tr>
+<tr><th id="344">344</th><td>    }</td></tr>
+<tr><th id="345">345</th><td>}</td></tr>
+<tr><th id="346">346</th><td></td></tr>
+<tr><th id="347">347</th><td>@end</td></tr>
+<tr><th id="348">348</th><td></td></tr>
+<tr><th id="349">349</th><td><em>void</em> <dfn class="decl def fn" id="_Z16runRegress141275v" title='runRegress141275' data-ref="_Z16runRegress141275v" data-ref-filename="_Z16runRegress141275v">runRegress141275</dfn>()</td></tr>
+<tr><th id="350">350</th><td>{</td></tr>
+<tr><th id="351">351</th><td>    <i>// Test that we can execute the same script from multiple threads with a shared context.</i></td></tr>
+<tr><th id="352">352</th><td><i>    // See &lt;<a href="https://webkit.org/b/141275">https://webkit.org/b/141275</a>&gt;</i></td></tr>
+<tr><th id="353">353</th><td>    <span class='ref fn' title='NSLog' data-ref="NSLog" data-ref-filename="NSLog">NSLog</span>(@<q>"TEST: Testing multiple threads executing the same script with a shared context"</q>);</td></tr>
+<tr><th id="354">354</th><td></td></tr>
+<tr><th id="355">355</th><td>    @autoreleasepool {</td></tr>
+<tr><th id="356">356</th><td>        JSTEvaluator* <dfn class="local col6 decl" id="76evaluator" title='evaluator' data-type='JSTEvaluator *__strong' data-ref="76evaluator" data-ref-filename="76evaluator">evaluator</dfn> = [[JSTEvaluator alloc] initWithScript:@<q>"this['counter'] = 0;"</q>];</td></tr>
+<tr><th id="357">357</th><td></td></tr>
+<tr><th id="358">358</th><td>        <em>void</em> (^<dfn class="local col7 decl" id="77showErrorIfNeeded" title='showErrorIfNeeded' data-type='void (^__strong)(NSError *__strong)' data-ref="77showErrorIfNeeded" data-ref-filename="77showErrorIfNeeded">showErrorIfNeeded</dfn>)(NSError* <dfn class="local col8 decl" id="78error" title='error' data-type='NSError *__strong' data-ref="78error" data-ref-filename="78error">error</dfn>) = ^(NSError* <dfn class="local col9 decl" id="79error" title='error' data-type='NSError *__strong' data-ref="79error" data-ref-filename="79error">error</dfn>) {</td></tr>
+<tr><th id="359">359</th><td>            <b>if</b> (<a class="local col9 ref" href="#79error" title='error' data-ref="79error" data-ref-filename="79error">error</a>) {</td></tr>
+<tr><th id="360">360</th><td>                <span class='ref fn' title='dispatch_async' data-ref="dispatch_async" data-ref-filename="dispatch_async">dispatch_async</span>(<span class='ref fn' title='dispatch_get_main_queue' data-ref="_ZL23dispatch_get_main_queuev" data-ref-filename="_ZL23dispatch_get_main_queuev">dispatch_get_main_queue</span>(), ^{</td></tr>
+<tr><th id="361">361</th><td>                    <span class='ref fn' title='NSLog' data-ref="NSLog" data-ref-filename="NSLog">NSLog</span>(@<q>"Error: %@"</q>, <a class="local col9 ref" href="#79error" title='error' data-ref="79error" data-ref-filename="79error">error</a>);</td></tr>
+<tr><th id="362">362</th><td>                });</td></tr>
+<tr><th id="363">363</th><td>            }</td></tr>
+<tr><th id="364">364</th><td>        };</td></tr>
+<tr><th id="365">365</th><td></td></tr>
+<tr><th id="366">366</th><td>        [<a class="local col6 ref" href="#76evaluator" title='evaluator' data-ref="76evaluator" data-ref-filename="76evaluator">evaluator</a> evaluateBlock:^(JSContext* <dfn class="local col0 decl" id="80context" title='context' data-type='JSContext *__strong' data-ref="80context" data-ref-filename="80context">context</dfn>) {</td></tr>
+<tr><th id="367">367</th><td>            <a class="ref fn" href="#JSSynchronousGarbageCollectForDebugging" title='JSSynchronousGarbageCollectForDebugging' data-ref="JSSynchronousGarbageCollectForDebugging" data-ref-filename="JSSynchronousGarbageCollectForDebugging">JSSynchronousGarbageCollectForDebugging</a>([<a class="local col0 ref" href="#80context" title='context' data-ref="80context" data-ref-filename="80context">context</a> JSGlobalContextRef]);</td></tr>
+<tr><th id="368">368</th><td>        } completion:<a class="local col7 ref" href="#77showErrorIfNeeded" title='showErrorIfNeeded' data-ref="77showErrorIfNeeded" data-ref-filename="77showErrorIfNeeded">showErrorIfNeeded</a>];</td></tr>
+<tr><th id="369">369</th><td></td></tr>
+<tr><th id="370">370</th><td>        [<a class="local col6 ref" href="#76evaluator" title='evaluator' data-ref="76evaluator" data-ref-filename="76evaluator">evaluator</a> evaluateBlock:^(JSContext* <dfn class="local col1 decl" id="81context" title='context' data-type='JSContext *__strong' data-ref="81context" data-ref-filename="81context">context</dfn>) {</td></tr>
+<tr><th id="371">371</th><td>            <a class="local col1 ref" href="#81context" title='context' data-ref="81context" data-ref-filename="81context">context</a>[@<q>"wait"</q>] = ^{</td></tr>
+<tr><th id="372">372</th><td>                [NSThread sleepForTimeInterval:<var>0.01</var>];</td></tr>
+<tr><th id="373">373</th><td>            };</td></tr>
+<tr><th id="374">374</th><td>        } completion:^(NSError* <dfn class="local col2 decl" id="82error" title='error' data-type='NSError *__strong' data-ref="82error" data-ref-filename="82error">error</dfn>) {</td></tr>
+<tr><th id="375">375</th><td>            <b>if</b> (<a class="local col2 ref" href="#82error" title='error' data-ref="82error" data-ref-filename="82error">error</a>) {</td></tr>
+<tr><th id="376">376</th><td>                <span class='ref fn' title='dispatch_async' data-ref="dispatch_async" data-ref-filename="dispatch_async">dispatch_async</span>(<span class='ref fn' title='dispatch_get_main_queue' data-ref="_ZL23dispatch_get_main_queuev" data-ref-filename="_ZL23dispatch_get_main_queuev">dispatch_get_main_queue</span>(), ^{</td></tr>
+<tr><th id="377">377</th><td>                    <span class='ref fn' title='NSLog' data-ref="NSLog" data-ref-filename="NSLog">NSLog</span>(@<q>"Error: %@"</q>, <a class="local col2 ref" href="#82error" title='error' data-ref="82error" data-ref-filename="82error">error</a>);</td></tr>
+<tr><th id="378">378</th><td>                });</td></tr>
+<tr><th id="379">379</th><td>            }</td></tr>
+<tr><th id="380">380</th><td>            <b>for</b> (<em>unsigned</em> <dfn class="local col3 decl" id="83i" title='i' data-type='unsigned int' data-ref="83i" data-ref-filename="83i">i</dfn> = <var>0</var>; <a class="local col3 ref" href="#83i" title='i' data-ref="83i" data-ref-filename="83i">i</a> &lt; <a class="tu ref" href="#scriptToEvaluate" title='scriptToEvaluate' data-use='r' data-ref="scriptToEvaluate" data-ref-filename="scriptToEvaluate">scriptToEvaluate</a>; <a class="local col3 ref" href="#83i" title='i' data-ref="83i" data-ref-filename="83i">i</a>++)</td></tr>
+<tr><th id="381">381</th><td>                [<a class="local col6 ref" href="#76evaluator" title='evaluator' data-ref="76evaluator" data-ref-filename="76evaluator">evaluator</a> evaluateScript:@<q>"this['counter']++; this['wait']();"</q> completion:<a class="local col7 ref" href="#77showErrorIfNeeded" title='showErrorIfNeeded' data-ref="77showErrorIfNeeded" data-ref-filename="77showErrorIfNeeded">showErrorIfNeeded</a>];</td></tr>
+<tr><th id="382">382</th><td>        }];</td></tr>
+<tr><th id="383">383</th><td></td></tr>
+<tr><th id="384">384</th><td>        [<a class="local col6 ref" href="#76evaluator" title='evaluator' data-ref="76evaluator" data-ref-filename="76evaluator">evaluator</a> waitForTasksDoneAndReportResults];</td></tr>
+<tr><th id="385">385</th><td>    }</td></tr>
+<tr><th id="386">386</th><td>}</td></tr>
+<tr><th id="387">387</th><td></td></tr>
+<tr><th id="388">388</th><td><u>#<span data-ppcond="33">endif</span> // JSC_OBJC_API_ENABLED</u></td></tr>
+<tr><th id="389">389</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

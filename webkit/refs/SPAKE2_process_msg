@@ -1,0 +1,22 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/curve25519.h' l='179' type='int SPAKE2_process_msg(SPAKE2_CTX * ctx, uint8_t * out_key, size_t * out_key_len, size_t max_out_key_len, const uint8_t * their_msg, size_t their_msg_len)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/curve25519.h' l='159'>// SPAKE2_process_msg completes the SPAKE2 exchange given the peer&apos;s message in
+// |their_msg|, writes at most |max_out_key_len| bytes to |out_key| and sets
+// |*out_key_len| to the number of bytes written.
+//
+// The resulting keying material is suitable for:
+//   a) Using directly in a key-confirmation step: i.e. each side could
+//      transmit a hash of their role, a channel-binding value and the key
+//      material to prove to the other side that they know the shared key.
+//   b) Using as input keying material to HKDF to generate a variety of subkeys
+//      for encryption etc.
+//
+// If |max_out_key_key| is smaller than the amount of key material generated
+// then the key is silently truncated. If you want to ensure that no truncation
+// occurs then |max_out_key| should be at least |SPAKE2_MAX_KEY_SIZE|.
+//
+// You must call |SPAKE2_generate_msg| on a given |SPAKE2_CTX| before calling
+// this function. On successful return, |ctx| is complete and calling
+// |SPAKE2_CTX_free| is the only acceptable operation on it.
+//
+// Returns one on success or zero on error.</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/spake25519.c' l='475' ll='539' type='int SPAKE2_process_msg(SPAKE2_CTX * ctx, uint8_t * out_key, size_t * out_key_len, size_t max_out_key_len, const uint8_t * their_msg, size_t their_msg_len)'/>

@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>adaptive_agc.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/agc2/adaptive_agc.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::AdaptiveAgc "/>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/agc2/adaptive_agc.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>audio_processing</a>/<a href='./'>agc2</a>/<a href='adaptive_agc.h.html'>adaptive_agc.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2018 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/MODULES_AUDIO_PROCESSING_AGC2_ADAPTIVE_AGC_H_">MODULES_AUDIO_PROCESSING_AGC2_ADAPTIVE_AGC_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/MODULES_AUDIO_PROCESSING_AGC2_ADAPTIVE_AGC_H_" data-ref="_M/MODULES_AUDIO_PROCESSING_AGC2_ADAPTIVE_AGC_H_">MODULES_AUDIO_PROCESSING_AGC2_ADAPTIVE_AGC_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="adaptive_digital_gain_applier.h.html">"modules/audio_processing/agc2/adaptive_digital_gain_applier.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="adaptive_mode_level_estimator.h.html">"modules/audio_processing/agc2/adaptive_mode_level_estimator.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="noise_level_estimator.h.html">"modules/audio_processing/agc2/noise_level_estimator.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="saturation_protector.h.html">"modules/audio_processing/agc2/saturation_protector.h"</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="vad_with_level.h.html">"modules/audio_processing/agc2/vad_with_level.h"</a></u></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="../include/audio_frame_view.h.html">"modules/audio_processing/include/audio_frame_view.h"</a></u></td></tr>
+<tr><th id="22">22</th><td><u>#include <a href="../include/audio_processing.h.html">"modules/audio_processing/include/audio_processing.h"</a></u></td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="25">25</th><td><b>class</b> <a class="type" href="../logging/apm_data_dumper.h.html#webrtc::ApmDataDumper" title='webrtc::ApmDataDumper' data-ref="webrtc::ApmDataDumper" data-ref-filename="webrtc..ApmDataDumper" id="webrtc::ApmDataDumper">ApmDataDumper</a>;</td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td><i>// Adaptive digital gain controller.</i></td></tr>
+<tr><th id="28">28</th><td><i>// TODO(crbug.com/webrtc/7494): Rename to `AdaptiveDigitalGainController`.</i></td></tr>
+<tr><th id="29">29</th><td><b>class</b> <dfn class="type def" id="webrtc::AdaptiveAgc" title='webrtc::AdaptiveAgc' data-ref="webrtc::AdaptiveAgc" data-ref-filename="webrtc..AdaptiveAgc">AdaptiveAgc</dfn> {</td></tr>
+<tr><th id="30">30</th><td> <b>public</b>:</td></tr>
+<tr><th id="31">31</th><td>  <a class="decl fn" href="adaptive_agc.cc.html#_ZN6webrtc11AdaptiveAgcC1EPNS_13ApmDataDumperERKNS_15AudioProcessing6Config15GainController215AdaptiveDigitalE" title='webrtc::AdaptiveAgc::AdaptiveAgc' data-ref="_ZN6webrtc11AdaptiveAgcC1EPNS_13ApmDataDumperERKNS_15AudioProcessing6Config15GainController215AdaptiveDigitalE" data-ref-filename="_ZN6webrtc11AdaptiveAgcC1EPNS_13ApmDataDumperERKNS_15AudioProcessing6Config15GainController215AdaptiveDigitalE" id="_ZN6webrtc11AdaptiveAgcC1EPNS_13ApmDataDumperERKNS_15AudioProcessing6Config15GainController215AdaptiveDigitalE">AdaptiveAgc</a>(</td></tr>
+<tr><th id="32">32</th><td>      <a class="type" href="../logging/apm_data_dumper.h.html#webrtc::ApmDataDumper" title='webrtc::ApmDataDumper' data-ref="webrtc::ApmDataDumper" data-ref-filename="webrtc..ApmDataDumper">ApmDataDumper</a>* <dfn class="local col1 decl" id="41apm_data_dumper" title='apm_data_dumper' data-type='webrtc::ApmDataDumper *' data-ref="41apm_data_dumper" data-ref-filename="41apm_data_dumper">apm_data_dumper</dfn>,</td></tr>
+<tr><th id="33">33</th><td>      <em>const</em> <a class="type" href="../include/audio_processing.h.html#webrtc::AudioProcessing" title='webrtc::AudioProcessing' data-ref="webrtc::AudioProcessing" data-ref-filename="webrtc..AudioProcessing">AudioProcessing</a>::<a class="type" href="../include/audio_processing.h.html#webrtc::AudioProcessing::Config" title='webrtc::AudioProcessing::Config' data-ref="webrtc::AudioProcessing::Config" data-ref-filename="webrtc..AudioProcessing..Config">Config</a>::<a class="type" href="../include/audio_processing.h.html#webrtc::AudioProcessing::Config::GainController2" title='webrtc::AudioProcessing::Config::GainController2' data-ref="webrtc::AudioProcessing::Config::GainController2" data-ref-filename="webrtc..AudioProcessing..Config..GainController2">GainController2</a>::<a class="type" href="../include/audio_processing.h.html#webrtc::AudioProcessing::Config::GainController2::AdaptiveDigital" title='webrtc::AudioProcessing::Config::GainController2::AdaptiveDigital' data-ref="webrtc::AudioProcessing::Config::GainController2::AdaptiveDigital" data-ref-filename="webrtc..AudioProcessing..Config..GainController2..AdaptiveDigital">AdaptiveDigital</a>&amp; <dfn class="local col2 decl" id="42config" title='config' data-type='const AudioProcessing::Config::GainController2::AdaptiveDigital &amp;' data-ref="42config" data-ref-filename="42config">config</dfn>);</td></tr>
+<tr><th id="34">34</th><td>  <a class="decl fn" href="adaptive_agc.cc.html#_ZN6webrtc11AdaptiveAgcD1Ev" title='webrtc::AdaptiveAgc::~AdaptiveAgc' data-ref="_ZN6webrtc11AdaptiveAgcD1Ev" data-ref-filename="_ZN6webrtc11AdaptiveAgcD1Ev" id="_ZN6webrtc11AdaptiveAgcD1Ev">~AdaptiveAgc</a>();</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td>  <em>void</em> <a class="decl fn" href="adaptive_agc.cc.html#_ZN6webrtc11AdaptiveAgc10InitializeEii" title='webrtc::AdaptiveAgc::Initialize' data-ref="_ZN6webrtc11AdaptiveAgc10InitializeEii" data-ref-filename="_ZN6webrtc11AdaptiveAgc10InitializeEii" id="_ZN6webrtc11AdaptiveAgc10InitializeEii">Initialize</a>(<em>int</em> <dfn class="local col3 decl" id="43sample_rate_hz" title='sample_rate_hz' data-type='int' data-ref="43sample_rate_hz" data-ref-filename="43sample_rate_hz">sample_rate_hz</dfn>, <em>int</em> <dfn class="local col4 decl" id="44num_channels" title='num_channels' data-type='int' data-ref="44num_channels" data-ref-filename="44num_channels">num_channels</dfn>);</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td>  <i>// TODO(crbug.com/webrtc/7494): Add `SetLimiterEnvelope()`.</i></td></tr>
+<tr><th id="39">39</th><td><i></i></td></tr>
+<tr><th id="40">40</th><td><i>  // Analyzes `frame` and applies a digital adaptive gain to it. Takes into</i></td></tr>
+<tr><th id="41">41</th><td><i>  // account the envelope measured by the limiter.</i></td></tr>
+<tr><th id="42">42</th><td><i>  // TODO(crbug.com/webrtc/7494): Remove `limiter_envelope`.</i></td></tr>
+<tr><th id="43">43</th><td>  <em>void</em> <a class="decl fn" href="adaptive_agc.cc.html#_ZN6webrtc11AdaptiveAgc7ProcessENS_14AudioFrameViewIfEEf" title='webrtc::AdaptiveAgc::Process' data-ref="_ZN6webrtc11AdaptiveAgc7ProcessENS_14AudioFrameViewIfEEf" data-ref-filename="_ZN6webrtc11AdaptiveAgc7ProcessENS_14AudioFrameViewIfEEf" id="_ZN6webrtc11AdaptiveAgc7ProcessENS_14AudioFrameViewIfEEf">Process</a>(<a class="type" href="../include/audio_frame_view.h.html#webrtc::AudioFrameView" title='webrtc::AudioFrameView' data-ref="webrtc::AudioFrameView" data-ref-filename="webrtc..AudioFrameView">AudioFrameView</a>&lt;<em>float</em>&gt; <dfn class="local col5 decl" id="45frame" title='frame' data-type='AudioFrameView&lt;float&gt;' data-ref="45frame" data-ref-filename="45frame">frame</dfn>, <em>float</em> <dfn class="local col6 decl" id="46limiter_envelope" title='limiter_envelope' data-type='float' data-ref="46limiter_envelope" data-ref-filename="46limiter_envelope">limiter_envelope</dfn>);</td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td>  <i>// Handles a gain change applied to the input signal (e.g., analog gain).</i></td></tr>
+<tr><th id="46">46</th><td>  <em>void</em> <a class="decl fn" href="adaptive_agc.cc.html#_ZN6webrtc11AdaptiveAgc21HandleInputGainChangeEv" title='webrtc::AdaptiveAgc::HandleInputGainChange' data-ref="_ZN6webrtc11AdaptiveAgc21HandleInputGainChangeEv" data-ref-filename="_ZN6webrtc11AdaptiveAgc21HandleInputGainChangeEv" id="_ZN6webrtc11AdaptiveAgc21HandleInputGainChangeEv">HandleInputGainChange</a>();</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td> <b>private</b>:</td></tr>
+<tr><th id="49">49</th><td>  <a class="type" href="adaptive_mode_level_estimator.h.html#webrtc::AdaptiveModeLevelEstimator" title='webrtc::AdaptiveModeLevelEstimator' data-ref="webrtc::AdaptiveModeLevelEstimator" data-ref-filename="webrtc..AdaptiveModeLevelEstimator">AdaptiveModeLevelEstimator</a> <dfn class="decl field" id="webrtc::AdaptiveAgc::speech_level_estimator_" title='webrtc::AdaptiveAgc::speech_level_estimator_' data-ref="webrtc::AdaptiveAgc::speech_level_estimator_" data-ref-filename="webrtc..AdaptiveAgc..speech_level_estimator_">speech_level_estimator_</dfn>;</td></tr>
+<tr><th id="50">50</th><td>  <a class="type" href="vad_with_level.h.html#webrtc::VadLevelAnalyzer" title='webrtc::VadLevelAnalyzer' data-ref="webrtc::VadLevelAnalyzer" data-ref-filename="webrtc..VadLevelAnalyzer">VadLevelAnalyzer</a> <dfn class="decl field" id="webrtc::AdaptiveAgc::vad_" title='webrtc::AdaptiveAgc::vad_' data-ref="webrtc::AdaptiveAgc::vad_" data-ref-filename="webrtc..AdaptiveAgc..vad_">vad_</dfn>;</td></tr>
+<tr><th id="51">51</th><td>  <a class="type" href="adaptive_digital_gain_applier.h.html#webrtc::AdaptiveDigitalGainApplier" title='webrtc::AdaptiveDigitalGainApplier' data-ref="webrtc::AdaptiveDigitalGainApplier" data-ref-filename="webrtc..AdaptiveDigitalGainApplier">AdaptiveDigitalGainApplier</a> <dfn class="decl field" id="webrtc::AdaptiveAgc::gain_controller_" title='webrtc::AdaptiveAgc::gain_controller_' data-ref="webrtc::AdaptiveAgc::gain_controller_" data-ref-filename="webrtc..AdaptiveAgc..gain_controller_">gain_controller_</dfn>;</td></tr>
+<tr><th id="52">52</th><td>  <a class="type" href="../logging/apm_data_dumper.h.html#webrtc::ApmDataDumper" title='webrtc::ApmDataDumper' data-ref="webrtc::ApmDataDumper" data-ref-filename="webrtc..ApmDataDumper">ApmDataDumper</a>* <em>const</em> <dfn class="decl field" id="webrtc::AdaptiveAgc::apm_data_dumper_" title='webrtc::AdaptiveAgc::apm_data_dumper_' data-ref="webrtc::AdaptiveAgc::apm_data_dumper_" data-ref-filename="webrtc..AdaptiveAgc..apm_data_dumper_">apm_data_dumper_</dfn>;</td></tr>
+<tr><th id="53">53</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="noise_level_estimator.h.html#webrtc::NoiseLevelEstimator" title='webrtc::NoiseLevelEstimator' data-ref="webrtc::NoiseLevelEstimator" data-ref-filename="webrtc..NoiseLevelEstimator">NoiseLevelEstimator</a>&gt; <dfn class="decl field" id="webrtc::AdaptiveAgc::noise_level_estimator_" title='webrtc::AdaptiveAgc::noise_level_estimator_' data-ref="webrtc::AdaptiveAgc::noise_level_estimator_" data-ref-filename="webrtc..AdaptiveAgc..noise_level_estimator_">noise_level_estimator_</dfn>;</td></tr>
+<tr><th id="54">54</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="saturation_protector.h.html#webrtc::SaturationProtector" title='webrtc::SaturationProtector' data-ref="webrtc::SaturationProtector" data-ref-filename="webrtc..SaturationProtector">SaturationProtector</a>&gt; <dfn class="decl field" id="webrtc::AdaptiveAgc::saturation_protector_" title='webrtc::AdaptiveAgc::saturation_protector_' data-ref="webrtc::AdaptiveAgc::saturation_protector_" data-ref-filename="webrtc..AdaptiveAgc..saturation_protector_">saturation_protector_</dfn>;</td></tr>
+<tr><th id="55">55</th><td>};</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><u>#<span data-ppcond="11">endif</span>  // MODULES_AUDIO_PROCESSING_AGC2_ADAPTIVE_AGC_H_</u></td></tr>
+<tr><th id="60">60</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='adaptive_agc.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/agc2/adaptive_agc.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

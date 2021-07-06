@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>RevealSPI.h source code [webkit/WebKitBuild/Debug/usr/local/include/pal/spi/cocoa/RevealSPI.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/pal/spi/cocoa/RevealSPI.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>WebKitBuild</a>/<a href='../../../../../..'>Debug</a>/<a href='../../../../..'>usr</a>/<a href='../../../..'>local</a>/<a href='../../..'>include</a>/<a href='../..'>pal</a>/<a href='..'>spi</a>/<a href='./'>cocoa</a>/<a href='RevealSPI.h.html'>RevealSPI.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2018 Apple Inc.  All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import &lt;objc/runtime.h&gt;</u></td></tr>
+<tr><th id="27">27</th><td><u>#<span data-ppcond="27">if</span> <a class="macro" href="../../../wtf/PlatformLegacy.h.html#38" title="(defined 1 &amp;&amp; 1)" data-ref="_M/PLATFORM">PLATFORM</a>(MAC)</u></td></tr>
+<tr><th id="28">28</th><td><u>#import <a href="../mac/NSImmediateActionGestureRecognizerSPI.h.html">&lt;pal/spi/mac/NSImmediateActionGestureRecognizerSPI.h&gt;</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#<span data-ppcond="27">endif</span> // PLATFORM(MAC)</u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="../../../wtf/SoftLinking.h.html">&lt;wtf/SoftLinking.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><u>#<span data-ppcond="32">if</span> <a class="macro" href="../../../wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(REVEAL)</u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><u>#<span data-ppcond="34">if</span> <a class="macro" href="../../../wtf/PlatformUse.h.html#36" title="(defined USE_APPLE_INTERNAL_SDK &amp;&amp; USE_APPLE_INTERNAL_SDK)" data-ref="_M/USE">USE</a>(APPLE_INTERNAL_SDK)</u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><u>#if PLATFORM(MAC)</u></td></tr>
+<tr><th id="37">37</th><td><u>#import &lt;Reveal/RVPresenter.h&gt;</u></td></tr>
+<tr><th id="38">38</th><td><u>#import &lt;Reveal/Reveal.h&gt;</u></td></tr>
+<tr><th id="39">39</th><td><u>#endif // PLATFORM(MAC)</u></td></tr>
+<tr><th id="40">40</th><td><u>#import &lt;RevealCore/RVItem_Private.h&gt;</u></td></tr>
+<tr><th id="41">41</th><td><u>#import &lt;RevealCore/RVSelection.h&gt;</u></td></tr>
+<tr><th id="42">42</th><td><u>#import &lt;RevealCore/RevealCore.h&gt;</u></td></tr>
+<tr><th id="43">43</th><td><u>#<span data-ppcond="34">else</span> // USE(APPLE_INTERNAL_SDK)</u></td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td>@<b>class</b> DDScannerResult;</td></tr>
+<tr><th id="46">46</th><td>@<b>class</b> NSMenuItem;</td></tr>
+<tr><th id="47">47</th><td>@protocol RVPresenterHighlightDelegate;</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td>@interface RVItem : NSObject &lt;NSSecureCoding&gt;</td></tr>
+<tr><th id="50">50</th><td>- (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)initWithText:(NSString *)<dfn class="local col1 decl" id="11text" title='text' data-type='NSString *' data-ref="11text" data-ref-filename="11text">text</dfn> selectedRange:(<span class='typedef' title='NSRange' data-type='struct _NSRange' data-ref="NSRange" data-ref-filename="NSRange">NSRange</span>)<dfn class="local col2 decl" id="12selectedRange" title='selectedRange' data-type='NSRange' data-ref="12selectedRange" data-ref-filename="12selectedRange">selectedRange</dfn> <span class="macro" title="__attribute__((objc_designated_initializer))" data-ref="_M/NS_DESIGNATED_INITIALIZER">NS_DESIGNATED_INITIALIZER</span>;</td></tr>
+<tr><th id="51">51</th><td>- (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)initWithDDResult:(DDScannerResult *)<dfn class="local col3 decl" id="13result" title='result' data-type='DDScannerResult *' data-ref="13result" data-ref-filename="13result">result</dfn> <span class="macro" title="__attribute__((objc_designated_initializer))" data-ref="_M/NS_DESIGNATED_INITIALIZER">NS_DESIGNATED_INITIALIZER</span>;</td></tr>
+<tr><th id="52">52</th><td>- (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)initWithURL:(NSURL *)<dfn class="local col4 decl" id="14url" title='url' data-type='NSURL *' data-ref="14url" data-ref-filename="14url">url</dfn> rangeInContext:(<span class='typedef' title='NSRange' data-type='struct _NSRange' data-ref="NSRange" data-ref-filename="NSRange">NSRange</span>)<dfn class="local col5 decl" id="15rangeInContext" title='rangeInContext' data-type='NSRange' data-ref="15rangeInContext" data-ref-filename="15rangeInContext">rangeInContext</dfn>;</td></tr>
+<tr><th id="53">53</th><td>@property (readonly, nonatomic) <span class='typedef' title='NSRange' data-type='struct _NSRange' data-ref="NSRange" data-ref-filename="NSRange">NSRange</span> highlightRange;</td></tr>
+<tr><th id="54">54</th><td>@end</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td>@interface RVSelection : NSObject</td></tr>
+<tr><th id="57">57</th><td>+ (<span class='typedef' title='NSRange' data-type='struct _NSRange' data-ref="NSRange" data-ref-filename="NSRange">NSRange</span>)revealRangeAtIndex:(<span class='typedef' title='NSUInteger' data-type='unsigned long' data-ref="NSUInteger" data-ref-filename="NSUInteger">NSUInteger</span>)<dfn class="local col6 decl" id="16clickIndex" title='clickIndex' data-type='NSUInteger' data-ref="16clickIndex" data-ref-filename="16clickIndex">clickIndex</dfn> selectedRanges:(NSArray &lt;NSValue *&gt; *)<dfn class="local col7 decl" id="17selectedRanges" title='selectedRanges' data-type='NSArray&lt;NSValue *&gt; *' data-ref="17selectedRanges" data-ref-filename="17selectedRanges">selectedRanges</dfn> shouldUpdateSelection:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> *)<dfn class="local col8 decl" id="18shouldUpdateSelection" title='shouldUpdateSelection' data-type='BOOL *' data-ref="18shouldUpdateSelection" data-ref-filename="18shouldUpdateSelection">shouldUpdateSelection</dfn>;</td></tr>
+<tr><th id="58">58</th><td>@end</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><u>#<span data-ppcond="60">if</span> <a class="macro" href="../../../wtf/PlatformLegacy.h.html#38" title="(defined 1 &amp;&amp; 1)" data-ref="_M/PLATFORM">PLATFORM</a>(MAC)</u></td></tr>
+<tr><th id="61">61</th><td>@interface RVPresentingContext : NSObject</td></tr>
+<tr><th id="62">62</th><td>- (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)initWithPointerLocationInView:(<span class='typedef' title='NSPoint' data-type='CGPoint' data-ref="NSPoint" data-ref-filename="NSPoint">NSPoint</span>)<dfn class="local col9 decl" id="19pointerLocationInView" title='pointerLocationInView' data-type='NSPoint' data-ref="19pointerLocationInView" data-ref-filename="19pointerLocationInView">pointerLocationInView</dfn> inView:(NSView *)<dfn class="local col0 decl" id="20view" title='view' data-type='NSView *' data-ref="20view" data-ref-filename="20view">view</dfn> highlightDelegate:(id&lt;RVPresenterHighlightDelegate&gt;)<dfn class="local col1 decl" id="21highlightDelegate" title='highlightDelegate' data-type='id&lt;RVPresenterHighlightDelegate&gt;' data-ref="21highlightDelegate" data-ref-filename="21highlightDelegate">highlightDelegate</dfn>;</td></tr>
+<tr><th id="63">63</th><td>@property (readonly) NSArray &lt;NSValue *&gt; * itemRectsInView;</td></tr>
+<tr><th id="64">64</th><td>@end</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td>@protocol RVPresenterHighlightDelegate &lt;NSObject&gt;</td></tr>
+<tr><th id="67">67</th><td>@required</td></tr>
+<tr><th id="68">68</th><td>- (NSArray &lt;NSValue *&gt; *)revealContext:(RVPresentingContext *)<dfn class="local col2 decl" id="22context" title='context' data-type='RVPresentingContext *' data-ref="22context" data-ref-filename="22context">context</dfn> rectsForItem:(RVItem *)<dfn class="local col3 decl" id="23item" title='item' data-type='RVItem *' data-ref="23item" data-ref-filename="23item">item</dfn>;</td></tr>
+<tr><th id="69">69</th><td>@optional</td></tr>
+<tr><th id="70">70</th><td>- (<em>void</em>)revealContext:(RVPresentingContext *)<dfn class="local col4 decl" id="24context" title='context' data-type='RVPresentingContext *' data-ref="24context" data-ref-filename="24context">context</dfn> stopHighlightingItem:(RVItem *)<dfn class="local col5 decl" id="25item" title='item' data-type='RVItem *' data-ref="25item" data-ref-filename="25item">item</dfn>;</td></tr>
+<tr><th id="71">71</th><td>- (<em>void</em>)revealContext:(RVPresentingContext *)<dfn class="local col6 decl" id="26context" title='context' data-type='RVPresentingContext *' data-ref="26context" data-ref-filename="26context">context</dfn> drawRectsForItem:(RVItem *)<dfn class="local col7 decl" id="27item" title='item' data-type='RVItem *' data-ref="27item" data-ref-filename="27item">item</dfn>;</td></tr>
+<tr><th id="72">72</th><td>@end</td></tr>
+<tr><th id="73">73</th><td><u>#<span data-ppcond="60">endif</span></u></td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td>@interface RVDocumentContext : NSObject &lt;NSSecureCoding&gt;</td></tr>
+<tr><th id="76">76</th><td>@end</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td>@interface RVPresenter : NSObject</td></tr>
+<tr><th id="79">79</th><td><u>#<span data-ppcond="79">if</span> <a class="macro" href="../../../wtf/PlatformLegacy.h.html#38" title="(defined 1 &amp;&amp; 1)" data-ref="_M/PLATFORM">PLATFORM</a>(MAC)</u></td></tr>
+<tr><th id="80">80</th><td>- (id&lt;NSImmediateActionAnimationController&gt;)animationControllerForItem:(RVItem *)<dfn class="local col8 decl" id="28item" title='item' data-type='RVItem *' data-ref="28item" data-ref-filename="28item">item</dfn> documentContext:(RVDocumentContext *)<dfn class="local col9 decl" id="29documentContext" title='documentContext' data-type='RVDocumentContext *' data-ref="29documentContext" data-ref-filename="29documentContext">documentContext</dfn> presentingContext:(RVPresentingContext *)<dfn class="local col0 decl" id="30presentingContext" title='presentingContext' data-type='RVPresentingContext *' data-ref="30presentingContext" data-ref-filename="30presentingContext">presentingContext</dfn> options:(NSDictionary *)<dfn class="local col1 decl" id="31options" title='options' data-type='NSDictionary *' data-ref="31options" data-ref-filename="31options">options</dfn>;</td></tr>
+<tr><th id="81">81</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)revealItem:(RVItem *)<dfn class="local col2 decl" id="32item" title='item' data-type='RVItem *' data-ref="32item" data-ref-filename="32item">item</dfn> documentContext:(RVDocumentContext *)<dfn class="local col3 decl" id="33documentContext" title='documentContext' data-type='RVDocumentContext *' data-ref="33documentContext" data-ref-filename="33documentContext">documentContext</dfn> presentingContext:(RVPresentingContext *)<dfn class="local col4 decl" id="34presentingContext" title='presentingContext' data-type='RVPresentingContext *' data-ref="34presentingContext" data-ref-filename="34presentingContext">presentingContext</dfn> options:(NSDictionary *)<dfn class="local col5 decl" id="35options" title='options' data-type='NSDictionary *' data-ref="35options" data-ref-filename="35options">options</dfn>;</td></tr>
+<tr><th id="82">82</th><td>- (NSArray&lt;NSMenuItem *&gt; *)menuItemsForItem:(RVItem *)<dfn class="local col6 decl" id="36item" title='item' data-type='RVItem *' data-ref="36item" data-ref-filename="36item">item</dfn> documentContext:(RVDocumentContext *)<dfn class="local col7 decl" id="37documentContext" title='documentContext' data-type='RVDocumentContext *' data-ref="37documentContext" data-ref-filename="37documentContext">documentContext</dfn> presentingContext:(RVPresentingContext *)<dfn class="local col8 decl" id="38presentingContext" title='presentingContext' data-type='RVPresentingContext *' data-ref="38presentingContext" data-ref-filename="38presentingContext">presentingContext</dfn> options:(NSDictionary *)<dfn class="local col9 decl" id="39options" title='options' data-type='NSDictionary *' data-ref="39options" data-ref-filename="39options">options</dfn>;</td></tr>
+<tr><th id="83">83</th><td><u>#<span data-ppcond="79">endif</span> // PLATFORM(MAC)</u></td></tr>
+<tr><th id="84">84</th><td>@end</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td><u>#<span data-ppcond="34">endif</span> // !USE(APPLE_INTERNAL_SDK)</u></td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td><u>#<span data-ppcond="32">endif</span> // ENABLE(REVEAL)</u></td></tr>
+<tr><th id="89">89</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../../Source/WebCore/PAL/pal/cocoa/RevealSoftLink.mm.html'>webkit/Source/WebCore/PAL/pal/cocoa/RevealSoftLink.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

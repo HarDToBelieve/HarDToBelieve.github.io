@@ -1,0 +1,112 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>compare_neon64.cc source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libyuv/source/compare_neon64.cc] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libyuv/source/compare_neon64.cc'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>third_party</a>/<a href='..'>libyuv</a>/<a href='./'>source</a>/<a href='compare_neon64.cc.html'>compare_neon64.cc</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2012 The LibYuv Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS. All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#include <a href="../include/libyuv/basic_types.h.html">"libyuv/basic_types.h"</a></u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="../include/libyuv/compare_row.h.html">"libyuv/compare_row.h"</a></u></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="../include/libyuv/row.h.html">"libyuv/row.h"</a></u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#<span data-ppcond="16">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="17">17</th><td><b>namespace</b> <span class="namespace">libyuv</span> {</td></tr>
+<tr><th id="18">18</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="19">19</th><td><u>#<span data-ppcond="16">endif</span></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><u>#<span data-ppcond="21">if</span> !defined(<span class="macro" data-ref="_M/LIBYUV_DISABLE_NEON">LIBYUV_DISABLE_NEON</span>) &amp;&amp; defined(<span class="macro" data-ref="_M/__aarch64__">__aarch64__</span>)</u></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><i>// 256 bits at a time</i></td></tr>
+<tr><th id="24">24</th><td><i>// uses short accumulator which restricts count to 131 KB</i></td></tr>
+<tr><th id="25">25</th><td><span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl def fn" id="libyuv::HammingDistance_NEON" title='libyuv::HammingDistance_NEON' data-ref="libyuv::HammingDistance_NEON" data-ref-filename="libyuv..HammingDistance_NEON">HammingDistance_NEON</dfn>(<em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col1 decl" id="1src_a" title='src_a' data-type='const uint8_t *' data-ref="1src_a" data-ref-filename="1src_a">src_a</dfn>,</td></tr>
+<tr><th id="26">26</th><td>                              <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col2 decl" id="2src_b" title='src_b' data-type='const uint8_t *' data-ref="2src_b" data-ref-filename="2src_b">src_b</dfn>,</td></tr>
+<tr><th id="27">27</th><td>                              <em>int</em> <dfn class="local col3 decl" id="3count" title='count' data-type='int' data-ref="3count" data-ref-filename="3count">count</dfn>) {</td></tr>
+<tr><th id="28">28</th><td>  <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col4 decl" id="4diff" title='diff' data-type='uint32_t' data-ref="4diff" data-ref-filename="4diff">diff</dfn>;</td></tr>
+<tr><th id="29">29</th><td>  <b>asm</b> <em>volatile</em>(</td></tr>
+<tr><th id="30">30</th><td>      <q>"movi        v4.8h, #0                     \n"</q></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td>      <q>"1:                                        \n"</q></td></tr>
+<tr><th id="33">33</th><td>      <q>"ld1         {v0.16b, v1.16b}, [%0], #32   \n"</q></td></tr>
+<tr><th id="34">34</th><td>      <q>"ld1         {v2.16b, v3.16b}, [%1], #32   \n"</q></td></tr>
+<tr><th id="35">35</th><td>      <q>"eor         v0.16b, v0.16b, v2.16b        \n"</q></td></tr>
+<tr><th id="36">36</th><td>      <q>"prfm        pldl1keep, [%0, 448]          \n"</q>  <i>// prefetch 7 lines ahead</i></td></tr>
+<tr><th id="37">37</th><td>      <q>"eor         v1.16b, v1.16b, v3.16b        \n"</q></td></tr>
+<tr><th id="38">38</th><td>      <q>"cnt         v0.16b, v0.16b                \n"</q></td></tr>
+<tr><th id="39">39</th><td>      <q>"prfm        pldl1keep, [%1, 448]          \n"</q></td></tr>
+<tr><th id="40">40</th><td>      <q>"cnt         v1.16b, v1.16b                \n"</q></td></tr>
+<tr><th id="41">41</th><td>      <q>"subs        %w2, %w2, #32                 \n"</q></td></tr>
+<tr><th id="42">42</th><td>      <q>"add         v0.16b, v0.16b, v1.16b        \n"</q></td></tr>
+<tr><th id="43">43</th><td>      <q>"uadalp      v4.8h, v0.16b                 \n"</q></td></tr>
+<tr><th id="44">44</th><td>      <q>"b.gt        1b                            \n"</q></td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td>      <q>"uaddlv      s4, v4.8h                     \n"</q></td></tr>
+<tr><th id="47">47</th><td>      <q>"fmov        %w3, s4                       \n"</q></td></tr>
+<tr><th id="48">48</th><td>      : <q>"+r"</q>(<a class="local col1 ref" href="#1src_a" title='src_a' data-ref="1src_a" data-ref-filename="1src_a">src_a</a>), <q>"+r"</q>(<a class="local col2 ref" href="#2src_b" title='src_b' data-ref="2src_b" data-ref-filename="2src_b">src_b</a>), <q>"+r"</q>(<a class="local col3 ref" href="#3count" title='count' data-ref="3count" data-ref-filename="3count">count</a>), <q>"=r"</q>(<a class="local col4 ref" href="#4diff" title='diff' data-ref="4diff" data-ref-filename="4diff">diff</a>)</td></tr>
+<tr><th id="49">49</th><td>      :</td></tr>
+<tr><th id="50">50</th><td>      : <q>"cc"</q>, <q>"v0"</q>, <q>"v1"</q>, <q>"v2"</q>, <q>"v3"</q>, <q>"v4"</q>);</td></tr>
+<tr><th id="51">51</th><td>  <b>return</b> <a class="local col4 ref" href="#4diff" title='diff' data-ref="4diff" data-ref-filename="4diff">diff</a>;</td></tr>
+<tr><th id="52">52</th><td>}</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td><span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl def fn" id="libyuv::SumSquareError_NEON" title='libyuv::SumSquareError_NEON' data-ref="libyuv::SumSquareError_NEON" data-ref-filename="libyuv..SumSquareError_NEON">SumSquareError_NEON</dfn>(<em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col5 decl" id="5src_a" title='src_a' data-type='const uint8_t *' data-ref="5src_a" data-ref-filename="5src_a">src_a</dfn>,</td></tr>
+<tr><th id="55">55</th><td>                             <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col6 decl" id="6src_b" title='src_b' data-type='const uint8_t *' data-ref="6src_b" data-ref-filename="6src_b">src_b</dfn>,</td></tr>
+<tr><th id="56">56</th><td>                             <em>int</em> <dfn class="local col7 decl" id="7count" title='count' data-type='int' data-ref="7count" data-ref-filename="7count">count</dfn>) {</td></tr>
+<tr><th id="57">57</th><td>  <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col8 decl" id="8sse" title='sse' data-type='uint32_t' data-ref="8sse" data-ref-filename="8sse">sse</dfn>;</td></tr>
+<tr><th id="58">58</th><td>  <b>asm</b> <em>volatile</em>(</td></tr>
+<tr><th id="59">59</th><td>      <q>"eor         v16.16b, v16.16b, v16.16b     \n"</q></td></tr>
+<tr><th id="60">60</th><td>      <q>"eor         v18.16b, v18.16b, v18.16b     \n"</q></td></tr>
+<tr><th id="61">61</th><td>      <q>"eor         v17.16b, v17.16b, v17.16b     \n"</q></td></tr>
+<tr><th id="62">62</th><td>      <q>"eor         v19.16b, v19.16b, v19.16b     \n"</q></td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td>      <q>"1:                                        \n"</q></td></tr>
+<tr><th id="65">65</th><td>      <q>"ld1         {v0.16b}, [%0], #16           \n"</q></td></tr>
+<tr><th id="66">66</th><td>      <q>"ld1         {v1.16b}, [%1], #16           \n"</q></td></tr>
+<tr><th id="67">67</th><td>      <q>"subs        %w2, %w2, #16                 \n"</q></td></tr>
+<tr><th id="68">68</th><td>      <q>"usubl       v2.8h, v0.8b, v1.8b           \n"</q></td></tr>
+<tr><th id="69">69</th><td>      <q>"usubl2      v3.8h, v0.16b, v1.16b         \n"</q></td></tr>
+<tr><th id="70">70</th><td>      <q>"prfm        pldl1keep, [%0, 448]          \n"</q>  <i>// prefetch 7 lines ahead</i></td></tr>
+<tr><th id="71">71</th><td>      <q>"smlal       v16.4s, v2.4h, v2.4h          \n"</q></td></tr>
+<tr><th id="72">72</th><td>      <q>"smlal       v17.4s, v3.4h, v3.4h          \n"</q></td></tr>
+<tr><th id="73">73</th><td>      <q>"prfm        pldl1keep, [%1, 448]          \n"</q></td></tr>
+<tr><th id="74">74</th><td>      <q>"smlal2      v18.4s, v2.8h, v2.8h          \n"</q></td></tr>
+<tr><th id="75">75</th><td>      <q>"smlal2      v19.4s, v3.8h, v3.8h          \n"</q></td></tr>
+<tr><th id="76">76</th><td>      <q>"b.gt        1b                            \n"</q></td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td>      <q>"add         v16.4s, v16.4s, v17.4s        \n"</q></td></tr>
+<tr><th id="79">79</th><td>      <q>"add         v18.4s, v18.4s, v19.4s        \n"</q></td></tr>
+<tr><th id="80">80</th><td>      <q>"add         v19.4s, v16.4s, v18.4s        \n"</q></td></tr>
+<tr><th id="81">81</th><td>      <q>"addv        s0, v19.4s                    \n"</q></td></tr>
+<tr><th id="82">82</th><td>      <q>"fmov        %w3, s0                       \n"</q></td></tr>
+<tr><th id="83">83</th><td>      : <q>"+r"</q>(<a class="local col5 ref" href="#5src_a" title='src_a' data-ref="5src_a" data-ref-filename="5src_a">src_a</a>), <q>"+r"</q>(<a class="local col6 ref" href="#6src_b" title='src_b' data-ref="6src_b" data-ref-filename="6src_b">src_b</a>), <q>"+r"</q>(<a class="local col7 ref" href="#7count" title='count' data-ref="7count" data-ref-filename="7count">count</a>), <q>"=r"</q>(<a class="local col8 ref" href="#8sse" title='sse' data-ref="8sse" data-ref-filename="8sse">sse</a>)</td></tr>
+<tr><th id="84">84</th><td>      :</td></tr>
+<tr><th id="85">85</th><td>      : <q>"cc"</q>, <q>"v0"</q>, <q>"v1"</q>, <q>"v2"</q>, <q>"v3"</q>, <q>"v16"</q>, <q>"v17"</q>, <q>"v18"</q>, <q>"v19"</q>);</td></tr>
+<tr><th id="86">86</th><td>  <b>return</b> <a class="local col8 ref" href="#8sse" title='sse' data-ref="8sse" data-ref-filename="8sse">sse</a>;</td></tr>
+<tr><th id="87">87</th><td>}</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td><u>#<span data-ppcond="21">endif</span>  // !defined(LIBYUV_DISABLE_NEON) &amp;&amp; defined(__aarch64__)</u></td></tr>
+<tr><th id="90">90</th><td></td></tr>
+<tr><th id="91">91</th><td><u>#<span data-ppcond="91">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="92">92</th><td>}  <i>// extern "C"</i></td></tr>
+<tr><th id="93">93</th><td>}  <i>// namespace libyuv</i></td></tr>
+<tr><th id="94">94</th><td><u>#<span data-ppcond="91">endif</span></u></td></tr>
+<tr><th id="95">95</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

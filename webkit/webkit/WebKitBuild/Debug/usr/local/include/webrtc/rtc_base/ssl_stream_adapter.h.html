@@ -1,0 +1,300 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ssl_stream_adapter.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/ssl_stream_adapter.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::SSLHandshakeError,rtc::SSLMode,rtc::SSLPeerCertificateDigestError,rtc::SSLProtocolVersion,rtc::SSLRole,rtc::SSLStreamAdapter "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/ssl_stream_adapter.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>WebKitBuild</a>/<a href='../../../../..'>Debug</a>/<a href='../../../..'>usr</a>/<a href='../../..'>local</a>/<a href='../..'>include</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='ssl_stream_adapter.h.html'>ssl_stream_adapter.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2004 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_SSL_STREAM_ADAPTER_H_">RTC_BASE_SSL_STREAM_ADAPTER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_SSL_STREAM_ADAPTER_H_" data-ref="_M/RTC_BASE_SSL_STREAM_ADAPTER_H_">RTC_BASE_SSL_STREAM_ADAPTER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="16">16</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;string&gt;</u></td></tr>
+<tr><th id="18">18</th><td><u>#include &lt;vector&gt;</u></td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="../../absl/memory/memory.h.html">"absl/memory/memory.h"</a></u></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="ssl_certificate.h.html">"rtc_base/ssl_certificate.h"</a></u></td></tr>
+<tr><th id="22">22</th><td><u>#include <a href="ssl_identity.h.html">"rtc_base/ssl_identity.h"</a></u></td></tr>
+<tr><th id="23">23</th><td><u>#include <a href="stream.h.html">"rtc_base/stream.h"</a></u></td></tr>
+<tr><th id="24">24</th><td><u>#include <a href="third_party/sigslot/sigslot.h.html">"rtc_base/third_party/sigslot/sigslot.h"</a></u></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><i>// Constants for SSL profile.</i></td></tr>
+<tr><th id="29">29</th><td><em>const</em> <em>int</em> <dfn class="decl def" id="rtc::TLS_NULL_WITH_NULL_NULL" title='rtc::TLS_NULL_WITH_NULL_NULL' data-ref="rtc::TLS_NULL_WITH_NULL_NULL" data-ref-filename="rtc..TLS_NULL_WITH_NULL_NULL">TLS_NULL_WITH_NULL_NULL</dfn> = <var>0</var>;</td></tr>
+<tr><th id="30">30</th><td><em>const</em> <em>int</em> <dfn class="decl def" id="rtc::SSL_CIPHER_SUITE_MAX_VALUE" title='rtc::SSL_CIPHER_SUITE_MAX_VALUE' data-ref="rtc::SSL_CIPHER_SUITE_MAX_VALUE" data-ref-filename="rtc..SSL_CIPHER_SUITE_MAX_VALUE">SSL_CIPHER_SUITE_MAX_VALUE</dfn> = <var>0xFFFF</var>;</td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><i>// Constants for SRTP profiles.</i></td></tr>
+<tr><th id="33">33</th><td><em>const</em> <em>int</em> <dfn class="decl def" id="rtc::SRTP_INVALID_CRYPTO_SUITE" title='rtc::SRTP_INVALID_CRYPTO_SUITE' data-ref="rtc::SRTP_INVALID_CRYPTO_SUITE" data-ref-filename="rtc..SRTP_INVALID_CRYPTO_SUITE">SRTP_INVALID_CRYPTO_SUITE</dfn> = <var>0</var>;</td></tr>
+<tr><th id="34">34</th><td><u>#<span data-ppcond="34">ifndef</span> <span class="macro" data-ref="_M/SRTP_AES128_CM_SHA1_80">SRTP_AES128_CM_SHA1_80</span></u></td></tr>
+<tr><th id="35">35</th><td><em>const</em> <em>int</em> <dfn class="decl def" id="rtc::SRTP_AES128_CM_SHA1_80" title='rtc::SRTP_AES128_CM_SHA1_80' data-ref="rtc::SRTP_AES128_CM_SHA1_80" data-ref-filename="rtc..SRTP_AES128_CM_SHA1_80">SRTP_AES128_CM_SHA1_80</dfn> = <var>0x0001</var>;</td></tr>
+<tr><th id="36">36</th><td><u>#<span data-ppcond="34">endif</span></u></td></tr>
+<tr><th id="37">37</th><td><u>#<span data-ppcond="37">ifndef</span> <span class="macro" data-ref="_M/SRTP_AES128_CM_SHA1_32">SRTP_AES128_CM_SHA1_32</span></u></td></tr>
+<tr><th id="38">38</th><td><em>const</em> <em>int</em> <dfn class="decl def" id="rtc::SRTP_AES128_CM_SHA1_32" title='rtc::SRTP_AES128_CM_SHA1_32' data-ref="rtc::SRTP_AES128_CM_SHA1_32" data-ref-filename="rtc..SRTP_AES128_CM_SHA1_32">SRTP_AES128_CM_SHA1_32</dfn> = <var>0x0002</var>;</td></tr>
+<tr><th id="39">39</th><td><u>#<span data-ppcond="37">endif</span></u></td></tr>
+<tr><th id="40">40</th><td><u>#<span data-ppcond="40">ifndef</span> <span class="macro" data-ref="_M/SRTP_AEAD_AES_128_GCM">SRTP_AEAD_AES_128_GCM</span></u></td></tr>
+<tr><th id="41">41</th><td><em>const</em> <em>int</em> <dfn class="decl def" id="rtc::SRTP_AEAD_AES_128_GCM" title='rtc::SRTP_AEAD_AES_128_GCM' data-ref="rtc::SRTP_AEAD_AES_128_GCM" data-ref-filename="rtc..SRTP_AEAD_AES_128_GCM">SRTP_AEAD_AES_128_GCM</dfn> = <var>0x0007</var>;</td></tr>
+<tr><th id="42">42</th><td><u>#<span data-ppcond="40">endif</span></u></td></tr>
+<tr><th id="43">43</th><td><u>#<span data-ppcond="43">ifndef</span> <span class="macro" data-ref="_M/SRTP_AEAD_AES_256_GCM">SRTP_AEAD_AES_256_GCM</span></u></td></tr>
+<tr><th id="44">44</th><td><em>const</em> <em>int</em> <dfn class="decl def" id="rtc::SRTP_AEAD_AES_256_GCM" title='rtc::SRTP_AEAD_AES_256_GCM' data-ref="rtc::SRTP_AEAD_AES_256_GCM" data-ref-filename="rtc..SRTP_AEAD_AES_256_GCM">SRTP_AEAD_AES_256_GCM</dfn> = <var>0x0008</var>;</td></tr>
+<tr><th id="45">45</th><td><u>#<span data-ppcond="43">endif</span></u></td></tr>
+<tr><th id="46">46</th><td><em>const</em> <em>int</em> <dfn class="decl def" id="rtc::SRTP_CRYPTO_SUITE_MAX_VALUE" title='rtc::SRTP_CRYPTO_SUITE_MAX_VALUE' data-ref="rtc::SRTP_CRYPTO_SUITE_MAX_VALUE" data-ref-filename="rtc..SRTP_CRYPTO_SUITE_MAX_VALUE">SRTP_CRYPTO_SUITE_MAX_VALUE</dfn> = <var>0xFFFF</var>;</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td><i>// Names of SRTP profiles listed above.</i></td></tr>
+<tr><th id="49">49</th><td><i>// 128-bit AES with 80-bit SHA-1 HMAC.</i></td></tr>
+<tr><th id="50">50</th><td><b>extern</b> <em>const</em> <em>char</em> <dfn class="decl" id="rtc::CS_AES_CM_128_HMAC_SHA1_80" title='rtc::CS_AES_CM_128_HMAC_SHA1_80' data-ref="rtc::CS_AES_CM_128_HMAC_SHA1_80" data-ref-filename="rtc..CS_AES_CM_128_HMAC_SHA1_80">CS_AES_CM_128_HMAC_SHA1_80</dfn>[];</td></tr>
+<tr><th id="51">51</th><td><i>// 128-bit AES with 32-bit SHA-1 HMAC.</i></td></tr>
+<tr><th id="52">52</th><td><b>extern</b> <em>const</em> <em>char</em> <dfn class="decl" id="rtc::CS_AES_CM_128_HMAC_SHA1_32" title='rtc::CS_AES_CM_128_HMAC_SHA1_32' data-ref="rtc::CS_AES_CM_128_HMAC_SHA1_32" data-ref-filename="rtc..CS_AES_CM_128_HMAC_SHA1_32">CS_AES_CM_128_HMAC_SHA1_32</dfn>[];</td></tr>
+<tr><th id="53">53</th><td><i>// 128-bit AES GCM with 16 byte AEAD auth tag.</i></td></tr>
+<tr><th id="54">54</th><td><b>extern</b> <em>const</em> <em>char</em> <dfn class="decl" id="rtc::CS_AEAD_AES_128_GCM" title='rtc::CS_AEAD_AES_128_GCM' data-ref="rtc::CS_AEAD_AES_128_GCM" data-ref-filename="rtc..CS_AEAD_AES_128_GCM">CS_AEAD_AES_128_GCM</dfn>[];</td></tr>
+<tr><th id="55">55</th><td><i>// 256-bit AES GCM with 16 byte AEAD auth tag.</i></td></tr>
+<tr><th id="56">56</th><td><b>extern</b> <em>const</em> <em>char</em> <dfn class="decl" id="rtc::CS_AEAD_AES_256_GCM" title='rtc::CS_AEAD_AES_256_GCM' data-ref="rtc::CS_AEAD_AES_256_GCM" data-ref-filename="rtc..CS_AEAD_AES_256_GCM">CS_AEAD_AES_256_GCM</dfn>[];</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><i>// Given the DTLS-SRTP protection profile ID, as defined in</i></td></tr>
+<tr><th id="59">59</th><td><i>// <a href="https://tools.ietf.org/html/rfc4568#section-6.2">https://tools.ietf.org/html/rfc4568#section-6.2</a> , return the SRTP profile</i></td></tr>
+<tr><th id="60">60</th><td><i>// name, as defined in <a href="https://tools.ietf.org/html/rfc5764#section-4.1.2">https://tools.ietf.org/html/rfc5764#section-4.1.2</a>.</i></td></tr>
+<tr><th id="61">61</th><td><span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span> <dfn class="decl fn" id="_ZN3rtc21SrtpCryptoSuiteToNameEi" title='rtc::SrtpCryptoSuiteToName' data-ref="_ZN3rtc21SrtpCryptoSuiteToNameEi" data-ref-filename="_ZN3rtc21SrtpCryptoSuiteToNameEi">SrtpCryptoSuiteToName</dfn>(<em>int</em> <dfn class="local col1 decl" id="3871crypto_suite" title='crypto_suite' data-type='int' data-ref="3871crypto_suite" data-ref-filename="3871crypto_suite">crypto_suite</dfn>);</td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><i>// The reverse of above conversion.</i></td></tr>
+<tr><th id="64">64</th><td><em>int</em> <dfn class="decl fn" id="_ZN3rtc23SrtpCryptoSuiteFromNameERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE" title='rtc::SrtpCryptoSuiteFromName' data-ref="_ZN3rtc23SrtpCryptoSuiteFromNameERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE" data-ref-filename="_ZN3rtc23SrtpCryptoSuiteFromNameERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE">SrtpCryptoSuiteFromName</dfn>(<em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col2 decl" id="3872crypto_suite" title='crypto_suite' data-type='const std::string &amp;' data-ref="3872crypto_suite" data-ref-filename="3872crypto_suite">crypto_suite</dfn>);</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td><i>// Get key length and salt length for given crypto suite. Returns true for</i></td></tr>
+<tr><th id="67">67</th><td><i>// valid suites, otherwise false.</i></td></tr>
+<tr><th id="68">68</th><td><em>bool</em> <dfn class="decl fn" id="_ZN3rtc24GetSrtpKeyAndSaltLengthsEiPiS0_" title='rtc::GetSrtpKeyAndSaltLengths' data-ref="_ZN3rtc24GetSrtpKeyAndSaltLengthsEiPiS0_" data-ref-filename="_ZN3rtc24GetSrtpKeyAndSaltLengthsEiPiS0_">GetSrtpKeyAndSaltLengths</dfn>(<em>int</em> <dfn class="local col3 decl" id="3873crypto_suite" title='crypto_suite' data-type='int' data-ref="3873crypto_suite" data-ref-filename="3873crypto_suite">crypto_suite</dfn>,</td></tr>
+<tr><th id="69">69</th><td>                              <em>int</em>* <dfn class="local col4 decl" id="3874key_length" title='key_length' data-type='int *' data-ref="3874key_length" data-ref-filename="3874key_length">key_length</dfn>,</td></tr>
+<tr><th id="70">70</th><td>                              <em>int</em>* <dfn class="local col5 decl" id="3875salt_length" title='salt_length' data-type='int *' data-ref="3875salt_length" data-ref-filename="3875salt_length">salt_length</dfn>);</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td><i>// Returns true if the given crypto suite id uses a GCM cipher.</i></td></tr>
+<tr><th id="73">73</th><td><em>bool</em> <dfn class="decl fn" id="_ZN3rtc16IsGcmCryptoSuiteEi" title='rtc::IsGcmCryptoSuite' data-ref="_ZN3rtc16IsGcmCryptoSuiteEi" data-ref-filename="_ZN3rtc16IsGcmCryptoSuiteEi">IsGcmCryptoSuite</dfn>(<em>int</em> <dfn class="local col6 decl" id="3876crypto_suite" title='crypto_suite' data-type='int' data-ref="3876crypto_suite" data-ref-filename="3876crypto_suite">crypto_suite</dfn>);</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td><i>// Returns true if the given crypto suite name uses a GCM cipher.</i></td></tr>
+<tr><th id="76">76</th><td><em>bool</em> <dfn class="decl fn" id="_ZN3rtc20IsGcmCryptoSuiteNameERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE" title='rtc::IsGcmCryptoSuiteName' data-ref="_ZN3rtc20IsGcmCryptoSuiteNameERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE" data-ref-filename="_ZN3rtc20IsGcmCryptoSuiteNameERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEE">IsGcmCryptoSuiteName</dfn>(<em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col7 decl" id="3877crypto_suite" title='crypto_suite' data-type='const std::string &amp;' data-ref="3877crypto_suite" data-ref-filename="3877crypto_suite">crypto_suite</dfn>);</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td><i>// SSLStreamAdapter : A StreamInterfaceAdapter that does SSL/TLS.</i></td></tr>
+<tr><th id="79">79</th><td><i>// After SSL has been started, the stream will only open on successful</i></td></tr>
+<tr><th id="80">80</th><td><i>// SSL verification of certificates, and the communication is</i></td></tr>
+<tr><th id="81">81</th><td><i>// encrypted of course.</i></td></tr>
+<tr><th id="82">82</th><td><i>//</i></td></tr>
+<tr><th id="83">83</th><td><i>// This class was written with SSLAdapter as a starting point. It</i></td></tr>
+<tr><th id="84">84</th><td><i>// offers a similar interface, with two differences: there is no</i></td></tr>
+<tr><th id="85">85</th><td><i>// support for a restartable SSL connection, and this class has a</i></td></tr>
+<tr><th id="86">86</th><td><i>// peer-to-peer mode.</i></td></tr>
+<tr><th id="87">87</th><td><i>//</i></td></tr>
+<tr><th id="88">88</th><td><i>// The SSL library requires initialization and cleanup. Static method</i></td></tr>
+<tr><th id="89">89</th><td><i>// for doing this are in SSLAdapter. They should possibly be moved out</i></td></tr>
+<tr><th id="90">90</th><td><i>// to a neutral class.</i></td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td><b>enum</b> <dfn class="type def" id="rtc::SSLRole" title='rtc::SSLRole' data-ref="rtc::SSLRole" data-ref-filename="rtc..SSLRole">SSLRole</dfn> { <dfn class="enum" id="rtc::SSL_CLIENT" title='rtc::SSL_CLIENT' data-ref="rtc::SSL_CLIENT" data-ref-filename="rtc..SSL_CLIENT">SSL_CLIENT</dfn>, <dfn class="enum" id="rtc::SSL_SERVER" title='rtc::SSL_SERVER' data-ref="rtc::SSL_SERVER" data-ref-filename="rtc..SSL_SERVER">SSL_SERVER</dfn> };</td></tr>
+<tr><th id="93">93</th><td><b>enum</b> <dfn class="type def" id="rtc::SSLMode" title='rtc::SSLMode' data-ref="rtc::SSLMode" data-ref-filename="rtc..SSLMode">SSLMode</dfn> { <dfn class="enum" id="rtc::SSL_MODE_TLS" title='rtc::SSL_MODE_TLS' data-ref="rtc::SSL_MODE_TLS" data-ref-filename="rtc..SSL_MODE_TLS">SSL_MODE_TLS</dfn>, <dfn class="enum" id="rtc::SSL_MODE_DTLS" title='rtc::SSL_MODE_DTLS' data-ref="rtc::SSL_MODE_DTLS" data-ref-filename="rtc..SSL_MODE_DTLS">SSL_MODE_DTLS</dfn> };</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td><i>// Note: TLS_10, TLS_11, and DTLS_10 will all be ignored, and only DTLS1_2 will</i></td></tr>
+<tr><th id="96">96</th><td><i>// be accepted unless the trial flag WebRTC-LegacyTlsProtocols/Enabled/ is</i></td></tr>
+<tr><th id="97">97</th><td><i>// passed in or an explicit override is used. Support for the legacy protocol</i></td></tr>
+<tr><th id="98">98</th><td><i>// versions will be completely removed in the future.</i></td></tr>
+<tr><th id="99">99</th><td><i>// See <a href="https://bugs.webrtc.org/10261">https://bugs.webrtc.org/10261</a>.</i></td></tr>
+<tr><th id="100">100</th><td><b>enum</b> <dfn class="type def" id="rtc::SSLProtocolVersion" title='rtc::SSLProtocolVersion' data-ref="rtc::SSLProtocolVersion" data-ref-filename="rtc..SSLProtocolVersion">SSLProtocolVersion</dfn> {</td></tr>
+<tr><th id="101">101</th><td>  <dfn class="enum" id="rtc::SSL_PROTOCOL_NOT_GIVEN" title='rtc::SSL_PROTOCOL_NOT_GIVEN' data-ref="rtc::SSL_PROTOCOL_NOT_GIVEN" data-ref-filename="rtc..SSL_PROTOCOL_NOT_GIVEN">SSL_PROTOCOL_NOT_GIVEN</dfn> = -<var>1</var>,</td></tr>
+<tr><th id="102">102</th><td>  <dfn class="enum" id="rtc::SSL_PROTOCOL_TLS_10" title='rtc::SSL_PROTOCOL_TLS_10' data-ref="rtc::SSL_PROTOCOL_TLS_10" data-ref-filename="rtc..SSL_PROTOCOL_TLS_10">SSL_PROTOCOL_TLS_10</dfn> = <var>0</var>,</td></tr>
+<tr><th id="103">103</th><td>  <dfn class="enum" id="rtc::SSL_PROTOCOL_TLS_11" title='rtc::SSL_PROTOCOL_TLS_11' data-ref="rtc::SSL_PROTOCOL_TLS_11" data-ref-filename="rtc..SSL_PROTOCOL_TLS_11">SSL_PROTOCOL_TLS_11</dfn>,</td></tr>
+<tr><th id="104">104</th><td>  <dfn class="enum" id="rtc::SSL_PROTOCOL_TLS_12" title='rtc::SSL_PROTOCOL_TLS_12' data-ref="rtc::SSL_PROTOCOL_TLS_12" data-ref-filename="rtc..SSL_PROTOCOL_TLS_12">SSL_PROTOCOL_TLS_12</dfn>,</td></tr>
+<tr><th id="105">105</th><td>  <dfn class="enum" id="rtc::SSL_PROTOCOL_DTLS_10" title='rtc::SSL_PROTOCOL_DTLS_10' data-ref="rtc::SSL_PROTOCOL_DTLS_10" data-ref-filename="rtc..SSL_PROTOCOL_DTLS_10">SSL_PROTOCOL_DTLS_10</dfn> = <a class="enum" href="#rtc::SSL_PROTOCOL_TLS_11" title='rtc::SSL_PROTOCOL_TLS_11' data-ref="rtc::SSL_PROTOCOL_TLS_11" data-ref-filename="rtc..SSL_PROTOCOL_TLS_11">SSL_PROTOCOL_TLS_11</a>,</td></tr>
+<tr><th id="106">106</th><td>  <dfn class="enum" id="rtc::SSL_PROTOCOL_DTLS_12" title='rtc::SSL_PROTOCOL_DTLS_12' data-ref="rtc::SSL_PROTOCOL_DTLS_12" data-ref-filename="rtc..SSL_PROTOCOL_DTLS_12">SSL_PROTOCOL_DTLS_12</dfn> = <a class="enum" href="#rtc::SSL_PROTOCOL_TLS_12" title='rtc::SSL_PROTOCOL_TLS_12' data-ref="rtc::SSL_PROTOCOL_TLS_12" data-ref-filename="rtc..SSL_PROTOCOL_TLS_12">SSL_PROTOCOL_TLS_12</a>,</td></tr>
+<tr><th id="107">107</th><td>};</td></tr>
+<tr><th id="108">108</th><td><b>enum</b> <b>class</b> <dfn class="type def" id="rtc::SSLPeerCertificateDigestError" title='rtc::SSLPeerCertificateDigestError' data-ref="rtc::SSLPeerCertificateDigestError" data-ref-filename="rtc..SSLPeerCertificateDigestError">SSLPeerCertificateDigestError</dfn> {</td></tr>
+<tr><th id="109">109</th><td>  <dfn class="enum" id="rtc::SSLPeerCertificateDigestError::NONE" title='rtc::SSLPeerCertificateDigestError::NONE' data-ref="rtc::SSLPeerCertificateDigestError::NONE" data-ref-filename="rtc..SSLPeerCertificateDigestError..NONE">NONE</dfn>,</td></tr>
+<tr><th id="110">110</th><td>  <dfn class="enum" id="rtc::SSLPeerCertificateDigestError::UNKNOWN_ALGORITHM" title='rtc::SSLPeerCertificateDigestError::UNKNOWN_ALGORITHM' data-ref="rtc::SSLPeerCertificateDigestError::UNKNOWN_ALGORITHM" data-ref-filename="rtc..SSLPeerCertificateDigestError..UNKNOWN_ALGORITHM">UNKNOWN_ALGORITHM</dfn>,</td></tr>
+<tr><th id="111">111</th><td>  <dfn class="enum" id="rtc::SSLPeerCertificateDigestError::INVALID_LENGTH" title='rtc::SSLPeerCertificateDigestError::INVALID_LENGTH' data-ref="rtc::SSLPeerCertificateDigestError::INVALID_LENGTH" data-ref-filename="rtc..SSLPeerCertificateDigestError..INVALID_LENGTH">INVALID_LENGTH</dfn>,</td></tr>
+<tr><th id="112">112</th><td>  <dfn class="enum" id="rtc::SSLPeerCertificateDigestError::VERIFICATION_FAILED" title='rtc::SSLPeerCertificateDigestError::VERIFICATION_FAILED' data-ref="rtc::SSLPeerCertificateDigestError::VERIFICATION_FAILED" data-ref-filename="rtc..SSLPeerCertificateDigestError..VERIFICATION_FAILED">VERIFICATION_FAILED</dfn>,</td></tr>
+<tr><th id="113">113</th><td>};</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td><i>// Errors for Read -- in the high range so no conflict with OpenSSL.</i></td></tr>
+<tr><th id="116">116</th><td><b>enum</b> { <dfn class="enum" id="rtc::SSE_MSG_TRUNC" title='rtc::SSE_MSG_TRUNC' data-ref="rtc::SSE_MSG_TRUNC" data-ref-filename="rtc..SSE_MSG_TRUNC">SSE_MSG_TRUNC</dfn> = <var>0xff0001</var> };</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td><i>// Used to send back UMA histogram value. Logged when Dtls handshake fails.</i></td></tr>
+<tr><th id="119">119</th><td><b>enum</b> <b>class</b> <dfn class="type def" id="rtc::SSLHandshakeError" title='rtc::SSLHandshakeError' data-ref="rtc::SSLHandshakeError" data-ref-filename="rtc..SSLHandshakeError">SSLHandshakeError</dfn> { <dfn class="enum" id="rtc::SSLHandshakeError::UNKNOWN" title='rtc::SSLHandshakeError::UNKNOWN' data-ref="rtc::SSLHandshakeError::UNKNOWN" data-ref-filename="rtc..SSLHandshakeError..UNKNOWN">UNKNOWN</dfn>, <dfn class="enum" id="rtc::SSLHandshakeError::INCOMPATIBLE_CIPHERSUITE" title='rtc::SSLHandshakeError::INCOMPATIBLE_CIPHERSUITE' data-ref="rtc::SSLHandshakeError::INCOMPATIBLE_CIPHERSUITE" data-ref-filename="rtc..SSLHandshakeError..INCOMPATIBLE_CIPHERSUITE">INCOMPATIBLE_CIPHERSUITE</dfn>, <dfn class="enum" id="rtc::SSLHandshakeError::MAX_VALUE" title='rtc::SSLHandshakeError::MAX_VALUE' data-ref="rtc::SSLHandshakeError::MAX_VALUE" data-ref-filename="rtc..SSLHandshakeError..MAX_VALUE">MAX_VALUE</dfn> };</td></tr>
+<tr><th id="120">120</th><td></td></tr>
+<tr><th id="121">121</th><td><b>class</b> <dfn class="type def" id="rtc::SSLStreamAdapter" title='rtc::SSLStreamAdapter' data-ref="rtc::SSLStreamAdapter" data-ref-filename="rtc..SSLStreamAdapter">SSLStreamAdapter</dfn> : <b>public</b> <a class="type" href="stream.h.html#rtc::StreamInterface" title='rtc::StreamInterface' data-ref="rtc::StreamInterface" data-ref-filename="rtc..StreamInterface">StreamInterface</a>, <b>public</b> <span class="namespace">sigslot::</span><a class="type" href="third_party/sigslot/sigslot.h.html#sigslot::has_slots" title='sigslot::has_slots' data-ref="sigslot::has_slots" data-ref-filename="sigslot..has_slots">has_slots</a>&lt;&gt; {</td></tr>
+<tr><th id="122">122</th><td> <b>public</b>:</td></tr>
+<tr><th id="123">123</th><td>  <i>// Instantiate an SSLStreamAdapter wrapping the given stream,</i></td></tr>
+<tr><th id="124">124</th><td><i>  // (using the selected implementation for the platform).</i></td></tr>
+<tr><th id="125">125</th><td><i>  // Caller is responsible for freeing the returned object.</i></td></tr>
+<tr><th id="126">126</th><td>  <em>static</em> <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="#rtc::SSLStreamAdapter" title='rtc::SSLStreamAdapter' data-ref="rtc::SSLStreamAdapter" data-ref-filename="rtc..SSLStreamAdapter">SSLStreamAdapter</a>&gt; <dfn class="decl fn" id="_ZN3rtc16SSLStreamAdapter6CreateENSt3__110unique_ptrINS_15StreamInterfaceENS1_14default_deleteIS3_EEEE" title='rtc::SSLStreamAdapter::Create' data-ref="_ZN3rtc16SSLStreamAdapter6CreateENSt3__110unique_ptrINS_15StreamInterfaceENS1_14default_deleteIS3_EEEE" data-ref-filename="_ZN3rtc16SSLStreamAdapter6CreateENSt3__110unique_ptrINS_15StreamInterfaceENS1_14default_deleteIS3_EEEE">Create</dfn>(</td></tr>
+<tr><th id="127">127</th><td>      <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="stream.h.html#rtc::StreamInterface" title='rtc::StreamInterface' data-ref="rtc::StreamInterface" data-ref-filename="rtc..StreamInterface">StreamInterface</a>&gt; <dfn class="local col8 decl" id="3878stream" title='stream' data-type='std::unique_ptr&lt;StreamInterface&gt;' data-ref="3878stream" data-ref-filename="3878stream">stream</dfn>);</td></tr>
+<tr><th id="128">128</th><td></td></tr>
+<tr><th id="129">129</th><td>  <dfn class="decl def fn" id="_ZN3rtc16SSLStreamAdapterC1Ev" title='rtc::SSLStreamAdapter::SSLStreamAdapter' data-ref="_ZN3rtc16SSLStreamAdapterC1Ev" data-ref-filename="_ZN3rtc16SSLStreamAdapterC1Ev">SSLStreamAdapter</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="130">130</th><td>  <dfn class="virtual decl def fn" id="_ZN3rtc16SSLStreamAdapterD1Ev" title='rtc::SSLStreamAdapter::~SSLStreamAdapter' data-ref="_ZN3rtc16SSLStreamAdapterD1Ev" data-ref-filename="_ZN3rtc16SSLStreamAdapterD1Ev">~SSLStreamAdapter</dfn>() override = <b>default</b>;</td></tr>
+<tr><th id="131">131</th><td></td></tr>
+<tr><th id="132">132</th><td>  <i>// Specify our SSL identity: key and certificate. SSLStream takes ownership</i></td></tr>
+<tr><th id="133">133</th><td><i>  // of the SSLIdentity object and will free it when appropriate. Should be</i></td></tr>
+<tr><th id="134">134</th><td><i>  // called no more than once on a given SSLStream instance.</i></td></tr>
+<tr><th id="135">135</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN3rtc16SSLStreamAdapter11SetIdentityENSt3__110unique_ptrINS_11SSLIdentityENS1_14default_deleteIS3_EEEE" title='rtc::SSLStreamAdapter::SetIdentity' data-ref="_ZN3rtc16SSLStreamAdapter11SetIdentityENSt3__110unique_ptrINS_11SSLIdentityENS1_14default_deleteIS3_EEEE" data-ref-filename="_ZN3rtc16SSLStreamAdapter11SetIdentityENSt3__110unique_ptrINS_11SSLIdentityENS1_14default_deleteIS3_EEEE">SetIdentity</dfn>(<span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="ssl_identity.h.html#rtc::SSLIdentity" title='rtc::SSLIdentity' data-ref="rtc::SSLIdentity" data-ref-filename="rtc..SSLIdentity">SSLIdentity</a>&gt; <dfn class="local col9 decl" id="3879identity" title='identity' data-type='std::unique_ptr&lt;SSLIdentity&gt;' data-ref="3879identity" data-ref-filename="3879identity">identity</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="136">136</th><td>  <b>virtual</b> <a class="type" href="ssl_identity.h.html#rtc::SSLIdentity" title='rtc::SSLIdentity' data-ref="rtc::SSLIdentity" data-ref-filename="rtc..SSLIdentity">SSLIdentity</a>* <dfn class="virtual decl fn" id="_ZNK3rtc16SSLStreamAdapter21GetIdentityForTestingEv" title='rtc::SSLStreamAdapter::GetIdentityForTesting' data-ref="_ZNK3rtc16SSLStreamAdapter21GetIdentityForTestingEv" data-ref-filename="_ZNK3rtc16SSLStreamAdapter21GetIdentityForTestingEv">GetIdentityForTesting</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="137">137</th><td></td></tr>
+<tr><th id="138">138</th><td>  <i>// Call this to indicate that we are to play the server role (or client role,</i></td></tr>
+<tr><th id="139">139</th><td><i>  // if the default argument is replaced by SSL_CLIENT).</i></td></tr>
+<tr><th id="140">140</th><td><i>  // The default argument is for backward compatibility.</i></td></tr>
+<tr><th id="141">141</th><td><i>  // TODO(ekr@rtfm.com): rename this SetRole to reflect its new function</i></td></tr>
+<tr><th id="142">142</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN3rtc16SSLStreamAdapter13SetServerRoleENS_7SSLRoleE" title='rtc::SSLStreamAdapter::SetServerRole' data-ref="_ZN3rtc16SSLStreamAdapter13SetServerRoleENS_7SSLRoleE" data-ref-filename="_ZN3rtc16SSLStreamAdapter13SetServerRoleENS_7SSLRoleE">SetServerRole</dfn>(<a class="type" href="#rtc::SSLRole" title='rtc::SSLRole' data-ref="rtc::SSLRole" data-ref-filename="rtc..SSLRole">SSLRole</a> <dfn class="local col0 decl" id="3880role" title='role' data-type='rtc::SSLRole' data-ref="3880role" data-ref-filename="3880role">role</dfn> = <a class="enum" href="#rtc::SSL_SERVER" title='rtc::SSL_SERVER' data-ref="rtc::SSL_SERVER" data-ref-filename="rtc..SSL_SERVER">SSL_SERVER</a>) = <var>0</var>;</td></tr>
+<tr><th id="143">143</th><td></td></tr>
+<tr><th id="144">144</th><td>  <i>// Do DTLS or TLS.</i></td></tr>
+<tr><th id="145">145</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN3rtc16SSLStreamAdapter7SetModeENS_7SSLModeE" title='rtc::SSLStreamAdapter::SetMode' data-ref="_ZN3rtc16SSLStreamAdapter7SetModeENS_7SSLModeE" data-ref-filename="_ZN3rtc16SSLStreamAdapter7SetModeENS_7SSLModeE">SetMode</dfn>(<a class="type" href="#rtc::SSLMode" title='rtc::SSLMode' data-ref="rtc::SSLMode" data-ref-filename="rtc..SSLMode">SSLMode</a> <dfn class="local col1 decl" id="3881mode" title='mode' data-type='rtc::SSLMode' data-ref="3881mode" data-ref-filename="3881mode">mode</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="146">146</th><td></td></tr>
+<tr><th id="147">147</th><td>  <i>// Set maximum supported protocol version. The highest version supported by</i></td></tr>
+<tr><th id="148">148</th><td><i>  // both ends will be used for the connection, i.e. if one party supports</i></td></tr>
+<tr><th id="149">149</th><td><i>  // DTLS 1.0 and the other DTLS 1.2, DTLS 1.0 will be used.</i></td></tr>
+<tr><th id="150">150</th><td><i>  // If requested version is not supported by underlying crypto library, the</i></td></tr>
+<tr><th id="151">151</th><td><i>  // next lower will be used.</i></td></tr>
+<tr><th id="152">152</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN3rtc16SSLStreamAdapter21SetMaxProtocolVersionENS_18SSLProtocolVersionE" title='rtc::SSLStreamAdapter::SetMaxProtocolVersion' data-ref="_ZN3rtc16SSLStreamAdapter21SetMaxProtocolVersionENS_18SSLProtocolVersionE" data-ref-filename="_ZN3rtc16SSLStreamAdapter21SetMaxProtocolVersionENS_18SSLProtocolVersionE">SetMaxProtocolVersion</dfn>(<a class="type" href="#rtc::SSLProtocolVersion" title='rtc::SSLProtocolVersion' data-ref="rtc::SSLProtocolVersion" data-ref-filename="rtc..SSLProtocolVersion">SSLProtocolVersion</a> <dfn class="local col2 decl" id="3882version" title='version' data-type='rtc::SSLProtocolVersion' data-ref="3882version" data-ref-filename="3882version">version</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="153">153</th><td></td></tr>
+<tr><th id="154">154</th><td>  <i>// Set the initial retransmission timeout for DTLS messages. When the timeout</i></td></tr>
+<tr><th id="155">155</th><td><i>  // expires, the message gets retransmitted and the timeout is exponentially</i></td></tr>
+<tr><th id="156">156</th><td><i>  // increased.</i></td></tr>
+<tr><th id="157">157</th><td><i>  // This should only be called before StartSSL().</i></td></tr>
+<tr><th id="158">158</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN3rtc16SSLStreamAdapter31SetInitialRetransmissionTimeoutEi" title='rtc::SSLStreamAdapter::SetInitialRetransmissionTimeout' data-ref="_ZN3rtc16SSLStreamAdapter31SetInitialRetransmissionTimeoutEi" data-ref-filename="_ZN3rtc16SSLStreamAdapter31SetInitialRetransmissionTimeoutEi">SetInitialRetransmissionTimeout</dfn>(<em>int</em> <dfn class="local col3 decl" id="3883timeout_ms" title='timeout_ms' data-type='int' data-ref="3883timeout_ms" data-ref-filename="3883timeout_ms">timeout_ms</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="159">159</th><td></td></tr>
+<tr><th id="160">160</th><td>  <i>// StartSSL starts negotiation with a peer, whose certificate is verified</i></td></tr>
+<tr><th id="161">161</th><td><i>  // using the certificate digest. Generally, SetIdentity() and possibly</i></td></tr>
+<tr><th id="162">162</th><td><i>  // SetServerRole() should have been called before this.</i></td></tr>
+<tr><th id="163">163</th><td><i>  // SetPeerCertificateDigest() must also be called. It may be called after</i></td></tr>
+<tr><th id="164">164</th><td><i>  // StartSSLWithPeer() but must be called before the underlying stream opens.</i></td></tr>
+<tr><th id="165">165</th><td><i>  //</i></td></tr>
+<tr><th id="166">166</th><td><i>  // Use of the stream prior to calling StartSSL will pass data in clear text.</i></td></tr>
+<tr><th id="167">167</th><td><i>  // Calling StartSSL causes SSL negotiation to begin as soon as possible: right</i></td></tr>
+<tr><th id="168">168</th><td><i>  // away if the underlying wrapped stream is already opened, or else as soon as</i></td></tr>
+<tr><th id="169">169</th><td><i>  // it opens.</i></td></tr>
+<tr><th id="170">170</th><td><i>  //</i></td></tr>
+<tr><th id="171">171</th><td><i>  // StartSSL returns a negative error code on failure. Returning 0 means</i></td></tr>
+<tr><th id="172">172</th><td><i>  // success so far, but negotiation is probably not complete and will continue</i></td></tr>
+<tr><th id="173">173</th><td><i>  // asynchronously. In that case, the exposed stream will open after</i></td></tr>
+<tr><th id="174">174</th><td><i>  // successful negotiation and verification, or an SE_CLOSE event will be</i></td></tr>
+<tr><th id="175">175</th><td><i>  // raised if negotiation fails.</i></td></tr>
+<tr><th id="176">176</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZN3rtc16SSLStreamAdapter8StartSSLEv" title='rtc::SSLStreamAdapter::StartSSL' data-ref="_ZN3rtc16SSLStreamAdapter8StartSSLEv" data-ref-filename="_ZN3rtc16SSLStreamAdapter8StartSSLEv">StartSSL</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="177">177</th><td></td></tr>
+<tr><th id="178">178</th><td>  <i>// Specify the digest of the certificate that our peer is expected to use.</i></td></tr>
+<tr><th id="179">179</th><td><i>  // Only this certificate will be accepted during SSL verification. The</i></td></tr>
+<tr><th id="180">180</th><td><i>  // certificate is assumed to have been obtained through some other secure</i></td></tr>
+<tr><th id="181">181</th><td><i>  // channel (such as the signaling channel). This must specify the terminal</i></td></tr>
+<tr><th id="182">182</th><td><i>  // certificate, not just a CA. SSLStream makes a copy of the digest value.</i></td></tr>
+<tr><th id="183">183</th><td><i>  //</i></td></tr>
+<tr><th id="184">184</th><td><i>  // Returns true if successful.</i></td></tr>
+<tr><th id="185">185</th><td><i>  // |error| is optional and provides more information about the failure.</i></td></tr>
+<tr><th id="186">186</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZN3rtc16SSLStreamAdapter24SetPeerCertificateDigestERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEPKhmPNS_29SSLPeerCertificateDigestErrorE" title='rtc::SSLStreamAdapter::SetPeerCertificateDigest' data-ref="_ZN3rtc16SSLStreamAdapter24SetPeerCertificateDigestERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEPKhmPNS_29SSLPeerCertificateDigestErrorE" data-ref-filename="_ZN3rtc16SSLStreamAdapter24SetPeerCertificateDigestERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEPKhmPNS_29SSLPeerCertificateDigestErrorE">SetPeerCertificateDigest</dfn>(</td></tr>
+<tr><th id="187">187</th><td>      <em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col4 decl" id="3884digest_alg" title='digest_alg' data-type='const std::string &amp;' data-ref="3884digest_alg" data-ref-filename="3884digest_alg">digest_alg</dfn>,</td></tr>
+<tr><th id="188">188</th><td>      <em>const</em> <em>unsigned</em> <em>char</em>* <dfn class="local col5 decl" id="3885digest_val" title='digest_val' data-type='const unsigned char *' data-ref="3885digest_val" data-ref-filename="3885digest_val">digest_val</dfn>,</td></tr>
+<tr><th id="189">189</th><td>      <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="3886digest_len" title='digest_len' data-type='size_t' data-ref="3886digest_len" data-ref-filename="3886digest_len">digest_len</dfn>,</td></tr>
+<tr><th id="190">190</th><td>      <a class="type" href="#rtc::SSLPeerCertificateDigestError" title='rtc::SSLPeerCertificateDigestError' data-ref="rtc::SSLPeerCertificateDigestError" data-ref-filename="rtc..SSLPeerCertificateDigestError">SSLPeerCertificateDigestError</a>* <dfn class="local col7 decl" id="3887error" title='error' data-type='rtc::SSLPeerCertificateDigestError *' data-ref="3887error" data-ref-filename="3887error">error</dfn> = <b>nullptr</b>) = <var>0</var>;</td></tr>
+<tr><th id="191">191</th><td></td></tr>
+<tr><th id="192">192</th><td>  <i>// Retrieves the peer's certificate chain including leaf certificate, if a</i></td></tr>
+<tr><th id="193">193</th><td><i>  // connection has been established.</i></td></tr>
+<tr><th id="194">194</th><td>  <b>virtual</b> <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="ssl_certificate.h.html#rtc::SSLCertChain" title='rtc::SSLCertChain' data-ref="rtc::SSLCertChain" data-ref-filename="rtc..SSLCertChain">SSLCertChain</a>&gt; <dfn class="virtual decl fn" id="_ZNK3rtc16SSLStreamAdapter19GetPeerSSLCertChainEv" title='rtc::SSLStreamAdapter::GetPeerSSLCertChain' data-ref="_ZNK3rtc16SSLStreamAdapter19GetPeerSSLCertChainEv" data-ref-filename="_ZNK3rtc16SSLStreamAdapter19GetPeerSSLCertChainEv">GetPeerSSLCertChain</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="195">195</th><td></td></tr>
+<tr><th id="196">196</th><td>  <i>// Retrieves the IANA registration id of the cipher suite used for the</i></td></tr>
+<tr><th id="197">197</th><td><i>  // connection (e.g. 0x2F for "TLS_RSA_WITH_AES_128_CBC_SHA").</i></td></tr>
+<tr><th id="198">198</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZN3rtc16SSLStreamAdapter17GetSslCipherSuiteEPi" title='rtc::SSLStreamAdapter::GetSslCipherSuite' data-ref="_ZN3rtc16SSLStreamAdapter17GetSslCipherSuiteEPi" data-ref-filename="_ZN3rtc16SSLStreamAdapter17GetSslCipherSuiteEPi">GetSslCipherSuite</dfn>(<em>int</em>* <dfn class="local col8 decl" id="3888cipher_suite" title='cipher_suite' data-type='int *' data-ref="3888cipher_suite" data-ref-filename="3888cipher_suite">cipher_suite</dfn>);</td></tr>
+<tr><th id="199">199</th><td></td></tr>
+<tr><th id="200">200</th><td>  <i>// Retrieves the enum value for SSL version.</i></td></tr>
+<tr><th id="201">201</th><td><i>  // Will return -1 until the version has been negotiated.</i></td></tr>
+<tr><th id="202">202</th><td>  <b>virtual</b> <a class="type" href="#rtc::SSLProtocolVersion" title='rtc::SSLProtocolVersion' data-ref="rtc::SSLProtocolVersion" data-ref-filename="rtc..SSLProtocolVersion">SSLProtocolVersion</a> <dfn class="virtual decl fn" id="_ZNK3rtc16SSLStreamAdapter13GetSslVersionEv" title='rtc::SSLStreamAdapter::GetSslVersion' data-ref="_ZNK3rtc16SSLStreamAdapter13GetSslVersionEv" data-ref-filename="_ZNK3rtc16SSLStreamAdapter13GetSslVersionEv">GetSslVersion</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="203">203</th><td>  <i>// Retrieves the 2-byte version from the TLS protocol.</i></td></tr>
+<tr><th id="204">204</th><td><i>  // Will return false until the version has been negotiated.</i></td></tr>
+<tr><th id="205">205</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZNK3rtc16SSLStreamAdapter18GetSslVersionBytesEPi" title='rtc::SSLStreamAdapter::GetSslVersionBytes' data-ref="_ZNK3rtc16SSLStreamAdapter18GetSslVersionBytesEPi" data-ref-filename="_ZNK3rtc16SSLStreamAdapter18GetSslVersionBytesEPi">GetSslVersionBytes</dfn>(<em>int</em>* <dfn class="local col9 decl" id="3889version" title='version' data-type='int *' data-ref="3889version" data-ref-filename="3889version">version</dfn>) <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td>  <i>// Key Exporter interface from RFC 5705</i></td></tr>
+<tr><th id="208">208</th><td><i>  // Arguments are:</i></td></tr>
+<tr><th id="209">209</th><td><i>  // label               -- the exporter label.</i></td></tr>
+<tr><th id="210">210</th><td><i>  //                        part of the RFC defining each exporter</i></td></tr>
+<tr><th id="211">211</th><td><i>  //                        usage (IN)</i></td></tr>
+<tr><th id="212">212</th><td><i>  // context/context_len -- a context to bind to for this connection;</i></td></tr>
+<tr><th id="213">213</th><td><i>  //                        optional, can be null, 0 (IN)</i></td></tr>
+<tr><th id="214">214</th><td><i>  // use_context         -- whether to use the context value</i></td></tr>
+<tr><th id="215">215</th><td><i>  //                        (needed to distinguish no context from</i></td></tr>
+<tr><th id="216">216</th><td><i>  //                        zero-length ones).</i></td></tr>
+<tr><th id="217">217</th><td><i>  // result              -- where to put the computed value</i></td></tr>
+<tr><th id="218">218</th><td><i>  // result_len          -- the length of the computed value</i></td></tr>
+<tr><th id="219">219</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZN3rtc16SSLStreamAdapter20ExportKeyingMaterialERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEPKhmbPhm" title='rtc::SSLStreamAdapter::ExportKeyingMaterial' data-ref="_ZN3rtc16SSLStreamAdapter20ExportKeyingMaterialERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEPKhmbPhm" data-ref-filename="_ZN3rtc16SSLStreamAdapter20ExportKeyingMaterialERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEPKhmbPhm">ExportKeyingMaterial</dfn>(<em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col0 decl" id="3890label" title='label' data-type='const std::string &amp;' data-ref="3890label" data-ref-filename="3890label">label</dfn>,</td></tr>
+<tr><th id="220">220</th><td>                                    <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col1 decl" id="3891context" title='context' data-type='const uint8_t *' data-ref="3891context" data-ref-filename="3891context">context</dfn>,</td></tr>
+<tr><th id="221">221</th><td>                                    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="3892context_len" title='context_len' data-type='size_t' data-ref="3892context_len" data-ref-filename="3892context_len">context_len</dfn>,</td></tr>
+<tr><th id="222">222</th><td>                                    <em>bool</em> <dfn class="local col3 decl" id="3893use_context" title='use_context' data-type='bool' data-ref="3893use_context" data-ref-filename="3893use_context">use_context</dfn>,</td></tr>
+<tr><th id="223">223</th><td>                                    <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col4 decl" id="3894result" title='result' data-type='uint8_t *' data-ref="3894result" data-ref-filename="3894result">result</dfn>,</td></tr>
+<tr><th id="224">224</th><td>                                    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="3895result_len" title='result_len' data-type='size_t' data-ref="3895result_len" data-ref-filename="3895result_len">result_len</dfn>);</td></tr>
+<tr><th id="225">225</th><td></td></tr>
+<tr><th id="226">226</th><td>  <i>// DTLS-SRTP interface</i></td></tr>
+<tr><th id="227">227</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZN3rtc16SSLStreamAdapter23SetDtlsSrtpCryptoSuitesERKNSt3__16vectorIiNS1_9allocatorIiEEEE" title='rtc::SSLStreamAdapter::SetDtlsSrtpCryptoSuites' data-ref="_ZN3rtc16SSLStreamAdapter23SetDtlsSrtpCryptoSuitesERKNSt3__16vectorIiNS1_9allocatorIiEEEE" data-ref-filename="_ZN3rtc16SSLStreamAdapter23SetDtlsSrtpCryptoSuitesERKNSt3__16vectorIiNS1_9allocatorIiEEEE">SetDtlsSrtpCryptoSuites</dfn>(<em>const</em> <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<em>int</em>&gt;&amp; <dfn class="local col6 decl" id="3896crypto_suites" title='crypto_suites' data-type='const std::vector&lt;int&gt; &amp;' data-ref="3896crypto_suites" data-ref-filename="3896crypto_suites">crypto_suites</dfn>);</td></tr>
+<tr><th id="228">228</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZN3rtc16SSLStreamAdapter22GetDtlsSrtpCryptoSuiteEPi" title='rtc::SSLStreamAdapter::GetDtlsSrtpCryptoSuite' data-ref="_ZN3rtc16SSLStreamAdapter22GetDtlsSrtpCryptoSuiteEPi" data-ref-filename="_ZN3rtc16SSLStreamAdapter22GetDtlsSrtpCryptoSuiteEPi">GetDtlsSrtpCryptoSuite</dfn>(<em>int</em>* <dfn class="local col7 decl" id="3897crypto_suite" title='crypto_suite' data-type='int *' data-ref="3897crypto_suite" data-ref-filename="3897crypto_suite">crypto_suite</dfn>);</td></tr>
+<tr><th id="229">229</th><td></td></tr>
+<tr><th id="230">230</th><td>  <i>// Returns true if a TLS connection has been established.</i></td></tr>
+<tr><th id="231">231</th><td><i>  // The only difference between this and "GetState() == SE_OPEN" is that if</i></td></tr>
+<tr><th id="232">232</th><td><i>  // the peer certificate digest hasn't been verified, the state will still be</i></td></tr>
+<tr><th id="233">233</th><td><i>  // SS_OPENING but IsTlsConnected should return true.</i></td></tr>
+<tr><th id="234">234</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZN3rtc16SSLStreamAdapter14IsTlsConnectedEv" title='rtc::SSLStreamAdapter::IsTlsConnected' data-ref="_ZN3rtc16SSLStreamAdapter14IsTlsConnectedEv" data-ref-filename="_ZN3rtc16SSLStreamAdapter14IsTlsConnectedEv">IsTlsConnected</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="235">235</th><td></td></tr>
+<tr><th id="236">236</th><td>  <i>// Capabilities testing.</i></td></tr>
+<tr><th id="237">237</th><td><i>  // Used to have "DTLS supported", "DTLS-SRTP supported" etc. methods, but now</i></td></tr>
+<tr><th id="238">238</th><td><i>  // that's assumed.</i></td></tr>
+<tr><th id="239">239</th><td>  <em>static</em> <em>bool</em> <dfn class="decl fn" id="_ZN3rtc16SSLStreamAdapter11IsBoringSslEv" title='rtc::SSLStreamAdapter::IsBoringSsl' data-ref="_ZN3rtc16SSLStreamAdapter11IsBoringSslEv" data-ref-filename="_ZN3rtc16SSLStreamAdapter11IsBoringSslEv">IsBoringSsl</dfn>();</td></tr>
+<tr><th id="240">240</th><td></td></tr>
+<tr><th id="241">241</th><td>  <i>// Returns true iff the supplied cipher is deemed to be strong.</i></td></tr>
+<tr><th id="242">242</th><td><i>  // TODO(torbjorng): Consider removing the KeyType argument.</i></td></tr>
+<tr><th id="243">243</th><td>  <em>static</em> <em>bool</em> <dfn class="decl fn" id="_ZN3rtc16SSLStreamAdapter18IsAcceptableCipherEiNS_7KeyTypeE" title='rtc::SSLStreamAdapter::IsAcceptableCipher' data-ref="_ZN3rtc16SSLStreamAdapter18IsAcceptableCipherEiNS_7KeyTypeE" data-ref-filename="_ZN3rtc16SSLStreamAdapter18IsAcceptableCipherEiNS_7KeyTypeE">IsAcceptableCipher</dfn>(<em>int</em> <dfn class="local col8 decl" id="3898cipher" title='cipher' data-type='int' data-ref="3898cipher" data-ref-filename="3898cipher">cipher</dfn>, <a class="type" href="ssl_identity.h.html#rtc::KeyType" title='rtc::KeyType' data-ref="rtc::KeyType" data-ref-filename="rtc..KeyType">KeyType</a> <dfn class="local col9 decl" id="3899key_type" title='key_type' data-type='rtc::KeyType' data-ref="3899key_type" data-ref-filename="3899key_type">key_type</dfn>);</td></tr>
+<tr><th id="244">244</th><td>  <em>static</em> <em>bool</em> <dfn class="decl fn" id="_ZN3rtc16SSLStreamAdapter18IsAcceptableCipherERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEENS_7KeyTypeE" title='rtc::SSLStreamAdapter::IsAcceptableCipher' data-ref="_ZN3rtc16SSLStreamAdapter18IsAcceptableCipherERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEENS_7KeyTypeE" data-ref-filename="_ZN3rtc16SSLStreamAdapter18IsAcceptableCipherERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEENS_7KeyTypeE">IsAcceptableCipher</dfn>(<em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col0 decl" id="3900cipher" title='cipher' data-type='const std::string &amp;' data-ref="3900cipher" data-ref-filename="3900cipher">cipher</dfn>, <a class="type" href="ssl_identity.h.html#rtc::KeyType" title='rtc::KeyType' data-ref="rtc::KeyType" data-ref-filename="rtc..KeyType">KeyType</a> <dfn class="local col1 decl" id="3901key_type" title='key_type' data-type='rtc::KeyType' data-ref="3901key_type" data-ref-filename="3901key_type">key_type</dfn>);</td></tr>
+<tr><th id="245">245</th><td></td></tr>
+<tr><th id="246">246</th><td>  <i>// TODO(guoweis): Move this away from a static class method. Currently this is</i></td></tr>
+<tr><th id="247">247</th><td><i>  // introduced such that any caller could depend on sslstreamadapter.h without</i></td></tr>
+<tr><th id="248">248</th><td><i>  // depending on specific SSL implementation.</i></td></tr>
+<tr><th id="249">249</th><td>  <em>static</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span> <dfn class="decl fn" id="_ZN3rtc16SSLStreamAdapter20SslCipherSuiteToNameEi" title='rtc::SSLStreamAdapter::SslCipherSuiteToName' data-ref="_ZN3rtc16SSLStreamAdapter20SslCipherSuiteToNameEi" data-ref-filename="_ZN3rtc16SSLStreamAdapter20SslCipherSuiteToNameEi">SslCipherSuiteToName</dfn>(<em>int</em> <dfn class="local col2 decl" id="3902cipher_suite" title='cipher_suite' data-type='int' data-ref="3902cipher_suite" data-ref-filename="3902cipher_suite">cipher_suite</dfn>);</td></tr>
+<tr><th id="250">250</th><td></td></tr>
+<tr><th id="251">251</th><td>  <i>////////////////////////////////////////////////////////////////////////////</i></td></tr>
+<tr><th id="252">252</th><td><i>  // Testing only member functions</i></td></tr>
+<tr><th id="253">253</th><td><i>  ////////////////////////////////////////////////////////////////////////////</i></td></tr>
+<tr><th id="254">254</th><td><i></i></td></tr>
+<tr><th id="255">255</th><td><i>  // Use our timeutils.h source of timing in BoringSSL, allowing us to test</i></td></tr>
+<tr><th id="256">256</th><td><i>  // using a fake clock.</i></td></tr>
+<tr><th id="257">257</th><td>  <em>static</em> <em>void</em> <dfn class="decl fn" id="_ZN3rtc16SSLStreamAdapter28EnableTimeCallbackForTestingEv" title='rtc::SSLStreamAdapter::EnableTimeCallbackForTesting' data-ref="_ZN3rtc16SSLStreamAdapter28EnableTimeCallbackForTestingEv" data-ref-filename="_ZN3rtc16SSLStreamAdapter28EnableTimeCallbackForTestingEv">EnableTimeCallbackForTesting</dfn>();</td></tr>
+<tr><th id="258">258</th><td></td></tr>
+<tr><th id="259">259</th><td>  <i>// Deprecated. Do not use this API outside of testing.</i></td></tr>
+<tr><th id="260">260</th><td><i>  // Do not set this to false outside of testing.</i></td></tr>
+<tr><th id="261">261</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN3rtc16SSLStreamAdapter30SetClientAuthEnabledForTestingEb" title='rtc::SSLStreamAdapter::SetClientAuthEnabledForTesting' data-ref="_ZN3rtc16SSLStreamAdapter30SetClientAuthEnabledForTestingEb" data-ref-filename="_ZN3rtc16SSLStreamAdapter30SetClientAuthEnabledForTestingEb">SetClientAuthEnabledForTesting</dfn>(<em>bool</em> <dfn class="local col3 decl" id="3903enabled" title='enabled' data-type='bool' data-ref="3903enabled" data-ref-filename="3903enabled">enabled</dfn>) {</td></tr>
+<tr><th id="262">262</th><td>    <a class="member field" href="#rtc::SSLStreamAdapter::client_auth_enabled_" title='rtc::SSLStreamAdapter::client_auth_enabled_' data-ref="rtc::SSLStreamAdapter::client_auth_enabled_" data-ref-filename="rtc..SSLStreamAdapter..client_auth_enabled_">client_auth_enabled_</a> = <a class="local col3 ref" href="#3903enabled" title='enabled' data-ref="3903enabled" data-ref-filename="3903enabled">enabled</a>;</td></tr>
+<tr><th id="263">263</th><td>  }</td></tr>
+<tr><th id="264">264</th><td></td></tr>
+<tr><th id="265">265</th><td>  <i>// Deprecated. Do not use this API outside of testing.</i></td></tr>
+<tr><th id="266">266</th><td><i>  // Returns true by default, else false if explicitly set to disable client</i></td></tr>
+<tr><th id="267">267</th><td><i>  // authentication.</i></td></tr>
+<tr><th id="268">268</th><td>  <em>bool</em> <dfn class="decl def fn" id="_ZNK3rtc16SSLStreamAdapter20GetClientAuthEnabledEv" title='rtc::SSLStreamAdapter::GetClientAuthEnabled' data-ref="_ZNK3rtc16SSLStreamAdapter20GetClientAuthEnabledEv" data-ref-filename="_ZNK3rtc16SSLStreamAdapter20GetClientAuthEnabledEv">GetClientAuthEnabled</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#rtc::SSLStreamAdapter::client_auth_enabled_" title='rtc::SSLStreamAdapter::client_auth_enabled_' data-ref="rtc::SSLStreamAdapter::client_auth_enabled_" data-ref-filename="rtc..SSLStreamAdapter..client_auth_enabled_">client_auth_enabled_</a>; }</td></tr>
+<tr><th id="269">269</th><td></td></tr>
+<tr><th id="270">270</th><td>  <span class="namespace">sigslot::</span><a class="type" href="third_party/sigslot/sigslot.h.html#sigslot::signal1" title='sigslot::signal1' data-ref="sigslot::signal1" data-ref-filename="sigslot..signal1">signal1</a>&lt;<a class="type" href="#rtc::SSLHandshakeError" title='rtc::SSLHandshakeError' data-ref="rtc::SSLHandshakeError" data-ref-filename="rtc..SSLHandshakeError">SSLHandshakeError</a>&gt; <dfn class="decl field" id="rtc::SSLStreamAdapter::SignalSSLHandshakeError" title='rtc::SSLStreamAdapter::SignalSSLHandshakeError' data-ref="rtc::SSLStreamAdapter::SignalSSLHandshakeError" data-ref-filename="rtc..SSLStreamAdapter..SignalSSLHandshakeError">SignalSSLHandshakeError</dfn>;</td></tr>
+<tr><th id="271">271</th><td></td></tr>
+<tr><th id="272">272</th><td> <b>private</b>:</td></tr>
+<tr><th id="273">273</th><td>  <i>// If true (default), the client is required to provide a certificate during</i></td></tr>
+<tr><th id="274">274</th><td><i>  // handshake. If no certificate is given, handshake fails. This applies to</i></td></tr>
+<tr><th id="275">275</th><td><i>  // server mode only.</i></td></tr>
+<tr><th id="276">276</th><td>  <em>bool</em> <dfn class="decl field" id="rtc::SSLStreamAdapter::client_auth_enabled_" title='rtc::SSLStreamAdapter::client_auth_enabled_' data-ref="rtc::SSLStreamAdapter::client_auth_enabled_" data-ref-filename="rtc..SSLStreamAdapter..client_auth_enabled_">client_auth_enabled_</dfn> = <b>true</b>;</td></tr>
+<tr><th id="277">277</th><td>};</td></tr>
+<tr><th id="278">278</th><td></td></tr>
+<tr><th id="279">279</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="280">280</th><td></td></tr>
+<tr><th id="281">281</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_SSL_STREAM_ADAPTER_H_</u></td></tr>
+<tr><th id="282">282</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

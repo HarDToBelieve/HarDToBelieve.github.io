@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WKBundlePageMac.mm source code [webkit/Source/WebKit/WebProcess/InjectedBundle/API/c/mac/WKBundlePageMac.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKit/WebProcess/InjectedBundle/API/c/mac/WKBundlePageMac.mm'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>WebKit</a>/<a href='../../../..'>WebProcess</a>/<a href='../../..'>InjectedBundle</a>/<a href='../..'>API</a>/<a href='..'>c</a>/<a href='./'>mac</a>/<a href='WKBundlePageMac.mm.html'>WKBundlePageMac.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2019 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import <a href="../../../../../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#import <a href="WKBundlePageMac.h.html">"WKBundlePageMac.h"</a></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="../../../../Plugins/PluginView.h.html">"PluginView.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="../WKBundleAPICast.h.html">"WKBundleAPICast.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="../WKBundleFrame.h.html">"WKBundleFrame.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#import <a href="../WKBundlePage.h.html">"WKBundlePage.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#import <a href="../../../../../UIProcess/API/cpp/WKRetainPtr.h.html">"WKRetainPtr.h"</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#import <a href="../../../../WebPage/WebFrame.h.html">"WebFrame.h"</a></u></td></tr>
+<tr><th id="35">35</th><td><u>#import <a href="../../../../WebPage/WebPage.h.html">"WebPage.h"</a></u></td></tr>
+<tr><th id="36">36</th><td><u>#import <a href="../../../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Frame.h.html">&lt;WebCore/Frame.h&gt;</a></u></td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><a class="macro" href="../../../../../Shared/API/c/WKDeclarationSpecifiers.h.html#44" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WK_EXPORT">WK_EXPORT</a> PDFDocument *<dfn class="decl def fn" id="WKBundlePageGetPDFDocumentInFrame" title='WKBundlePageGetPDFDocumentInFrame' data-ref="WKBundlePageGetPDFDocumentInFrame" data-ref-filename="WKBundlePageGetPDFDocumentInFrame">WKBundlePageGetPDFDocumentInFrame</dfn>(<a class="typedef" href="../../../../../Shared/API/c/WKBase.h.html#WKBundlePageRef" title='WKBundlePageRef' data-type='const struct OpaqueWKBundlePage *' data-ref="WKBundlePageRef" data-ref-filename="WKBundlePageRef">WKBundlePageRef</a> <dfn class="local col6 decl" id="716page" title='page' data-type='WKBundlePageRef' data-ref="716page" data-ref-filename="716page">page</dfn>, <a class="typedef" href="../../../../../Shared/API/c/WKBase.h.html#WKBundleFrameRef" title='WKBundleFrameRef' data-type='const struct OpaqueWKBundleFrame *' data-ref="WKBundleFrameRef" data-ref-filename="WKBundleFrameRef">WKBundleFrameRef</a> <dfn class="local col7 decl" id="717frame" title='frame' data-type='WKBundleFrameRef' data-ref="717frame" data-ref-filename="717frame">frame</dfn>)</td></tr>
+<tr><th id="39">39</th><td>{</td></tr>
+<tr><th id="40">40</th><td>    <span class="namespace">WebCore::</span><a class="type" href="../../../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Frame.h.html#WebCore::Frame" title='WebCore::Frame' data-ref="WebCore::Frame" data-ref-filename="WebCore..Frame">Frame</a>* <dfn class="local col8 decl" id="718coreFrame" title='coreFrame' data-type='WebCore::Frame *' data-ref="718coreFrame" data-ref-filename="718coreFrame">coreFrame</dfn> = <span class="namespace">WebKit::</span><a class="ref fn" href="../../../../../Shared/API/c/WKSharedAPICast.h.html#_ZN6WebKit6toImplET_" title='WebKit::toImpl' data-ref="_ZN6WebKit6toImplET_" data-ref-filename="_ZN6WebKit6toImplET_">toImpl</a>(<a class="local col7 ref" href="#717frame" title='frame' data-ref="717frame" data-ref-filename="717frame">frame</a>)-&gt;<a class="ref fn" href="../../../../WebPage/WebFrame.h.html#_ZNK6WebKit8WebFrame9coreFrameEv" title='WebKit::WebFrame::coreFrame' data-ref="_ZNK6WebKit8WebFrame9coreFrameEv" data-ref-filename="_ZNK6WebKit8WebFrame9coreFrameEv">coreFrame</a>();</td></tr>
+<tr><th id="41">41</th><td>    <b>if</b> (!<a class="local col8 ref" href="#718coreFrame" title='coreFrame' data-ref="718coreFrame" data-ref-filename="718coreFrame">coreFrame</a>)</td></tr>
+<tr><th id="42">42</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td>    <span class="namespace">WebKit::</span><a class="type" href="../../../../Plugins/PluginView.h.html#WebKit::PluginView" title='WebKit::PluginView' data-ref="WebKit::PluginView" data-ref-filename="WebKit..PluginView">PluginView</a>* <dfn class="local col9 decl" id="719pluginView" title='pluginView' data-type='WebKit::PluginView *' data-ref="719pluginView" data-ref-filename="719pluginView">pluginView</dfn> = <span class="namespace">WebKit::</span><a class="ref fn" href="../../../../../Shared/API/c/WKSharedAPICast.h.html#_ZN6WebKit6toImplET_" title='WebKit::toImpl' data-ref="_ZN6WebKit6toImplET_" data-ref-filename="_ZN6WebKit6toImplET_">toImpl</a>(<a class="local col6 ref" href="#716page" title='page' data-ref="716page" data-ref-filename="716page">page</a>)-&gt;<a class="ref fn" href="../../../../WebPage/WebPage.h.html#_ZN6WebKit7WebPage18pluginViewForFrameEPN7WebCore5FrameE" title='WebKit::WebPage::pluginViewForFrame' data-ref="_ZN6WebKit7WebPage18pluginViewForFrameEPN7WebCore5FrameE" data-ref-filename="_ZN6WebKit7WebPage18pluginViewForFrameEPN7WebCore5FrameE">pluginViewForFrame</a>(<a class="local col8 ref" href="#718coreFrame" title='coreFrame' data-ref="718coreFrame" data-ref-filename="718coreFrame">coreFrame</a>);</td></tr>
+<tr><th id="45">45</th><td>    <b>if</b> (!<a class="local col9 ref" href="#719pluginView" title='pluginView' data-ref="719pluginView" data-ref-filename="719pluginView">pluginView</a>)</td></tr>
+<tr><th id="46">46</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td>    <b>return</b> <a class="local col9 ref" href="#719pluginView" title='pluginView' data-ref="719pluginView" data-ref-filename="719pluginView">pluginView</a>-&gt;<a class="ref fn" href="../../../../Plugins/PluginView.h.html#_ZNK6WebKit10PluginView22pdfDocumentForPrintingEv" title='WebKit::PluginView::pdfDocumentForPrinting' data-ref="_ZNK6WebKit10PluginView22pdfDocumentForPrintingEv" data-ref-filename="_ZNK6WebKit10PluginView22pdfDocumentForPrintingEv">pdfDocumentForPrinting</a>().<a class="ref fn" href="../../../../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF9RetainPtr11autoreleaseEv" title='WTF::RetainPtr::autorelease' data-ref="_ZN3WTF9RetainPtr11autoreleaseEv" data-ref-filename="_ZN3WTF9RetainPtr11autoreleaseEv">autorelease</a>();</td></tr>
+<tr><th id="49">49</th><td>}</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

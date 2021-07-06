@@ -1,0 +1,330 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>blockd.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp8/common/blockd.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="b_mode_info,blockd,macroblockd,modeinfo "/>
+<link rel="stylesheet" href="../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp8/common/blockd.h'; var root_path = '../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../..'>Source</a>/<a href='../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../..'>libwebrtc</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>third_party</a>/<a href='../../../..'>libvpx</a>/<a href='../../..'>source</a>/<a href='../..'>libvpx</a>/<a href='..'>vp8</a>/<a href='./'>common</a>/<a href='blockd.h.html'>blockd.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2010 The WebM project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/VPX_VP8_COMMON_BLOCKD_H_">VPX_VP8_COMMON_BLOCKD_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/VPX_VP8_COMMON_BLOCKD_H_" data-ref="_M/VPX_VP8_COMMON_BLOCKD_H_">VPX_VP8_COMMON_BLOCKD_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><em>void</em> <dfn class="decl fn" id="vpx_log" title='vpx_log' data-ref="vpx_log" data-ref-filename="vpx_log">vpx_log</dfn>(<em>const</em> <em>char</em> *<dfn class="local col2 decl" id="552format" title='format' data-type='const char *' data-ref="552format" data-ref-filename="552format">format</dfn>, ...);</td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="../../vpx/internal/vpx_codec_internal.h.html">"vpx/internal/vpx_codec_internal.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../../../config/ios/arm64/vpx_config.h.html">"vpx_config.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../../vpx_scale/yv12config.h.html">"vpx_scale/yv12config.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="mv.h.html">"mv.h"</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="treecoder.h.html">"treecoder.h"</a></u></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="../../vpx_ports/mem.h.html">"vpx_ports/mem.h"</a></u></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><u>#<span data-ppcond="23">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="24">24</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="25">25</th><td><u>#<span data-ppcond="23">endif</span></u></td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td><i>/*#define DCPRED 1*/</i></td></tr>
+<tr><th id="28">28</th><td><u>#define <dfn class="macro" id="_M/DCPREDSIMTHRESH" data-ref="_M/DCPREDSIMTHRESH">DCPREDSIMTHRESH</dfn> 0</u></td></tr>
+<tr><th id="29">29</th><td><u>#define <dfn class="macro" id="_M/DCPREDCNTTHRESH" data-ref="_M/DCPREDCNTTHRESH">DCPREDCNTTHRESH</dfn> 3</u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#define <dfn class="macro" id="_M/MB_FEATURE_TREE_PROBS" data-ref="_M/MB_FEATURE_TREE_PROBS">MB_FEATURE_TREE_PROBS</dfn> 3</u></td></tr>
+<tr><th id="32">32</th><td><u>#define <dfn class="macro" id="_M/MAX_MB_SEGMENTS" data-ref="_M/MAX_MB_SEGMENTS">MAX_MB_SEGMENTS</dfn> 4</u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><u>#define <dfn class="macro" id="_M/MAX_REF_LF_DELTAS" data-ref="_M/MAX_REF_LF_DELTAS">MAX_REF_LF_DELTAS</dfn> 4</u></td></tr>
+<tr><th id="35">35</th><td><u>#define <dfn class="macro" id="_M/MAX_MODE_LF_DELTAS" data-ref="_M/MAX_MODE_LF_DELTAS">MAX_MODE_LF_DELTAS</dfn> 4</u></td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><i>/* Segment Feature Masks */</i></td></tr>
+<tr><th id="38">38</th><td><u>#define <dfn class="macro" id="_M/SEGMENT_DELTADATA" data-ref="_M/SEGMENT_DELTADATA">SEGMENT_DELTADATA</dfn> 0</u></td></tr>
+<tr><th id="39">39</th><td><u>#define <dfn class="macro" id="_M/SEGMENT_ABSDATA" data-ref="_M/SEGMENT_ABSDATA">SEGMENT_ABSDATA</dfn> 1</u></td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><b>typedef</b> <b>struct</b> {</td></tr>
+<tr><th id="42">42</th><td>  <em>int</em> <dfn class="decl field" id="(anonymous)::r" title='(anonymous struct)::r' data-ref="(anonymous)::r" data-ref-filename="(anonymous)..r">r</dfn>, <dfn class="decl field" id="(anonymous)::c" title='(anonymous struct)::c' data-ref="(anonymous)::c" data-ref-filename="(anonymous)..c">c</dfn>;</td></tr>
+<tr><th id="43">43</th><td>} <dfn class="typedef" id="POS" title='POS' data-type='struct POS' data-ref="POS" data-ref-filename="POS">POS</dfn>;</td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td><u>#define <dfn class="macro" id="_M/PLANE_TYPE_Y_NO_DC" data-ref="_M/PLANE_TYPE_Y_NO_DC">PLANE_TYPE_Y_NO_DC</dfn> 0</u></td></tr>
+<tr><th id="46">46</th><td><u>#define <dfn class="macro" id="_M/PLANE_TYPE_Y2" data-ref="_M/PLANE_TYPE_Y2">PLANE_TYPE_Y2</dfn> 1</u></td></tr>
+<tr><th id="47">47</th><td><u>#define <dfn class="macro" id="_M/PLANE_TYPE_UV" data-ref="_M/PLANE_TYPE_UV">PLANE_TYPE_UV</dfn> 2</u></td></tr>
+<tr><th id="48">48</th><td><u>#define <dfn class="macro" id="_M/PLANE_TYPE_Y_WITH_DC" data-ref="_M/PLANE_TYPE_Y_WITH_DC">PLANE_TYPE_Y_WITH_DC</dfn> 3</u></td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><b>typedef</b> <em>char</em> <dfn class="typedef" id="ENTROPY_CONTEXT" title='ENTROPY_CONTEXT' data-type='char' data-ref="ENTROPY_CONTEXT" data-ref-filename="ENTROPY_CONTEXT">ENTROPY_CONTEXT</dfn>;</td></tr>
+<tr><th id="51">51</th><td><b>typedef</b> <b>struct</b> {</td></tr>
+<tr><th id="52">52</th><td>  <a class="typedef" href="#ENTROPY_CONTEXT" title='ENTROPY_CONTEXT' data-type='char' data-ref="ENTROPY_CONTEXT" data-ref-filename="ENTROPY_CONTEXT">ENTROPY_CONTEXT</a> <dfn class="decl field" id="(anonymous)::y1" title='(anonymous struct)::y1' data-ref="(anonymous)::y1" data-ref-filename="(anonymous)..y1">y1</dfn>[<var>4</var>];</td></tr>
+<tr><th id="53">53</th><td>  <a class="typedef" href="#ENTROPY_CONTEXT" title='ENTROPY_CONTEXT' data-type='char' data-ref="ENTROPY_CONTEXT" data-ref-filename="ENTROPY_CONTEXT">ENTROPY_CONTEXT</a> <dfn class="decl field" id="(anonymous)::u" title='(anonymous struct)::u' data-ref="(anonymous)::u" data-ref-filename="(anonymous)..u">u</dfn>[<var>2</var>];</td></tr>
+<tr><th id="54">54</th><td>  <a class="typedef" href="#ENTROPY_CONTEXT" title='ENTROPY_CONTEXT' data-type='char' data-ref="ENTROPY_CONTEXT" data-ref-filename="ENTROPY_CONTEXT">ENTROPY_CONTEXT</a> <dfn class="decl field" id="(anonymous)::v" title='(anonymous struct)::v' data-ref="(anonymous)::v" data-ref-filename="(anonymous)..v">v</dfn>[<var>2</var>];</td></tr>
+<tr><th id="55">55</th><td>  <a class="typedef" href="#ENTROPY_CONTEXT" title='ENTROPY_CONTEXT' data-type='char' data-ref="ENTROPY_CONTEXT" data-ref-filename="ENTROPY_CONTEXT">ENTROPY_CONTEXT</a> <dfn class="decl field" id="(anonymous)::y2" title='(anonymous struct)::y2' data-ref="(anonymous)::y2" data-ref-filename="(anonymous)..y2">y2</dfn>;</td></tr>
+<tr><th id="56">56</th><td>} <dfn class="typedef" id="ENTROPY_CONTEXT_PLANES" title='ENTROPY_CONTEXT_PLANES' data-type='struct ENTROPY_CONTEXT_PLANES' data-ref="ENTROPY_CONTEXT_PLANES" data-ref-filename="ENTROPY_CONTEXT_PLANES">ENTROPY_CONTEXT_PLANES</dfn>;</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><b>extern</b> <em>const</em> <em>unsigned</em> <em>char</em> <dfn class="decl" id="vp8_block2left" title='vp8_block2left' data-ref="vp8_block2left" data-ref-filename="vp8_block2left">vp8_block2left</dfn>[<var>25</var>];</td></tr>
+<tr><th id="59">59</th><td><b>extern</b> <em>const</em> <em>unsigned</em> <em>char</em> <dfn class="decl" id="vp8_block2above" title='vp8_block2above' data-ref="vp8_block2above" data-ref-filename="vp8_block2above">vp8_block2above</dfn>[<var>25</var>];</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td><u>#define <dfn class="macro" id="_M/VP8_COMBINEENTROPYCONTEXTS" data-ref="_M/VP8_COMBINEENTROPYCONTEXTS">VP8_COMBINEENTROPYCONTEXTS</dfn>(Dest, A, B) Dest = (A) + (B);</u></td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><b>typedef</b> <b>enum</b> { <dfn class="enum" id="KEY_FRAME" title='KEY_FRAME' data-ref="KEY_FRAME" data-ref-filename="KEY_FRAME">KEY_FRAME</dfn> = <var>0</var>, <dfn class="enum" id="INTER_FRAME" title='INTER_FRAME' data-ref="INTER_FRAME" data-ref-filename="INTER_FRAME">INTER_FRAME</dfn> = <var>1</var> } <dfn class="typedef" id="FRAME_TYPE" title='FRAME_TYPE' data-type='enum FRAME_TYPE' data-ref="FRAME_TYPE" data-ref-filename="FRAME_TYPE">FRAME_TYPE</dfn>;</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="66">66</th><td>  <dfn class="enum" id="DC_PRED" title='DC_PRED' data-ref="DC_PRED" data-ref-filename="DC_PRED">DC_PRED</dfn>, <i>/* average of above and left pixels */</i></td></tr>
+<tr><th id="67">67</th><td>  <dfn class="enum" id="V_PRED" title='V_PRED' data-ref="V_PRED" data-ref-filename="V_PRED">V_PRED</dfn>,  <i>/* vertical prediction */</i></td></tr>
+<tr><th id="68">68</th><td>  <dfn class="enum" id="H_PRED" title='H_PRED' data-ref="H_PRED" data-ref-filename="H_PRED">H_PRED</dfn>,  <i>/* horizontal prediction */</i></td></tr>
+<tr><th id="69">69</th><td>  <dfn class="enum" id="TM_PRED" title='TM_PRED' data-ref="TM_PRED" data-ref-filename="TM_PRED">TM_PRED</dfn>, <i>/* Truemotion prediction */</i></td></tr>
+<tr><th id="70">70</th><td>  <dfn class="enum" id="B_PRED" title='B_PRED' data-ref="B_PRED" data-ref-filename="B_PRED">B_PRED</dfn>,  <i>/* block based prediction, each block has its own prediction mode */</i></td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td>  <dfn class="enum" id="NEARESTMV" title='NEARESTMV' data-ref="NEARESTMV" data-ref-filename="NEARESTMV">NEARESTMV</dfn>,</td></tr>
+<tr><th id="73">73</th><td>  <dfn class="enum" id="NEARMV" title='NEARMV' data-ref="NEARMV" data-ref-filename="NEARMV">NEARMV</dfn>,</td></tr>
+<tr><th id="74">74</th><td>  <dfn class="enum" id="ZEROMV" title='ZEROMV' data-ref="ZEROMV" data-ref-filename="ZEROMV">ZEROMV</dfn>,</td></tr>
+<tr><th id="75">75</th><td>  <dfn class="enum" id="NEWMV" title='NEWMV' data-ref="NEWMV" data-ref-filename="NEWMV">NEWMV</dfn>,</td></tr>
+<tr><th id="76">76</th><td>  <dfn class="enum" id="SPLITMV" title='SPLITMV' data-ref="SPLITMV" data-ref-filename="SPLITMV">SPLITMV</dfn>,</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td>  <dfn class="enum" id="MB_MODE_COUNT" title='MB_MODE_COUNT' data-ref="MB_MODE_COUNT" data-ref-filename="MB_MODE_COUNT">MB_MODE_COUNT</dfn></td></tr>
+<tr><th id="79">79</th><td>} <dfn class="typedef" id="MB_PREDICTION_MODE" title='MB_PREDICTION_MODE' data-type='enum MB_PREDICTION_MODE' data-ref="MB_PREDICTION_MODE" data-ref-filename="MB_PREDICTION_MODE">MB_PREDICTION_MODE</dfn>;</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td><i>/* Macroblock level features */</i></td></tr>
+<tr><th id="82">82</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="83">83</th><td>  <dfn class="enum" id="MB_LVL_ALT_Q" title='MB_LVL_ALT_Q' data-ref="MB_LVL_ALT_Q" data-ref-filename="MB_LVL_ALT_Q">MB_LVL_ALT_Q</dfn> = <var>0</var>,  <i>/* Use alternate Quantizer .... */</i></td></tr>
+<tr><th id="84">84</th><td>  <dfn class="enum" id="MB_LVL_ALT_LF" title='MB_LVL_ALT_LF' data-ref="MB_LVL_ALT_LF" data-ref-filename="MB_LVL_ALT_LF">MB_LVL_ALT_LF</dfn> = <var>1</var>, <i>/* Use alternate loop filter value... */</i></td></tr>
+<tr><th id="85">85</th><td>  <dfn class="enum" id="MB_LVL_MAX" title='MB_LVL_MAX' data-ref="MB_LVL_MAX" data-ref-filename="MB_LVL_MAX">MB_LVL_MAX</dfn> = <var>2</var>     <i>/* Number of MB level features supported */</i></td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td>} <dfn class="typedef" id="MB_LVL_FEATURES" title='MB_LVL_FEATURES' data-type='enum MB_LVL_FEATURES' data-ref="MB_LVL_FEATURES" data-ref-filename="MB_LVL_FEATURES">MB_LVL_FEATURES</dfn>;</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td><i>/* Segment Feature Masks */</i></td></tr>
+<tr><th id="90">90</th><td><u>#define <dfn class="macro" id="_M/SEGMENT_ALTQ" data-ref="_M/SEGMENT_ALTQ">SEGMENT_ALTQ</dfn> 0x01</u></td></tr>
+<tr><th id="91">91</th><td><u>#define <dfn class="macro" id="_M/SEGMENT_ALT_LF" data-ref="_M/SEGMENT_ALT_LF">SEGMENT_ALT_LF</dfn> 0x02</u></td></tr>
+<tr><th id="92">92</th><td></td></tr>
+<tr><th id="93">93</th><td><u>#define <dfn class="macro" id="_M/VP8_YMODES" data-ref="_M/VP8_YMODES">VP8_YMODES</dfn> (B_PRED + 1)</u></td></tr>
+<tr><th id="94">94</th><td><u>#define <dfn class="macro" id="_M/VP8_UV_MODES" data-ref="_M/VP8_UV_MODES">VP8_UV_MODES</dfn> (TM_PRED + 1)</u></td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td><u>#define <dfn class="macro" id="_M/VP8_MVREFS" data-ref="_M/VP8_MVREFS">VP8_MVREFS</dfn> (1 + SPLITMV - NEARESTMV)</u></td></tr>
+<tr><th id="97">97</th><td></td></tr>
+<tr><th id="98">98</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="99">99</th><td>  <dfn class="enum" id="B_DC_PRED" title='B_DC_PRED' data-ref="B_DC_PRED" data-ref-filename="B_DC_PRED">B_DC_PRED</dfn>, <i>/* average of above and left pixels */</i></td></tr>
+<tr><th id="100">100</th><td>  <dfn class="enum" id="B_TM_PRED" title='B_TM_PRED' data-ref="B_TM_PRED" data-ref-filename="B_TM_PRED">B_TM_PRED</dfn>,</td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td>  <dfn class="enum" id="B_VE_PRED" title='B_VE_PRED' data-ref="B_VE_PRED" data-ref-filename="B_VE_PRED">B_VE_PRED</dfn>, <i>/* vertical prediction */</i></td></tr>
+<tr><th id="103">103</th><td>  <dfn class="enum" id="B_HE_PRED" title='B_HE_PRED' data-ref="B_HE_PRED" data-ref-filename="B_HE_PRED">B_HE_PRED</dfn>, <i>/* horizontal prediction */</i></td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td>  <dfn class="enum" id="B_LD_PRED" title='B_LD_PRED' data-ref="B_LD_PRED" data-ref-filename="B_LD_PRED">B_LD_PRED</dfn>,</td></tr>
+<tr><th id="106">106</th><td>  <dfn class="enum" id="B_RD_PRED" title='B_RD_PRED' data-ref="B_RD_PRED" data-ref-filename="B_RD_PRED">B_RD_PRED</dfn>,</td></tr>
+<tr><th id="107">107</th><td></td></tr>
+<tr><th id="108">108</th><td>  <dfn class="enum" id="B_VR_PRED" title='B_VR_PRED' data-ref="B_VR_PRED" data-ref-filename="B_VR_PRED">B_VR_PRED</dfn>,</td></tr>
+<tr><th id="109">109</th><td>  <dfn class="enum" id="B_VL_PRED" title='B_VL_PRED' data-ref="B_VL_PRED" data-ref-filename="B_VL_PRED">B_VL_PRED</dfn>,</td></tr>
+<tr><th id="110">110</th><td>  <dfn class="enum" id="B_HD_PRED" title='B_HD_PRED' data-ref="B_HD_PRED" data-ref-filename="B_HD_PRED">B_HD_PRED</dfn>,</td></tr>
+<tr><th id="111">111</th><td>  <dfn class="enum" id="B_HU_PRED" title='B_HU_PRED' data-ref="B_HU_PRED" data-ref-filename="B_HU_PRED">B_HU_PRED</dfn>,</td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td>  <dfn class="enum" id="LEFT4X4" title='LEFT4X4' data-ref="LEFT4X4" data-ref-filename="LEFT4X4">LEFT4X4</dfn>,</td></tr>
+<tr><th id="114">114</th><td>  <dfn class="enum" id="ABOVE4X4" title='ABOVE4X4' data-ref="ABOVE4X4" data-ref-filename="ABOVE4X4">ABOVE4X4</dfn>,</td></tr>
+<tr><th id="115">115</th><td>  <dfn class="enum" id="ZERO4X4" title='ZERO4X4' data-ref="ZERO4X4" data-ref-filename="ZERO4X4">ZERO4X4</dfn>,</td></tr>
+<tr><th id="116">116</th><td>  <dfn class="enum" id="NEW4X4" title='NEW4X4' data-ref="NEW4X4" data-ref-filename="NEW4X4">NEW4X4</dfn>,</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td>  <dfn class="enum" id="B_MODE_COUNT" title='B_MODE_COUNT' data-ref="B_MODE_COUNT" data-ref-filename="B_MODE_COUNT">B_MODE_COUNT</dfn></td></tr>
+<tr><th id="119">119</th><td>} <dfn class="typedef" id="B_PREDICTION_MODE" title='B_PREDICTION_MODE' data-type='enum B_PREDICTION_MODE' data-ref="B_PREDICTION_MODE" data-ref-filename="B_PREDICTION_MODE">B_PREDICTION_MODE</dfn>;</td></tr>
+<tr><th id="120">120</th><td></td></tr>
+<tr><th id="121">121</th><td><u>#define <dfn class="macro" id="_M/VP8_BINTRAMODES" data-ref="_M/VP8_BINTRAMODES">VP8_BINTRAMODES</dfn> (B_HU_PRED + 1) /* 10 */</u></td></tr>
+<tr><th id="122">122</th><td><u>#define <dfn class="macro" id="_M/VP8_SUBMVREFS" data-ref="_M/VP8_SUBMVREFS">VP8_SUBMVREFS</dfn> (1 + NEW4X4 - LEFT4X4)</u></td></tr>
+<tr><th id="123">123</th><td></td></tr>
+<tr><th id="124">124</th><td><i>/* For keyframes, intra block modes are predicted by the (already decoded)</i></td></tr>
+<tr><th id="125">125</th><td><i>   modes for the Y blocks to the left and above us; for interframes, there</i></td></tr>
+<tr><th id="126">126</th><td><i>   is a single probability table. */</i></td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td><b>union</b> <dfn class="type def" id="b_mode_info" title='b_mode_info' data-ref="b_mode_info" data-ref-filename="b_mode_info">b_mode_info</dfn> {</td></tr>
+<tr><th id="129">129</th><td>  <a class="typedef" href="#B_PREDICTION_MODE" title='B_PREDICTION_MODE' data-type='enum B_PREDICTION_MODE' data-ref="B_PREDICTION_MODE" data-ref-filename="B_PREDICTION_MODE">B_PREDICTION_MODE</a> <dfn class="decl field" id="b_mode_info::as_mode" title='b_mode_info::as_mode' data-ref="b_mode_info::as_mode" data-ref-filename="b_mode_info..as_mode">as_mode</dfn>;</td></tr>
+<tr><th id="130">130</th><td>  <a class="typedef" href="mv.h.html#int_mv" title='int_mv' data-type='union int_mv' data-ref="int_mv" data-ref-filename="int_mv">int_mv</a> <dfn class="decl field" id="b_mode_info::mv" title='b_mode_info::mv' data-ref="b_mode_info::mv" data-ref-filename="b_mode_info..mv">mv</dfn>;</td></tr>
+<tr><th id="131">131</th><td>};</td></tr>
+<tr><th id="132">132</th><td></td></tr>
+<tr><th id="133">133</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="134">134</th><td>  <dfn class="enum" id="INTRA_FRAME" title='INTRA_FRAME' data-ref="INTRA_FRAME" data-ref-filename="INTRA_FRAME">INTRA_FRAME</dfn> = <var>0</var>,</td></tr>
+<tr><th id="135">135</th><td>  <dfn class="enum" id="LAST_FRAME" title='LAST_FRAME' data-ref="LAST_FRAME" data-ref-filename="LAST_FRAME">LAST_FRAME</dfn> = <var>1</var>,</td></tr>
+<tr><th id="136">136</th><td>  <dfn class="enum" id="GOLDEN_FRAME" title='GOLDEN_FRAME' data-ref="GOLDEN_FRAME" data-ref-filename="GOLDEN_FRAME">GOLDEN_FRAME</dfn> = <var>2</var>,</td></tr>
+<tr><th id="137">137</th><td>  <dfn class="enum" id="ALTREF_FRAME" title='ALTREF_FRAME' data-ref="ALTREF_FRAME" data-ref-filename="ALTREF_FRAME">ALTREF_FRAME</dfn> = <var>3</var>,</td></tr>
+<tr><th id="138">138</th><td>  <dfn class="enum" id="MAX_REF_FRAMES" title='MAX_REF_FRAMES' data-ref="MAX_REF_FRAMES" data-ref-filename="MAX_REF_FRAMES">MAX_REF_FRAMES</dfn> = <var>4</var></td></tr>
+<tr><th id="139">139</th><td>} <dfn class="typedef" id="MV_REFERENCE_FRAME" title='MV_REFERENCE_FRAME' data-type='enum MV_REFERENCE_FRAME' data-ref="MV_REFERENCE_FRAME" data-ref-filename="MV_REFERENCE_FRAME">MV_REFERENCE_FRAME</dfn>;</td></tr>
+<tr><th id="140">140</th><td></td></tr>
+<tr><th id="141">141</th><td><b>typedef</b> <b>struct</b> {</td></tr>
+<tr><th id="142">142</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="(anonymous)::mode" title='(anonymous struct)::mode' data-ref="(anonymous)::mode" data-ref-filename="(anonymous)..mode">mode</dfn>, <dfn class="decl field" id="(anonymous)::uv_mode" title='(anonymous struct)::uv_mode' data-ref="(anonymous)::uv_mode" data-ref-filename="(anonymous)..uv_mode">uv_mode</dfn>;</td></tr>
+<tr><th id="143">143</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="(anonymous)::ref_frame" title='(anonymous struct)::ref_frame' data-ref="(anonymous)::ref_frame" data-ref-filename="(anonymous)..ref_frame">ref_frame</dfn>;</td></tr>
+<tr><th id="144">144</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="(anonymous)::is_4x4" title='(anonymous struct)::is_4x4' data-ref="(anonymous)::is_4x4" data-ref-filename="(anonymous)..is_4x4">is_4x4</dfn>;</td></tr>
+<tr><th id="145">145</th><td>  <a class="typedef" href="mv.h.html#int_mv" title='int_mv' data-type='union int_mv' data-ref="int_mv" data-ref-filename="int_mv">int_mv</a> <dfn class="decl field" id="(anonymous)::mv" title='(anonymous struct)::mv' data-ref="(anonymous)::mv" data-ref-filename="(anonymous)..mv">mv</dfn>;</td></tr>
+<tr><th id="146">146</th><td></td></tr>
+<tr><th id="147">147</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="(anonymous)::partitioning" title='(anonymous struct)::partitioning' data-ref="(anonymous)::partitioning" data-ref-filename="(anonymous)..partitioning">partitioning</dfn>;</td></tr>
+<tr><th id="148">148</th><td>  <i>/* does this mb has coefficients at all, 1=no coefficients, 0=need decode</i></td></tr>
+<tr><th id="149">149</th><td><i>     tokens */</i></td></tr>
+<tr><th id="150">150</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="(anonymous)::mb_skip_coeff" title='(anonymous struct)::mb_skip_coeff' data-ref="(anonymous)::mb_skip_coeff" data-ref-filename="(anonymous)..mb_skip_coeff">mb_skip_coeff</dfn>;</td></tr>
+<tr><th id="151">151</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="(anonymous)::need_to_clamp_mvs" title='(anonymous struct)::need_to_clamp_mvs' data-ref="(anonymous)::need_to_clamp_mvs" data-ref-filename="(anonymous)..need_to_clamp_mvs">need_to_clamp_mvs</dfn>;</td></tr>
+<tr><th id="152">152</th><td>  <i>/* Which set of segmentation parameters should be used for this MB */</i></td></tr>
+<tr><th id="153">153</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="(anonymous)::segment_id" title='(anonymous struct)::segment_id' data-ref="(anonymous)::segment_id" data-ref-filename="(anonymous)..segment_id">segment_id</dfn>;</td></tr>
+<tr><th id="154">154</th><td>} <dfn class="typedef" id="MB_MODE_INFO" title='MB_MODE_INFO' data-type='struct MB_MODE_INFO' data-ref="MB_MODE_INFO" data-ref-filename="MB_MODE_INFO">MB_MODE_INFO</dfn>;</td></tr>
+<tr><th id="155">155</th><td></td></tr>
+<tr><th id="156">156</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="modeinfo" title='modeinfo' data-ref="modeinfo" data-ref-filename="modeinfo"><a class="type" href="#modeinfo" title='modeinfo' data-ref="modeinfo" data-ref-filename="modeinfo">modeinfo</a></dfn> {</td></tr>
+<tr><th id="157">157</th><td>  <a class="typedef" href="#MB_MODE_INFO" title='MB_MODE_INFO' data-type='struct MB_MODE_INFO' data-ref="MB_MODE_INFO" data-ref-filename="MB_MODE_INFO">MB_MODE_INFO</a> <dfn class="decl field" id="modeinfo::mbmi" title='modeinfo::mbmi' data-ref="modeinfo::mbmi" data-ref-filename="modeinfo..mbmi">mbmi</dfn>;</td></tr>
+<tr><th id="158">158</th><td>  <b>union</b> <a class="type" href="#b_mode_info" title='b_mode_info' data-ref="b_mode_info" data-ref-filename="b_mode_info">b_mode_info</a> <dfn class="decl field" id="modeinfo::bmi" title='modeinfo::bmi' data-ref="modeinfo::bmi" data-ref-filename="modeinfo..bmi">bmi</dfn>[<var>16</var>];</td></tr>
+<tr><th id="159">159</th><td>} <dfn class="typedef" id="MODE_INFO" title='MODE_INFO' data-type='struct modeinfo' data-ref="MODE_INFO" data-ref-filename="MODE_INFO">MODE_INFO</dfn>;</td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td><u>#<span data-ppcond="161">if</span> <a class="macro" href="../../../config/ios/arm64/vpx_config.h.html#89" title="1" data-ref="_M/CONFIG_MULTI_RES_ENCODING">CONFIG_MULTI_RES_ENCODING</a></u></td></tr>
+<tr><th id="162">162</th><td><i>/* The mb-level information needed to be stored for higher-resolution encoder */</i></td></tr>
+<tr><th id="163">163</th><td><b>typedef</b> <b>struct</b> {</td></tr>
+<tr><th id="164">164</th><td>  <a class="typedef" href="#MB_PREDICTION_MODE" title='MB_PREDICTION_MODE' data-type='enum MB_PREDICTION_MODE' data-ref="MB_PREDICTION_MODE" data-ref-filename="MB_PREDICTION_MODE">MB_PREDICTION_MODE</a> <dfn class="decl field" id="(anonymous)::mode" title='(anonymous struct)::mode' data-ref="(anonymous)::mode" data-ref-filename="(anonymous)..mode">mode</dfn>;</td></tr>
+<tr><th id="165">165</th><td>  <a class="typedef" href="#MV_REFERENCE_FRAME" title='MV_REFERENCE_FRAME' data-type='enum MV_REFERENCE_FRAME' data-ref="MV_REFERENCE_FRAME" data-ref-filename="MV_REFERENCE_FRAME">MV_REFERENCE_FRAME</a> <dfn class="decl field" id="(anonymous)::ref_frame" title='(anonymous struct)::ref_frame' data-ref="(anonymous)::ref_frame" data-ref-filename="(anonymous)..ref_frame">ref_frame</dfn>;</td></tr>
+<tr><th id="166">166</th><td>  <a class="typedef" href="mv.h.html#int_mv" title='int_mv' data-type='union int_mv' data-ref="int_mv" data-ref-filename="int_mv">int_mv</a> <dfn class="decl field" id="(anonymous)::mv" title='(anonymous struct)::mv' data-ref="(anonymous)::mv" data-ref-filename="(anonymous)..mv">mv</dfn>;</td></tr>
+<tr><th id="167">167</th><td>  <em>int</em> <dfn class="decl field" id="(anonymous)::dissim" title='(anonymous struct)::dissim' data-ref="(anonymous)::dissim" data-ref-filename="(anonymous)..dissim">dissim</dfn>; <i>/* dissimilarity level of the macroblock */</i></td></tr>
+<tr><th id="168">168</th><td>} <dfn class="typedef" id="LOWER_RES_MB_INFO" title='LOWER_RES_MB_INFO' data-type='struct LOWER_RES_MB_INFO' data-ref="LOWER_RES_MB_INFO" data-ref-filename="LOWER_RES_MB_INFO">LOWER_RES_MB_INFO</dfn>;</td></tr>
+<tr><th id="169">169</th><td></td></tr>
+<tr><th id="170">170</th><td><i>/* The frame-level information needed to be stored for higher-resolution</i></td></tr>
+<tr><th id="171">171</th><td><i> *  encoder */</i></td></tr>
+<tr><th id="172">172</th><td><b>typedef</b> <b>struct</b> {</td></tr>
+<tr><th id="173">173</th><td>  <a class="typedef" href="#FRAME_TYPE" title='FRAME_TYPE' data-type='enum FRAME_TYPE' data-ref="FRAME_TYPE" data-ref-filename="FRAME_TYPE">FRAME_TYPE</a> <dfn class="decl field" id="(anonymous)::frame_type" title='(anonymous struct)::frame_type' data-ref="(anonymous)::frame_type" data-ref-filename="(anonymous)..frame_type">frame_type</dfn>;</td></tr>
+<tr><th id="174">174</th><td>  <em>int</em> <dfn class="decl field" id="(anonymous)::is_frame_dropped" title='(anonymous struct)::is_frame_dropped' data-ref="(anonymous)::is_frame_dropped" data-ref-filename="(anonymous)..is_frame_dropped">is_frame_dropped</dfn>;</td></tr>
+<tr><th id="175">175</th><td>  <i>// If frame is dropped due to overshoot after encode_frame. This triggers a</i></td></tr>
+<tr><th id="176">176</th><td><i>  // drop and resets rate control with Q forced to max for following frame.</i></td></tr>
+<tr><th id="177">177</th><td><i>  // The check for this dropping due to overshoot is only done on lowest stream,</i></td></tr>
+<tr><th id="178">178</th><td><i>  // and if set will force drop on all spatial streams for that current frame.</i></td></tr>
+<tr><th id="179">179</th><td>  <em>int</em> <dfn class="decl field" id="(anonymous)::is_frame_dropped_overshoot_maxqp" title='(anonymous struct)::is_frame_dropped_overshoot_maxqp' data-ref="(anonymous)::is_frame_dropped_overshoot_maxqp" data-ref-filename="(anonymous)..is_frame_dropped_overshoot_maxqp">is_frame_dropped_overshoot_maxqp</dfn>;</td></tr>
+<tr><th id="180">180</th><td>  <i>// The frame rate for the lowest resolution.</i></td></tr>
+<tr><th id="181">181</th><td>  <em>double</em> <dfn class="decl field" id="(anonymous)::low_res_framerate" title='(anonymous struct)::low_res_framerate' data-ref="(anonymous)::low_res_framerate" data-ref-filename="(anonymous)..low_res_framerate">low_res_framerate</dfn>;</td></tr>
+<tr><th id="182">182</th><td>  <i>/* The frame number of each reference frames */</i></td></tr>
+<tr><th id="183">183</th><td>  <em>unsigned</em> <em>int</em> <dfn class="decl field" id="(anonymous)::low_res_ref_frames" title='(anonymous struct)::low_res_ref_frames' data-ref="(anonymous)::low_res_ref_frames" data-ref-filename="(anonymous)..low_res_ref_frames">low_res_ref_frames</dfn>[<a class="enum" href="#MAX_REF_FRAMES" title='MAX_REF_FRAMES' data-ref="MAX_REF_FRAMES" data-ref-filename="MAX_REF_FRAMES">MAX_REF_FRAMES</a>];</td></tr>
+<tr><th id="184">184</th><td>  <i>// The video frame counter value for the key frame, for lowest resolution.</i></td></tr>
+<tr><th id="185">185</th><td>  <em>unsigned</em> <em>int</em> <dfn class="decl field" id="(anonymous)::key_frame_counter_value" title='(anonymous struct)::key_frame_counter_value' data-ref="(anonymous)::key_frame_counter_value" data-ref-filename="(anonymous)..key_frame_counter_value">key_frame_counter_value</dfn>;</td></tr>
+<tr><th id="186">186</th><td>  <i>// Flags to signal skipped encoding of previous and base layer stream.</i></td></tr>
+<tr><th id="187">187</th><td>  <em>unsigned</em> <em>int</em> <dfn class="decl field" id="(anonymous)::skip_encoding_prev_stream" title='(anonymous struct)::skip_encoding_prev_stream' data-ref="(anonymous)::skip_encoding_prev_stream" data-ref-filename="(anonymous)..skip_encoding_prev_stream">skip_encoding_prev_stream</dfn>;</td></tr>
+<tr><th id="188">188</th><td>  <em>unsigned</em> <em>int</em> <dfn class="decl field" id="(anonymous)::skip_encoding_base_stream" title='(anonymous struct)::skip_encoding_base_stream' data-ref="(anonymous)::skip_encoding_base_stream" data-ref-filename="(anonymous)..skip_encoding_base_stream">skip_encoding_base_stream</dfn>;</td></tr>
+<tr><th id="189">189</th><td>  <a class="typedef" href="#LOWER_RES_MB_INFO" title='LOWER_RES_MB_INFO' data-type='struct LOWER_RES_MB_INFO' data-ref="LOWER_RES_MB_INFO" data-ref-filename="LOWER_RES_MB_INFO">LOWER_RES_MB_INFO</a> *<dfn class="decl field" id="(anonymous)::mb_info" title='(anonymous struct)::mb_info' data-ref="(anonymous)::mb_info" data-ref-filename="(anonymous)..mb_info">mb_info</dfn>;</td></tr>
+<tr><th id="190">190</th><td>} <dfn class="typedef" id="LOWER_RES_FRAME_INFO" title='LOWER_RES_FRAME_INFO' data-type='struct LOWER_RES_FRAME_INFO' data-ref="LOWER_RES_FRAME_INFO" data-ref-filename="LOWER_RES_FRAME_INFO">LOWER_RES_FRAME_INFO</dfn>;</td></tr>
+<tr><th id="191">191</th><td><u>#<span data-ppcond="161">endif</span></u></td></tr>
+<tr><th id="192">192</th><td></td></tr>
+<tr><th id="193">193</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="blockd" title='blockd' data-ref="blockd" data-ref-filename="blockd"><a class="type" href="#blockd" title='blockd' data-ref="blockd" data-ref-filename="blockd">blockd</a></dfn> {</td></tr>
+<tr><th id="194">194</th><td>  <em>short</em> *<dfn class="decl field" id="blockd::qcoeff" title='blockd::qcoeff' data-ref="blockd::qcoeff" data-ref-filename="blockd..qcoeff">qcoeff</dfn>;</td></tr>
+<tr><th id="195">195</th><td>  <em>short</em> *<dfn class="decl field" id="blockd::dqcoeff" title='blockd::dqcoeff' data-ref="blockd::dqcoeff" data-ref-filename="blockd..dqcoeff">dqcoeff</dfn>;</td></tr>
+<tr><th id="196">196</th><td>  <em>unsigned</em> <em>char</em> *<dfn class="decl field" id="blockd::predictor" title='blockd::predictor' data-ref="blockd::predictor" data-ref-filename="blockd..predictor">predictor</dfn>;</td></tr>
+<tr><th id="197">197</th><td>  <em>short</em> *<dfn class="decl field" id="blockd::dequant" title='blockd::dequant' data-ref="blockd::dequant" data-ref-filename="blockd..dequant">dequant</dfn>;</td></tr>
+<tr><th id="198">198</th><td></td></tr>
+<tr><th id="199">199</th><td>  <em>int</em> <dfn class="decl field" id="blockd::offset" title='blockd::offset' data-ref="blockd::offset" data-ref-filename="blockd..offset">offset</dfn>;</td></tr>
+<tr><th id="200">200</th><td>  <em>char</em> *<dfn class="decl field" id="blockd::eob" title='blockd::eob' data-ref="blockd::eob" data-ref-filename="blockd..eob">eob</dfn>;</td></tr>
+<tr><th id="201">201</th><td></td></tr>
+<tr><th id="202">202</th><td>  <b>union</b> <a class="type" href="#b_mode_info" title='b_mode_info' data-ref="b_mode_info" data-ref-filename="b_mode_info">b_mode_info</a> <dfn class="decl field" id="blockd::bmi" title='blockd::bmi' data-ref="blockd::bmi" data-ref-filename="blockd..bmi">bmi</dfn>;</td></tr>
+<tr><th id="203">203</th><td>} <dfn class="typedef" id="BLOCKD" title='BLOCKD' data-type='struct blockd' data-ref="BLOCKD" data-ref-filename="BLOCKD">BLOCKD</dfn>;</td></tr>
+<tr><th id="204">204</th><td></td></tr>
+<tr><th id="205">205</th><td><b>typedef</b> <em>void</em> (*<dfn class="typedef" id="vp8_subpix_fn_t" title='vp8_subpix_fn_t' data-type='void (*)(unsigned char *, int, int, int, unsigned char *, int)' data-ref="vp8_subpix_fn_t" data-ref-filename="vp8_subpix_fn_t">vp8_subpix_fn_t</dfn>)(<em>unsigned</em> <em>char</em> *<dfn class="local col0 decl" id="580src_ptr" title='src_ptr' data-type='unsigned char *' data-ref="580src_ptr" data-ref-filename="580src_ptr">src_ptr</dfn>, <em>int</em> <dfn class="local col1 decl" id="581src_pixels_per_line" title='src_pixels_per_line' data-type='int' data-ref="581src_pixels_per_line" data-ref-filename="581src_pixels_per_line">src_pixels_per_line</dfn>,</td></tr>
+<tr><th id="206">206</th><td>                                <em>int</em> <dfn class="local col2 decl" id="582xoffset" title='xoffset' data-type='int' data-ref="582xoffset" data-ref-filename="582xoffset">xoffset</dfn>, <em>int</em> <dfn class="local col3 decl" id="583yoffset" title='yoffset' data-type='int' data-ref="583yoffset" data-ref-filename="583yoffset">yoffset</dfn>,</td></tr>
+<tr><th id="207">207</th><td>                                <em>unsigned</em> <em>char</em> *<dfn class="local col4 decl" id="584dst_ptr" title='dst_ptr' data-type='unsigned char *' data-ref="584dst_ptr" data-ref-filename="584dst_ptr">dst_ptr</dfn>, <em>int</em> <dfn class="local col5 decl" id="585dst_pitch" title='dst_pitch' data-type='int' data-ref="585dst_pitch" data-ref-filename="585dst_pitch">dst_pitch</dfn>);</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="macroblockd" title='macroblockd' data-ref="macroblockd" data-ref-filename="macroblockd"><a class="type" href="#macroblockd" title='macroblockd' data-ref="macroblockd" data-ref-filename="macroblockd">macroblockd</a></dfn> {</td></tr>
+<tr><th id="210">210</th><td>  <a class="macro" href="../../vpx_ports/mem.h.html#18" title="unsigned char predictor[384] __attribute__((aligned(16)))" data-ref="_M/DECLARE_ALIGNED">DECLARE_ALIGNED</a>(<var>16</var>, <em>unsigned</em> <em>char</em>, <dfn class="decl field" id="macroblockd::predictor" title='macroblockd::predictor' data-ref="macroblockd::predictor" data-ref-filename="macroblockd..predictor">predictor</dfn>[<var>384</var>]);</td></tr>
+<tr><th id="211">211</th><td>  <a class="macro" href="../../vpx_ports/mem.h.html#18" title="short qcoeff[400] __attribute__((aligned(16)))" data-ref="_M/DECLARE_ALIGNED">DECLARE_ALIGNED</a>(<var>16</var>, <em>short</em>, <dfn class="decl field" id="macroblockd::qcoeff" title='macroblockd::qcoeff' data-ref="macroblockd::qcoeff" data-ref-filename="macroblockd..qcoeff">qcoeff</dfn>[<var>400</var>]);</td></tr>
+<tr><th id="212">212</th><td>  <a class="macro" href="../../vpx_ports/mem.h.html#18" title="short dqcoeff[400] __attribute__((aligned(16)))" data-ref="_M/DECLARE_ALIGNED">DECLARE_ALIGNED</a>(<var>16</var>, <em>short</em>, <dfn class="decl field" id="macroblockd::dqcoeff" title='macroblockd::dqcoeff' data-ref="macroblockd::dqcoeff" data-ref-filename="macroblockd..dqcoeff">dqcoeff</dfn>[<var>400</var>]);</td></tr>
+<tr><th id="213">213</th><td>  <a class="macro" href="../../vpx_ports/mem.h.html#18" title="char eobs[25] __attribute__((aligned(16)))" data-ref="_M/DECLARE_ALIGNED">DECLARE_ALIGNED</a>(<var>16</var>, <em>char</em>, <dfn class="decl field" id="macroblockd::eobs" title='macroblockd::eobs' data-ref="macroblockd::eobs" data-ref-filename="macroblockd..eobs">eobs</dfn>[<var>25</var>]);</td></tr>
+<tr><th id="214">214</th><td></td></tr>
+<tr><th id="215">215</th><td>  <a class="macro" href="../../vpx_ports/mem.h.html#18" title="short dequant_y1[16] __attribute__((aligned(16)))" data-ref="_M/DECLARE_ALIGNED">DECLARE_ALIGNED</a>(<var>16</var>, <em>short</em>, <dfn class="decl field" id="macroblockd::dequant_y1" title='macroblockd::dequant_y1' data-ref="macroblockd::dequant_y1" data-ref-filename="macroblockd..dequant_y1">dequant_y1</dfn>[<var>16</var>]);</td></tr>
+<tr><th id="216">216</th><td>  <a class="macro" href="../../vpx_ports/mem.h.html#18" title="short dequant_y1_dc[16] __attribute__((aligned(16)))" data-ref="_M/DECLARE_ALIGNED">DECLARE_ALIGNED</a>(<var>16</var>, <em>short</em>, <dfn class="decl field" id="macroblockd::dequant_y1_dc" title='macroblockd::dequant_y1_dc' data-ref="macroblockd::dequant_y1_dc" data-ref-filename="macroblockd..dequant_y1_dc">dequant_y1_dc</dfn>[<var>16</var>]);</td></tr>
+<tr><th id="217">217</th><td>  <a class="macro" href="../../vpx_ports/mem.h.html#18" title="short dequant_y2[16] __attribute__((aligned(16)))" data-ref="_M/DECLARE_ALIGNED">DECLARE_ALIGNED</a>(<var>16</var>, <em>short</em>, <dfn class="decl field" id="macroblockd::dequant_y2" title='macroblockd::dequant_y2' data-ref="macroblockd::dequant_y2" data-ref-filename="macroblockd..dequant_y2">dequant_y2</dfn>[<var>16</var>]);</td></tr>
+<tr><th id="218">218</th><td>  <a class="macro" href="../../vpx_ports/mem.h.html#18" title="short dequant_uv[16] __attribute__((aligned(16)))" data-ref="_M/DECLARE_ALIGNED">DECLARE_ALIGNED</a>(<var>16</var>, <em>short</em>, <dfn class="decl field" id="macroblockd::dequant_uv" title='macroblockd::dequant_uv' data-ref="macroblockd::dequant_uv" data-ref-filename="macroblockd..dequant_uv">dequant_uv</dfn>[<var>16</var>]);</td></tr>
+<tr><th id="219">219</th><td></td></tr>
+<tr><th id="220">220</th><td>  <i>/* 16 Y blocks, 4 U, 4 V, 1 DC 2nd order block, each with 16 entries. */</i></td></tr>
+<tr><th id="221">221</th><td>  <a class="typedef" href="#BLOCKD" title='BLOCKD' data-type='struct blockd' data-ref="BLOCKD" data-ref-filename="BLOCKD">BLOCKD</a> <dfn class="decl field" id="macroblockd::block" title='macroblockd::block' data-ref="macroblockd::block" data-ref-filename="macroblockd..block">block</dfn>[<var>25</var>];</td></tr>
+<tr><th id="222">222</th><td>  <em>int</em> <dfn class="decl field" id="macroblockd::fullpixel_mask" title='macroblockd::fullpixel_mask' data-ref="macroblockd::fullpixel_mask" data-ref-filename="macroblockd..fullpixel_mask">fullpixel_mask</dfn>;</td></tr>
+<tr><th id="223">223</th><td></td></tr>
+<tr><th id="224">224</th><td>  <a class="typedef" href="../../vpx_scale/yv12config.h.html#YV12_BUFFER_CONFIG" title='YV12_BUFFER_CONFIG' data-type='struct yv12_buffer_config' data-ref="YV12_BUFFER_CONFIG" data-ref-filename="YV12_BUFFER_CONFIG">YV12_BUFFER_CONFIG</a> <dfn class="decl field" id="macroblockd::pre" title='macroblockd::pre' data-ref="macroblockd::pre" data-ref-filename="macroblockd..pre">pre</dfn>; <i>/* Filtered copy of previous frame reconstruction */</i></td></tr>
+<tr><th id="225">225</th><td>  <a class="typedef" href="../../vpx_scale/yv12config.h.html#YV12_BUFFER_CONFIG" title='YV12_BUFFER_CONFIG' data-type='struct yv12_buffer_config' data-ref="YV12_BUFFER_CONFIG" data-ref-filename="YV12_BUFFER_CONFIG">YV12_BUFFER_CONFIG</a> <dfn class="decl field" id="macroblockd::dst" title='macroblockd::dst' data-ref="macroblockd::dst" data-ref-filename="macroblockd..dst">dst</dfn>;</td></tr>
+<tr><th id="226">226</th><td></td></tr>
+<tr><th id="227">227</th><td>  <a class="typedef" href="#MODE_INFO" title='MODE_INFO' data-type='struct modeinfo' data-ref="MODE_INFO" data-ref-filename="MODE_INFO">MODE_INFO</a> *<dfn class="decl field" id="macroblockd::mode_info_context" title='macroblockd::mode_info_context' data-ref="macroblockd::mode_info_context" data-ref-filename="macroblockd..mode_info_context">mode_info_context</dfn>;</td></tr>
+<tr><th id="228">228</th><td>  <em>int</em> <dfn class="decl field" id="macroblockd::mode_info_stride" title='macroblockd::mode_info_stride' data-ref="macroblockd::mode_info_stride" data-ref-filename="macroblockd..mode_info_stride">mode_info_stride</dfn>;</td></tr>
+<tr><th id="229">229</th><td></td></tr>
+<tr><th id="230">230</th><td>  <a class="typedef" href="#FRAME_TYPE" title='FRAME_TYPE' data-type='enum FRAME_TYPE' data-ref="FRAME_TYPE" data-ref-filename="FRAME_TYPE">FRAME_TYPE</a> <dfn class="decl field" id="macroblockd::frame_type" title='macroblockd::frame_type' data-ref="macroblockd::frame_type" data-ref-filename="macroblockd..frame_type">frame_type</dfn>;</td></tr>
+<tr><th id="231">231</th><td></td></tr>
+<tr><th id="232">232</th><td>  <em>int</em> <dfn class="decl field" id="macroblockd::up_available" title='macroblockd::up_available' data-ref="macroblockd::up_available" data-ref-filename="macroblockd..up_available">up_available</dfn>;</td></tr>
+<tr><th id="233">233</th><td>  <em>int</em> <dfn class="decl field" id="macroblockd::left_available" title='macroblockd::left_available' data-ref="macroblockd::left_available" data-ref-filename="macroblockd..left_available">left_available</dfn>;</td></tr>
+<tr><th id="234">234</th><td></td></tr>
+<tr><th id="235">235</th><td>  <em>unsigned</em> <em>char</em> *<dfn class="decl field" id="macroblockd::recon_above" title='macroblockd::recon_above' data-ref="macroblockd::recon_above" data-ref-filename="macroblockd..recon_above">recon_above</dfn>[<var>3</var>];</td></tr>
+<tr><th id="236">236</th><td>  <em>unsigned</em> <em>char</em> *<dfn class="decl field" id="macroblockd::recon_left" title='macroblockd::recon_left' data-ref="macroblockd::recon_left" data-ref-filename="macroblockd..recon_left">recon_left</dfn>[<var>3</var>];</td></tr>
+<tr><th id="237">237</th><td>  <em>int</em> <dfn class="decl field" id="macroblockd::recon_left_stride" title='macroblockd::recon_left_stride' data-ref="macroblockd::recon_left_stride" data-ref-filename="macroblockd..recon_left_stride">recon_left_stride</dfn>[<var>2</var>];</td></tr>
+<tr><th id="238">238</th><td></td></tr>
+<tr><th id="239">239</th><td>  <i>/* Y,U,V,Y2 */</i></td></tr>
+<tr><th id="240">240</th><td>  <a class="typedef" href="#ENTROPY_CONTEXT_PLANES" title='ENTROPY_CONTEXT_PLANES' data-type='struct ENTROPY_CONTEXT_PLANES' data-ref="ENTROPY_CONTEXT_PLANES" data-ref-filename="ENTROPY_CONTEXT_PLANES">ENTROPY_CONTEXT_PLANES</a> *<dfn class="decl field" id="macroblockd::above_context" title='macroblockd::above_context' data-ref="macroblockd::above_context" data-ref-filename="macroblockd..above_context">above_context</dfn>;</td></tr>
+<tr><th id="241">241</th><td>  <a class="typedef" href="#ENTROPY_CONTEXT_PLANES" title='ENTROPY_CONTEXT_PLANES' data-type='struct ENTROPY_CONTEXT_PLANES' data-ref="ENTROPY_CONTEXT_PLANES" data-ref-filename="ENTROPY_CONTEXT_PLANES">ENTROPY_CONTEXT_PLANES</a> *<dfn class="decl field" id="macroblockd::left_context" title='macroblockd::left_context' data-ref="macroblockd::left_context" data-ref-filename="macroblockd..left_context">left_context</dfn>;</td></tr>
+<tr><th id="242">242</th><td></td></tr>
+<tr><th id="243">243</th><td>  <i>/* 0 indicates segmentation at MB level is not enabled. Otherwise the</i></td></tr>
+<tr><th id="244">244</th><td><i>   * individual bits indicate which features are active. */</i></td></tr>
+<tr><th id="245">245</th><td>  <em>unsigned</em> <em>char</em> <dfn class="decl field" id="macroblockd::segmentation_enabled" title='macroblockd::segmentation_enabled' data-ref="macroblockd::segmentation_enabled" data-ref-filename="macroblockd..segmentation_enabled">segmentation_enabled</dfn>;</td></tr>
+<tr><th id="246">246</th><td></td></tr>
+<tr><th id="247">247</th><td>  <i>/* 0 (do not update) 1 (update) the macroblock segmentation map. */</i></td></tr>
+<tr><th id="248">248</th><td>  <em>unsigned</em> <em>char</em> <dfn class="decl field" id="macroblockd::update_mb_segmentation_map" title='macroblockd::update_mb_segmentation_map' data-ref="macroblockd::update_mb_segmentation_map" data-ref-filename="macroblockd..update_mb_segmentation_map">update_mb_segmentation_map</dfn>;</td></tr>
+<tr><th id="249">249</th><td></td></tr>
+<tr><th id="250">250</th><td>  <i>/* 0 (do not update) 1 (update) the macroblock segmentation feature data. */</i></td></tr>
+<tr><th id="251">251</th><td>  <em>unsigned</em> <em>char</em> <dfn class="decl field" id="macroblockd::update_mb_segmentation_data" title='macroblockd::update_mb_segmentation_data' data-ref="macroblockd::update_mb_segmentation_data" data-ref-filename="macroblockd..update_mb_segmentation_data">update_mb_segmentation_data</dfn>;</td></tr>
+<tr><th id="252">252</th><td></td></tr>
+<tr><th id="253">253</th><td>  <i>/* 0 (do not update) 1 (update) the macroblock segmentation feature data. */</i></td></tr>
+<tr><th id="254">254</th><td>  <em>unsigned</em> <em>char</em> <dfn class="decl field" id="macroblockd::mb_segement_abs_delta" title='macroblockd::mb_segement_abs_delta' data-ref="macroblockd::mb_segement_abs_delta" data-ref-filename="macroblockd..mb_segement_abs_delta">mb_segement_abs_delta</dfn>;</td></tr>
+<tr><th id="255">255</th><td></td></tr>
+<tr><th id="256">256</th><td>  <i>/* Per frame flags that define which MB level features (such as quantizer or</i></td></tr>
+<tr><th id="257">257</th><td><i>   * loop filter level) */</i></td></tr>
+<tr><th id="258">258</th><td>  <i>/* are enabled and when enabled the proabilities used to decode the per MB</i></td></tr>
+<tr><th id="259">259</th><td><i>   * flags in MB_MODE_INFO */</i></td></tr>
+<tr><th id="260">260</th><td>  <i>/* Probability Tree used to code Segment number */</i></td></tr>
+<tr><th id="261">261</th><td>  <a class="typedef" href="treecoder.h.html#vp8_prob" title='vp8_prob' data-type='unsigned char' data-ref="vp8_prob" data-ref-filename="vp8_prob">vp8_prob</a> <dfn class="decl field" id="macroblockd::mb_segment_tree_probs" title='macroblockd::mb_segment_tree_probs' data-ref="macroblockd::mb_segment_tree_probs" data-ref-filename="macroblockd..mb_segment_tree_probs">mb_segment_tree_probs</dfn>[<a class="macro" href="#31" title="3" data-ref="_M/MB_FEATURE_TREE_PROBS">MB_FEATURE_TREE_PROBS</a>];</td></tr>
+<tr><th id="262">262</th><td>  <i>/* Segment parameters */</i></td></tr>
+<tr><th id="263">263</th><td>  <em>signed</em> <em>char</em> <dfn class="decl field" id="macroblockd::segment_feature_data" title='macroblockd::segment_feature_data' data-ref="macroblockd::segment_feature_data" data-ref-filename="macroblockd..segment_feature_data">segment_feature_data</dfn>[<a class="enum" href="#MB_LVL_MAX" title='MB_LVL_MAX' data-ref="MB_LVL_MAX" data-ref-filename="MB_LVL_MAX">MB_LVL_MAX</a>][<a class="macro" href="#32" title="4" data-ref="_M/MAX_MB_SEGMENTS">MAX_MB_SEGMENTS</a>];</td></tr>
+<tr><th id="264">264</th><td></td></tr>
+<tr><th id="265">265</th><td>  <i>/* mode_based Loop filter adjustment */</i></td></tr>
+<tr><th id="266">266</th><td>  <em>unsigned</em> <em>char</em> <dfn class="decl field" id="macroblockd::mode_ref_lf_delta_enabled" title='macroblockd::mode_ref_lf_delta_enabled' data-ref="macroblockd::mode_ref_lf_delta_enabled" data-ref-filename="macroblockd..mode_ref_lf_delta_enabled">mode_ref_lf_delta_enabled</dfn>;</td></tr>
+<tr><th id="267">267</th><td>  <em>unsigned</em> <em>char</em> <dfn class="decl field" id="macroblockd::mode_ref_lf_delta_update" title='macroblockd::mode_ref_lf_delta_update' data-ref="macroblockd::mode_ref_lf_delta_update" data-ref-filename="macroblockd..mode_ref_lf_delta_update">mode_ref_lf_delta_update</dfn>;</td></tr>
+<tr><th id="268">268</th><td></td></tr>
+<tr><th id="269">269</th><td>  <i>/* Delta values have the range +/- MAX_LOOP_FILTER */</i></td></tr>
+<tr><th id="270">270</th><td>  <em>signed</em> <em>char</em></td></tr>
+<tr><th id="271">271</th><td>      <dfn class="decl field" id="macroblockd::last_ref_lf_deltas" title='macroblockd::last_ref_lf_deltas' data-ref="macroblockd::last_ref_lf_deltas" data-ref-filename="macroblockd..last_ref_lf_deltas">last_ref_lf_deltas</dfn>[<a class="macro" href="#34" title="4" data-ref="_M/MAX_REF_LF_DELTAS">MAX_REF_LF_DELTAS</a>];    <i>/* 0 = Intra, Last, GF, ARF */</i></td></tr>
+<tr><th id="272">272</th><td>  <em>signed</em> <em>char</em> <dfn class="decl field" id="macroblockd::ref_lf_deltas" title='macroblockd::ref_lf_deltas' data-ref="macroblockd::ref_lf_deltas" data-ref-filename="macroblockd..ref_lf_deltas">ref_lf_deltas</dfn>[<a class="macro" href="#34" title="4" data-ref="_M/MAX_REF_LF_DELTAS">MAX_REF_LF_DELTAS</a>]; <i>/* 0 = Intra, Last, GF, ARF */</i></td></tr>
+<tr><th id="273">273</th><td>  <i>/* 0 = BPRED, ZERO_MV, MV, SPLIT */</i></td></tr>
+<tr><th id="274">274</th><td>  <em>signed</em> <em>char</em> <dfn class="decl field" id="macroblockd::last_mode_lf_deltas" title='macroblockd::last_mode_lf_deltas' data-ref="macroblockd::last_mode_lf_deltas" data-ref-filename="macroblockd..last_mode_lf_deltas">last_mode_lf_deltas</dfn>[<a class="macro" href="#35" title="4" data-ref="_M/MAX_MODE_LF_DELTAS">MAX_MODE_LF_DELTAS</a>];</td></tr>
+<tr><th id="275">275</th><td>  <em>signed</em> <em>char</em></td></tr>
+<tr><th id="276">276</th><td>      <dfn class="decl field" id="macroblockd::mode_lf_deltas" title='macroblockd::mode_lf_deltas' data-ref="macroblockd::mode_lf_deltas" data-ref-filename="macroblockd..mode_lf_deltas">mode_lf_deltas</dfn>[<a class="macro" href="#35" title="4" data-ref="_M/MAX_MODE_LF_DELTAS">MAX_MODE_LF_DELTAS</a>]; <i>/* 0 = BPRED, ZERO_MV, MV, SPLIT */</i></td></tr>
+<tr><th id="277">277</th><td></td></tr>
+<tr><th id="278">278</th><td>  <i>/* Distance of MB away from frame edges */</i></td></tr>
+<tr><th id="279">279</th><td>  <em>int</em> <dfn class="decl field" id="macroblockd::mb_to_left_edge" title='macroblockd::mb_to_left_edge' data-ref="macroblockd::mb_to_left_edge" data-ref-filename="macroblockd..mb_to_left_edge">mb_to_left_edge</dfn>;</td></tr>
+<tr><th id="280">280</th><td>  <em>int</em> <dfn class="decl field" id="macroblockd::mb_to_right_edge" title='macroblockd::mb_to_right_edge' data-ref="macroblockd::mb_to_right_edge" data-ref-filename="macroblockd..mb_to_right_edge">mb_to_right_edge</dfn>;</td></tr>
+<tr><th id="281">281</th><td>  <em>int</em> <dfn class="decl field" id="macroblockd::mb_to_top_edge" title='macroblockd::mb_to_top_edge' data-ref="macroblockd::mb_to_top_edge" data-ref-filename="macroblockd..mb_to_top_edge">mb_to_top_edge</dfn>;</td></tr>
+<tr><th id="282">282</th><td>  <em>int</em> <dfn class="decl field" id="macroblockd::mb_to_bottom_edge" title='macroblockd::mb_to_bottom_edge' data-ref="macroblockd::mb_to_bottom_edge" data-ref-filename="macroblockd..mb_to_bottom_edge">mb_to_bottom_edge</dfn>;</td></tr>
+<tr><th id="283">283</th><td></td></tr>
+<tr><th id="284">284</th><td>  <a class="typedef" href="#vp8_subpix_fn_t" title='vp8_subpix_fn_t' data-type='void (*)(unsigned char *, int, int, int, unsigned char *, int)' data-ref="vp8_subpix_fn_t" data-ref-filename="vp8_subpix_fn_t">vp8_subpix_fn_t</a> <dfn class="decl field" id="macroblockd::subpixel_predict" title='macroblockd::subpixel_predict' data-ref="macroblockd::subpixel_predict" data-ref-filename="macroblockd..subpixel_predict">subpixel_predict</dfn>;</td></tr>
+<tr><th id="285">285</th><td>  <a class="typedef" href="#vp8_subpix_fn_t" title='vp8_subpix_fn_t' data-type='void (*)(unsigned char *, int, int, int, unsigned char *, int)' data-ref="vp8_subpix_fn_t" data-ref-filename="vp8_subpix_fn_t">vp8_subpix_fn_t</a> <dfn class="decl field" id="macroblockd::subpixel_predict8x4" title='macroblockd::subpixel_predict8x4' data-ref="macroblockd::subpixel_predict8x4" data-ref-filename="macroblockd..subpixel_predict8x4">subpixel_predict8x4</dfn>;</td></tr>
+<tr><th id="286">286</th><td>  <a class="typedef" href="#vp8_subpix_fn_t" title='vp8_subpix_fn_t' data-type='void (*)(unsigned char *, int, int, int, unsigned char *, int)' data-ref="vp8_subpix_fn_t" data-ref-filename="vp8_subpix_fn_t">vp8_subpix_fn_t</a> <dfn class="decl field" id="macroblockd::subpixel_predict8x8" title='macroblockd::subpixel_predict8x8' data-ref="macroblockd::subpixel_predict8x8" data-ref-filename="macroblockd..subpixel_predict8x8">subpixel_predict8x8</dfn>;</td></tr>
+<tr><th id="287">287</th><td>  <a class="typedef" href="#vp8_subpix_fn_t" title='vp8_subpix_fn_t' data-type='void (*)(unsigned char *, int, int, int, unsigned char *, int)' data-ref="vp8_subpix_fn_t" data-ref-filename="vp8_subpix_fn_t">vp8_subpix_fn_t</a> <dfn class="decl field" id="macroblockd::subpixel_predict16x16" title='macroblockd::subpixel_predict16x16' data-ref="macroblockd::subpixel_predict16x16" data-ref-filename="macroblockd..subpixel_predict16x16">subpixel_predict16x16</dfn>;</td></tr>
+<tr><th id="288">288</th><td></td></tr>
+<tr><th id="289">289</th><td>  <em>void</em> *<dfn class="decl field" id="macroblockd::current_bc" title='macroblockd::current_bc' data-ref="macroblockd::current_bc" data-ref-filename="macroblockd..current_bc">current_bc</dfn>;</td></tr>
+<tr><th id="290">290</th><td></td></tr>
+<tr><th id="291">291</th><td>  <em>int</em> <dfn class="decl field" id="macroblockd::corrupted" title='macroblockd::corrupted' data-ref="macroblockd::corrupted" data-ref-filename="macroblockd..corrupted">corrupted</dfn>;</td></tr>
+<tr><th id="292">292</th><td></td></tr>
+<tr><th id="293">293</th><td>  <b>struct</b> <a class="type" href="../../vpx/internal/vpx_codec_internal.h.html#vpx_internal_error_info" title='vpx_internal_error_info' data-ref="vpx_internal_error_info" data-ref-filename="vpx_internal_error_info">vpx_internal_error_info</a> <dfn class="decl field" id="macroblockd::error_info" title='macroblockd::error_info' data-ref="macroblockd::error_info" data-ref-filename="macroblockd..error_info">error_info</dfn>;</td></tr>
+<tr><th id="294">294</th><td></td></tr>
+<tr><th id="295">295</th><td><u>#<span data-ppcond="295">if</span> <a class="macro" href="../../../config/ios/arm64/vpx_config.h.html#17" title="0" data-ref="_M/VPX_ARCH_X86">VPX_ARCH_X86</a> || <a class="macro" href="../../../config/ios/arm64/vpx_config.h.html#19" title="0" data-ref="_M/VPX_ARCH_X86_64">VPX_ARCH_X86_64</a></u></td></tr>
+<tr><th id="296">296</th><td>  <i>/* This is an intermediate buffer currently used in sub-pixel motion search</i></td></tr>
+<tr><th id="297">297</th><td><i>   * to keep a copy of the reference area. This buffer can be used for other</i></td></tr>
+<tr><th id="298">298</th><td><i>   * purpose.</i></td></tr>
+<tr><th id="299">299</th><td><i>   */</i></td></tr>
+<tr><th id="300">300</th><td>  DECLARE_ALIGNED(<var>32</var>, <em>unsigned</em> <em>char</em>, y_buf[<var>22</var> * <var>32</var>]);</td></tr>
+<tr><th id="301">301</th><td><u>#<span data-ppcond="295">endif</span></u></td></tr>
+<tr><th id="302">302</th><td>} <dfn class="typedef" id="MACROBLOCKD" title='MACROBLOCKD' data-type='struct macroblockd' data-ref="MACROBLOCKD" data-ref-filename="MACROBLOCKD">MACROBLOCKD</dfn>;</td></tr>
+<tr><th id="303">303</th><td></td></tr>
+<tr><th id="304">304</th><td><b>extern</b> <em>void</em> <dfn class="decl fn" id="vp8_build_block_doffsets" title='vp8_build_block_doffsets' data-ref="vp8_build_block_doffsets" data-ref-filename="vp8_build_block_doffsets">vp8_build_block_doffsets</dfn>(<a class="typedef" href="#MACROBLOCKD" title='MACROBLOCKD' data-type='struct macroblockd' data-ref="MACROBLOCKD" data-ref-filename="MACROBLOCKD">MACROBLOCKD</a> *<dfn class="local col6 decl" id="586x" title='x' data-type='MACROBLOCKD *' data-ref="586x" data-ref-filename="586x">x</dfn>);</td></tr>
+<tr><th id="305">305</th><td><b>extern</b> <em>void</em> <dfn class="decl fn" id="vp8_setup_block_dptrs" title='vp8_setup_block_dptrs' data-ref="vp8_setup_block_dptrs" data-ref-filename="vp8_setup_block_dptrs">vp8_setup_block_dptrs</dfn>(<a class="typedef" href="#MACROBLOCKD" title='MACROBLOCKD' data-type='struct macroblockd' data-ref="MACROBLOCKD" data-ref-filename="MACROBLOCKD">MACROBLOCKD</a> *<dfn class="local col7 decl" id="587x" title='x' data-type='MACROBLOCKD *' data-ref="587x" data-ref-filename="587x">x</dfn>);</td></tr>
+<tr><th id="306">306</th><td></td></tr>
+<tr><th id="307">307</th><td><u>#<span data-ppcond="307">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="308">308</th><td>}  <i>// extern "C"</i></td></tr>
+<tr><th id="309">309</th><td><u>#<span data-ppcond="307">endif</span></u></td></tr>
+<tr><th id="310">310</th><td></td></tr>
+<tr><th id="311">311</th><td><u>#<span data-ppcond="11">endif</span>  // VPX_VP8_COMMON_BLOCKD_H_</u></td></tr>
+<tr><th id="312">312</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='alloccommon.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp8/common/alloccommon.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,149 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>DOMInternal.mm source code [webkit/Source/WebKitLegacy/mac/DOM/DOMInternal.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/DOM/DOMInternal.mm'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>DOM</a>/<a href='DOMInternal.mm.html'>DOMInternal.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2004, 2006, 2007, 2008, 2009 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import <a href="DOMInternal.h.html">"DOMInternal.h"</a></u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#import <a href="DOMNodeInternal.h.html">"DOMNodeInternal.h"</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Document.h.html">&lt;WebCore/Document.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Frame.h.html">&lt;WebCore/Frame.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/JSNode.h.html">&lt;WebCore/JSNode.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ScriptController.h.html">&lt;WebCore/ScriptController.h&gt;</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/WebScriptObjectPrivate.h.html">&lt;WebCore/WebScriptObjectPrivate.h&gt;</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/runtime_root.h.html">&lt;WebCore/runtime_root.h&gt;</a></u></td></tr>
+<tr><th id="35">35</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/HashMap.h.html">&lt;wtf/HashMap.h&gt;</a></u></td></tr>
+<tr><th id="36">36</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Lock.h.html">&lt;wtf/Lock.h&gt;</a></u></td></tr>
+<tr><th id="37">37</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/NeverDestroyed.h.html">&lt;wtf/NeverDestroyed.h&gt;</a></u></td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><u>#<span data-ppcond="39">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="40">40</th><td><u>#define NEEDS_WRAPPER_CACHE_LOCK 1</u></td></tr>
+<tr><th id="41">41</th><td><u>#<span data-ppcond="39">endif</span></u></td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><i>//------------------------------------------------------------------------------------------</i></td></tr>
+<tr><th id="44">44</th><td><i>// Wrapping WebCore implementation objects</i></td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td><u>#<span data-ppcond="46">ifdef</span> <span class="macro" data-ref="_M/NEEDS_WRAPPER_CACHE_LOCK">NEEDS_WRAPPER_CACHE_LOCK</span></u></td></tr>
+<tr><th id="47">47</th><td><em>static</em> Lock wrapperCacheLock;</td></tr>
+<tr><th id="48">48</th><td><em>static</em> HashMap&lt;DOMObjectInternal*, NSObject *&gt;&amp; wrapperCache() WTF_REQUIRES_LOCK(wrapperCacheLock)</td></tr>
+<tr><th id="49">49</th><td><u>#<span data-ppcond="46">else</span></u></td></tr>
+<tr><th id="50">50</th><td><em>static</em> <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::HashMap" title='WTF::HashMap' data-ref="WTF::HashMap" data-ref-filename="WTF..HashMap">HashMap</a>&lt;<a class="typedef" href="DOMObject.h.html#DOMObjectInternal" title='DOMObjectInternal' data-type='struct DOMObjectInternal' data-ref="DOMObjectInternal" data-ref-filename="DOMObjectInternal">DOMObjectInternal</a>*, NSObject *&gt;&amp; <dfn class="decl def fn" id="_ZL12wrapperCachev" title='wrapperCache' data-ref="_ZL12wrapperCachev" data-ref-filename="_ZL12wrapperCachev">wrapperCache</dfn>()</td></tr>
+<tr><th id="51">51</th><td><u>#<span data-ppcond="46">endif</span></u></td></tr>
+<tr><th id="52">52</th><td>{</td></tr>
+<tr><th id="53">53</th><td>    <em>static</em> <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::NeverDestroyed" title='WTF::NeverDestroyed' data-ref="WTF::NeverDestroyed" data-ref-filename="WTF..NeverDestroyed">NeverDestroyed</a>&lt;<a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::HashMap" title='WTF::HashMap' data-ref="WTF::HashMap" data-ref-filename="WTF..HashMap">HashMap</a>&lt;<a class="typedef" href="DOMObject.h.html#DOMObjectInternal" title='DOMObjectInternal' data-type='struct DOMObjectInternal' data-ref="DOMObjectInternal" data-ref-filename="DOMObjectInternal">DOMObjectInternal</a>*, NSObject *&gt;&gt; <a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/NeverDestroyed.h.html#_ZN3WTF14NeverDestroyedC1EDpOTL0__" title='WTF::NeverDestroyed::NeverDestroyed&lt;type-parameter-0-0, type-parameter-0-1&gt;' data-ref="_ZN3WTF14NeverDestroyedC1EDpOTL0__" data-ref-filename="_ZN3WTF14NeverDestroyedC1EDpOTL0__"></a><dfn class="local col1 decl" id="1map" title='map' data-type='NeverDestroyed&lt;HashMap&lt;DOMObjectInternal *, NSObject *&gt;&gt;' data-ref="1map" data-ref-filename="1map">map</dfn>;</td></tr>
+<tr><th id="54">54</th><td>    <b>return</b> <a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/NeverDestroyed.h.html#_ZN3WTF14NeverDestroyedcvRT_Ev" title='WTF::NeverDestroyed::operator type-parameter-0-0 &amp;' data-ref="_ZN3WTF14NeverDestroyedcvRT_Ev" data-ref-filename="_ZN3WTF14NeverDestroyedcvRT_Ev"></a><a class="local col1 ref" href="#1map" title='map' data-ref="1map" data-ref-filename="1map">map</a>;</td></tr>
+<tr><th id="55">55</th><td>}</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td>NSObject* <dfn class="decl def fn" id="_Z13getDOMWrapperP17DOMObjectInternal" title='getDOMWrapper' data-ref="_Z13getDOMWrapperP17DOMObjectInternal" data-ref-filename="_Z13getDOMWrapperP17DOMObjectInternal">getDOMWrapper</dfn>(<a class="typedef" href="DOMObject.h.html#DOMObjectInternal" title='DOMObjectInternal' data-type='struct DOMObjectInternal' data-ref="DOMObjectInternal" data-ref-filename="DOMObjectInternal">DOMObjectInternal</a>* <dfn class="local col2 decl" id="2impl" title='impl' data-type='DOMObjectInternal *' data-ref="2impl" data-ref-filename="2impl">impl</dfn>)</td></tr>
+<tr><th id="58">58</th><td>{</td></tr>
+<tr><th id="59">59</th><td><u>#<span data-ppcond="59">ifdef</span> <span class="macro" data-ref="_M/NEEDS_WRAPPER_CACHE_LOCK">NEEDS_WRAPPER_CACHE_LOCK</span></u></td></tr>
+<tr><th id="60">60</th><td>    Locker stateLocker { wrapperCacheLock };</td></tr>
+<tr><th id="61">61</th><td><u>#<span data-ppcond="59">endif</span></u></td></tr>
+<tr><th id="62">62</th><td>    <b>return</b> <a class="ref fn" href="#_ZL12wrapperCachev" title='wrapperCache' data-ref="_ZL12wrapperCachev" data-ref-filename="_ZL12wrapperCachev">wrapperCache</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/HashMap.h.html#_ZNK3WTF7HashMap3getERKNT2_9TraitTypeE" title='WTF::HashMap::get' data-ref="_ZNK3WTF7HashMap3getERKNT2_9TraitTypeE" data-ref-filename="_ZNK3WTF7HashMap3getERKNT2_9TraitTypeE">get</a>(<a class="local col2 ref" href="#2impl" title='impl' data-ref="2impl" data-ref-filename="2impl">impl</a>);</td></tr>
+<tr><th id="63">63</th><td>}</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td><em>void</em> <dfn class="decl def fn" id="_Z13addDOMWrapperP8NSObjectP17DOMObjectInternal" title='addDOMWrapper' data-ref="_Z13addDOMWrapperP8NSObjectP17DOMObjectInternal" data-ref-filename="_Z13addDOMWrapperP8NSObjectP17DOMObjectInternal">addDOMWrapper</dfn>(NSObject* <dfn class="local col3 decl" id="3wrapper" title='wrapper' data-type='NSObject *' data-ref="3wrapper" data-ref-filename="3wrapper">wrapper</dfn>, <a class="typedef" href="DOMObject.h.html#DOMObjectInternal" title='DOMObjectInternal' data-type='struct DOMObjectInternal' data-ref="DOMObjectInternal" data-ref-filename="DOMObjectInternal">DOMObjectInternal</a>* <dfn class="local col4 decl" id="4impl" title='impl' data-type='DOMObjectInternal *' data-ref="4impl" data-ref-filename="4impl">impl</dfn>)</td></tr>
+<tr><th id="66">66</th><td>{</td></tr>
+<tr><th id="67">67</th><td><u>#<span data-ppcond="67">ifdef</span> <span class="macro" data-ref="_M/NEEDS_WRAPPER_CACHE_LOCK">NEEDS_WRAPPER_CACHE_LOCK</span></u></td></tr>
+<tr><th id="68">68</th><td>    Locker stateLocker { wrapperCacheLock };</td></tr>
+<tr><th id="69">69</th><td><u>#<span data-ppcond="67">endif</span></u></td></tr>
+<tr><th id="70">70</th><td>    <a class="ref fn" href="#_ZL12wrapperCachev" title='wrapperCache' data-ref="_ZL12wrapperCachev" data-ref-filename="_ZL12wrapperCachev">wrapperCache</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/HashMap.h.html#_ZN3WTF7HashMap3setERKNT2_9TraitTypeEOTL0__" title='WTF::HashMap::set' data-ref="_ZN3WTF7HashMap3setERKNT2_9TraitTypeEOTL0__" data-ref-filename="_ZN3WTF7HashMap3setERKNT2_9TraitTypeEOTL0__">set</a>(<a class="local col4 ref" href="#4impl" title='impl' data-ref="4impl" data-ref-filename="4impl">impl</a>, <span class='refarg'><a class="local col3 ref" href="#3wrapper" title='wrapper' data-ref="3wrapper" data-ref-filename="3wrapper">wrapper</a></span>);</td></tr>
+<tr><th id="71">71</th><td>}</td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td><em>void</em> <dfn class="decl def fn" id="_Z16removeDOMWrapperP17DOMObjectInternal" title='removeDOMWrapper' data-ref="_Z16removeDOMWrapperP17DOMObjectInternal" data-ref-filename="_Z16removeDOMWrapperP17DOMObjectInternal">removeDOMWrapper</dfn>(<a class="typedef" href="DOMObject.h.html#DOMObjectInternal" title='DOMObjectInternal' data-type='struct DOMObjectInternal' data-ref="DOMObjectInternal" data-ref-filename="DOMObjectInternal">DOMObjectInternal</a>* <dfn class="local col5 decl" id="5impl" title='impl' data-type='DOMObjectInternal *' data-ref="5impl" data-ref-filename="5impl">impl</dfn>)</td></tr>
+<tr><th id="74">74</th><td>{</td></tr>
+<tr><th id="75">75</th><td><u>#<span data-ppcond="75">ifdef</span> <span class="macro" data-ref="_M/NEEDS_WRAPPER_CACHE_LOCK">NEEDS_WRAPPER_CACHE_LOCK</span></u></td></tr>
+<tr><th id="76">76</th><td>    Locker stateLocker { wrapperCacheLock };</td></tr>
+<tr><th id="77">77</th><td><u>#<span data-ppcond="75">endif</span></u></td></tr>
+<tr><th id="78">78</th><td>    <a class="ref fn" href="#_ZL12wrapperCachev" title='wrapperCache' data-ref="_ZL12wrapperCachev" data-ref-filename="_ZL12wrapperCachev">wrapperCache</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/HashMap.h.html#_ZN3WTF7HashMap6removeERKNT2_9TraitTypeE" title='WTF::HashMap::remove' data-ref="_ZN3WTF7HashMap6removeERKNT2_9TraitTypeE" data-ref-filename="_ZN3WTF7HashMap6removeERKNT2_9TraitTypeE">remove</a>(<a class="local col5 ref" href="#5impl" title='impl' data-ref="5impl" data-ref-filename="5impl">impl</a>);</td></tr>
+<tr><th id="79">79</th><td>}</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td><i>//------------------------------------------------------------------------------------------</i></td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td>@implementation WebScriptObject (WebScriptObjectInternal)</td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td><i>// Only called by DOMObject subclass.</i></td></tr>
+<tr><th id="86">86</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)_init</td></tr>
+<tr><th id="87">87</th><td>{</td></tr>
+<tr><th id="88">88</th><td>    <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> = [super init];</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td>    <b>if</b> (![<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> isKindOfClass:[DOMObject <b>class</b>]]) {</td></tr>
+<tr><th id="91">91</th><td>        [NSException raise:<span class='ref' title='NSGenericException' data-ref="NSGenericException" data-ref-filename="NSGenericException">NSGenericException</span> format:@<q>"+%@: _init is an internal initializer"</q>, [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> <b>class</b>]];</td></tr>
+<tr><th id="92">92</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="93">93</th><td>    }</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td>    _private = [[WebScriptObjectPrivate alloc] init];</td></tr>
+<tr><th id="96">96</th><td>    _private-&gt;isCreatedByDOMWrapper = <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="97">97</th><td>    </td></tr>
+<tr><th id="98">98</th><td>    <b>return</b> <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>;</td></tr>
+<tr><th id="99">99</th><td>}</td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td>- (<em>void</em>)_initializeScriptDOMNodeImp</td></tr>
+<tr><th id="102">102</th><td>{</td></tr>
+<tr><th id="103">103</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(_private-&gt;isCreatedByDOMWrapper)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKitLegacy/mac/DOM/DOMInternal.mm&quot;, 103, __PRETTY_FUNCTION__, &quot;_private-&gt;isCreatedByDOMWrapper&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(103, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKitLegacy/mac/DOM/DOMInternal.mm&quot;, __PRETTY_FUNCTION__, 2736); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(_private-&gt;isCreatedByDOMWrapper);</td></tr>
+<tr><th id="104">104</th><td>    </td></tr>
+<tr><th id="105">105</th><td>    <b>if</b> (![<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> isKindOfClass:[DOMNode <b>class</b>]]) {</td></tr>
+<tr><th id="106">106</th><td>        <i>// DOMObject can't map back to a document, and thus an interpreter,</i></td></tr>
+<tr><th id="107">107</th><td><i>        // so for now only create wrappers for DOMNodes.</i></td></tr>
+<tr><th id="108">108</th><td>        <b>return</b>;</td></tr>
+<tr><th id="109">109</th><td>    }</td></tr>
+<tr><th id="110">110</th><td>    </td></tr>
+<tr><th id="111">111</th><td>    <i>// Extract the WebCore::Node from the ObjectiveC wrapper.</i></td></tr>
+<tr><th id="112">112</th><td>    DOMNode *<dfn class="local col7 decl" id="7n" title='n' data-type='DOMNode *' data-ref="7n" data-ref-filename="7n">n</dfn> = (DOMNode *)<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>;</td></tr>
+<tr><th id="113">113</th><td>    <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Node.h.html#WebCore::Node" title='WebCore::Node' data-ref="WebCore::Node" data-ref-filename="WebCore..Node">Node</a> *<dfn class="local col8 decl" id="8nodeImpl" title='nodeImpl' data-type='WebCore::Node *' data-ref="8nodeImpl" data-ref-filename="8nodeImpl">nodeImpl</dfn> = <a class="ref fn" href="DOMNode.mm.html#_Z4coreP7DOMNode" title='core' data-ref="_Z4coreP7DOMNode" data-ref-filename="_Z4coreP7DOMNode">core</a>(<a class="local col7 ref" href="#7n" title='n' data-ref="7n" data-ref-filename="7n">n</a>);</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td>    <i>// Dig up Interpreter and ExecState.</i></td></tr>
+<tr><th id="116">116</th><td>    <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Frame.h.html#WebCore::Frame" title='WebCore::Frame' data-ref="WebCore::Frame" data-ref-filename="WebCore..Frame">Frame</a> *<dfn class="local col9 decl" id="9frame" title='frame' data-type='WebCore::Frame *' data-ref="9frame" data-ref-filename="9frame">frame</dfn> = <a class="local col8 ref" href="#8nodeImpl" title='nodeImpl' data-ref="8nodeImpl" data-ref-filename="8nodeImpl">nodeImpl</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Node.h.html#_ZNK7WebCore4Node8documentEv" title='WebCore::Node::document' data-ref="_ZNK7WebCore4Node8documentEv" data-ref-filename="_ZNK7WebCore4Node8documentEv">document</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameDestructionObserver.h.html#_ZNK7WebCore24FrameDestructionObserver5frameEv" title='WebCore::FrameDestructionObserver::frame' data-ref="_ZNK7WebCore24FrameDestructionObserver5frameEv" data-ref-filename="_ZNK7WebCore24FrameDestructionObserver5frameEv">frame</a>();</td></tr>
+<tr><th id="117">117</th><td>    <b>if</b> (!<a class="local col9 ref" href="#9frame" title='frame' data-ref="9frame" data-ref-filename="9frame">frame</a>)</td></tr>
+<tr><th id="118">118</th><td>        <b>return</b>;</td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td>    <i>// The global object which should own this node - FIXME: does this need to be isolated-world aware?</i></td></tr>
+<tr><th id="121">121</th><td>    <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/JSDOMGlobalObject.h.html#WebCore::JSDOMGlobalObject" title='WebCore::JSDOMGlobalObject' data-ref="WebCore::JSDOMGlobalObject" data-ref-filename="WebCore..JSDOMGlobalObject">JSDOMGlobalObject</a>* <dfn class="local col0 decl" id="10globalObject" title='globalObject' data-type='WebCore::JSDOMGlobalObject *' data-ref="10globalObject" data-ref-filename="10globalObject">globalObject</dfn> = <a class="local col9 ref" href="#9frame" title='frame' data-ref="9frame" data-ref-filename="9frame">frame</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Frame.h.html#_ZN7WebCore5Frame6scriptEv" title='WebCore::Frame::script' data-ref="_ZN7WebCore5Frame6scriptEv" data-ref-filename="_ZN7WebCore5Frame6scriptEv">script</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ScriptController.h.html#_ZN7WebCore16ScriptController12globalObjectERNS_15DOMWrapperWorldE" title='WebCore::ScriptController::globalObject' data-ref="_ZN7WebCore16ScriptController12globalObjectERNS_15DOMWrapperWorldE" data-ref-filename="_ZN7WebCore16ScriptController12globalObjectERNS_15DOMWrapperWorldE">globalObject</a>(<span class='refarg'><span class="namespace">WebCore::</span><a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DOMWrapperWorld.h.html#_ZN7WebCore21mainThreadNormalWorldEv" title='WebCore::mainThreadNormalWorld' data-ref="_ZN7WebCore21mainThreadNormalWorldEv" data-ref-filename="_ZN7WebCore21mainThreadNormalWorldEv">mainThreadNormalWorld</a>()</span>);</td></tr>
+<tr><th id="122">122</th><td></td></tr>
+<tr><th id="123">123</th><td>    <i>// Get (or create) a cached JS object for the DOM node.</i></td></tr>
+<tr><th id="124">124</th><td>    <span class="namespace">JSC::</span><a class="type" href="../../../../WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSObject.h.html#JSC::JSObject" title='JSC::JSObject' data-ref="JSC::JSObject" data-ref-filename="JSC..JSObject">JSObject</a> *<dfn class="local col1 decl" id="11scriptImp" title='scriptImp' data-type='JSC::JSObject *' data-ref="11scriptImp" data-ref-filename="11scriptImp">scriptImp</dfn> = <a class="ref fn" href="../../../../WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSObject.h.html#_ZN3JSC8asObjectENS_7JSValueE" title='JSC::asObject' data-ref="_ZN3JSC8asObjectENS_7JSValueE" data-ref-filename="_ZN3JSC8asObjectENS_7JSValueE">asObject</a>(<span class="namespace">WebCore::</span><a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/JSNode.h.html#_ZN7WebCore4toJSEPN3JSC14JSGlobalObjectEPNS_17JSDOMGlobalObjectEPNS_4NodeE" title='WebCore::toJS' data-ref="_ZN7WebCore4toJSEPN3JSC14JSGlobalObjectEPNS_17JSDOMGlobalObjectEPNS_4NodeE" data-ref-filename="_ZN7WebCore4toJSEPN3JSC14JSGlobalObjectEPNS_17JSDOMGlobalObjectEPNS_4NodeE">toJS</a>(<a class="local col0 ref" href="#10globalObject" title='globalObject' data-ref="10globalObject" data-ref-filename="10globalObject">globalObject</a>, <a class="local col0 ref" href="#10globalObject" title='globalObject' data-ref="10globalObject" data-ref-filename="10globalObject">globalObject</a>, <a class="local col8 ref" href="#8nodeImpl" title='nodeImpl' data-ref="8nodeImpl" data-ref-filename="8nodeImpl">nodeImpl</a>));</td></tr>
+<tr><th id="125">125</th><td></td></tr>
+<tr><th id="126">126</th><td>    <span class="namespace">JSC::Bindings::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/runtime_root.h.html#JSC::Bindings::RootObject" title='JSC::Bindings::RootObject' data-ref="JSC::Bindings::RootObject" data-ref-filename="JSC..Bindings..RootObject">RootObject</a>* <dfn class="local col2 decl" id="12rootObject" title='rootObject' data-type='JSC::Bindings::RootObject *' data-ref="12rootObject" data-ref-filename="12rootObject">rootObject</dfn> = <a class="local col9 ref" href="#9frame" title='frame' data-ref="9frame" data-ref-filename="9frame">frame</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Frame.h.html#_ZN7WebCore5Frame6scriptEv" title='WebCore::Frame::script' data-ref="_ZN7WebCore5Frame6scriptEv" data-ref-filename="_ZN7WebCore5Frame6scriptEv">script</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ScriptController.h.html#_ZN7WebCore16ScriptController17bindingRootObjectEv" title='WebCore::ScriptController::bindingRootObject' data-ref="_ZN7WebCore16ScriptController17bindingRootObjectEv" data-ref-filename="_ZN7WebCore16ScriptController17bindingRootObjectEv">bindingRootObject</a>();</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> _setImp:<a class="local col1 ref" href="#11scriptImp" title='scriptImp' data-ref="11scriptImp" data-ref-filename="11scriptImp">scriptImp</a> originRootObject:<a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RefPtr.h.html#_ZN3WTF6RefPtrC1EPT_" title='WTF::RefPtr::RefPtr&lt;T, type-parameter-0-1, type-parameter-0-2&gt;' data-ref="_ZN3WTF6RefPtrC1EPT_" data-ref-filename="_ZN3WTF6RefPtrC1EPT_"></a><a class="local col2 ref" href="#12rootObject" title='rootObject' data-ref="12rootObject" data-ref-filename="12rootObject">rootObject</a> rootObject:<a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RefPtr.h.html#_ZN3WTF6RefPtrC1EPT_" title='WTF::RefPtr::RefPtr&lt;T, type-parameter-0-1, type-parameter-0-2&gt;' data-ref="_ZN3WTF6RefPtrC1EPT_" data-ref-filename="_ZN3WTF6RefPtrC1EPT_"></a><a class="local col2 ref" href="#12rootObject" title='rootObject' data-ref="12rootObject" data-ref-filename="12rootObject">rootObject</a>];</td></tr>
+<tr><th id="129">129</th><td>}</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td>@end</td></tr>
+<tr><th id="132">132</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../WebKitBuild/Debug/DerivedSources/WebKitLegacy/unified-sources/UnifiedSource14-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKitLegacy/unified-sources/UnifiedSource14-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

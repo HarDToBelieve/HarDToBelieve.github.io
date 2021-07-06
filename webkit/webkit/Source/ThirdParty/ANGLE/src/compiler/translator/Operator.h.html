@@ -1,0 +1,295 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Operator.h source code [webkit/Source/ThirdParty/ANGLE/src/compiler/translator/Operator.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="TOperator "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/ANGLE/src/compiler/translator/Operator.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>ANGLE</a>/<a href='../..'>src</a>/<a href='..'>compiler</a>/<a href='./'>translator</a>/<a href='Operator.h.html'>Operator.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>//</i></td></tr>
+<tr><th id="2">2</th><td><i>// Copyright 2002 The ANGLE Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i>// Use of this source code is governed by a BSD-style license that can be</i></td></tr>
+<tr><th id="4">4</th><td><i>// found in the LICENSE file.</i></td></tr>
+<tr><th id="5">5</th><td><i>//</i></td></tr>
+<tr><th id="6">6</th><td></td></tr>
+<tr><th id="7">7</th><td><u>#<span data-ppcond="7">ifndef</span> <span class="macro" data-ref="_M/COMPILER_TRANSLATOR_OPERATOR_H_">COMPILER_TRANSLATOR_OPERATOR_H_</span></u></td></tr>
+<tr><th id="8">8</th><td><u>#define <dfn class="macro" id="_M/COMPILER_TRANSLATOR_OPERATOR_H_" data-ref="_M/COMPILER_TRANSLATOR_OPERATOR_H_">COMPILER_TRANSLATOR_OPERATOR_H_</dfn></u></td></tr>
+<tr><th id="9">9</th><td></td></tr>
+<tr><th id="10">10</th><td><u>#include &lt;cstdint&gt;</u></td></tr>
+<tr><th id="11">11</th><td></td></tr>
+<tr><th id="12">12</th><td><i>//</i></td></tr>
+<tr><th id="13">13</th><td><i>// Operators used by the high-level (parse tree) representation.</i></td></tr>
+<tr><th id="14">14</th><td><i>//</i></td></tr>
+<tr><th id="15">15</th><td><b>enum</b> <dfn class="type def" id="TOperator" title='TOperator' data-ref="TOperator" data-ref-filename="TOperator">TOperator</dfn> : uint8_t</td></tr>
+<tr><th id="16">16</th><td>{</td></tr>
+<tr><th id="17">17</th><td>    <dfn class="enum" id="EOpNull" title='EOpNull' data-ref="EOpNull" data-ref-filename="EOpNull">EOpNull</dfn>,  <i>// if in a node, should only mean a node is still being built</i></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td>    <i>// Call a function defined in the AST. This might be a user-defined function or a function</i></td></tr>
+<tr><th id="20">20</th><td><i>    // inserted by an AST transformation.</i></td></tr>
+<tr><th id="21">21</th><td>    <dfn class="enum" id="EOpCallFunctionInAST" title='EOpCallFunctionInAST' data-ref="EOpCallFunctionInAST" data-ref-filename="EOpCallFunctionInAST">EOpCallFunctionInAST</dfn>,</td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td>    <i>// Call an internal helper function with a raw implementation - the implementation can't be</i></td></tr>
+<tr><th id="24">24</th><td><i>    // subject to AST transformations. Raw functions have a few constraints to keep them compatible</i></td></tr>
+<tr><th id="25">25</th><td><i>    // with AST traversers:</i></td></tr>
+<tr><th id="26">26</th><td><i>    // * They should not return arrays.</i></td></tr>
+<tr><th id="27">27</th><td><i>    // * They should not have out parameters.</i></td></tr>
+<tr><th id="28">28</th><td>    <dfn class="enum" id="EOpCallInternalRawFunction" title='EOpCallInternalRawFunction' data-ref="EOpCallInternalRawFunction" data-ref-filename="EOpCallInternalRawFunction">EOpCallInternalRawFunction</dfn>,</td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td>    <i>// Call a built-in function like a texture or image function.</i></td></tr>
+<tr><th id="31">31</th><td>    <dfn class="enum" id="EOpCallBuiltInFunction" title='EOpCallBuiltInFunction' data-ref="EOpCallBuiltInFunction" data-ref-filename="EOpCallBuiltInFunction">EOpCallBuiltInFunction</dfn>,</td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td>    <i>//</i></td></tr>
+<tr><th id="34">34</th><td><i>    // Unary operators</i></td></tr>
+<tr><th id="35">35</th><td><i>    //</i></td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td>    <dfn class="enum" id="EOpNegative" title='EOpNegative' data-ref="EOpNegative" data-ref-filename="EOpNegative">EOpNegative</dfn>,</td></tr>
+<tr><th id="38">38</th><td>    <dfn class="enum" id="EOpPositive" title='EOpPositive' data-ref="EOpPositive" data-ref-filename="EOpPositive">EOpPositive</dfn>,</td></tr>
+<tr><th id="39">39</th><td>    <dfn class="enum" id="EOpLogicalNot" title='EOpLogicalNot' data-ref="EOpLogicalNot" data-ref-filename="EOpLogicalNot">EOpLogicalNot</dfn>,</td></tr>
+<tr><th id="40">40</th><td>    <dfn class="enum" id="EOpBitwiseNot" title='EOpBitwiseNot' data-ref="EOpBitwiseNot" data-ref-filename="EOpBitwiseNot">EOpBitwiseNot</dfn>,</td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td>    <dfn class="enum" id="EOpPostIncrement" title='EOpPostIncrement' data-ref="EOpPostIncrement" data-ref-filename="EOpPostIncrement">EOpPostIncrement</dfn>,</td></tr>
+<tr><th id="43">43</th><td>    <dfn class="enum" id="EOpPostDecrement" title='EOpPostDecrement' data-ref="EOpPostDecrement" data-ref-filename="EOpPostDecrement">EOpPostDecrement</dfn>,</td></tr>
+<tr><th id="44">44</th><td>    <dfn class="enum" id="EOpPreIncrement" title='EOpPreIncrement' data-ref="EOpPreIncrement" data-ref-filename="EOpPreIncrement">EOpPreIncrement</dfn>,</td></tr>
+<tr><th id="45">45</th><td>    <dfn class="enum" id="EOpPreDecrement" title='EOpPreDecrement' data-ref="EOpPreDecrement" data-ref-filename="EOpPreDecrement">EOpPreDecrement</dfn>,</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td>    <dfn class="enum" id="EOpArrayLength" title='EOpArrayLength' data-ref="EOpArrayLength" data-ref-filename="EOpArrayLength">EOpArrayLength</dfn>,</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td>    <i>//</i></td></tr>
+<tr><th id="50">50</th><td><i>    // binary operations (ones with special GLSL syntax are used in TIntermBinary nodes, others in</i></td></tr>
+<tr><th id="51">51</th><td><i>    // TIntermAggregate nodes)</i></td></tr>
+<tr><th id="52">52</th><td><i>    //</i></td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td>    <dfn class="enum" id="EOpAdd" title='EOpAdd' data-ref="EOpAdd" data-ref-filename="EOpAdd">EOpAdd</dfn>,</td></tr>
+<tr><th id="55">55</th><td>    <dfn class="enum" id="EOpSub" title='EOpSub' data-ref="EOpSub" data-ref-filename="EOpSub">EOpSub</dfn>,</td></tr>
+<tr><th id="56">56</th><td>    <dfn class="enum" id="EOpMul" title='EOpMul' data-ref="EOpMul" data-ref-filename="EOpMul">EOpMul</dfn>,</td></tr>
+<tr><th id="57">57</th><td>    <dfn class="enum" id="EOpDiv" title='EOpDiv' data-ref="EOpDiv" data-ref-filename="EOpDiv">EOpDiv</dfn>,</td></tr>
+<tr><th id="58">58</th><td>    <dfn class="enum" id="EOpIMod" title='EOpIMod' data-ref="EOpIMod" data-ref-filename="EOpIMod">EOpIMod</dfn>,</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td>    <dfn class="enum" id="EOpEqual" title='EOpEqual' data-ref="EOpEqual" data-ref-filename="EOpEqual">EOpEqual</dfn>,</td></tr>
+<tr><th id="61">61</th><td>    <dfn class="enum" id="EOpNotEqual" title='EOpNotEqual' data-ref="EOpNotEqual" data-ref-filename="EOpNotEqual">EOpNotEqual</dfn>,</td></tr>
+<tr><th id="62">62</th><td>    <dfn class="enum" id="EOpLessThan" title='EOpLessThan' data-ref="EOpLessThan" data-ref-filename="EOpLessThan">EOpLessThan</dfn>,</td></tr>
+<tr><th id="63">63</th><td>    <dfn class="enum" id="EOpGreaterThan" title='EOpGreaterThan' data-ref="EOpGreaterThan" data-ref-filename="EOpGreaterThan">EOpGreaterThan</dfn>,</td></tr>
+<tr><th id="64">64</th><td>    <dfn class="enum" id="EOpLessThanEqual" title='EOpLessThanEqual' data-ref="EOpLessThanEqual" data-ref-filename="EOpLessThanEqual">EOpLessThanEqual</dfn>,</td></tr>
+<tr><th id="65">65</th><td>    <dfn class="enum" id="EOpGreaterThanEqual" title='EOpGreaterThanEqual' data-ref="EOpGreaterThanEqual" data-ref-filename="EOpGreaterThanEqual">EOpGreaterThanEqual</dfn>,</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td>    <dfn class="enum" id="EOpEqualComponentWise" title='EOpEqualComponentWise' data-ref="EOpEqualComponentWise" data-ref-filename="EOpEqualComponentWise">EOpEqualComponentWise</dfn>,</td></tr>
+<tr><th id="68">68</th><td>    <dfn class="enum" id="EOpNotEqualComponentWise" title='EOpNotEqualComponentWise' data-ref="EOpNotEqualComponentWise" data-ref-filename="EOpNotEqualComponentWise">EOpNotEqualComponentWise</dfn>,</td></tr>
+<tr><th id="69">69</th><td>    <dfn class="enum" id="EOpLessThanComponentWise" title='EOpLessThanComponentWise' data-ref="EOpLessThanComponentWise" data-ref-filename="EOpLessThanComponentWise">EOpLessThanComponentWise</dfn>,</td></tr>
+<tr><th id="70">70</th><td>    <dfn class="enum" id="EOpLessThanEqualComponentWise" title='EOpLessThanEqualComponentWise' data-ref="EOpLessThanEqualComponentWise" data-ref-filename="EOpLessThanEqualComponentWise">EOpLessThanEqualComponentWise</dfn>,</td></tr>
+<tr><th id="71">71</th><td>    <dfn class="enum" id="EOpGreaterThanComponentWise" title='EOpGreaterThanComponentWise' data-ref="EOpGreaterThanComponentWise" data-ref-filename="EOpGreaterThanComponentWise">EOpGreaterThanComponentWise</dfn>,</td></tr>
+<tr><th id="72">72</th><td>    <dfn class="enum" id="EOpGreaterThanEqualComponentWise" title='EOpGreaterThanEqualComponentWise' data-ref="EOpGreaterThanEqualComponentWise" data-ref-filename="EOpGreaterThanEqualComponentWise">EOpGreaterThanEqualComponentWise</dfn>,</td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td>    <dfn class="enum" id="EOpComma" title='EOpComma' data-ref="EOpComma" data-ref-filename="EOpComma">EOpComma</dfn>,</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td>    <dfn class="enum" id="EOpVectorTimesScalar" title='EOpVectorTimesScalar' data-ref="EOpVectorTimesScalar" data-ref-filename="EOpVectorTimesScalar">EOpVectorTimesScalar</dfn>,</td></tr>
+<tr><th id="77">77</th><td>    <dfn class="enum" id="EOpVectorTimesMatrix" title='EOpVectorTimesMatrix' data-ref="EOpVectorTimesMatrix" data-ref-filename="EOpVectorTimesMatrix">EOpVectorTimesMatrix</dfn>,</td></tr>
+<tr><th id="78">78</th><td>    <dfn class="enum" id="EOpMatrixTimesVector" title='EOpMatrixTimesVector' data-ref="EOpMatrixTimesVector" data-ref-filename="EOpMatrixTimesVector">EOpMatrixTimesVector</dfn>,</td></tr>
+<tr><th id="79">79</th><td>    <dfn class="enum" id="EOpMatrixTimesScalar" title='EOpMatrixTimesScalar' data-ref="EOpMatrixTimesScalar" data-ref-filename="EOpMatrixTimesScalar">EOpMatrixTimesScalar</dfn>,</td></tr>
+<tr><th id="80">80</th><td>    <dfn class="enum" id="EOpMatrixTimesMatrix" title='EOpMatrixTimesMatrix' data-ref="EOpMatrixTimesMatrix" data-ref-filename="EOpMatrixTimesMatrix">EOpMatrixTimesMatrix</dfn>,</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td>    <dfn class="enum" id="EOpLogicalOr" title='EOpLogicalOr' data-ref="EOpLogicalOr" data-ref-filename="EOpLogicalOr">EOpLogicalOr</dfn>,</td></tr>
+<tr><th id="83">83</th><td>    <dfn class="enum" id="EOpLogicalXor" title='EOpLogicalXor' data-ref="EOpLogicalXor" data-ref-filename="EOpLogicalXor">EOpLogicalXor</dfn>,</td></tr>
+<tr><th id="84">84</th><td>    <dfn class="enum" id="EOpLogicalAnd" title='EOpLogicalAnd' data-ref="EOpLogicalAnd" data-ref-filename="EOpLogicalAnd">EOpLogicalAnd</dfn>,</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>    <dfn class="enum" id="EOpBitShiftLeft" title='EOpBitShiftLeft' data-ref="EOpBitShiftLeft" data-ref-filename="EOpBitShiftLeft">EOpBitShiftLeft</dfn>,</td></tr>
+<tr><th id="87">87</th><td>    <dfn class="enum" id="EOpBitShiftRight" title='EOpBitShiftRight' data-ref="EOpBitShiftRight" data-ref-filename="EOpBitShiftRight">EOpBitShiftRight</dfn>,</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td>    <dfn class="enum" id="EOpBitwiseAnd" title='EOpBitwiseAnd' data-ref="EOpBitwiseAnd" data-ref-filename="EOpBitwiseAnd">EOpBitwiseAnd</dfn>,</td></tr>
+<tr><th id="90">90</th><td>    <dfn class="enum" id="EOpBitwiseXor" title='EOpBitwiseXor' data-ref="EOpBitwiseXor" data-ref-filename="EOpBitwiseXor">EOpBitwiseXor</dfn>,</td></tr>
+<tr><th id="91">91</th><td>    <dfn class="enum" id="EOpBitwiseOr" title='EOpBitwiseOr' data-ref="EOpBitwiseOr" data-ref-filename="EOpBitwiseOr">EOpBitwiseOr</dfn>,</td></tr>
+<tr><th id="92">92</th><td></td></tr>
+<tr><th id="93">93</th><td>    <dfn class="enum" id="EOpIndexDirect" title='EOpIndexDirect' data-ref="EOpIndexDirect" data-ref-filename="EOpIndexDirect">EOpIndexDirect</dfn>,</td></tr>
+<tr><th id="94">94</th><td>    <dfn class="enum" id="EOpIndexIndirect" title='EOpIndexIndirect' data-ref="EOpIndexIndirect" data-ref-filename="EOpIndexIndirect">EOpIndexIndirect</dfn>,</td></tr>
+<tr><th id="95">95</th><td>    <dfn class="enum" id="EOpIndexDirectStruct" title='EOpIndexDirectStruct' data-ref="EOpIndexDirectStruct" data-ref-filename="EOpIndexDirectStruct">EOpIndexDirectStruct</dfn>,</td></tr>
+<tr><th id="96">96</th><td>    <dfn class="enum" id="EOpIndexDirectInterfaceBlock" title='EOpIndexDirectInterfaceBlock' data-ref="EOpIndexDirectInterfaceBlock" data-ref-filename="EOpIndexDirectInterfaceBlock">EOpIndexDirectInterfaceBlock</dfn>,</td></tr>
+<tr><th id="97">97</th><td></td></tr>
+<tr><th id="98">98</th><td>    <i>//</i></td></tr>
+<tr><th id="99">99</th><td><i>    // Built-in functions mapped to operators (either unary or with multiple parameters)</i></td></tr>
+<tr><th id="100">100</th><td><i>    //</i></td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td>    <dfn class="enum" id="EOpRadians" title='EOpRadians' data-ref="EOpRadians" data-ref-filename="EOpRadians">EOpRadians</dfn>,</td></tr>
+<tr><th id="103">103</th><td>    <dfn class="enum" id="EOpDegrees" title='EOpDegrees' data-ref="EOpDegrees" data-ref-filename="EOpDegrees">EOpDegrees</dfn>,</td></tr>
+<tr><th id="104">104</th><td>    <dfn class="enum" id="EOpSin" title='EOpSin' data-ref="EOpSin" data-ref-filename="EOpSin">EOpSin</dfn>,</td></tr>
+<tr><th id="105">105</th><td>    <dfn class="enum" id="EOpCos" title='EOpCos' data-ref="EOpCos" data-ref-filename="EOpCos">EOpCos</dfn>,</td></tr>
+<tr><th id="106">106</th><td>    <dfn class="enum" id="EOpTan" title='EOpTan' data-ref="EOpTan" data-ref-filename="EOpTan">EOpTan</dfn>,</td></tr>
+<tr><th id="107">107</th><td>    <dfn class="enum" id="EOpAsin" title='EOpAsin' data-ref="EOpAsin" data-ref-filename="EOpAsin">EOpAsin</dfn>,</td></tr>
+<tr><th id="108">108</th><td>    <dfn class="enum" id="EOpAcos" title='EOpAcos' data-ref="EOpAcos" data-ref-filename="EOpAcos">EOpAcos</dfn>,</td></tr>
+<tr><th id="109">109</th><td>    <dfn class="enum" id="EOpAtan" title='EOpAtan' data-ref="EOpAtan" data-ref-filename="EOpAtan">EOpAtan</dfn>,</td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td>    <dfn class="enum" id="EOpSinh" title='EOpSinh' data-ref="EOpSinh" data-ref-filename="EOpSinh">EOpSinh</dfn>,</td></tr>
+<tr><th id="112">112</th><td>    <dfn class="enum" id="EOpCosh" title='EOpCosh' data-ref="EOpCosh" data-ref-filename="EOpCosh">EOpCosh</dfn>,</td></tr>
+<tr><th id="113">113</th><td>    <dfn class="enum" id="EOpTanh" title='EOpTanh' data-ref="EOpTanh" data-ref-filename="EOpTanh">EOpTanh</dfn>,</td></tr>
+<tr><th id="114">114</th><td>    <dfn class="enum" id="EOpAsinh" title='EOpAsinh' data-ref="EOpAsinh" data-ref-filename="EOpAsinh">EOpAsinh</dfn>,</td></tr>
+<tr><th id="115">115</th><td>    <dfn class="enum" id="EOpAcosh" title='EOpAcosh' data-ref="EOpAcosh" data-ref-filename="EOpAcosh">EOpAcosh</dfn>,</td></tr>
+<tr><th id="116">116</th><td>    <dfn class="enum" id="EOpAtanh" title='EOpAtanh' data-ref="EOpAtanh" data-ref-filename="EOpAtanh">EOpAtanh</dfn>,</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td>    <dfn class="enum" id="EOpPow" title='EOpPow' data-ref="EOpPow" data-ref-filename="EOpPow">EOpPow</dfn>,</td></tr>
+<tr><th id="119">119</th><td>    <dfn class="enum" id="EOpExp" title='EOpExp' data-ref="EOpExp" data-ref-filename="EOpExp">EOpExp</dfn>,</td></tr>
+<tr><th id="120">120</th><td>    <dfn class="enum" id="EOpLog" title='EOpLog' data-ref="EOpLog" data-ref-filename="EOpLog">EOpLog</dfn>,</td></tr>
+<tr><th id="121">121</th><td>    <dfn class="enum" id="EOpExp2" title='EOpExp2' data-ref="EOpExp2" data-ref-filename="EOpExp2">EOpExp2</dfn>,</td></tr>
+<tr><th id="122">122</th><td>    <dfn class="enum" id="EOpLog2" title='EOpLog2' data-ref="EOpLog2" data-ref-filename="EOpLog2">EOpLog2</dfn>,</td></tr>
+<tr><th id="123">123</th><td>    <dfn class="enum" id="EOpSqrt" title='EOpSqrt' data-ref="EOpSqrt" data-ref-filename="EOpSqrt">EOpSqrt</dfn>,</td></tr>
+<tr><th id="124">124</th><td>    <dfn class="enum" id="EOpInversesqrt" title='EOpInversesqrt' data-ref="EOpInversesqrt" data-ref-filename="EOpInversesqrt">EOpInversesqrt</dfn>,</td></tr>
+<tr><th id="125">125</th><td></td></tr>
+<tr><th id="126">126</th><td>    <dfn class="enum" id="EOpAbs" title='EOpAbs' data-ref="EOpAbs" data-ref-filename="EOpAbs">EOpAbs</dfn>,</td></tr>
+<tr><th id="127">127</th><td>    <dfn class="enum" id="EOpSign" title='EOpSign' data-ref="EOpSign" data-ref-filename="EOpSign">EOpSign</dfn>,</td></tr>
+<tr><th id="128">128</th><td>    <dfn class="enum" id="EOpFloor" title='EOpFloor' data-ref="EOpFloor" data-ref-filename="EOpFloor">EOpFloor</dfn>,</td></tr>
+<tr><th id="129">129</th><td>    <dfn class="enum" id="EOpTrunc" title='EOpTrunc' data-ref="EOpTrunc" data-ref-filename="EOpTrunc">EOpTrunc</dfn>,</td></tr>
+<tr><th id="130">130</th><td>    <dfn class="enum" id="EOpRound" title='EOpRound' data-ref="EOpRound" data-ref-filename="EOpRound">EOpRound</dfn>,</td></tr>
+<tr><th id="131">131</th><td>    <dfn class="enum" id="EOpRoundEven" title='EOpRoundEven' data-ref="EOpRoundEven" data-ref-filename="EOpRoundEven">EOpRoundEven</dfn>,</td></tr>
+<tr><th id="132">132</th><td>    <dfn class="enum" id="EOpCeil" title='EOpCeil' data-ref="EOpCeil" data-ref-filename="EOpCeil">EOpCeil</dfn>,</td></tr>
+<tr><th id="133">133</th><td>    <dfn class="enum" id="EOpFract" title='EOpFract' data-ref="EOpFract" data-ref-filename="EOpFract">EOpFract</dfn>,</td></tr>
+<tr><th id="134">134</th><td>    <dfn class="enum" id="EOpMod" title='EOpMod' data-ref="EOpMod" data-ref-filename="EOpMod">EOpMod</dfn>,</td></tr>
+<tr><th id="135">135</th><td>    <dfn class="enum" id="EOpModf" title='EOpModf' data-ref="EOpModf" data-ref-filename="EOpModf">EOpModf</dfn>,</td></tr>
+<tr><th id="136">136</th><td>    <dfn class="enum" id="EOpMin" title='EOpMin' data-ref="EOpMin" data-ref-filename="EOpMin">EOpMin</dfn>,</td></tr>
+<tr><th id="137">137</th><td>    <dfn class="enum" id="EOpMax" title='EOpMax' data-ref="EOpMax" data-ref-filename="EOpMax">EOpMax</dfn>,</td></tr>
+<tr><th id="138">138</th><td>    <dfn class="enum" id="EOpClamp" title='EOpClamp' data-ref="EOpClamp" data-ref-filename="EOpClamp">EOpClamp</dfn>,</td></tr>
+<tr><th id="139">139</th><td>    <dfn class="enum" id="EOpMix" title='EOpMix' data-ref="EOpMix" data-ref-filename="EOpMix">EOpMix</dfn>,</td></tr>
+<tr><th id="140">140</th><td>    <dfn class="enum" id="EOpStep" title='EOpStep' data-ref="EOpStep" data-ref-filename="EOpStep">EOpStep</dfn>,</td></tr>
+<tr><th id="141">141</th><td>    <dfn class="enum" id="EOpSmoothstep" title='EOpSmoothstep' data-ref="EOpSmoothstep" data-ref-filename="EOpSmoothstep">EOpSmoothstep</dfn>,</td></tr>
+<tr><th id="142">142</th><td>    <dfn class="enum" id="EOpIsnan" title='EOpIsnan' data-ref="EOpIsnan" data-ref-filename="EOpIsnan">EOpIsnan</dfn>,</td></tr>
+<tr><th id="143">143</th><td>    <dfn class="enum" id="EOpIsinf" title='EOpIsinf' data-ref="EOpIsinf" data-ref-filename="EOpIsinf">EOpIsinf</dfn>,</td></tr>
+<tr><th id="144">144</th><td>    <dfn class="enum" id="EOpFma" title='EOpFma' data-ref="EOpFma" data-ref-filename="EOpFma">EOpFma</dfn>,</td></tr>
+<tr><th id="145">145</th><td></td></tr>
+<tr><th id="146">146</th><td>    <dfn class="enum" id="EOpFloatBitsToInt" title='EOpFloatBitsToInt' data-ref="EOpFloatBitsToInt" data-ref-filename="EOpFloatBitsToInt">EOpFloatBitsToInt</dfn>,</td></tr>
+<tr><th id="147">147</th><td>    <dfn class="enum" id="EOpFloatBitsToUint" title='EOpFloatBitsToUint' data-ref="EOpFloatBitsToUint" data-ref-filename="EOpFloatBitsToUint">EOpFloatBitsToUint</dfn>,</td></tr>
+<tr><th id="148">148</th><td>    <dfn class="enum" id="EOpIntBitsToFloat" title='EOpIntBitsToFloat' data-ref="EOpIntBitsToFloat" data-ref-filename="EOpIntBitsToFloat">EOpIntBitsToFloat</dfn>,</td></tr>
+<tr><th id="149">149</th><td>    <dfn class="enum" id="EOpUintBitsToFloat" title='EOpUintBitsToFloat' data-ref="EOpUintBitsToFloat" data-ref-filename="EOpUintBitsToFloat">EOpUintBitsToFloat</dfn>,</td></tr>
+<tr><th id="150">150</th><td></td></tr>
+<tr><th id="151">151</th><td>    <dfn class="enum" id="EOpFrexp" title='EOpFrexp' data-ref="EOpFrexp" data-ref-filename="EOpFrexp">EOpFrexp</dfn>,</td></tr>
+<tr><th id="152">152</th><td>    <dfn class="enum" id="EOpLdexp" title='EOpLdexp' data-ref="EOpLdexp" data-ref-filename="EOpLdexp">EOpLdexp</dfn>,</td></tr>
+<tr><th id="153">153</th><td></td></tr>
+<tr><th id="154">154</th><td>    <dfn class="enum" id="EOpPackSnorm2x16" title='EOpPackSnorm2x16' data-ref="EOpPackSnorm2x16" data-ref-filename="EOpPackSnorm2x16">EOpPackSnorm2x16</dfn>,</td></tr>
+<tr><th id="155">155</th><td>    <dfn class="enum" id="EOpPackUnorm2x16" title='EOpPackUnorm2x16' data-ref="EOpPackUnorm2x16" data-ref-filename="EOpPackUnorm2x16">EOpPackUnorm2x16</dfn>,</td></tr>
+<tr><th id="156">156</th><td>    <dfn class="enum" id="EOpPackHalf2x16" title='EOpPackHalf2x16' data-ref="EOpPackHalf2x16" data-ref-filename="EOpPackHalf2x16">EOpPackHalf2x16</dfn>,</td></tr>
+<tr><th id="157">157</th><td>    <dfn class="enum" id="EOpUnpackSnorm2x16" title='EOpUnpackSnorm2x16' data-ref="EOpUnpackSnorm2x16" data-ref-filename="EOpUnpackSnorm2x16">EOpUnpackSnorm2x16</dfn>,</td></tr>
+<tr><th id="158">158</th><td>    <dfn class="enum" id="EOpUnpackUnorm2x16" title='EOpUnpackUnorm2x16' data-ref="EOpUnpackUnorm2x16" data-ref-filename="EOpUnpackUnorm2x16">EOpUnpackUnorm2x16</dfn>,</td></tr>
+<tr><th id="159">159</th><td>    <dfn class="enum" id="EOpUnpackHalf2x16" title='EOpUnpackHalf2x16' data-ref="EOpUnpackHalf2x16" data-ref-filename="EOpUnpackHalf2x16">EOpUnpackHalf2x16</dfn>,</td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td>    <dfn class="enum" id="EOpPackUnorm4x8" title='EOpPackUnorm4x8' data-ref="EOpPackUnorm4x8" data-ref-filename="EOpPackUnorm4x8">EOpPackUnorm4x8</dfn>,</td></tr>
+<tr><th id="162">162</th><td>    <dfn class="enum" id="EOpPackSnorm4x8" title='EOpPackSnorm4x8' data-ref="EOpPackSnorm4x8" data-ref-filename="EOpPackSnorm4x8">EOpPackSnorm4x8</dfn>,</td></tr>
+<tr><th id="163">163</th><td>    <dfn class="enum" id="EOpUnpackUnorm4x8" title='EOpUnpackUnorm4x8' data-ref="EOpUnpackUnorm4x8" data-ref-filename="EOpUnpackUnorm4x8">EOpUnpackUnorm4x8</dfn>,</td></tr>
+<tr><th id="164">164</th><td>    <dfn class="enum" id="EOpUnpackSnorm4x8" title='EOpUnpackSnorm4x8' data-ref="EOpUnpackSnorm4x8" data-ref-filename="EOpUnpackSnorm4x8">EOpUnpackSnorm4x8</dfn>,</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td>    <dfn class="enum" id="EOpLength" title='EOpLength' data-ref="EOpLength" data-ref-filename="EOpLength">EOpLength</dfn>,</td></tr>
+<tr><th id="167">167</th><td>    <dfn class="enum" id="EOpDistance" title='EOpDistance' data-ref="EOpDistance" data-ref-filename="EOpDistance">EOpDistance</dfn>,</td></tr>
+<tr><th id="168">168</th><td>    <dfn class="enum" id="EOpDot" title='EOpDot' data-ref="EOpDot" data-ref-filename="EOpDot">EOpDot</dfn>,</td></tr>
+<tr><th id="169">169</th><td>    <dfn class="enum" id="EOpCross" title='EOpCross' data-ref="EOpCross" data-ref-filename="EOpCross">EOpCross</dfn>,</td></tr>
+<tr><th id="170">170</th><td>    <dfn class="enum" id="EOpNormalize" title='EOpNormalize' data-ref="EOpNormalize" data-ref-filename="EOpNormalize">EOpNormalize</dfn>,</td></tr>
+<tr><th id="171">171</th><td>    <dfn class="enum" id="EOpFaceforward" title='EOpFaceforward' data-ref="EOpFaceforward" data-ref-filename="EOpFaceforward">EOpFaceforward</dfn>,</td></tr>
+<tr><th id="172">172</th><td>    <dfn class="enum" id="EOpReflect" title='EOpReflect' data-ref="EOpReflect" data-ref-filename="EOpReflect">EOpReflect</dfn>,</td></tr>
+<tr><th id="173">173</th><td>    <dfn class="enum" id="EOpRefract" title='EOpRefract' data-ref="EOpRefract" data-ref-filename="EOpRefract">EOpRefract</dfn>,</td></tr>
+<tr><th id="174">174</th><td></td></tr>
+<tr><th id="175">175</th><td>    <dfn class="enum" id="EOpDFdx" title='EOpDFdx' data-ref="EOpDFdx" data-ref-filename="EOpDFdx">EOpDFdx</dfn>,    <i>// Fragment only, OES_standard_derivatives extension</i></td></tr>
+<tr><th id="176">176</th><td>    <dfn class="enum" id="EOpDFdy" title='EOpDFdy' data-ref="EOpDFdy" data-ref-filename="EOpDFdy">EOpDFdy</dfn>,    <i>// Fragment only, OES_standard_derivatives extension</i></td></tr>
+<tr><th id="177">177</th><td>    <dfn class="enum" id="EOpFwidth" title='EOpFwidth' data-ref="EOpFwidth" data-ref-filename="EOpFwidth">EOpFwidth</dfn>,  <i>// Fragment only, OES_standard_derivatives extension</i></td></tr>
+<tr><th id="178">178</th><td></td></tr>
+<tr><th id="179">179</th><td>    <dfn class="enum" id="EOpMulMatrixComponentWise" title='EOpMulMatrixComponentWise' data-ref="EOpMulMatrixComponentWise" data-ref-filename="EOpMulMatrixComponentWise">EOpMulMatrixComponentWise</dfn>,</td></tr>
+<tr><th id="180">180</th><td>    <dfn class="enum" id="EOpOuterProduct" title='EOpOuterProduct' data-ref="EOpOuterProduct" data-ref-filename="EOpOuterProduct">EOpOuterProduct</dfn>,</td></tr>
+<tr><th id="181">181</th><td>    <dfn class="enum" id="EOpTranspose" title='EOpTranspose' data-ref="EOpTranspose" data-ref-filename="EOpTranspose">EOpTranspose</dfn>,</td></tr>
+<tr><th id="182">182</th><td>    <dfn class="enum" id="EOpDeterminant" title='EOpDeterminant' data-ref="EOpDeterminant" data-ref-filename="EOpDeterminant">EOpDeterminant</dfn>,</td></tr>
+<tr><th id="183">183</th><td>    <dfn class="enum" id="EOpInverse" title='EOpInverse' data-ref="EOpInverse" data-ref-filename="EOpInverse">EOpInverse</dfn>,</td></tr>
+<tr><th id="184">184</th><td></td></tr>
+<tr><th id="185">185</th><td>    <dfn class="enum" id="EOpAny" title='EOpAny' data-ref="EOpAny" data-ref-filename="EOpAny">EOpAny</dfn>,</td></tr>
+<tr><th id="186">186</th><td>    <dfn class="enum" id="EOpAll" title='EOpAll' data-ref="EOpAll" data-ref-filename="EOpAll">EOpAll</dfn>,</td></tr>
+<tr><th id="187">187</th><td>    <dfn class="enum" id="EOpLogicalNotComponentWise" title='EOpLogicalNotComponentWise' data-ref="EOpLogicalNotComponentWise" data-ref-filename="EOpLogicalNotComponentWise">EOpLogicalNotComponentWise</dfn>,</td></tr>
+<tr><th id="188">188</th><td></td></tr>
+<tr><th id="189">189</th><td>    <dfn class="enum" id="EOpBitfieldExtract" title='EOpBitfieldExtract' data-ref="EOpBitfieldExtract" data-ref-filename="EOpBitfieldExtract">EOpBitfieldExtract</dfn>,</td></tr>
+<tr><th id="190">190</th><td>    <dfn class="enum" id="EOpBitfieldInsert" title='EOpBitfieldInsert' data-ref="EOpBitfieldInsert" data-ref-filename="EOpBitfieldInsert">EOpBitfieldInsert</dfn>,</td></tr>
+<tr><th id="191">191</th><td>    <dfn class="enum" id="EOpBitfieldReverse" title='EOpBitfieldReverse' data-ref="EOpBitfieldReverse" data-ref-filename="EOpBitfieldReverse">EOpBitfieldReverse</dfn>,</td></tr>
+<tr><th id="192">192</th><td>    <dfn class="enum" id="EOpBitCount" title='EOpBitCount' data-ref="EOpBitCount" data-ref-filename="EOpBitCount">EOpBitCount</dfn>,</td></tr>
+<tr><th id="193">193</th><td>    <dfn class="enum" id="EOpFindLSB" title='EOpFindLSB' data-ref="EOpFindLSB" data-ref-filename="EOpFindLSB">EOpFindLSB</dfn>,</td></tr>
+<tr><th id="194">194</th><td>    <dfn class="enum" id="EOpFindMSB" title='EOpFindMSB' data-ref="EOpFindMSB" data-ref-filename="EOpFindMSB">EOpFindMSB</dfn>,</td></tr>
+<tr><th id="195">195</th><td>    <dfn class="enum" id="EOpUaddCarry" title='EOpUaddCarry' data-ref="EOpUaddCarry" data-ref-filename="EOpUaddCarry">EOpUaddCarry</dfn>,</td></tr>
+<tr><th id="196">196</th><td>    <dfn class="enum" id="EOpUsubBorrow" title='EOpUsubBorrow' data-ref="EOpUsubBorrow" data-ref-filename="EOpUsubBorrow">EOpUsubBorrow</dfn>,</td></tr>
+<tr><th id="197">197</th><td>    <dfn class="enum" id="EOpUmulExtended" title='EOpUmulExtended' data-ref="EOpUmulExtended" data-ref-filename="EOpUmulExtended">EOpUmulExtended</dfn>,</td></tr>
+<tr><th id="198">198</th><td>    <dfn class="enum" id="EOpImulExtended" title='EOpImulExtended' data-ref="EOpImulExtended" data-ref-filename="EOpImulExtended">EOpImulExtended</dfn>,</td></tr>
+<tr><th id="199">199</th><td></td></tr>
+<tr><th id="200">200</th><td>    <i>//</i></td></tr>
+<tr><th id="201">201</th><td><i>    // Branch</i></td></tr>
+<tr><th id="202">202</th><td><i>    //</i></td></tr>
+<tr><th id="203">203</th><td></td></tr>
+<tr><th id="204">204</th><td>    <dfn class="enum" id="EOpKill" title='EOpKill' data-ref="EOpKill" data-ref-filename="EOpKill">EOpKill</dfn>,  <i>// Fragment only</i></td></tr>
+<tr><th id="205">205</th><td>    <dfn class="enum" id="EOpReturn" title='EOpReturn' data-ref="EOpReturn" data-ref-filename="EOpReturn">EOpReturn</dfn>,</td></tr>
+<tr><th id="206">206</th><td>    <dfn class="enum" id="EOpBreak" title='EOpBreak' data-ref="EOpBreak" data-ref-filename="EOpBreak">EOpBreak</dfn>,</td></tr>
+<tr><th id="207">207</th><td>    <dfn class="enum" id="EOpContinue" title='EOpContinue' data-ref="EOpContinue" data-ref-filename="EOpContinue">EOpContinue</dfn>,</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td>    <i>//</i></td></tr>
+<tr><th id="210">210</th><td><i>    // Constructor</i></td></tr>
+<tr><th id="211">211</th><td><i>    //</i></td></tr>
+<tr><th id="212">212</th><td></td></tr>
+<tr><th id="213">213</th><td>    <dfn class="enum" id="EOpConstruct" title='EOpConstruct' data-ref="EOpConstruct" data-ref-filename="EOpConstruct">EOpConstruct</dfn>,</td></tr>
+<tr><th id="214">214</th><td></td></tr>
+<tr><th id="215">215</th><td>    <i>//</i></td></tr>
+<tr><th id="216">216</th><td><i>    // moves</i></td></tr>
+<tr><th id="217">217</th><td><i>    //</i></td></tr>
+<tr><th id="218">218</th><td></td></tr>
+<tr><th id="219">219</th><td>    <dfn class="enum" id="EOpAssign" title='EOpAssign' data-ref="EOpAssign" data-ref-filename="EOpAssign">EOpAssign</dfn>,</td></tr>
+<tr><th id="220">220</th><td>    <dfn class="enum" id="EOpInitialize" title='EOpInitialize' data-ref="EOpInitialize" data-ref-filename="EOpInitialize">EOpInitialize</dfn>,</td></tr>
+<tr><th id="221">221</th><td>    <dfn class="enum" id="EOpAddAssign" title='EOpAddAssign' data-ref="EOpAddAssign" data-ref-filename="EOpAddAssign">EOpAddAssign</dfn>,</td></tr>
+<tr><th id="222">222</th><td>    <dfn class="enum" id="EOpSubAssign" title='EOpSubAssign' data-ref="EOpSubAssign" data-ref-filename="EOpSubAssign">EOpSubAssign</dfn>,</td></tr>
+<tr><th id="223">223</th><td></td></tr>
+<tr><th id="224">224</th><td>    <dfn class="enum" id="EOpMulAssign" title='EOpMulAssign' data-ref="EOpMulAssign" data-ref-filename="EOpMulAssign">EOpMulAssign</dfn>,</td></tr>
+<tr><th id="225">225</th><td>    <dfn class="enum" id="EOpVectorTimesMatrixAssign" title='EOpVectorTimesMatrixAssign' data-ref="EOpVectorTimesMatrixAssign" data-ref-filename="EOpVectorTimesMatrixAssign">EOpVectorTimesMatrixAssign</dfn>,</td></tr>
+<tr><th id="226">226</th><td>    <dfn class="enum" id="EOpVectorTimesScalarAssign" title='EOpVectorTimesScalarAssign' data-ref="EOpVectorTimesScalarAssign" data-ref-filename="EOpVectorTimesScalarAssign">EOpVectorTimesScalarAssign</dfn>,</td></tr>
+<tr><th id="227">227</th><td>    <dfn class="enum" id="EOpMatrixTimesScalarAssign" title='EOpMatrixTimesScalarAssign' data-ref="EOpMatrixTimesScalarAssign" data-ref-filename="EOpMatrixTimesScalarAssign">EOpMatrixTimesScalarAssign</dfn>,</td></tr>
+<tr><th id="228">228</th><td>    <dfn class="enum" id="EOpMatrixTimesMatrixAssign" title='EOpMatrixTimesMatrixAssign' data-ref="EOpMatrixTimesMatrixAssign" data-ref-filename="EOpMatrixTimesMatrixAssign">EOpMatrixTimesMatrixAssign</dfn>,</td></tr>
+<tr><th id="229">229</th><td></td></tr>
+<tr><th id="230">230</th><td>    <dfn class="enum" id="EOpDivAssign" title='EOpDivAssign' data-ref="EOpDivAssign" data-ref-filename="EOpDivAssign">EOpDivAssign</dfn>,</td></tr>
+<tr><th id="231">231</th><td>    <dfn class="enum" id="EOpIModAssign" title='EOpIModAssign' data-ref="EOpIModAssign" data-ref-filename="EOpIModAssign">EOpIModAssign</dfn>,</td></tr>
+<tr><th id="232">232</th><td>    <dfn class="enum" id="EOpBitShiftLeftAssign" title='EOpBitShiftLeftAssign' data-ref="EOpBitShiftLeftAssign" data-ref-filename="EOpBitShiftLeftAssign">EOpBitShiftLeftAssign</dfn>,</td></tr>
+<tr><th id="233">233</th><td>    <dfn class="enum" id="EOpBitShiftRightAssign" title='EOpBitShiftRightAssign' data-ref="EOpBitShiftRightAssign" data-ref-filename="EOpBitShiftRightAssign">EOpBitShiftRightAssign</dfn>,</td></tr>
+<tr><th id="234">234</th><td>    <dfn class="enum" id="EOpBitwiseAndAssign" title='EOpBitwiseAndAssign' data-ref="EOpBitwiseAndAssign" data-ref-filename="EOpBitwiseAndAssign">EOpBitwiseAndAssign</dfn>,</td></tr>
+<tr><th id="235">235</th><td>    <dfn class="enum" id="EOpBitwiseXorAssign" title='EOpBitwiseXorAssign' data-ref="EOpBitwiseXorAssign" data-ref-filename="EOpBitwiseXorAssign">EOpBitwiseXorAssign</dfn>,</td></tr>
+<tr><th id="236">236</th><td>    <dfn class="enum" id="EOpBitwiseOrAssign" title='EOpBitwiseOrAssign' data-ref="EOpBitwiseOrAssign" data-ref-filename="EOpBitwiseOrAssign">EOpBitwiseOrAssign</dfn>,</td></tr>
+<tr><th id="237">237</th><td></td></tr>
+<tr><th id="238">238</th><td>    <i>// barriers</i></td></tr>
+<tr><th id="239">239</th><td>    <dfn class="enum" id="EOpBarrier" title='EOpBarrier' data-ref="EOpBarrier" data-ref-filename="EOpBarrier">EOpBarrier</dfn>,</td></tr>
+<tr><th id="240">240</th><td>    <dfn class="enum" id="EOpMemoryBarrier" title='EOpMemoryBarrier' data-ref="EOpMemoryBarrier" data-ref-filename="EOpMemoryBarrier">EOpMemoryBarrier</dfn>,</td></tr>
+<tr><th id="241">241</th><td>    <dfn class="enum" id="EOpMemoryBarrierAtomicCounter" title='EOpMemoryBarrierAtomicCounter' data-ref="EOpMemoryBarrierAtomicCounter" data-ref-filename="EOpMemoryBarrierAtomicCounter">EOpMemoryBarrierAtomicCounter</dfn>,</td></tr>
+<tr><th id="242">242</th><td>    <dfn class="enum" id="EOpMemoryBarrierBuffer" title='EOpMemoryBarrierBuffer' data-ref="EOpMemoryBarrierBuffer" data-ref-filename="EOpMemoryBarrierBuffer">EOpMemoryBarrierBuffer</dfn>,</td></tr>
+<tr><th id="243">243</th><td>    <dfn class="enum" id="EOpMemoryBarrierImage" title='EOpMemoryBarrierImage' data-ref="EOpMemoryBarrierImage" data-ref-filename="EOpMemoryBarrierImage">EOpMemoryBarrierImage</dfn>,</td></tr>
+<tr><th id="244">244</th><td>    <dfn class="enum" id="EOpMemoryBarrierShared" title='EOpMemoryBarrierShared' data-ref="EOpMemoryBarrierShared" data-ref-filename="EOpMemoryBarrierShared">EOpMemoryBarrierShared</dfn>,</td></tr>
+<tr><th id="245">245</th><td>    <dfn class="enum" id="EOpGroupMemoryBarrier" title='EOpGroupMemoryBarrier' data-ref="EOpGroupMemoryBarrier" data-ref-filename="EOpGroupMemoryBarrier">EOpGroupMemoryBarrier</dfn>,</td></tr>
+<tr><th id="246">246</th><td></td></tr>
+<tr><th id="247">247</th><td>    <i>// Atomic functions</i></td></tr>
+<tr><th id="248">248</th><td>    <dfn class="enum" id="EOpAtomicAdd" title='EOpAtomicAdd' data-ref="EOpAtomicAdd" data-ref-filename="EOpAtomicAdd">EOpAtomicAdd</dfn>,</td></tr>
+<tr><th id="249">249</th><td>    <dfn class="enum" id="EOpAtomicMin" title='EOpAtomicMin' data-ref="EOpAtomicMin" data-ref-filename="EOpAtomicMin">EOpAtomicMin</dfn>,</td></tr>
+<tr><th id="250">250</th><td>    <dfn class="enum" id="EOpAtomicMax" title='EOpAtomicMax' data-ref="EOpAtomicMax" data-ref-filename="EOpAtomicMax">EOpAtomicMax</dfn>,</td></tr>
+<tr><th id="251">251</th><td>    <dfn class="enum" id="EOpAtomicAnd" title='EOpAtomicAnd' data-ref="EOpAtomicAnd" data-ref-filename="EOpAtomicAnd">EOpAtomicAnd</dfn>,</td></tr>
+<tr><th id="252">252</th><td>    <dfn class="enum" id="EOpAtomicOr" title='EOpAtomicOr' data-ref="EOpAtomicOr" data-ref-filename="EOpAtomicOr">EOpAtomicOr</dfn>,</td></tr>
+<tr><th id="253">253</th><td>    <dfn class="enum" id="EOpAtomicXor" title='EOpAtomicXor' data-ref="EOpAtomicXor" data-ref-filename="EOpAtomicXor">EOpAtomicXor</dfn>,</td></tr>
+<tr><th id="254">254</th><td>    <dfn class="enum" id="EOpAtomicExchange" title='EOpAtomicExchange' data-ref="EOpAtomicExchange" data-ref-filename="EOpAtomicExchange">EOpAtomicExchange</dfn>,</td></tr>
+<tr><th id="255">255</th><td>    <dfn class="enum" id="EOpAtomicCompSwap" title='EOpAtomicCompSwap' data-ref="EOpAtomicCompSwap" data-ref-filename="EOpAtomicCompSwap">EOpAtomicCompSwap</dfn>,</td></tr>
+<tr><th id="256">256</th><td></td></tr>
+<tr><th id="257">257</th><td>    <i>// Geometry only</i></td></tr>
+<tr><th id="258">258</th><td>    <dfn class="enum" id="EOpEmitVertex" title='EOpEmitVertex' data-ref="EOpEmitVertex" data-ref-filename="EOpEmitVertex">EOpEmitVertex</dfn>,</td></tr>
+<tr><th id="259">259</th><td>    <dfn class="enum" id="EOpEndPrimitive" title='EOpEndPrimitive' data-ref="EOpEndPrimitive" data-ref-filename="EOpEndPrimitive">EOpEndPrimitive</dfn>,</td></tr>
+<tr><th id="260">260</th><td></td></tr>
+<tr><th id="261">261</th><td>    <i>// Desktop GLSL functions</i></td></tr>
+<tr><th id="262">262</th><td>    <dfn class="enum" id="EOpFTransform" title='EOpFTransform' data-ref="EOpFTransform" data-ref-filename="EOpFTransform">EOpFTransform</dfn>,</td></tr>
+<tr><th id="263">263</th><td>    <dfn class="enum" id="EOpPackDouble2x32" title='EOpPackDouble2x32' data-ref="EOpPackDouble2x32" data-ref-filename="EOpPackDouble2x32">EOpPackDouble2x32</dfn>,</td></tr>
+<tr><th id="264">264</th><td>    <dfn class="enum" id="EOpUnpackDouble2x32" title='EOpUnpackDouble2x32' data-ref="EOpUnpackDouble2x32" data-ref-filename="EOpUnpackDouble2x32">EOpUnpackDouble2x32</dfn>,</td></tr>
+<tr><th id="265">265</th><td>};</td></tr>
+<tr><th id="266">266</th><td></td></tr>
+<tr><th id="267">267</th><td><i>// Returns the string corresponding to the operator in GLSL</i></td></tr>
+<tr><th id="268">268</th><td><em>const</em> <em>char</em> *<dfn class="decl fn" id="_Z17GetOperatorString9TOperator" title='GetOperatorString' data-ref="_Z17GetOperatorString9TOperator" data-ref-filename="_Z17GetOperatorString9TOperator">GetOperatorString</dfn>(<a class="type" href="#TOperator" title='TOperator' data-ref="TOperator" data-ref-filename="TOperator">TOperator</a> <dfn class="local col7 decl" id="177op" title='op' data-type='TOperator' data-ref="177op" data-ref-filename="177op">op</dfn>);</td></tr>
+<tr><th id="269">269</th><td></td></tr>
+<tr><th id="270">270</th><td><i>// Say whether or not a binary or unary operation changes the value of a variable.</i></td></tr>
+<tr><th id="271">271</th><td><em>bool</em> <dfn class="decl fn" id="_Z12IsAssignment9TOperator" title='IsAssignment' data-ref="_Z12IsAssignment9TOperator" data-ref-filename="_Z12IsAssignment9TOperator">IsAssignment</dfn>(<a class="type" href="#TOperator" title='TOperator' data-ref="TOperator" data-ref-filename="TOperator">TOperator</a> <dfn class="local col8 decl" id="178op" title='op' data-type='TOperator' data-ref="178op" data-ref-filename="178op">op</dfn>);</td></tr>
+<tr><th id="272">272</th><td></td></tr>
+<tr><th id="273">273</th><td><i>// Say whether or not an operator represents an atomic function.</i></td></tr>
+<tr><th id="274">274</th><td><em>bool</em> <dfn class="decl fn" id="_Z16IsAtomicFunction9TOperator" title='IsAtomicFunction' data-ref="_Z16IsAtomicFunction9TOperator" data-ref-filename="_Z16IsAtomicFunction9TOperator">IsAtomicFunction</dfn>(<a class="type" href="#TOperator" title='TOperator' data-ref="TOperator" data-ref-filename="TOperator">TOperator</a> <dfn class="local col9 decl" id="179op" title='op' data-type='TOperator' data-ref="179op" data-ref-filename="179op">op</dfn>);</td></tr>
+<tr><th id="275">275</th><td></td></tr>
+<tr><th id="276">276</th><td><u>#<span data-ppcond="7">endif</span>  // COMPILER_TRANSLATOR_OPERATOR_H_</u></td></tr>
+<tr><th id="277">277</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='ASTMetadataHLSL.cpp.html'>webkit/Source/ThirdParty/ANGLE/src/compiler/translator/ASTMetadataHLSL.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

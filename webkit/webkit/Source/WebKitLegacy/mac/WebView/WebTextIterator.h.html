@@ -1,0 +1,115 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebTextIterator.h source code [webkit/Source/WebKitLegacy/mac/WebView/WebTextIterator.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/WebView/WebTextIterator.h'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>WebView</a>/<a href='WebTextIterator.h.html'>WebTextIterator.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2008, 2009 Apple Inc. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import &lt;Foundation/Foundation.h&gt;</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td>@<b>class</b> DOMRange;</td></tr>
+<tr><th id="29">29</th><td>@<b>class</b> DOMNode;</td></tr>
+<tr><th id="30">30</th><td>@<b>class</b> WebTextIteratorPrivate;</td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td>@interface WebTextIterator : NSObject {</td></tr>
+<tr><th id="33">33</th><td>@<b>private</b></td></tr>
+<tr><th id="34">34</th><td>    WebTextIteratorPrivate *<dfn class="local col1 decl field" id="1_private" title='_private' data-type='WebTextIteratorPrivate *' data-ref="1_private" data-ref-filename="1_private">_private</dfn>;</td></tr>
+<tr><th id="35">35</th><td>}</td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)initWithRange:(DOMRange *)<dfn class="local col2 decl" id="2range" title='range' data-type='DOMRange *' data-ref="2range" data-ref-filename="2range">range</dfn>;</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="40">40</th><td><i class="doc"> <span class="command">@method</span> <span class="verb">advance</span></i></td></tr>
+<tr><th id="41">41</th><td><i class="doc"> <span class="command">@abstract</span> Moves the WebTextIterator to the next bit of text or boundary between runs of text.</i></td></tr>
+<tr><th id="42">42</th><td><i class="doc"> The iterator can break up runs of text however it finds convenient, so clients need to handle</i></td></tr>
+<tr><th id="43">43</th><td><i class="doc"> text runs that are broken up into arbitrary pieces.</i></td></tr>
+<tr><th id="44">44</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="45">45</th><td>- (<em>void</em>)advance;</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="48">48</th><td><i class="doc"> <span class="command">@method</span> <span class="verb">atEnd</span></i></td></tr>
+<tr><th id="49">49</th><td><i class="doc"> <span class="command">@result</span> YES if the WebTextIterator has reached the end of the DOMRange.</i></td></tr>
+<tr><th id="50">50</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="51">51</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)atEnd;</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="54">54</th><td><i class="doc"> <span class="command">@method</span> <span class="verb">currentTextLength</span></i></td></tr>
+<tr><th id="55">55</th><td><i class="doc"> <span class="command">@result</span> Length of the current text. Length of zero means that the iterator is at a boundary,</i></td></tr>
+<tr><th id="56">56</th><td><i class="doc"> such as an image, that separates runs of text.</i></td></tr>
+<tr><th id="57">57</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="58">58</th><td>- (<span class='typedef' title='NSUInteger' data-type='unsigned long' data-ref="NSUInteger" data-ref-filename="NSUInteger">NSUInteger</span>)currentTextLength;</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="61">61</th><td><i class="doc"> <span class="command">@method</span> <span class="verb">currentTextPointer</span></i></td></tr>
+<tr><th id="62">62</th><td><i class="doc"> <span class="command">@result</span> A pointer to the current text. Like the WebTextIterator itself, the pointer becomes</i></td></tr>
+<tr><th id="63">63</th><td><i class="doc"> invalid after any modification is made to the document; it must be used before the document</i></td></tr>
+<tr><th id="64">64</th><td><i class="doc"> is changed or the iterator is advanced.</i></td></tr>
+<tr><th id="65">65</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="66">66</th><td>- (<em>const</em> <span class='typedef' title='unichar' data-type='unsigned short' data-ref="unichar" data-ref-filename="unichar">unichar</span> *)currentTextPointer;</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="69">69</th><td><i class="doc"> <span class="command">@method</span> <span class="verb">currentRange</span></i></td></tr>
+<tr><th id="70">70</th><td><i class="doc"> <span class="command">@abstract</span> A function that identifies the specific document range that text corresponds to.</i></td></tr>
+<tr><th id="71">71</th><td><i class="doc"> This can be quite costly to compute for non-text items, so when possible this should only</i></td></tr>
+<tr><th id="72">72</th><td><i class="doc"> be called once the caller has determined that the text is text it wants to process. If you</i></td></tr>
+<tr><th id="73">73</th><td><i class="doc"> call currentRange every time you advance the iterator, performance will be extremely slow</i></td></tr>
+<tr><th id="74">74</th><td><i class="doc"> due to the cost of computing a DOM range.</i></td></tr>
+<tr><th id="75">75</th><td><i class="doc"> <span class="command">@result</span> A DOM range indicating the position within the document of the current text.</i></td></tr>
+<tr><th id="76">76</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="77">77</th><td>- (DOMRange *)currentRange;</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td>@end</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>@interface WebTextIterator (WebTextIteratorDeprecated)</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="84">84</th><td><i class="doc"> <span class="command">@method</span> <span class="verb">currentNode</span></i></td></tr>
+<tr><th id="85">85</th><td><i class="doc"> <span class="command">@abstract</span> A convenience method that finds the first node in currentRange; it's almost always better to use currentRange instead.</i></td></tr>
+<tr><th id="86">86</th><td><i class="doc"> <span class="command">@result</span> The current DOMNode in the WebTextIterator</i></td></tr>
+<tr><th id="87">87</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="88">88</th><td>- (DOMNode *)currentNode;</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="91">91</th><td><i class="doc"> <span class="command">@method</span> <span class="verb">currentText</span></i></td></tr>
+<tr><th id="92">92</th><td><i class="doc"> <span class="command">@abstract</span> A convenience method that makes an NSString out of the current text; it's almost always better to use currentTextPointer and currentTextLength instead.</i></td></tr>
+<tr><th id="93">93</th><td><i class="doc"> <span class="command">@result</span> The current text in the WebTextIterator.</i></td></tr>
+<tr><th id="94">94</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="95">95</th><td>- (NSString *)currentText;</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td>@end</td></tr>
+<tr><th id="98">98</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='WebTextIterator.mm.html'>webkit/Source/WebKitLegacy/mac/WebView/WebTextIterator.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,192 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebKitErrors.m source code [webkit/Source/WebKitLegacy/mac/Misc/WebKitErrors.m] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/Misc/WebKitErrors.m'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>Misc</a>/<a href='WebKitErrors.m.html'>WebKitErrors.m</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2005-2016 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * 1.  Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="9">9</th><td><i> *     notice, this list of conditions and the following disclaimer. </i></td></tr>
+<tr><th id="10">10</th><td><i> * 2.  Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="11">11</th><td><i> *     notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="12">12</th><td><i> *     documentation and/or other materials provided with the distribution. </i></td></tr>
+<tr><th id="13">13</th><td><i> * 3.  Neither the name of Apple Inc. ("Apple") nor the names of</i></td></tr>
+<tr><th id="14">14</th><td><i> *     its contributors may be used to endorse or promote products derived</i></td></tr>
+<tr><th id="15">15</th><td><i> *     from this software without specific prior written permission. </i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</i></td></tr>
+<tr><th id="19">19</th><td><i> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</i></td></tr>
+<tr><th id="20">20</th><td><i> * DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="21">21</th><td><i> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</i></td></tr>
+<tr><th id="23">23</th><td><i> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</i></td></tr>
+<tr><th id="24">24</th><td><i> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="25">25</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF</i></td></tr>
+<tr><th id="26">26</th><td><i> * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="27">27</th><td><i> */</i></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="WebKitErrors.h.html">&lt;WebKitLegacy/WebKitErrors.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="WebLocalizableStringsInternal.h.html">"WebLocalizableStringsInternal.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#import &lt;Foundation/NSURLError.h&gt;</u></td></tr>
+<tr><th id="33">33</th><td><u>#import <a href="WebKitErrorsPrivate.h.html">&lt;WebKitLegacy/WebKitErrorsPrivate.h&gt;</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#import <a href="WebNSURLExtras.h.html">&lt;WebKitLegacy/WebNSURLExtras.h&gt;</a></u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><u>#import &lt;dispatch/dispatch.h&gt;</u></td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td>NSString *<dfn class="decl def" id="WebKitErrorDomain" title='WebKitErrorDomain' data-ref="WebKitErrorDomain" data-ref-filename="WebKitErrorDomain">WebKitErrorDomain</dfn> = @<q>"WebKitErrorDomain"</q>;</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td>NSString * <em>const</em> <dfn class="decl def" id="WebKitErrorMIMETypeKey" title='WebKitErrorMIMETypeKey' data-ref="WebKitErrorMIMETypeKey" data-ref-filename="WebKitErrorMIMETypeKey">WebKitErrorMIMETypeKey</dfn> =               @<q>"WebKitErrorMIMETypeKey"</q>;</td></tr>
+<tr><th id="41">41</th><td>NSString * <em>const</em> <dfn class="decl def" id="WebKitErrorPlugInNameKey" title='WebKitErrorPlugInNameKey' data-ref="WebKitErrorPlugInNameKey" data-ref-filename="WebKitErrorPlugInNameKey">WebKitErrorPlugInNameKey</dfn> =             @<q>"WebKitErrorPlugInNameKey"</q>;</td></tr>
+<tr><th id="42">42</th><td>NSString * <em>const</em> <dfn class="decl def" id="WebKitErrorPlugInPageURLStringKey" title='WebKitErrorPlugInPageURLStringKey' data-ref="WebKitErrorPlugInPageURLStringKey" data-ref-filename="WebKitErrorPlugInPageURLStringKey">WebKitErrorPlugInPageURLStringKey</dfn> =    @<q>"WebKitErrorPlugInPageURLStringKey"</q>;</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><i>// Policy errors</i></td></tr>
+<tr><th id="45">45</th><td><u>#define <dfn class="macro" id="_M/WebKitErrorDescriptionCannotShowMIMEType" data-ref="_M/WebKitErrorDescriptionCannotShowMIMEType">WebKitErrorDescriptionCannotShowMIMEType</dfn> UI_STRING_INTERNAL("Content with specified MIME type can’t be shown", "WebKitErrorCannotShowMIMEType description")</u></td></tr>
+<tr><th id="46">46</th><td><u>#define <dfn class="macro" id="_M/WebKitErrorDescriptionCannotShowURL" data-ref="_M/WebKitErrorDescriptionCannotShowURL">WebKitErrorDescriptionCannotShowURL</dfn> UI_STRING_INTERNAL("The URL can’t be shown", "WebKitErrorCannotShowURL description")</u></td></tr>
+<tr><th id="47">47</th><td><u>#define <dfn class="macro" id="_M/WebKitErrorDescriptionFrameLoadInterruptedByPolicyChange" data-ref="_M/WebKitErrorDescriptionFrameLoadInterruptedByPolicyChange">WebKitErrorDescriptionFrameLoadInterruptedByPolicyChange</dfn> UI_STRING_INTERNAL("Frame load interrupted", "WebKitErrorFrameLoadInterruptedByPolicyChange description")</u></td></tr>
+<tr><th id="48">48</th><td><u>#define <dfn class="macro" id="_M/WebKitErrorDescriptionCannotUseRestrictedPort" data-ref="_M/WebKitErrorDescriptionCannotUseRestrictedPort">WebKitErrorDescriptionCannotUseRestrictedPort</dfn> UI_STRING_INTERNAL("Not allowed to use restricted network port", "WebKitErrorCannotUseRestrictedPort description")</u></td></tr>
+<tr><th id="49">49</th><td><u>#define <dfn class="macro" id="_M/WebKitErrorDescriptionFrameLoadBlockedByContentFilter" data-ref="_M/WebKitErrorDescriptionFrameLoadBlockedByContentFilter">WebKitErrorDescriptionFrameLoadBlockedByContentFilter</dfn> UI_STRING_INTERNAL("The URL was blocked by a content filter", "WebKitErrorFrameLoadBlockedByContentFilter description")</u></td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><i>// Plug-in and java errors</i></td></tr>
+<tr><th id="52">52</th><td><u>#define <dfn class="macro" id="_M/WebKitErrorDescriptionCannotFindPlugin" data-ref="_M/WebKitErrorDescriptionCannotFindPlugin">WebKitErrorDescriptionCannotFindPlugin</dfn> UI_STRING_INTERNAL("The plug-in can’t be found", "WebKitErrorCannotFindPlugin description")</u></td></tr>
+<tr><th id="53">53</th><td><u>#define <dfn class="macro" id="_M/WebKitErrorDescriptionCannotLoadPlugin" data-ref="_M/WebKitErrorDescriptionCannotLoadPlugin">WebKitErrorDescriptionCannotLoadPlugin</dfn> UI_STRING_INTERNAL("The plug-in can’t be loaded", "WebKitErrorCannotLoadPlugin description")</u></td></tr>
+<tr><th id="54">54</th><td><u>#define <dfn class="macro" id="_M/WebKitErrorDescriptionJavaUnavailable" data-ref="_M/WebKitErrorDescriptionJavaUnavailable">WebKitErrorDescriptionJavaUnavailable</dfn> UI_STRING_INTERNAL("Java is unavailable", "WebKitErrorJavaUnavailable description")</u></td></tr>
+<tr><th id="55">55</th><td><u>#define <dfn class="macro" id="_M/WebKitErrorDescriptionPlugInCancelledConnection" data-ref="_M/WebKitErrorDescriptionPlugInCancelledConnection">WebKitErrorDescriptionPlugInCancelledConnection</dfn> UI_STRING_INTERNAL("Plug-in cancelled", "WebKitErrorPlugInCancelledConnection description")</u></td></tr>
+<tr><th id="56">56</th><td><u>#define <dfn class="macro" id="_M/WebKitErrorDescriptionPlugInWillHandleLoad" data-ref="_M/WebKitErrorDescriptionPlugInWillHandleLoad">WebKitErrorDescriptionPlugInWillHandleLoad</dfn> UI_STRING_INTERNAL("Plug-in handled load", "WebKitErrorPlugInWillHandleLoad description")</u></td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><i>// Geolocations errors</i></td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><u>#define <dfn class="macro" id="_M/WebKitErrorDescriptionGeolocationLocationUnknown" data-ref="_M/WebKitErrorDescriptionGeolocationLocationUnknown">WebKitErrorDescriptionGeolocationLocationUnknown</dfn> UI_STRING_INTERNAL("The current location cannot be found.", "WebKitErrorGeolocationLocationUnknown description")</u></td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><em>static</em> NSMutableDictionary *<dfn class="tu decl def" id="descriptions" title='descriptions' data-type='NSMutableDictionary *' data-ref="descriptions" data-ref-filename="descriptions">descriptions</dfn> = <span class="macro" title="((void *)0)" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td>@interface NSError (WebKitInternal)</td></tr>
+<tr><th id="65">65</th><td>- (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)_webkit_initWithDomain:(NSString *)<dfn class="local col2 decl" id="12domain" title='domain' data-type='NSString *' data-ref="12domain" data-ref-filename="12domain">domain</dfn> code:(<em>int</em>)<dfn class="local col3 decl" id="13code" title='code' data-type='int' data-ref="13code" data-ref-filename="13code">code</dfn> URL:(NSURL *)<dfn class="local col4 decl" id="14URL" title='URL' data-type='NSURL *' data-ref="14URL" data-ref-filename="14URL">URL</dfn> <b>__attribute__</b>((objc_method_family(init)));</td></tr>
+<tr><th id="66">66</th><td>@end</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td>@implementation NSError (WebKitInternal)</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td>- (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)_webkit_initWithDomain:(NSString *)<dfn class="local col5 decl" id="15domain" title='domain' data-type='NSString *' data-ref="15domain" data-ref-filename="15domain">domain</dfn> code:(<em>int</em>)<dfn class="local col6 decl" id="16code" title='code' data-type='int' data-ref="16code" data-ref-filename="16code">code</dfn> URL:(NSURL *)<dfn class="local col7 decl" id="17URL" title='URL' data-type='NSURL *' data-ref="17URL" data-ref-filename="17URL">URL</dfn></td></tr>
+<tr><th id="71">71</th><td>{</td></tr>
+<tr><th id="72">72</th><td>    <i>// Insert a localized string here for those folks not savvy to our category methods.</i></td></tr>
+<tr><th id="73">73</th><td>    NSString *<dfn class="local col8 decl" id="18localizedDescription" title='localizedDescription' data-type='NSString *' data-ref="18localizedDescription" data-ref-filename="18localizedDescription">localizedDescription</dfn> = [[<a class="tu ref" href="#descriptions" title='descriptions' data-use='r' data-ref="descriptions" data-ref-filename="descriptions">descriptions</a> objectForKey:<a class="local col5 ref" href="#15domain" title='domain' data-ref="15domain" data-ref-filename="15domain">domain</a>] objectForKey:@(<a class="local col6 ref" href="#16code" title='code' data-ref="16code" data-ref-filename="16code">code</a>)];</td></tr>
+<tr><th id="74">74</th><td>    NSDictionary *<dfn class="local col9 decl" id="19userInfo" title='userInfo' data-type='NSDictionary *' data-ref="19userInfo" data-ref-filename="19userInfo">userInfo</dfn> = [NSDictionary dictionaryWithObjectsAndKeys:</td></tr>
+<tr><th id="75">75</th><td>        <a class="local col7 ref" href="#17URL" title='URL' data-ref="17URL" data-ref-filename="17URL">URL</a>, @<q>"NSErrorFailingURLKey"</q>,</td></tr>
+<tr><th id="76">76</th><td>        [<a class="local col7 ref" href="#17URL" title='URL' data-ref="17URL" data-ref-filename="17URL">URL</a> absoluteString], <span class='ref' title='NSURLErrorFailingURLStringErrorKey' data-ref="NSURLErrorFailingURLStringErrorKey" data-ref-filename="NSURLErrorFailingURLStringErrorKey">NSURLErrorFailingURLStringErrorKey</span>,</td></tr>
+<tr><th id="77">77</th><td>        <a class="local col8 ref" href="#18localizedDescription" title='localizedDescription' data-ref="18localizedDescription" data-ref-filename="18localizedDescription">localizedDescription</a>, <span class='ref' title='NSLocalizedDescriptionKey' data-ref="NSLocalizedDescriptionKey" data-ref-filename="NSLocalizedDescriptionKey">NSLocalizedDescriptionKey</span>,</td></tr>
+<tr><th id="78">78</th><td>        <span class="macro" title="((void *)0)" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="79">79</th><td>    <b>return</b> [<span class='local col0 ref' title='self' data-ref="20self" data-ref-filename="20self">self</span> initWithDomain:<a class="local col5 ref" href="#15domain" title='domain' data-ref="15domain" data-ref-filename="15domain">domain</a> code:<a class="local col6 ref" href="#16code" title='code' data-ref="16code" data-ref-filename="16code">code</a> userInfo:<a class="local col9 ref" href="#19userInfo" title='userInfo' data-ref="19userInfo" data-ref-filename="19userInfo">userInfo</a>];</td></tr>
+<tr><th id="80">80</th><td>}</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td>@end</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td>@implementation NSError (WebKitExtras)</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>+ (<em>void</em>)_registerWebKitErrors</td></tr>
+<tr><th id="87">87</th><td>{</td></tr>
+<tr><th id="88">88</th><td>    <em>static</em> <span class='typedef' title='dispatch_once_t' data-type='intptr_t' data-ref="dispatch_once_t" data-ref-filename="dispatch_once_t">dispatch_once_t</span> <dfn class="local col1 decl" id="21flag" title='flag' data-type='dispatch_once_t' data-ref="21flag" data-ref-filename="21flag">flag</dfn>;</td></tr>
+<tr><th id="89">89</th><td>    <span class="macro" title="_dispatch_once" data-ref="_M/dispatch_once">dispatch_once</span>(&amp;<a class="local col1 ref" href="#21flag" title='flag' data-ref="21flag" data-ref-filename="21flag">flag</a>, ^{</td></tr>
+<tr><th id="90">90</th><td>        @autoreleasepool {</td></tr>
+<tr><th id="91">91</th><td>            NSDictionary *<dfn class="local col2 decl" id="22dict" title='dict' data-type='NSDictionary *' data-ref="22dict" data-ref-filename="22dict">dict</dfn> = [NSDictionary dictionaryWithObjectsAndKeys:</td></tr>
+<tr><th id="92">92</th><td>                <i>// Policy errors</i></td></tr>
+<tr><th id="93">93</th><td>                <a class="macro" href="#45" title="WebLocalizedStringInternal(&quot;Content with specified MIME type can’t be shown&quot;)" data-ref="_M/WebKitErrorDescriptionCannotShowMIMEType">WebKitErrorDescriptionCannotShowMIMEType</a>,                   @(<a class="enum" href="WebKitErrors.h.html#WebKitErrorCannotShowMIMEType" title='WebKitErrorCannotShowMIMEType' data-ref="WebKitErrorCannotShowMIMEType" data-ref-filename="WebKitErrorCannotShowMIMEType">WebKitErrorCannotShowMIMEType</a>),</td></tr>
+<tr><th id="94">94</th><td>                <a class="macro" href="#46" title="WebLocalizedStringInternal(&quot;The URL can’t be shown&quot;)" data-ref="_M/WebKitErrorDescriptionCannotShowURL">WebKitErrorDescriptionCannotShowURL</a>,                        @(<a class="enum" href="WebKitErrors.h.html#WebKitErrorCannotShowURL" title='WebKitErrorCannotShowURL' data-ref="WebKitErrorCannotShowURL" data-ref-filename="WebKitErrorCannotShowURL">WebKitErrorCannotShowURL</a>),</td></tr>
+<tr><th id="95">95</th><td>                <a class="macro" href="#47" title="WebLocalizedStringInternal(&quot;Frame load interrupted&quot;)" data-ref="_M/WebKitErrorDescriptionFrameLoadInterruptedByPolicyChange">WebKitErrorDescriptionFrameLoadInterruptedByPolicyChange</a>,   @(<a class="enum" href="WebKitErrors.h.html#WebKitErrorFrameLoadInterruptedByPolicyChange" title='WebKitErrorFrameLoadInterruptedByPolicyChange' data-ref="WebKitErrorFrameLoadInterruptedByPolicyChange" data-ref-filename="WebKitErrorFrameLoadInterruptedByPolicyChange">WebKitErrorFrameLoadInterruptedByPolicyChange</a>),</td></tr>
+<tr><th id="96">96</th><td>                <a class="macro" href="#48" title="WebLocalizedStringInternal(&quot;Not allowed to use restricted network port&quot;)" data-ref="_M/WebKitErrorDescriptionCannotUseRestrictedPort">WebKitErrorDescriptionCannotUseRestrictedPort</a>,              @(<a class="enum" href="WebKitErrorsPrivate.h.html#WebKitErrorCannotUseRestrictedPort" title='WebKitErrorCannotUseRestrictedPort' data-ref="WebKitErrorCannotUseRestrictedPort" data-ref-filename="WebKitErrorCannotUseRestrictedPort">WebKitErrorCannotUseRestrictedPort</a>),</td></tr>
+<tr><th id="97">97</th><td>                <a class="macro" href="#49" title="WebLocalizedStringInternal(&quot;The URL was blocked by a content filter&quot;)" data-ref="_M/WebKitErrorDescriptionFrameLoadBlockedByContentFilter">WebKitErrorDescriptionFrameLoadBlockedByContentFilter</a>,      @(<a class="enum" href="WebKitErrorsPrivate.h.html#WebKitErrorFrameLoadBlockedByContentFilter" title='WebKitErrorFrameLoadBlockedByContentFilter' data-ref="WebKitErrorFrameLoadBlockedByContentFilter" data-ref-filename="WebKitErrorFrameLoadBlockedByContentFilter">WebKitErrorFrameLoadBlockedByContentFilter</a>),</td></tr>
+<tr><th id="98">98</th><td></td></tr>
+<tr><th id="99">99</th><td>                <i>// Plug-in and java errors</i></td></tr>
+<tr><th id="100">100</th><td>                <a class="macro" href="#52" title="WebLocalizedStringInternal(&quot;The plug-in can’t be found&quot;)" data-ref="_M/WebKitErrorDescriptionCannotFindPlugin">WebKitErrorDescriptionCannotFindPlugin</a>,                     @(<a class="enum" href="WebKitErrors.h.html#WebKitErrorCannotFindPlugIn" title='WebKitErrorCannotFindPlugIn' data-ref="WebKitErrorCannotFindPlugIn" data-ref-filename="WebKitErrorCannotFindPlugIn">WebKitErrorCannotFindPlugIn</a>),</td></tr>
+<tr><th id="101">101</th><td>                <a class="macro" href="#53" title="WebLocalizedStringInternal(&quot;The plug-in can’t be loaded&quot;)" data-ref="_M/WebKitErrorDescriptionCannotLoadPlugin">WebKitErrorDescriptionCannotLoadPlugin</a>,                     @(<a class="enum" href="WebKitErrors.h.html#WebKitErrorCannotLoadPlugIn" title='WebKitErrorCannotLoadPlugIn' data-ref="WebKitErrorCannotLoadPlugIn" data-ref-filename="WebKitErrorCannotLoadPlugIn">WebKitErrorCannotLoadPlugIn</a>),</td></tr>
+<tr><th id="102">102</th><td>                <a class="macro" href="#54" title="WebLocalizedStringInternal(&quot;Java is unavailable&quot;)" data-ref="_M/WebKitErrorDescriptionJavaUnavailable">WebKitErrorDescriptionJavaUnavailable</a>,                      @(<a class="enum" href="WebKitErrors.h.html#WebKitErrorJavaUnavailable" title='WebKitErrorJavaUnavailable' data-ref="WebKitErrorJavaUnavailable" data-ref-filename="WebKitErrorJavaUnavailable">WebKitErrorJavaUnavailable</a>),</td></tr>
+<tr><th id="103">103</th><td>                <a class="macro" href="#55" title="WebLocalizedStringInternal(&quot;Plug-in cancelled&quot;)" data-ref="_M/WebKitErrorDescriptionPlugInCancelledConnection">WebKitErrorDescriptionPlugInCancelledConnection</a>,            @(<a class="macro" href="WebKitErrorsPrivate.h.html#31" title="203" data-ref="_M/WebKitErrorPlugInCancelledConnection">WebKitErrorPlugInCancelledConnection</a>),</td></tr>
+<tr><th id="104">104</th><td>                <a class="macro" href="#56" title="WebLocalizedStringInternal(&quot;Plug-in handled load&quot;)" data-ref="_M/WebKitErrorDescriptionPlugInWillHandleLoad">WebKitErrorDescriptionPlugInWillHandleLoad</a>,                 @(<a class="macro" href="WebKitErrorsPrivate.h.html#33" title="204" data-ref="_M/WebKitErrorPlugInWillHandleLoad">WebKitErrorPlugInWillHandleLoad</a>),</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td>                <i>// Geolocation errors</i></td></tr>
+<tr><th id="107">107</th><td>                <a class="macro" href="#60" title="WebLocalizedStringInternal(&quot;The current location cannot be found.&quot;)" data-ref="_M/WebKitErrorDescriptionGeolocationLocationUnknown">WebKitErrorDescriptionGeolocationLocationUnknown</a>,           @(<a class="enum" href="WebKitErrorsPrivate.h.html#WebKitErrorGeolocationLocationUnknown" title='WebKitErrorGeolocationLocationUnknown' data-ref="WebKitErrorGeolocationLocationUnknown" data-ref-filename="WebKitErrorGeolocationLocationUnknown">WebKitErrorGeolocationLocationUnknown</a>),</td></tr>
+<tr><th id="108">108</th><td>                <span class="macro" title="((void *)0)" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td>            [NSError _webkit_addErrorsWithCodesAndDescriptions:<a class="local col2 ref" href="#22dict" title='dict' data-ref="22dict" data-ref-filename="22dict">dict</a> inDomain:<a class="ref" href="WebKitErrors.h.html#WebKitErrorDomain" title='WebKitErrorDomain' data-ref="WebKitErrorDomain" data-ref-filename="WebKitErrorDomain">WebKitErrorDomain</a>];</td></tr>
+<tr><th id="111">111</th><td>        }</td></tr>
+<tr><th id="112">112</th><td>    });</td></tr>
+<tr><th id="113">113</th><td>}</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td>+(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)_webkit_errorWithDomain:(NSString *)<dfn class="local col3 decl" id="23domain" title='domain' data-type='NSString *' data-ref="23domain" data-ref-filename="23domain">domain</dfn> code:(<em>int</em>)<dfn class="local col4 decl" id="24code" title='code' data-type='int' data-ref="24code" data-ref-filename="24code">code</dfn> URL:(NSURL *)<dfn class="local col5 decl" id="25URL" title='URL' data-type='NSURL *' data-ref="25URL" data-ref-filename="25URL">URL</dfn></td></tr>
+<tr><th id="116">116</th><td>{</td></tr>
+<tr><th id="117">117</th><td>    <b>return</b> [[[<span class='local col0 ref' title='self' data-ref="20self" data-ref-filename="20self">self</span> alloc] _webkit_initWithDomain:<a class="local col3 ref" href="#23domain" title='domain' data-ref="23domain" data-ref-filename="23domain">domain</a> code:<a class="local col4 ref" href="#24code" title='code' data-ref="24code" data-ref-filename="24code">code</a> URL:<a class="local col5 ref" href="#25URL" title='URL' data-ref="25URL" data-ref-filename="25URL">URL</a>] autorelease];</td></tr>
+<tr><th id="118">118</th><td>}</td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td>+ (NSError *)_webKitErrorWithDomain:(NSString *)<dfn class="local col6 decl" id="26domain" title='domain' data-type='NSString *' data-ref="26domain" data-ref-filename="26domain">domain</dfn> code:(<em>int</em>)<dfn class="local col7 decl" id="27code" title='code' data-type='int' data-ref="27code" data-ref-filename="27code">code</dfn> URL:(NSURL *)<dfn class="local col8 decl" id="28URL" title='URL' data-type='NSURL *' data-ref="28URL" data-ref-filename="28URL">URL</dfn></td></tr>
+<tr><th id="121">121</th><td>{</td></tr>
+<tr><th id="122">122</th><td>    [<span class='local col0 ref' title='self' data-ref="20self" data-ref-filename="20self">self</span> _registerWebKitErrors];</td></tr>
+<tr><th id="123">123</th><td>    <b>return</b> [<span class='local col0 ref' title='self' data-ref="20self" data-ref-filename="20self">self</span> _webkit_errorWithDomain:<a class="local col6 ref" href="#26domain" title='domain' data-ref="26domain" data-ref-filename="26domain">domain</a> code:<a class="local col7 ref" href="#27code" title='code' data-ref="27code" data-ref-filename="27code">code</a> URL:<a class="local col8 ref" href="#28URL" title='URL' data-ref="28URL" data-ref-filename="28URL">URL</a>];</td></tr>
+<tr><th id="124">124</th><td>}</td></tr>
+<tr><th id="125">125</th><td></td></tr>
+<tr><th id="126">126</th><td>+ (NSError *)_webKitErrorWithCode:(<em>int</em>)<dfn class="local col9 decl" id="29code" title='code' data-type='int' data-ref="29code" data-ref-filename="29code">code</dfn> failingURL:(NSString *)<dfn class="local col0 decl" id="30URLString" title='URLString' data-type='NSString *' data-ref="30URLString" data-ref-filename="30URLString">URLString</dfn></td></tr>
+<tr><th id="127">127</th><td>{</td></tr>
+<tr><th id="128">128</th><td>    <b>return</b> [<span class='local col0 ref' title='self' data-ref="20self" data-ref-filename="20self">self</span> _webKitErrorWithDomain:<a class="ref" href="WebKitErrors.h.html#WebKitErrorDomain" title='WebKitErrorDomain' data-ref="WebKitErrorDomain" data-ref-filename="WebKitErrorDomain">WebKitErrorDomain</a> code:<a class="local col9 ref" href="#29code" title='code' data-ref="29code" data-ref-filename="29code">code</a> URL:[NSURL _webkit_URLWithUserTypedString:<a class="local col0 ref" href="#30URLString" title='URLString' data-ref="30URLString" data-ref-filename="30URLString">URLString</a>]];</td></tr>
+<tr><th id="129">129</th><td>}</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)_initWithPluginErrorCode:(<em>int</em>)<dfn class="local col1 decl" id="31code" title='code' data-type='int' data-ref="31code" data-ref-filename="31code">code</dfn></td></tr>
+<tr><th id="132">132</th><td>                    contentURL:(NSURL *)<dfn class="local col2 decl" id="32contentURL" title='contentURL' data-type='NSURL *' data-ref="32contentURL" data-ref-filename="32contentURL">contentURL</dfn></td></tr>
+<tr><th id="133">133</th><td>                 pluginPageURL:(NSURL *)<dfn class="local col3 decl" id="33pluginPageURL" title='pluginPageURL' data-type='NSURL *' data-ref="33pluginPageURL" data-ref-filename="33pluginPageURL">pluginPageURL</dfn></td></tr>
+<tr><th id="134">134</th><td>                    pluginName:(NSString *)<dfn class="local col4 decl" id="34pluginName" title='pluginName' data-type='NSString *' data-ref="34pluginName" data-ref-filename="34pluginName">pluginName</dfn></td></tr>
+<tr><th id="135">135</th><td>                      MIMEType:(NSString *)<dfn class="local col5 decl" id="35MIMEType" title='MIMEType' data-type='NSString *' data-ref="35MIMEType" data-ref-filename="35MIMEType">MIMEType</dfn></td></tr>
+<tr><th id="136">136</th><td>{</td></tr>
+<tr><th id="137">137</th><td>    [[<span class='local col0 ref' title='self' data-ref="20self" data-ref-filename="20self">self</span> class] _registerWebKitErrors];</td></tr>
+<tr><th id="138">138</th><td>    </td></tr>
+<tr><th id="139">139</th><td>    NSMutableDictionary *<dfn class="local col6 decl" id="36userInfo" title='userInfo' data-type='NSMutableDictionary *' data-ref="36userInfo" data-ref-filename="36userInfo">userInfo</dfn> = [[NSMutableDictionary alloc] init];</td></tr>
+<tr><th id="140">140</th><td>    NSDictionary *<dfn class="local col7 decl" id="37descriptionsForWebKitErrorDomain" title='descriptionsForWebKitErrorDomain' data-type='NSDictionary *' data-ref="37descriptionsForWebKitErrorDomain" data-ref-filename="37descriptionsForWebKitErrorDomain">descriptionsForWebKitErrorDomain</dfn> = [<a class="tu ref" href="#descriptions" title='descriptions' data-use='r' data-ref="descriptions" data-ref-filename="descriptions">descriptions</a> objectForKey:<a class="ref" href="WebKitErrors.h.html#WebKitErrorDomain" title='WebKitErrorDomain' data-ref="WebKitErrorDomain" data-ref-filename="WebKitErrorDomain">WebKitErrorDomain</a>];</td></tr>
+<tr><th id="141">141</th><td>    NSString *<dfn class="local col8 decl" id="38localizedDescription" title='localizedDescription' data-type='NSString *' data-ref="38localizedDescription" data-ref-filename="38localizedDescription">localizedDescription</dfn> = [<a class="local col7 ref" href="#37descriptionsForWebKitErrorDomain" title='descriptionsForWebKitErrorDomain' data-ref="37descriptionsForWebKitErrorDomain" data-ref-filename="37descriptionsForWebKitErrorDomain">descriptionsForWebKitErrorDomain</a> objectForKey:@(<a class="local col1 ref" href="#31code" title='code' data-ref="31code" data-ref-filename="31code">code</a>)];</td></tr>
+<tr><th id="142">142</th><td>    <b>if</b> (<a class="local col8 ref" href="#38localizedDescription" title='localizedDescription' data-ref="38localizedDescription" data-ref-filename="38localizedDescription">localizedDescription</a>)</td></tr>
+<tr><th id="143">143</th><td>        [<a class="local col6 ref" href="#36userInfo" title='userInfo' data-ref="36userInfo" data-ref-filename="36userInfo">userInfo</a> setObject:<a class="local col8 ref" href="#38localizedDescription" title='localizedDescription' data-ref="38localizedDescription" data-ref-filename="38localizedDescription">localizedDescription</a> forKey:<span class='ref' title='NSLocalizedDescriptionKey' data-ref="NSLocalizedDescriptionKey" data-ref-filename="NSLocalizedDescriptionKey">NSLocalizedDescriptionKey</span>];</td></tr>
+<tr><th id="144">144</th><td>    <b>if</b> (<a class="local col2 ref" href="#32contentURL" title='contentURL' data-ref="32contentURL" data-ref-filename="32contentURL">contentURL</a>) {</td></tr>
+<tr><th id="145">145</th><td>        [<a class="local col6 ref" href="#36userInfo" title='userInfo' data-ref="36userInfo" data-ref-filename="36userInfo">userInfo</a> setObject:<a class="local col2 ref" href="#32contentURL" title='contentURL' data-ref="32contentURL" data-ref-filename="32contentURL">contentURL</a> forKey:@<q>"NSErrorFailingURLKey"</q>];</td></tr>
+<tr><th id="146">146</th><td>        [<a class="local col6 ref" href="#36userInfo" title='userInfo' data-ref="36userInfo" data-ref-filename="36userInfo">userInfo</a> setObject:[<a class="local col2 ref" href="#32contentURL" title='contentURL' data-ref="32contentURL" data-ref-filename="32contentURL">contentURL</a> _web_userVisibleString] forKey:<span class='ref' title='NSURLErrorFailingURLStringErrorKey' data-ref="NSURLErrorFailingURLStringErrorKey" data-ref-filename="NSURLErrorFailingURLStringErrorKey">NSURLErrorFailingURLStringErrorKey</span>];</td></tr>
+<tr><th id="147">147</th><td>    }</td></tr>
+<tr><th id="148">148</th><td>    <b>if</b> (<a class="local col3 ref" href="#33pluginPageURL" title='pluginPageURL' data-ref="33pluginPageURL" data-ref-filename="33pluginPageURL">pluginPageURL</a>) {</td></tr>
+<tr><th id="149">149</th><td>        [<a class="local col6 ref" href="#36userInfo" title='userInfo' data-ref="36userInfo" data-ref-filename="36userInfo">userInfo</a> setObject:[<a class="local col3 ref" href="#33pluginPageURL" title='pluginPageURL' data-ref="33pluginPageURL" data-ref-filename="33pluginPageURL">pluginPageURL</a> _web_userVisibleString] forKey:<a class="ref" href="WebKitErrors.h.html#WebKitErrorPlugInPageURLStringKey" title='WebKitErrorPlugInPageURLStringKey' data-ref="WebKitErrorPlugInPageURLStringKey" data-ref-filename="WebKitErrorPlugInPageURLStringKey">WebKitErrorPlugInPageURLStringKey</a>];</td></tr>
+<tr><th id="150">150</th><td>    }</td></tr>
+<tr><th id="151">151</th><td>    <b>if</b> (<a class="local col4 ref" href="#34pluginName" title='pluginName' data-ref="34pluginName" data-ref-filename="34pluginName">pluginName</a>) {</td></tr>
+<tr><th id="152">152</th><td>        [<a class="local col6 ref" href="#36userInfo" title='userInfo' data-ref="36userInfo" data-ref-filename="36userInfo">userInfo</a> setObject:<a class="local col4 ref" href="#34pluginName" title='pluginName' data-ref="34pluginName" data-ref-filename="34pluginName">pluginName</a> forKey:<a class="ref" href="WebKitErrors.h.html#WebKitErrorPlugInNameKey" title='WebKitErrorPlugInNameKey' data-ref="WebKitErrorPlugInNameKey" data-ref-filename="WebKitErrorPlugInNameKey">WebKitErrorPlugInNameKey</a>];</td></tr>
+<tr><th id="153">153</th><td>    }</td></tr>
+<tr><th id="154">154</th><td>    <b>if</b> (<a class="local col5 ref" href="#35MIMEType" title='MIMEType' data-ref="35MIMEType" data-ref-filename="35MIMEType">MIMEType</a>) {</td></tr>
+<tr><th id="155">155</th><td>        [<a class="local col6 ref" href="#36userInfo" title='userInfo' data-ref="36userInfo" data-ref-filename="36userInfo">userInfo</a> setObject:<a class="local col5 ref" href="#35MIMEType" title='MIMEType' data-ref="35MIMEType" data-ref-filename="35MIMEType">MIMEType</a> forKey:<a class="ref" href="WebKitErrors.h.html#WebKitErrorMIMETypeKey" title='WebKitErrorMIMETypeKey' data-ref="WebKitErrorMIMETypeKey" data-ref-filename="WebKitErrorMIMETypeKey">WebKitErrorMIMETypeKey</a>];</td></tr>
+<tr><th id="156">156</th><td>    }</td></tr>
+<tr><th id="157">157</th><td></td></tr>
+<tr><th id="158">158</th><td>    NSDictionary *<dfn class="local col9 decl" id="39userInfoCopy" title='userInfoCopy' data-type='NSDictionary *' data-ref="39userInfoCopy" data-ref-filename="39userInfoCopy">userInfoCopy</dfn> = [<a class="local col6 ref" href="#36userInfo" title='userInfo' data-ref="36userInfo" data-ref-filename="36userInfo">userInfo</a> count] &gt; <var>0</var> ? [[NSDictionary alloc] initWithDictionary:<a class="local col6 ref" href="#36userInfo" title='userInfo' data-ref="36userInfo" data-ref-filename="36userInfo">userInfo</a>] : <span class="macro" title="((void *)0)" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="159">159</th><td>    [<a class="local col6 ref" href="#36userInfo" title='userInfo' data-ref="36userInfo" data-ref-filename="36userInfo">userInfo</a> release];</td></tr>
+<tr><th id="160">160</th><td>    NSError *<dfn class="local col0 decl" id="40error" title='error' data-type='NSError *' data-ref="40error" data-ref-filename="40error">error</dfn> = [<span class='local col0 ref' title='self' data-ref="20self" data-ref-filename="20self">self</span> initWithDomain:<a class="ref" href="WebKitErrors.h.html#WebKitErrorDomain" title='WebKitErrorDomain' data-ref="WebKitErrorDomain" data-ref-filename="WebKitErrorDomain">WebKitErrorDomain</a> code:<a class="local col1 ref" href="#31code" title='code' data-ref="31code" data-ref-filename="31code">code</a> userInfo:<a class="local col9 ref" href="#39userInfoCopy" title='userInfoCopy' data-ref="39userInfoCopy" data-ref-filename="39userInfoCopy">userInfoCopy</a>];</td></tr>
+<tr><th id="161">161</th><td>    [<a class="local col9 ref" href="#39userInfoCopy" title='userInfoCopy' data-ref="39userInfoCopy" data-ref-filename="39userInfoCopy">userInfoCopy</a> release];</td></tr>
+<tr><th id="162">162</th><td>    </td></tr>
+<tr><th id="163">163</th><td>    <b>return</b> <a class="local col0 ref" href="#40error" title='error' data-ref="40error" data-ref-filename="40error">error</a>;</td></tr>
+<tr><th id="164">164</th><td>}</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td>+ (<em>void</em>)_webkit_addErrorsWithCodesAndDescriptions:(NSDictionary *)<dfn class="local col1 decl" id="41dictionary" title='dictionary' data-type='NSDictionary *' data-ref="41dictionary" data-ref-filename="41dictionary">dictionary</dfn> inDomain:(NSString *)<dfn class="local col2 decl" id="42domain" title='domain' data-type='NSString *' data-ref="42domain" data-ref-filename="42domain">domain</dfn></td></tr>
+<tr><th id="167">167</th><td>{</td></tr>
+<tr><th id="168">168</th><td>    <b>if</b> (!<a class="tu ref" href="#descriptions" title='descriptions' data-use='r' data-ref="descriptions" data-ref-filename="descriptions">descriptions</a>)</td></tr>
+<tr><th id="169">169</th><td>        <a class="tu ref" href="#descriptions" title='descriptions' data-use='w' data-ref="descriptions" data-ref-filename="descriptions">descriptions</a> = [[NSMutableDictionary alloc] init];</td></tr>
+<tr><th id="170">170</th><td></td></tr>
+<tr><th id="171">171</th><td>    [<a class="tu ref" href="#descriptions" title='descriptions' data-use='r' data-ref="descriptions" data-ref-filename="descriptions">descriptions</a> setObject:<a class="local col1 ref" href="#41dictionary" title='dictionary' data-ref="41dictionary" data-ref-filename="41dictionary">dictionary</a> forKey:<a class="local col2 ref" href="#42domain" title='domain' data-ref="42domain" data-ref-filename="42domain">domain</a>];</td></tr>
+<tr><th id="172">172</th><td>}</td></tr>
+<tr><th id="173">173</th><td></td></tr>
+<tr><th id="174">174</th><td>@end</td></tr>
+<tr><th id="175">175</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

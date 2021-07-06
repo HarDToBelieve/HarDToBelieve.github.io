@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>RTCIceCandidateDescriptor.cpp source code [webkit/Source/WebCore/platform/mediastream/RTCIceCandidateDescriptor.cpp] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebCore/platform/mediastream/RTCIceCandidateDescriptor.cpp'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebCore</a>/<a href='..'>platform</a>/<a href='./'>mediastream</a>/<a href='RTCIceCandidateDescriptor.cpp.html'>RTCIceCandidateDescriptor.cpp</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2012 Google Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="9">9</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="10">10</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="11">11</th><td><i> *    notice, this list of conditions and the following disclaimer</i></td></tr>
+<tr><th id="12">12</th><td><i> *    in the documentation and/or other materials provided with the</i></td></tr>
+<tr><th id="13">13</th><td><i> *    distribution.</i></td></tr>
+<tr><th id="14">14</th><td><i> * 3. Neither the name of Google Inc. nor the names of its contributors</i></td></tr>
+<tr><th id="15">15</th><td><i> *    may be used to endorse or promote products derived from this</i></td></tr>
+<tr><th id="16">16</th><td><i> *    software without specific prior written permission.</i></td></tr>
+<tr><th id="17">17</th><td><i> *</i></td></tr>
+<tr><th id="18">18</th><td><i> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</i></td></tr>
+<tr><th id="19">19</th><td><i> * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</i></td></tr>
+<tr><th id="20">20</th><td><i> * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR</i></td></tr>
+<tr><th id="21">21</th><td><i> * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</i></td></tr>
+<tr><th id="22">22</th><td><i> * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</i></td></tr>
+<tr><th id="23">23</th><td><i> * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</i></td></tr>
+<tr><th id="24">24</th><td><i> * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</i></td></tr>
+<tr><th id="25">25</th><td><i> * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</i></td></tr>
+<tr><th id="26">26</th><td><i> * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="27">27</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="28">28</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="29">29</th><td><i> */</i></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="../../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><u>#<span data-ppcond="33">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(WEB_RTC)</u></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><u>#include <a href="RTCIceCandidateDescriptor.h.html">"RTCIceCandidateDescriptor.h"</a></u></td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><b>namespace</b> <span class="namespace">WebCore</span> {</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::Ref" title='WTF::Ref' data-ref="WTF::Ref" data-ref-filename="WTF..Ref">Ref</a>&lt;<a class="type" href="RTCIceCandidateDescriptor.h.html#WebCore::RTCIceCandidateDescriptor" title='WebCore::RTCIceCandidateDescriptor' data-ref="WebCore::RTCIceCandidateDescriptor" data-ref-filename="WebCore..RTCIceCandidateDescriptor">RTCIceCandidateDescriptor</a>&gt; <a class="type" href="RTCIceCandidateDescriptor.h.html#WebCore::RTCIceCandidateDescriptor" title='WebCore::RTCIceCandidateDescriptor' data-ref="WebCore::RTCIceCandidateDescriptor" data-ref-filename="WebCore..RTCIceCandidateDescriptor">RTCIceCandidateDescriptor</a>::<dfn class="decl def fn" id="_ZN7WebCore25RTCIceCandidateDescriptor6createERKN3WTF6StringES4_t" title='WebCore::RTCIceCandidateDescriptor::create' data-ref="_ZN7WebCore25RTCIceCandidateDescriptor6createERKN3WTF6StringES4_t" data-ref-filename="_ZN7WebCore25RTCIceCandidateDescriptor6createERKN3WTF6StringES4_t">create</dfn>(<em>const</em> <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#WTF::String" title='WTF::String' data-ref="WTF::String" data-ref-filename="WTF..String">String</a>&amp; <dfn class="local col3 decl" id="133candidate" title='candidate' data-type='const WTF::String &amp;' data-ref="133candidate" data-ref-filename="133candidate">candidate</dfn>, <em>const</em> <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#WTF::String" title='WTF::String' data-ref="WTF::String" data-ref-filename="WTF..String">String</a>&amp; <dfn class="local col4 decl" id="134sdpMid" title='sdpMid' data-type='const WTF::String &amp;' data-ref="134sdpMid" data-ref-filename="134sdpMid">sdpMid</dfn>, <em>unsigned</em> <em>short</em> <dfn class="local col5 decl" id="135sdpMLineIndex" title='sdpMLineIndex' data-type='unsigned short' data-ref="135sdpMLineIndex" data-ref-filename="135sdpMLineIndex">sdpMLineIndex</dfn>)</td></tr>
+<tr><th id="40">40</th><td>{</td></tr>
+<tr><th id="41">41</th><td>    <b>return</b> <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Ref.h.html#_ZN3WTF8adoptRefERT_" title='WTF::adoptRef' data-ref="_ZN3WTF8adoptRefERT_" data-ref-filename="_ZN3WTF8adoptRefERT_">adoptRef</a>(<span class='refarg'>*<b>new</b> <a class="type" href="RTCIceCandidateDescriptor.h.html#WebCore::RTCIceCandidateDescriptor" title='WebCore::RTCIceCandidateDescriptor' data-ref="WebCore::RTCIceCandidateDescriptor" data-ref-filename="WebCore..RTCIceCandidateDescriptor">RTCIceCandidateDescriptor</a><a class="ref fn" href="#_ZN7WebCore25RTCIceCandidateDescriptorC1ERKN3WTF6StringES4_t" title='WebCore::RTCIceCandidateDescriptor::RTCIceCandidateDescriptor' data-ref="_ZN7WebCore25RTCIceCandidateDescriptorC1ERKN3WTF6StringES4_t" data-ref-filename="_ZN7WebCore25RTCIceCandidateDescriptorC1ERKN3WTF6StringES4_t">(</a><a class="local col3 ref" href="#133candidate" title='candidate' data-ref="133candidate" data-ref-filename="133candidate">candidate</a>, <a class="local col4 ref" href="#134sdpMid" title='sdpMid' data-ref="134sdpMid" data-ref-filename="134sdpMid">sdpMid</a>, <a class="local col5 ref" href="#135sdpMLineIndex" title='sdpMLineIndex' data-ref="135sdpMLineIndex" data-ref-filename="135sdpMLineIndex">sdpMLineIndex</a>)</span>);</td></tr>
+<tr><th id="42">42</th><td>}</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><a class="type" href="RTCIceCandidateDescriptor.h.html#WebCore::RTCIceCandidateDescriptor" title='WebCore::RTCIceCandidateDescriptor' data-ref="WebCore::RTCIceCandidateDescriptor" data-ref-filename="WebCore..RTCIceCandidateDescriptor">RTCIceCandidateDescriptor</a>::<dfn class="decl def fn" id="_ZN7WebCore25RTCIceCandidateDescriptorC1ERKN3WTF6StringES4_t" title='WebCore::RTCIceCandidateDescriptor::RTCIceCandidateDescriptor' data-ref="_ZN7WebCore25RTCIceCandidateDescriptorC1ERKN3WTF6StringES4_t" data-ref-filename="_ZN7WebCore25RTCIceCandidateDescriptorC1ERKN3WTF6StringES4_t">RTCIceCandidateDescriptor</dfn>(<em>const</em> <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#WTF::String" title='WTF::String' data-ref="WTF::String" data-ref-filename="WTF..String">String</a>&amp; <dfn class="local col6 decl" id="136candidate" title='candidate' data-type='const WTF::String &amp;' data-ref="136candidate" data-ref-filename="136candidate">candidate</dfn>, <em>const</em> <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#WTF::String" title='WTF::String' data-ref="WTF::String" data-ref-filename="WTF..String">String</a>&amp; <dfn class="local col7 decl" id="137sdpMid" title='sdpMid' data-type='const WTF::String &amp;' data-ref="137sdpMid" data-ref-filename="137sdpMid">sdpMid</dfn>, <em>unsigned</em> <em>short</em> <dfn class="local col8 decl" id="138sdpMLineIndex" title='sdpMLineIndex' data-type='unsigned short' data-ref="138sdpMLineIndex" data-ref-filename="138sdpMLineIndex">sdpMLineIndex</dfn>)</td></tr>
+<tr><th id="45">45</th><td>    : <a class="member field" href="RTCIceCandidateDescriptor.h.html#WebCore::RTCIceCandidateDescriptor::m_candidate" title='WebCore::RTCIceCandidateDescriptor::m_candidate' data-ref="WebCore::RTCIceCandidateDescriptor::m_candidate" data-ref-filename="WebCore..RTCIceCandidateDescriptor..m_candidate">m_candidate</a><a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZN3WTF6StringC1ERKS0_" title='WTF::String::String' data-ref="_ZN3WTF6StringC1ERKS0_" data-ref-filename="_ZN3WTF6StringC1ERKS0_">(</a><a class="local col6 ref" href="#136candidate" title='candidate' data-ref="136candidate" data-ref-filename="136candidate">candidate</a>)</td></tr>
+<tr><th id="46">46</th><td>    , <a class="member field" href="RTCIceCandidateDescriptor.h.html#WebCore::RTCIceCandidateDescriptor::m_sdpMid" title='WebCore::RTCIceCandidateDescriptor::m_sdpMid' data-ref="WebCore::RTCIceCandidateDescriptor::m_sdpMid" data-ref-filename="WebCore..RTCIceCandidateDescriptor..m_sdpMid">m_sdpMid</a><a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZN3WTF6StringC1ERKS0_" title='WTF::String::String' data-ref="_ZN3WTF6StringC1ERKS0_" data-ref-filename="_ZN3WTF6StringC1ERKS0_">(</a><a class="local col7 ref" href="#137sdpMid" title='sdpMid' data-ref="137sdpMid" data-ref-filename="137sdpMid">sdpMid</a>)</td></tr>
+<tr><th id="47">47</th><td>    , <a class="member field" href="RTCIceCandidateDescriptor.h.html#WebCore::RTCIceCandidateDescriptor::m_sdpMLineIndex" title='WebCore::RTCIceCandidateDescriptor::m_sdpMLineIndex' data-ref="WebCore::RTCIceCandidateDescriptor::m_sdpMLineIndex" data-ref-filename="WebCore..RTCIceCandidateDescriptor..m_sdpMLineIndex">m_sdpMLineIndex</a>(<a class="local col8 ref" href="#138sdpMLineIndex" title='sdpMLineIndex' data-ref="138sdpMLineIndex" data-ref-filename="138sdpMLineIndex">sdpMLineIndex</a>)</td></tr>
+<tr><th id="48">48</th><td>{</td></tr>
+<tr><th id="49">49</th><td>}</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><a class="type" href="RTCIceCandidateDescriptor.h.html#WebCore::RTCIceCandidateDescriptor" title='WebCore::RTCIceCandidateDescriptor' data-ref="WebCore::RTCIceCandidateDescriptor" data-ref-filename="WebCore..RTCIceCandidateDescriptor">RTCIceCandidateDescriptor</a>::<dfn class="virtual decl def fn" id="_ZN7WebCore25RTCIceCandidateDescriptorD1Ev" title='WebCore::RTCIceCandidateDescriptor::~RTCIceCandidateDescriptor' data-ref="_ZN7WebCore25RTCIceCandidateDescriptorD1Ev" data-ref-filename="_ZN7WebCore25RTCIceCandidateDescriptorD1Ev">~RTCIceCandidateDescriptor</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td>} <i>// namespace WebCore</i></td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><u>#<span data-ppcond="33">endif</span> // ENABLE(WEB_RTC)</u></td></tr>
+<tr><th id="56">56</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource295.cpp.html'>webkit/WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource295.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

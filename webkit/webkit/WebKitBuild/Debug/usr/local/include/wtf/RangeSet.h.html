@@ -1,0 +1,233 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>RangeSet.h source code [webkit/WebKitBuild/Debug/usr/local/include/wtf/RangeSet.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="WTF::RangeSet "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/wtf/RangeSet.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>wtf</a>/<a href='RangeSet.h.html'>RangeSet.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2016 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="ListDump.h.html">&lt;wtf/ListDump.h&gt;</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="MathExtras.h.html">&lt;wtf/MathExtras.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="StdLibExtras.h.html">&lt;wtf/StdLibExtras.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="Vector.h.html">&lt;wtf/Vector.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><i>// A RangeSet is a set of numerical ranges. A value belongs to the set if it is within any of the</i></td></tr>
+<tr><th id="36">36</th><td><i>// ranges. A range belongs to the set if every value in the range belongs to the set. A range overlaps</i></td></tr>
+<tr><th id="37">37</th><td><i>// the set if any value in the range belongs to the set. You can add ranges and query range</i></td></tr>
+<tr><th id="38">38</th><td><i>// membership. The internal representation is a list of ranges that gets periodically compacted. This</i></td></tr>
+<tr><th id="39">39</th><td><i>// representation is optimal so long as the number of distinct ranges tends to be small, and the</i></td></tr>
+<tr><th id="40">40</th><td><i>// number of range sets tends to be small as well. This works reasonably well in a bunch of compiler</i></td></tr>
+<tr><th id="41">41</th><td><i>// algorithms, where the top range ends up being used a lot.</i></td></tr>
+<tr><th id="42">42</th><td><i>//</i></td></tr>
+<tr><th id="43">43</th><td><i>// The initial user of this is JSC::B3::HeapRange, which is used to perform alias analysis. You can</i></td></tr>
+<tr><th id="44">44</th><td><i>// model new users on that class. Basically, you need to define:</i></td></tr>
+<tr><th id="45">45</th><td><i>//</i></td></tr>
+<tr><th id="46">46</th><td><i>// T::Type - the type of the members of the range. HeapRange uses unsigned.</i></td></tr>
+<tr><th id="47">47</th><td><i>// T(T::Type begin, T::Type end) - construct a new range.</i></td></tr>
+<tr><th id="48">48</th><td><i>// T::Type T::begin() const - instance method giving the inclusive beginning of the range.</i></td></tr>
+<tr><th id="49">49</th><td><i>// T::Type T::end() const - instance method giving the exclusive end of the range.</i></td></tr>
+<tr><th id="50">50</th><td><i>// void T::dump(PrintStream&amp;) const - some kind of dumping.</i></td></tr>
+<tr><th id="51">51</th><td></td></tr>
+<tr><th id="52">52</th><td><b>template</b>&lt;<b>typename</b> RangeType&gt;</td></tr>
+<tr><th id="53">53</th><td><b>class</b> <dfn class="type def" id="WTF::RangeSet" title='WTF::RangeSet' data-ref="WTF::RangeSet" data-ref-filename="WTF..RangeSet">RangeSet</dfn> final {</td></tr>
+<tr><th id="54">54</th><td>    <a class="macro" href="FastMalloc.h.html#399" title="public: void* operator new(size_t, void* p) { return p; } void* operator new[](size_t, void* p) { return p; } void* operator new(size_t size) { return ::WTF::fastMalloc(size); } void operator delete(void* p) { ::WTF::fastFree(p); } void* operator new[](size_t size) { return ::WTF::fastMalloc(size); } void operator delete[](void* p) { ::WTF::fastFree(p); } void* operator new(size_t, NotNullTag, void* location) { do { if (!(location)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/RangeSet.h&quot;, 54, __PRETTY_FUNCTION__, &quot;location&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(54, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/RangeSet.h&quot;, __PRETTY_FUNCTION__, 3636); } while (false); } } while (0); return location; } using webkitFastMalloced = int; private: using __thisIsHereToForceASemicolonAfterThisMacro __attribute__((unused)) = int" data-ref="_M/WTF_MAKE_FAST_ALLOCATED">WTF_MAKE_FAST_ALLOCATED</a>;</td></tr>
+<tr><th id="55">55</th><td><b>public</b>:</td></tr>
+<tr><th id="56">56</th><td>    <b>typedef</b> RangeType <dfn class="typedef" id="WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</dfn>;</td></tr>
+<tr><th id="57">57</th><td>    <b>typedef</b> <b>typename</b> <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>::Type <dfn class="typedef" id="WTF::RangeSet::Type" title='WTF::RangeSet::Type' data-type='typename Range::Type' data-ref="WTF::RangeSet::Type" data-ref-filename="WTF..RangeSet..Type">Type</dfn>;</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td>    <b>typedef</b> <a class="type" href="Forward.h.html#WTF::Vector" title='WTF::Vector' data-ref="WTF::Vector" data-ref-filename="WTF..Vector">Vector</a>&lt;<a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>, <var>8</var>&gt; <dfn class="typedef" id="WTF::RangeSet::VectorType" title='WTF::RangeSet::VectorType' data-type='Vector&lt;WTF::RangeSet::Range, 8&gt;' data-ref="WTF::RangeSet::VectorType" data-ref-filename="WTF..RangeSet..VectorType">VectorType</dfn>;</td></tr>
+<tr><th id="60">60</th><td>    </td></tr>
+<tr><th id="61">61</th><td>    <dfn class="decl def fn" id="_ZN3WTF8RangeSetC1Ev" title='WTF::RangeSet::RangeSet&lt;RangeType&gt;' data-ref="_ZN3WTF8RangeSetC1Ev" data-ref-filename="_ZN3WTF8RangeSetC1Ev">RangeSet</dfn>()</td></tr>
+<tr><th id="62">62</th><td>    {</td></tr>
+<tr><th id="63">63</th><td>    }</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td>    <dfn class="decl def fn" id="_ZN3WTF8RangeSetD1Ev" title='WTF::RangeSet::~RangeSet&lt;RangeType&gt;' data-ref="_ZN3WTF8RangeSetD1Ev" data-ref-filename="_ZN3WTF8RangeSetD1Ev">~RangeSet</dfn>()</td></tr>
+<tr><th id="66">66</th><td>    {</td></tr>
+<tr><th id="67">67</th><td>    }</td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN3WTF8RangeSet3addERKT_" title='WTF::RangeSet::add' data-ref="_ZN3WTF8RangeSet3addERKT_" data-ref-filename="_ZN3WTF8RangeSet3addERKT_">add</dfn>(<em>const</em> <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>&amp; <dfn class="local col1 decl" id="2301range" title='range' data-type='const WTF::RangeSet::Range &amp;' data-ref="2301range" data-ref-filename="2301range">range</dfn>)</td></tr>
+<tr><th id="70">70</th><td>    {</td></tr>
+<tr><th id="71">71</th><td>        <b>if</b> (<a class="local col1 ref" href="#2301range" title='range' data-ref="2301range" data-ref-filename="2301range">range</a>.begin() == <a class="local col1 ref" href="#2301range" title='range' data-ref="2301range" data-ref-filename="2301range">range</a>.end())</td></tr>
+<tr><th id="72">72</th><td>            <b>return</b>;</td></tr>
+<tr><th id="73">73</th><td>        </td></tr>
+<tr><th id="74">74</th><td>        <i>// We expect the range set to become top in a lot of cases. We also expect the same range to</i></td></tr>
+<tr><th id="75">75</th><td><i>        // be added repeatedly. That's why this is here.</i></td></tr>
+<tr><th id="76">76</th><td>        <b>if</b> (!<a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.isEmpty() &amp;&amp; <a class="member fn" href="#_ZN3WTF8RangeSet16subsumesNonEmptyERKT_S3_" title='WTF::RangeSet::subsumesNonEmpty' data-ref="_ZN3WTF8RangeSet16subsumesNonEmptyERKT_S3_" data-ref-filename="_ZN3WTF8RangeSet16subsumesNonEmptyERKT_S3_">subsumesNonEmpty</a>(<a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.last(), <a class="local col1 ref" href="#2301range" title='range' data-ref="2301range" data-ref-filename="2301range">range</a>))</td></tr>
+<tr><th id="77">77</th><td>            <b>return</b>;</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td>        <a class="member field" href="#WTF::RangeSet::m_isCompact" title='WTF::RangeSet::m_isCompact' data-ref="WTF::RangeSet::m_isCompact" data-ref-filename="WTF..RangeSet..m_isCompact">m_isCompact</a> = <b>false</b>;</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>        <i>// We append without compacting only if doing so is guaranteed not to resize the vector.</i></td></tr>
+<tr><th id="82">82</th><td><i>        // FIXME: This heuristic is almost certainly wrong, because we don't control the capacity. I</i></td></tr>
+<tr><th id="83">83</th><td><i>        // think that this means that we will sometimes be rage-compacting when we are just shy of the</i></td></tr>
+<tr><th id="84">84</th><td><i>        // capacity.</i></td></tr>
+<tr><th id="85">85</th><td><i>        // <a href="https://bugs.webkit.org/show_bug.cgi?id=170308">https://bugs.webkit.org/show_bug.cgi?id=170308</a></i></td></tr>
+<tr><th id="86">86</th><td>        <b>if</b> (<a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.size() + <var>1</var> &lt; <a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.capacity()) {</td></tr>
+<tr><th id="87">87</th><td>            <a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.append(<a class="local col1 ref" href="#2301range" title='range' data-ref="2301range" data-ref-filename="2301range">range</a>);</td></tr>
+<tr><th id="88">88</th><td>            <b>return</b>;</td></tr>
+<tr><th id="89">89</th><td>        }</td></tr>
+<tr><th id="90">90</th><td></td></tr>
+<tr><th id="91">91</th><td>        <a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.append(<a class="local col1 ref" href="#2301range" title='range' data-ref="2301range" data-ref-filename="2301range">range</a>);</td></tr>
+<tr><th id="92">92</th><td>        <a class="member fn" href="#_ZN3WTF8RangeSet7compactEv" title='WTF::RangeSet::compact' data-ref="_ZN3WTF8RangeSet7compactEv" data-ref-filename="_ZN3WTF8RangeSet7compactEv">compact</a>();</td></tr>
+<tr><th id="93">93</th><td>    }</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td>    <em>bool</em> <dfn class="decl def fn" id="_ZNK3WTF8RangeSet8containsERKT_" title='WTF::RangeSet::contains' data-ref="_ZNK3WTF8RangeSet8containsERKT_" data-ref-filename="_ZNK3WTF8RangeSet8containsERKT_">contains</dfn>(<em>const</em> <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>&amp; <dfn class="local col2 decl" id="2302range" title='range' data-type='const WTF::RangeSet::Range &amp;' data-ref="2302range" data-ref-filename="2302range">range</dfn>) <em>const</em></td></tr>
+<tr><th id="96">96</th><td>    {</td></tr>
+<tr><th id="97">97</th><td>        <b>if</b> (<a class="local col2 ref" href="#2302range" title='range' data-ref="2302range" data-ref-filename="2302range">range</a>.begin() == <a class="local col2 ref" href="#2302range" title='range' data-ref="2302range" data-ref-filename="2302range">range</a>.end())</td></tr>
+<tr><th id="98">98</th><td>            <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="99">99</th><td>        </td></tr>
+<tr><th id="100">100</th><td>        <em>unsigned</em> <dfn class="local col3 decl" id="2303index" title='index' data-type='unsigned int' data-ref="2303index" data-ref-filename="2303index">index</dfn> = <a class="member fn" href="#_ZNK3WTF8RangeSet9findRangeERKT_" title='WTF::RangeSet::findRange' data-ref="_ZNK3WTF8RangeSet9findRangeERKT_" data-ref-filename="_ZNK3WTF8RangeSet9findRangeERKT_">findRange</a>(<a class="local col2 ref" href="#2302range" title='range' data-ref="2302range" data-ref-filename="2302range">range</a>);</td></tr>
+<tr><th id="101">101</th><td>        <b>if</b> (<a class="local col3 ref" href="#2303index" title='index' data-ref="2303index" data-ref-filename="2303index">index</a> != <span class="macro" title="(2147483647 *2U +1U)" data-ref="_M/UINT_MAX">UINT_MAX</span>)</td></tr>
+<tr><th id="102">102</th><td>            <b>return</b> <a class="member fn" href="#_ZN3WTF8RangeSet16subsumesNonEmptyERKT_S3_" title='WTF::RangeSet::subsumesNonEmpty' data-ref="_ZN3WTF8RangeSet16subsumesNonEmptyERKT_S3_" data-ref-filename="_ZN3WTF8RangeSet16subsumesNonEmptyERKT_S3_">subsumesNonEmpty</a>(<a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>[<a class="local col3 ref" href="#2303index" title='index' data-ref="2303index" data-ref-filename="2303index">index</a>], <a class="local col2 ref" href="#2302range" title='range' data-ref="2302range" data-ref-filename="2302range">range</a>);</td></tr>
+<tr><th id="103">103</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="104">104</th><td>    }</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td>    <em>bool</em> <dfn class="decl def fn" id="_ZNK3WTF8RangeSet8overlapsERKT_" title='WTF::RangeSet::overlaps' data-ref="_ZNK3WTF8RangeSet8overlapsERKT_" data-ref-filename="_ZNK3WTF8RangeSet8overlapsERKT_">overlaps</dfn>(<em>const</em> <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>&amp; <dfn class="local col4 decl" id="2304range" title='range' data-type='const WTF::RangeSet::Range &amp;' data-ref="2304range" data-ref-filename="2304range">range</dfn>) <em>const</em></td></tr>
+<tr><th id="107">107</th><td>    {</td></tr>
+<tr><th id="108">108</th><td>        <b>if</b> (<a class="local col4 ref" href="#2304range" title='range' data-ref="2304range" data-ref-filename="2304range">range</a>.begin() == <a class="local col4 ref" href="#2304range" title='range' data-ref="2304range" data-ref-filename="2304range">range</a>.end())</td></tr>
+<tr><th id="109">109</th><td>            <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="110">110</th><td>        </td></tr>
+<tr><th id="111">111</th><td>        <b>return</b> <a class="member fn" href="#_ZNK3WTF8RangeSet9findRangeERKT_" title='WTF::RangeSet::findRange' data-ref="_ZNK3WTF8RangeSet9findRangeERKT_" data-ref-filename="_ZNK3WTF8RangeSet9findRangeERKT_">findRange</a>(<a class="local col4 ref" href="#2304range" title='range' data-ref="2304range" data-ref-filename="2304range">range</a>) != <span class="macro" title="(2147483647 *2U +1U)" data-ref="_M/UINT_MAX">UINT_MAX</span>;</td></tr>
+<tr><th id="112">112</th><td>    }</td></tr>
+<tr><th id="113">113</th><td></td></tr>
+<tr><th id="114">114</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN3WTF8RangeSet5clearEv" title='WTF::RangeSet::clear' data-ref="_ZN3WTF8RangeSet5clearEv" data-ref-filename="_ZN3WTF8RangeSet5clearEv">clear</dfn>()</td></tr>
+<tr><th id="115">115</th><td>    {</td></tr>
+<tr><th id="116">116</th><td>        <a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.clear();</td></tr>
+<tr><th id="117">117</th><td>        <a class="member field" href="#WTF::RangeSet::m_isCompact" title='WTF::RangeSet::m_isCompact' data-ref="WTF::RangeSet::m_isCompact" data-ref-filename="WTF..RangeSet..m_isCompact">m_isCompact</a> = <b>true</b>;</td></tr>
+<tr><th id="118">118</th><td>    }</td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZNK3WTF8RangeSet4dumpERNS_11PrintStreamE" title='WTF::RangeSet::dump' data-ref="_ZNK3WTF8RangeSet4dumpERNS_11PrintStreamE" data-ref-filename="_ZNK3WTF8RangeSet4dumpERNS_11PrintStreamE">dump</dfn>(<a class="type" href="PrintStream.h.html#WTF::PrintStream" title='WTF::PrintStream' data-ref="WTF::PrintStream" data-ref-filename="WTF..PrintStream">PrintStream</a>&amp; <dfn class="local col5 decl" id="2305out" title='out' data-type='WTF::PrintStream &amp;' data-ref="2305out" data-ref-filename="2305out">out</dfn>) <em>const</em></td></tr>
+<tr><th id="121">121</th><td>    {</td></tr>
+<tr><th id="122">122</th><td>        <b>const_cast</b>&lt;RangeSet*&gt;(<b>this</b>)-&gt;compact();</td></tr>
+<tr><th id="123">123</th><td>        <a class="local col5 ref" href="#2305out" title='out' data-ref="2305out" data-ref-filename="2305out">out</a>.print(listDump(<a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>));</td></tr>
+<tr><th id="124">124</th><td>    }</td></tr>
+<tr><th id="125">125</th><td></td></tr>
+<tr><th id="126">126</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZNK3WTF8RangeSet7dumpRawERNS_11PrintStreamE" title='WTF::RangeSet::dumpRaw' data-ref="_ZNK3WTF8RangeSet7dumpRawERNS_11PrintStreamE" data-ref-filename="_ZNK3WTF8RangeSet7dumpRawERNS_11PrintStreamE">dumpRaw</dfn>(<a class="type" href="PrintStream.h.html#WTF::PrintStream" title='WTF::PrintStream' data-ref="WTF::PrintStream" data-ref-filename="WTF..PrintStream">PrintStream</a>&amp; <dfn class="local col6 decl" id="2306out" title='out' data-type='WTF::PrintStream &amp;' data-ref="2306out" data-ref-filename="2306out">out</dfn>) <em>const</em></td></tr>
+<tr><th id="127">127</th><td>    {</td></tr>
+<tr><th id="128">128</th><td>        <a class="local col6 ref" href="#2306out" title='out' data-ref="2306out" data-ref-filename="2306out">out</a>.print(<q>"{"</q>, listDump(<a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>), <q>", isCompact = "</q>, <a class="member field" href="#WTF::RangeSet::m_isCompact" title='WTF::RangeSet::m_isCompact' data-ref="WTF::RangeSet::m_isCompact" data-ref-filename="WTF..RangeSet..m_isCompact">m_isCompact</a>, <q>"}"</q>);</td></tr>
+<tr><th id="129">129</th><td>    }</td></tr>
+<tr><th id="130">130</th><td>    </td></tr>
+<tr><th id="131">131</th><td>    <b>typename</b> <a class="typedef" href="#WTF::RangeSet::VectorType" title='WTF::RangeSet::VectorType' data-type='Vector&lt;WTF::RangeSet::Range, 8&gt;' data-ref="WTF::RangeSet::VectorType" data-ref-filename="WTF..RangeSet..VectorType">VectorType</a>::const_iterator <dfn class="decl def fn" id="_ZNK3WTF8RangeSet5beginEv" title='WTF::RangeSet::begin' data-ref="_ZNK3WTF8RangeSet5beginEv" data-ref-filename="_ZNK3WTF8RangeSet5beginEv">begin</dfn>() <em>const</em></td></tr>
+<tr><th id="132">132</th><td>    {</td></tr>
+<tr><th id="133">133</th><td>        <b>return</b> <a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.begin();</td></tr>
+<tr><th id="134">134</th><td>    }</td></tr>
+<tr><th id="135">135</th><td>    </td></tr>
+<tr><th id="136">136</th><td>    <b>typename</b> <a class="typedef" href="#WTF::RangeSet::VectorType" title='WTF::RangeSet::VectorType' data-type='Vector&lt;WTF::RangeSet::Range, 8&gt;' data-ref="WTF::RangeSet::VectorType" data-ref-filename="WTF..RangeSet..VectorType">VectorType</a>::const_iterator <dfn class="decl def fn" id="_ZNK3WTF8RangeSet3endEv" title='WTF::RangeSet::end' data-ref="_ZNK3WTF8RangeSet3endEv" data-ref-filename="_ZNK3WTF8RangeSet3endEv">end</dfn>() <em>const</em></td></tr>
+<tr><th id="137">137</th><td>    {</td></tr>
+<tr><th id="138">138</th><td>        <b>return</b> <a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.end();</td></tr>
+<tr><th id="139">139</th><td>    }</td></tr>
+<tr><th id="140">140</th><td>    </td></tr>
+<tr><th id="141">141</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN3WTF8RangeSet6addAllERKNS_8RangeSetIT_EE" title='WTF::RangeSet::addAll' data-ref="_ZN3WTF8RangeSet6addAllERKNS_8RangeSetIT_EE" data-ref-filename="_ZN3WTF8RangeSet6addAllERKNS_8RangeSetIT_EE">addAll</dfn>(<em>const</em> RangeSet&amp; <dfn class="local col7 decl" id="2307other" title='other' data-type='const RangeSet&lt;RangeType&gt; &amp;' data-ref="2307other" data-ref-filename="2307other">other</dfn>)</td></tr>
+<tr><th id="142">142</th><td>    {</td></tr>
+<tr><th id="143">143</th><td>        <b>for</b> (<a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a> <dfn class="local col8 decl" id="2308range" title='range' data-type='WTF::RangeSet::Range' data-ref="2308range" data-ref-filename="2308range">range</dfn> : <a class="local col7 ref" href="#2307other" title='other' data-ref="2307other" data-ref-filename="2307other">other</a>)</td></tr>
+<tr><th id="144">144</th><td>            <a class="member fn" href="#_ZN3WTF8RangeSet3addERKT_" title='WTF::RangeSet::add' data-ref="_ZN3WTF8RangeSet3addERKT_" data-ref-filename="_ZN3WTF8RangeSet3addERKT_">add</a>(<a class="local col8 ref" href="#2308range" title='range' data-ref="2308range" data-ref-filename="2308range">range</a>);</td></tr>
+<tr><th id="145">145</th><td>    }</td></tr>
+<tr><th id="146">146</th><td></td></tr>
+<tr><th id="147">147</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN3WTF8RangeSet7compactEv" title='WTF::RangeSet::compact' data-ref="_ZN3WTF8RangeSet7compactEv" data-ref-filename="_ZN3WTF8RangeSet7compactEv">compact</dfn>()</td></tr>
+<tr><th id="148">148</th><td>    {</td></tr>
+<tr><th id="149">149</th><td>        <b>if</b> (<a class="member field" href="#WTF::RangeSet::m_isCompact" title='WTF::RangeSet::m_isCompact' data-ref="WTF::RangeSet::m_isCompact" data-ref-filename="WTF..RangeSet..m_isCompact">m_isCompact</a>)</td></tr>
+<tr><th id="150">150</th><td>            <b>return</b>;</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td>        <b>if</b> (<a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.isEmpty()) {</td></tr>
+<tr><th id="153">153</th><td>            <a class="member field" href="#WTF::RangeSet::m_isCompact" title='WTF::RangeSet::m_isCompact' data-ref="WTF::RangeSet::m_isCompact" data-ref-filename="WTF..RangeSet..m_isCompact">m_isCompact</a> = <b>true</b>;</td></tr>
+<tr><th id="154">154</th><td>            <b>return</b>;</td></tr>
+<tr><th id="155">155</th><td>        }</td></tr>
+<tr><th id="156">156</th><td></td></tr>
+<tr><th id="157">157</th><td>        <span class="namespace">std::</span>sort(</td></tr>
+<tr><th id="158">158</th><td>            <a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.begin(), <a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.end(),</td></tr>
+<tr><th id="159">159</th><td>            [&amp;] (<em>const</em> <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>&amp; <dfn class="local col9 decl" id="2309a" title='a' data-type='const WTF::RangeSet::Range &amp;' data-ref="2309a" data-ref-filename="2309a">a</dfn>, <em>const</em> <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>&amp; <dfn class="local col0 decl" id="2310b" title='b' data-type='const WTF::RangeSet::Range &amp;' data-ref="2310b" data-ref-filename="2310b">b</dfn>) -&gt; <em>bool</em> {</td></tr>
+<tr><th id="160">160</th><td>                <b>return</b> <a class="local col9 ref" href="#2309a" title='a' data-ref="2309a" data-ref-filename="2309a">a</a>.begin() &lt; <a class="local col0 ref" href="#2310b" title='b' data-ref="2310b" data-ref-filename="2310b">b</a>.begin();</td></tr>
+<tr><th id="161">161</th><td>            });</td></tr>
+<tr><th id="162">162</th><td></td></tr>
+<tr><th id="163">163</th><td>        <em>unsigned</em> <dfn class="local col1 decl" id="2311srcIndex" title='srcIndex' data-type='unsigned int' data-ref="2311srcIndex" data-ref-filename="2311srcIndex">srcIndex</dfn> = <var>1</var>;</td></tr>
+<tr><th id="164">164</th><td>        <em>unsigned</em> <dfn class="local col2 decl" id="2312dstIndex" title='dstIndex' data-type='unsigned int' data-ref="2312dstIndex" data-ref-filename="2312dstIndex">dstIndex</dfn> = <var>1</var>;</td></tr>
+<tr><th id="165">165</th><td>        <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>* <dfn class="local col3 decl" id="2313lastRange" title='lastRange' data-type='WTF::RangeSet::Range *' data-ref="2313lastRange" data-ref-filename="2313lastRange">lastRange</dfn> = &amp;<a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>[<var>0</var>];</td></tr>
+<tr><th id="166">166</th><td>        <b>while</b> (<a class="local col1 ref" href="#2311srcIndex" title='srcIndex' data-ref="2311srcIndex" data-ref-filename="2311srcIndex">srcIndex</a> &lt; <a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.size()) {</td></tr>
+<tr><th id="167">167</th><td>            <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a> <dfn class="local col4 decl" id="2314range" title='range' data-type='WTF::RangeSet::Range' data-ref="2314range" data-ref-filename="2314range">range</dfn> = <a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>[<a class="local col1 ref" href="#2311srcIndex" title='srcIndex' data-ref="2311srcIndex" data-ref-filename="2311srcIndex">srcIndex</a>++];</td></tr>
+<tr><th id="168">168</th><td>            <a class="macro" href="Assertions.h.html#347" title="do { if (!(range.begin() &gt;= lastRange-&gt;begin())) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/RangeSet.h&quot;, 168, __PRETTY_FUNCTION__, &quot;range.begin() &gt;= lastRange-&gt;begin()&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(168, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/RangeSet.h&quot;, __PRETTY_FUNCTION__, 3638); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(<a class="local col4 ref" href="#2314range" title='range' data-ref="2314range" data-ref-filename="2314range">range</a>.begin() &gt;= <a class="local col3 ref" href="#2313lastRange" title='lastRange' data-ref="2313lastRange" data-ref-filename="2313lastRange">lastRange</a>-&gt;begin());</td></tr>
+<tr><th id="169">169</th><td>            <b>if</b> (<a class="local col4 ref" href="#2314range" title='range' data-ref="2314range" data-ref-filename="2314range">range</a>.end() &lt;= <a class="local col3 ref" href="#2313lastRange" title='lastRange' data-ref="2313lastRange" data-ref-filename="2313lastRange">lastRange</a>-&gt;end())</td></tr>
+<tr><th id="170">170</th><td>                <b>continue</b>;</td></tr>
+<tr><th id="171">171</th><td>            <b>if</b> (<a class="local col4 ref" href="#2314range" title='range' data-ref="2314range" data-ref-filename="2314range">range</a>.begin() &lt;= <a class="local col3 ref" href="#2313lastRange" title='lastRange' data-ref="2313lastRange" data-ref-filename="2313lastRange">lastRange</a>-&gt;end()) {</td></tr>
+<tr><th id="172">172</th><td>                *<a class="local col3 ref" href="#2313lastRange" title='lastRange' data-ref="2313lastRange" data-ref-filename="2313lastRange">lastRange</a> = <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>(<a class="local col3 ref" href="#2313lastRange" title='lastRange' data-ref="2313lastRange" data-ref-filename="2313lastRange">lastRange</a>-&gt;begin(), <a class="local col4 ref" href="#2314range" title='range' data-ref="2314range" data-ref-filename="2314range">range</a>.end());</td></tr>
+<tr><th id="173">173</th><td>                <b>continue</b>;</td></tr>
+<tr><th id="174">174</th><td>            }</td></tr>
+<tr><th id="175">175</th><td>            <a class="macro" href="Assertions.h.html#347" title="do { if (!(!overlapsNonEmpty(*lastRange, range))) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/RangeSet.h&quot;, 175, __PRETTY_FUNCTION__, &quot;!overlapsNonEmpty(*lastRange, range)&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(175, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/RangeSet.h&quot;, __PRETTY_FUNCTION__, 3640); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(!<a class="member fn" href="#_ZN3WTF8RangeSet16overlapsNonEmptyERKT_S3_" title='WTF::RangeSet::overlapsNonEmpty' data-ref="_ZN3WTF8RangeSet16overlapsNonEmptyERKT_S3_" data-ref-filename="_ZN3WTF8RangeSet16overlapsNonEmptyERKT_S3_">overlapsNonEmpty</a>(*<a class="local col3 ref" href="#2313lastRange" title='lastRange' data-ref="2313lastRange" data-ref-filename="2313lastRange">lastRange</a>, <a class="local col4 ref" href="#2314range" title='range' data-ref="2314range" data-ref-filename="2314range">range</a>));</td></tr>
+<tr><th id="176">176</th><td>            <a class="local col3 ref" href="#2313lastRange" title='lastRange' data-ref="2313lastRange" data-ref-filename="2313lastRange">lastRange</a> = &amp;<a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>[<a class="local col2 ref" href="#2312dstIndex" title='dstIndex' data-ref="2312dstIndex" data-ref-filename="2312dstIndex">dstIndex</a>++];</td></tr>
+<tr><th id="177">177</th><td>            *<a class="local col3 ref" href="#2313lastRange" title='lastRange' data-ref="2313lastRange" data-ref-filename="2313lastRange">lastRange</a> = <a class="local col4 ref" href="#2314range" title='range' data-ref="2314range" data-ref-filename="2314range">range</a>;</td></tr>
+<tr><th id="178">178</th><td>        }</td></tr>
+<tr><th id="179">179</th><td>        <a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.shrink(<a class="local col2 ref" href="#2312dstIndex" title='dstIndex' data-ref="2312dstIndex" data-ref-filename="2312dstIndex">dstIndex</a>);</td></tr>
+<tr><th id="180">180</th><td></td></tr>
+<tr><th id="181">181</th><td>        <a class="member field" href="#WTF::RangeSet::m_isCompact" title='WTF::RangeSet::m_isCompact' data-ref="WTF::RangeSet::m_isCompact" data-ref-filename="WTF..RangeSet..m_isCompact">m_isCompact</a> = <b>true</b>;</td></tr>
+<tr><th id="182">182</th><td>    }</td></tr>
+<tr><th id="183">183</th><td>    </td></tr>
+<tr><th id="184">184</th><td><b>private</b>:</td></tr>
+<tr><th id="185">185</th><td>    <em>static</em> <em>bool</em> <dfn class="decl def fn" id="_ZN3WTF8RangeSet16overlapsNonEmptyERKT_S3_" title='WTF::RangeSet::overlapsNonEmpty' data-ref="_ZN3WTF8RangeSet16overlapsNonEmptyERKT_S3_" data-ref-filename="_ZN3WTF8RangeSet16overlapsNonEmptyERKT_S3_">overlapsNonEmpty</dfn>(<em>const</em> <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>&amp; <dfn class="local col5 decl" id="2315a" title='a' data-type='const WTF::RangeSet::Range &amp;' data-ref="2315a" data-ref-filename="2315a">a</dfn>, <em>const</em> <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>&amp; <dfn class="local col6 decl" id="2316b" title='b' data-type='const WTF::RangeSet::Range &amp;' data-ref="2316b" data-ref-filename="2316b">b</dfn>)</td></tr>
+<tr><th id="186">186</th><td>    {</td></tr>
+<tr><th id="187">187</th><td>        <b>return</b> nonEmptyRangesOverlap(<a class="local col5 ref" href="#2315a" title='a' data-ref="2315a" data-ref-filename="2315a">a</a>.begin(), <a class="local col5 ref" href="#2315a" title='a' data-ref="2315a" data-ref-filename="2315a">a</a>.end(), <a class="local col6 ref" href="#2316b" title='b' data-ref="2316b" data-ref-filename="2316b">b</a>.begin(), <a class="local col6 ref" href="#2316b" title='b' data-ref="2316b" data-ref-filename="2316b">b</a>.end());</td></tr>
+<tr><th id="188">188</th><td>    }</td></tr>
+<tr><th id="189">189</th><td></td></tr>
+<tr><th id="190">190</th><td>    <em>static</em> <em>bool</em> <dfn class="decl def fn" id="_ZN3WTF8RangeSet16subsumesNonEmptyERKT_S3_" title='WTF::RangeSet::subsumesNonEmpty' data-ref="_ZN3WTF8RangeSet16subsumesNonEmptyERKT_S3_" data-ref-filename="_ZN3WTF8RangeSet16subsumesNonEmptyERKT_S3_">subsumesNonEmpty</dfn>(<em>const</em> <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>&amp; <dfn class="local col7 decl" id="2317a" title='a' data-type='const WTF::RangeSet::Range &amp;' data-ref="2317a" data-ref-filename="2317a">a</dfn>, <em>const</em> <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>&amp; <dfn class="local col8 decl" id="2318b" title='b' data-type='const WTF::RangeSet::Range &amp;' data-ref="2318b" data-ref-filename="2318b">b</dfn>)</td></tr>
+<tr><th id="191">191</th><td>    {</td></tr>
+<tr><th id="192">192</th><td>        <b>return</b> <a class="local col7 ref" href="#2317a" title='a' data-ref="2317a" data-ref-filename="2317a">a</a>.begin() &lt;= <a class="local col8 ref" href="#2318b" title='b' data-ref="2318b" data-ref-filename="2318b">b</a>.begin() &amp;&amp; <a class="local col7 ref" href="#2317a" title='a' data-ref="2317a" data-ref-filename="2317a">a</a>.end() &gt;= <a class="local col8 ref" href="#2318b" title='b' data-ref="2318b" data-ref-filename="2318b">b</a>.end();</td></tr>
+<tr><th id="193">193</th><td>    }</td></tr>
+<tr><th id="194">194</th><td></td></tr>
+<tr><th id="195">195</th><td>    <em>unsigned</em> <dfn class="decl def fn" id="_ZNK3WTF8RangeSet9findRangeERKT_" title='WTF::RangeSet::findRange' data-ref="_ZNK3WTF8RangeSet9findRangeERKT_" data-ref-filename="_ZNK3WTF8RangeSet9findRangeERKT_">findRange</dfn>(<em>const</em> <a class="typedef" href="#WTF::RangeSet::Range" title='WTF::RangeSet::Range' data-type='RangeType' data-ref="WTF::RangeSet::Range" data-ref-filename="WTF..RangeSet..Range">Range</a>&amp; <dfn class="local col9 decl" id="2319range" title='range' data-type='const WTF::RangeSet::Range &amp;' data-ref="2319range" data-ref-filename="2319range">range</dfn>) <em>const</em></td></tr>
+<tr><th id="196">196</th><td>    {</td></tr>
+<tr><th id="197">197</th><td>        <b>const_cast</b>&lt;RangeSet*&gt;(<b>this</b>)-&gt;compact();</td></tr>
+<tr><th id="198">198</th><td></td></tr>
+<tr><th id="199">199</th><td>        <i>// FIXME: Once we start using this in anger, we will want this to be a binary search.</i></td></tr>
+<tr><th id="200">200</th><td>        <b>for</b> (<em>unsigned</em> <dfn class="local col0 decl" id="2320i" title='i' data-type='unsigned int' data-ref="2320i" data-ref-filename="2320i">i</dfn> = <var>0</var>; <a class="local col0 ref" href="#2320i" title='i' data-ref="2320i" data-ref-filename="2320i">i</a> &lt; <a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>.size(); ++<a class="local col0 ref" href="#2320i" title='i' data-ref="2320i" data-ref-filename="2320i">i</a>) {</td></tr>
+<tr><th id="201">201</th><td>            <b>if</b> (<a class="member fn" href="#_ZN3WTF8RangeSet16overlapsNonEmptyERKT_S3_" title='WTF::RangeSet::overlapsNonEmpty' data-ref="_ZN3WTF8RangeSet16overlapsNonEmptyERKT_S3_" data-ref-filename="_ZN3WTF8RangeSet16overlapsNonEmptyERKT_S3_">overlapsNonEmpty</a>(<a class="member field" href="#WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</a>[<a class="local col0 ref" href="#2320i" title='i' data-ref="2320i" data-ref-filename="2320i">i</a>], <a class="local col9 ref" href="#2319range" title='range' data-ref="2319range" data-ref-filename="2319range">range</a>))</td></tr>
+<tr><th id="202">202</th><td>                <b>return</b> <a class="local col0 ref" href="#2320i" title='i' data-ref="2320i" data-ref-filename="2320i">i</a>;</td></tr>
+<tr><th id="203">203</th><td>        }</td></tr>
+<tr><th id="204">204</th><td>        </td></tr>
+<tr><th id="205">205</th><td>        <b>return</b> <span class="macro" title="(2147483647 *2U +1U)" data-ref="_M/UINT_MAX">UINT_MAX</span>;</td></tr>
+<tr><th id="206">206</th><td>    }</td></tr>
+<tr><th id="207">207</th><td>    </td></tr>
+<tr><th id="208">208</th><td>    <a class="typedef" href="#WTF::RangeSet::VectorType" title='WTF::RangeSet::VectorType' data-type='Vector&lt;WTF::RangeSet::Range, 8&gt;' data-ref="WTF::RangeSet::VectorType" data-ref-filename="WTF..RangeSet..VectorType">VectorType</a> <dfn class="decl field" id="WTF::RangeSet::m_ranges" title='WTF::RangeSet::m_ranges' data-ref="WTF::RangeSet::m_ranges" data-ref-filename="WTF..RangeSet..m_ranges">m_ranges</dfn>;</td></tr>
+<tr><th id="209">209</th><td>    <em>bool</em> <dfn class="decl field" id="WTF::RangeSet::m_isCompact" title='WTF::RangeSet::m_isCompact' data-ref="WTF::RangeSet::m_isCompact" data-ref-filename="WTF..RangeSet..m_isCompact">m_isCompact</dfn> { <b>true</b> };</td></tr>
+<tr><th id="210">210</th><td>};</td></tr>
+<tr><th id="211">211</th><td></td></tr>
+<tr><th id="212">212</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="213">213</th><td></td></tr>
+<tr><th id="214">214</th><td><b>using</b> <span class="namespace">WTF::</span>RangeSet;</td></tr>
+<tr><th id="215">215</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/WebKit/WebProcess/WebPage/WebPage.cpp.html'>webkit/Source/WebKit/WebProcess/WebPage/WebPage.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>sctp_indata.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/netinet/sctp_indata.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/netinet/sctp_indata.h'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>third_party</a>/<a href='../../..'>usrsctp</a>/<a href='../..'>usrsctplib</a>/<a href='..'>usrsctplib</a>/<a href='./'>netinet</a>/<a href='sctp_indata.h.html'>sctp_indata.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*-</i></td></tr>
+<tr><th id="2">2</th><td><i> * SPDX-License-Identifier: BSD-3-Clause</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Copyright (c) 2001-2007, by Cisco Systems, Inc. All rights reserved.</i></td></tr>
+<tr><th id="5">5</th><td><i> * Copyright (c) 2008-2012, by Randall Stewart. All rights reserved.</i></td></tr>
+<tr><th id="6">6</th><td><i> * Copyright (c) 2008-2012, by Michael Tuexen. All rights reserved.</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="9">9</th><td><i> * modification, are permitted provided that the following conditions are met:</i></td></tr>
+<tr><th id="10">10</th><td><i> *</i></td></tr>
+<tr><th id="11">11</th><td><i> * a) Redistributions of source code must retain the above copyright notice,</i></td></tr>
+<tr><th id="12">12</th><td><i> *    this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="13">13</th><td><i> *</i></td></tr>
+<tr><th id="14">14</th><td><i> * b) Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="15">15</th><td><i> *    notice, this list of conditions and the following disclaimer in</i></td></tr>
+<tr><th id="16">16</th><td><i> *    the documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="17">17</th><td><i> *</i></td></tr>
+<tr><th id="18">18</th><td><i> * c) Neither the name of Cisco Systems, Inc. nor the names of its</i></td></tr>
+<tr><th id="19">19</th><td><i> *    contributors may be used to endorse or promote products derived</i></td></tr>
+<tr><th id="20">20</th><td><i> *    from this software without specific prior written permission.</i></td></tr>
+<tr><th id="21">21</th><td><i> *</i></td></tr>
+<tr><th id="22">22</th><td><i> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</i></td></tr>
+<tr><th id="23">23</th><td><i> * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="24">24</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</i></td></tr>
+<tr><th id="25">25</th><td><i> * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE</i></td></tr>
+<tr><th id="26">26</th><td><i> * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="27">27</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="28">28</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="29">29</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="30">30</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="31">31</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="32">32</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="33">33</th><td><i> */</i></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><u>#<span data-ppcond="35">if</span> defined(<span class="macro" data-ref="_M/__FreeBSD__">__FreeBSD__</span>) &amp;&amp; !defined(<span class="macro" data-ref="_M/__Userspace__">__Userspace__</span>)</u></td></tr>
+<tr><th id="36">36</th><td><u>#include &lt;sys/cdefs.h&gt;</u></td></tr>
+<tr><th id="37">37</th><td>__FBSDID(<q>"$FreeBSD: head/sys/netinet/sctp_indata.h 365071 2020-09-01 21:19:14Z mjg $"</q>);</td></tr>
+<tr><th id="38">38</th><td><u>#<span data-ppcond="35">endif</span></u></td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><u>#<span data-ppcond="40">ifndef</span> <span class="macro" data-ref="_M/_NETINET_SCTP_INDATA_H_">_NETINET_SCTP_INDATA_H_</span></u></td></tr>
+<tr><th id="41">41</th><td><u>#define <dfn class="macro" id="_M/_NETINET_SCTP_INDATA_H_" data-ref="_M/_NETINET_SCTP_INDATA_H_">_NETINET_SCTP_INDATA_H_</dfn></u></td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><u>#<span data-ppcond="43">if</span> defined(<span class="macro" data-ref="_M/_KERNEL">_KERNEL</span>) || defined(<span class="macro" data-ref="_M/__Userspace__">__Userspace__</span>)</u></td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td><b>struct</b> <a class="type" href="sctp_structs.h.html#sctp_queued_to_read" title='sctp_queued_to_read' data-ref="sctp_queued_to_read" data-ref-filename="sctp_queued_to_read">sctp_queued_to_read</a> *</td></tr>
+<tr><th id="46">46</th><td><dfn class="decl fn" id="sctp_build_readq_entry" title='sctp_build_readq_entry' data-ref="sctp_build_readq_entry" data-ref-filename="sctp_build_readq_entry">sctp_build_readq_entry</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *<dfn class="local col1 decl" id="1stcb" title='stcb' data-type='struct sctp_tcb *' data-ref="1stcb" data-ref-filename="1stcb">stcb</dfn>,</td></tr>
+<tr><th id="47">47</th><td>                       <b>struct</b> <a class="type" href="sctp_structs.h.html#sctp_nets" title='sctp_nets' data-ref="sctp_nets" data-ref-filename="sctp_nets">sctp_nets</a> *<dfn class="local col2 decl" id="2net" title='net' data-type='struct sctp_nets *' data-ref="2net" data-ref-filename="2net">net</dfn>,</td></tr>
+<tr><th id="48">48</th><td>                       <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col3 decl" id="3tsn" title='tsn' data-type='uint32_t' data-ref="3tsn" data-ref-filename="3tsn">tsn</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col4 decl" id="4ppid" title='ppid' data-type='uint32_t' data-ref="4ppid" data-ref-filename="4ppid">ppid</dfn>,</td></tr>
+<tr><th id="49">49</th><td>                       <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col5 decl" id="5context" title='context' data-type='uint32_t' data-ref="5context" data-ref-filename="5context">context</dfn>, <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="local col6 decl" id="6sid" title='sid' data-type='uint16_t' data-ref="6sid" data-ref-filename="6sid">sid</dfn>,</td></tr>
+<tr><th id="50">50</th><td>                       <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col7 decl" id="7mid" title='mid' data-type='uint32_t' data-ref="7mid" data-ref-filename="7mid">mid</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col8 decl" id="8flags" title='flags' data-type='uint8_t' data-ref="8flags" data-ref-filename="8flags">flags</dfn>,</td></tr>
+<tr><th id="51">51</th><td>                       <b>struct</b> <a class="type" href="../user_mbuf.h.html#mbuf" title='mbuf' data-ref="mbuf" data-ref-filename="mbuf">mbuf</a> *<dfn class="local col9 decl" id="9dm" title='dm' data-type='struct mbuf *' data-ref="9dm" data-ref-filename="9dm">dm</dfn>);</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td><u>#define <dfn class="macro" id="_M/sctp_build_readq_entry_mac" data-ref="_M/sctp_build_readq_entry_mac">sctp_build_readq_entry_mac</dfn>(_ctl, in_it, context, net, tsn, ppid, sid, flags, dm, tfsn, mid) do { \</u></td></tr>
+<tr><th id="54">54</th><td><u>	if (_ctl) { \</u></td></tr>
+<tr><th id="55">55</th><td><u>		atomic_add_int(&amp;((net)-&gt;ref_count), 1); \</u></td></tr>
+<tr><th id="56">56</th><td><u>		memset(_ctl, 0, sizeof(struct sctp_queued_to_read)); \</u></td></tr>
+<tr><th id="57">57</th><td><u>		(_ctl)-&gt;sinfo_stream = sid; \</u></td></tr>
+<tr><th id="58">58</th><td><u>		TAILQ_INIT(&amp;_ctl-&gt;reasm); \</u></td></tr>
+<tr><th id="59">59</th><td><u>		(_ctl)-&gt;top_fsn = tfsn; \</u></td></tr>
+<tr><th id="60">60</th><td><u>		(_ctl)-&gt;mid = mid; \</u></td></tr>
+<tr><th id="61">61</th><td><u>		(_ctl)-&gt;sinfo_flags = (flags &lt;&lt; 8); \</u></td></tr>
+<tr><th id="62">62</th><td><u>		(_ctl)-&gt;sinfo_ppid = ppid; \</u></td></tr>
+<tr><th id="63">63</th><td><u>		(_ctl)-&gt;sinfo_context = context; \</u></td></tr>
+<tr><th id="64">64</th><td><u>		(_ctl)-&gt;fsn_included = 0xffffffff; \</u></td></tr>
+<tr><th id="65">65</th><td><u>		(_ctl)-&gt;sinfo_tsn = tsn; \</u></td></tr>
+<tr><th id="66">66</th><td><u>		(_ctl)-&gt;sinfo_cumtsn = tsn; \</u></td></tr>
+<tr><th id="67">67</th><td><u>		(_ctl)-&gt;sinfo_assoc_id = sctp_get_associd((in_it)); \</u></td></tr>
+<tr><th id="68">68</th><td><u>		(_ctl)-&gt;whoFrom = net; \</u></td></tr>
+<tr><th id="69">69</th><td><u>		(_ctl)-&gt;data = dm; \</u></td></tr>
+<tr><th id="70">70</th><td><u>		(_ctl)-&gt;stcb = (in_it); \</u></td></tr>
+<tr><th id="71">71</th><td><u>		(_ctl)-&gt;port_from = (in_it)-&gt;rport; \</u></td></tr>
+<tr><th id="72">72</th><td><u>		if ((in_it)-&gt;asoc.state &amp; SCTP_STATE_ABOUT_TO_BE_FREED) { \</u></td></tr>
+<tr><th id="73">73</th><td><u>			(_ctl)-&gt;do_not_ref_stcb = 1; \</u></td></tr>
+<tr><th id="74">74</th><td><u>		}\</u></td></tr>
+<tr><th id="75">75</th><td><u>	} \</u></td></tr>
+<tr><th id="76">76</th><td><u>} while (0)</u></td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td><b>struct</b> <a class="type" href="../user_mbuf.h.html#mbuf" title='mbuf' data-ref="mbuf" data-ref-filename="mbuf">mbuf</a> *</td></tr>
+<tr><th id="79">79</th><td><dfn class="decl fn" id="sctp_build_ctl_nchunk" title='sctp_build_ctl_nchunk' data-ref="sctp_build_ctl_nchunk" data-ref-filename="sctp_build_ctl_nchunk">sctp_build_ctl_nchunk</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_inpcb" title='sctp_inpcb' data-ref="sctp_inpcb" data-ref-filename="sctp_inpcb">sctp_inpcb</a> *<dfn class="local col0 decl" id="10inp" title='inp' data-type='struct sctp_inpcb *' data-ref="10inp" data-ref-filename="10inp">inp</dfn>,</td></tr>
+<tr><th id="80">80</th><td>                      <b>struct</b> <a class="type" href="sctp_uio.h.html#sctp_sndrcvinfo" title='sctp_sndrcvinfo' data-ref="sctp_sndrcvinfo" data-ref-filename="sctp_sndrcvinfo">sctp_sndrcvinfo</a> *<dfn class="local col1 decl" id="11sinfo" title='sinfo' data-type='struct sctp_sndrcvinfo *' data-ref="11sinfo" data-ref-filename="11sinfo">sinfo</dfn>);</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td><em>void</em> <dfn class="decl fn" id="sctp_set_rwnd" title='sctp_set_rwnd' data-ref="sctp_set_rwnd" data-ref-filename="sctp_set_rwnd">sctp_set_rwnd</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *, <b>struct</b> <a class="type" href="sctp_structs.h.html#sctp_association" title='sctp_association' data-ref="sctp_association" data-ref-filename="sctp_association">sctp_association</a> *);</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td><span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span></td></tr>
+<tr><th id="85">85</th><td><dfn class="decl fn" id="sctp_calc_rwnd" title='sctp_calc_rwnd' data-ref="sctp_calc_rwnd" data-ref-filename="sctp_calc_rwnd">sctp_calc_rwnd</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *<dfn class="local col2 decl" id="12stcb" title='stcb' data-type='struct sctp_tcb *' data-ref="12stcb" data-ref-filename="12stcb">stcb</dfn>, <b>struct</b> <a class="type" href="sctp_structs.h.html#sctp_association" title='sctp_association' data-ref="sctp_association" data-ref-filename="sctp_association">sctp_association</a> *<dfn class="local col3 decl" id="13asoc" title='asoc' data-type='struct sctp_association *' data-ref="13asoc" data-ref-filename="13asoc">asoc</dfn>);</td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td><em>void</em></td></tr>
+<tr><th id="88">88</th><td><dfn class="decl fn" id="sctp_express_handle_sack" title='sctp_express_handle_sack' data-ref="sctp_express_handle_sack" data-ref-filename="sctp_express_handle_sack">sctp_express_handle_sack</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *<dfn class="local col4 decl" id="14stcb" title='stcb' data-type='struct sctp_tcb *' data-ref="14stcb" data-ref-filename="14stcb">stcb</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col5 decl" id="15cumack" title='cumack' data-type='uint32_t' data-ref="15cumack" data-ref-filename="15cumack">cumack</dfn>,</td></tr>
+<tr><th id="89">89</th><td>                         <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col6 decl" id="16rwnd" title='rwnd' data-type='uint32_t' data-ref="16rwnd" data-ref-filename="16rwnd">rwnd</dfn>, <em>int</em> *<dfn class="local col7 decl" id="17abort_now" title='abort_now' data-type='int *' data-ref="17abort_now" data-ref-filename="17abort_now">abort_now</dfn>, <em>int</em> <dfn class="local col8 decl" id="18ecne_seen" title='ecne_seen' data-type='int' data-ref="18ecne_seen" data-ref-filename="18ecne_seen">ecne_seen</dfn>);</td></tr>
+<tr><th id="90">90</th><td></td></tr>
+<tr><th id="91">91</th><td><em>void</em></td></tr>
+<tr><th id="92">92</th><td><dfn class="decl fn" id="sctp_handle_sack" title='sctp_handle_sack' data-ref="sctp_handle_sack" data-ref-filename="sctp_handle_sack">sctp_handle_sack</dfn>(<b>struct</b> <a class="type" href="../user_mbuf.h.html#mbuf" title='mbuf' data-ref="mbuf" data-ref-filename="mbuf">mbuf</a> *<dfn class="local col9 decl" id="19m" title='m' data-type='struct mbuf *' data-ref="19m" data-ref-filename="19m">m</dfn>, <em>int</em> <dfn class="local col0 decl" id="20offset_seg" title='offset_seg' data-type='int' data-ref="20offset_seg" data-ref-filename="20offset_seg">offset_seg</dfn>, <em>int</em> <dfn class="local col1 decl" id="21offset_dup" title='offset_dup' data-type='int' data-ref="21offset_dup" data-ref-filename="21offset_dup">offset_dup</dfn>,</td></tr>
+<tr><th id="93">93</th><td>                 <b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *<dfn class="local col2 decl" id="22stcb" title='stcb' data-type='struct sctp_tcb *' data-ref="22stcb" data-ref-filename="22stcb">stcb</dfn>,</td></tr>
+<tr><th id="94">94</th><td>                 <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="local col3 decl" id="23num_seg" title='num_seg' data-type='uint16_t' data-ref="23num_seg" data-ref-filename="23num_seg">num_seg</dfn>, <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="local col4 decl" id="24num_nr_seg" title='num_nr_seg' data-type='uint16_t' data-ref="24num_nr_seg" data-ref-filename="24num_nr_seg">num_nr_seg</dfn>, <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="local col5 decl" id="25num_dup" title='num_dup' data-type='uint16_t' data-ref="25num_dup" data-ref-filename="25num_dup">num_dup</dfn>,</td></tr>
+<tr><th id="95">95</th><td>                 <em>int</em> *<dfn class="local col6 decl" id="26abort_now" title='abort_now' data-type='int *' data-ref="26abort_now" data-ref-filename="26abort_now">abort_now</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col7 decl" id="27flags" title='flags' data-type='uint8_t' data-ref="27flags" data-ref-filename="27flags">flags</dfn>,</td></tr>
+<tr><th id="96">96</th><td>                 <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col8 decl" id="28cum_ack" title='cum_ack' data-type='uint32_t' data-ref="28cum_ack" data-ref-filename="28cum_ack">cum_ack</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col9 decl" id="29rwnd" title='rwnd' data-type='uint32_t' data-ref="29rwnd" data-ref-filename="29rwnd">rwnd</dfn>, <em>int</em> <dfn class="local col0 decl" id="30ecne_seen" title='ecne_seen' data-type='int' data-ref="30ecne_seen" data-ref-filename="30ecne_seen">ecne_seen</dfn>);</td></tr>
+<tr><th id="97">97</th><td></td></tr>
+<tr><th id="98">98</th><td><i>/* draft-ietf-tsvwg-usctp */</i></td></tr>
+<tr><th id="99">99</th><td><em>void</em></td></tr>
+<tr><th id="100">100</th><td><dfn class="decl fn" id="sctp_handle_forward_tsn" title='sctp_handle_forward_tsn' data-ref="sctp_handle_forward_tsn" data-ref-filename="sctp_handle_forward_tsn">sctp_handle_forward_tsn</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *,</td></tr>
+<tr><th id="101">101</th><td>                        <b>struct</b> <a class="type" href="sctp_header.h.html#sctp_forward_tsn_chunk" title='sctp_forward_tsn_chunk' data-ref="sctp_forward_tsn_chunk" data-ref-filename="sctp_forward_tsn_chunk">sctp_forward_tsn_chunk</a> *, <em>int</em> *, <b>struct</b> <a class="type" href="../user_mbuf.h.html#mbuf" title='mbuf' data-ref="mbuf" data-ref-filename="mbuf">mbuf</a> *, <em>int</em>);</td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td><b>struct</b> <a class="type" href="sctp_structs.h.html#sctp_tmit_chunk" title='sctp_tmit_chunk' data-ref="sctp_tmit_chunk" data-ref-filename="sctp_tmit_chunk">sctp_tmit_chunk</a> *</td></tr>
+<tr><th id="104">104</th><td><dfn class="decl fn" id="sctp_try_advance_peer_ack_point" title='sctp_try_advance_peer_ack_point' data-ref="sctp_try_advance_peer_ack_point" data-ref-filename="sctp_try_advance_peer_ack_point">sctp_try_advance_peer_ack_point</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *, <b>struct</b> <a class="type" href="sctp_structs.h.html#sctp_association" title='sctp_association' data-ref="sctp_association" data-ref-filename="sctp_association">sctp_association</a> *);</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td><em>void</em> <dfn class="decl fn" id="sctp_service_queues" title='sctp_service_queues' data-ref="sctp_service_queues" data-ref-filename="sctp_service_queues">sctp_service_queues</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *, <b>struct</b> <a class="type" href="sctp_structs.h.html#sctp_association" title='sctp_association' data-ref="sctp_association" data-ref-filename="sctp_association">sctp_association</a> *);</td></tr>
+<tr><th id="107">107</th><td></td></tr>
+<tr><th id="108">108</th><td><em>void</em></td></tr>
+<tr><th id="109">109</th><td><dfn class="decl fn" id="sctp_update_acked" title='sctp_update_acked' data-ref="sctp_update_acked" data-ref-filename="sctp_update_acked">sctp_update_acked</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *, <b>struct</b> <a class="type" href="sctp_header.h.html#sctp_shutdown_chunk" title='sctp_shutdown_chunk' data-ref="sctp_shutdown_chunk" data-ref-filename="sctp_shutdown_chunk">sctp_shutdown_chunk</a> *, <em>int</em> *);</td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td><em>int</em></td></tr>
+<tr><th id="112">112</th><td><dfn class="decl fn" id="sctp_process_data" title='sctp_process_data' data-ref="sctp_process_data" data-ref-filename="sctp_process_data">sctp_process_data</dfn>(<b>struct</b> <a class="type" href="../user_mbuf.h.html#mbuf" title='mbuf' data-ref="mbuf" data-ref-filename="mbuf">mbuf</a> **, <em>int</em>, <em>int</em> *, <em>int</em>,</td></tr>
+<tr><th id="113">113</th><td>                  <b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_inpcb" title='sctp_inpcb' data-ref="sctp_inpcb" data-ref-filename="sctp_inpcb">sctp_inpcb</a> *, <b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *,</td></tr>
+<tr><th id="114">114</th><td>                  <b>struct</b> <a class="type" href="sctp_structs.h.html#sctp_nets" title='sctp_nets' data-ref="sctp_nets" data-ref-filename="sctp_nets">sctp_nets</a> *, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> *);</td></tr>
+<tr><th id="115">115</th><td></td></tr>
+<tr><th id="116">116</th><td><em>void</em> <dfn class="decl fn" id="sctp_slide_mapping_arrays" title='sctp_slide_mapping_arrays' data-ref="sctp_slide_mapping_arrays" data-ref-filename="sctp_slide_mapping_arrays">sctp_slide_mapping_arrays</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *<dfn class="local col1 decl" id="31stcb" title='stcb' data-type='struct sctp_tcb *' data-ref="31stcb" data-ref-filename="31stcb">stcb</dfn>);</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td><em>void</em> <dfn class="decl fn" id="sctp_sack_check" title='sctp_sack_check' data-ref="sctp_sack_check" data-ref-filename="sctp_sack_check">sctp_sack_check</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *, <em>int</em>);</td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td><u>#<span data-ppcond="43">endif</span></u></td></tr>
+<tr><th id="121">121</th><td><u>#<span data-ppcond="40">endif</span></u></td></tr>
+<tr><th id="122">122</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='sctp_auth.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/netinet/sctp_auth.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

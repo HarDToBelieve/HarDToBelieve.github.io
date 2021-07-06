@@ -1,0 +1,20 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='2392' type='void SSL_CTX_set_custom_verify(SSL_CTX * ctx, int mode, enum ssl_verify_result_t (*)(SSL *, uint8_t *) callback)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='2375'>// SSL_CTX_set_custom_verify configures certificate verification. |mode| is one
+// of the |SSL_VERIFY_*| values defined above. |callback| performs the
+// certificate verification.
+//
+// The callback may call |SSL_get0_peer_certificates| for the certificate chain
+// to validate. The callback should return |ssl_verify_ok| if the certificate is
+// valid. If the certificate is invalid, the callback should return
+// |ssl_verify_invalid| and optionally set |*out_alert| to an alert to send to
+// the peer. Some useful alerts include |SSL_AD_CERTIFICATE_EXPIRED|,
+// |SSL_AD_CERTIFICATE_REVOKED|, |SSL_AD_UNKNOWN_CA|, |SSL_AD_BAD_CERTIFICATE|,
+// |SSL_AD_CERTIFICATE_UNKNOWN|, and |SSL_AD_INTERNAL_ERROR|. See RFC 5246
+// section 7.2.2 for their precise meanings. If unspecified,
+// |SSL_AD_CERTIFICATE_UNKNOWN| will be sent by default.
+//
+// To verify a certificate asynchronously, the callback may return
+// |ssl_verify_retry|. The handshake will then pause with |SSL_get_error|
+// returning |SSL_ERROR_WANT_CERTIFICATE_VERIFY|.</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_lib.cc' l='2099' ll='2104' type='void SSL_CTX_set_custom_verify(SSL_CTX * ctx, int mode, enum ssl_verify_result_t (*)(SSL *, uint8_t *) callback)'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/openssl_stream_adapter.cc' l='1085' u='c' c='_ZN3rtc20OpenSSLStreamAdapter15SetupSSLContextEv'/>

@@ -1,0 +1,21 @@
+<dec f='webkit/Source/WebCore/crypto/JsonWebKey.h' l='49' type='WTF::String'/>
+<offset>704</offset>
+<use f='webkit/WebKitBuild/Debug/DerivedSources/WebCore/JSJsonWebKey.cpp' l='85' u='w' c='_ZN7WebCore17convertDictionaryERN3JSC14JSGlobalObjectENS0_7JSValueE'/>
+<use f='webkit/WebKitBuild/Debug/DerivedSources/WebCore/JSJsonWebKey.cpp' l='276' u='r' c='_ZN7WebCore21convertDictionaryToJSERN3JSC14JSGlobalObjectERNS_17JSDOMGlobalObjectERKNS_10JsonWebKeyE'/>
+<use f='webkit/WebKitBuild/Debug/DerivedSources/WebCore/JSJsonWebKey.cpp' l='277' u='r' c='_ZN7WebCore21convertDictionaryToJSERN3JSC14JSGlobalObjectERNS_17JSDOMGlobalObjectERKNS_10JsonWebKeyE'/>
+<use f='webkit/Source/WebCore/crypto/algorithms/CryptoAlgorithmECDH.cpp' l='137' u='m' c='_ZN7WebCore19CryptoAlgorithmECDH9importKeyENS_15CryptoKeyFormatEON3WTF7VariantIJNS2_6VectorIhLm0ENS2_15CrashOnOverflowELm16ENS2_10FastMallocEEENS_10Js9088054'/>
+<use f='webkit/Source/WebCore/crypto/algorithms/CryptoAlgorithmECDSA.cpp' l='115' u='m' c='_ZN7WebCore20CryptoAlgorithmECDSA9importKeyENS_15CryptoKeyFormatEON3WTF7VariantIJNS2_6VectorIhLm0ENS2_15CrashOnOverflowELm16ENS2_10FastMallocEEENS_10J1605103'/>
+<use f='webkit/Source/WebCore/crypto/algorithms/CryptoAlgorithmECDSA.cpp' l='115' u='m' c='_ZN7WebCore20CryptoAlgorithmECDSA9importKeyENS_15CryptoKeyFormatEON3WTF7VariantIJNS2_6VectorIhLm0ENS2_15CrashOnOverflowELm16ENS2_10FastMallocEEENS_10J1605103'/>
+<use f='webkit/Source/WebCore/crypto/algorithms/CryptoAlgorithmRSAES_PKCS1_v1_5.cpp' l='103' u='m' c='_ZN7WebCore31CryptoAlgorithmRSAES_PKCS1_v1_59importKeyENS_15CryptoKeyFormatEON3WTF7VariantIJNS2_6VectorIhLm0ENS2_15CrashOnOverflowELm16ENS2_10FastMall16622545'/>
+<use f='webkit/Source/WebCore/crypto/algorithms/CryptoAlgorithmRSAES_PKCS1_v1_5.cpp' l='103' u='m' c='_ZN7WebCore31CryptoAlgorithmRSAES_PKCS1_v1_59importKeyENS_15CryptoKeyFormatEON3WTF7VariantIJNS2_6VectorIhLm0ENS2_15CrashOnOverflowELm16ENS2_10FastMall16622545'/>
+<use f='webkit/Source/WebCore/crypto/algorithms/CryptoAlgorithmRSASSA_PKCS1_v1_5.cpp' l='114' u='m' c='_ZN7WebCore32CryptoAlgorithmRSASSA_PKCS1_v1_59importKeyENS_15CryptoKeyFormatEON3WTF7VariantIJNS2_6VectorIhLm0ENS2_15CrashOnOverflowELm16ENS2_10FastMal1329523'/>
+<use f='webkit/Source/WebCore/crypto/algorithms/CryptoAlgorithmRSASSA_PKCS1_v1_5.cpp' l='114' u='m' c='_ZN7WebCore32CryptoAlgorithmRSASSA_PKCS1_v1_59importKeyENS_15CryptoKeyFormatEON3WTF7VariantIJNS2_6VectorIhLm0ENS2_15CrashOnOverflowELm16ENS2_10FastMal1329523'/>
+<use f='webkit/Source/WebCore/crypto/algorithms/CryptoAlgorithmRSA_OAEP.cpp' l='117' u='m' c='_ZN7WebCore23CryptoAlgorithmRSA_OAEP9importKeyENS_15CryptoKeyFormatEON3WTF7VariantIJNS2_6VectorIhLm0ENS2_15CrashOnOverflowELm16ENS2_10FastMallocEEENS_7929634'/>
+<use f='webkit/Source/WebCore/crypto/algorithms/CryptoAlgorithmRSA_PSS.cpp' l='116' u='m' c='_ZN7WebCore22CryptoAlgorithmRSA_PSS9importKeyENS_15CryptoKeyFormatEON3WTF7VariantIJNS2_6VectorIhLm0ENS2_15CrashOnOverflowELm16ENS2_10FastMallocEEENS_17037831'/>
+<use f='webkit/Source/WebCore/crypto/algorithms/CryptoAlgorithmRSA_PSS.cpp' l='116' u='m' c='_ZN7WebCore22CryptoAlgorithmRSA_PSS9importKeyENS_15CryptoKeyFormatEON3WTF7VariantIJNS2_6VectorIhLm0ENS2_15CrashOnOverflowELm16ENS2_10FastMallocEEENS_17037831'/>
+<use f='webkit/Source/WebCore/crypto/keys/CryptoKeyEC.cpp' l='107' u='m' c='_ZN7WebCore11CryptoKeyEC9importJwkENS_25CryptoAlgorithmIdentifierERKN3WTF6StringEONS_10JsonWebKeyEbi'/>
+<use f='webkit/Source/WebCore/crypto/keys/CryptoKeyEC.cpp' l='112' u='r' c='_ZN7WebCore11CryptoKeyEC9importJwkENS_25CryptoAlgorithmIdentifierERKN3WTF6StringEONS_10JsonWebKeyEbi'/>
+<use f='webkit/Source/WebCore/crypto/keys/CryptoKeyRSA.cpp' l='57' u='m' c='_ZN7WebCore12CryptoKeyRSA9importJwkENS_25CryptoAlgorithmIdentifierENSt3__18optionalIS1_EEONS_10JsonWebKeyEbi'/>
+<use f='webkit/Source/WebCore/crypto/keys/CryptoKeyRSA.cpp' l='65' u='r' c='_ZN7WebCore12CryptoKeyRSA9importJwkENS_25CryptoAlgorithmIdentifierENSt3__18optionalIS1_EEONS_10JsonWebKeyEbi'/>
+<use f='webkit/Source/WebCore/crypto/keys/CryptoKeyRSA.cpp' l='149' u='w' c='_ZNK7WebCore12CryptoKeyRSA9exportJwkEv'/>
+<use f='webkit/Source/WebCore/crypto/mac/CryptoKeyECMac.cpp' l='203' u='w' c='_ZNK7WebCore11CryptoKeyEC24platformAddFieldElementsERNS_10JsonWebKeyE'/>

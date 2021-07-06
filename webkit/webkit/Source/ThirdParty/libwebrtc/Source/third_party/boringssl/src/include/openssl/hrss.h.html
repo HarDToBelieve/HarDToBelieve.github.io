@@ -1,0 +1,119 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>hrss.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/hrss.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="HRSS_private_key,HRSS_public_key "/>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/hrss.h'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>third_party</a>/<a href='../../..'>boringssl</a>/<a href='../..'>src</a>/<a href='..'>include</a>/<a href='./'>openssl</a>/<a href='hrss.h.html'>hrss.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/* Copyright (c) 2018, Google Inc.</i></td></tr>
+<tr><th id="2">2</th><td><i> *</i></td></tr>
+<tr><th id="3">3</th><td><i> * Permission to use, copy, modify, and/or distribute this software for any</i></td></tr>
+<tr><th id="4">4</th><td><i> * purpose with or without fee is hereby granted, provided that the above</i></td></tr>
+<tr><th id="5">5</th><td><i> * copyright notice and this permission notice appear in all copies.</i></td></tr>
+<tr><th id="6">6</th><td><i> *</i></td></tr>
+<tr><th id="7">7</th><td><i> * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES</i></td></tr>
+<tr><th id="8">8</th><td><i> * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF</i></td></tr>
+<tr><th id="9">9</th><td><i> * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="10">10</th><td><i> * SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES</i></td></tr>
+<tr><th id="11">11</th><td><i> * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION</i></td></tr>
+<tr><th id="12">12</th><td><i> * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN</i></td></tr>
+<tr><th id="13">13</th><td><i> * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */</i></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><u>#<span data-ppcond="15">ifndef</span> <span class="macro" data-ref="_M/OPENSSL_HEADER_HRSS_H">OPENSSL_HEADER_HRSS_H</span></u></td></tr>
+<tr><th id="16">16</th><td><u>#define <dfn class="macro" id="_M/OPENSSL_HEADER_HRSS_H" data-ref="_M/OPENSSL_HEADER_HRSS_H">OPENSSL_HEADER_HRSS_H</dfn></u></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="base.h.html">&lt;openssl/base.h&gt;</a></u></td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><u>#<span data-ppcond="20">if</span> defined(<span class="macro" data-ref="_M/__cplusplus">__cplusplus</span>)</u></td></tr>
+<tr><th id="21">21</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="22">22</th><td><u>#<span data-ppcond="20">endif</span></u></td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><i>// HRSS</i></td></tr>
+<tr><th id="25">25</th><td><i>//</i></td></tr>
+<tr><th id="26">26</th><td><i>// HRSS is a structured-lattice-based post-quantum key encapsulation mechanism.</i></td></tr>
+<tr><th id="27">27</th><td><i>// The best exposition is <a href="https://eprint.iacr.org/2017/667.pdf">https://eprint.iacr.org/2017/667.pdf</a> although this</i></td></tr>
+<tr><th id="28">28</th><td><i>// implementation uses a different KEM construction based on</i></td></tr>
+<tr><th id="29">29</th><td><i>// <a href="https://eprint.iacr.org/2017/1005.pdf">https://eprint.iacr.org/2017/1005.pdf</a>.</i></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><b>struct</b> <dfn class="type def" id="HRSS_private_key" title='HRSS_private_key' data-ref="HRSS_private_key" data-ref-filename="HRSS_private_key">HRSS_private_key</dfn> {</td></tr>
+<tr><th id="32">32</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="HRSS_private_key::opaque" title='HRSS_private_key::opaque' data-ref="HRSS_private_key::opaque" data-ref-filename="HRSS_private_key..opaque">opaque</dfn>[<var>1808</var>];</td></tr>
+<tr><th id="33">33</th><td>};</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><b>struct</b> <dfn class="type def" id="HRSS_public_key" title='HRSS_public_key' data-ref="HRSS_public_key" data-ref-filename="HRSS_public_key">HRSS_public_key</dfn> {</td></tr>
+<tr><th id="36">36</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="HRSS_public_key::opaque" title='HRSS_public_key::opaque' data-ref="HRSS_public_key::opaque" data-ref-filename="HRSS_public_key..opaque">opaque</dfn>[<var>1424</var>];</td></tr>
+<tr><th id="37">37</th><td>};</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><i>// HRSS_SAMPLE_BYTES is the number of bytes of entropy needed to generate a</i></td></tr>
+<tr><th id="40">40</th><td><i>// short vector. There are 701 coefficients, but the final one is always set to</i></td></tr>
+<tr><th id="41">41</th><td><i>// zero when sampling. Otherwise, we need one byte of input per coefficient.</i></td></tr>
+<tr><th id="42">42</th><td><u>#define <dfn class="macro" id="_M/HRSS_SAMPLE_BYTES" data-ref="_M/HRSS_SAMPLE_BYTES">HRSS_SAMPLE_BYTES</dfn> (701 - 1)</u></td></tr>
+<tr><th id="43">43</th><td><i>// HRSS_GENERATE_KEY_BYTES is the number of bytes of entropy needed to generate</i></td></tr>
+<tr><th id="44">44</th><td><i>// an HRSS key pair.</i></td></tr>
+<tr><th id="45">45</th><td><u>#define <dfn class="macro" id="_M/HRSS_GENERATE_KEY_BYTES" data-ref="_M/HRSS_GENERATE_KEY_BYTES">HRSS_GENERATE_KEY_BYTES</dfn> (HRSS_SAMPLE_BYTES + HRSS_SAMPLE_BYTES + 32)</u></td></tr>
+<tr><th id="46">46</th><td><i>// HRSS_ENCAP_BYTES is the number of bytes of entropy needed to encapsulate a</i></td></tr>
+<tr><th id="47">47</th><td><i>// session key.</i></td></tr>
+<tr><th id="48">48</th><td><u>#define <dfn class="macro" id="_M/HRSS_ENCAP_BYTES" data-ref="_M/HRSS_ENCAP_BYTES">HRSS_ENCAP_BYTES</dfn> (HRSS_SAMPLE_BYTES + HRSS_SAMPLE_BYTES)</u></td></tr>
+<tr><th id="49">49</th><td><i>// HRSS_PUBLIC_KEY_BYTES is the number of bytes in a public key.</i></td></tr>
+<tr><th id="50">50</th><td><u>#define <dfn class="macro" id="_M/HRSS_PUBLIC_KEY_BYTES" data-ref="_M/HRSS_PUBLIC_KEY_BYTES">HRSS_PUBLIC_KEY_BYTES</dfn> 1138</u></td></tr>
+<tr><th id="51">51</th><td><i>// HRSS_CIPHERTEXT_BYTES is the number of bytes in a ciphertext.</i></td></tr>
+<tr><th id="52">52</th><td><u>#define <dfn class="macro" id="_M/HRSS_CIPHERTEXT_BYTES" data-ref="_M/HRSS_CIPHERTEXT_BYTES">HRSS_CIPHERTEXT_BYTES</dfn> 1138</u></td></tr>
+<tr><th id="53">53</th><td><i>// HRSS_KEY_BYTES is the number of bytes in a shared key.</i></td></tr>
+<tr><th id="54">54</th><td><u>#define <dfn class="macro" id="_M/HRSS_KEY_BYTES" data-ref="_M/HRSS_KEY_BYTES">HRSS_KEY_BYTES</dfn> 32</u></td></tr>
+<tr><th id="55">55</th><td><i>// HRSS_POLY3_BYTES is the number of bytes needed to serialise a mod 3</i></td></tr>
+<tr><th id="56">56</th><td><i>// polynomial.</i></td></tr>
+<tr><th id="57">57</th><td><u>#define <dfn class="macro" id="_M/HRSS_POLY3_BYTES" data-ref="_M/HRSS_POLY3_BYTES">HRSS_POLY3_BYTES</dfn> 140</u></td></tr>
+<tr><th id="58">58</th><td><u>#define <dfn class="macro" id="_M/HRSS_PRIVATE_KEY_BYTES" data-ref="_M/HRSS_PRIVATE_KEY_BYTES">HRSS_PRIVATE_KEY_BYTES</dfn> \</u></td></tr>
+<tr><th id="59">59</th><td><u>  (HRSS_POLY3_BYTES * 2 + HRSS_PUBLIC_KEY_BYTES + 2 + 32)</u></td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td><i>// HRSS_generate_key is a deterministic function that outputs a public and</i></td></tr>
+<tr><th id="62">62</th><td><i>// private key based on the given entropy.</i></td></tr>
+<tr><th id="63">63</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>void</em> <a class="decl fn" href="../../crypto/hrss/hrss.c.html#HRSS_generate_key" title='HRSS_generate_key' data-ref="HRSS_generate_key" data-ref-filename="HRSS_generate_key" id="HRSS_generate_key">HRSS_generate_key</a>(</td></tr>
+<tr><th id="64">64</th><td>    <b>struct</b> <a class="type" href="#HRSS_public_key" title='HRSS_public_key' data-ref="HRSS_public_key" data-ref-filename="HRSS_public_key">HRSS_public_key</a> *<dfn class="local col1 decl" id="1out_pub" title='out_pub' data-type='struct HRSS_public_key *' data-ref="1out_pub" data-ref-filename="1out_pub">out_pub</dfn>, <b>struct</b> <a class="type" href="#HRSS_private_key" title='HRSS_private_key' data-ref="HRSS_private_key" data-ref-filename="HRSS_private_key">HRSS_private_key</a> *<dfn class="local col2 decl" id="2out_priv" title='out_priv' data-type='struct HRSS_private_key *' data-ref="2out_priv" data-ref-filename="2out_priv">out_priv</dfn>,</td></tr>
+<tr><th id="65">65</th><td>    <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col3 decl" id="3input" title='input' data-type='const uint8_t *' data-ref="3input" data-ref-filename="3input">input</dfn>[<a class="macro" href="#45" title="((701 - 1) + (701 - 1) + 32)" data-ref="_M/HRSS_GENERATE_KEY_BYTES">HRSS_GENERATE_KEY_BYTES</a>]);</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><i>// HRSS_encap is a deterministic function the generates and encrypts a random</i></td></tr>
+<tr><th id="68">68</th><td><i>// session key from the given entropy, writing those values to |out_shared_key|</i></td></tr>
+<tr><th id="69">69</th><td><i>// and |out_ciphertext|, respectively.</i></td></tr>
+<tr><th id="70">70</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>void</em> <a class="decl fn" href="../../crypto/hrss/hrss.c.html#HRSS_encap" title='HRSS_encap' data-ref="HRSS_encap" data-ref-filename="HRSS_encap" id="HRSS_encap">HRSS_encap</a>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col4 decl" id="4out_ciphertext" title='out_ciphertext' data-type='uint8_t *' data-ref="4out_ciphertext" data-ref-filename="4out_ciphertext">out_ciphertext</dfn>[<a class="macro" href="#52" title="1138" data-ref="_M/HRSS_CIPHERTEXT_BYTES">HRSS_CIPHERTEXT_BYTES</a>],</td></tr>
+<tr><th id="71">71</th><td>                               <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col5 decl" id="5out_shared_key" title='out_shared_key' data-type='uint8_t *' data-ref="5out_shared_key" data-ref-filename="5out_shared_key">out_shared_key</dfn>[<a class="macro" href="#54" title="32" data-ref="_M/HRSS_KEY_BYTES">HRSS_KEY_BYTES</a>],</td></tr>
+<tr><th id="72">72</th><td>                               <em>const</em> <b>struct</b> <a class="type" href="#HRSS_public_key" title='HRSS_public_key' data-ref="HRSS_public_key" data-ref-filename="HRSS_public_key">HRSS_public_key</a> *<dfn class="local col6 decl" id="6in_pub" title='in_pub' data-type='const struct HRSS_public_key *' data-ref="6in_pub" data-ref-filename="6in_pub">in_pub</dfn>,</td></tr>
+<tr><th id="73">73</th><td>                               <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col7 decl" id="7in" title='in' data-type='const uint8_t *' data-ref="7in" data-ref-filename="7in">in</dfn>[<a class="macro" href="#48" title="((701 - 1) + (701 - 1))" data-ref="_M/HRSS_ENCAP_BYTES">HRSS_ENCAP_BYTES</a>]);</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td><i>// HRSS_decap decrypts a session key from |ciphertext_len| bytes of</i></td></tr>
+<tr><th id="76">76</th><td><i>// |ciphertext|. If the ciphertext is valid, the decrypted key is written to</i></td></tr>
+<tr><th id="77">77</th><td><i>// |out_shared_key|. Otherwise the HMAC of |ciphertext| under a secret key (kept</i></td></tr>
+<tr><th id="78">78</th><td><i>// in |in_priv|) is written. If the ciphertext is the wrong length then it will</i></td></tr>
+<tr><th id="79">79</th><td><i>// leak which was done via side-channels. Otherwise it should perform either</i></td></tr>
+<tr><th id="80">80</th><td><i>// action in constant-time.</i></td></tr>
+<tr><th id="81">81</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>void</em> <a class="decl fn" href="../../crypto/hrss/hrss.c.html#HRSS_decap" title='HRSS_decap' data-ref="HRSS_decap" data-ref-filename="HRSS_decap" id="HRSS_decap">HRSS_decap</a>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col8 decl" id="8out_shared_key" title='out_shared_key' data-type='uint8_t *' data-ref="8out_shared_key" data-ref-filename="8out_shared_key">out_shared_key</dfn>[<a class="macro" href="#54" title="32" data-ref="_M/HRSS_KEY_BYTES">HRSS_KEY_BYTES</a>],</td></tr>
+<tr><th id="82">82</th><td>                               <em>const</em> <b>struct</b> <a class="type" href="#HRSS_private_key" title='HRSS_private_key' data-ref="HRSS_private_key" data-ref-filename="HRSS_private_key">HRSS_private_key</a> *<dfn class="local col9 decl" id="9in_priv" title='in_priv' data-type='const struct HRSS_private_key *' data-ref="9in_priv" data-ref-filename="9in_priv">in_priv</dfn>,</td></tr>
+<tr><th id="83">83</th><td>                               <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col0 decl" id="10ciphertext" title='ciphertext' data-type='const uint8_t *' data-ref="10ciphertext" data-ref-filename="10ciphertext">ciphertext</dfn>,</td></tr>
+<tr><th id="84">84</th><td>                               <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="11ciphertext_len" title='ciphertext_len' data-type='size_t' data-ref="11ciphertext_len" data-ref-filename="11ciphertext_len">ciphertext_len</dfn>);</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td><i>// HRSS_marshal_public_key serialises |in_pub| to |out|.</i></td></tr>
+<tr><th id="87">87</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>void</em> <a class="decl fn" href="../../crypto/hrss/hrss.c.html#HRSS_marshal_public_key" title='HRSS_marshal_public_key' data-ref="HRSS_marshal_public_key" data-ref-filename="HRSS_marshal_public_key" id="HRSS_marshal_public_key">HRSS_marshal_public_key</a>(</td></tr>
+<tr><th id="88">88</th><td>    <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col2 decl" id="12out" title='out' data-type='uint8_t *' data-ref="12out" data-ref-filename="12out">out</dfn>[<a class="macro" href="#50" title="1138" data-ref="_M/HRSS_PUBLIC_KEY_BYTES">HRSS_PUBLIC_KEY_BYTES</a>], <em>const</em> <b>struct</b> <a class="type" href="#HRSS_public_key" title='HRSS_public_key' data-ref="HRSS_public_key" data-ref-filename="HRSS_public_key">HRSS_public_key</a> *<dfn class="local col3 decl" id="13in_pub" title='in_pub' data-type='const struct HRSS_public_key *' data-ref="13in_pub" data-ref-filename="13in_pub">in_pub</dfn>);</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td><i>// HRSS_parse_public_key sets |*out| to the public-key encoded in |in|. It</i></td></tr>
+<tr><th id="91">91</th><td><i>// returns true on success and zero on error.</i></td></tr>
+<tr><th id="92">92</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <a class="decl fn" href="../../crypto/hrss/hrss.c.html#HRSS_parse_public_key" title='HRSS_parse_public_key' data-ref="HRSS_parse_public_key" data-ref-filename="HRSS_parse_public_key" id="HRSS_parse_public_key">HRSS_parse_public_key</a>(</td></tr>
+<tr><th id="93">93</th><td>    <b>struct</b> <a class="type" href="#HRSS_public_key" title='HRSS_public_key' data-ref="HRSS_public_key" data-ref-filename="HRSS_public_key">HRSS_public_key</a> *<dfn class="local col4 decl" id="14out" title='out' data-type='struct HRSS_public_key *' data-ref="14out" data-ref-filename="14out">out</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col5 decl" id="15in" title='in' data-type='const uint8_t *' data-ref="15in" data-ref-filename="15in">in</dfn>[<a class="macro" href="#50" title="1138" data-ref="_M/HRSS_PUBLIC_KEY_BYTES">HRSS_PUBLIC_KEY_BYTES</a>]);</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td><u>#<span data-ppcond="96">if</span> defined(<span class="macro" data-ref="_M/__cplusplus">__cplusplus</span>)</u></td></tr>
+<tr><th id="97">97</th><td>}  <i>// extern C</i></td></tr>
+<tr><th id="98">98</th><td><u>#<span data-ppcond="96">endif</span></u></td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td><u>#<span data-ppcond="15">endif</span>  // OPENSSL_HEADER_HRSS_H</u></td></tr>
+<tr><th id="101">101</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../crypto/hrss/hrss.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/hrss/hrss.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

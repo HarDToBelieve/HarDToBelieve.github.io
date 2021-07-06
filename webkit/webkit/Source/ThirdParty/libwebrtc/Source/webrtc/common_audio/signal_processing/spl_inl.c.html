@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>spl_inl.c source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/signal_processing/spl_inl.c] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/signal_processing/spl_inl.c'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>webrtc</a>/<a href='..'>common_audio</a>/<a href='./'>signal_processing</a>/<a href='spl_inl.c.html'>spl_inl.c</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2016 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="include/spl_inl.h.html">"common_audio/signal_processing/include/spl_inl.h"</a></u></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><i>// Table used by WebRtcSpl_CountLeadingZeros32_NotBuiltin. For each uint32_t n</i></td></tr>
+<tr><th id="16">16</th><td><i>// that's a sequence of 0 bits followed by a sequence of 1 bits, the entry at</i></td></tr>
+<tr><th id="17">17</th><td><i>// index (n * 0x8c0b2891) &gt;&gt; 26 in this table gives the number of zero bits in</i></td></tr>
+<tr><th id="18">18</th><td><i>// n.</i></td></tr>
+<tr><th id="19">19</th><td><em>const</em> <span class='typedef' title='int8_t' data-type='signed char' data-ref="int8_t" data-ref-filename="int8_t">int8_t</span> <dfn class="decl def" id="kWebRtcSpl_CountLeadingZeros32_Table" title='kWebRtcSpl_CountLeadingZeros32_Table' data-ref="kWebRtcSpl_CountLeadingZeros32_Table" data-ref-filename="kWebRtcSpl_CountLeadingZeros32_Table">kWebRtcSpl_CountLeadingZeros32_Table</dfn>[<var>64</var>] = {</td></tr>
+<tr><th id="20">20</th><td>    <var>32</var>, <var>8</var>,  <var>17</var>, -<var>1</var>, -<var>1</var>, <var>14</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, <var>20</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, <var>28</var>, -<var>1</var>, <var>18</var>,</td></tr>
+<tr><th id="21">21</th><td>    -<var>1</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, <var>0</var>,  <var>26</var>, <var>25</var>, <var>24</var>,</td></tr>
+<tr><th id="22">22</th><td>    <var>4</var>,  <var>11</var>, <var>23</var>, <var>31</var>, <var>3</var>,  <var>7</var>,  <var>10</var>, <var>16</var>, <var>22</var>, <var>30</var>, -<var>1</var>, -<var>1</var>, <var>2</var>,  <var>6</var>,  <var>13</var>, <var>9</var>,</td></tr>
+<tr><th id="23">23</th><td>    -<var>1</var>, <var>15</var>, -<var>1</var>, <var>21</var>, -<var>1</var>, <var>29</var>, <var>19</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, -<var>1</var>, <var>1</var>,  <var>27</var>, <var>5</var>,  <var>12</var>,</td></tr>
+<tr><th id="24">24</th><td>};</td></tr>
+<tr><th id="25">25</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

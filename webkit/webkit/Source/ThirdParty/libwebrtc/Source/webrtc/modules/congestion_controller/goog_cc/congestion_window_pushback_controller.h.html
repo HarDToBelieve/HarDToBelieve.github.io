@@ -1,0 +1,67 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>congestion_window_pushback_controller.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/congestion_controller/goog_cc/congestion_window_pushback_controller.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::CongestionWindowPushbackController "/>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/congestion_controller/goog_cc/congestion_window_pushback_controller.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>congestion_controller</a>/<a href='./'>goog_cc</a>/<a href='congestion_window_pushback_controller.h.html'>congestion_window_pushback_controller.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2018 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/MODULES_CONGESTION_CONTROLLER_GOOG_CC_CONGESTION_WINDOW_PUSHBACK_CONTROLLER_H_">MODULES_CONGESTION_CONTROLLER_GOOG_CC_CONGESTION_WINDOW_PUSHBACK_CONTROLLER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/MODULES_CONGESTION_CONTROLLER_GOOG_CC_CONGESTION_WINDOW_PUSHBACK_CONTROLLER_H_" data-ref="_M/MODULES_CONGESTION_CONTROLLER_GOOG_CC_CONGESTION_WINDOW_PUSHBACK_CONTROLLER_H_">MODULES_CONGESTION_CONTROLLER_GOOG_CC_CONGESTION_WINDOW_PUSHBACK_CONTROLLER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../../../../third_party/abseil-cpp/absl/types/optional.h.html">"absl/types/optional.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../../../api/transport/webrtc_key_value_config.h.html">"api/transport/webrtc_key_value_config.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="../../../api/units/data_size.h.html">"api/units/data_size.h"</a></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><i>// This class enables pushback from congestion window directly to video encoder.</i></td></tr>
+<tr><th id="24">24</th><td><i>// When the congestion window is filling up, the video encoder target bitrate</i></td></tr>
+<tr><th id="25">25</th><td><i>// will be reduced accordingly to accommodate the network changes. To avoid</i></td></tr>
+<tr><th id="26">26</th><td><i>// pausing video too frequently, a minimum encoder target bitrate threshold is</i></td></tr>
+<tr><th id="27">27</th><td><i>// used to prevent video pause due to a full congestion window.</i></td></tr>
+<tr><th id="28">28</th><td><b>class</b> <dfn class="type def" id="webrtc::CongestionWindowPushbackController" title='webrtc::CongestionWindowPushbackController' data-ref="webrtc::CongestionWindowPushbackController" data-ref-filename="webrtc..CongestionWindowPushbackController">CongestionWindowPushbackController</dfn> {</td></tr>
+<tr><th id="29">29</th><td> <b>public</b>:</td></tr>
+<tr><th id="30">30</th><td>  <b>explicit</b> <dfn class="decl fn" id="_ZN6webrtc34CongestionWindowPushbackControllerC1EPKNS_20WebRtcKeyValueConfigE" title='webrtc::CongestionWindowPushbackController::CongestionWindowPushbackController' data-ref="_ZN6webrtc34CongestionWindowPushbackControllerC1EPKNS_20WebRtcKeyValueConfigE" data-ref-filename="_ZN6webrtc34CongestionWindowPushbackControllerC1EPKNS_20WebRtcKeyValueConfigE">CongestionWindowPushbackController</dfn>(</td></tr>
+<tr><th id="31">31</th><td>      <em>const</em> <a class="type" href="../../../api/transport/webrtc_key_value_config.h.html#webrtc::WebRtcKeyValueConfig" title='webrtc::WebRtcKeyValueConfig' data-ref="webrtc::WebRtcKeyValueConfig" data-ref-filename="webrtc..WebRtcKeyValueConfig">WebRtcKeyValueConfig</a>* <dfn class="local col3 decl" id="53key_value_config" title='key_value_config' data-type='const webrtc::WebRtcKeyValueConfig *' data-ref="53key_value_config" data-ref-filename="53key_value_config">key_value_config</dfn>);</td></tr>
+<tr><th id="32">32</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN6webrtc34CongestionWindowPushbackController21UpdateOutstandingDataEx" title='webrtc::CongestionWindowPushbackController::UpdateOutstandingData' data-ref="_ZN6webrtc34CongestionWindowPushbackController21UpdateOutstandingDataEx" data-ref-filename="_ZN6webrtc34CongestionWindowPushbackController21UpdateOutstandingDataEx">UpdateOutstandingData</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col4 decl" id="54outstanding_bytes" title='outstanding_bytes' data-type='int64_t' data-ref="54outstanding_bytes" data-ref-filename="54outstanding_bytes">outstanding_bytes</dfn>);</td></tr>
+<tr><th id="33">33</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN6webrtc34CongestionWindowPushbackController17UpdatePacingQueueEx" title='webrtc::CongestionWindowPushbackController::UpdatePacingQueue' data-ref="_ZN6webrtc34CongestionWindowPushbackController17UpdatePacingQueueEx" data-ref-filename="_ZN6webrtc34CongestionWindowPushbackController17UpdatePacingQueueEx">UpdatePacingQueue</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col5 decl" id="55pacing_bytes" title='pacing_bytes' data-type='int64_t' data-ref="55pacing_bytes" data-ref-filename="55pacing_bytes">pacing_bytes</dfn>);</td></tr>
+<tr><th id="34">34</th><td>  <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl fn" id="_ZN6webrtc34CongestionWindowPushbackController19UpdateTargetBitrateEj" title='webrtc::CongestionWindowPushbackController::UpdateTargetBitrate' data-ref="_ZN6webrtc34CongestionWindowPushbackController19UpdateTargetBitrateEj" data-ref-filename="_ZN6webrtc34CongestionWindowPushbackController19UpdateTargetBitrateEj">UpdateTargetBitrate</dfn>(<span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col6 decl" id="56bitrate_bps" title='bitrate_bps' data-type='uint32_t' data-ref="56bitrate_bps" data-ref-filename="56bitrate_bps">bitrate_bps</dfn>);</td></tr>
+<tr><th id="35">35</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN6webrtc34CongestionWindowPushbackController13SetDataWindowENS_8DataSizeE" title='webrtc::CongestionWindowPushbackController::SetDataWindow' data-ref="_ZN6webrtc34CongestionWindowPushbackController13SetDataWindowENS_8DataSizeE" data-ref-filename="_ZN6webrtc34CongestionWindowPushbackController13SetDataWindowENS_8DataSizeE">SetDataWindow</dfn>(<a class="type" href="../../../api/units/data_size.h.html#webrtc::DataSize" title='webrtc::DataSize' data-ref="webrtc::DataSize" data-ref-filename="webrtc..DataSize">DataSize</a> <dfn class="local col7 decl" id="57data_window" title='data_window' data-type='webrtc::DataSize' data-ref="57data_window" data-ref-filename="57data_window">data_window</dfn>);</td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td> <b>private</b>:</td></tr>
+<tr><th id="38">38</th><td>  <em>const</em> <em>bool</em> <dfn class="decl field" id="webrtc::CongestionWindowPushbackController::add_pacing_" title='webrtc::CongestionWindowPushbackController::add_pacing_' data-ref="webrtc::CongestionWindowPushbackController::add_pacing_" data-ref-filename="webrtc..CongestionWindowPushbackController..add_pacing_">add_pacing_</dfn>;</td></tr>
+<tr><th id="39">39</th><td>  <em>const</em> <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="webrtc::CongestionWindowPushbackController::min_pushback_target_bitrate_bps_" title='webrtc::CongestionWindowPushbackController::min_pushback_target_bitrate_bps_' data-ref="webrtc::CongestionWindowPushbackController::min_pushback_target_bitrate_bps_" data-ref-filename="webrtc..CongestionWindowPushbackController..min_pushback_target_bitrate_bps_">min_pushback_target_bitrate_bps_</dfn>;</td></tr>
+<tr><th id="40">40</th><td>  <span class="namespace">absl::</span><span class='type' title='std::__1::optional' data-ref="std::__1::optional" data-ref-filename="std..__1..optional">optional</span>&lt;<a class="type" href="../../../api/units/data_size.h.html#webrtc::DataSize" title='webrtc::DataSize' data-ref="webrtc::DataSize" data-ref-filename="webrtc..DataSize">DataSize</a>&gt; <dfn class="decl field" id="webrtc::CongestionWindowPushbackController::current_data_window_" title='webrtc::CongestionWindowPushbackController::current_data_window_' data-ref="webrtc::CongestionWindowPushbackController::current_data_window_" data-ref-filename="webrtc..CongestionWindowPushbackController..current_data_window_">current_data_window_</dfn>;</td></tr>
+<tr><th id="41">41</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl field" id="webrtc::CongestionWindowPushbackController::outstanding_bytes_" title='webrtc::CongestionWindowPushbackController::outstanding_bytes_' data-ref="webrtc::CongestionWindowPushbackController::outstanding_bytes_" data-ref-filename="webrtc..CongestionWindowPushbackController..outstanding_bytes_">outstanding_bytes_</dfn> = <var>0</var>;</td></tr>
+<tr><th id="42">42</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl field" id="webrtc::CongestionWindowPushbackController::pacing_bytes_" title='webrtc::CongestionWindowPushbackController::pacing_bytes_' data-ref="webrtc::CongestionWindowPushbackController::pacing_bytes_" data-ref-filename="webrtc..CongestionWindowPushbackController..pacing_bytes_">pacing_bytes_</dfn> = <var>0</var>;</td></tr>
+<tr><th id="43">43</th><td>  <em>double</em> <dfn class="decl field" id="webrtc::CongestionWindowPushbackController::encoding_rate_ratio_" title='webrtc::CongestionWindowPushbackController::encoding_rate_ratio_' data-ref="webrtc::CongestionWindowPushbackController::encoding_rate_ratio_" data-ref-filename="webrtc..CongestionWindowPushbackController..encoding_rate_ratio_">encoding_rate_ratio_</dfn> = <var>1.0</var>;</td></tr>
+<tr><th id="44">44</th><td>};</td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td><u>#<span data-ppcond="11">endif</span>  // MODULES_CONGESTION_CONTROLLER_GOOG_CC_CONGESTION_WINDOW_PUSHBACK_CONTROLLER_H_</u></td></tr>
+<tr><th id="49">49</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../api/transport/goog_cc_factory.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/transport/goog_cc_factory.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

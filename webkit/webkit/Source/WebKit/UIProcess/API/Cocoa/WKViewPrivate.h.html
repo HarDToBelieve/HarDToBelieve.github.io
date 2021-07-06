@@ -1,0 +1,175 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WKViewPrivate.h source code [webkit/Source/WebKit/UIProcess/API/Cocoa/WKViewPrivate.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKit/UIProcess/API/Cocoa/WKViewPrivate.h'; var root_path = '../../../../../..'; var data_path = '../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../..'>webkit</a>/<a href='../../../..'>Source</a>/<a href='../../..'>WebKit</a>/<a href='../..'>UIProcess</a>/<a href='..'>API</a>/<a href='./'>Cocoa</a>/<a href='WKViewPrivate.h.html'>WKViewPrivate.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2011, 2014 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="26">if</span> !<span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#import <a href="../../../Shared/API/c/WKBase.h.html">&lt;WebKit/WKBase.h&gt;</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="../C/WKLayoutMode.h.html">&lt;WebKit/WKLayoutMode.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="WKView.h.html">&lt;WebKit/WKView.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="_WKOverlayScrollbarStyle.h.html">&lt;WebKit/_WKOverlayScrollbarStyle.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td>@<b>class</b> _WKLinkIconParameters;</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td>@interface WKView (Private)</td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><i>/* C SPI support. */</i></td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td>@property (readonly) <a class="typedef" href="../../../Shared/API/c/WKBase.h.html#WKPageRef" title='WKPageRef' data-type='const struct OpaqueWKPage *' data-ref="WKPageRef" data-ref-filename="WKPageRef">WKPageRef</a> pageRef;</td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)initWithFrame:(<span class='typedef' title='NSRect' data-type='struct CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)<dfn class="local col4 decl" id="64frame" title='frame' data-type='NSRect' data-ref="64frame" data-ref-filename="64frame">frame</dfn> contextRef:(<a class="typedef" href="../../../Shared/API/c/WKBase.h.html#WKContextRef" title='WKContextRef' data-type='const struct OpaqueWKContext *' data-ref="WKContextRef" data-ref-filename="WKContextRef">WKContextRef</a>)<dfn class="local col5 decl" id="65contextRef" title='contextRef' data-type='WKContextRef' data-ref="65contextRef" data-ref-filename="65contextRef">contextRef</dfn> pageGroupRef:(<a class="typedef" href="../../../Shared/API/c/WKBase.h.html#WKPageGroupRef" title='WKPageGroupRef' data-type='const struct OpaqueWKPageGroup *' data-ref="WKPageGroupRef" data-ref-filename="WKPageGroupRef">WKPageGroupRef</a>)<dfn class="local col6 decl" id="66pageGroupRef" title='pageGroupRef' data-type='WKPageGroupRef' data-ref="66pageGroupRef" data-ref-filename="66pageGroupRef">pageGroupRef</dfn>;</td></tr>
+<tr><th id="42">42</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)initWithFrame:(<span class='typedef' title='NSRect' data-type='struct CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)<dfn class="local col7 decl" id="67frame" title='frame' data-type='NSRect' data-ref="67frame" data-ref-filename="67frame">frame</dfn> contextRef:(<a class="typedef" href="../../../Shared/API/c/WKBase.h.html#WKContextRef" title='WKContextRef' data-type='const struct OpaqueWKContext *' data-ref="WKContextRef" data-ref-filename="WKContextRef">WKContextRef</a>)<dfn class="local col8 decl" id="68contextRef" title='contextRef' data-type='WKContextRef' data-ref="68contextRef" data-ref-filename="68contextRef">contextRef</dfn> pageGroupRef:(<a class="typedef" href="../../../Shared/API/c/WKBase.h.html#WKPageGroupRef" title='WKPageGroupRef' data-type='const struct OpaqueWKPageGroup *' data-ref="WKPageGroupRef" data-ref-filename="WKPageGroupRef">WKPageGroupRef</a>)<dfn class="local col9 decl" id="69pageGroupRef" title='pageGroupRef' data-type='WKPageGroupRef' data-ref="69pageGroupRef" data-ref-filename="69pageGroupRef">pageGroupRef</dfn> relatedToPage:(<a class="typedef" href="../../../Shared/API/c/WKBase.h.html#WKPageRef" title='WKPageRef' data-type='const struct OpaqueWKPage *' data-ref="WKPageRef" data-ref-filename="WKPageRef">WKPageRef</a>)<dfn class="local col0 decl" id="70relatedPage" title='relatedPage' data-type='WKPageRef' data-ref="70relatedPage" data-ref-filename="70relatedPage">relatedPage</dfn>;</td></tr>
+<tr><th id="43">43</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)initWithFrame:(<span class='typedef' title='NSRect' data-type='struct CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)<dfn class="local col1 decl" id="71frame" title='frame' data-type='NSRect' data-ref="71frame" data-ref-filename="71frame">frame</dfn> configurationRef:(<a class="typedef" href="../../../Shared/API/c/WKBase.h.html#WKPageConfigurationRef" title='WKPageConfigurationRef' data-type='const struct OpaqueWKPageConfiguration *' data-ref="WKPageConfigurationRef" data-ref-filename="WKPageConfigurationRef">WKPageConfigurationRef</a>)<dfn class="local col2 decl" id="72configuration" title='configuration' data-type='WKPageConfigurationRef' data-ref="72configuration" data-ref-filename="72configuration">configuration</dfn>;</td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td>- (NSPrintOperation *)printOperationWithPrintInfo:(NSPrintInfo *)<dfn class="local col3 decl" id="73printInfo" title='printInfo' data-type='NSPrintInfo *' data-ref="73printInfo" data-ref-filename="73printInfo">printInfo</dfn> forFrame:(<a class="typedef" href="../../../Shared/API/c/WKBase.h.html#WKFrameRef" title='WKFrameRef' data-type='const struct OpaqueWKFrame *' data-ref="WKFrameRef" data-ref-filename="WKFrameRef">WKFrameRef</a>)<dfn class="local col4 decl" id="74frameRef" title='frameRef' data-type='WKFrameRef' data-ref="74frameRef" data-ref-filename="74frameRef">frameRef</dfn>;</td></tr>
+<tr><th id="46">46</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)canChangeFrameLayout:(<a class="typedef" href="../../../Shared/API/c/WKBase.h.html#WKFrameRef" title='WKFrameRef' data-type='const struct OpaqueWKFrame *' data-ref="WKFrameRef" data-ref-filename="WKFrameRef">WKFrameRef</a>)<dfn class="local col5 decl" id="75frameRef" title='frameRef' data-type='WKFrameRef' data-ref="75frameRef" data-ref-filename="75frameRef">frameRef</dfn>;</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td>- (<em>void</em>)setFrame:(<span class='typedef' title='NSRect' data-type='struct CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)<dfn class="local col6 decl" id="76rect" title='rect' data-type='NSRect' data-ref="76rect" data-ref-filename="76rect">rect</dfn> andScrollBy:(<span class='typedef' title='NSSize' data-type='struct CGSize' data-ref="NSSize" data-ref-filename="NSSize">NSSize</span>)<dfn class="local col7 decl" id="77offset" title='offset' data-type='NSSize' data-ref="77offset" data-ref-filename="77offset">offset</dfn>;</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><i>// Stops updating the size of the page as the WKView frame size updates.</i></td></tr>
+<tr><th id="51">51</th><td><i>// This should always be followed by enableFrameSizeUpdates. Calls can be nested.</i></td></tr>
+<tr><th id="52">52</th><td>- (<em>void</em>)disableFrameSizeUpdates;</td></tr>
+<tr><th id="53">53</th><td><i>// Immediately updates the size of the page to match WKView's frame size</i></td></tr>
+<tr><th id="54">54</th><td><i>// and allows subsequent updates as the frame size is set. Calls can be nested.</i></td></tr>
+<tr><th id="55">55</th><td>- (<em>void</em>)enableFrameSizeUpdates;</td></tr>
+<tr><th id="56">56</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)frameSizeUpdatesDisabled;</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>+ (<em>void</em>)hideWordDefinitionWindow;</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td>@property (readwrite) <span class='typedef' title='NSSize' data-type='struct CGSize' data-ref="NSSize" data-ref-filename="NSSize">NSSize</span> minimumSizeForAutoLayout;</td></tr>
+<tr><th id="61">61</th><td>@property (readwrite) <span class='typedef' title='NSSize' data-type='struct CGSize' data-ref="NSSize" data-ref-filename="NSSize">NSSize</span> sizeToContentAutoSizeMaximumSize;</td></tr>
+<tr><th id="62">62</th><td>@property (readwrite) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> shouldClipToVisibleRect;</td></tr>
+<tr><th id="63">63</th><td>@property (readwrite) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> shouldExpandToViewHeightForAutoLayout;</td></tr>
+<tr><th id="64">64</th><td>@property (readonly, getter=isUsingUISideCompositing) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> usingUISideCompositing;</td></tr>
+<tr><th id="65">65</th><td>@property (readwrite) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> allowsMagnification;</td></tr>
+<tr><th id="66">66</th><td>@property (readwrite) <em>double</em> magnification;</td></tr>
+<tr><th id="67">67</th><td>@property (readwrite, setter=_setIgnoresNonWheelEvents:) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> _ignoresNonWheelEvents;</td></tr>
+<tr><th id="68">68</th><td>@property (readwrite, setter=_setIgnoresAllEvents:) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> _ignoresAllEvents;</td></tr>
+<tr><th id="69">69</th><td>@property (readwrite) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> allowsBackForwardNavigationGestures;</td></tr>
+<tr><th id="70">70</th><td>@property (nonatomic, setter=_setTopContentInset:) <span class='typedef' title='CGFloat' data-type='double' data-ref="CGFloat" data-ref-filename="CGFloat">CGFloat</span> _topContentInset;</td></tr>
+<tr><th id="71">71</th><td>@property (nonatomic, setter=_setTotalHeightOfBanners:) <span class='typedef' title='CGFloat' data-type='double' data-ref="CGFloat" data-ref-filename="CGFloat">CGFloat</span> _totalHeightOfBanners;</td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td>@property (nonatomic, setter=_setOverlayScrollbarStyle:) <a class="typedef" href="_WKOverlayScrollbarStyle.h.html#28" title='_WKOverlayScrollbarStyle' data-type='enum _WKOverlayScrollbarStyle' data-ref="_WKOverlayScrollbarStyle" data-ref-filename="_WKOverlayScrollbarStyle">_WKOverlayScrollbarStyle</a> _overlayScrollbarStyle;</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td>@property (nonatomic, setter=_setLayoutMode:) <a class="typedef" href="../C/WKLayoutMode.h.html#WKLayoutMode" title='WKLayoutMode' data-type='uint32_t' data-ref="WKLayoutMode" data-ref-filename="WKLayoutMode">WKLayoutMode</a> _layoutMode;</td></tr>
+<tr><th id="76">76</th><td><i>// For use with _layoutMode = kWKLayoutModeFixedSize:</i></td></tr>
+<tr><th id="77">77</th><td>@property (nonatomic, setter=_setFixedLayoutSize:) <span class='typedef' title='CGSize' data-type='struct CGSize' data-ref="CGSize" data-ref-filename="CGSize">CGSize</span> _fixedLayoutSize;</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td>@property (nonatomic, setter=_setViewScale:) <span class='typedef' title='CGFloat' data-type='double' data-ref="CGFloat" data-ref-filename="CGFloat">CGFloat</span> _viewScale;</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>@property (nonatomic, setter=_setOverrideDeviceScaleFactor:) <span class='typedef' title='CGFloat' data-type='double' data-ref="CGFloat" data-ref-filename="CGFloat">CGFloat</span> _overrideDeviceScaleFactor <a class="macro" href="../../../Shared/API/Cocoa/WKFoundation.h.html#49" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.11</var>));</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td>@property (nonatomic, setter=_setAutomaticallyAdjustsContentInsets:) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> _automaticallyAdjustsContentInsets;</td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td>@property (readonly) NSColor *_pageExtendedBackgroundColor;</td></tr>
+<tr><th id="86">86</th><td>@property (copy, nonatomic) NSColor *underlayColor;</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td>@property (nonatomic, setter=_setBackgroundColor:) NSColor *_backgroundColor <a class="macro" href="../../../Shared/API/Cocoa/WKFoundation.h.html#49" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.14</var>));</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td>@property (strong, nonatomic, setter=_setInspectorAttachmentView:) NSView *_inspectorAttachmentView <a class="macro" href="../../../Shared/API/Cocoa/WKFoundation.h.html#49" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.11</var>));</td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td>@property (nonatomic, readwrite, setter=_setRequiresUserActionForEditingControlsManager:) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> _requiresUserActionForEditingControlsManager;</td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td>- (NSView*)fullScreenPlaceholderView;</td></tr>
+<tr><th id="95">95</th><td>- (NSWindow*)createFullScreenWindow;</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td>- (<em>void</em>)beginDeferringViewInWindowChanges;</td></tr>
+<tr><th id="98">98</th><td>- (<em>void</em>)endDeferringViewInWindowChanges;</td></tr>
+<tr><th id="99">99</th><td>- (<em>void</em>)endDeferringViewInWindowChangesSync;</td></tr>
+<tr><th id="100">100</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isDeferringViewInWindowChanges;</td></tr>
+<tr><th id="101">101</th><td>- (<em>void</em>)_prepareForMoveToWindow:(NSWindow *)<dfn class="local col8 decl" id="78targetWindow" title='targetWindow' data-type='NSWindow *' data-ref="78targetWindow" data-ref-filename="78targetWindow">targetWindow</dfn> withCompletionHandler:(<em>void</em>(^)(<em>void</em>))<dfn class="local col9 decl" id="79completionHandler" title='completionHandler' data-type='void (^)()' data-ref="79completionHandler" data-ref-filename="79completionHandler">completionHandler</dfn>;</td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)windowOcclusionDetectionEnabled;</td></tr>
+<tr><th id="104">104</th><td>- (<em>void</em>)setWindowOcclusionDetectionEnabled:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col0 decl" id="80flag" title='flag' data-type='BOOL' data-ref="80flag" data-ref-filename="80flag">flag</dfn>;</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td>- (<em>void</em>)setMagnification:(<em>double</em>)<dfn class="local col1 decl" id="81magnification" title='magnification' data-type='double' data-ref="81magnification" data-ref-filename="81magnification">magnification</dfn> centeredAtPoint:(<span class='typedef' title='NSPoint' data-type='struct CGPoint' data-ref="NSPoint" data-ref-filename="NSPoint">NSPoint</span>)<dfn class="local col2 decl" id="82point" title='point' data-type='NSPoint' data-ref="82point" data-ref-filename="82point">point</dfn>;</td></tr>
+<tr><th id="107">107</th><td></td></tr>
+<tr><th id="108">108</th><td>- (<em>void</em>)setAllowsLinkPreview:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col3 decl" id="83allowsLinkPreview" title='allowsLinkPreview' data-type='BOOL' data-ref="83allowsLinkPreview" data-ref-filename="83allowsLinkPreview">allowsLinkPreview</dfn>;</td></tr>
+<tr><th id="109">109</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)allowsLinkPreview;</td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td>- (<em>void</em>)saveBackForwardSnapshotForCurrentItem;</td></tr>
+<tr><th id="112">112</th><td>- (<em>void</em>)saveBackForwardSnapshotForItem:(<a class="typedef" href="../../../Shared/API/c/WKBase.h.html#WKBackForwardListItemRef" title='WKBackForwardListItemRef' data-type='const struct OpaqueWKBackForwardListItem *' data-ref="WKBackForwardListItemRef" data-ref-filename="WKBackForwardListItemRef">WKBackForwardListItemRef</a>)<dfn class="local col4 decl" id="84item" title='item' data-type='WKBackForwardListItemRef' data-ref="84item" data-ref-filename="84item">item</dfn>;</td></tr>
+<tr><th id="113">113</th><td></td></tr>
+<tr><th id="114">114</th><td><i>// Views must be layer-backed, have no transform applied, be in back-to-front z-order, and the whole set must be a contiguous opaque rectangle.</i></td></tr>
+<tr><th id="115">115</th><td>- (<em>void</em>)_setCustomSwipeViews:(NSArray *)<dfn class="local col5 decl" id="85customSwipeViews" title='customSwipeViews' data-type='NSArray *' data-ref="85customSwipeViews" data-ref-filename="85customSwipeViews">customSwipeViews</dfn>;</td></tr>
+<tr><th id="116">116</th><td><i>// The top content inset is applied in the window's coordinate space, to the union of the custom swipe view's frames.</i></td></tr>
+<tr><th id="117">117</th><td>- (<em>void</em>)_setCustomSwipeViewsTopContentInset:(<em>float</em>)<dfn class="local col6 decl" id="86topContentInset" title='topContentInset' data-type='float' data-ref="86topContentInset" data-ref-filename="86topContentInset">topContentInset</dfn>;</td></tr>
+<tr><th id="118">118</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)_tryToSwipeWithEvent:(NSEvent *)<dfn class="local col7 decl" id="87event" title='event' data-type='NSEvent *' data-ref="87event" data-ref-filename="87event">event</dfn> ignoringPinnedState:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col8 decl" id="88ignoringPinnedState" title='ignoringPinnedState' data-type='BOOL' data-ref="88ignoringPinnedState" data-ref-filename="88ignoringPinnedState">ignoringPinnedState</dfn>;</td></tr>
+<tr><th id="119">119</th><td><i>// The rect returned is always that of the snapshot, and only if it is the view being manipulated by the swipe. This only works for layer-backed windows.</i></td></tr>
+<tr><th id="120">120</th><td>- (<em>void</em>)_setDidMoveSwipeSnapshotCallback:(<em>void</em>(^)(<span class='typedef' title='CGRect' data-type='struct CGRect' data-ref="CGRect" data-ref-filename="CGRect">CGRect</span> <dfn class="local col0 decl" id="90swipeSnapshotRectInWindowCoordinates" title='swipeSnapshotRectInWindowCoordinates' data-type='CGRect' data-ref="90swipeSnapshotRectInWindowCoordinates" data-ref-filename="90swipeSnapshotRectInWindowCoordinates">swipeSnapshotRectInWindowCoordinates</dfn>))<dfn class="local col9 decl" id="89callback" title='callback' data-type='void (^)(CGRect)' data-ref="89callback" data-ref-filename="89callback">callback</dfn>;</td></tr>
+<tr><th id="121">121</th><td></td></tr>
+<tr><th id="122">122</th><td><i>// Clients that want to maintain default behavior can return nil. To disable the immediate action entirely, return NSNull. And to</i></td></tr>
+<tr><th id="123">123</th><td><i>// do something custom, return an object that conforms to the NSImmediateActionAnimationController protocol.</i></td></tr>
+<tr><th id="124">124</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)_immediateActionAnimationControllerForHitTestResult:(<a class="typedef" href="../../../Shared/API/c/WKBase.h.html#WKHitTestResultRef" title='WKHitTestResultRef' data-type='const struct OpaqueWKHitTestResult *' data-ref="WKHitTestResultRef" data-ref-filename="WKHitTestResultRef">WKHitTestResultRef</a>)<dfn class="local col1 decl" id="91hitTestResult" title='hitTestResult' data-type='WKHitTestResultRef' data-ref="91hitTestResult" data-ref-filename="91hitTestResult">hitTestResult</dfn> withType:(<span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span>)<dfn class="local col2 decl" id="92type" title='type' data-type='uint32_t' data-ref="92type" data-ref-filename="92type">type</dfn> userData:(<a class="typedef" href="../../../Shared/API/c/WKBase.h.html#WKTypeRef" title='WKTypeRef' data-type='const void *' data-ref="WKTypeRef" data-ref-filename="WKTypeRef">WKTypeRef</a>)<dfn class="local col3 decl" id="93userData" title='userData' data-type='WKTypeRef' data-ref="93userData" data-ref-filename="93userData">userData</dfn>;</td></tr>
+<tr><th id="125">125</th><td></td></tr>
+<tr><th id="126">126</th><td>- (<em>void</em>)_prepareForImmediateActionAnimation;</td></tr>
+<tr><th id="127">127</th><td>- (<em>void</em>)_cancelImmediateActionAnimation;</td></tr>
+<tr><th id="128">128</th><td>- (<em>void</em>)_completeImmediateActionAnimation;</td></tr>
+<tr><th id="129">129</th><td></td></tr>
+<tr><th id="130">130</th><td>- (<em>void</em>)_dismissContentRelativeChildWindows;</td></tr>
+<tr><th id="131">131</th><td>- (<em>void</em>)_dismissContentRelativeChildWindowsWithAnimation:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col4 decl" id="94withAnimation" title='withAnimation' data-type='BOOL' data-ref="94withAnimation" data-ref-filename="94withAnimation">withAnimation</dfn>;</td></tr>
+<tr><th id="132">132</th><td></td></tr>
+<tr><th id="133">133</th><td>- (<em>void</em>)_didChangeContentSize:(<span class='typedef' title='NSSize' data-type='struct CGSize' data-ref="NSSize" data-ref-filename="NSSize">NSSize</span>)<dfn class="local col5 decl" id="95newSize" title='newSize' data-type='NSSize' data-ref="95newSize" data-ref-filename="95newSize">newSize</dfn>;</td></tr>
+<tr><th id="134">134</th><td></td></tr>
+<tr><th id="135">135</th><td>- (<em>void</em>)_gestureEventWasNotHandledByWebCore:(NSEvent *)<dfn class="local col6 decl" id="96event" title='event' data-type='NSEvent *' data-ref="96event" data-ref-filename="96event">event</dfn>;</td></tr>
+<tr><th id="136">136</th><td></td></tr>
+<tr><th id="137">137</th><td>- (<em>void</em>)_setShouldSuppressFirstResponderChanges:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col7 decl" id="97shouldSuppress" title='shouldSuppress' data-type='BOOL' data-ref="97shouldSuppress" data-ref-filename="97shouldSuppress">shouldSuppress</dfn> <a class="macro" href="../../../Shared/API/Cocoa/WKFoundation.h.html#49" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.13.4</var>));</td></tr>
+<tr><th id="138">138</th><td></td></tr>
+<tr><th id="139">139</th><td>@property (nonatomic, readwrite, setter=_setWantsMediaPlaybackControlsView:) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> _wantsMediaPlaybackControlsView;</td></tr>
+<tr><th id="140">140</th><td>@property (nonatomic, readonly)  <span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span> _mediaPlaybackControlsView;</td></tr>
+<tr><th id="141">141</th><td>- (<em>void</em>)_addMediaPlaybackControlsView:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col8 decl" id="98mediaPlaybackControlsView" title='mediaPlaybackControlsView' data-type='id' data-ref="98mediaPlaybackControlsView" data-ref-filename="98mediaPlaybackControlsView">mediaPlaybackControlsView</dfn>;</td></tr>
+<tr><th id="142">142</th><td>- (<em>void</em>)_removeMediaPlaybackControlsView;</td></tr>
+<tr><th id="143">143</th><td></td></tr>
+<tr><th id="144">144</th><td>- (<em>void</em>)_doAfterNextPresentationUpdate:(<em>void</em> (^)(<em>void</em>))<dfn class="local col9 decl" id="99updateBlock" title='updateBlock' data-type='void (^)()' data-ref="99updateBlock" data-ref-filename="99updateBlock">updateBlock</dfn> <a class="macro" href="../../../Shared/API/Cocoa/WKFoundation.h.html#49" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.13.4</var>));</td></tr>
+<tr><th id="145">145</th><td></td></tr>
+<tr><th id="146">146</th><td>@property (nonatomic, readwrite, setter=_setUseSystemAppearance:) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> _useSystemAppearance <a class="macro" href="../../../Shared/API/Cocoa/WKFoundation.h.html#49" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.14</var>));</td></tr>
+<tr><th id="147">147</th><td></td></tr>
+<tr><th id="148">148</th><td>@end</td></tr>
+<tr><th id="149">149</th><td></td></tr>
+<tr><th id="150">150</th><td>@interface WKView (PrivateForSubclassToDefine)</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td><i>// This a method that subclasses can define and WKView itself does not define. WKView will call the method if it is present.</i></td></tr>
+<tr><th id="153">153</th><td>- (<em>void</em>)_shouldLoadIconWithParameters:(_WKLinkIconParameters *)<dfn class="local col0 decl" id="100parameters" title='parameters' data-type='_WKLinkIconParameters *' data-ref="100parameters" data-ref-filename="100parameters">parameters</dfn> completionHandler:(<em>void</em> (^)(<em>void</em> (^)(NSData *)))<dfn class="local col1 decl" id="101completionHandler" title='completionHandler' data-type='void (^)(void (^)(NSData *))' data-ref="101completionHandler" data-ref-filename="101completionHandler">completionHandler</dfn>;</td></tr>
+<tr><th id="154">154</th><td></td></tr>
+<tr><th id="155">155</th><td>@end</td></tr>
+<tr><th id="156">156</th><td></td></tr>
+<tr><th id="157">157</th><td><u>#<span data-ppcond="26">endif</span> // !TARGET_OS_IPHONE</u></td></tr>
+<tr><th id="158">158</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource20-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource20-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

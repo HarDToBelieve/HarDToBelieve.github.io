@@ -1,0 +1,161 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>B3ReduceLoopStrength.h source code [webkit/Source/JavaScriptCore/b3/B3ReduceLoopStrength.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/JavaScriptCore/b3/B3ReduceLoopStrength.h'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>JavaScriptCore</a>/<a href='./'>b3</a>/<a href='B3ReduceLoopStrength.h.html'>B3ReduceLoopStrength.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2019 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="28">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(B3_JIT)</u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><b>namespace</b> <span class="namespace">JSC</span> { <b>namespace</b> <span class="namespace">B3</span> {</td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><b>class</b> <a class="type" href="B3Procedure.h.html#JSC::B3::Procedure" title='JSC::B3::Procedure' data-ref="JSC::B3::Procedure" data-ref-filename="JSC..B3..Procedure" id="JSC::B3::Procedure">Procedure</a>;</td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><i>// Apply transformations that match and simplify entire loops.</i></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><em>bool</em> <dfn class="decl fn" id="_ZN3JSC2B318reduceLoopStrengthERNS0_9ProcedureE" title='JSC::B3::reduceLoopStrength' data-ref="_ZN3JSC2B318reduceLoopStrengthERNS0_9ProcedureE" data-ref-filename="_ZN3JSC2B318reduceLoopStrengthERNS0_9ProcedureE">reduceLoopStrength</dfn>(<a class="type" href="B3Procedure.h.html#JSC::B3::Procedure" title='JSC::B3::Procedure' data-ref="JSC::B3::Procedure" data-ref-filename="JSC..B3..Procedure">Procedure</a>&amp;);</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><u>#<span data-ppcond="40">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformCPU.h.html#33" title="(defined WTF_CPU_X86_64 &amp;&amp; WTF_CPU_X86_64)" data-ref="_M/CPU">CPU</a>(X86_64)</u></td></tr>
+<tr><th id="41">41</th><td><i>/*</i></td></tr>
+<tr><th id="42">42</th><td><i> * The semantics of B3 require that loads and stores are not reduced in granularity.</i></td></tr>
+<tr><th id="43">43</th><td><i> * If we would use system memcpy, then it is possible that we would get a byte copy loop,</i></td></tr>
+<tr><th id="44">44</th><td><i> * and this could cause GC tearing.</i></td></tr>
+<tr><th id="45">45</th><td><i> */</i></td></tr>
+<tr><th id="46">46</th><td>ALWAYS_INLINE <em>void</em> fastForwardCopy32(uint32_t* dst, <em>const</em> uint32_t* src, size_t size)</td></tr>
+<tr><th id="47">47</th><td>{</td></tr>
+<tr><th id="48">48</th><td>    uint64_t i;</td></tr>
+<tr><th id="49">49</th><td>    int64_t counter;</td></tr>
+<tr><th id="50">50</th><td>    uint64_t tmp, tmp2;</td></tr>
+<tr><th id="51">51</th><td></td></tr>
+<tr><th id="52">52</th><td>    <b>asm</b> <em>volatile</em>(</td></tr>
+<tr><th id="53">53</th><td>        <q>"test %q[size], %q[size]\t\n"</q></td></tr>
+<tr><th id="54">54</th><td>        <q>"jz 900f\t\n"</q> <i>// exit</i></td></tr>
+<tr><th id="55">55</th><td>        <q>"xorq %q[i], %q[i]\t\n"</q></td></tr>
+<tr><th id="56">56</th><td>        <i>// if size &lt; 8</i></td></tr>
+<tr><th id="57">57</th><td>        <q>"cmp $8, %q[size]\t\n"</q></td></tr>
+<tr><th id="58">58</th><td>        <q>"jl 100f\t\n"</q> <i>// backporch</i></td></tr>
+<tr><th id="59">59</th><td>        <i>// if (dst + size*4 &lt;= src || src + size*4 &lt;= dst)</i></td></tr>
+<tr><th id="60">60</th><td>        <q>"leaq (%q[src], %q[size], 4), %q[tmp]\t\n"</q></td></tr>
+<tr><th id="61">61</th><td>        <q>"cmp %q[tmp], %q[dst]\t\n"</q></td></tr>
+<tr><th id="62">62</th><td>        <q>"jae 500f\t\n"</q> <i>// simd no overlap</i></td></tr>
+<tr><th id="63">63</th><td>        <q>"leaq (%q[dst], %q[size], 4), %q[tmp]\t\n"</q></td></tr>
+<tr><th id="64">64</th><td>        <q>"cmp %q[tmp], %q[src]\t\n"</q></td></tr>
+<tr><th id="65">65</th><td>        <q>"jae 500f\t\n"</q> <i>// simd no overlap</i></td></tr>
+<tr><th id="66">66</th><td>        <q>"jmp 100f\t\n"</q> <i>// Backporch</i></td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td>        <i>// Backporch (assumes we can write at least one int)</i></td></tr>
+<tr><th id="69">69</th><td>        <q>"100:\t\n"</q></td></tr>
+<tr><th id="70">70</th><td>        <i>// counter = (size - i)%4</i></td></tr>
+<tr><th id="71">71</th><td>        <q>"mov %q[size], %q[counter]\t\n"</q></td></tr>
+<tr><th id="72">72</th><td>        <q>"subq %q[i], %q[counter]\t\n"</q></td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td>        <i>// If we are a multiple of 4, unroll the loop</i></td></tr>
+<tr><th id="75">75</th><td><i>        // We already know we are nonzero</i></td></tr>
+<tr><th id="76">76</th><td>        <q>"and $3, %q[counter]\t\n"</q></td></tr>
+<tr><th id="77">77</th><td>        <q>"jz 200f\t\n"</q> <i>// unrolled loop</i></td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td>        <q>"negq %q[counter]\t\n"</q></td></tr>
+<tr><th id="80">80</th><td>        <q>".balign 32\t\n"</q></td></tr>
+<tr><th id="81">81</th><td>        <q>"101:\t\n"</q></td></tr>
+<tr><th id="82">82</th><td>        <q>"mov (%q[src], %q[i], 4), %k[tmp]\t\n"</q></td></tr>
+<tr><th id="83">83</th><td>        <q>"mov %k[tmp], (%q[dst], %q[i], 4)\t\n"</q></td></tr>
+<tr><th id="84">84</th><td>        <q>"incq %q[i]\t\n"</q></td></tr>
+<tr><th id="85">85</th><td>        <q>"incq %q[counter]\t\n"</q></td></tr>
+<tr><th id="86">86</th><td>        <q>"jnz 101b\t\n"</q></td></tr>
+<tr><th id="87">87</th><td>        <i>// Do we still have anything left?</i></td></tr>
+<tr><th id="88">88</th><td>        <q>"cmpq %q[size], %q[i]\t\n"</q></td></tr>
+<tr><th id="89">89</th><td>        <q>"je 900f\t\n"</q> <i>// exit</i></td></tr>
+<tr><th id="90">90</th><td>        <i>// Then go to the unrolled loop</i></td></tr>
+<tr><th id="91">91</th><td>        <q>"jmp 200f\t\n"</q></td></tr>
+<tr><th id="92">92</th><td></td></tr>
+<tr><th id="93">93</th><td>        <i>// Unrolled loop (assumes multiple of 4, can do one iteration)</i></td></tr>
+<tr><th id="94">94</th><td>        <q>"200:\t\n"</q></td></tr>
+<tr><th id="95">95</th><td>        <q>"shr $2, %q[counter]\t\n"</q></td></tr>
+<tr><th id="96">96</th><td>        <q>"negq %q[counter]\t\n"</q></td></tr>
+<tr><th id="97">97</th><td>        <q>".balign 32\t\n"</q></td></tr>
+<tr><th id="98">98</th><td>        <q>"201:\t\n"</q></td></tr>
+<tr><th id="99">99</th><td>        <q>"mov (%q[src], %q[i], 4), %k[tmp]\t\n"</q></td></tr>
+<tr><th id="100">100</th><td>        <q>"mov %k[tmp], (%q[dst], %q[i], 4)\t\n"</q></td></tr>
+<tr><th id="101">101</th><td>        <q>"mov 4(%q[src], %q[i], 4), %k[tmp2]\t\n"</q></td></tr>
+<tr><th id="102">102</th><td>        <q>"mov %k[tmp2], 4(%q[dst], %q[i], 4)\t\n"</q></td></tr>
+<tr><th id="103">103</th><td>        <q>"mov 8(%q[src], %q[i], 4), %k[tmp2]\t\n"</q></td></tr>
+<tr><th id="104">104</th><td>        <q>"mov %k[tmp2], 8(%q[dst], %q[i], 4)\t\n"</q></td></tr>
+<tr><th id="105">105</th><td>        <q>"mov 12(%q[src], %q[i], 4), %k[tmp]\t\n"</q></td></tr>
+<tr><th id="106">106</th><td>        <q>"mov %k[tmp], 12(%q[dst], %q[i], 4)\t\n"</q></td></tr>
+<tr><th id="107">107</th><td>        <q>"addq $4, %q[i]\t\n"</q></td></tr>
+<tr><th id="108">108</th><td>        <q>"cmpq %q[size], %q[i]\t\n"</q></td></tr>
+<tr><th id="109">109</th><td>        <q>"jb 201b\t\n"</q></td></tr>
+<tr><th id="110">110</th><td>        <q>"jmp 900f\t\n"</q> <i>// exit</i></td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td>        <i>// simd no overlap</i></td></tr>
+<tr><th id="113">113</th><td><i>        // counter = -(size/8);</i></td></tr>
+<tr><th id="114">114</th><td>        <q>"500:\t\n"</q></td></tr>
+<tr><th id="115">115</th><td>        <q>"mov %q[size], %q[counter]\t\n"</q></td></tr>
+<tr><th id="116">116</th><td>        <q>"shrq $3, %q[counter]\t\n"</q></td></tr>
+<tr><th id="117">117</th><td>        <q>"negq %q[counter]\t\n"</q></td></tr>
+<tr><th id="118">118</th><td>        <q>".balign 32\t\n"</q></td></tr>
+<tr><th id="119">119</th><td>        <q>"501:\t\n"</q></td></tr>
+<tr><th id="120">120</th><td>        <q>"movups (%q[src], %q[i], 4), %%xmm0\t\n"</q></td></tr>
+<tr><th id="121">121</th><td>        <q>"movups 16(%q[src], %q[i], 4), %%xmm1\t\n"</q></td></tr>
+<tr><th id="122">122</th><td>        <q>"movups %%xmm0, (%q[dst], %q[i], 4)\t\n"</q></td></tr>
+<tr><th id="123">123</th><td>        <q>"movups %%xmm1, 16(%q[dst], %q[i], 4)\t\n"</q></td></tr>
+<tr><th id="124">124</th><td>        <q>"addq $8, %q[i]\t\n"</q></td></tr>
+<tr><th id="125">125</th><td>        <q>"incq %q[counter]\t\n"</q></td></tr>
+<tr><th id="126">126</th><td>        <q>"jnz 501b\t\n"</q></td></tr>
+<tr><th id="127">127</th><td>        <i>// if (i == size)</i></td></tr>
+<tr><th id="128">128</th><td>        <q>"cmpq %q[size], %q[i]\t\n"</q></td></tr>
+<tr><th id="129">129</th><td>        <q>"je 900f\t\n"</q> <i>// end</i></td></tr>
+<tr><th id="130">130</th><td>        <q>"jmp 100b\t\n"</q> <i>// backporch</i></td></tr>
+<tr><th id="131">131</th><td>        <q>"900:\t\n"</q></td></tr>
+<tr><th id="132">132</th><td>    : [i] <q>"=&amp;c"</q> (i), [counter] <q>"=&amp;r"</q> (counter), [tmp] <q>"=&amp;a"</q> (tmp),  [tmp2] <q>"=&amp;r"</q> (tmp2)</td></tr>
+<tr><th id="133">133</th><td>    : [dst] <q>"D"</q> (dst), [src] <q>"S"</q> (src), [size] <q>"r"</q> (size)</td></tr>
+<tr><th id="134">134</th><td>    : <q>"xmm0"</q>, <q>"xmm1"</q>);</td></tr>
+<tr><th id="135">135</th><td>}</td></tr>
+<tr><th id="136">136</th><td></td></tr>
+<tr><th id="137">137</th><td>JSC_DECLARE_JIT_OPERATION(operationFastForwardCopy32, <em>void</em>, (uint32_t*, <em>const</em> uint32_t*, size_t));</td></tr>
+<tr><th id="138">138</th><td><u>#<span data-ppcond="40">endif</span></u></td></tr>
+<tr><th id="139">139</th><td></td></tr>
+<tr><th id="140">140</th><td>} } <i>// namespace JSC::B3</i></td></tr>
+<tr><th id="141">141</th><td></td></tr>
+<tr><th id="142">142</th><td><u>#<span data-ppcond="28">endif</span> // ENABLE(B3_JIT)</u></td></tr>
+<tr><th id="143">143</th><td></td></tr>
+<tr><th id="144">144</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='testb3_1.cpp.html'>webkit/Source/JavaScriptCore/b3/testb3_1.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

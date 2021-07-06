@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>IndexMap.h source code [webkit/WebKitBuild/Debug/usr/local/include/wtf/IndexMap.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="WTF::IndexMap "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/wtf/IndexMap.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>wtf</a>/<a href='IndexMap.h.html'>IndexMap.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2015-2017 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="IndexKeyType.h.html">&lt;wtf/IndexKeyType.h&gt;</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="Vector.h.html">&lt;wtf/Vector.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><i>// This is a map for keys that have an index(). It's super efficient for BasicBlocks. It's only</i></td></tr>
+<tr><th id="34">34</th><td><i>// efficient for Values if you don't create too many of these maps, since Values can have very</i></td></tr>
+<tr><th id="35">35</th><td><i>// sparse indices and there are a lot of Values.</i></td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><b>template</b>&lt;<b>typename</b> Key, <b>typename</b> Value&gt;</td></tr>
+<tr><th id="38">38</th><td><b>class</b> <dfn class="type def" id="WTF::IndexMap" title='WTF::IndexMap' data-ref="WTF::IndexMap" data-ref-filename="WTF..IndexMap">IndexMap</dfn> {</td></tr>
+<tr><th id="39">39</th><td>    <a class="macro" href="FastMalloc.h.html#399" title="public: void* operator new(size_t, void* p) { return p; } void* operator new[](size_t, void* p) { return p; } void* operator new(size_t size) { return ::WTF::fastMalloc(size); } void operator delete(void* p) { ::WTF::fastFree(p); } void* operator new[](size_t size) { return ::WTF::fastMalloc(size); } void operator delete[](void* p) { ::WTF::fastFree(p); } void* operator new(size_t, NotNullTag, void* location) { do { if (!(location)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/IndexMap.h&quot;, 39, __PRETTY_FUNCTION__, &quot;location&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(39, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/IndexMap.h&quot;, __PRETTY_FUNCTION__, 1622); } while (false); } } while (0); return location; } using webkitFastMalloced = int; private: using __thisIsHereToForceASemicolonAfterThisMacro __attribute__((unused)) = int" data-ref="_M/WTF_MAKE_FAST_ALLOCATED">WTF_MAKE_FAST_ALLOCATED</a>;</td></tr>
+<tr><th id="40">40</th><td><b>public</b>:</td></tr>
+<tr><th id="41">41</th><td>    <dfn class="decl def fn" id="_ZN3WTF8IndexMapC1Ev" title='WTF::IndexMap::IndexMap&lt;Key, Value&gt;' data-ref="_ZN3WTF8IndexMapC1Ev" data-ref-filename="_ZN3WTF8IndexMapC1Ev">IndexMap</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="42">42</th><td>    <dfn class="decl def fn" id="_ZN3WTF8IndexMapC1EONS_8IndexMapIT_T0_EE" title='WTF::IndexMap::IndexMap&lt;Key, Value&gt;' data-ref="_ZN3WTF8IndexMapC1EONS_8IndexMapIT_T0_EE" data-ref-filename="_ZN3WTF8IndexMapC1EONS_8IndexMapIT_T0_EE">IndexMap</dfn>(IndexMap&amp;&amp;) = <b>default</b>;</td></tr>
+<tr><th id="43">43</th><td>    IndexMap&amp; <dfn class="decl def fn" id="_ZN3WTF8IndexMapaSEONS_8IndexMapIT_T0_EE" title='WTF::IndexMap::operator=' data-ref="_ZN3WTF8IndexMapaSEONS_8IndexMapIT_T0_EE" data-ref-filename="_ZN3WTF8IndexMapaSEONS_8IndexMapIT_T0_EE"><b>operator</b>=</dfn>(IndexMap&amp;&amp;) = <b>default</b>;</td></tr>
+<tr><th id="44">44</th><td>    <dfn class="decl def fn" id="_ZN3WTF8IndexMapC1ERKNS_8IndexMapIT_T0_EE" title='WTF::IndexMap::IndexMap&lt;Key, Value&gt;' data-ref="_ZN3WTF8IndexMapC1ERKNS_8IndexMapIT_T0_EE" data-ref-filename="_ZN3WTF8IndexMapC1ERKNS_8IndexMapIT_T0_EE">IndexMap</dfn>(<em>const</em> IndexMap&amp;) = <b>default</b>;</td></tr>
+<tr><th id="45">45</th><td>    IndexMap&amp; <dfn class="decl def fn" id="_ZN3WTF8IndexMapaSERKNS_8IndexMapIT_T0_EE" title='WTF::IndexMap::operator=' data-ref="_ZN3WTF8IndexMapaSERKNS_8IndexMapIT_T0_EE" data-ref-filename="_ZN3WTF8IndexMapaSERKNS_8IndexMapIT_T0_EE"><b>operator</b>=</dfn>(<em>const</em> IndexMap&amp;) = <b>default</b>;</td></tr>
+<tr><th id="46">46</th><td>    </td></tr>
+<tr><th id="47">47</th><td>    <b>template</b>&lt;<b>typename</b>... Args&gt;</td></tr>
+<tr><th id="48">48</th><td>    <b>explicit</b> <dfn class="decl def fn" id="_ZN3WTF8IndexMapC1EmDpOTL0__" title='WTF::IndexMap::IndexMap&lt;Key, Value&gt;' data-ref="_ZN3WTF8IndexMapC1EmDpOTL0__" data-ref-filename="_ZN3WTF8IndexMapC1EmDpOTL0__">IndexMap</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="216size" title='size' data-type='size_t' data-ref="216size" data-ref-filename="216size">size</dfn>, Args&amp;&amp;... <dfn class="local col7 decl" id="217args" title='args' data-type='Args &amp;&amp;...' data-ref="217args" data-ref-filename="217args">args</dfn>)</td></tr>
+<tr><th id="49">49</th><td>    {</td></tr>
+<tr><th id="50">50</th><td>        <a class="member field" href="#WTF::IndexMap::m_vector" title='WTF::IndexMap::m_vector' data-ref="WTF::IndexMap::m_vector" data-ref-filename="WTF..IndexMap..m_vector">m_vector</a>.fill(Value(<span class="namespace">std::</span>forward&lt;Args&gt;(<a class="local col7 ref" href="#217args" title='args' data-ref="217args" data-ref-filename="217args">args</a>)...), <a class="local col6 ref" href="#216size" title='size' data-ref="216size" data-ref-filename="216size">size</a>);</td></tr>
+<tr><th id="51">51</th><td>    }</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td>    <b>template</b>&lt;<b>typename</b>... Args&gt;</td></tr>
+<tr><th id="54">54</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN3WTF8IndexMap6resizeEmDpOTL0__" title='WTF::IndexMap::resize' data-ref="_ZN3WTF8IndexMap6resizeEmDpOTL0__" data-ref-filename="_ZN3WTF8IndexMap6resizeEmDpOTL0__">resize</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="218size" title='size' data-type='size_t' data-ref="218size" data-ref-filename="218size">size</dfn>, Args&amp;&amp;... <dfn class="local col9 decl" id="219args" title='args' data-type='Args &amp;&amp;...' data-ref="219args" data-ref-filename="219args">args</dfn>)</td></tr>
+<tr><th id="55">55</th><td>    {</td></tr>
+<tr><th id="56">56</th><td>        <a class="member field" href="#WTF::IndexMap::m_vector" title='WTF::IndexMap::m_vector' data-ref="WTF::IndexMap::m_vector" data-ref-filename="WTF..IndexMap..m_vector">m_vector</a>.fill(Value(<span class="namespace">std::</span>forward&lt;Args&gt;(<a class="local col9 ref" href="#219args" title='args' data-ref="219args" data-ref-filename="219args">args</a>)...), <a class="local col8 ref" href="#218size" title='size' data-ref="218size" data-ref-filename="218size">size</a>);</td></tr>
+<tr><th id="57">57</th><td>    }</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td>    <b>template</b>&lt;<b>typename</b>... Args&gt;</td></tr>
+<tr><th id="60">60</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN3WTF8IndexMap5clearEDpOTL0__" title='WTF::IndexMap::clear' data-ref="_ZN3WTF8IndexMap5clearEDpOTL0__" data-ref-filename="_ZN3WTF8IndexMap5clearEDpOTL0__">clear</dfn>(Args&amp;&amp;... <dfn class="local col0 decl" id="220args" title='args' data-type='Args &amp;&amp;...' data-ref="220args" data-ref-filename="220args">args</dfn>)</td></tr>
+<tr><th id="61">61</th><td>    {</td></tr>
+<tr><th id="62">62</th><td>        <a class="member field" href="#WTF::IndexMap::m_vector" title='WTF::IndexMap::m_vector' data-ref="WTF::IndexMap::m_vector" data-ref-filename="WTF..IndexMap..m_vector">m_vector</a>.fill(Value(<span class="namespace">std::</span>forward&lt;Args&gt;(<a class="local col0 ref" href="#220args" title='args' data-ref="220args" data-ref-filename="220args">args</a>)...), <a class="member field" href="#WTF::IndexMap::m_vector" title='WTF::IndexMap::m_vector' data-ref="WTF::IndexMap::m_vector" data-ref-filename="WTF..IndexMap..m_vector">m_vector</a>.size());</td></tr>
+<tr><th id="63">63</th><td>    }</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl def fn" id="_ZNK3WTF8IndexMap4sizeEv" title='WTF::IndexMap::size' data-ref="_ZNK3WTF8IndexMap4sizeEv" data-ref-filename="_ZNK3WTF8IndexMap4sizeEv">size</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#WTF::IndexMap::m_vector" title='WTF::IndexMap::m_vector' data-ref="WTF::IndexMap::m_vector" data-ref-filename="WTF..IndexMap..m_vector">m_vector</a>.size(); }</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td>    Value&amp; <dfn class="decl def fn" id="_ZN3WTF8IndexMap2atERKT_" title='WTF::IndexMap::at' data-ref="_ZN3WTF8IndexMap2atERKT_" data-ref-filename="_ZN3WTF8IndexMap2atERKT_">at</dfn>(<em>const</em> Key&amp; <dfn class="local col1 decl" id="221key" title='key' data-type='const Key &amp;' data-ref="221key" data-ref-filename="221key">key</dfn>)</td></tr>
+<tr><th id="68">68</th><td>    {</td></tr>
+<tr><th id="69">69</th><td>        <b>return</b> <a class="member field" href="#WTF::IndexMap::m_vector" title='WTF::IndexMap::m_vector' data-ref="WTF::IndexMap::m_vector" data-ref-filename="WTF..IndexMap..m_vector">m_vector</a>[<a class="type" href="IndexKeyType.h.html#WTF::IndexKeyType" title='WTF::IndexKeyType' data-ref="WTF::IndexKeyType" data-ref-filename="WTF..IndexKeyType">IndexKeyType</a>&lt;Key&gt;::index(<a class="local col1 ref" href="#221key" title='key' data-ref="221key" data-ref-filename="221key">key</a>)];</td></tr>
+<tr><th id="70">70</th><td>    }</td></tr>
+<tr><th id="71">71</th><td>    </td></tr>
+<tr><th id="72">72</th><td>    <em>const</em> Value&amp; <dfn class="decl def fn" id="_ZNK3WTF8IndexMap2atERKT_" title='WTF::IndexMap::at' data-ref="_ZNK3WTF8IndexMap2atERKT_" data-ref-filename="_ZNK3WTF8IndexMap2atERKT_">at</dfn>(<em>const</em> Key&amp; <dfn class="local col2 decl" id="222key" title='key' data-type='const Key &amp;' data-ref="222key" data-ref-filename="222key">key</dfn>) <em>const</em></td></tr>
+<tr><th id="73">73</th><td>    {</td></tr>
+<tr><th id="74">74</th><td>        <b>return</b> <a class="member field" href="#WTF::IndexMap::m_vector" title='WTF::IndexMap::m_vector' data-ref="WTF::IndexMap::m_vector" data-ref-filename="WTF..IndexMap..m_vector">m_vector</a>[<a class="type" href="IndexKeyType.h.html#WTF::IndexKeyType" title='WTF::IndexKeyType' data-ref="WTF::IndexKeyType" data-ref-filename="WTF..IndexKeyType">IndexKeyType</a>&lt;Key&gt;::index(<a class="local col2 ref" href="#222key" title='key' data-ref="222key" data-ref-filename="222key">key</a>)];</td></tr>
+<tr><th id="75">75</th><td>    }</td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td>    Value&amp; <dfn class="decl def fn" id="_ZN3WTF8IndexMap2atEm" title='WTF::IndexMap::at' data-ref="_ZN3WTF8IndexMap2atEm" data-ref-filename="_ZN3WTF8IndexMap2atEm">at</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="223index" title='index' data-type='size_t' data-ref="223index" data-ref-filename="223index">index</dfn>)</td></tr>
+<tr><th id="78">78</th><td>    {</td></tr>
+<tr><th id="79">79</th><td>        <b>return</b> <a class="member field" href="#WTF::IndexMap::m_vector" title='WTF::IndexMap::m_vector' data-ref="WTF::IndexMap::m_vector" data-ref-filename="WTF..IndexMap..m_vector">m_vector</a>[<a class="local col3 ref" href="#223index" title='index' data-ref="223index" data-ref-filename="223index">index</a>];</td></tr>
+<tr><th id="80">80</th><td>    }</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td>    <em>const</em> Value&amp; <dfn class="decl def fn" id="_ZNK3WTF8IndexMap2atEm" title='WTF::IndexMap::at' data-ref="_ZNK3WTF8IndexMap2atEm" data-ref-filename="_ZNK3WTF8IndexMap2atEm">at</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="224index" title='index' data-type='size_t' data-ref="224index" data-ref-filename="224index">index</dfn>) <em>const</em></td></tr>
+<tr><th id="83">83</th><td>    {</td></tr>
+<tr><th id="84">84</th><td>        <b>return</b> <a class="member field" href="#WTF::IndexMap::m_vector" title='WTF::IndexMap::m_vector' data-ref="WTF::IndexMap::m_vector" data-ref-filename="WTF..IndexMap..m_vector">m_vector</a>[<a class="local col4 ref" href="#224index" title='index' data-ref="224index" data-ref-filename="224index">index</a>];</td></tr>
+<tr><th id="85">85</th><td>    }</td></tr>
+<tr><th id="86">86</th><td>    </td></tr>
+<tr><th id="87">87</th><td>    Value&amp; <dfn class="decl def fn" id="_ZN3WTF8IndexMapixEm" title='WTF::IndexMap::operator[]' data-ref="_ZN3WTF8IndexMapixEm" data-ref-filename="_ZN3WTF8IndexMapixEm"><b>operator</b>[]</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="225index" title='index' data-type='size_t' data-ref="225index" data-ref-filename="225index">index</dfn>) { <b>return</b> at(<a class="local col5 ref" href="#225index" title='index' data-ref="225index" data-ref-filename="225index">index</a>); }</td></tr>
+<tr><th id="88">88</th><td>    <em>const</em> Value&amp; <dfn class="decl def fn" id="_ZNK3WTF8IndexMapixEm" title='WTF::IndexMap::operator[]' data-ref="_ZNK3WTF8IndexMapixEm" data-ref-filename="_ZNK3WTF8IndexMapixEm"><b>operator</b>[]</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="226index" title='index' data-type='size_t' data-ref="226index" data-ref-filename="226index">index</dfn>) <em>const</em> { <b>return</b> at(<a class="local col6 ref" href="#226index" title='index' data-ref="226index" data-ref-filename="226index">index</a>); }</td></tr>
+<tr><th id="89">89</th><td>    Value&amp; <dfn class="decl def fn" id="_ZN3WTF8IndexMapixERKT_" title='WTF::IndexMap::operator[]' data-ref="_ZN3WTF8IndexMapixERKT_" data-ref-filename="_ZN3WTF8IndexMapixERKT_"><b>operator</b>[]</dfn>(<em>const</em> Key&amp; <dfn class="local col7 decl" id="227key" title='key' data-type='const Key &amp;' data-ref="227key" data-ref-filename="227key">key</dfn>) { <b>return</b> at(<a class="local col7 ref" href="#227key" title='key' data-ref="227key" data-ref-filename="227key">key</a>); }</td></tr>
+<tr><th id="90">90</th><td>    <em>const</em> Value&amp; <dfn class="decl def fn" id="_ZNK3WTF8IndexMapixERKT_" title='WTF::IndexMap::operator[]' data-ref="_ZNK3WTF8IndexMapixERKT_" data-ref-filename="_ZNK3WTF8IndexMapixERKT_"><b>operator</b>[]</dfn>(<em>const</em> Key&amp; <dfn class="local col8 decl" id="228key" title='key' data-type='const Key &amp;' data-ref="228key" data-ref-filename="228key">key</dfn>) <em>const</em> { <b>return</b> at(<a class="local col8 ref" href="#228key" title='key' data-ref="228key" data-ref-filename="228key">key</a>); }</td></tr>
+<tr><th id="91">91</th><td>    </td></tr>
+<tr><th id="92">92</th><td>    <b>template</b>&lt;<b>typename</b> PassedValue&gt;</td></tr>
+<tr><th id="93">93</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN3WTF8IndexMap6appendERKT_OTL0__" title='WTF::IndexMap::append' data-ref="_ZN3WTF8IndexMap6appendERKT_OTL0__" data-ref-filename="_ZN3WTF8IndexMap6appendERKT_OTL0__">append</dfn>(<em>const</em> Key&amp; <dfn class="local col9 decl" id="229key" title='key' data-type='const Key &amp;' data-ref="229key" data-ref-filename="229key">key</dfn>, PassedValue&amp;&amp; <dfn class="local col0 decl" id="230value" title='value' data-type='PassedValue &amp;&amp;' data-ref="230value" data-ref-filename="230value">value</dfn>)</td></tr>
+<tr><th id="94">94</th><td>    {</td></tr>
+<tr><th id="95">95</th><td>        <a class="macro" href="Assertions.h.html#622" title="do { if (!(IndexKeyType&lt;Key&gt;::index(key) == m_vector.size())) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/IndexMap.h&quot;, 95, __PRETTY_FUNCTION__, &quot;IndexKeyType&lt;Key&gt;::index(key) == m_vector.size()&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(95, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/IndexMap.h&quot;, __PRETTY_FUNCTION__, 1624); } while (false); } } while (0)" data-ref="_M/RELEASE_ASSERT">RELEASE_ASSERT</a>(<a class="type" href="IndexKeyType.h.html#WTF::IndexKeyType" title='WTF::IndexKeyType' data-ref="WTF::IndexKeyType" data-ref-filename="WTF..IndexKeyType">IndexKeyType</a>&lt;Key&gt;::index(<a class="local col9 ref" href="#229key" title='key' data-ref="229key" data-ref-filename="229key">key</a>) == <a class="member field" href="#WTF::IndexMap::m_vector" title='WTF::IndexMap::m_vector' data-ref="WTF::IndexMap::m_vector" data-ref-filename="WTF..IndexMap..m_vector">m_vector</a>.size());</td></tr>
+<tr><th id="96">96</th><td>        <a class="member field" href="#WTF::IndexMap::m_vector" title='WTF::IndexMap::m_vector' data-ref="WTF::IndexMap::m_vector" data-ref-filename="WTF..IndexMap..m_vector">m_vector</a>.append(<span class="namespace">std::</span>forward&lt;PassedValue&gt;(<a class="local col0 ref" href="#230value" title='value' data-ref="230value" data-ref-filename="230value">value</a>));</td></tr>
+<tr><th id="97">97</th><td>    }</td></tr>
+<tr><th id="98">98</th><td></td></tr>
+<tr><th id="99">99</th><td><b>private</b>:</td></tr>
+<tr><th id="100">100</th><td>    <a class="type" href="Forward.h.html#WTF::Vector" title='WTF::Vector' data-ref="WTF::Vector" data-ref-filename="WTF..Vector">Vector</a>&lt;Value, <var>0</var>, <a class="type" href="Vector.h.html#WTF::UnsafeVectorOverflow" title='WTF::UnsafeVectorOverflow' data-ref="WTF::UnsafeVectorOverflow" data-ref-filename="WTF..UnsafeVectorOverflow">UnsafeVectorOverflow</a>&gt; <dfn class="decl field" id="WTF::IndexMap::m_vector" title='WTF::IndexMap::m_vector' data-ref="WTF::IndexMap::m_vector" data-ref-filename="WTF..IndexMap..m_vector">m_vector</dfn>;</td></tr>
+<tr><th id="101">101</th><td>};</td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td><b>using</b> <span class="namespace">WTF::</span>IndexMap;</td></tr>
+<tr><th id="106">106</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/JavaScriptCore/b3/air/testair.cpp.html'>webkit/Source/JavaScriptCore/b3/air/testair.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

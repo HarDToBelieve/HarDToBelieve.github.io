@@ -1,0 +1,247 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebDatabaseManager.mm source code [webkit/Source/WebKitLegacy/mac/Storage/WebDatabaseManager.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/Storage/WebDatabaseManager.mm'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>Storage</a>/<a href='WebDatabaseManager.mm.html'>WebDatabaseManager.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2007, 2008 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * 1.  Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="9">9</th><td><i> *     notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="10">10</th><td><i> * 2.  Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="11">11</th><td><i> *     notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="12">12</th><td><i> *     documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="13">13</th><td><i> * 3.  Neither the name of Apple Inc. ("Apple") nor the names of</i></td></tr>
+<tr><th id="14">14</th><td><i> *     its contributors may be used to endorse or promote products derived</i></td></tr>
+<tr><th id="15">15</th><td><i> *     from this software without specific prior written permission.</i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</i></td></tr>
+<tr><th id="19">19</th><td><i> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</i></td></tr>
+<tr><th id="20">20</th><td><i> * DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="21">21</th><td><i> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</i></td></tr>
+<tr><th id="23">23</th><td><i> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</i></td></tr>
+<tr><th id="24">24</th><td><i> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="25">25</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF</i></td></tr>
+<tr><th id="26">26</th><td><i> * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="27">27</th><td><i> */</i></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="WebDatabaseManagerPrivate.h.html">"WebDatabaseManagerPrivate.h"</a></u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="WebDatabaseManagerClient.h.html">"WebDatabaseManagerClient.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#import <a href="../../Storage/WebDatabaseProvider.h.html">"WebDatabaseProvider.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#import <a href="../WebCoreSupport/WebPlatformStrategies.h.html">"WebPlatformStrategies.h"</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#import <a href="../WebCoreSupport/WebSecurityOriginInternal.h.html">"WebSecurityOriginInternal.h"</a></u></td></tr>
+<tr><th id="35">35</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseManager.h.html">&lt;WebCore/DatabaseManager.h&gt;</a></u></td></tr>
+<tr><th id="36">36</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html">&lt;WebCore/DatabaseTracker.h&gt;</a></u></td></tr>
+<tr><th id="37">37</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/SecurityOrigin.h.html">&lt;WebCore/SecurityOrigin.h&gt;</a></u></td></tr>
+<tr><th id="38">38</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/cocoa/VectorCocoa.h.html">&lt;wtf/cocoa/VectorCocoa.h&gt;</a></u></td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><u>#<span data-ppcond="40">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="41">41</th><td><u>#import "WebDatabaseManagerInternal.h"</u></td></tr>
+<tr><th id="42">42</th><td><u>#import &lt;WebCore/DatabaseTracker.h&gt;</u></td></tr>
+<tr><th id="43">43</th><td><u>#import &lt;WebCore/WebCoreThread.h&gt;</u></td></tr>
+<tr><th id="44">44</th><td><u>#<span data-ppcond="40">endif</span></u></td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td><b>using</b> <b>namespace</b> <span class="namespace">WebCore</span>;</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td>NSString *<dfn class="decl def" id="WebDatabaseDirectoryDefaultsKey" title='WebDatabaseDirectoryDefaultsKey' data-ref="WebDatabaseDirectoryDefaultsKey" data-ref-filename="WebDatabaseDirectoryDefaultsKey">WebDatabaseDirectoryDefaultsKey</dfn> = @<q>"WebDatabaseDirectory"</q>;</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td>NSString *<dfn class="decl def" id="WebDatabaseDisplayNameKey" title='WebDatabaseDisplayNameKey' data-ref="WebDatabaseDisplayNameKey" data-ref-filename="WebDatabaseDisplayNameKey">WebDatabaseDisplayNameKey</dfn> = @<q>"WebDatabaseDisplayNameKey"</q>;</td></tr>
+<tr><th id="51">51</th><td>NSString *<dfn class="decl def" id="WebDatabaseExpectedSizeKey" title='WebDatabaseExpectedSizeKey' data-ref="WebDatabaseExpectedSizeKey" data-ref-filename="WebDatabaseExpectedSizeKey">WebDatabaseExpectedSizeKey</dfn> = @<q>"WebDatabaseExpectedSizeKey"</q>;</td></tr>
+<tr><th id="52">52</th><td>NSString *<dfn class="decl def" id="WebDatabaseUsageKey" title='WebDatabaseUsageKey' data-ref="WebDatabaseUsageKey" data-ref-filename="WebDatabaseUsageKey">WebDatabaseUsageKey</dfn> = @<q>"WebDatabaseUsageKey"</q>;</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td>NSString *<dfn class="decl def" id="WebDatabaseDidModifyOriginNotification" title='WebDatabaseDidModifyOriginNotification' data-ref="WebDatabaseDidModifyOriginNotification" data-ref-filename="WebDatabaseDidModifyOriginNotification">WebDatabaseDidModifyOriginNotification</dfn> = @<q>"WebDatabaseDidModifyOriginNotification"</q>;</td></tr>
+<tr><th id="55">55</th><td>NSString *<dfn class="decl def" id="WebDatabaseDidModifyDatabaseNotification" title='WebDatabaseDidModifyDatabaseNotification' data-ref="WebDatabaseDidModifyDatabaseNotification" data-ref-filename="WebDatabaseDidModifyDatabaseNotification">WebDatabaseDidModifyDatabaseNotification</dfn> = @<q>"WebDatabaseDidModifyDatabaseNotification"</q>;</td></tr>
+<tr><th id="56">56</th><td>NSString *<dfn class="decl def" id="WebDatabaseIdentifierKey" title='WebDatabaseIdentifierKey' data-ref="WebDatabaseIdentifierKey" data-ref-filename="WebDatabaseIdentifierKey">WebDatabaseIdentifierKey</dfn> = @<q>"WebDatabaseIdentifierKey"</q>;</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><u>#<span data-ppcond="58">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="59">59</th><td>CFStringRef WebDatabaseOriginsDidChangeNotification = CFSTR(<q>"WebDatabaseOriginsDidChangeNotification"</q>);</td></tr>
+<tr><th id="60">60</th><td><u>#<span data-ppcond="58">endif</span></u></td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><em>static</em> NSString *<a class="tu decl fn" href="#_ZL22databasesDirectoryPathv" title='databasesDirectoryPath' data-type='NSString * databasesDirectoryPath()' data-ref="_ZL22databasesDirectoryPathv" data-ref-filename="_ZL22databasesDirectoryPathv">databasesDirectoryPath</a>();</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td>@implementation WebDatabaseManager</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td>+ (WebDatabaseManager *) sharedWebDatabaseManager</td></tr>
+<tr><th id="67">67</th><td>{</td></tr>
+<tr><th id="68">68</th><td>    <em>static</em> WebDatabaseManager *<dfn class="local col9 decl" id="139sharedManager" title='sharedManager' data-type='WebDatabaseManager *' data-ref="139sharedManager" data-ref-filename="139sharedManager">sharedManager</dfn> = [[WebDatabaseManager alloc] init];</td></tr>
+<tr><th id="69">69</th><td>    <b>return</b> <a class="local col9 ref" href="#139sharedManager" title='sharedManager' data-ref="139sharedManager" data-ref-filename="139sharedManager">sharedManager</a>;</td></tr>
+<tr><th id="70">70</th><td>}</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)init</td></tr>
+<tr><th id="73">73</th><td>{</td></tr>
+<tr><th id="74">74</th><td>    <b>if</b> (!(<span class='local col0 ref' title='self' data-ref="140self" data-ref-filename="140self">self</span> = [super init]))</td></tr>
+<tr><th id="75">75</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td>    <a class="type" href="../WebCoreSupport/WebPlatformStrategies.h.html#WebPlatformStrategies" title='WebPlatformStrategies' data-ref="WebPlatformStrategies" data-ref-filename="WebPlatformStrategies">WebPlatformStrategies</a>::<a class="ref fn" href="../WebCoreSupport/WebPlatformStrategies.h.html#_ZN21WebPlatformStrategies21initializeIfNecessaryEv" title='WebPlatformStrategies::initializeIfNecessary' data-ref="_ZN21WebPlatformStrategies21initializeIfNecessaryEv" data-ref-filename="_ZN21WebPlatformStrategies21initializeIfNecessaryEv">initializeIfNecessary</a>();</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseManager.h.html#WebCore::DatabaseManager" title='WebCore::DatabaseManager' data-ref="WebCore::DatabaseManager" data-ref-filename="WebCore..DatabaseManager">DatabaseManager</a>&amp; <dfn class="local col1 decl" id="141dbManager" title='dbManager' data-type='WebCore::DatabaseManager &amp;' data-ref="141dbManager" data-ref-filename="141dbManager">dbManager</dfn> = <a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseManager.h.html#WebCore::DatabaseManager" title='WebCore::DatabaseManager' data-ref="WebCore::DatabaseManager" data-ref-filename="WebCore..DatabaseManager">DatabaseManager</a>::<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseManager.h.html#_ZN7WebCore15DatabaseManager9singletonEv" title='WebCore::DatabaseManager::singleton' data-ref="_ZN7WebCore15DatabaseManager9singletonEv" data-ref-filename="_ZN7WebCore15DatabaseManager9singletonEv">singleton</a>();</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>    <i>// Set the database root path in WebCore</i></td></tr>
+<tr><th id="82">82</th><td>    <a class="local col1 ref" href="#141dbManager" title='dbManager' data-ref="141dbManager" data-ref-filename="141dbManager">dbManager</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseManager.h.html#_ZN7WebCore15DatabaseManager10initializeERKN3WTF6StringE" title='WebCore::DatabaseManager::initialize' data-ref="_ZN7WebCore15DatabaseManager10initializeERKN3WTF6StringE" data-ref-filename="_ZN7WebCore15DatabaseManager10initializeERKN3WTF6StringE">initialize</a>(<a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZN3WTF6StringC1EP8NSString" title='WTF::String::String' data-ref="_ZN3WTF6StringC1EP8NSString" data-ref-filename="_ZN3WTF6StringC1EP8NSString"></a><a class="tu ref fn" href="#_ZL22databasesDirectoryPathv" title='databasesDirectoryPath' data-use='c' data-ref="_ZL22databasesDirectoryPathv" data-ref-filename="_ZL22databasesDirectoryPathv">databasesDirectoryPath</a>());</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td>    <i>// Set the DatabaseManagerClient</i></td></tr>
+<tr><th id="85">85</th><td>    <a class="local col1 ref" href="#141dbManager" title='dbManager' data-ref="141dbManager" data-ref-filename="141dbManager">dbManager</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseManager.h.html#_ZN7WebCore15DatabaseManager9setClientEPNS_21DatabaseManagerClientE" title='WebCore::DatabaseManager::setClient' data-ref="_ZN7WebCore15DatabaseManager9setClientEPNS_21DatabaseManagerClientE" data-ref-filename="_ZN7WebCore15DatabaseManager9setClientEPNS_21DatabaseManagerClientE">setClient</a>(<a class="type" href="WebDatabaseManagerClient.h.html#WebDatabaseManagerClient" title='WebDatabaseManagerClient' data-ref="WebDatabaseManagerClient" data-ref-filename="WebDatabaseManagerClient">WebDatabaseManagerClient</a>::<a class="ref fn" href="WebDatabaseManagerClient.h.html#_ZN24WebDatabaseManagerClient30sharedWebDatabaseManagerClientEv" title='WebDatabaseManagerClient::sharedWebDatabaseManagerClient' data-ref="_ZN24WebDatabaseManagerClient30sharedWebDatabaseManagerClientEv" data-ref-filename="_ZN24WebDatabaseManagerClient30sharedWebDatabaseManagerClientEv">sharedWebDatabaseManagerClient</a>());</td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td>    <b>return</b> <span class='local col0 ref' title='self' data-ref="140self" data-ref-filename="140self">self</span>;</td></tr>
+<tr><th id="88">88</th><td>}</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td>- (NSArray *)origins</td></tr>
+<tr><th id="91">91</th><td>{</td></tr>
+<tr><th id="92">92</th><td>    <b>return</b> <a class="tu ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/cocoa/VectorCocoa.h.html#_ZN3WTF13createNSArrayEOT_OT0_" title='WTF::createNSArray' data-use='c' data-ref="_ZN3WTF13createNSArrayEOT_OT0_" data-ref-filename="_ZN3WTF13createNSArrayEOT_OT0_">createNSArray</a>(<a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#WebCore::DatabaseTracker" title='WebCore::DatabaseTracker' data-ref="WebCore::DatabaseTracker" data-ref-filename="WebCore..DatabaseTracker">DatabaseTracker</a>::<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#_ZN7WebCore15DatabaseTracker9singletonEv" title='WebCore::DatabaseTracker::singleton' data-ref="_ZN7WebCore15DatabaseTracker9singletonEv" data-ref-filename="_ZN7WebCore15DatabaseTracker9singletonEv">singleton</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#_ZN7WebCore15DatabaseTracker7originsEv" title='WebCore::DatabaseTracker::origins' data-ref="_ZN7WebCore15DatabaseTracker7originsEv" data-ref-filename="_ZN7WebCore15DatabaseTracker7originsEv">origins</a>(), [] (<em>auto</em>&amp; <dfn class="local col2 decl" id="142origin" title='origin' data-type='auto &amp;' data-ref="142origin" data-ref-filename="142origin">origin</dfn>) {</td></tr>
+<tr><th id="93">93</th><td>        <b>return</b> adoptNS([[WebSecurityOrigin alloc] _initWithWebCoreSecurityOrigin:<a class="local col2 ref" href="#142origin" title='origin' data-ref="142origin" data-ref-filename="142origin">origin</a>.securityOrigin().ptr()]);</td></tr>
+<tr><th id="94">94</th><td>    }).<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF9RetainPtr11autoreleaseEv" title='WTF::RetainPtr::autorelease' data-ref="_ZN3WTF9RetainPtr11autoreleaseEv" data-ref-filename="_ZN3WTF9RetainPtr11autoreleaseEv">autorelease</a>();</td></tr>
+<tr><th id="95">95</th><td>}</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td>- (NSArray *)databasesWithOrigin:(WebSecurityOrigin *)<dfn class="local col3 decl" id="143origin" title='origin' data-type='WebSecurityOrigin *' data-ref="143origin" data-ref-filename="143origin">origin</dfn></td></tr>
+<tr><th id="98">98</th><td>{</td></tr>
+<tr><th id="99">99</th><td>    <b>if</b> (!<a class="local col3 ref" href="#143origin" title='origin' data-ref="143origin" data-ref-filename="143origin">origin</a>)</td></tr>
+<tr><th id="100">100</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="101">101</th><td>    <b>return</b> <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/cocoa/VectorCocoa.h.html#_ZN3WTF13createNSArrayEOT_" title='WTF::createNSArray' data-ref="_ZN3WTF13createNSArrayEOT_" data-ref-filename="_ZN3WTF13createNSArrayEOT_">createNSArray</a>(<a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#WebCore::DatabaseTracker" title='WebCore::DatabaseTracker' data-ref="WebCore::DatabaseTracker" data-ref-filename="WebCore..DatabaseTracker">DatabaseTracker</a>::<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#_ZN7WebCore15DatabaseTracker9singletonEv" title='WebCore::DatabaseTracker::singleton' data-ref="_ZN7WebCore15DatabaseTracker9singletonEv" data-ref-filename="_ZN7WebCore15DatabaseTracker9singletonEv">singleton</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#_ZN7WebCore15DatabaseTracker13databaseNamesERKNS_18SecurityOriginDataE" title='WebCore::DatabaseTracker::databaseNames' data-ref="_ZN7WebCore15DatabaseTracker13databaseNamesERKNS_18SecurityOriginDataE" data-ref-filename="_ZN7WebCore15DatabaseTracker13databaseNamesERKNS_18SecurityOriginDataE">databaseNames</a>([<a class="local col3 ref" href="#143origin" title='origin' data-ref="143origin" data-ref-filename="143origin">origin</a> _core]-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/SecurityOrigin.h.html#_ZNK7WebCore14SecurityOrigin4dataEv" title='WebCore::SecurityOrigin::data' data-ref="_ZNK7WebCore14SecurityOrigin4dataEv" data-ref-filename="_ZNK7WebCore14SecurityOrigin4dataEv">data</a>())).<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF9RetainPtr11autoreleaseEv" title='WTF::RetainPtr::autorelease' data-ref="_ZN3WTF9RetainPtr11autoreleaseEv" data-ref-filename="_ZN3WTF9RetainPtr11autoreleaseEv">autorelease</a>();</td></tr>
+<tr><th id="102">102</th><td>}</td></tr>
+<tr><th id="103">103</th><td></td></tr>
+<tr><th id="104">104</th><td>- (NSDictionary *)detailsForDatabase:(NSString *)<dfn class="local col4 decl" id="144databaseIdentifier" title='databaseIdentifier' data-type='NSString *' data-ref="144databaseIdentifier" data-ref-filename="144databaseIdentifier">databaseIdentifier</dfn> withOrigin:(WebSecurityOrigin *)<dfn class="local col5 decl" id="145origin" title='origin' data-type='WebSecurityOrigin *' data-ref="145origin" data-ref-filename="145origin">origin</dfn></td></tr>
+<tr><th id="105">105</th><td>{</td></tr>
+<tr><th id="106">106</th><td>    <b>if</b> (!<a class="local col5 ref" href="#145origin" title='origin' data-ref="145origin" data-ref-filename="145origin">origin</a>)</td></tr>
+<tr><th id="107">107</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="108">108</th><td></td></tr>
+<tr><th id="109">109</th><td>    <em>auto</em> <dfn class="local col6 decl" id="146details" title='details' data-type='WebCore::DatabaseDetails' data-ref="146details" data-ref-filename="146details">details</dfn> = <a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseManager.h.html#WebCore::DatabaseManager" title='WebCore::DatabaseManager' data-ref="WebCore::DatabaseManager" data-ref-filename="WebCore..DatabaseManager">DatabaseManager</a>::<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseManager.h.html#_ZN7WebCore15DatabaseManager9singletonEv" title='WebCore::DatabaseManager::singleton' data-ref="_ZN7WebCore15DatabaseManager9singletonEv" data-ref-filename="_ZN7WebCore15DatabaseManager9singletonEv">singleton</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseManager.h.html#_ZN7WebCore15DatabaseManager23detailsForNameAndOriginERKN3WTF6StringERNS_14SecurityOriginE" title='WebCore::DatabaseManager::detailsForNameAndOrigin' data-ref="_ZN7WebCore15DatabaseManager23detailsForNameAndOriginERKN3WTF6StringERNS_14SecurityOriginE" data-ref-filename="_ZN7WebCore15DatabaseManager23detailsForNameAndOriginERKN3WTF6StringERNS_14SecurityOriginE">detailsForNameAndOrigin</a>(<a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZN3WTF6StringC1EP8NSString" title='WTF::String::String' data-ref="_ZN3WTF6StringC1EP8NSString" data-ref-filename="_ZN3WTF6StringC1EP8NSString"></a><a class="local col4 ref" href="#144databaseIdentifier" title='databaseIdentifier' data-ref="144databaseIdentifier" data-ref-filename="144databaseIdentifier">databaseIdentifier</a>, <span class='refarg'>*[<a class="local col5 ref" href="#145origin" title='origin' data-ref="145origin" data-ref-filename="145origin">origin</a> _core]</span>);</td></tr>
+<tr><th id="110">110</th><td>    <b>if</b> (<a class="local col6 ref" href="#146details" title='details' data-ref="146details" data-ref-filename="146details">details</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseDetails.h.html#_ZNK7WebCore15DatabaseDetails4nameEv" title='WebCore::DatabaseDetails::name' data-ref="_ZNK7WebCore15DatabaseDetails4nameEv" data-ref-filename="_ZNK7WebCore15DatabaseDetails4nameEv">name</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZNK3WTF6String6isNullEv" title='WTF::String::isNull' data-ref="_ZNK3WTF6String6isNullEv" data-ref-filename="_ZNK3WTF6String6isNullEv">isNull</a>())</td></tr>
+<tr><th id="111">111</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td>    <b>return</b> @{</td></tr>
+<tr><th id="114">114</th><td>        <a class="ref" href="WebDatabaseManagerPrivate.h.html#WebDatabaseDisplayNameKey" title='WebDatabaseDisplayNameKey' data-ref="WebDatabaseDisplayNameKey" data-ref-filename="WebDatabaseDisplayNameKey">WebDatabaseDisplayNameKey</a>: <a class="local col6 ref" href="#146details" title='details' data-ref="146details" data-ref-filename="146details">details</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseDetails.h.html#_ZNK7WebCore15DatabaseDetails11displayNameEv" title='WebCore::DatabaseDetails::displayName' data-ref="_ZNK7WebCore15DatabaseDetails11displayNameEv" data-ref-filename="_ZNK7WebCore15DatabaseDetails11displayNameEv">displayName</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZNK3WTF6String7isEmptyEv" title='WTF::String::isEmpty' data-ref="_ZNK3WTF6String7isEmptyEv" data-ref-filename="_ZNK3WTF6String7isEmptyEv">isEmpty</a>() ? <a class="local col4 ref" href="#144databaseIdentifier" title='databaseIdentifier' data-ref="144databaseIdentifier" data-ref-filename="144databaseIdentifier">databaseIdentifier</a> : (NSString *)<a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZNK3WTF6StringcvP8NSStringEv" title='WTF::String::operator NSString *' data-ref="_ZNK3WTF6StringcvP8NSStringEv" data-ref-filename="_ZNK3WTF6StringcvP8NSStringEv"></a><a class="local col6 ref" href="#146details" title='details' data-ref="146details" data-ref-filename="146details">details</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseDetails.h.html#_ZNK7WebCore15DatabaseDetails11displayNameEv" title='WebCore::DatabaseDetails::displayName' data-ref="_ZNK7WebCore15DatabaseDetails11displayNameEv" data-ref-filename="_ZNK7WebCore15DatabaseDetails11displayNameEv">displayName</a>(),</td></tr>
+<tr><th id="115">115</th><td>        <a class="ref" href="WebDatabaseManagerPrivate.h.html#WebDatabaseExpectedSizeKey" title='WebDatabaseExpectedSizeKey' data-ref="WebDatabaseExpectedSizeKey" data-ref-filename="WebDatabaseExpectedSizeKey">WebDatabaseExpectedSizeKey</a>: @(<a class="local col6 ref" href="#146details" title='details' data-ref="146details" data-ref-filename="146details">details</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseDetails.h.html#_ZNK7WebCore15DatabaseDetails13expectedUsageEv" title='WebCore::DatabaseDetails::expectedUsage' data-ref="_ZNK7WebCore15DatabaseDetails13expectedUsageEv" data-ref-filename="_ZNK7WebCore15DatabaseDetails13expectedUsageEv">expectedUsage</a>()),</td></tr>
+<tr><th id="116">116</th><td>        <a class="ref" href="WebDatabaseManagerPrivate.h.html#WebDatabaseUsageKey" title='WebDatabaseUsageKey' data-ref="WebDatabaseUsageKey" data-ref-filename="WebDatabaseUsageKey">WebDatabaseUsageKey</a>: @(<a class="local col6 ref" href="#146details" title='details' data-ref="146details" data-ref-filename="146details">details</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseDetails.h.html#_ZNK7WebCore15DatabaseDetails12currentUsageEv" title='WebCore::DatabaseDetails::currentUsage' data-ref="_ZNK7WebCore15DatabaseDetails12currentUsageEv" data-ref-filename="_ZNK7WebCore15DatabaseDetails12currentUsageEv">currentUsage</a>()),</td></tr>
+<tr><th id="117">117</th><td>    };</td></tr>
+<tr><th id="118">118</th><td>}</td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td>- (<em>void</em>)deleteAllDatabases</td></tr>
+<tr><th id="121">121</th><td>{</td></tr>
+<tr><th id="122">122</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#WebCore::DatabaseTracker" title='WebCore::DatabaseTracker' data-ref="WebCore::DatabaseTracker" data-ref-filename="WebCore..DatabaseTracker">DatabaseTracker</a>::<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#_ZN7WebCore15DatabaseTracker9singletonEv" title='WebCore::DatabaseTracker::singleton' data-ref="_ZN7WebCore15DatabaseTracker9singletonEv" data-ref-filename="_ZN7WebCore15DatabaseTracker9singletonEv">singleton</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#_ZN7WebCore15DatabaseTracker29deleteAllDatabasesImmediatelyEv" title='WebCore::DatabaseTracker::deleteAllDatabasesImmediately' data-ref="_ZN7WebCore15DatabaseTracker29deleteAllDatabasesImmediatelyEv" data-ref-filename="_ZN7WebCore15DatabaseTracker29deleteAllDatabasesImmediatelyEv">deleteAllDatabasesImmediately</a>();</td></tr>
+<tr><th id="123">123</th><td><u>#<span data-ppcond="123">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="124">124</th><td>    <i>// FIXME: This needs to be removed once DatabaseTrackers in multiple processes</i></td></tr>
+<tr><th id="125">125</th><td><i>    // are in sync: &lt;rdar://problem/9567500&gt; Remove Website Data pane is not kept in sync with Safari</i></td></tr>
+<tr><th id="126">126</th><td>    [[NSFileManager defaultManager] removeItemAtPath:databasesDirectoryPath() error:NULL];</td></tr>
+<tr><th id="127">127</th><td><u>#<span data-ppcond="123">endif</span></u></td></tr>
+<tr><th id="128">128</th><td>}</td></tr>
+<tr><th id="129">129</th><td></td></tr>
+<tr><th id="130">130</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)deleteOrigin:(WebSecurityOrigin *)<dfn class="local col7 decl" id="147origin" title='origin' data-type='WebSecurityOrigin *' data-ref="147origin" data-ref-filename="147origin">origin</dfn></td></tr>
+<tr><th id="131">131</th><td>{</td></tr>
+<tr><th id="132">132</th><td>    <b>return</b> <a class="local col7 ref" href="#147origin" title='origin' data-ref="147origin" data-ref-filename="147origin">origin</a> &amp;&amp; <a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#WebCore::DatabaseTracker" title='WebCore::DatabaseTracker' data-ref="WebCore::DatabaseTracker" data-ref-filename="WebCore..DatabaseTracker">DatabaseTracker</a>::<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#_ZN7WebCore15DatabaseTracker9singletonEv" title='WebCore::DatabaseTracker::singleton' data-ref="_ZN7WebCore15DatabaseTracker9singletonEv" data-ref-filename="_ZN7WebCore15DatabaseTracker9singletonEv">singleton</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#_ZN7WebCore15DatabaseTracker12deleteOriginERKNS_18SecurityOriginDataE" title='WebCore::DatabaseTracker::deleteOrigin' data-ref="_ZN7WebCore15DatabaseTracker12deleteOriginERKNS_18SecurityOriginDataE" data-ref-filename="_ZN7WebCore15DatabaseTracker12deleteOriginERKNS_18SecurityOriginDataE">deleteOrigin</a>([<a class="local col7 ref" href="#147origin" title='origin' data-ref="147origin" data-ref-filename="147origin">origin</a> _core]-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/SecurityOrigin.h.html#_ZNK7WebCore14SecurityOrigin4dataEv" title='WebCore::SecurityOrigin::data' data-ref="_ZNK7WebCore14SecurityOrigin4dataEv" data-ref-filename="_ZNK7WebCore14SecurityOrigin4dataEv">data</a>());</td></tr>
+<tr><th id="133">133</th><td>}</td></tr>
+<tr><th id="134">134</th><td></td></tr>
+<tr><th id="135">135</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)deleteDatabase:(NSString *)<dfn class="local col8 decl" id="148databaseIdentifier" title='databaseIdentifier' data-type='NSString *' data-ref="148databaseIdentifier" data-ref-filename="148databaseIdentifier">databaseIdentifier</dfn> withOrigin:(WebSecurityOrigin *)<dfn class="local col9 decl" id="149origin" title='origin' data-type='WebSecurityOrigin *' data-ref="149origin" data-ref-filename="149origin">origin</dfn></td></tr>
+<tr><th id="136">136</th><td>{</td></tr>
+<tr><th id="137">137</th><td>    <b>return</b> <a class="local col9 ref" href="#149origin" title='origin' data-ref="149origin" data-ref-filename="149origin">origin</a> &amp;&amp; <a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#WebCore::DatabaseTracker" title='WebCore::DatabaseTracker' data-ref="WebCore::DatabaseTracker" data-ref-filename="WebCore..DatabaseTracker">DatabaseTracker</a>::<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#_ZN7WebCore15DatabaseTracker9singletonEv" title='WebCore::DatabaseTracker::singleton' data-ref="_ZN7WebCore15DatabaseTracker9singletonEv" data-ref-filename="_ZN7WebCore15DatabaseTracker9singletonEv">singleton</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DatabaseTracker.h.html#_ZN7WebCore15DatabaseTracker14deleteDatabaseERKNS_18SecurityOriginDataERKN3WTF6StringE" title='WebCore::DatabaseTracker::deleteDatabase' data-ref="_ZN7WebCore15DatabaseTracker14deleteDatabaseERKNS_18SecurityOriginDataERKN3WTF6StringE" data-ref-filename="_ZN7WebCore15DatabaseTracker14deleteDatabaseERKNS_18SecurityOriginDataERKN3WTF6StringE">deleteDatabase</a>([<a class="local col9 ref" href="#149origin" title='origin' data-ref="149origin" data-ref-filename="149origin">origin</a> _core]-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/SecurityOrigin.h.html#_ZNK7WebCore14SecurityOrigin4dataEv" title='WebCore::SecurityOrigin::data' data-ref="_ZNK7WebCore14SecurityOrigin4dataEv" data-ref-filename="_ZNK7WebCore14SecurityOrigin4dataEv">data</a>(), <a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZN3WTF6StringC1EP8NSString" title='WTF::String::String' data-ref="_ZN3WTF6StringC1EP8NSString" data-ref-filename="_ZN3WTF6StringC1EP8NSString"></a><a class="local col8 ref" href="#148databaseIdentifier" title='databaseIdentifier' data-ref="148databaseIdentifier" data-ref-filename="148databaseIdentifier">databaseIdentifier</a>);</td></tr>
+<tr><th id="138">138</th><td>}</td></tr>
+<tr><th id="139">139</th><td></td></tr>
+<tr><th id="140">140</th><td><i>// For DumpRenderTree support only</i></td></tr>
+<tr><th id="141">141</th><td>- (<em>void</em>)deleteAllIndexedDatabases</td></tr>
+<tr><th id="142">142</th><td>{</td></tr>
+<tr><th id="143">143</th><td>    <a class="type" href="../../Storage/WebDatabaseProvider.h.html#WebDatabaseProvider" title='WebDatabaseProvider' data-ref="WebDatabaseProvider" data-ref-filename="WebDatabaseProvider">WebDatabaseProvider</a>::<a class="ref fn" href="../../Storage/WebDatabaseProvider.h.html#_ZN19WebDatabaseProvider9singletonEv" title='WebDatabaseProvider::singleton' data-ref="_ZN19WebDatabaseProvider9singletonEv" data-ref-filename="_ZN19WebDatabaseProvider9singletonEv">singleton</a>().<a class="ref fn" href="../../Storage/WebDatabaseProvider.h.html#_ZN19WebDatabaseProvider18deleteAllDatabasesEv" title='WebDatabaseProvider::deleteAllDatabases' data-ref="_ZN19WebDatabaseProvider18deleteAllDatabasesEv" data-ref-filename="_ZN19WebDatabaseProvider18deleteAllDatabasesEv">deleteAllDatabases</a>();</td></tr>
+<tr><th id="144">144</th><td>}</td></tr>
+<tr><th id="145">145</th><td></td></tr>
+<tr><th id="146">146</th><td><u>#<span data-ppcond="146">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="147">147</th><td></td></tr>
+<tr><th id="148">148</th><td><em>static</em> <em>bool</em> isFileHidden(NSString *file)</td></tr>
+<tr><th id="149">149</th><td>{</td></tr>
+<tr><th id="150">150</th><td>    ASSERT([file length]);</td></tr>
+<tr><th id="151">151</th><td>    <b>return</b> [file characterAtIndex:<var>0</var>] == <kbd>'.'</kbd>;</td></tr>
+<tr><th id="152">152</th><td>}</td></tr>
+<tr><th id="153">153</th><td></td></tr>
+<tr><th id="154">154</th><td>+ (<em>void</em>)removeEmptyDatabaseFiles</td></tr>
+<tr><th id="155">155</th><td>{</td></tr>
+<tr><th id="156">156</th><td>    NSString *databasesDirectory = databasesDirectoryPath();</td></tr>
+<tr><th id="157">157</th><td>    NSFileManager *fileManager = [NSFileManager defaultManager];</td></tr>
+<tr><th id="158">158</th><td>    NSArray *array = [fileManager contentsOfDirectoryAtPath:databasesDirectory error:<var>0</var>];</td></tr>
+<tr><th id="159">159</th><td>    <b>if</b> (!array)</td></tr>
+<tr><th id="160">160</th><td>        <b>return</b>;</td></tr>
+<tr><th id="161">161</th><td>    </td></tr>
+<tr><th id="162">162</th><td>    NSUInteger count = [array count];</td></tr>
+<tr><th id="163">163</th><td>    <b>for</b> (NSUInteger i = <var>0</var>; i &lt; count; ++i) {</td></tr>
+<tr><th id="164">164</th><td>        NSString *fileName = [array objectAtIndex:i];</td></tr>
+<tr><th id="165">165</th><td>        <i>// Skip hidden files.</i></td></tr>
+<tr><th id="166">166</th><td>        <b>if</b> (![fileName length] || isFileHidden(fileName))</td></tr>
+<tr><th id="167">167</th><td>            <b>continue</b>;</td></tr>
+<tr><th id="168">168</th><td>        </td></tr>
+<tr><th id="169">169</th><td>        NSString *path = [databasesDirectory stringByAppendingPathComponent:fileName];</td></tr>
+<tr><th id="170">170</th><td>        <i>// Look for directories that contain database files belonging to the same origins.</i></td></tr>
+<tr><th id="171">171</th><td>        BOOL isDirectory;</td></tr>
+<tr><th id="172">172</th><td>        <b>if</b> (![fileManager fileExistsAtPath:path isDirectory:&amp;isDirectory] || !isDirectory)</td></tr>
+<tr><th id="173">173</th><td>            <b>continue</b>;</td></tr>
+<tr><th id="174">174</th><td>        </td></tr>
+<tr><th id="175">175</th><td>        <i>// Make sure the directory is not a symbolic link that points to something else.</i></td></tr>
+<tr><th id="176">176</th><td>        NSDictionary *attributes = [fileManager attributesOfItemAtPath:path error:<var>0</var>];</td></tr>
+<tr><th id="177">177</th><td>        <b>if</b> ([attributes fileType] == NSFileTypeSymbolicLink)</td></tr>
+<tr><th id="178">178</th><td>            <b>continue</b>;</td></tr>
+<tr><th id="179">179</th><td>        </td></tr>
+<tr><th id="180">180</th><td>        NSArray *databaseFilesInOrigin = [fileManager contentsOfDirectoryAtPath:path error:<var>0</var>];</td></tr>
+<tr><th id="181">181</th><td>        NSUInteger databaseFileCount = [databaseFilesInOrigin count];</td></tr>
+<tr><th id="182">182</th><td>        NSUInteger deletedDatabaseFileCount = <var>0</var>;</td></tr>
+<tr><th id="183">183</th><td>        <b>for</b> (NSUInteger j = <var>0</var>; j &lt; databaseFileCount; ++j) {</td></tr>
+<tr><th id="184">184</th><td>            NSString *dbFileName = [databaseFilesInOrigin objectAtIndex:j];</td></tr>
+<tr><th id="185">185</th><td>            <i>// Skip hidden files.</i></td></tr>
+<tr><th id="186">186</th><td>            <b>if</b> (![dbFileName length] || isFileHidden(dbFileName))</td></tr>
+<tr><th id="187">187</th><td>                <b>continue</b>;</td></tr>
+<tr><th id="188">188</th><td>            </td></tr>
+<tr><th id="189">189</th><td>            NSString *dbFilePath = [path stringByAppendingPathComponent:dbFileName];</td></tr>
+<tr><th id="190">190</th><td>            </td></tr>
+<tr><th id="191">191</th><td>            <i>// There shouldn't be any directories in this folder - but check for it anyway.</i></td></tr>
+<tr><th id="192">192</th><td>            <b>if</b> (![fileManager fileExistsAtPath:dbFilePath isDirectory:&amp;isDirectory] || isDirectory)</td></tr>
+<tr><th id="193">193</th><td>                <b>continue</b>;</td></tr>
+<tr><th id="194">194</th><td>            </td></tr>
+<tr><th id="195">195</th><td>            <b>if</b> (DatabaseTracker::deleteDatabaseFileIfEmpty(dbFilePath))</td></tr>
+<tr><th id="196">196</th><td>                ++deletedDatabaseFileCount;</td></tr>
+<tr><th id="197">197</th><td>        }</td></tr>
+<tr><th id="198">198</th><td>        </td></tr>
+<tr><th id="199">199</th><td>        <i>// If we have removed every database file for this origin, delete the folder for this origin.</i></td></tr>
+<tr><th id="200">200</th><td>        <b>if</b> (databaseFileCount == deletedDatabaseFileCount || ![fileManager contentsOfDirectoryAtPath:path error:<b>nullptr</b>].count) {</td></tr>
+<tr><th id="201">201</th><td>            <i>// Use rmdir - we don't want the deletion to happen if the folder is not empty.</i></td></tr>
+<tr><th id="202">202</th><td>            rmdir([path fileSystemRepresentation]);</td></tr>
+<tr><th id="203">203</th><td>        }</td></tr>
+<tr><th id="204">204</th><td>    }</td></tr>
+<tr><th id="205">205</th><td>}</td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td>+ (<em>void</em>)scheduleEmptyDatabaseRemoval</td></tr>
+<tr><th id="208">208</th><td>{</td></tr>
+<tr><th id="209">209</th><td>    DatabaseTracker::emptyDatabaseFilesRemovalTaskWillBeScheduled();</td></tr>
+<tr><th id="210">210</th><td>    </td></tr>
+<tr><th id="211">211</th><td>    dispatch_async(dispatch_get_global_queue(<var>0</var>, <var>0</var>), ^{</td></tr>
+<tr><th id="212">212</th><td>        [WebDatabaseManager removeEmptyDatabaseFiles];</td></tr>
+<tr><th id="213">213</th><td>        DatabaseTracker::emptyDatabaseFilesRemovalTaskDidFinish();</td></tr>
+<tr><th id="214">214</th><td>    });</td></tr>
+<tr><th id="215">215</th><td>}</td></tr>
+<tr><th id="216">216</th><td></td></tr>
+<tr><th id="217">217</th><td><u>#<span data-ppcond="146">endif</span> // PLATFORM(IOS_FAMILY)</u></td></tr>
+<tr><th id="218">218</th><td></td></tr>
+<tr><th id="219">219</th><td>@end</td></tr>
+<tr><th id="220">220</th><td></td></tr>
+<tr><th id="221">221</th><td><em>static</em> NSString *<dfn class="tu decl def fn" id="_ZL22databasesDirectoryPathv" title='databasesDirectoryPath' data-type='NSString * databasesDirectoryPath()' data-ref="_ZL22databasesDirectoryPathv" data-ref-filename="_ZL22databasesDirectoryPathv">databasesDirectoryPath</dfn>()</td></tr>
+<tr><th id="222">222</th><td>{</td></tr>
+<tr><th id="223">223</th><td>    NSUserDefaults *<dfn class="local col0 decl" id="150defaults" title='defaults' data-type='NSUserDefaults *' data-ref="150defaults" data-ref-filename="150defaults">defaults</dfn> = [NSUserDefaults standardUserDefaults];</td></tr>
+<tr><th id="224">224</th><td>    NSString *<dfn class="local col1 decl" id="151databasesDirectory" title='databasesDirectory' data-type='NSString *' data-ref="151databasesDirectory" data-ref-filename="151databasesDirectory">databasesDirectory</dfn> = [<a class="local col0 ref" href="#150defaults" title='defaults' data-ref="150defaults" data-ref-filename="150defaults">defaults</a> objectForKey:<a class="ref" href="WebDatabaseManagerPrivate.h.html#WebDatabaseDirectoryDefaultsKey" title='WebDatabaseDirectoryDefaultsKey' data-ref="WebDatabaseDirectoryDefaultsKey" data-ref-filename="WebDatabaseDirectoryDefaultsKey">WebDatabaseDirectoryDefaultsKey</a>];</td></tr>
+<tr><th id="225">225</th><td>    <b>if</b> (!<a class="local col1 ref" href="#151databasesDirectory" title='databasesDirectory' data-ref="151databasesDirectory" data-ref-filename="151databasesDirectory">databasesDirectory</a> || ![<a class="local col1 ref" href="#151databasesDirectory" title='databasesDirectory' data-ref="151databasesDirectory" data-ref-filename="151databasesDirectory">databasesDirectory</a> isKindOfClass:[NSString <b>class</b>]])</td></tr>
+<tr><th id="226">226</th><td>        <a class="local col1 ref" href="#151databasesDirectory" title='databasesDirectory' data-ref="151databasesDirectory" data-ref-filename="151databasesDirectory">databasesDirectory</a> = @<q>"~/Library/WebKit/Databases"</q>;</td></tr>
+<tr><th id="227">227</th><td>    </td></tr>
+<tr><th id="228">228</th><td>    <b>return</b> [<a class="local col1 ref" href="#151databasesDirectory" title='databasesDirectory' data-ref="151databasesDirectory" data-ref-filename="151databasesDirectory">databasesDirectory</a> stringByStandardizingPath];</td></tr>
+<tr><th id="229">229</th><td>}</td></tr>
+<tr><th id="230">230</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

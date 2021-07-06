@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>mutex.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/synchronization/mutex.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::GlobalMutex,webrtc::GlobalMutexLock,webrtc::Mutex,webrtc::MutexLock "/>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/synchronization/mutex.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>WebKitBuild</a>/<a href='../../../../../..'>Debug</a>/<a href='../../../../..'>usr</a>/<a href='../../../..'>local</a>/<a href='../../..'>include</a>/<a href='../..'>webrtc</a>/<a href='..'>rtc_base</a>/<a href='./'>synchronization</a>/<a href='mutex.h.html'>mutex.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2020 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_SYNCHRONIZATION_MUTEX_H_">RTC_BASE_SYNCHRONIZATION_MUTEX_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_SYNCHRONIZATION_MUTEX_H_" data-ref="_M/RTC_BASE_SYNCHRONIZATION_MUTEX_H_">RTC_BASE_SYNCHRONIZATION_MUTEX_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;atomic&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="../../../absl/base/attributes.h.html">"absl/base/attributes.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../../../absl/base/const_init.h.html">"absl/base/const_init.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../checks.h.html">"rtc_base/checks.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="../thread_annotations.h.html">"rtc_base/thread_annotations.h"</a></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><u>#<span data-ppcond="21">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_RACE_CHECK_MUTEX">WEBRTC_RACE_CHECK_MUTEX</span>)</u></td></tr>
+<tr><th id="22">22</th><td><i>// To use the race check mutex, define WEBRTC_RACE_CHECK_MUTEX globally. This</i></td></tr>
+<tr><th id="23">23</th><td><i>// also adds a dependency to absl::Mutex from logging.cc due to concurrent</i></td></tr>
+<tr><th id="24">24</th><td><i>// invocation of the static logging system.</i></td></tr>
+<tr><th id="25">25</th><td><u>#include "rtc_base/synchronization/mutex_race_check.h"</u></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="21">elif</span> defined(<span class="macro" data-ref="_M/WEBRTC_ABSL_MUTEX">WEBRTC_ABSL_MUTEX</span>)</u></td></tr>
+<tr><th id="27">27</th><td><u>#include "rtc_base/synchronization/mutex_abseil.h"  // nogncheck</u></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="21">elif</span> defined(<span class="macro" data-ref="_M/WEBRTC_WIN">WEBRTC_WIN</span>)</u></td></tr>
+<tr><th id="29">29</th><td><u>#include "rtc_base/synchronization/mutex_critical_section.h"</u></td></tr>
+<tr><th id="30">30</th><td><u>#<span data-ppcond="21">elif</span> defined(<a class="macro" href="../../../../../../../../Source/WebCore/platform/mediastream/libwebrtc/LibWebRTCMacros.h.html#43" data-ref="_M/WEBRTC_POSIX">WEBRTC_POSIX</a>)</u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="mutex_pthread.h.html">"rtc_base/synchronization/mutex_pthread.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#<span data-ppcond="21">else</span></u></td></tr>
+<tr><th id="33">33</th><td><u>#error Unsupported platform.</u></td></tr>
+<tr><th id="34">34</th><td><u>#<span data-ppcond="21">endif</span></u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><i>// The Mutex guarantees exclusive access and aims to follow Abseil semantics</i></td></tr>
+<tr><th id="39">39</th><td><i>// (i.e. non-reentrant etc).</i></td></tr>
+<tr><th id="40">40</th><td><b>class</b> <a class="macro" href="../thread_annotations.h.html#70" title="__attribute__((lockable))" data-ref="_M/RTC_LOCKABLE">RTC_LOCKABLE</a> <dfn class="type def" id="webrtc::Mutex" title='webrtc::Mutex' data-ref="webrtc::Mutex" data-ref-filename="webrtc..Mutex">Mutex</dfn> final {</td></tr>
+<tr><th id="41">41</th><td> <b>public</b>:</td></tr>
+<tr><th id="42">42</th><td>  <dfn class="decl def fn" id="_ZN6webrtc5MutexC1Ev" title='webrtc::Mutex::Mutex' data-ref="_ZN6webrtc5MutexC1Ev" data-ref-filename="_ZN6webrtc5MutexC1Ev">Mutex</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="43">43</th><td>  <dfn class="decl def fn" id="_ZN6webrtc5MutexC1ERKS0_" title='webrtc::Mutex::Mutex' data-ref="_ZN6webrtc5MutexC1ERKS0_" data-ref-filename="_ZN6webrtc5MutexC1ERKS0_">Mutex</dfn>(<em>const</em> <a class="type" href="#webrtc::Mutex" title='webrtc::Mutex' data-ref="webrtc::Mutex" data-ref-filename="webrtc..Mutex">Mutex</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="44">44</th><td>  <a class="type" href="#webrtc::Mutex" title='webrtc::Mutex' data-ref="webrtc::Mutex" data-ref-filename="webrtc..Mutex">Mutex</a>&amp; <dfn class="decl def fn" id="_ZN6webrtc5MutexaSERKS0_" title='webrtc::Mutex::operator=' data-ref="_ZN6webrtc5MutexaSERKS0_" data-ref-filename="_ZN6webrtc5MutexaSERKS0_"><b>operator</b>=</dfn>(<em>const</em> <a class="type" href="#webrtc::Mutex" title='webrtc::Mutex' data-ref="webrtc::Mutex" data-ref-filename="webrtc..Mutex">Mutex</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN6webrtc5Mutex4LockEv" title='webrtc::Mutex::Lock' data-ref="_ZN6webrtc5Mutex4LockEv" data-ref-filename="_ZN6webrtc5Mutex4LockEv">Lock</dfn>() <a class="macro" href="../thread_annotations.h.html#76" title="__attribute__((exclusive_lock_function()))" data-ref="_M/RTC_EXCLUSIVE_LOCK_FUNCTION">RTC_EXCLUSIVE_LOCK_FUNCTION</a>() {</td></tr>
+<tr><th id="47">47</th><td>    <a class="member field" href="#webrtc::Mutex::impl_" title='webrtc::Mutex::impl_' data-ref="webrtc::Mutex::impl_" data-ref-filename="webrtc..Mutex..impl_">impl_</a>.<a class="ref fn" href="mutex_pthread.h.html#_ZN6webrtc9MutexImpl4LockEv" title='webrtc::MutexImpl::Lock' data-ref="_ZN6webrtc9MutexImpl4LockEv" data-ref-filename="_ZN6webrtc9MutexImpl4LockEv">Lock</a>();</td></tr>
+<tr><th id="48">48</th><td>  }</td></tr>
+<tr><th id="49">49</th><td>  <a class="macro" href="../../../absl/base/attributes.h.html#424" title="__attribute__((warn_unused_result))" data-ref="_M/ABSL_MUST_USE_RESULT">ABSL_MUST_USE_RESULT</a> <em>bool</em> <dfn class="decl def fn" id="_ZN6webrtc5Mutex7TryLockEv" title='webrtc::Mutex::TryLock' data-ref="_ZN6webrtc5Mutex7TryLockEv" data-ref-filename="_ZN6webrtc5Mutex7TryLockEv">TryLock</dfn>() <a class="macro" href="../thread_annotations.h.html#82" title="__attribute__((exclusive_trylock_function(true)))" data-ref="_M/RTC_EXCLUSIVE_TRYLOCK_FUNCTION">RTC_EXCLUSIVE_TRYLOCK_FUNCTION</a>(<b>true</b>) {</td></tr>
+<tr><th id="50">50</th><td>    <b>return</b> <a class="member field" href="#webrtc::Mutex::impl_" title='webrtc::Mutex::impl_' data-ref="webrtc::Mutex::impl_" data-ref-filename="webrtc..Mutex..impl_">impl_</a>.<a class="ref fn" href="mutex_pthread.h.html#_ZN6webrtc9MutexImpl7TryLockEv" title='webrtc::MutexImpl::TryLock' data-ref="_ZN6webrtc9MutexImpl7TryLockEv" data-ref-filename="_ZN6webrtc9MutexImpl7TryLockEv">TryLock</a>();</td></tr>
+<tr><th id="51">51</th><td>  }</td></tr>
+<tr><th id="52">52</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN6webrtc5Mutex6UnlockEv" title='webrtc::Mutex::Unlock' data-ref="_ZN6webrtc5Mutex6UnlockEv" data-ref-filename="_ZN6webrtc5Mutex6UnlockEv">Unlock</dfn>() <a class="macro" href="../thread_annotations.h.html#88" title="__attribute__((unlock_function()))" data-ref="_M/RTC_UNLOCK_FUNCTION">RTC_UNLOCK_FUNCTION</a>() {</td></tr>
+<tr><th id="53">53</th><td>    <a class="member field" href="#webrtc::Mutex::impl_" title='webrtc::Mutex::impl_' data-ref="webrtc::Mutex::impl_" data-ref-filename="webrtc..Mutex..impl_">impl_</a>.<a class="ref fn" href="mutex_pthread.h.html#_ZN6webrtc9MutexImpl6UnlockEv" title='webrtc::MutexImpl::Unlock' data-ref="_ZN6webrtc9MutexImpl6UnlockEv" data-ref-filename="_ZN6webrtc9MutexImpl6UnlockEv">Unlock</a>();</td></tr>
+<tr><th id="54">54</th><td>  }</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td> <b>private</b>:</td></tr>
+<tr><th id="57">57</th><td>  <a class="type" href="mutex_pthread.h.html#webrtc::MutexImpl" title='webrtc::MutexImpl' data-ref="webrtc::MutexImpl" data-ref-filename="webrtc..MutexImpl">MutexImpl</a> <dfn class="decl field" id="webrtc::Mutex::impl_" title='webrtc::Mutex::impl_' data-ref="webrtc::Mutex::impl_" data-ref-filename="webrtc..Mutex..impl_">impl_</dfn>;</td></tr>
+<tr><th id="58">58</th><td>};</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><i>// MutexLock, for serializing execution through a scope.</i></td></tr>
+<tr><th id="61">61</th><td><b>class</b> <a class="macro" href="../thread_annotations.h.html#73" title="__attribute__((scoped_lockable))" data-ref="_M/RTC_SCOPED_LOCKABLE">RTC_SCOPED_LOCKABLE</a> <dfn class="type def" id="webrtc::MutexLock" title='webrtc::MutexLock' data-ref="webrtc::MutexLock" data-ref-filename="webrtc..MutexLock">MutexLock</dfn> final {</td></tr>
+<tr><th id="62">62</th><td> <b>public</b>:</td></tr>
+<tr><th id="63">63</th><td>  <dfn class="decl def fn" id="_ZN6webrtc9MutexLockC1ERKS0_" title='webrtc::MutexLock::MutexLock' data-ref="_ZN6webrtc9MutexLockC1ERKS0_" data-ref-filename="_ZN6webrtc9MutexLockC1ERKS0_">MutexLock</dfn>(<em>const</em> <a class="type" href="#webrtc::MutexLock" title='webrtc::MutexLock' data-ref="webrtc::MutexLock" data-ref-filename="webrtc..MutexLock">MutexLock</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="64">64</th><td>  <a class="type" href="#webrtc::MutexLock" title='webrtc::MutexLock' data-ref="webrtc::MutexLock" data-ref-filename="webrtc..MutexLock">MutexLock</a>&amp; <dfn class="decl def fn" id="_ZN6webrtc9MutexLockaSERKS0_" title='webrtc::MutexLock::operator=' data-ref="_ZN6webrtc9MutexLockaSERKS0_" data-ref-filename="_ZN6webrtc9MutexLockaSERKS0_"><b>operator</b>=</dfn>(<em>const</em> <a class="type" href="#webrtc::MutexLock" title='webrtc::MutexLock' data-ref="webrtc::MutexLock" data-ref-filename="webrtc..MutexLock">MutexLock</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td>  <b>explicit</b> <dfn class="decl def fn" id="_ZN6webrtc9MutexLockC1EPNS_5MutexE" title='webrtc::MutexLock::MutexLock' data-ref="_ZN6webrtc9MutexLockC1EPNS_5MutexE" data-ref-filename="_ZN6webrtc9MutexLockC1EPNS_5MutexE">MutexLock</dfn>(<a class="type" href="#webrtc::Mutex" title='webrtc::Mutex' data-ref="webrtc::Mutex" data-ref-filename="webrtc..Mutex">Mutex</a>* <dfn class="local col4 decl" id="1894mutex" title='mutex' data-type='webrtc::Mutex *' data-ref="1894mutex" data-ref-filename="1894mutex">mutex</dfn>) <a class="macro" href="../thread_annotations.h.html#76" title="__attribute__((exclusive_lock_function(mutex)))" data-ref="_M/RTC_EXCLUSIVE_LOCK_FUNCTION">RTC_EXCLUSIVE_LOCK_FUNCTION</a>(<a class="local col4 ref" href="#1894mutex" title='mutex' data-ref="1894mutex" data-ref-filename="1894mutex">mutex</a>)</td></tr>
+<tr><th id="67">67</th><td>      : <a class="member field" href="#webrtc::MutexLock::mutex_" title='webrtc::MutexLock::mutex_' data-ref="webrtc::MutexLock::mutex_" data-ref-filename="webrtc..MutexLock..mutex_">mutex_</a>(<a class="local col4 ref" href="#1894mutex" title='mutex' data-ref="1894mutex" data-ref-filename="1894mutex">mutex</a>) {</td></tr>
+<tr><th id="68">68</th><td>    <a class="local col4 ref" href="#1894mutex" title='mutex' data-ref="1894mutex" data-ref-filename="1894mutex">mutex</a>-&gt;<a class="ref fn" href="#_ZN6webrtc5Mutex4LockEv" title='webrtc::Mutex::Lock' data-ref="_ZN6webrtc5Mutex4LockEv" data-ref-filename="_ZN6webrtc5Mutex4LockEv">Lock</a>();</td></tr>
+<tr><th id="69">69</th><td>  }</td></tr>
+<tr><th id="70">70</th><td>  <dfn class="decl def fn" id="_ZN6webrtc9MutexLockD1Ev" title='webrtc::MutexLock::~MutexLock' data-ref="_ZN6webrtc9MutexLockD1Ev" data-ref-filename="_ZN6webrtc9MutexLockD1Ev">~MutexLock</dfn>() <a class="macro" href="../thread_annotations.h.html#88" title="__attribute__((unlock_function()))" data-ref="_M/RTC_UNLOCK_FUNCTION">RTC_UNLOCK_FUNCTION</a>() { <a class="member field" href="#webrtc::MutexLock::mutex_" title='webrtc::MutexLock::mutex_' data-ref="webrtc::MutexLock::mutex_" data-ref-filename="webrtc..MutexLock..mutex_">mutex_</a>-&gt;<a class="ref fn" href="#_ZN6webrtc5Mutex6UnlockEv" title='webrtc::Mutex::Unlock' data-ref="_ZN6webrtc5Mutex6UnlockEv" data-ref-filename="_ZN6webrtc5Mutex6UnlockEv">Unlock</a>(); }</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td> <b>private</b>:</td></tr>
+<tr><th id="73">73</th><td>  <a class="type" href="#webrtc::Mutex" title='webrtc::Mutex' data-ref="webrtc::Mutex" data-ref-filename="webrtc..Mutex">Mutex</a>* <dfn class="decl field" id="webrtc::MutexLock::mutex_" title='webrtc::MutexLock::mutex_' data-ref="webrtc::MutexLock::mutex_" data-ref-filename="webrtc..MutexLock..mutex_">mutex_</dfn>;</td></tr>
+<tr><th id="74">74</th><td>};</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td><i>// A mutex used to protect global variables. Do NOT use for other purposes.</i></td></tr>
+<tr><th id="77">77</th><td><u>#<span data-ppcond="77">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_ABSL_MUTEX">WEBRTC_ABSL_MUTEX</span>)</u></td></tr>
+<tr><th id="78">78</th><td><b>using</b> GlobalMutex = absl::Mutex;</td></tr>
+<tr><th id="79">79</th><td><b>using</b> GlobalMutexLock = absl::MutexLock;</td></tr>
+<tr><th id="80">80</th><td><u>#<span data-ppcond="77">else</span></u></td></tr>
+<tr><th id="81">81</th><td><b>class</b> <a class="macro" href="../thread_annotations.h.html#70" title="__attribute__((lockable))" data-ref="_M/RTC_LOCKABLE">RTC_LOCKABLE</a> <dfn class="type def" id="webrtc::GlobalMutex" title='webrtc::GlobalMutex' data-ref="webrtc::GlobalMutex" data-ref-filename="webrtc..GlobalMutex">GlobalMutex</dfn> final {</td></tr>
+<tr><th id="82">82</th><td> <b>public</b>:</td></tr>
+<tr><th id="83">83</th><td>  <dfn class="decl def fn" id="_ZN6webrtc11GlobalMutexC1ERKS0_" title='webrtc::GlobalMutex::GlobalMutex' data-ref="_ZN6webrtc11GlobalMutexC1ERKS0_" data-ref-filename="_ZN6webrtc11GlobalMutexC1ERKS0_">GlobalMutex</dfn>(<em>const</em> <a class="type" href="#webrtc::GlobalMutex" title='webrtc::GlobalMutex' data-ref="webrtc::GlobalMutex" data-ref-filename="webrtc..GlobalMutex">GlobalMutex</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="84">84</th><td>  <a class="type" href="#webrtc::GlobalMutex" title='webrtc::GlobalMutex' data-ref="webrtc::GlobalMutex" data-ref-filename="webrtc..GlobalMutex">GlobalMutex</a>&amp; <dfn class="decl def fn" id="_ZN6webrtc11GlobalMutexaSERKS0_" title='webrtc::GlobalMutex::operator=' data-ref="_ZN6webrtc11GlobalMutexaSERKS0_" data-ref-filename="_ZN6webrtc11GlobalMutexaSERKS0_"><b>operator</b>=</dfn>(<em>const</em> <a class="type" href="#webrtc::GlobalMutex" title='webrtc::GlobalMutex' data-ref="webrtc::GlobalMutex" data-ref-filename="webrtc..GlobalMutex">GlobalMutex</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>  <b>constexpr</b> <b>explicit</b> <dfn class="decl def fn" id="_ZN6webrtc11GlobalMutexC1EN4absl13ConstInitTypeE" title='webrtc::GlobalMutex::GlobalMutex' data-ref="_ZN6webrtc11GlobalMutexC1EN4absl13ConstInitTypeE" data-ref-filename="_ZN6webrtc11GlobalMutexC1EN4absl13ConstInitTypeE">GlobalMutex</dfn>(<span class="namespace">absl::</span><a class="type" href="../../../absl/base/const_init.h.html#absl::ConstInitType" title='absl::ConstInitType' data-ref="absl::ConstInitType" data-ref-filename="absl..ConstInitType">ConstInitType</a> <i>/*unused*/</i>)</td></tr>
+<tr><th id="87">87</th><td>      : <a class="member field" href="#webrtc::GlobalMutex::mutex_locked_" title='webrtc::GlobalMutex::mutex_locked_' data-ref="webrtc::GlobalMutex::mutex_locked_" data-ref-filename="webrtc..GlobalMutex..mutex_locked_">mutex_locked_</a><span class='ref fn' title='std::__1::atomic::atomic&lt;_Tp&gt;' data-ref="_ZNSt3__16atomicC1ET_" data-ref-filename="_ZNSt3__16atomicC1ET_">(</span><var>0</var>) {}</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN6webrtc11GlobalMutex4LockEv" title='webrtc::GlobalMutex::Lock' data-ref="_ZN6webrtc11GlobalMutex4LockEv" data-ref-filename="_ZN6webrtc11GlobalMutex4LockEv">Lock</dfn>() <a class="macro" href="../thread_annotations.h.html#76" title="__attribute__((exclusive_lock_function()))" data-ref="_M/RTC_EXCLUSIVE_LOCK_FUNCTION">RTC_EXCLUSIVE_LOCK_FUNCTION</a>();</td></tr>
+<tr><th id="90">90</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN6webrtc11GlobalMutex6UnlockEv" title='webrtc::GlobalMutex::Unlock' data-ref="_ZN6webrtc11GlobalMutex6UnlockEv" data-ref-filename="_ZN6webrtc11GlobalMutex6UnlockEv">Unlock</dfn>() <a class="macro" href="../thread_annotations.h.html#88" title="__attribute__((unlock_function()))" data-ref="_M/RTC_UNLOCK_FUNCTION">RTC_UNLOCK_FUNCTION</a>();</td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td> <b>private</b>:</td></tr>
+<tr><th id="93">93</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::atomic' data-ref="std::__1::atomic" data-ref-filename="std..__1..atomic">atomic</span>&lt;<em>int</em>&gt; <dfn class="decl field" id="webrtc::GlobalMutex::mutex_locked_" title='webrtc::GlobalMutex::mutex_locked_' data-ref="webrtc::GlobalMutex::mutex_locked_" data-ref-filename="webrtc..GlobalMutex..mutex_locked_">mutex_locked_</dfn>;  <i>// 0 means lock not taken, 1 means taken.</i></td></tr>
+<tr><th id="94">94</th><td>};</td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td><i>// GlobalMutexLock, for serializing execution through a scope.</i></td></tr>
+<tr><th id="97">97</th><td><b>class</b> <a class="macro" href="../thread_annotations.h.html#73" title="__attribute__((scoped_lockable))" data-ref="_M/RTC_SCOPED_LOCKABLE">RTC_SCOPED_LOCKABLE</a> <dfn class="type def" id="webrtc::GlobalMutexLock" title='webrtc::GlobalMutexLock' data-ref="webrtc::GlobalMutexLock" data-ref-filename="webrtc..GlobalMutexLock">GlobalMutexLock</dfn> final {</td></tr>
+<tr><th id="98">98</th><td> <b>public</b>:</td></tr>
+<tr><th id="99">99</th><td>  <dfn class="decl def fn" id="_ZN6webrtc15GlobalMutexLockC1ERKS0_" title='webrtc::GlobalMutexLock::GlobalMutexLock' data-ref="_ZN6webrtc15GlobalMutexLockC1ERKS0_" data-ref-filename="_ZN6webrtc15GlobalMutexLockC1ERKS0_">GlobalMutexLock</dfn>(<em>const</em> <a class="type" href="#webrtc::GlobalMutexLock" title='webrtc::GlobalMutexLock' data-ref="webrtc::GlobalMutexLock" data-ref-filename="webrtc..GlobalMutexLock">GlobalMutexLock</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="100">100</th><td>  <a class="type" href="#webrtc::GlobalMutexLock" title='webrtc::GlobalMutexLock' data-ref="webrtc::GlobalMutexLock" data-ref-filename="webrtc..GlobalMutexLock">GlobalMutexLock</a>&amp; <dfn class="decl def fn" id="_ZN6webrtc15GlobalMutexLockaSERKS0_" title='webrtc::GlobalMutexLock::operator=' data-ref="_ZN6webrtc15GlobalMutexLockaSERKS0_" data-ref-filename="_ZN6webrtc15GlobalMutexLockaSERKS0_"><b>operator</b>=</dfn>(<em>const</em> <a class="type" href="#webrtc::GlobalMutexLock" title='webrtc::GlobalMutexLock' data-ref="webrtc::GlobalMutexLock" data-ref-filename="webrtc..GlobalMutexLock">GlobalMutexLock</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td>  <b>explicit</b> <dfn class="decl fn" id="_ZN6webrtc15GlobalMutexLockC1EPNS_11GlobalMutexE" title='webrtc::GlobalMutexLock::GlobalMutexLock' data-ref="_ZN6webrtc15GlobalMutexLockC1EPNS_11GlobalMutexE" data-ref-filename="_ZN6webrtc15GlobalMutexLockC1EPNS_11GlobalMutexE">GlobalMutexLock</dfn>(<a class="type" href="#webrtc::GlobalMutex" title='webrtc::GlobalMutex' data-ref="webrtc::GlobalMutex" data-ref-filename="webrtc..GlobalMutex">GlobalMutex</a>* <dfn class="local col5 decl" id="1895mutex" title='mutex' data-type='webrtc::GlobalMutex *' data-ref="1895mutex" data-ref-filename="1895mutex">mutex</dfn>)</td></tr>
+<tr><th id="103">103</th><td>      <a class="macro" href="../thread_annotations.h.html#76" title="__attribute__((exclusive_lock_function(mutex_)))" data-ref="_M/RTC_EXCLUSIVE_LOCK_FUNCTION">RTC_EXCLUSIVE_LOCK_FUNCTION</a>(<a class="member field" href="#webrtc::GlobalMutexLock::mutex_" title='webrtc::GlobalMutexLock::mutex_' data-ref="webrtc::GlobalMutexLock::mutex_" data-ref-filename="webrtc..GlobalMutexLock..mutex_">mutex_</a>);</td></tr>
+<tr><th id="104">104</th><td>  <dfn class="decl fn" id="_ZN6webrtc15GlobalMutexLockD1Ev" title='webrtc::GlobalMutexLock::~GlobalMutexLock' data-ref="_ZN6webrtc15GlobalMutexLockD1Ev" data-ref-filename="_ZN6webrtc15GlobalMutexLockD1Ev">~GlobalMutexLock</dfn>() <a class="macro" href="../thread_annotations.h.html#88" title="__attribute__((unlock_function()))" data-ref="_M/RTC_UNLOCK_FUNCTION">RTC_UNLOCK_FUNCTION</a>();</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td> <b>private</b>:</td></tr>
+<tr><th id="107">107</th><td>  <a class="type" href="#webrtc::GlobalMutex" title='webrtc::GlobalMutex' data-ref="webrtc::GlobalMutex" data-ref-filename="webrtc..GlobalMutex">GlobalMutex</a>* <dfn class="decl field" id="webrtc::GlobalMutexLock::mutex_" title='webrtc::GlobalMutexLock::mutex_' data-ref="webrtc::GlobalMutexLock::mutex_" data-ref-filename="webrtc..GlobalMutexLock..mutex_">mutex_</dfn>;</td></tr>
+<tr><th id="108">108</th><td>};</td></tr>
+<tr><th id="109">109</th><td><u>#<span data-ppcond="77">endif</span>  // if defined(WEBRTC_ABSL_MUTEX)</u></td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_SYNCHRONIZATION_MUTEX_H_</u></td></tr>
+<tr><th id="114">114</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

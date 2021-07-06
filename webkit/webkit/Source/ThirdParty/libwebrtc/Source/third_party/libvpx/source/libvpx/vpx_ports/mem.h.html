@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>mem.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_ports/mem.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_ports/mem.h'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>third_party</a>/<a href='../../..'>libvpx</a>/<a href='../..'>source</a>/<a href='..'>libvpx</a>/<a href='./'>vpx_ports</a>/<a href='mem.h.html'>mem.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2010 The WebM project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/VPX_VPX_PORTS_MEM_H_">VPX_VPX_PORTS_MEM_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/VPX_VPX_PORTS_MEM_H_" data-ref="_M/VPX_VPX_PORTS_MEM_H_">VPX_VPX_PORTS_MEM_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="../../config/ios/arm64/vpx_config.h.html">"vpx_config.h"</a></u></td></tr>
+<tr><th id="15">15</th><td><u>#include <a href="../vpx/vpx_integer.h.html">"vpx/vpx_integer.h"</a></u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#<span data-ppcond="17">if</span> (defined(<span class="macro" data-ref="_M/__GNUC__">__GNUC__</span>) &amp;&amp; <span class="macro" title="4" data-ref="_M/__GNUC__">__GNUC__</span>) || defined(<span class="macro" data-ref="_M/__SUNPRO_C">__SUNPRO_C</span>)</u></td></tr>
+<tr><th id="18">18</th><td><u>#define <dfn class="macro" id="_M/DECLARE_ALIGNED" data-ref="_M/DECLARE_ALIGNED">DECLARE_ALIGNED</dfn>(n, typ, val) typ val __attribute__((aligned(n)))</u></td></tr>
+<tr><th id="19">19</th><td><u>#<span data-ppcond="17">elif</span> defined(_MSC_VER)</u></td></tr>
+<tr><th id="20">20</th><td><u>#define DECLARE_ALIGNED(n, typ, val) __declspec(align(n)) typ val</u></td></tr>
+<tr><th id="21">21</th><td><u>#else</u></td></tr>
+<tr><th id="22">22</th><td><u>#warning No alignment directives known for this compiler.</u></td></tr>
+<tr><th id="23">23</th><td><u>#define DECLARE_ALIGNED(n, typ, val) typ val</u></td></tr>
+<tr><th id="24">24</th><td><u>#<span data-ppcond="17">endif</span></u></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="26">if</span> <a class="macro" href="../../config/ios/arm64/vpx_config.h.html#23" title="1" data-ref="_M/HAVE_NEON">HAVE_NEON</a> &amp;&amp; defined(<span class="macro" data-ref="_M/_MSC_VER">_MSC_VER</span>)</u></td></tr>
+<tr><th id="27">27</th><td><u>#define __builtin_prefetch(x)</u></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="26">endif</span></u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><i>/* Shift down with rounding */</i></td></tr>
+<tr><th id="31">31</th><td><u>#define <dfn class="macro" id="_M/ROUND_POWER_OF_TWO" data-ref="_M/ROUND_POWER_OF_TWO">ROUND_POWER_OF_TWO</dfn>(value, n) (((value) + (1 &lt;&lt; ((n)-1))) &gt;&gt; (n))</u></td></tr>
+<tr><th id="32">32</th><td><u>#define <dfn class="macro" id="_M/ROUND64_POWER_OF_TWO" data-ref="_M/ROUND64_POWER_OF_TWO">ROUND64_POWER_OF_TWO</dfn>(value, n) (((value) + (1ULL &lt;&lt; ((n)-1))) &gt;&gt; (n))</u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><u>#define <dfn class="macro" id="_M/ALIGN_POWER_OF_TWO" data-ref="_M/ALIGN_POWER_OF_TWO">ALIGN_POWER_OF_TWO</dfn>(value, n) \</u></td></tr>
+<tr><th id="35">35</th><td><u>  (((value) + ((1 &lt;&lt; (n)) - 1)) &amp; ~((1 &lt;&lt; (n)) - 1))</u></td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><u>#define <dfn class="macro" id="_M/CONVERT_TO_SHORTPTR" data-ref="_M/CONVERT_TO_SHORTPTR">CONVERT_TO_SHORTPTR</dfn>(x) ((uint16_t *)(((uintptr_t)(x)) &lt;&lt; 1))</u></td></tr>
+<tr><th id="38">38</th><td><u>#define <dfn class="macro" id="_M/CAST_TO_SHORTPTR" data-ref="_M/CAST_TO_SHORTPTR">CAST_TO_SHORTPTR</dfn>(x) ((uint16_t *)((uintptr_t)(x)))</u></td></tr>
+<tr><th id="39">39</th><td><u>#<span data-ppcond="39">if</span> <a class="macro" href="../../config/ios/arm64/vpx_config.h.html#94" title="0" data-ref="_M/CONFIG_VP9_HIGHBITDEPTH">CONFIG_VP9_HIGHBITDEPTH</a></u></td></tr>
+<tr><th id="40">40</th><td><u>#define CONVERT_TO_BYTEPTR(x) ((uint8_t *)(((uintptr_t)(x)) &gt;&gt; 1))</u></td></tr>
+<tr><th id="41">41</th><td><u>#define CAST_TO_BYTEPTR(x) ((uint8_t *)((uintptr_t)(x)))</u></td></tr>
+<tr><th id="42">42</th><td><u>#<span data-ppcond="39">endif</span>  // CONFIG_VP9_HIGHBITDEPTH</u></td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><u>#<span data-ppcond="11">endif</span>  // VPX_VPX_PORTS_MEM_H_</u></td></tr>
+<tr><th id="45">45</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../vp8/common/alloccommon.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp8/common/alloccommon.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,70 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>copymem_neon.c source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp8/common/arm/neon/copymem_neon.c] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp8/common/arm/neon/copymem_neon.c'; var root_path = '../../../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../../../..'>Source</a>/<a href='../../../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../../../..'>libwebrtc</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>third_party</a>/<a href='../../../../../..'>libvpx</a>/<a href='../../../../..'>source</a>/<a href='../../../..'>libvpx</a>/<a href='../../..'>vp8</a>/<a href='../..'>common</a>/<a href='..'>arm</a>/<a href='./'>neon</a>/<a href='copymem_neon.c.html'>copymem_neon.c</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2014 The WebM project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#include <span class='error' title="&apos;arm_neon.h&apos; file not found">&lt;</span>arm_neon.h&gt;</u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="../../../../../config/ios/arm64/vp8_rtcd.h.html">"./vp8_rtcd.h"</a></u></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><em>void</em> <dfn class="decl def fn" id="vp8_copy_mem8x4_neon" title='vp8_copy_mem8x4_neon' data-ref="vp8_copy_mem8x4_neon" data-ref-filename="vp8_copy_mem8x4_neon">vp8_copy_mem8x4_neon</dfn>(<em>unsigned</em> <em>char</em> *<dfn class="local col1 decl" id="1src" title='src' data-type='unsigned char *' data-ref="1src" data-ref-filename="1src">src</dfn>, <em>int</em> <dfn class="local col2 decl" id="2src_stride" title='src_stride' data-type='int' data-ref="2src_stride" data-ref-filename="2src_stride">src_stride</dfn>,</td></tr>
+<tr><th id="16">16</th><td>                          <em>unsigned</em> <em>char</em> *<dfn class="local col3 decl" id="3dst" title='dst' data-type='unsigned char *' data-ref="3dst" data-ref-filename="3dst">dst</dfn>, <em>int</em> <dfn class="local col4 decl" id="4dst_stride" title='dst_stride' data-type='int' data-ref="4dst_stride" data-ref-filename="4dst_stride">dst_stride</dfn>) {</td></tr>
+<tr><th id="17">17</th><td>  uint8x8_t vtmp;</td></tr>
+<tr><th id="18">18</th><td>  <em>int</em> <dfn class="local col5 decl" id="5r" title='r' data-type='int' data-ref="5r" data-ref-filename="5r">r</dfn>;</td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td>  <b>for</b> (<a class="local col5 ref" href="#5r" title='r' data-ref="5r" data-ref-filename="5r">r</a> = <var>0</var>; <a class="local col5 ref" href="#5r" title='r' data-ref="5r" data-ref-filename="5r">r</a> &lt; <var>4</var>; ++<a class="local col5 ref" href="#5r" title='r' data-ref="5r" data-ref-filename="5r">r</a>) {</td></tr>
+<tr><th id="21">21</th><td>    vtmp = vld1_u8(src);</td></tr>
+<tr><th id="22">22</th><td>    vst1_u8(dst, vtmp);</td></tr>
+<tr><th id="23">23</th><td>    <a class="local col1 ref" href="#1src" title='src' data-ref="1src" data-ref-filename="1src">src</a> += <a class="local col2 ref" href="#2src_stride" title='src_stride' data-ref="2src_stride" data-ref-filename="2src_stride">src_stride</a>;</td></tr>
+<tr><th id="24">24</th><td>    <a class="local col3 ref" href="#3dst" title='dst' data-ref="3dst" data-ref-filename="3dst">dst</a> += <a class="local col4 ref" href="#4dst_stride" title='dst_stride' data-ref="4dst_stride" data-ref-filename="4dst_stride">dst_stride</a>;</td></tr>
+<tr><th id="25">25</th><td>  }</td></tr>
+<tr><th id="26">26</th><td>}</td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><em>void</em> <dfn class="decl def fn" id="vp8_copy_mem8x8_neon" title='vp8_copy_mem8x8_neon' data-ref="vp8_copy_mem8x8_neon" data-ref-filename="vp8_copy_mem8x8_neon">vp8_copy_mem8x8_neon</dfn>(<em>unsigned</em> <em>char</em> *<dfn class="local col6 decl" id="6src" title='src' data-type='unsigned char *' data-ref="6src" data-ref-filename="6src">src</dfn>, <em>int</em> <dfn class="local col7 decl" id="7src_stride" title='src_stride' data-type='int' data-ref="7src_stride" data-ref-filename="7src_stride">src_stride</dfn>,</td></tr>
+<tr><th id="29">29</th><td>                          <em>unsigned</em> <em>char</em> *<dfn class="local col8 decl" id="8dst" title='dst' data-type='unsigned char *' data-ref="8dst" data-ref-filename="8dst">dst</dfn>, <em>int</em> <dfn class="local col9 decl" id="9dst_stride" title='dst_stride' data-type='int' data-ref="9dst_stride" data-ref-filename="9dst_stride">dst_stride</dfn>) {</td></tr>
+<tr><th id="30">30</th><td>  <span class='error' title="use of undeclared identifier &apos;uint8x8_t&apos;">uint8x8_t</span> vtmp;</td></tr>
+<tr><th id="31">31</th><td>  <em>int</em> <dfn class="local col0 decl" id="10r" title='r' data-type='int' data-ref="10r" data-ref-filename="10r">r</dfn>;</td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td>  <b>for</b> (<a class="local col0 ref" href="#10r" title='r' data-ref="10r" data-ref-filename="10r">r</a> = <var>0</var>; <a class="local col0 ref" href="#10r" title='r' data-ref="10r" data-ref-filename="10r">r</a> &lt; <var>8</var>; ++<a class="local col0 ref" href="#10r" title='r' data-ref="10r" data-ref-filename="10r">r</a>) {</td></tr>
+<tr><th id="34">34</th><td>    <span class='error' title="use of undeclared identifier &apos;vtmp&apos;">vtmp</span> = vld1_u8(src);</td></tr>
+<tr><th id="35">35</th><td>    vst1_u8(dst, <span class='error' title="use of undeclared identifier &apos;vtmp&apos;">vtmp</span>);</td></tr>
+<tr><th id="36">36</th><td>    <a class="local col6 ref" href="#6src" title='src' data-ref="6src" data-ref-filename="6src">src</a> += <a class="local col7 ref" href="#7src_stride" title='src_stride' data-ref="7src_stride" data-ref-filename="7src_stride">src_stride</a>;</td></tr>
+<tr><th id="37">37</th><td>    <a class="local col8 ref" href="#8dst" title='dst' data-ref="8dst" data-ref-filename="8dst">dst</a> += <a class="local col9 ref" href="#9dst_stride" title='dst_stride' data-ref="9dst_stride" data-ref-filename="9dst_stride">dst_stride</a>;</td></tr>
+<tr><th id="38">38</th><td>  }</td></tr>
+<tr><th id="39">39</th><td>}</td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><em>void</em> <dfn class="decl def fn" id="vp8_copy_mem16x16_neon" title='vp8_copy_mem16x16_neon' data-ref="vp8_copy_mem16x16_neon" data-ref-filename="vp8_copy_mem16x16_neon">vp8_copy_mem16x16_neon</dfn>(<em>unsigned</em> <em>char</em> *<dfn class="local col1 decl" id="11src" title='src' data-type='unsigned char *' data-ref="11src" data-ref-filename="11src">src</dfn>, <em>int</em> <dfn class="local col2 decl" id="12src_stride" title='src_stride' data-type='int' data-ref="12src_stride" data-ref-filename="12src_stride">src_stride</dfn>,</td></tr>
+<tr><th id="42">42</th><td>                            <em>unsigned</em> <em>char</em> *<dfn class="local col3 decl" id="13dst" title='dst' data-type='unsigned char *' data-ref="13dst" data-ref-filename="13dst">dst</dfn>, <em>int</em> <dfn class="local col4 decl" id="14dst_stride" title='dst_stride' data-type='int' data-ref="14dst_stride" data-ref-filename="14dst_stride">dst_stride</dfn>) {</td></tr>
+<tr><th id="43">43</th><td>  <em>int</em> <dfn class="local col5 decl" id="15r" title='r' data-type='int' data-ref="15r" data-ref-filename="15r">r</dfn>;</td></tr>
+<tr><th id="44">44</th><td>  <span class='error' title="use of undeclared identifier &apos;uint8x16_t&apos;">uint8x16_t</span> qtmp;</td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td>  <b>for</b> (<a class="local col5 ref" href="#15r" title='r' data-ref="15r" data-ref-filename="15r">r</a> = <var>0</var>; <a class="local col5 ref" href="#15r" title='r' data-ref="15r" data-ref-filename="15r">r</a> &lt; <var>16</var>; ++<a class="local col5 ref" href="#15r" title='r' data-ref="15r" data-ref-filename="15r">r</a>) {</td></tr>
+<tr><th id="47">47</th><td>    <span class='error' title="use of undeclared identifier &apos;qtmp&apos;">qtmp</span> = vld1q_u8(src);</td></tr>
+<tr><th id="48">48</th><td>    vst1q_u8(dst, <span class='error' title="use of undeclared identifier &apos;qtmp&apos;">qtmp</span>);</td></tr>
+<tr><th id="49">49</th><td>    <a class="local col1 ref" href="#11src" title='src' data-ref="11src" data-ref-filename="11src">src</a> += <a class="local col2 ref" href="#12src_stride" title='src_stride' data-ref="12src_stride" data-ref-filename="12src_stride">src_stride</a>;</td></tr>
+<tr><th id="50">50</th><td>    <a class="local col3 ref" href="#13dst" title='dst' data-ref="13dst" data-ref-filename="13dst">dst</a> += <a class="local col4 ref" href="#14dst_stride" title='dst_stride' data-ref="14dst_stride" data-ref-filename="14dst_stride">dst_stride</a>;</td></tr>
+<tr><th id="51">51</th><td>  }</td></tr>
+<tr><th id="52">52</th><td>}</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

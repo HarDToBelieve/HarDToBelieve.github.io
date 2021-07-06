@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WKSystemPreviewView.mm source code [webkit/Source/WebKit/UIProcess/ios/WKSystemPreviewView.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKit/UIProcess/ios/WKSystemPreviewView.mm'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKit</a>/<a href='..'>UIProcess</a>/<a href='./'>ios</a>/<a href='WKSystemPreviewView.mm.html'>WKSystemPreviewView.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2018-2019 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import <a href="../../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#import <a href="WKSystemPreviewView.h.html">"WKSystemPreviewView.h"</a></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#<span data-ppcond="29">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformUse.h.html#36" title="(defined USE_SYSTEM_PREVIEW &amp;&amp; USE_SYSTEM_PREVIEW)" data-ref="_M/USE">USE</a>(SYSTEM_PREVIEW)</u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#import "APIFindClient.h"</u></td></tr>
+<tr><th id="32">32</th><td><u>#import "APIUIClient.h"</u></td></tr>
+<tr><th id="33">33</th><td><u>#import "WKWebViewIOS.h"</u></td></tr>
+<tr><th id="34">34</th><td><u>#import "WebPageProxy.h"</u></td></tr>
+<tr><th id="35">35</th><td><u>#import &lt;MobileCoreServices/MobileCoreServices.h&gt;</u></td></tr>
+<tr><th id="36">36</th><td><u>#import &lt;WebCore/FloatRect.h&gt;</u></td></tr>
+<tr><th id="37">37</th><td><u>#import &lt;WebCore/LocalizedStrings.h&gt;</u></td></tr>
+<tr><th id="38">38</th><td><u>#import &lt;WebCore/MIMETypeRegistry.h&gt;</u></td></tr>
+<tr><th id="39">39</th><td><u>#import &lt;WebCore/UTIUtilities.h&gt;</u></td></tr>
+<tr><th id="40">40</th><td><u>#import &lt;pal/ios/QuickLookSoftLink.h&gt;</u></td></tr>
+<tr><th id="41">41</th><td><u>#import &lt;pal/spi/cg/CoreGraphicsSPI.h&gt;</u></td></tr>
+<tr><th id="42">42</th><td><u>#import &lt;pal/spi/ios/SystemPreviewSPI.h&gt;</u></td></tr>
+<tr><th id="43">43</th><td><u>#import &lt;wtf/RetainPtr.h&gt;</u></td></tr>
+<tr><th id="44">44</th><td><u>#import &lt;wtf/Vector.h&gt;</u></td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td>SOFT_LINK_PRIVATE_FRAMEWORK(AssetViewer);</td></tr>
+<tr><th id="47">47</th><td>SOFT_LINK_CLASS(AssetViewer, ASVThumbnailView);</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td><em>static</em> NSString *getUTIForSystemPreviewMIMEType(<em>const</em> String&amp; mimeType)</td></tr>
+<tr><th id="50">50</th><td>{</td></tr>
+<tr><th id="51">51</th><td>    <b>if</b> (!WebCore::MIMETypeRegistry::isSystemPreviewMIMEType(mimeType))</td></tr>
+<tr><th id="52">52</th><td>        <b>return</b> nil;</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td>    <b>return</b> WebCore::UTIFromMIMEType(mimeType);</td></tr>
+<tr><th id="55">55</th><td>}</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td>@interface WKSystemPreviewView () &lt;ASVThumbnailViewDelegate&gt;</td></tr>
+<tr><th id="58">58</th><td>@end</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td>@implementation WKSystemPreviewView {</td></tr>
+<tr><th id="61">61</th><td>    RetainPtr&lt;NSItemProvider&gt; _itemProvider;</td></tr>
+<tr><th id="62">62</th><td>    RetainPtr&lt;NSData&gt; _data;</td></tr>
+<tr><th id="63">63</th><td>    RetainPtr&lt;NSString&gt; _suggestedFilename;</td></tr>
+<tr><th id="64">64</th><td>    RetainPtr&lt;NSString&gt; _mimeType;</td></tr>
+<tr><th id="65">65</th><td>    RetainPtr&lt;QLItem&gt; _item;</td></tr>
+<tr><th id="66">66</th><td>    RetainPtr&lt;ASVThumbnailView&gt; _thumbnailView;</td></tr>
+<tr><th id="67">67</th><td>    WKWebView *_webView;</td></tr>
+<tr><th id="68">68</th><td>}</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td>- (instancetype)web_initWithFrame:(CGRect)frame webView:(WKWebView *)webView mimeType:(NSString *)mimeType</td></tr>
+<tr><th id="71">71</th><td>{</td></tr>
+<tr><th id="72">72</th><td>    <b>if</b> (!(self = [super initWithFrame:frame webView:webView]))</td></tr>
+<tr><th id="73">73</th><td>        <b>return</b> nil;</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td>    UIColor *backgroundColor = [UIColor colorWithRed:(<var>38.</var> / <var>255</var>) green:(<var>38.</var> / <var>255</var>) blue:(<var>38.</var> / <var>255</var>) alpha:<var>1</var>];</td></tr>
+<tr><th id="76">76</th><td>    self.backgroundColor = backgroundColor;</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td>    _webView = webView;</td></tr>
+<tr><th id="79">79</th><td>    _mimeType = mimeType;</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>    UIScrollView *scrollView = webView.scrollView;</td></tr>
+<tr><th id="82">82</th><td>    [scrollView setMinimumZoomScale:<var>1</var>];</td></tr>
+<tr><th id="83">83</th><td>    [scrollView setMaximumZoomScale:<var>1</var>];</td></tr>
+<tr><th id="84">84</th><td>    [scrollView setBackgroundColor:backgroundColor];</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>    <b>return</b> self;</td></tr>
+<tr><th id="87">87</th><td>}</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td>- (<em>void</em>)web_setContentProviderData:(NSData *)data suggestedFilename:(NSString *)filename</td></tr>
+<tr><th id="90">90</th><td>{</td></tr>
+<tr><th id="91">91</th><td>    _suggestedFilename = adoptNS([filename copy]);</td></tr>
+<tr><th id="92">92</th><td>    _data = adoptNS([data copy]);</td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td>    NSString *contentType = getUTIForSystemPreviewMIMEType(_mimeType.get());</td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td>    _item = adoptNS([PAL::allocQLItemInstance() initWithDataProvider:self contentType:contentType previewTitle:_suggestedFilename.get()]);</td></tr>
+<tr><th id="97">97</th><td>    [_item setUseLoadingTimeout:NO];</td></tr>
+<tr><th id="98">98</th><td></td></tr>
+<tr><th id="99">99</th><td>    _thumbnailView = adoptNS([allocASVThumbnailViewInstance() init]);</td></tr>
+<tr><th id="100">100</th><td>    [_thumbnailView setDelegate:self];</td></tr>
+<tr><th id="101">101</th><td>    [self setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];</td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td>    [self setAutoresizesSubviews:YES];</td></tr>
+<tr><th id="104">104</th><td>    [self setClipsToBounds:YES];</td></tr>
+<tr><th id="105">105</th><td>    [self addSubview:_thumbnailView.get()];</td></tr>
+<tr><th id="106">106</th><td>    [self _layoutThumbnailView];</td></tr>
+<tr><th id="107">107</th><td></td></tr>
+<tr><th id="108">108</th><td>    <em>auto</em> screenBounds = UIScreen.mainScreen.bounds;</td></tr>
+<tr><th id="109">109</th><td>    CGFloat maxDimension = CGFloatMin(screenBounds.size.width, screenBounds.size.height);</td></tr>
+<tr><th id="110">110</th><td>    [_thumbnailView setMaxThumbnailSize:CGSizeMake(maxDimension, maxDimension)];</td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td>    [_thumbnailView setThumbnailItem:_item.get()];</td></tr>
+<tr><th id="113">113</th><td>}</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td>- (<em>void</em>)_layoutThumbnailView</td></tr>
+<tr><th id="116">116</th><td>{</td></tr>
+<tr><th id="117">117</th><td>    <b>if</b> (_thumbnailView) {</td></tr>
+<tr><th id="118">118</th><td>        UIEdgeInsets safeAreaInsets = _webView._computedUnobscuredSafeAreaInset;</td></tr>
+<tr><th id="119">119</th><td>        UIEdgeInsets obscuredAreaInsets = _webView._computedObscuredInset;</td></tr>
+<tr><th id="120">120</th><td></td></tr>
+<tr><th id="121">121</th><td>        CGRect layoutFrame = UIEdgeInsetsInsetRect(self.frame, safeAreaInsets);</td></tr>
+<tr><th id="122">122</th><td></td></tr>
+<tr><th id="123">123</th><td>        layoutFrame.size.width -= obscuredAreaInsets.left + obscuredAreaInsets.right;</td></tr>
+<tr><th id="124">124</th><td>        layoutFrame.size.height -= obscuredAreaInsets.top + obscuredAreaInsets.bottom;</td></tr>
+<tr><th id="125">125</th><td></td></tr>
+<tr><th id="126">126</th><td>        [_thumbnailView setFrame:layoutFrame];</td></tr>
+<tr><th id="127">127</th><td>        [_thumbnailView setAutoresizingMask:UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight];</td></tr>
+<tr><th id="128">128</th><td>    }</td></tr>
+<tr><th id="129">129</th><td>}</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td><u>#pragma mark ASVThumbnailViewDelegate</u></td></tr>
+<tr><th id="132">132</th><td></td></tr>
+<tr><th id="133">133</th><td>- (<em>void</em>)thumbnailView:(ASVThumbnailView *)thumbnailView wantsToPresentPreviewController:(QLPreviewController *)previewController forItem:(QLItem *)item</td></tr>
+<tr><th id="134">134</th><td>{</td></tr>
+<tr><th id="135">135</th><td>    RefPtr&lt;WebKit::WebPageProxy&gt; page = _webView-&gt;_page;</td></tr>
+<tr><th id="136">136</th><td>    UIViewController *presentingViewController = page-&gt;uiClient().presentingViewController();</td></tr>
+<tr><th id="137">137</th><td>    [presentingViewController presentViewController:previewController animated:YES completion:nil];</td></tr>
+<tr><th id="138">138</th><td>}</td></tr>
+<tr><th id="139">139</th><td></td></tr>
+<tr><th id="140">140</th><td><u>#pragma mark WKWebViewContentProvider protocol</u></td></tr>
+<tr><th id="141">141</th><td></td></tr>
+<tr><th id="142">142</th><td>- (UIView *)web_contentView</td></tr>
+<tr><th id="143">143</th><td>{</td></tr>
+<tr><th id="144">144</th><td>    <b>return</b> self;</td></tr>
+<tr><th id="145">145</th><td>}</td></tr>
+<tr><th id="146">146</th><td></td></tr>
+<tr><th id="147">147</th><td>+ (BOOL)web_requiresCustomSnapshotting</td></tr>
+<tr><th id="148">148</th><td>{</td></tr>
+<tr><th id="149">149</th><td>    <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="150">150</th><td>}</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td>- (<em>void</em>)web_setMinimumSize:(CGSize)size</td></tr>
+<tr><th id="153">153</th><td>{</td></tr>
+<tr><th id="154">154</th><td>}</td></tr>
+<tr><th id="155">155</th><td></td></tr>
+<tr><th id="156">156</th><td>- (<em>void</em>)web_setOverlaidAccessoryViewsInset:(CGSize)inset</td></tr>
+<tr><th id="157">157</th><td>{</td></tr>
+<tr><th id="158">158</th><td>}</td></tr>
+<tr><th id="159">159</th><td></td></tr>
+<tr><th id="160">160</th><td>- (<em>void</em>)web_computedContentInsetDidChange</td></tr>
+<tr><th id="161">161</th><td>{</td></tr>
+<tr><th id="162">162</th><td>    [self _layoutThumbnailView];</td></tr>
+<tr><th id="163">163</th><td>}</td></tr>
+<tr><th id="164">164</th><td></td></tr>
+<tr><th id="165">165</th><td>- (<em>void</em>)web_setFixedOverlayView:(UIView *)fixedOverlayView</td></tr>
+<tr><th id="166">166</th><td>{</td></tr>
+<tr><th id="167">167</th><td>}</td></tr>
+<tr><th id="168">168</th><td></td></tr>
+<tr><th id="169">169</th><td>- (<em>void</em>)web_didSameDocumentNavigation:(WKSameDocumentNavigationType)navigationType</td></tr>
+<tr><th id="170">170</th><td>{</td></tr>
+<tr><th id="171">171</th><td>}</td></tr>
+<tr><th id="172">172</th><td></td></tr>
+<tr><th id="173">173</th><td>- (BOOL)web_isBackground</td></tr>
+<tr><th id="174">174</th><td>{</td></tr>
+<tr><th id="175">175</th><td>    <b>return</b> self.isBackground;</td></tr>
+<tr><th id="176">176</th><td>}</td></tr>
+<tr><th id="177">177</th><td></td></tr>
+<tr><th id="178">178</th><td><u>#pragma mark Find-in-Page</u></td></tr>
+<tr><th id="179">179</th><td></td></tr>
+<tr><th id="180">180</th><td>- (<em>void</em>)web_countStringMatches:(NSString *)string options:(_WKFindOptions)options maxCount:(NSUInteger)maxCount</td></tr>
+<tr><th id="181">181</th><td>{</td></tr>
+<tr><th id="182">182</th><td>    RefPtr&lt;WebKit::WebPageProxy&gt; page = _webView-&gt;_page;</td></tr>
+<tr><th id="183">183</th><td>    page-&gt;findClient().didCountStringMatches(page.get(), string, <var>0</var>);</td></tr>
+<tr><th id="184">184</th><td>}</td></tr>
+<tr><th id="185">185</th><td></td></tr>
+<tr><th id="186">186</th><td>- (<em>void</em>)web_findString:(NSString *)string options:(_WKFindOptions)options maxCount:(NSUInteger)maxCount</td></tr>
+<tr><th id="187">187</th><td>{</td></tr>
+<tr><th id="188">188</th><td>    RefPtr&lt;WebKit::WebPageProxy&gt; page = _webView-&gt;_page;</td></tr>
+<tr><th id="189">189</th><td>    page-&gt;findClient().didFailToFindString(page.get(), string);</td></tr>
+<tr><th id="190">190</th><td>}</td></tr>
+<tr><th id="191">191</th><td></td></tr>
+<tr><th id="192">192</th><td>- (<em>void</em>)web_hideFindUI</td></tr>
+<tr><th id="193">193</th><td>{</td></tr>
+<tr><th id="194">194</th><td>}</td></tr>
+<tr><th id="195">195</th><td></td></tr>
+<tr><th id="196">196</th><td><u>#pragma mark QLPreviewItemDataProvider</u></td></tr>
+<tr><th id="197">197</th><td></td></tr>
+<tr><th id="198">198</th><td>- (NSData *)provideDataForItem:(QLItem *)item</td></tr>
+<tr><th id="199">199</th><td>{</td></tr>
+<tr><th id="200">200</th><td>    <b>return</b> _data.get();</td></tr>
+<tr><th id="201">201</th><td>}</td></tr>
+<tr><th id="202">202</th><td></td></tr>
+<tr><th id="203">203</th><td>@end</td></tr>
+<tr><th id="204">204</th><td></td></tr>
+<tr><th id="205">205</th><td><u>#<span data-ppcond="29">endif</span></u></td></tr>
+<tr><th id="206">206</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource49-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource49-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

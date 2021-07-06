@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>TextBoundaries.cpp source code [webkit/Source/WebCore/platform/text/TextBoundaries.cpp] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebCore/platform/text/TextBoundaries.cpp'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebCore</a>/<a href='..'>platform</a>/<a href='./'>text</a>/<a href='TextBoundaries.cpp.html'>TextBoundaries.cpp</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2006, 2007 Apple Inc.  All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> * Copyright (C) 2009 Dominik Röttsches &lt;dominik.roettsches@access-company.com&gt;</i></td></tr>
+<tr><th id="4">4</th><td><i> *</i></td></tr>
+<tr><th id="5">5</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="6">6</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="7">7</th><td><i> * are met:</i></td></tr>
+<tr><th id="8">8</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="9">9</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="10">10</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="11">11</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="12">12</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="13">13</th><td><i> *</i></td></tr>
+<tr><th id="14">14</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="15">15</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="16">16</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="17">17</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="19">19</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="21">21</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="22">22</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="23">23</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="24">24</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="25">25</th><td><i> */</i></td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td><u>#include <a href="../../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="TextBoundaries.h.html">"TextBoundaries.h"</a></u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="../../../../WebKitBuild/Debug/usr/local/include/unicode/ubrk.h.html">&lt;unicode/ubrk.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringImpl.h.html">&lt;wtf/text/StringImpl.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/TextBreakIterator.h.html">&lt;wtf/text/TextBreakIterator.h&gt;</a></u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><b>namespace</b> <span class="namespace">WebCore</span> {</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><em>unsigned</em> <dfn class="decl def fn" id="_ZN7WebCore29endOfFirstWordBoundaryContextEN3WTF10StringViewE" title='WebCore::endOfFirstWordBoundaryContext' data-ref="_ZN7WebCore29endOfFirstWordBoundaryContextEN3WTF10StringViewE" data-ref-filename="_ZN7WebCore29endOfFirstWordBoundaryContextEN3WTF10StringViewE">endOfFirstWordBoundaryContext</dfn>(<a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringView.h.html#WTF::StringView" title='WTF::StringView' data-ref="WTF::StringView" data-ref-filename="WTF..StringView">StringView</a> <dfn class="local col3 decl" id="223text" title='text' data-type='WTF::StringView' data-ref="223text" data-ref-filename="223text">text</dfn>)</td></tr>
+<tr><th id="37">37</th><td>{</td></tr>
+<tr><th id="38">38</th><td>    <em>unsigned</em> <dfn class="local col4 decl" id="224length" title='length' data-type='unsigned int' data-ref="224length" data-ref-filename="224length">length</dfn> = <a class="local col3 ref" href="#223text" title='text' data-ref="223text" data-ref-filename="223text">text</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringView.h.html#_ZNK3WTF10StringView6lengthEv" title='WTF::StringView::length' data-ref="_ZNK3WTF10StringView6lengthEv" data-ref-filename="_ZNK3WTF10StringView6lengthEv">length</a>();</td></tr>
+<tr><th id="39">39</th><td>    <b>for</b> (<em>unsigned</em> <dfn class="local col5 decl" id="225i" title='i' data-type='unsigned int' data-ref="225i" data-ref-filename="225i">i</dfn> = <var>0</var>; <a class="local col5 ref" href="#225i" title='i' data-ref="225i" data-ref-filename="225i">i</a> &lt; <a class="local col4 ref" href="#224length" title='length' data-ref="224length" data-ref-filename="224length">length</a>; ) {</td></tr>
+<tr><th id="40">40</th><td>        <em>unsigned</em> <dfn class="local col6 decl" id="226first" title='first' data-type='unsigned int' data-ref="226first" data-ref-filename="226first">first</dfn> = <a class="local col5 ref" href="#225i" title='i' data-ref="225i" data-ref-filename="225i">i</a>;</td></tr>
+<tr><th id="41">41</th><td>        <a class="typedef" href="../../../../WebKitBuild/Debug/usr/local/include/unicode/umachine.h.html#UChar32" title='UChar32' data-type='int32_t' data-ref="UChar32" data-ref-filename="UChar32">UChar32</a> <dfn class="local col7 decl" id="227ch" title='ch' data-type='UChar32' data-ref="227ch" data-ref-filename="227ch">ch</dfn>;</td></tr>
+<tr><th id="42">42</th><td>        <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/unicode/utf16.h.html#312" title="{ (ch)=(text)[(i)++]; if((((ch)&amp;0xfffffc00)==0xd800)) { uint16_t __c2; if((i)!=(length) &amp;&amp; (((__c2=(text)[(i)])&amp;0xfffffc00)==0xdc00)) { ++(i); (ch)=(((UChar32)((ch))&lt;&lt;10UL)+(UChar32)(__c2)-((0xd800&lt;&lt;10UL)+0xdc00-0x10000)); } } }" data-ref="_M/U16_NEXT">U16_NEXT</a>(<a class="local col3 ref" href="#223text" title='text' data-ref="223text" data-ref-filename="223text">text</a>, <a class="local col5 ref" href="#225i" title='i' data-ref="225i" data-ref-filename="225i">i</a>, <a class="local col4 ref" href="#224length" title='length' data-ref="224length" data-ref-filename="224length">length</a>, <a class="local col7 ref" href="#227ch" title='ch' data-ref="227ch" data-ref-filename="227ch">ch</a>);</td></tr>
+<tr><th id="43">43</th><td>        <b>if</b> (!<a class="ref fn" href="TextBoundaries.h.html#_ZN7WebCore30requiresContextForWordBoundaryEi" title='WebCore::requiresContextForWordBoundary' data-ref="_ZN7WebCore30requiresContextForWordBoundaryEi" data-ref-filename="_ZN7WebCore30requiresContextForWordBoundaryEi">requiresContextForWordBoundary</a>(<a class="local col7 ref" href="#227ch" title='ch' data-ref="227ch" data-ref-filename="227ch">ch</a>))</td></tr>
+<tr><th id="44">44</th><td>            <b>return</b> <a class="local col6 ref" href="#226first" title='first' data-ref="226first" data-ref-filename="226first">first</a>;</td></tr>
+<tr><th id="45">45</th><td>    }</td></tr>
+<tr><th id="46">46</th><td>    <b>return</b> <a class="local col4 ref" href="#224length" title='length' data-ref="224length" data-ref-filename="224length">length</a>;</td></tr>
+<tr><th id="47">47</th><td>}</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td><em>unsigned</em> <dfn class="decl def fn" id="_ZN7WebCore30startOfLastWordBoundaryContextEN3WTF10StringViewE" title='WebCore::startOfLastWordBoundaryContext' data-ref="_ZN7WebCore30startOfLastWordBoundaryContextEN3WTF10StringViewE" data-ref-filename="_ZN7WebCore30startOfLastWordBoundaryContextEN3WTF10StringViewE">startOfLastWordBoundaryContext</dfn>(<a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringView.h.html#WTF::StringView" title='WTF::StringView' data-ref="WTF::StringView" data-ref-filename="WTF..StringView">StringView</a> <dfn class="local col8 decl" id="228text" title='text' data-type='WTF::StringView' data-ref="228text" data-ref-filename="228text">text</dfn>)</td></tr>
+<tr><th id="50">50</th><td>{</td></tr>
+<tr><th id="51">51</th><td>    <em>unsigned</em> <dfn class="local col9 decl" id="229length" title='length' data-type='unsigned int' data-ref="229length" data-ref-filename="229length">length</dfn> = <a class="local col8 ref" href="#228text" title='text' data-ref="228text" data-ref-filename="228text">text</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringView.h.html#_ZNK3WTF10StringView6lengthEv" title='WTF::StringView::length' data-ref="_ZNK3WTF10StringView6lengthEv" data-ref-filename="_ZNK3WTF10StringView6lengthEv">length</a>();</td></tr>
+<tr><th id="52">52</th><td>    <b>for</b> (<em>unsigned</em> <dfn class="local col0 decl" id="230i" title='i' data-type='unsigned int' data-ref="230i" data-ref-filename="230i">i</dfn> = <a class="local col9 ref" href="#229length" title='length' data-ref="229length" data-ref-filename="229length">length</a>; <a class="local col0 ref" href="#230i" title='i' data-ref="230i" data-ref-filename="230i">i</a> &gt; <var>0</var>; ) {</td></tr>
+<tr><th id="53">53</th><td>        <em>unsigned</em> <dfn class="local col1 decl" id="231last" title='last' data-type='unsigned int' data-ref="231last" data-ref-filename="231last">last</dfn> = <a class="local col0 ref" href="#230i" title='i' data-ref="230i" data-ref-filename="230i">i</a>;</td></tr>
+<tr><th id="54">54</th><td>        <a class="typedef" href="../../../../WebKitBuild/Debug/usr/local/include/unicode/umachine.h.html#UChar32" title='UChar32' data-type='int32_t' data-ref="UChar32" data-ref-filename="UChar32">UChar32</a> <dfn class="local col2 decl" id="232ch" title='ch' data-type='UChar32' data-ref="232ch" data-ref-filename="232ch">ch</dfn>;</td></tr>
+<tr><th id="55">55</th><td>        <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/unicode/utf16.h.html#577" title="{ (ch)=(text)[--(i)]; if((((ch)&amp;0xfffffc00)==0xdc00)) { uint16_t __c2; if((i)&gt;(0) &amp;&amp; (((__c2=(text)[(i)-1])&amp;0xfffffc00)==0xd800)) { --(i); (ch)=(((UChar32)(__c2)&lt;&lt;10UL)+(UChar32)((ch))-((0xd800&lt;&lt;10UL)+0xdc00-0x10000)); } } }" data-ref="_M/U16_PREV">U16_PREV</a>(<a class="local col8 ref" href="#228text" title='text' data-ref="228text" data-ref-filename="228text">text</a>, <var>0</var>, <a class="local col0 ref" href="#230i" title='i' data-ref="230i" data-ref-filename="230i">i</a>, <a class="local col2 ref" href="#232ch" title='ch' data-ref="232ch" data-ref-filename="232ch">ch</a>);</td></tr>
+<tr><th id="56">56</th><td>        <b>if</b> (!<a class="ref fn" href="TextBoundaries.h.html#_ZN7WebCore30requiresContextForWordBoundaryEi" title='WebCore::requiresContextForWordBoundary' data-ref="_ZN7WebCore30requiresContextForWordBoundaryEi" data-ref-filename="_ZN7WebCore30requiresContextForWordBoundaryEi">requiresContextForWordBoundary</a>(<a class="local col2 ref" href="#232ch" title='ch' data-ref="232ch" data-ref-filename="232ch">ch</a>))</td></tr>
+<tr><th id="57">57</th><td>            <b>return</b> <a class="local col1 ref" href="#231last" title='last' data-ref="231last" data-ref-filename="231last">last</a>;</td></tr>
+<tr><th id="58">58</th><td>    }</td></tr>
+<tr><th id="59">59</th><td>    <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="60">60</th><td>}</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><u>#<span data-ppcond="62">if</span> !<a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined 1 &amp;&amp; 1)" data-ref="_M/PLATFORM">PLATFORM</a>(COCOA)</u></td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td><em>int</em> findNextWordFromIndex(StringView text, <em>int</em> position, <em>bool</em> forward)</td></tr>
+<tr><th id="65">65</th><td>{</td></tr>
+<tr><th id="66">66</th><td>    UBreakIterator* it = wordBreakIterator(text);</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td>    <b>if</b> (forward) {</td></tr>
+<tr><th id="69">69</th><td>        position = ubrk_following(it, position);</td></tr>
+<tr><th id="70">70</th><td>        <b>while</b> (position != UBRK_DONE) {</td></tr>
+<tr><th id="71">71</th><td>            <i>// We stop searching when the character preceeding the break is alphanumeric.</i></td></tr>
+<tr><th id="72">72</th><td>            <b>if</b> (<b>static_cast</b>&lt;<em>unsigned</em>&gt;(position) &lt; text.length() &amp;&amp; u_isalnum(text[position - <var>1</var>]))</td></tr>
+<tr><th id="73">73</th><td>                <b>return</b> position;</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td>            position = ubrk_following(it, position);</td></tr>
+<tr><th id="76">76</th><td>        }</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td>        <b>return</b> text.length();</td></tr>
+<tr><th id="79">79</th><td>    } <b>else</b> {</td></tr>
+<tr><th id="80">80</th><td>        position = ubrk_preceding(it, position);</td></tr>
+<tr><th id="81">81</th><td>        <b>while</b> (position != UBRK_DONE) {</td></tr>
+<tr><th id="82">82</th><td>            <i>// We stop searching when the character following the break is alphanumeric.</i></td></tr>
+<tr><th id="83">83</th><td>            <b>if</b> (position &amp;&amp; u_isalnum(text[position]))</td></tr>
+<tr><th id="84">84</th><td>                <b>return</b> position;</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>            position = ubrk_preceding(it, position);</td></tr>
+<tr><th id="87">87</th><td>        }</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td>        <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="90">90</th><td>    }</td></tr>
+<tr><th id="91">91</th><td>}</td></tr>
+<tr><th id="92">92</th><td></td></tr>
+<tr><th id="93">93</th><td><em>void</em> findWordBoundary(StringView text, <em>int</em> position, <em>int</em>* start, <em>int</em>* end)</td></tr>
+<tr><th id="94">94</th><td>{</td></tr>
+<tr><th id="95">95</th><td>    UBreakIterator* it = wordBreakIterator(text);</td></tr>
+<tr><th id="96">96</th><td>    *end = ubrk_following(it, position);</td></tr>
+<tr><th id="97">97</th><td>    <b>if</b> (*end &lt; <var>0</var>)</td></tr>
+<tr><th id="98">98</th><td>        *end = ubrk_last(it);</td></tr>
+<tr><th id="99">99</th><td>    *start = ubrk_previous(it);</td></tr>
+<tr><th id="100">100</th><td>}</td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td><em>void</em> findEndWordBoundary(StringView text, <em>int</em> position, <em>int</em>* end)</td></tr>
+<tr><th id="103">103</th><td>{</td></tr>
+<tr><th id="104">104</th><td>    UBreakIterator* it = wordBreakIterator(text);</td></tr>
+<tr><th id="105">105</th><td>    *end = ubrk_following(it, position);</td></tr>
+<tr><th id="106">106</th><td>    <b>if</b> (*end &lt; <var>0</var>)</td></tr>
+<tr><th id="107">107</th><td>        *end = ubrk_last(it);</td></tr>
+<tr><th id="108">108</th><td>}</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td><u>#<span data-ppcond="62">endif</span> // !PLATFORM(COCOA)</u></td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td>} <i>// namespace WebCore</i></td></tr>
+<tr><th id="113">113</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource308.cpp.html'>webkit/WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource308.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>match.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/abseil-cpp/absl/strings/match.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/abseil-cpp/absl/strings/match.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>third_party</a>/<a href='../..'>abseil-cpp</a>/<a href='..'>absl</a>/<a href='./'>strings</a>/<a href='match.h.html'>match.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>//</i></td></tr>
+<tr><th id="2">2</th><td><i>// Copyright 2017 The Abseil Authors.</i></td></tr>
+<tr><th id="3">3</th><td><i>//</i></td></tr>
+<tr><th id="4">4</th><td><i>// Licensed under the Apache License, Version 2.0 (the "License");</i></td></tr>
+<tr><th id="5">5</th><td><i>// you may not use this file except in compliance with the License.</i></td></tr>
+<tr><th id="6">6</th><td><i>// You may obtain a copy of the License at</i></td></tr>
+<tr><th id="7">7</th><td><i>//</i></td></tr>
+<tr><th id="8">8</th><td><i>//      <a href="https://www.apache.org/licenses/LICENSE-2.0">https://www.apache.org/licenses/LICENSE-2.0</a></i></td></tr>
+<tr><th id="9">9</th><td><i>//</i></td></tr>
+<tr><th id="10">10</th><td><i>// Unless required by applicable law or agreed to in writing, software</i></td></tr>
+<tr><th id="11">11</th><td><i>// distributed under the License is distributed on an "AS IS" BASIS,</i></td></tr>
+<tr><th id="12">12</th><td><i>// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</i></td></tr>
+<tr><th id="13">13</th><td><i>// See the License for the specific language governing permissions and</i></td></tr>
+<tr><th id="14">14</th><td><i>// limitations under the License.</i></td></tr>
+<tr><th id="15">15</th><td><i>//</i></td></tr>
+<tr><th id="16">16</th><td><i>// -----------------------------------------------------------------------------</i></td></tr>
+<tr><th id="17">17</th><td><i>// File: match.h</i></td></tr>
+<tr><th id="18">18</th><td><i>// -----------------------------------------------------------------------------</i></td></tr>
+<tr><th id="19">19</th><td><i>//</i></td></tr>
+<tr><th id="20">20</th><td><i>// This file contains simple utilities for performing string matching checks.</i></td></tr>
+<tr><th id="21">21</th><td><i>// All of these function parameters are specified as `absl::string_view`,</i></td></tr>
+<tr><th id="22">22</th><td><i>// meaning that these functions can accept `std::string`, `absl::string_view` or</i></td></tr>
+<tr><th id="23">23</th><td><i>// NUL-terminated C-style strings.</i></td></tr>
+<tr><th id="24">24</th><td><i>//</i></td></tr>
+<tr><th id="25">25</th><td><i>// Examples:</i></td></tr>
+<tr><th id="26">26</th><td><i>//   std::string s = "foo";</i></td></tr>
+<tr><th id="27">27</th><td><i>//   absl::string_view sv = "f";</i></td></tr>
+<tr><th id="28">28</th><td><i>//   assert(absl::StrContains(s, sv));</i></td></tr>
+<tr><th id="29">29</th><td><i>//</i></td></tr>
+<tr><th id="30">30</th><td><i>// Note: The order of parameters in these functions is designed to mimic the</i></td></tr>
+<tr><th id="31">31</th><td><i>// order an equivalent member function would exhibit;</i></td></tr>
+<tr><th id="32">32</th><td><i>// e.g. `s.Contains(x)` ==&gt; `absl::StrContains(s, x).</i></td></tr>
+<tr><th id="33">33</th><td><u>#<span data-ppcond="33">ifndef</span> <span class="macro" data-ref="_M/ABSL_STRINGS_MATCH_H_">ABSL_STRINGS_MATCH_H_</span></u></td></tr>
+<tr><th id="34">34</th><td><u>#define <dfn class="macro" id="_M/ABSL_STRINGS_MATCH_H_" data-ref="_M/ABSL_STRINGS_MATCH_H_">ABSL_STRINGS_MATCH_H_</dfn></u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><u>#include &lt;cstring&gt;</u></td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><u>#include <a href="string_view.h.html">"absl/strings/string_view.h"</a></u></td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><b>namespace</b> <span class="namespace">absl</span> {</td></tr>
+<tr><th id="41">41</th><td><a class="macro" href="../base/config.h.html#122" title="" data-ref="_M/ABSL_NAMESPACE_BEGIN">ABSL_NAMESPACE_BEGIN</a></td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><i>// StrContains()</i></td></tr>
+<tr><th id="44">44</th><td><i>//</i></td></tr>
+<tr><th id="45">45</th><td><i>// Returns whether a given string `haystack` contains the substring `needle`.</i></td></tr>
+<tr><th id="46">46</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN4absl11StrContainsENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" title='absl::StrContains' data-ref="_ZN4absl11StrContainsENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" data-ref-filename="_ZN4absl11StrContainsENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_">StrContains</dfn>(<span class="namespace">absl::</span><a class="typedef" href="string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col1 decl" id="1haystack" title='haystack' data-type='absl::string_view' data-ref="1haystack" data-ref-filename="1haystack">haystack</dfn>,</td></tr>
+<tr><th id="47">47</th><td>                        <span class="namespace">absl::</span><a class="typedef" href="string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col2 decl" id="2needle" title='needle' data-type='absl::string_view' data-ref="2needle" data-ref-filename="2needle">needle</dfn>) <b>noexcept</b> {</td></tr>
+<tr><th id="48">48</th><td>  <b>return</b> <a class="local col1 ref" href="#1haystack" title='haystack' data-ref="1haystack" data-ref-filename="1haystack">haystack</a>.<span class='ref fn' title='std::__1::basic_string_view::find' data-ref="_ZNKSt3__117basic_string_view4findENS_17basic_string_viewIT_T0_EEm" data-ref-filename="_ZNKSt3__117basic_string_view4findENS_17basic_string_viewIT_T0_EEm">find</span>(<span class='ref fn fake' title='std::__1::basic_string_view::basic_string_view&lt;_CharT, _Traits&gt;' data-ref="_ZNSt3__117basic_string_viewC1ERKNS_17basic_string_viewIT_T0_EE" data-ref-filename="_ZNSt3__117basic_string_viewC1ERKNS_17basic_string_viewIT_T0_EE"></span><a class="local col2 ref" href="#2needle" title='needle' data-ref="2needle" data-ref-filename="2needle">needle</a>, <var>0</var>) != <a class="local col1 ref" href="#1haystack" title='haystack' data-ref="1haystack" data-ref-filename="1haystack">haystack</a>.<span class='ref' title='std::__1::basic_string_view::npos' data-ref="std::__1::basic_string_view::npos" data-ref-filename="std..__1..basic_string_view..npos">npos</span>;</td></tr>
+<tr><th id="49">49</th><td>}</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN4absl11StrContainsENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEEc" title='absl::StrContains' data-ref="_ZN4absl11StrContainsENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEEc" data-ref-filename="_ZN4absl11StrContainsENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEEc">StrContains</dfn>(<span class="namespace">absl::</span><a class="typedef" href="string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col3 decl" id="3haystack" title='haystack' data-type='absl::string_view' data-ref="3haystack" data-ref-filename="3haystack">haystack</dfn>, <em>char</em> <dfn class="local col4 decl" id="4needle" title='needle' data-type='char' data-ref="4needle" data-ref-filename="4needle">needle</dfn>) <b>noexcept</b> {</td></tr>
+<tr><th id="52">52</th><td>  <b>return</b> <a class="local col3 ref" href="#3haystack" title='haystack' data-ref="3haystack" data-ref-filename="3haystack">haystack</a>.<span class='ref fn' title='std::__1::basic_string_view::find' data-ref="_ZNKSt3__117basic_string_view4findET_m" data-ref-filename="_ZNKSt3__117basic_string_view4findET_m">find</span>(<a class="local col4 ref" href="#4needle" title='needle' data-ref="4needle" data-ref-filename="4needle">needle</a>) != <a class="local col3 ref" href="#3haystack" title='haystack' data-ref="3haystack" data-ref-filename="3haystack">haystack</a>.<span class='ref' title='std::__1::basic_string_view::npos' data-ref="std::__1::basic_string_view::npos" data-ref-filename="std..__1..basic_string_view..npos">npos</span>;</td></tr>
+<tr><th id="53">53</th><td>}</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><i>// StartsWith()</i></td></tr>
+<tr><th id="56">56</th><td><i>//</i></td></tr>
+<tr><th id="57">57</th><td><i>// Returns whether a given string `text` begins with `prefix`.</i></td></tr>
+<tr><th id="58">58</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN4absl10StartsWithENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" title='absl::StartsWith' data-ref="_ZN4absl10StartsWithENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" data-ref-filename="_ZN4absl10StartsWithENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_">StartsWith</dfn>(<span class="namespace">absl::</span><a class="typedef" href="string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col5 decl" id="5text" title='text' data-type='absl::string_view' data-ref="5text" data-ref-filename="5text">text</dfn>,</td></tr>
+<tr><th id="59">59</th><td>                       <span class="namespace">absl::</span><a class="typedef" href="string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col6 decl" id="6prefix" title='prefix' data-type='absl::string_view' data-ref="6prefix" data-ref-filename="6prefix">prefix</dfn>) <b>noexcept</b> {</td></tr>
+<tr><th id="60">60</th><td>  <b>return</b> <a class="local col6 ref" href="#6prefix" title='prefix' data-ref="6prefix" data-ref-filename="6prefix">prefix</a>.<span class='ref fn' title='std::__1::basic_string_view::empty' data-ref="_ZNKSt3__117basic_string_view5emptyEv" data-ref-filename="_ZNKSt3__117basic_string_view5emptyEv">empty</span>() ||</td></tr>
+<tr><th id="61">61</th><td>         (<a class="local col5 ref" href="#5text" title='text' data-ref="5text" data-ref-filename="5text">text</a>.<span class='ref fn' title='std::__1::basic_string_view::size' data-ref="_ZNKSt3__117basic_string_view4sizeEv" data-ref-filename="_ZNKSt3__117basic_string_view4sizeEv">size</span>() &gt;= <a class="local col6 ref" href="#6prefix" title='prefix' data-ref="6prefix" data-ref-filename="6prefix">prefix</a>.<span class='ref fn' title='std::__1::basic_string_view::size' data-ref="_ZNKSt3__117basic_string_view4sizeEv" data-ref-filename="_ZNKSt3__117basic_string_view4sizeEv">size</span>() &amp;&amp;</td></tr>
+<tr><th id="62">62</th><td>          <span class='ref fn' title='memcmp' data-ref="memcmp" data-ref-filename="memcmp">memcmp</span>(<a class="local col5 ref" href="#5text" title='text' data-ref="5text" data-ref-filename="5text">text</a>.<span class='ref fn' title='std::__1::basic_string_view::data' data-ref="_ZNKSt3__117basic_string_view4dataEv" data-ref-filename="_ZNKSt3__117basic_string_view4dataEv">data</span>(), <a class="local col6 ref" href="#6prefix" title='prefix' data-ref="6prefix" data-ref-filename="6prefix">prefix</a>.<span class='ref fn' title='std::__1::basic_string_view::data' data-ref="_ZNKSt3__117basic_string_view4dataEv" data-ref-filename="_ZNKSt3__117basic_string_view4dataEv">data</span>(), <a class="local col6 ref" href="#6prefix" title='prefix' data-ref="6prefix" data-ref-filename="6prefix">prefix</a>.<span class='ref fn' title='std::__1::basic_string_view::size' data-ref="_ZNKSt3__117basic_string_view4sizeEv" data-ref-filename="_ZNKSt3__117basic_string_view4sizeEv">size</span>()) == <var>0</var>);</td></tr>
+<tr><th id="63">63</th><td>}</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td><i>// EndsWith()</i></td></tr>
+<tr><th id="66">66</th><td><i>//</i></td></tr>
+<tr><th id="67">67</th><td><i>// Returns whether a given string `text` ends with `suffix`.</i></td></tr>
+<tr><th id="68">68</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN4absl8EndsWithENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" title='absl::EndsWith' data-ref="_ZN4absl8EndsWithENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" data-ref-filename="_ZN4absl8EndsWithENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_">EndsWith</dfn>(<span class="namespace">absl::</span><a class="typedef" href="string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col7 decl" id="7text" title='text' data-type='absl::string_view' data-ref="7text" data-ref-filename="7text">text</dfn>,</td></tr>
+<tr><th id="69">69</th><td>                     <span class="namespace">absl::</span><a class="typedef" href="string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col8 decl" id="8suffix" title='suffix' data-type='absl::string_view' data-ref="8suffix" data-ref-filename="8suffix">suffix</dfn>) <b>noexcept</b> {</td></tr>
+<tr><th id="70">70</th><td>  <b>return</b> <a class="local col8 ref" href="#8suffix" title='suffix' data-ref="8suffix" data-ref-filename="8suffix">suffix</a>.<span class='ref fn' title='std::__1::basic_string_view::empty' data-ref="_ZNKSt3__117basic_string_view5emptyEv" data-ref-filename="_ZNKSt3__117basic_string_view5emptyEv">empty</span>() ||</td></tr>
+<tr><th id="71">71</th><td>         (<a class="local col7 ref" href="#7text" title='text' data-ref="7text" data-ref-filename="7text">text</a>.<span class='ref fn' title='std::__1::basic_string_view::size' data-ref="_ZNKSt3__117basic_string_view4sizeEv" data-ref-filename="_ZNKSt3__117basic_string_view4sizeEv">size</span>() &gt;= <a class="local col8 ref" href="#8suffix" title='suffix' data-ref="8suffix" data-ref-filename="8suffix">suffix</a>.<span class='ref fn' title='std::__1::basic_string_view::size' data-ref="_ZNKSt3__117basic_string_view4sizeEv" data-ref-filename="_ZNKSt3__117basic_string_view4sizeEv">size</span>() &amp;&amp;</td></tr>
+<tr><th id="72">72</th><td>          <span class='ref fn' title='memcmp' data-ref="memcmp" data-ref-filename="memcmp">memcmp</span>(<a class="local col7 ref" href="#7text" title='text' data-ref="7text" data-ref-filename="7text">text</a>.<span class='ref fn' title='std::__1::basic_string_view::data' data-ref="_ZNKSt3__117basic_string_view4dataEv" data-ref-filename="_ZNKSt3__117basic_string_view4dataEv">data</span>() + (<a class="local col7 ref" href="#7text" title='text' data-ref="7text" data-ref-filename="7text">text</a>.<span class='ref fn' title='std::__1::basic_string_view::size' data-ref="_ZNKSt3__117basic_string_view4sizeEv" data-ref-filename="_ZNKSt3__117basic_string_view4sizeEv">size</span>() - <a class="local col8 ref" href="#8suffix" title='suffix' data-ref="8suffix" data-ref-filename="8suffix">suffix</a>.<span class='ref fn' title='std::__1::basic_string_view::size' data-ref="_ZNKSt3__117basic_string_view4sizeEv" data-ref-filename="_ZNKSt3__117basic_string_view4sizeEv">size</span>()), <a class="local col8 ref" href="#8suffix" title='suffix' data-ref="8suffix" data-ref-filename="8suffix">suffix</a>.<span class='ref fn' title='std::__1::basic_string_view::data' data-ref="_ZNKSt3__117basic_string_view4dataEv" data-ref-filename="_ZNKSt3__117basic_string_view4dataEv">data</span>(),</td></tr>
+<tr><th id="73">73</th><td>                 <a class="local col8 ref" href="#8suffix" title='suffix' data-ref="8suffix" data-ref-filename="8suffix">suffix</a>.<span class='ref fn' title='std::__1::basic_string_view::size' data-ref="_ZNKSt3__117basic_string_view4sizeEv" data-ref-filename="_ZNKSt3__117basic_string_view4sizeEv">size</span>()) == <var>0</var>);</td></tr>
+<tr><th id="74">74</th><td>}</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td><i>// EqualsIgnoreCase()</i></td></tr>
+<tr><th id="77">77</th><td><i>//</i></td></tr>
+<tr><th id="78">78</th><td><i>// Returns whether given ASCII strings `piece1` and `piece2` are equal, ignoring</i></td></tr>
+<tr><th id="79">79</th><td><i>// case in the comparison.</i></td></tr>
+<tr><th id="80">80</th><td><em>bool</em> <a class="decl fn" href="match.cc.html#_ZN4absl16EqualsIgnoreCaseENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" title='absl::EqualsIgnoreCase' data-ref="_ZN4absl16EqualsIgnoreCaseENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" data-ref-filename="_ZN4absl16EqualsIgnoreCaseENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" id="_ZN4absl16EqualsIgnoreCaseENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_">EqualsIgnoreCase</a>(<span class="namespace">absl::</span><a class="typedef" href="string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col9 decl" id="9piece1" title='piece1' data-type='absl::string_view' data-ref="9piece1" data-ref-filename="9piece1">piece1</dfn>,</td></tr>
+<tr><th id="81">81</th><td>                      <span class="namespace">absl::</span><a class="typedef" href="string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col0 decl" id="10piece2" title='piece2' data-type='absl::string_view' data-ref="10piece2" data-ref-filename="10piece2">piece2</dfn>) <b>noexcept</b>;</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td><i>// StartsWithIgnoreCase()</i></td></tr>
+<tr><th id="84">84</th><td><i>//</i></td></tr>
+<tr><th id="85">85</th><td><i>// Returns whether a given ASCII string `text` starts with `prefix`,</i></td></tr>
+<tr><th id="86">86</th><td><i>// ignoring case in the comparison.</i></td></tr>
+<tr><th id="87">87</th><td><em>bool</em> <a class="decl fn" href="match.cc.html#_ZN4absl20StartsWithIgnoreCaseENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" title='absl::StartsWithIgnoreCase' data-ref="_ZN4absl20StartsWithIgnoreCaseENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" data-ref-filename="_ZN4absl20StartsWithIgnoreCaseENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" id="_ZN4absl20StartsWithIgnoreCaseENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_">StartsWithIgnoreCase</a>(<span class="namespace">absl::</span><a class="typedef" href="string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col1 decl" id="11text" title='text' data-type='absl::string_view' data-ref="11text" data-ref-filename="11text">text</dfn>,</td></tr>
+<tr><th id="88">88</th><td>                          <span class="namespace">absl::</span><a class="typedef" href="string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col2 decl" id="12prefix" title='prefix' data-type='absl::string_view' data-ref="12prefix" data-ref-filename="12prefix">prefix</dfn>) <b>noexcept</b>;</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td><i>// EndsWithIgnoreCase()</i></td></tr>
+<tr><th id="91">91</th><td><i>//</i></td></tr>
+<tr><th id="92">92</th><td><i>// Returns whether a given ASCII string `text` ends with `suffix`, ignoring</i></td></tr>
+<tr><th id="93">93</th><td><i>// case in the comparison.</i></td></tr>
+<tr><th id="94">94</th><td><em>bool</em> <a class="decl fn" href="match.cc.html#_ZN4absl18EndsWithIgnoreCaseENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" title='absl::EndsWithIgnoreCase' data-ref="_ZN4absl18EndsWithIgnoreCaseENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" data-ref-filename="_ZN4absl18EndsWithIgnoreCaseENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_" id="_ZN4absl18EndsWithIgnoreCaseENSt3__117basic_string_viewIcNS0_11char_traitsIcEEEES4_">EndsWithIgnoreCase</a>(<span class="namespace">absl::</span><a class="typedef" href="string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col3 decl" id="13text" title='text' data-type='absl::string_view' data-ref="13text" data-ref-filename="13text">text</dfn>,</td></tr>
+<tr><th id="95">95</th><td>                        <span class="namespace">absl::</span><a class="typedef" href="string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col4 decl" id="14suffix" title='suffix' data-type='absl::string_view' data-ref="14suffix" data-ref-filename="14suffix">suffix</dfn>) <b>noexcept</b>;</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td><a class="macro" href="../base/config.h.html#123" title="" data-ref="_M/ABSL_NAMESPACE_END">ABSL_NAMESPACE_END</a></td></tr>
+<tr><th id="98">98</th><td>}  <i>// namespace absl</i></td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td><u>#<span data-ppcond="33">endif</span>  // ABSL_STRINGS_MATCH_H_</u></td></tr>
+<tr><th id="101">101</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='match.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/abseil-cpp/absl/strings/match.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

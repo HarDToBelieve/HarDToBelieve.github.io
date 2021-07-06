@@ -1,0 +1,226 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebCache.mm source code [webkit/Source/WebKitLegacy/mac/Misc/WebCache.mm] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="DefaultStorageSessionProvider "/>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/Misc/WebCache.mm'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>Misc</a>/<a href='WebCache.mm.html'>WebCache.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2006 Apple Inc.  All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import <a href="WebCache.h.html">"WebCache.h"</a></u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#import <a href="../../WebCoreSupport/NetworkStorageSessionMap.h.html">"NetworkStorageSessionMap.h"</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="../WebCoreSupport/WebApplicationCacheInternal.h.html">"WebApplicationCacheInternal.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="WebNSObjectExtras.h.html">"WebNSObjectExtras.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="../WebView/WebPreferences.h.html">"WebPreferences.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#import <a href="../WebView/WebView.h.html">"WebView.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#import <a href="../WebView/WebViewInternal.h.html">"WebViewInternal.h"</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#import <a href="../../../../WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/InitializeThreading.h.html">&lt;JavaScriptCore/InitializeThreading.h&gt;</a></u></td></tr>
+<tr><th id="35">35</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ApplicationCacheStorage.h.html">&lt;WebCore/ApplicationCacheStorage.h&gt;</a></u></td></tr>
+<tr><th id="36">36</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CookieJar.h.html">&lt;WebCore/CookieJar.h&gt;</a></u></td></tr>
+<tr><th id="37">37</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CredentialStorage.h.html">&lt;WebCore/CredentialStorage.h&gt;</a></u></td></tr>
+<tr><th id="38">38</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CrossOriginPreflightResultCache.h.html">&lt;WebCore/CrossOriginPreflightResultCache.h&gt;</a></u></td></tr>
+<tr><th id="39">39</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Document.h.html">&lt;WebCore/Document.h&gt;</a></u></td></tr>
+<tr><th id="40">40</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html">&lt;WebCore/MemoryCache.h&gt;</a></u></td></tr>
+<tr><th id="41">41</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/NetworkStorageSession.h.html">&lt;WebCore/NetworkStorageSession.h&gt;</a></u></td></tr>
+<tr><th id="42">42</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/StorageSessionProvider.h.html">&lt;WebCore/StorageSessionProvider.h&gt;</a></u></td></tr>
+<tr><th id="43">43</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/WebCoreJITOperations.h.html">&lt;WebCore/WebCoreJITOperations.h&gt;</a></u></td></tr>
+<tr><th id="44">44</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/MainThread.h.html">&lt;wtf/MainThread.h&gt;</a></u></td></tr>
+<tr><th id="45">45</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RunLoop.h.html">&lt;wtf/RunLoop.h&gt;</a></u></td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td><u>#<span data-ppcond="47">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="48">48</th><td><u>#import "WebFrameInternal.h"</u></td></tr>
+<tr><th id="49">49</th><td><u>#import &lt;WebCore/BackForwardCache.h&gt;</u></td></tr>
+<tr><th id="50">50</th><td><u>#import &lt;WebCore/CachedImage.h&gt;</u></td></tr>
+<tr><th id="51">51</th><td><u>#import &lt;WebCore/Frame.h&gt;</u></td></tr>
+<tr><th id="52">52</th><td><u>#import &lt;WebCore/WebCoreThreadRun.h&gt;</u></td></tr>
+<tr><th id="53">53</th><td><u>#<span data-ppcond="47">endif</span></u></td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><b>class</b> <dfn class="type def" id="DefaultStorageSessionProvider" title='DefaultStorageSessionProvider' data-ref="DefaultStorageSessionProvider" data-ref-filename="DefaultStorageSessionProvider">DefaultStorageSessionProvider</dfn> : <b>public</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/StorageSessionProvider.h.html#WebCore::StorageSessionProvider" title='WebCore::StorageSessionProvider' data-ref="WebCore::StorageSessionProvider" data-ref-filename="WebCore..StorageSessionProvider">StorageSessionProvider</a> {</td></tr>
+<tr><th id="56">56</th><td>    <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/NetworkStorageSession.h.html#WebCore::NetworkStorageSession" title='WebCore::NetworkStorageSession' data-ref="WebCore::NetworkStorageSession" data-ref-filename="WebCore..NetworkStorageSession">NetworkStorageSession</a>* <dfn class="virtual decl def fn" id="_ZNK29DefaultStorageSessionProvider14storageSessionEv" title='DefaultStorageSessionProvider::storageSession' data-ref="_ZNK29DefaultStorageSessionProvider14storageSessionEv" data-ref-filename="_ZNK29DefaultStorageSessionProvider14storageSessionEv">storageSession</dfn>() <em>const</em> final</td></tr>
+<tr><th id="57">57</th><td>    {</td></tr>
+<tr><th id="58">58</th><td>        <b>return</b> &amp;<a class="type" href="../../WebCoreSupport/NetworkStorageSessionMap.h.html#NetworkStorageSessionMap" title='NetworkStorageSessionMap' data-ref="NetworkStorageSessionMap" data-ref-filename="NetworkStorageSessionMap">NetworkStorageSessionMap</a>::<a class="ref fn" href="../../WebCoreSupport/NetworkStorageSessionMap.h.html#_ZN24NetworkStorageSessionMap21defaultStorageSessionEv" title='NetworkStorageSessionMap::defaultStorageSession' data-ref="_ZN24NetworkStorageSessionMap21defaultStorageSessionEv" data-ref-filename="_ZN24NetworkStorageSessionMap21defaultStorageSessionEv">defaultStorageSession</a>();</td></tr>
+<tr><th id="59">59</th><td>    }</td></tr>
+<tr><th id="60">60</th><td>};</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td>@implementation WebCache</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td>+ (<em>void</em>)initialize</td></tr>
+<tr><th id="65">65</th><td>{</td></tr>
+<tr><th id="66">66</th><td><u>#<span data-ppcond="66">if</span> !<a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="67">67</th><td>    <span class="namespace">JSC::</span><a class="ref fn" href="../../../../WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/InitializeThreading.h.html#_ZN3JSC10initializeEv" title='JSC::initialize' data-ref="_ZN3JSC10initializeEv" data-ref-filename="_ZN3JSC10initializeEv">initialize</a>();</td></tr>
+<tr><th id="68">68</th><td>    <span class="namespace">WTF::</span><a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/MainThread.h.html#_ZN3WTF20initializeMainThreadEv" title='WTF::initializeMainThread' data-ref="_ZN3WTF20initializeMainThreadEv" data-ref-filename="_ZN3WTF20initializeMainThreadEv">initializeMainThread</a>();</td></tr>
+<tr><th id="69">69</th><td>    <span class="namespace">WebCore::</span><a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/WebCoreJITOperations.h.html#_ZN7WebCore21populateJITOperationsEv" title='WebCore::populateJITOperations' data-ref="_ZN7WebCore21populateJITOperationsEv" data-ref-filename="_ZN7WebCore21populateJITOperationsEv">populateJITOperations</a>();</td></tr>
+<tr><th id="70">70</th><td><u>#<span data-ppcond="66">endif</span></u></td></tr>
+<tr><th id="71">71</th><td>}</td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td>+ (NSArray *)statistics</td></tr>
+<tr><th id="74">74</th><td>{</td></tr>
+<tr><th id="75">75</th><td>    <em>auto</em> <dfn class="local col9 decl" id="49s" title='s' data-type='WebCore::MemoryCache::Statistics' data-ref="49s" data-ref-filename="49s">s</dfn> = <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache" title='WebCore::MemoryCache' data-ref="WebCore::MemoryCache" data-ref-filename="WebCore..MemoryCache">MemoryCache</a>::<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#_ZN7WebCore11MemoryCache9singletonEv" title='WebCore::MemoryCache::singleton' data-ref="_ZN7WebCore11MemoryCache9singletonEv" data-ref-filename="_ZN7WebCore11MemoryCache9singletonEv">singleton</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#_ZN7WebCore11MemoryCache13getStatisticsEv" title='WebCore::MemoryCache::getStatistics' data-ref="_ZN7WebCore11MemoryCache13getStatisticsEv" data-ref-filename="_ZN7WebCore11MemoryCache13getStatisticsEv">getStatistics</a>();</td></tr>
+<tr><th id="76">76</th><td>    <b>return</b> @[</td></tr>
+<tr><th id="77">77</th><td>        @{</td></tr>
+<tr><th id="78">78</th><td>            @<q>"Images"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::images" title='WebCore::MemoryCache::Statistics::images' data-ref="WebCore::MemoryCache::Statistics::images" data-ref-filename="WebCore..MemoryCache..Statistics..images">images</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::count" title='WebCore::MemoryCache::TypeStatistic::count' data-ref="WebCore::MemoryCache::TypeStatistic::count" data-ref-filename="WebCore..MemoryCache..TypeStatistic..count">count</a>),</td></tr>
+<tr><th id="79">79</th><td>            @<q>"CSS"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::cssStyleSheets" title='WebCore::MemoryCache::Statistics::cssStyleSheets' data-ref="WebCore::MemoryCache::Statistics::cssStyleSheets" data-ref-filename="WebCore..MemoryCache..Statistics..cssStyleSheets">cssStyleSheets</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::count" title='WebCore::MemoryCache::TypeStatistic::count' data-ref="WebCore::MemoryCache::TypeStatistic::count" data-ref-filename="WebCore..MemoryCache..TypeStatistic..count">count</a>),</td></tr>
+<tr><th id="80">80</th><td><u>#<span data-ppcond="80">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(XSLT)</u></td></tr>
+<tr><th id="81">81</th><td>            @<q>"XSL"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::xslStyleSheets" title='WebCore::MemoryCache::Statistics::xslStyleSheets' data-ref="WebCore::MemoryCache::Statistics::xslStyleSheets" data-ref-filename="WebCore..MemoryCache..Statistics..xslStyleSheets">xslStyleSheets</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::count" title='WebCore::MemoryCache::TypeStatistic::count' data-ref="WebCore::MemoryCache::TypeStatistic::count" data-ref-filename="WebCore..MemoryCache..TypeStatistic..count">count</a>),</td></tr>
+<tr><th id="82">82</th><td><u>#<span data-ppcond="80">else</span></u></td></tr>
+<tr><th id="83">83</th><td>            @<q>"XSL"</q>: @(<var>0</var>),</td></tr>
+<tr><th id="84">84</th><td><u>#<span data-ppcond="80">endif</span></u></td></tr>
+<tr><th id="85">85</th><td>            @<q>"JavaScript"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::scripts" title='WebCore::MemoryCache::Statistics::scripts' data-ref="WebCore::MemoryCache::Statistics::scripts" data-ref-filename="WebCore..MemoryCache..Statistics..scripts">scripts</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::count" title='WebCore::MemoryCache::TypeStatistic::count' data-ref="WebCore::MemoryCache::TypeStatistic::count" data-ref-filename="WebCore..MemoryCache..TypeStatistic..count">count</a>),</td></tr>
+<tr><th id="86">86</th><td>        },</td></tr>
+<tr><th id="87">87</th><td>        @{</td></tr>
+<tr><th id="88">88</th><td>            @<q>"Images"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::images" title='WebCore::MemoryCache::Statistics::images' data-ref="WebCore::MemoryCache::Statistics::images" data-ref-filename="WebCore..MemoryCache..Statistics..images">images</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::size" title='WebCore::MemoryCache::TypeStatistic::size' data-ref="WebCore::MemoryCache::TypeStatistic::size" data-ref-filename="WebCore..MemoryCache..TypeStatistic..size">size</a>),</td></tr>
+<tr><th id="89">89</th><td>            @<q>"CSS"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::cssStyleSheets" title='WebCore::MemoryCache::Statistics::cssStyleSheets' data-ref="WebCore::MemoryCache::Statistics::cssStyleSheets" data-ref-filename="WebCore..MemoryCache..Statistics..cssStyleSheets">cssStyleSheets</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::size" title='WebCore::MemoryCache::TypeStatistic::size' data-ref="WebCore::MemoryCache::TypeStatistic::size" data-ref-filename="WebCore..MemoryCache..TypeStatistic..size">size</a>),</td></tr>
+<tr><th id="90">90</th><td><u>#<span data-ppcond="90">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(XSLT)</u></td></tr>
+<tr><th id="91">91</th><td>            @<q>"XSL"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::xslStyleSheets" title='WebCore::MemoryCache::Statistics::xslStyleSheets' data-ref="WebCore::MemoryCache::Statistics::xslStyleSheets" data-ref-filename="WebCore..MemoryCache..Statistics..xslStyleSheets">xslStyleSheets</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::size" title='WebCore::MemoryCache::TypeStatistic::size' data-ref="WebCore::MemoryCache::TypeStatistic::size" data-ref-filename="WebCore..MemoryCache..TypeStatistic..size">size</a>),</td></tr>
+<tr><th id="92">92</th><td><u>#<span data-ppcond="90">else</span></u></td></tr>
+<tr><th id="93">93</th><td>            @<q>"XSL"</q>: @(<var>0</var>),</td></tr>
+<tr><th id="94">94</th><td><u>#<span data-ppcond="90">endif</span></u></td></tr>
+<tr><th id="95">95</th><td>            @<q>"JavaScript"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::scripts" title='WebCore::MemoryCache::Statistics::scripts' data-ref="WebCore::MemoryCache::Statistics::scripts" data-ref-filename="WebCore..MemoryCache..Statistics..scripts">scripts</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::size" title='WebCore::MemoryCache::TypeStatistic::size' data-ref="WebCore::MemoryCache::TypeStatistic::size" data-ref-filename="WebCore..MemoryCache..TypeStatistic..size">size</a>),</td></tr>
+<tr><th id="96">96</th><td>        },</td></tr>
+<tr><th id="97">97</th><td>        @{</td></tr>
+<tr><th id="98">98</th><td>            @<q>"Images"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::images" title='WebCore::MemoryCache::Statistics::images' data-ref="WebCore::MemoryCache::Statistics::images" data-ref-filename="WebCore..MemoryCache..Statistics..images">images</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::liveSize" title='WebCore::MemoryCache::TypeStatistic::liveSize' data-ref="WebCore::MemoryCache::TypeStatistic::liveSize" data-ref-filename="WebCore..MemoryCache..TypeStatistic..liveSize">liveSize</a>),</td></tr>
+<tr><th id="99">99</th><td>            @<q>"CSS"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::cssStyleSheets" title='WebCore::MemoryCache::Statistics::cssStyleSheets' data-ref="WebCore::MemoryCache::Statistics::cssStyleSheets" data-ref-filename="WebCore..MemoryCache..Statistics..cssStyleSheets">cssStyleSheets</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::liveSize" title='WebCore::MemoryCache::TypeStatistic::liveSize' data-ref="WebCore::MemoryCache::TypeStatistic::liveSize" data-ref-filename="WebCore..MemoryCache..TypeStatistic..liveSize">liveSize</a>),</td></tr>
+<tr><th id="100">100</th><td><u>#<span data-ppcond="100">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(XSLT)</u></td></tr>
+<tr><th id="101">101</th><td>            @<q>"XSL"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::xslStyleSheets" title='WebCore::MemoryCache::Statistics::xslStyleSheets' data-ref="WebCore::MemoryCache::Statistics::xslStyleSheets" data-ref-filename="WebCore..MemoryCache..Statistics..xslStyleSheets">xslStyleSheets</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::liveSize" title='WebCore::MemoryCache::TypeStatistic::liveSize' data-ref="WebCore::MemoryCache::TypeStatistic::liveSize" data-ref-filename="WebCore..MemoryCache..TypeStatistic..liveSize">liveSize</a>),</td></tr>
+<tr><th id="102">102</th><td><u>#<span data-ppcond="100">else</span></u></td></tr>
+<tr><th id="103">103</th><td>            @<q>"XSL"</q>: @(<var>0</var>),</td></tr>
+<tr><th id="104">104</th><td><u>#<span data-ppcond="100">endif</span></u></td></tr>
+<tr><th id="105">105</th><td>            @<q>"JavaScript"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::scripts" title='WebCore::MemoryCache::Statistics::scripts' data-ref="WebCore::MemoryCache::Statistics::scripts" data-ref-filename="WebCore..MemoryCache..Statistics..scripts">scripts</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::liveSize" title='WebCore::MemoryCache::TypeStatistic::liveSize' data-ref="WebCore::MemoryCache::TypeStatistic::liveSize" data-ref-filename="WebCore..MemoryCache..TypeStatistic..liveSize">liveSize</a>),</td></tr>
+<tr><th id="106">106</th><td>        },</td></tr>
+<tr><th id="107">107</th><td>        @{</td></tr>
+<tr><th id="108">108</th><td>            @<q>"Images"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::images" title='WebCore::MemoryCache::Statistics::images' data-ref="WebCore::MemoryCache::Statistics::images" data-ref-filename="WebCore..MemoryCache..Statistics..images">images</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::decodedSize" title='WebCore::MemoryCache::TypeStatistic::decodedSize' data-ref="WebCore::MemoryCache::TypeStatistic::decodedSize" data-ref-filename="WebCore..MemoryCache..TypeStatistic..decodedSize">decodedSize</a>),</td></tr>
+<tr><th id="109">109</th><td>            @<q>"CSS"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::cssStyleSheets" title='WebCore::MemoryCache::Statistics::cssStyleSheets' data-ref="WebCore::MemoryCache::Statistics::cssStyleSheets" data-ref-filename="WebCore..MemoryCache..Statistics..cssStyleSheets">cssStyleSheets</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::decodedSize" title='WebCore::MemoryCache::TypeStatistic::decodedSize' data-ref="WebCore::MemoryCache::TypeStatistic::decodedSize" data-ref-filename="WebCore..MemoryCache..TypeStatistic..decodedSize">decodedSize</a>),</td></tr>
+<tr><th id="110">110</th><td><u>#<span data-ppcond="110">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(XSLT)</u></td></tr>
+<tr><th id="111">111</th><td>            @<q>"XSL"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::xslStyleSheets" title='WebCore::MemoryCache::Statistics::xslStyleSheets' data-ref="WebCore::MemoryCache::Statistics::xslStyleSheets" data-ref-filename="WebCore..MemoryCache..Statistics..xslStyleSheets">xslStyleSheets</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::decodedSize" title='WebCore::MemoryCache::TypeStatistic::decodedSize' data-ref="WebCore::MemoryCache::TypeStatistic::decodedSize" data-ref-filename="WebCore..MemoryCache..TypeStatistic..decodedSize">decodedSize</a>),</td></tr>
+<tr><th id="112">112</th><td><u>#<span data-ppcond="110">else</span></u></td></tr>
+<tr><th id="113">113</th><td>            @<q>"XSL"</q>: @(<var>0</var>),</td></tr>
+<tr><th id="114">114</th><td><u>#<span data-ppcond="110">endif</span></u></td></tr>
+<tr><th id="115">115</th><td>            @<q>"JavaScript"</q>: @(<a class="local col9 ref" href="#49s" title='s' data-ref="49s" data-ref-filename="49s">s</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::Statistics::scripts" title='WebCore::MemoryCache::Statistics::scripts' data-ref="WebCore::MemoryCache::Statistics::scripts" data-ref-filename="WebCore..MemoryCache..Statistics..scripts">scripts</a>.<a class="ref field" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache::TypeStatistic::decodedSize" title='WebCore::MemoryCache::TypeStatistic::decodedSize' data-ref="WebCore::MemoryCache::TypeStatistic::decodedSize" data-ref-filename="WebCore..MemoryCache..TypeStatistic..decodedSize">decodedSize</a>),</td></tr>
+<tr><th id="116">116</th><td>        },</td></tr>
+<tr><th id="117">117</th><td>    ];</td></tr>
+<tr><th id="118">118</th><td>}</td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td>+ (<em>void</em>)empty</td></tr>
+<tr><th id="121">121</th><td>{</td></tr>
+<tr><th id="122">122</th><td>    <i>// Toggling the cache model like this forces the cache to evict all its in-memory resources.</i></td></tr>
+<tr><th id="123">123</th><td>    <a class="typedef" href="../WebView/WebPreferences.h.html#61" title='WebCacheModel' data-type='enum WebCacheModel' data-ref="WebCacheModel" data-ref-filename="WebCacheModel">WebCacheModel</a> <dfn class="local col0 decl" id="50cacheModel" title='cacheModel' data-type='WebCacheModel' data-ref="50cacheModel" data-ref-filename="50cacheModel">cacheModel</dfn> = [WebView _cacheModel];</td></tr>
+<tr><th id="124">124</th><td>    [WebView _setCacheModel:<a class="enum" href="../WebView/WebPreferences.h.html#WebCacheModelDocumentViewer" title='WebCacheModelDocumentViewer' data-ref="WebCacheModelDocumentViewer" data-ref-filename="WebCacheModelDocumentViewer">WebCacheModelDocumentViewer</a>];</td></tr>
+<tr><th id="125">125</th><td>    [WebView _setCacheModel:<a class="local col0 ref" href="#50cacheModel" title='cacheModel' data-ref="50cacheModel" data-ref-filename="50cacheModel">cacheModel</a>];</td></tr>
+<tr><th id="126">126</th><td></td></tr>
+<tr><th id="127">127</th><td>    <i>// Empty the application cache.</i></td></tr>
+<tr><th id="128">128</th><td>    <a class="ref fn" href="../WebCoreSupport/WebApplicationCacheInternal.h.html#_Z26webApplicationCacheStoragev" title='webApplicationCacheStorage' data-ref="_Z26webApplicationCacheStoragev" data-ref-filename="_Z26webApplicationCacheStoragev">webApplicationCacheStorage</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ApplicationCacheStorage.h.html#_ZN7WebCore23ApplicationCacheStorage5emptyEv" title='WebCore::ApplicationCacheStorage::empty' data-ref="_ZN7WebCore23ApplicationCacheStorage5emptyEv" data-ref-filename="_ZN7WebCore23ApplicationCacheStorage5emptyEv">empty</a>();</td></tr>
+<tr><th id="129">129</th><td></td></tr>
+<tr><th id="130">130</th><td>    <i>// Empty the Cross-Origin Preflight cache</i></td></tr>
+<tr><th id="131">131</th><td>    <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CrossOriginPreflightResultCache.h.html#WebCore::CrossOriginPreflightResultCache" title='WebCore::CrossOriginPreflightResultCache' data-ref="WebCore::CrossOriginPreflightResultCache" data-ref-filename="WebCore..CrossOriginPreflightResultCache">CrossOriginPreflightResultCache</a>::<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CrossOriginPreflightResultCache.h.html#_ZN7WebCore31CrossOriginPreflightResultCache9singletonEv" title='WebCore::CrossOriginPreflightResultCache::singleton' data-ref="_ZN7WebCore31CrossOriginPreflightResultCache9singletonEv" data-ref-filename="_ZN7WebCore31CrossOriginPreflightResultCache9singletonEv">singleton</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CrossOriginPreflightResultCache.h.html#_ZN7WebCore31CrossOriginPreflightResultCache5clearEv" title='WebCore::CrossOriginPreflightResultCache::clear' data-ref="_ZN7WebCore31CrossOriginPreflightResultCache5clearEv" data-ref-filename="_ZN7WebCore31CrossOriginPreflightResultCache5clearEv">clear</a>();</td></tr>
+<tr><th id="132">132</th><td>}</td></tr>
+<tr><th id="133">133</th><td></td></tr>
+<tr><th id="134">134</th><td><u>#<span data-ppcond="134">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="135">135</th><td></td></tr>
+<tr><th id="136">136</th><td>+ (<em>void</em>)emptyInMemoryResources</td></tr>
+<tr><th id="137">137</th><td>{</td></tr>
+<tr><th id="138">138</th><td>    <i>// This method gets called from MobileSafari after it calls [WebView</i></td></tr>
+<tr><th id="139">139</th><td><i>    // _close]. [WebView _close] schedules its work on the WebThread. So we</i></td></tr>
+<tr><th id="140">140</th><td><i>    // schedule this method on the WebThread as well so as to pick up all the</i></td></tr>
+<tr><th id="141">141</th><td><i>    // dead resources left behind after closing the WebViews</i></td></tr>
+<tr><th id="142">142</th><td>    WebThreadRun(^{</td></tr>
+<tr><th id="143">143</th><td>        <i>// Toggling the cache model like this forces the cache to evict all its in-memory resources.</i></td></tr>
+<tr><th id="144">144</th><td>        WebCacheModel cacheModel = [WebView _cacheModel];</td></tr>
+<tr><th id="145">145</th><td>        [WebView _setCacheModel:WebCacheModelDocumentViewer];</td></tr>
+<tr><th id="146">146</th><td>        [WebView _setCacheModel:cacheModel];</td></tr>
+<tr><th id="147">147</th><td></td></tr>
+<tr><th id="148">148</th><td>        WebCore::MemoryCache::singleton().pruneLiveResources(<b>true</b>);</td></tr>
+<tr><th id="149">149</th><td>    });</td></tr>
+<tr><th id="150">150</th><td>}</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td>+ (<em>void</em>)sizeOfDeadResources:(<em>int</em> *)resources</td></tr>
+<tr><th id="153">153</th><td>{</td></tr>
+<tr><th id="154">154</th><td>    WebCore::MemoryCache::Statistics stats = WebCore::MemoryCache::singleton().getStatistics();</td></tr>
+<tr><th id="155">155</th><td>    <b>if</b> (resources) {</td></tr>
+<tr><th id="156">156</th><td>        *resources = (stats.images.size - stats.images.liveSize)</td></tr>
+<tr><th id="157">157</th><td>                     + (stats.cssStyleSheets.size - stats.cssStyleSheets.liveSize)</td></tr>
+<tr><th id="158">158</th><td><u>#if ENABLE(XSLT)</u></td></tr>
+<tr><th id="159">159</th><td>                     + (stats.xslStyleSheets.size - stats.xslStyleSheets.liveSize)</td></tr>
+<tr><th id="160">160</th><td><u>#endif</u></td></tr>
+<tr><th id="161">161</th><td>                     + (stats.scripts.size - stats.scripts.liveSize);</td></tr>
+<tr><th id="162">162</th><td>    }</td></tr>
+<tr><th id="163">163</th><td>}</td></tr>
+<tr><th id="164">164</th><td></td></tr>
+<tr><th id="165">165</th><td>+ (CGImageRef)imageForURL:(NSURL *)url</td></tr>
+<tr><th id="166">166</th><td>{</td></tr>
+<tr><th id="167">167</th><td>    <b>if</b> (!url)</td></tr>
+<tr><th id="168">168</th><td>        <b>return</b> <b>nullptr</b>;</td></tr>
+<tr><th id="169">169</th><td>    </td></tr>
+<tr><th id="170">170</th><td>    WebCore::ResourceRequest request(url);</td></tr>
+<tr><th id="171">171</th><td>    WebCore::CachedResource* cachedResource = WebCore::MemoryCache::singleton().resourceForRequest(request, PAL::SessionID::defaultSessionID());</td></tr>
+<tr><th id="172">172</th><td>    <b>if</b> (!is&lt;WebCore::CachedImage&gt;(cachedResource))</td></tr>
+<tr><th id="173">173</th><td>        <b>return</b> <b>nullptr</b>;</td></tr>
+<tr><th id="174">174</th><td></td></tr>
+<tr><th id="175">175</th><td>    <em>auto</em>&amp; cachedImage = downcast&lt;WebCore::CachedImage&gt;(*cachedResource);</td></tr>
+<tr><th id="176">176</th><td>    <b>if</b> (!cachedImage.hasImage())</td></tr>
+<tr><th id="177">177</th><td>        <b>return</b> <b>nullptr</b>;</td></tr>
+<tr><th id="178">178</th><td>    </td></tr>
+<tr><th id="179">179</th><td>    <em>auto</em> nativeImage = cachedImage.image()-&gt;nativeImage();</td></tr>
+<tr><th id="180">180</th><td>    <b>if</b> (!nativeImage)</td></tr>
+<tr><th id="181">181</th><td>        <b>return</b> <b>nullptr</b>;</td></tr>
+<tr><th id="182">182</th><td></td></tr>
+<tr><th id="183">183</th><td>    <b>return</b> nativeImage-&gt;platformImage().get();</td></tr>
+<tr><th id="184">184</th><td>}</td></tr>
+<tr><th id="185">185</th><td></td></tr>
+<tr><th id="186">186</th><td><u>#<span data-ppcond="134">endif</span> // PLATFORM(IOS_FAMILY)</u></td></tr>
+<tr><th id="187">187</th><td></td></tr>
+<tr><th id="188">188</th><td>+ (<em>void</em>)setDisabled:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col1 decl" id="51disabled" title='disabled' data-type='BOOL' data-ref="51disabled" data-ref-filename="51disabled">disabled</dfn></td></tr>
+<tr><th id="189">189</th><td>{</td></tr>
+<tr><th id="190">190</th><td>    <b>if</b> (!<span class='ref fn' title='pthread_main_np' data-ref="pthread_main_np" data-ref-filename="pthread_main_np">pthread_main_np</span>())</td></tr>
+<tr><th id="191">191</th><td>        <b>return</b> [[<span class='local col2 ref' title='self' data-ref="52self" data-ref-filename="52self">self</span> _webkit_invokeOnMainThread] setDisabled:<a class="local col1 ref" href="#51disabled" title='disabled' data-ref="51disabled" data-ref-filename="51disabled">disabled</a>];</td></tr>
+<tr><th id="192">192</th><td></td></tr>
+<tr><th id="193">193</th><td>    <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache" title='WebCore::MemoryCache' data-ref="WebCore::MemoryCache" data-ref-filename="WebCore..MemoryCache">MemoryCache</a>::<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#_ZN7WebCore11MemoryCache9singletonEv" title='WebCore::MemoryCache::singleton' data-ref="_ZN7WebCore11MemoryCache9singletonEv" data-ref-filename="_ZN7WebCore11MemoryCache9singletonEv">singleton</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#_ZN7WebCore11MemoryCache11setDisabledEb" title='WebCore::MemoryCache::setDisabled' data-ref="_ZN7WebCore11MemoryCache11setDisabledEb" data-ref-filename="_ZN7WebCore11MemoryCache11setDisabledEb">setDisabled</a>(<a class="local col1 ref" href="#51disabled" title='disabled' data-ref="51disabled" data-ref-filename="51disabled">disabled</a>);</td></tr>
+<tr><th id="194">194</th><td>}</td></tr>
+<tr><th id="195">195</th><td></td></tr>
+<tr><th id="196">196</th><td>+ (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isDisabled</td></tr>
+<tr><th id="197">197</th><td>{</td></tr>
+<tr><th id="198">198</th><td>    <b>return</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#WebCore::MemoryCache" title='WebCore::MemoryCache' data-ref="WebCore::MemoryCache" data-ref-filename="WebCore..MemoryCache">MemoryCache</a>::<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#_ZN7WebCore11MemoryCache9singletonEv" title='WebCore::MemoryCache::singleton' data-ref="_ZN7WebCore11MemoryCache9singletonEv" data-ref-filename="_ZN7WebCore11MemoryCache9singletonEv">singleton</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/MemoryCache.h.html#_ZNK7WebCore11MemoryCache8disabledEv" title='WebCore::MemoryCache::disabled' data-ref="_ZNK7WebCore11MemoryCache8disabledEv" data-ref-filename="_ZNK7WebCore11MemoryCache8disabledEv">disabled</a>();</td></tr>
+<tr><th id="199">199</th><td>}</td></tr>
+<tr><th id="200">200</th><td></td></tr>
+<tr><th id="201">201</th><td>+ (<em>void</em>)clearCachedCredentials</td></tr>
+<tr><th id="202">202</th><td>{</td></tr>
+<tr><th id="203">203</th><td>    [WebView _makeAllWebViewsPerformSelector:@selector(_clearCredentials)];</td></tr>
+<tr><th id="204">204</th><td>    <a class="type" href="../../WebCoreSupport/NetworkStorageSessionMap.h.html#NetworkStorageSessionMap" title='NetworkStorageSessionMap' data-ref="NetworkStorageSessionMap" data-ref-filename="NetworkStorageSessionMap">NetworkStorageSessionMap</a>::<a class="ref fn" href="../../WebCoreSupport/NetworkStorageSessionMap.h.html#_ZN24NetworkStorageSessionMap21defaultStorageSessionEv" title='NetworkStorageSessionMap::defaultStorageSession' data-ref="_ZN24NetworkStorageSessionMap21defaultStorageSessionEv" data-ref-filename="_ZN24NetworkStorageSessionMap21defaultStorageSessionEv">defaultStorageSession</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/NetworkStorageSession.h.html#_ZN7WebCore21NetworkStorageSession17credentialStorageEv" title='WebCore::NetworkStorageSession::credentialStorage' data-ref="_ZN7WebCore21NetworkStorageSession17credentialStorageEv" data-ref-filename="_ZN7WebCore21NetworkStorageSession17credentialStorageEv">credentialStorage</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CredentialStorage.h.html#_ZN7WebCore17CredentialStorage16clearCredentialsEv" title='WebCore::CredentialStorage::clearCredentials' data-ref="_ZN7WebCore17CredentialStorage16clearCredentialsEv" data-ref-filename="_ZN7WebCore17CredentialStorage16clearCredentialsEv">clearCredentials</a>();</td></tr>
+<tr><th id="205">205</th><td>}</td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td>@end</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

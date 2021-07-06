@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebTextInputWindowController.m source code [webkit/Source/WebKitLegacy/mac/Plugins/Hosted/WebTextInputWindowController.m] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/Plugins/Hosted/WebTextInputWindowController.m'; var root_path = '../../../../../..'; var data_path = '../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../..'>webkit</a>/<a href='../../../..'>Source</a>/<a href='../../..'>WebKitLegacy</a>/<a href='../..'>mac</a>/<a href='..'>Plugins</a>/<a href='./'>Hosted</a>/<a href='WebTextInputWindowController.m.html'>WebTextInputWindowController.m</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2009 Apple Inc. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="26">if</span> <a class="macro" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformUse.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/USE">USE</a>(PLUGIN_HOST_PROCESS)</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#import <a href="WebTextInputWindowController.h.html">"WebTextInputWindowController.h"</a></u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="../../../../../WebKitBuild/Debug/usr/local/include/pal/system/mac/WebPanel.h.html">&lt;pal/system/mac/WebPanel.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td>@interface WebTextInputView : NSTextView {</td></tr>
+<tr><th id="33">33</th><td>}</td></tr>
+<tr><th id="34">34</th><td>@end</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td>@implementation WebTextInputView</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td>- (NSArray *)validAttributesForMarkedText</td></tr>
+<tr><th id="39">39</th><td>{</td></tr>
+<tr><th id="40">40</th><td>    <i>// Let TSM know that a bottom input window would be created for marked text.</i></td></tr>
+<tr><th id="41">41</th><td>    NSArray *<dfn class="local col1 decl" id="1regularAttributes" title='regularAttributes' data-type='NSArray *' data-ref="1regularAttributes" data-ref-filename="1regularAttributes">regularAttributes</dfn> = [super validAttributesForMarkedText];</td></tr>
+<tr><th id="42">42</th><td>    NSMutableArray *<dfn class="local col2 decl" id="2floatingWindowAttributes" title='floatingWindowAttributes' data-type='NSMutableArray *' data-ref="2floatingWindowAttributes" data-ref-filename="2floatingWindowAttributes">floatingWindowAttributes</dfn> = [NSMutableArray arrayWithArray:<a class="local col1 ref" href="#1regularAttributes" title='regularAttributes' data-ref="1regularAttributes" data-ref-filename="1regularAttributes">regularAttributes</a>];</td></tr>
+<tr><th id="43">43</th><td>    [<a class="local col2 ref" href="#2floatingWindowAttributes" title='floatingWindowAttributes' data-ref="2floatingWindowAttributes" data-ref-filename="2floatingWindowAttributes">floatingWindowAttributes</a> addObject:@<q>"__NSUsesFloatingInputWindow"</q>];</td></tr>
+<tr><th id="44">44</th><td>    <b>return</b> <a class="local col2 ref" href="#2floatingWindowAttributes" title='floatingWindowAttributes' data-ref="2floatingWindowAttributes" data-ref-filename="2floatingWindowAttributes">floatingWindowAttributes</a>;</td></tr>
+<tr><th id="45">45</th><td>}</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td>@end</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td>@interface WebTextInputPanel : WebPanel {</td></tr>
+<tr><th id="50">50</th><td>    NSTextView *<dfn class="local col3 decl field" id="3_inputTextView" title='_inputTextView' data-type='NSTextView *' data-ref="3_inputTextView" data-ref-filename="3_inputTextView">_inputTextView</dfn>;</td></tr>
+<tr><th id="51">51</th><td>}</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td>- (NSTextInputContext *)_inputContext;</td></tr>
+<tr><th id="54">54</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)_interpretKeyEvent:(NSEvent *)<dfn class="local col4 decl" id="4event" title='event' data-type='NSEvent *' data-ref="4event" data-ref-filename="4event">event</dfn> string:(NSString **)<dfn class="local col5 decl" id="5string" title='string' data-type='NSString **' data-ref="5string" data-ref-filename="5string">string</dfn>;</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td>@end</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><u>#define <dfn class="macro" id="_M/inputWindowHeight" data-ref="_M/inputWindowHeight">inputWindowHeight</dfn> 20</u></td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td>@implementation WebTextInputPanel</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td>- (<em>void</em>)dealloc</td></tr>
+<tr><th id="63">63</th><td>{</td></tr>
+<tr><th id="64">64</th><td>    [[NSNotificationCenter defaultCenter] removeObserver:<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>];</td></tr>
+<tr><th id="65">65</th><td>    </td></tr>
+<tr><th id="66">66</th><td>    [_inputTextView release];</td></tr>
+<tr><th id="67">67</th><td>    </td></tr>
+<tr><th id="68">68</th><td>    [super dealloc];</td></tr>
+<tr><th id="69">69</th><td>}</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)init</td></tr>
+<tr><th id="72">72</th><td>{</td></tr>
+<tr><th id="73">73</th><td>    <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> = [super init];</td></tr>
+<tr><th id="74">74</th><td>    <b>if</b> (!<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>)</td></tr>
+<tr><th id="75">75</th><td>        <b>return</b> <span class="macro" title="((void *)0)" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="76">76</th><td>    </td></tr>
+<tr><th id="77">77</th><td>    <i>// Set the frame size.</i></td></tr>
+<tr><th id="78">78</th><td>    <span class='typedef' title='NSRect' data-type='CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span> <dfn class="local col7 decl" id="7visibleFrame" title='visibleFrame' data-type='NSRect' data-ref="7visibleFrame" data-ref-filename="7visibleFrame">visibleFrame</dfn> = [[NSScreen mainScreen] visibleFrame];</td></tr>
+<tr><th id="79">79</th><td>    <span class='typedef' title='NSRect' data-type='CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span> <dfn class="local col8 decl" id="8frame" title='frame' data-type='NSRect' data-ref="8frame" data-ref-filename="8frame">frame</dfn> = <span class='ref fn' title='NSMakeRect' data-ref="NSMakeRect" data-ref-filename="NSMakeRect">NSMakeRect</span>(<a class="local col7 ref" href="#7visibleFrame" title='visibleFrame' data-ref="7visibleFrame" data-ref-filename="7visibleFrame">visibleFrame</a>.<span class='ref field' title='CGRect::origin' data-ref="CGRect::origin" data-ref-filename="CGRect..origin">origin</span>.<span class='ref field' title='CGPoint::x' data-ref="CGPoint::x" data-ref-filename="CGPoint..x">x</span>, <a class="local col7 ref" href="#7visibleFrame" title='visibleFrame' data-ref="7visibleFrame" data-ref-filename="7visibleFrame">visibleFrame</a>.<span class='ref field' title='CGRect::origin' data-ref="CGRect::origin" data-ref-filename="CGRect..origin">origin</span>.<span class='ref field' title='CGPoint::y' data-ref="CGPoint::y" data-ref-filename="CGPoint..y">y</span>, <a class="local col7 ref" href="#7visibleFrame" title='visibleFrame' data-ref="7visibleFrame" data-ref-filename="7visibleFrame">visibleFrame</a>.<span class='ref field' title='CGRect::size' data-ref="CGRect::size" data-ref-filename="CGRect..size">size</span>.<span class='ref field' title='CGSize::width' data-ref="CGSize::width" data-ref-filename="CGSize..width">width</span>, <a class="macro" href="#58" title="20" data-ref="_M/inputWindowHeight">inputWindowHeight</a>);</td></tr>
+<tr><th id="80">80</th><td>     </td></tr>
+<tr><th id="81">81</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> setFrame:<a class="local col8 ref" href="#8frame" title='frame' data-ref="8frame" data-ref-filename="8frame">frame</a> display:<span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>];</td></tr>
+<tr><th id="82">82</th><td>        </td></tr>
+<tr><th id="83">83</th><td>    _inputTextView = [[WebTextInputView alloc] initWithFrame:[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.contentView frame]];</td></tr>
+<tr><th id="84">84</th><td>    _inputTextView.autoresizingMask = <span class='enum' title='NSViewWidthSizable' data-ref="NSViewWidthSizable" data-ref-filename="NSViewWidthSizable">NSViewWidthSizable</span> | <span class='enum' title='NSViewHeightSizable' data-ref="NSViewHeightSizable" data-ref-filename="NSViewHeightSizable">NSViewHeightSizable</span> | <span class='enum' title='NSViewMaxXMargin' data-ref="NSViewMaxXMargin" data-ref-filename="NSViewMaxXMargin">NSViewMaxXMargin</span> | <span class='enum' title='NSViewMinXMargin' data-ref="NSViewMinXMargin" data-ref-filename="NSViewMinXMargin">NSViewMinXMargin</span> | <span class='enum' title='NSViewMaxYMargin' data-ref="NSViewMaxYMargin" data-ref-filename="NSViewMaxYMargin">NSViewMaxYMargin</span> | <span class='enum' title='NSViewMinYMargin' data-ref="NSViewMinYMargin" data-ref-filename="NSViewMinYMargin">NSViewMinYMargin</span>;</td></tr>
+<tr><th id="85">85</th><td>        </td></tr>
+<tr><th id="86">86</th><td>    NSScrollView* <dfn class="local col9 decl" id="9scrollView" title='scrollView' data-type='NSScrollView *' data-ref="9scrollView" data-ref-filename="9scrollView">scrollView</dfn> = [[NSScrollView alloc] initWithFrame:[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.contentView frame]];</td></tr>
+<tr><th id="87">87</th><td>    <a class="local col9 ref" href="#9scrollView" title='scrollView' data-ref="9scrollView" data-ref-filename="9scrollView">scrollView</a>.documentView = _inputTextView;</td></tr>
+<tr><th id="88">88</th><td>    <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.contentView = <a class="local col9 ref" href="#9scrollView" title='scrollView' data-ref="9scrollView" data-ref-filename="9scrollView">scrollView</a>;</td></tr>
+<tr><th id="89">89</th><td>    [<a class="local col9 ref" href="#9scrollView" title='scrollView' data-ref="9scrollView" data-ref-filename="9scrollView">scrollView</a> release];</td></tr>
+<tr><th id="90">90</th><td>        </td></tr>
+<tr><th id="91">91</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> setFloatingPanel:<span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>];</td></tr>
+<tr><th id="92">92</th><td>    </td></tr>
+<tr><th id="93">93</th><td>    [[NSNotificationCenter defaultCenter] addObserver:<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span></td></tr>
+<tr><th id="94">94</th><td>                                             selector:@selector(_keyboardInputSourceChanged:)</td></tr>
+<tr><th id="95">95</th><td>                                                 name:<span class='ref' title='NSTextInputContextKeyboardSelectionDidChangeNotification' data-ref="NSTextInputContextKeyboardSelectionDidChangeNotification" data-ref-filename="NSTextInputContextKeyboardSelectionDidChangeNotification">NSTextInputContextKeyboardSelectionDidChangeNotification</span></td></tr>
+<tr><th id="96">96</th><td>                                               object:<span class="macro" title="((void *)0)" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="97">97</th><td></td></tr>
+<tr><th id="98">98</th><td>    <b>return</b> <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>;</td></tr>
+<tr><th id="99">99</th><td>}</td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td>- (<em>void</em>)_keyboardInputSourceChanged:(NSNotification *)<dfn class="local col0 decl" id="10notification" title='notification' data-type='NSNotification *' data-ref="10notification" data-ref-filename="10notification">notification</dfn></td></tr>
+<tr><th id="102">102</th><td>{</td></tr>
+<tr><th id="103">103</th><td>    [_inputTextView setString:@<q>""</q>];</td></tr>
+<tr><th id="104">104</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> orderOut:<span class="macro" title="((void *)0)" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="105">105</th><td>}</td></tr>
+<tr><th id="106">106</th><td></td></tr>
+<tr><th id="107">107</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)_interpretKeyEvent:(NSEvent *)<dfn class="local col1 decl" id="11event" title='event' data-type='NSEvent *' data-ref="11event" data-ref-filename="11event">event</dfn> string:(NSString **)<dfn class="local col2 decl" id="12string" title='string' data-type='NSString **' data-ref="12string" data-ref-filename="12string">string</dfn></td></tr>
+<tr><th id="108">108</th><td>{</td></tr>
+<tr><th id="109">109</th><td>    <a class="macro" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#495" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_BEGIN">ALLOW_DEPRECATED_DECLARATIONS_BEGIN</a></td></tr>
+<tr><th id="110">110</th><td>    <span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col3 decl" id="13hadMarkedText" title='hadMarkedText' data-type='BOOL' data-ref="13hadMarkedText" data-ref-filename="13hadMarkedText">hadMarkedText</dfn> = [_inputTextView hasMarkedText];</td></tr>
+<tr><th id="111">111</th><td>    <a class="macro" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#496" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_END">ALLOW_DEPRECATED_DECLARATIONS_END</a></td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td>    *<a class="local col2 ref" href="#12string" title='string' data-ref="12string" data-ref-filename="12string">string</a> = <span class="macro" title="((void *)0)" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td>    <i>// Let TSM know that a bottom input window would be created for marked text.</i></td></tr>
+<tr><th id="116">116</th><td><i>    // FIXME: Can be removed once we can rely on __NSUsesFloatingInputWindow (or a better API) being available everywhere.</i></td></tr>
+<tr><th id="117">117</th><td>    <a class="macro" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#488" title="" data-ref="_M/IGNORE_WARNINGS_BEGIN">IGNORE_WARNINGS_BEGIN</a>(<q>"cast-qual"</q>)</td></tr>
+<tr><th id="118">118</th><td>    <span class='typedef' title='EventRef' data-type='struct OpaqueEventRef *' data-ref="EventRef" data-ref-filename="EventRef">EventRef</span> <dfn class="local col4 decl" id="14carbonEvent" title='carbonEvent' data-type='EventRef' data-ref="14carbonEvent" data-ref-filename="14carbonEvent">carbonEvent</dfn> = (<span class='typedef' title='EventRef' data-type='struct OpaqueEventRef *' data-ref="EventRef" data-ref-filename="EventRef">EventRef</span>)[<a class="local col1 ref" href="#11event" title='event' data-ref="11event" data-ref-filename="11event">event</a> eventRef];</td></tr>
+<tr><th id="119">119</th><td>    <a class="macro" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#489" title="" data-ref="_M/IGNORE_WARNINGS_END">IGNORE_WARNINGS_END</a></td></tr>
+<tr><th id="120">120</th><td>    <b>if</b> (<a class="local col4 ref" href="#14carbonEvent" title='carbonEvent' data-ref="14carbonEvent" data-ref-filename="14carbonEvent">carbonEvent</a>) {</td></tr>
+<tr><th id="121">121</th><td>        <span class='typedef' title='Boolean' data-type='unsigned char' data-ref="Boolean" data-ref-filename="Boolean">Boolean</span> <dfn class="local col5 decl" id="15ignorePAH" title='ignorePAH' data-type='Boolean' data-ref="15ignorePAH" data-ref-filename="15ignorePAH">ignorePAH</dfn> = <span class="macro" title="1" data-ref="_M/true">true</span>;</td></tr>
+<tr><th id="122">122</th><td>        <span class='ref fn' title='SetEventParameter' data-ref="SetEventParameter" data-ref-filename="SetEventParameter">SetEventParameter</span>(<a class="local col4 ref" href="#14carbonEvent" title='carbonEvent' data-ref="14carbonEvent" data-ref-filename="14carbonEvent">carbonEvent</a>, <kbd>'iPAH'</kbd>, <span class='enum' title='typeBoolean' data-ref="typeBoolean" data-ref-filename="typeBoolean">typeBoolean</span>, <b>sizeof</b>(<a class="local col5 ref" href="#15ignorePAH" title='ignorePAH' data-ref="15ignorePAH" data-ref-filename="15ignorePAH">ignorePAH</a>), &amp;<a class="local col5 ref" href="#15ignorePAH" title='ignorePAH' data-ref="15ignorePAH" data-ref-filename="15ignorePAH">ignorePAH</a>);</td></tr>
+<tr><th id="123">123</th><td>    }</td></tr>
+<tr><th id="124">124</th><td></td></tr>
+<tr><th id="125">125</th><td>    <b>if</b> (![[_inputTextView inputContext] handleEvent:<a class="local col1 ref" href="#11event" title='event' data-ref="11event" data-ref-filename="11event">event</a>])</td></tr>
+<tr><th id="126">126</th><td>        <b>return</b> <span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>;</td></tr>
+<tr><th id="127">127</th><td>    </td></tr>
+<tr><th id="128">128</th><td>    <a class="macro" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#495" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_BEGIN">ALLOW_DEPRECATED_DECLARATIONS_BEGIN</a></td></tr>
+<tr><th id="129">129</th><td>    <b>if</b> ([_inputTextView hasMarkedText]) {</td></tr>
+<tr><th id="130">130</th><td>        <a class="macro" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#496" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_END">ALLOW_DEPRECATED_DECLARATIONS_END</a></td></tr>
+<tr><th id="131">131</th><td>        <i>// Don't show the input method window for dead keys</i></td></tr>
+<tr><th id="132">132</th><td>        <b>if</b> ([[<a class="local col1 ref" href="#11event" title='event' data-ref="11event" data-ref-filename="11event">event</a> characters] length] &gt; <var>0</var>)</td></tr>
+<tr><th id="133">133</th><td>            [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> orderFront:<span class="macro" title="((void *)0)" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="134">134</th><td></td></tr>
+<tr><th id="135">135</th><td>        <b>return</b> <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="136">136</th><td>    }</td></tr>
+<tr><th id="137">137</th><td>    </td></tr>
+<tr><th id="138">138</th><td>    <b>if</b> (<a class="local col3 ref" href="#13hadMarkedText" title='hadMarkedText' data-ref="13hadMarkedText" data-ref-filename="13hadMarkedText">hadMarkedText</a>) {</td></tr>
+<tr><th id="139">139</th><td>        [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> orderOut:<span class="macro" title="((void *)0)" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="140">140</th><td></td></tr>
+<tr><th id="141">141</th><td>        NSString *<dfn class="local col6 decl" id="16text" title='text' data-type='NSString *' data-ref="16text" data-ref-filename="16text">text</dfn> = [[_inputTextView textStorage] string];</td></tr>
+<tr><th id="142">142</th><td>        <b>if</b> ([<a class="local col6 ref" href="#16text" title='text' data-ref="16text" data-ref-filename="16text">text</a> length] &gt; <var>0</var>)</td></tr>
+<tr><th id="143">143</th><td>            *<a class="local col2 ref" href="#12string" title='string' data-ref="12string" data-ref-filename="12string">string</a> = [[<a class="local col6 ref" href="#16text" title='text' data-ref="16text" data-ref-filename="16text">text</a> copy] autorelease];</td></tr>
+<tr><th id="144">144</th><td>    }</td></tr>
+<tr><th id="145">145</th><td>            </td></tr>
+<tr><th id="146">146</th><td>    [_inputTextView setString:@<q>""</q>];</td></tr>
+<tr><th id="147">147</th><td>    <b>return</b> <a class="local col3 ref" href="#13hadMarkedText" title='hadMarkedText' data-ref="13hadMarkedText" data-ref-filename="13hadMarkedText">hadMarkedText</a>;</td></tr>
+<tr><th id="148">148</th><td>}</td></tr>
+<tr><th id="149">149</th><td></td></tr>
+<tr><th id="150">150</th><td>- (NSTextInputContext *)_inputContext</td></tr>
+<tr><th id="151">151</th><td>{</td></tr>
+<tr><th id="152">152</th><td>    <b>return</b> [_inputTextView inputContext];</td></tr>
+<tr><th id="153">153</th><td>}</td></tr>
+<tr><th id="154">154</th><td></td></tr>
+<tr><th id="155">155</th><td>@end</td></tr>
+<tr><th id="156">156</th><td></td></tr>
+<tr><th id="157">157</th><td>@implementation WebTextInputWindowController</td></tr>
+<tr><th id="158">158</th><td></td></tr>
+<tr><th id="159">159</th><td>+ (WebTextInputWindowController *)sharedTextInputWindowController</td></tr>
+<tr><th id="160">160</th><td>{</td></tr>
+<tr><th id="161">161</th><td>    <em>static</em> WebTextInputWindowController *<dfn class="local col7 decl" id="17textInputWindowController" title='textInputWindowController' data-type='WebTextInputWindowController *' data-ref="17textInputWindowController" data-ref-filename="17textInputWindowController">textInputWindowController</dfn>;</td></tr>
+<tr><th id="162">162</th><td>    <b>if</b> (!<a class="local col7 ref" href="#17textInputWindowController" title='textInputWindowController' data-ref="17textInputWindowController" data-ref-filename="17textInputWindowController">textInputWindowController</a>)</td></tr>
+<tr><th id="163">163</th><td>        <a class="local col7 ref" href="#17textInputWindowController" title='textInputWindowController' data-ref="17textInputWindowController" data-ref-filename="17textInputWindowController">textInputWindowController</a> = [[WebTextInputWindowController alloc] init];</td></tr>
+<tr><th id="164">164</th><td>    </td></tr>
+<tr><th id="165">165</th><td>    <b>return</b> <a class="local col7 ref" href="#17textInputWindowController" title='textInputWindowController' data-ref="17textInputWindowController" data-ref-filename="17textInputWindowController">textInputWindowController</a>;</td></tr>
+<tr><th id="166">166</th><td>}</td></tr>
+<tr><th id="167">167</th><td></td></tr>
+<tr><th id="168">168</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)init</td></tr>
+<tr><th id="169">169</th><td>{</td></tr>
+<tr><th id="170">170</th><td>    <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> = [super init];</td></tr>
+<tr><th id="171">171</th><td>    <b>if</b> (!<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>)</td></tr>
+<tr><th id="172">172</th><td>        <b>return</b> <span class="macro" title="((void *)0)" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="173">173</th><td>    </td></tr>
+<tr><th id="174">174</th><td>    _panel = [[WebTextInputPanel alloc] init];</td></tr>
+<tr><th id="175">175</th><td>    </td></tr>
+<tr><th id="176">176</th><td>    <b>return</b> <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>;</td></tr>
+<tr><th id="177">177</th><td>}</td></tr>
+<tr><th id="178">178</th><td>        </td></tr>
+<tr><th id="179">179</th><td>- (NSTextInputContext *)inputContext</td></tr>
+<tr><th id="180">180</th><td>{</td></tr>
+<tr><th id="181">181</th><td>    <b>return</b> [_panel _inputContext];</td></tr>
+<tr><th id="182">182</th><td>}</td></tr>
+<tr><th id="183">183</th><td></td></tr>
+<tr><th id="184">184</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)interpretKeyEvent:(NSEvent *)<dfn class="local col8 decl" id="18event" title='event' data-type='NSEvent *' data-ref="18event" data-ref-filename="18event">event</dfn> string:(NSString **)<dfn class="local col9 decl" id="19string" title='string' data-type='NSString **' data-ref="19string" data-ref-filename="19string">string</dfn></td></tr>
+<tr><th id="185">185</th><td>{</td></tr>
+<tr><th id="186">186</th><td>    <b>return</b> [_panel _interpretKeyEvent:<a class="local col8 ref" href="#18event" title='event' data-ref="18event" data-ref-filename="18event">event</a> string:<a class="local col9 ref" href="#19string" title='string' data-ref="19string" data-ref-filename="19string">string</a>];</td></tr>
+<tr><th id="187">187</th><td>}</td></tr>
+<tr><th id="188">188</th><td></td></tr>
+<tr><th id="189">189</th><td>@end</td></tr>
+<tr><th id="190">190</th><td></td></tr>
+<tr><th id="191">191</th><td><u>#<span data-ppcond="26">endif</span> // USE(PLUGIN_HOST_PROCESS)</u></td></tr>
+<tr><th id="192">192</th><td></td></tr>
+<tr><th id="193">193</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

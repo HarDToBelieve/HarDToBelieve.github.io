@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>push_resampler.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/resampler/include/push_resampler.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::PushResampler "/>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/resampler/include/push_resampler.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>common_audio</a>/<a href='..'>resampler</a>/<a href='./'>include</a>/<a href='push_resampler.h.html'>push_resampler.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2013 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/COMMON_AUDIO_RESAMPLER_INCLUDE_PUSH_RESAMPLER_H_">COMMON_AUDIO_RESAMPLER_INCLUDE_PUSH_RESAMPLER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/COMMON_AUDIO_RESAMPLER_INCLUDE_PUSH_RESAMPLER_H_" data-ref="_M/COMMON_AUDIO_RESAMPLER_INCLUDE_PUSH_RESAMPLER_H_">COMMON_AUDIO_RESAMPLER_INCLUDE_PUSH_RESAMPLER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;vector&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><b>class</b> <dfn class="type" id="webrtc::PushSincResampler" title='webrtc::PushSincResampler' data-ref="webrtc::PushSincResampler" data-ref-filename="webrtc..PushSincResampler">PushSincResampler</dfn>;</td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><i>// Wraps PushSincResampler to provide stereo support.</i></td></tr>
+<tr><th id="22">22</th><td><i>// TODO(ajm): add support for an arbitrary number of channels.</i></td></tr>
+<tr><th id="23">23</th><td><b>template</b> &lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="24">24</th><td><b>class</b> <dfn class="type def" id="webrtc::PushResampler" title='webrtc::PushResampler' data-ref="webrtc::PushResampler" data-ref-filename="webrtc..PushResampler">PushResampler</dfn> {</td></tr>
+<tr><th id="25">25</th><td> <b>public</b>:</td></tr>
+<tr><th id="26">26</th><td>  <dfn class="decl fn" id="_ZN6webrtc13PushResamplerC1Ev" title='webrtc::PushResampler::PushResampler&lt;T&gt;' data-ref="_ZN6webrtc13PushResamplerC1Ev" data-ref-filename="_ZN6webrtc13PushResamplerC1Ev">PushResampler</dfn>();</td></tr>
+<tr><th id="27">27</th><td>  <b>virtual</b> <dfn class="virtual decl fn" id="_ZN6webrtc13PushResamplerD1Ev" title='webrtc::PushResampler::~PushResampler&lt;T&gt;' data-ref="_ZN6webrtc13PushResamplerD1Ev" data-ref-filename="_ZN6webrtc13PushResamplerD1Ev">~PushResampler</dfn>();</td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td>  <i>// Must be called whenever the parameters change. Free to be called at any</i></td></tr>
+<tr><th id="30">30</th><td><i>  // time as it is a no-op if parameters have not changed since the last call.</i></td></tr>
+<tr><th id="31">31</th><td>  <em>int</em> <dfn class="decl fn" id="_ZN6webrtc13PushResampler18InitializeIfNeededEiim" title='webrtc::PushResampler::InitializeIfNeeded' data-ref="_ZN6webrtc13PushResampler18InitializeIfNeededEiim" data-ref-filename="_ZN6webrtc13PushResampler18InitializeIfNeededEiim">InitializeIfNeeded</dfn>(<em>int</em> <dfn class="local col1 decl" id="1src_sample_rate_hz" title='src_sample_rate_hz' data-type='int' data-ref="1src_sample_rate_hz" data-ref-filename="1src_sample_rate_hz">src_sample_rate_hz</dfn>,</td></tr>
+<tr><th id="32">32</th><td>                         <em>int</em> <dfn class="local col2 decl" id="2dst_sample_rate_hz" title='dst_sample_rate_hz' data-type='int' data-ref="2dst_sample_rate_hz" data-ref-filename="2dst_sample_rate_hz">dst_sample_rate_hz</dfn>,</td></tr>
+<tr><th id="33">33</th><td>                         <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="3num_channels" title='num_channels' data-type='size_t' data-ref="3num_channels" data-ref-filename="3num_channels">num_channels</dfn>);</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td>  <i>// Returns the total number of samples provided in destination (e.g. 32 kHz,</i></td></tr>
+<tr><th id="36">36</th><td><i>  // 2 channel audio gives 640 samples).</i></td></tr>
+<tr><th id="37">37</th><td>  <em>int</em> <dfn class="decl fn" id="_ZN6webrtc13PushResampler8ResampleEPKT_mPS1_m" title='webrtc::PushResampler::Resample' data-ref="_ZN6webrtc13PushResampler8ResampleEPKT_mPS1_m" data-ref-filename="_ZN6webrtc13PushResampler8ResampleEPKT_mPS1_m">Resample</dfn>(<em>const</em> T* <dfn class="local col4 decl" id="4src" title='src' data-type='const T *' data-ref="4src" data-ref-filename="4src">src</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="5src_length" title='src_length' data-type='size_t' data-ref="5src_length" data-ref-filename="5src_length">src_length</dfn>, T* <dfn class="local col6 decl" id="6dst" title='dst' data-type='T *' data-ref="6dst" data-ref-filename="6dst">dst</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="7dst_capacity" title='dst_capacity' data-type='size_t' data-ref="7dst_capacity" data-ref-filename="7dst_capacity">dst_capacity</dfn>);</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td> <b>private</b>:</td></tr>
+<tr><th id="40">40</th><td>  <em>int</em> <dfn class="decl field" id="webrtc::PushResampler::src_sample_rate_hz_" title='webrtc::PushResampler::src_sample_rate_hz_' data-ref="webrtc::PushResampler::src_sample_rate_hz_" data-ref-filename="webrtc..PushResampler..src_sample_rate_hz_">src_sample_rate_hz_</dfn>;</td></tr>
+<tr><th id="41">41</th><td>  <em>int</em> <dfn class="decl field" id="webrtc::PushResampler::dst_sample_rate_hz_" title='webrtc::PushResampler::dst_sample_rate_hz_' data-ref="webrtc::PushResampler::dst_sample_rate_hz_" data-ref-filename="webrtc..PushResampler..dst_sample_rate_hz_">dst_sample_rate_hz_</dfn>;</td></tr>
+<tr><th id="42">42</th><td>  <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="webrtc::PushResampler::num_channels_" title='webrtc::PushResampler::num_channels_' data-ref="webrtc::PushResampler::num_channels_" data-ref-filename="webrtc..PushResampler..num_channels_">num_channels_</dfn>;</td></tr>
+<tr><th id="43">43</th><td>  <i>// Vector that is needed to provide the proper inputs and outputs to the</i></td></tr>
+<tr><th id="44">44</th><td><i>  // interleave/de-interleave methods used in Resample. This needs to be</i></td></tr>
+<tr><th id="45">45</th><td><i>  // heap-allocated on the state to support an arbitrary number of channels</i></td></tr>
+<tr><th id="46">46</th><td><i>  // without doing run-time heap-allocations in the Resample method.</i></td></tr>
+<tr><th id="47">47</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;T*&gt; <dfn class="decl field" id="webrtc::PushResampler::channel_data_array_" title='webrtc::PushResampler::channel_data_array_' data-ref="webrtc::PushResampler::channel_data_array_" data-ref-filename="webrtc..PushResampler..channel_data_array_">channel_data_array_</dfn>;</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td>  <b>struct</b> <dfn class="type def" id="webrtc::PushResampler::ChannelResampler" title='webrtc::PushResampler::ChannelResampler' data-ref="webrtc::PushResampler::ChannelResampler" data-ref-filename="webrtc..PushResampler..ChannelResampler">ChannelResampler</dfn> {</td></tr>
+<tr><th id="50">50</th><td>    <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="#webrtc::PushSincResampler" title='webrtc::PushSincResampler' data-ref="webrtc::PushSincResampler" data-ref-filename="webrtc..PushSincResampler">PushSincResampler</a>&gt; <dfn class="decl field" id="webrtc::PushResampler::ChannelResampler::resampler" title='webrtc::PushResampler::ChannelResampler::resampler' data-ref="webrtc::PushResampler::ChannelResampler::resampler" data-ref-filename="webrtc..PushResampler..ChannelResampler..resampler">resampler</dfn>;</td></tr>
+<tr><th id="51">51</th><td>    <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;T&gt; <dfn class="decl field" id="webrtc::PushResampler::ChannelResampler::source" title='webrtc::PushResampler::ChannelResampler::source' data-ref="webrtc::PushResampler::ChannelResampler::source" data-ref-filename="webrtc..PushResampler..ChannelResampler..source">source</dfn>;</td></tr>
+<tr><th id="52">52</th><td>    <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;T&gt; <dfn class="decl field" id="webrtc::PushResampler::ChannelResampler::destination" title='webrtc::PushResampler::ChannelResampler::destination' data-ref="webrtc::PushResampler::ChannelResampler::destination" data-ref-filename="webrtc..PushResampler..ChannelResampler..destination">destination</dfn>;</td></tr>
+<tr><th id="53">53</th><td>  };</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<a class="type" href="#webrtc::PushResampler::ChannelResampler" title='webrtc::PushResampler::ChannelResampler' data-ref="webrtc::PushResampler::ChannelResampler" data-ref-filename="webrtc..PushResampler..ChannelResampler">ChannelResampler</a>&gt; <dfn class="decl field" id="webrtc::PushResampler::channel_resamplers_" title='webrtc::PushResampler::channel_resamplers_' data-ref="webrtc::PushResampler::channel_resamplers_" data-ref-filename="webrtc..PushResampler..channel_resamplers_">channel_resamplers_</dfn>;</td></tr>
+<tr><th id="56">56</th><td>};</td></tr>
+<tr><th id="57">57</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><u>#<span data-ppcond="11">endif</span>  // COMMON_AUDIO_RESAMPLER_INCLUDE_PUSH_RESAMPLER_H_</u></td></tr>
+<tr><th id="60">60</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../audio/audio_receive_stream.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_receive_stream.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

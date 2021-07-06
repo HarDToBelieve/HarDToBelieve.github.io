@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WKRemoteObject.mm source code [webkit/Source/WebKit/Shared/API/Cocoa/WKRemoteObject.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKit/Shared/API/Cocoa/WKRemoteObject.mm'; var root_path = '../../../../../..'; var data_path = '../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../..'>webkit</a>/<a href='../../../..'>Source</a>/<a href='../../..'>WebKit</a>/<a href='../..'>Shared</a>/<a href='..'>API</a>/<a href='./'>Cocoa</a>/<a href='WKRemoteObject.mm.html'>WKRemoteObject.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2013 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import <a href="../../../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#import <a href="WKRemoteObject.h.html">"WKRemoteObject.h"</a></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="_WKRemoteObjectInterface.h.html">"_WKRemoteObjectInterface.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="_WKRemoteObjectRegistryInternal.h.html">"_WKRemoteObjectRegistryInternal.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#import &lt;objc/runtime.h&gt;</u></td></tr>
+<tr><th id="32">32</th><td><u>#import <a href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html">&lt;wtf/RetainPtr.h&gt;</a></u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td>@implementation WKRemoteObject {</td></tr>
+<tr><th id="35">35</th><td>    <a class="type" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RetainPtr" title='WTF::RetainPtr' data-ref="WTF::RetainPtr" data-ref-filename="WTF..RetainPtr">RetainPtr</a>&lt;_WKRemoteObjectRegistry&gt; <dfn class="local col5 decl field" id="85_objectRegistry" title='_objectRegistry' data-type='RetainPtr&lt;_WKRemoteObjectRegistry&gt;' data-ref="85_objectRegistry" data-ref-filename="85_objectRegistry">_objectRegistry</dfn>;</td></tr>
+<tr><th id="36">36</th><td>    <a class="type" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RetainPtr" title='WTF::RetainPtr' data-ref="WTF::RetainPtr" data-ref-filename="WTF..RetainPtr">RetainPtr</a>&lt;_WKRemoteObjectInterface&gt; <dfn class="local col6 decl field" id="86_interface" title='_interface' data-type='RetainPtr&lt;_WKRemoteObjectInterface&gt;' data-ref="86_interface" data-ref-filename="86_interface">_interface</dfn>;</td></tr>
+<tr><th id="37">37</th><td>}</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td>- (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)_initWithObjectRegistry:(_WKRemoteObjectRegistry *)<dfn class="local col7 decl" id="87objectRegistry" title='objectRegistry' data-type='_WKRemoteObjectRegistry *' data-ref="87objectRegistry" data-ref-filename="87objectRegistry">objectRegistry</dfn> interface:(_WKRemoteObjectInterface *)<dfn class="local col8 decl" id="88interface" title='interface' data-type='_WKRemoteObjectInterface *' data-ref="88interface" data-ref-filename="88interface">interface</dfn></td></tr>
+<tr><th id="40">40</th><td>{</td></tr>
+<tr><th id="41">41</th><td>    <b>if</b> (!(<span class='local col0 ref' title='self' data-ref="60self" data-ref-filename="60self">self</span> = [super init]))</td></tr>
+<tr><th id="42">42</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td>    _objectRegistry <a class="ref fn" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF9RetainPtraSEPNSt3__114remove_pointerIT_E4typeE" title='WTF::RetainPtr::operator=' data-ref="_ZN3WTF9RetainPtraSEPNSt3__114remove_pointerIT_E4typeE" data-ref-filename="_ZN3WTF9RetainPtraSEPNSt3__114remove_pointerIT_E4typeE">=</a> <a class="local col7 ref" href="#87objectRegistry" title='objectRegistry' data-ref="87objectRegistry" data-ref-filename="87objectRegistry">objectRegistry</a>;</td></tr>
+<tr><th id="45">45</th><td>    _interface <a class="ref fn" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF9RetainPtraSEPNSt3__114remove_pointerIT_E4typeE" title='WTF::RetainPtr::operator=' data-ref="_ZN3WTF9RetainPtraSEPNSt3__114remove_pointerIT_E4typeE" data-ref-filename="_ZN3WTF9RetainPtraSEPNSt3__114remove_pointerIT_E4typeE">=</a> <a class="local col8 ref" href="#88interface" title='interface' data-ref="88interface" data-ref-filename="88interface">interface</a>;</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td>    <b>return</b> <span class='local col0 ref' title='self' data-ref="60self" data-ref-filename="60self">self</span>;</td></tr>
+<tr><th id="48">48</th><td>}</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)conformsToProtocol:(Protocol *)<dfn class="local col9 decl" id="89protocol" title='protocol' data-type='Protocol *' data-ref="89protocol" data-ref-filename="89protocol">protocol</dfn></td></tr>
+<tr><th id="51">51</th><td>{</td></tr>
+<tr><th id="52">52</th><td>    <b>return</b> [super conformsToProtocol:<a class="local col9 ref" href="#89protocol" title='protocol' data-ref="89protocol" data-ref-filename="89protocol">protocol</a>] || <span class='ref fn' title='protocol_conformsToProtocol' data-ref="protocol_conformsToProtocol" data-ref-filename="protocol_conformsToProtocol">protocol_conformsToProtocol</span>([<a class="ref fn fake" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv" title='WTF::RetainPtr::operator typename remove_pointer&lt;type-parameter-0-0&gt;::type *' data-ref="_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv" data-ref-filename="_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv"></a>_interface protocol], <a class="local col9 ref" href="#89protocol" title='protocol' data-ref="89protocol" data-ref-filename="89protocol">protocol</a>);</td></tr>
+<tr><th id="53">53</th><td>}</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><em>static</em> <em>const</em> <em>char</em>* <dfn class="decl def fn" id="_ZL37methodArgumentTypeEncodingForSelectorP8ProtocolP13objc_selector" title='methodArgumentTypeEncodingForSelector' data-ref="_ZL37methodArgumentTypeEncodingForSelectorP8ProtocolP13objc_selector" data-ref-filename="_ZL37methodArgumentTypeEncodingForSelectorP8ProtocolP13objc_selector">methodArgumentTypeEncodingForSelector</dfn>(Protocol *<dfn class="local col4 decl" id="94protocol" title='protocol' data-type='Protocol *' data-ref="94protocol" data-ref-filename="94protocol">protocol</dfn>, <span class='typedef' title='SEL' data-type='SEL *' data-ref="SEL" data-ref-filename="SEL">SEL</span> <dfn class="local col5 decl" id="95selector" title='selector' data-type='SEL' data-ref="95selector" data-ref-filename="95selector">selector</dfn>)</td></tr>
+<tr><th id="56">56</th><td>{</td></tr>
+<tr><th id="57">57</th><td>    <i>// First look at required methods.</i></td></tr>
+<tr><th id="58">58</th><td>    <b>struct</b> <span class='type' title='objc_method_description' data-ref="objc_method_description" data-ref-filename="objc_method_description">objc_method_description</span> <dfn class="local col6 decl" id="96method" title='method' data-type='struct objc_method_description' data-ref="96method" data-ref-filename="96method">method</dfn> = <span class='ref fn' title='protocol_getMethodDescription' data-ref="protocol_getMethodDescription" data-ref-filename="protocol_getMethodDescription">protocol_getMethodDescription</span>(<a class="local col4 ref" href="#94protocol" title='protocol' data-ref="94protocol" data-ref-filename="94protocol">protocol</a>, <a class="local col5 ref" href="#95selector" title='selector' data-ref="95selector" data-ref-filename="95selector">selector</a>, <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>, <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>);</td></tr>
+<tr><th id="59">59</th><td>    <b>if</b> (<a class="local col6 ref" href="#96method" title='method' data-ref="96method" data-ref-filename="96method">method</a>.<span class='ref field' title='objc_method_description::name' data-ref="objc_method_description::name" data-ref-filename="objc_method_description..name">name</span>)</td></tr>
+<tr><th id="60">60</th><td>        <b>return</b> <a class="local col6 ref" href="#96method" title='method' data-ref="96method" data-ref-filename="96method">method</a>.<span class='ref field' title='objc_method_description::types' data-ref="objc_method_description::types" data-ref-filename="objc_method_description..types">types</span>;</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td>    <i>// Then look at optional methods.</i></td></tr>
+<tr><th id="63">63</th><td>    <a class="local col6 ref" href="#96method" title='method' data-ref="96method" data-ref-filename="96method">method</a> <span class='ref fn' title='objc_method_description::operator=' data-ref="_ZN23objc_method_descriptionaSEOS_" data-ref-filename="_ZN23objc_method_descriptionaSEOS_">=</span> <span class='ref fn' title='protocol_getMethodDescription' data-ref="protocol_getMethodDescription" data-ref-filename="protocol_getMethodDescription">protocol_getMethodDescription</span>(<a class="local col4 ref" href="#94protocol" title='protocol' data-ref="94protocol" data-ref-filename="94protocol">protocol</a>, <a class="local col5 ref" href="#95selector" title='selector' data-ref="95selector" data-ref-filename="95selector">selector</a>, <span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>, <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>);</td></tr>
+<tr><th id="64">64</th><td>    <b>if</b> (<a class="local col6 ref" href="#96method" title='method' data-ref="96method" data-ref-filename="96method">method</a>.<span class='ref field' title='objc_method_description::name' data-ref="objc_method_description::name" data-ref-filename="objc_method_description..name">name</span>)</td></tr>
+<tr><th id="65">65</th><td>        <b>return</b> <a class="local col6 ref" href="#96method" title='method' data-ref="96method" data-ref-filename="96method">method</a>.<span class='ref field' title='objc_method_description::types' data-ref="objc_method_description::types" data-ref-filename="objc_method_description..types">types</span>;</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td>    <b>return</b> <b>nullptr</b>;</td></tr>
+<tr><th id="68">68</th><td>}</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td>- (NSMethodSignature *)methodSignatureForSelector:(<span class='typedef' title='SEL' data-type='SEL *' data-ref="SEL" data-ref-filename="SEL">SEL</span>)<dfn class="local col0 decl" id="90selector" title='selector' data-type='SEL' data-ref="90selector" data-ref-filename="90selector">selector</dfn></td></tr>
+<tr><th id="71">71</th><td>{</td></tr>
+<tr><th id="72">72</th><td>    <b>if</b> (!<a class="local col0 ref" href="#90selector" title='selector' data-ref="90selector" data-ref-filename="90selector">selector</a>)</td></tr>
+<tr><th id="73">73</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td>    Protocol *<dfn class="local col1 decl" id="91protocol" title='protocol' data-type='Protocol *' data-ref="91protocol" data-ref-filename="91protocol">protocol</dfn> = [<a class="ref fn fake" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv" title='WTF::RetainPtr::operator typename remove_pointer&lt;type-parameter-0-0&gt;::type *' data-ref="_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv" data-ref-filename="_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv"></a>_interface protocol];</td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td>    <em>const</em> <em>char</em>* <dfn class="local col2 decl" id="92types" title='types' data-type='const char *' data-ref="92types" data-ref-filename="92types">types</dfn> = <a class="ref fn" href="#_ZL37methodArgumentTypeEncodingForSelectorP8ProtocolP13objc_selector" title='methodArgumentTypeEncodingForSelector' data-ref="_ZL37methodArgumentTypeEncodingForSelectorP8ProtocolP13objc_selector" data-ref-filename="_ZL37methodArgumentTypeEncodingForSelectorP8ProtocolP13objc_selector">methodArgumentTypeEncodingForSelector</a>(<a class="local col1 ref" href="#91protocol" title='protocol' data-ref="91protocol" data-ref-filename="91protocol">protocol</a>, <a class="local col0 ref" href="#90selector" title='selector' data-ref="90selector" data-ref-filename="90selector">selector</a>);</td></tr>
+<tr><th id="78">78</th><td>    <b>if</b> (!<a class="local col2 ref" href="#92types" title='types' data-ref="92types" data-ref-filename="92types">types</a>) {</td></tr>
+<tr><th id="79">79</th><td>        <i>// We didn't find anything the protocol, fall back to the superclass.</i></td></tr>
+<tr><th id="80">80</th><td>        <b>return</b> [super methodSignatureForSelector:<a class="local col0 ref" href="#90selector" title='selector' data-ref="90selector" data-ref-filename="90selector">selector</a>];</td></tr>
+<tr><th id="81">81</th><td>    }</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td>    <b>return</b> [NSMethodSignature signatureWithObjCTypes:<a class="local col2 ref" href="#92types" title='types' data-ref="92types" data-ref-filename="92types">types</a>];</td></tr>
+<tr><th id="84">84</th><td>}</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>- (<em>void</em>)forwardInvocation:(NSInvocation *)<dfn class="local col3 decl" id="93invocation" title='invocation' data-type='NSInvocation *' data-ref="93invocation" data-ref-filename="93invocation">invocation</dfn></td></tr>
+<tr><th id="87">87</th><td>{</td></tr>
+<tr><th id="88">88</th><td>    [<a class="ref fn fake" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv" title='WTF::RetainPtr::operator typename remove_pointer&lt;type-parameter-0-0&gt;::type *' data-ref="_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv" data-ref-filename="_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv"></a>_objectRegistry _sendInvocation:<a class="local col3 ref" href="#93invocation" title='invocation' data-ref="93invocation" data-ref-filename="93invocation">invocation</a> interface:_interface.<a class="ref fn" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZNK3WTF9RetainPtr3getEv" title='WTF::RetainPtr::get' data-ref="_ZNK3WTF9RetainPtr3getEv" data-ref-filename="_ZNK3WTF9RetainPtr3getEv">get</a>()];</td></tr>
+<tr><th id="89">89</th><td>}</td></tr>
+<tr><th id="90">90</th><td></td></tr>
+<tr><th id="91">91</th><td>@end</td></tr>
+<tr><th id="92">92</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource8-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource8-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

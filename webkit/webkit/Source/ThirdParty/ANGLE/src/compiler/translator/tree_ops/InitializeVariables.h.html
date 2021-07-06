@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>InitializeVariables.h source code [webkit/Source/ThirdParty/ANGLE/src/compiler/translator/tree_ops/InitializeVariables.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/ANGLE/src/compiler/translator/tree_ops/InitializeVariables.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>ANGLE</a>/<a href='../../..'>src</a>/<a href='../..'>compiler</a>/<a href='..'>translator</a>/<a href='./'>tree_ops</a>/<a href='InitializeVariables.h.html'>InitializeVariables.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>//</i></td></tr>
+<tr><th id="2">2</th><td><i>// Copyright 2002 The ANGLE Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i>// Use of this source code is governed by a BSD-style license that can be</i></td></tr>
+<tr><th id="4">4</th><td><i>// found in the LICENSE file.</i></td></tr>
+<tr><th id="5">5</th><td><i>//</i></td></tr>
+<tr><th id="6">6</th><td></td></tr>
+<tr><th id="7">7</th><td><u>#<span data-ppcond="7">ifndef</span> <span class="macro" data-ref="_M/COMPILER_TRANSLATOR_TREEOPS_INITIALIZEVARIABLES_H_">COMPILER_TRANSLATOR_TREEOPS_INITIALIZEVARIABLES_H_</span></u></td></tr>
+<tr><th id="8">8</th><td><u>#define <dfn class="macro" id="_M/COMPILER_TRANSLATOR_TREEOPS_INITIALIZEVARIABLES_H_" data-ref="_M/COMPILER_TRANSLATOR_TREEOPS_INITIALIZEVARIABLES_H_">COMPILER_TRANSLATOR_TREEOPS_INITIALIZEVARIABLES_H_</dfn></u></td></tr>
+<tr><th id="9">9</th><td></td></tr>
+<tr><th id="10">10</th><td><u>#include <a href="../../../../include/GLSLANG/ShaderLang.h.html">&lt;GLSLANG/ShaderLang.h&gt;</a></u></td></tr>
+<tr><th id="11">11</th><td></td></tr>
+<tr><th id="12">12</th><td><u>#include <a href="../ExtensionBehavior.h.html">"compiler/translator/ExtensionBehavior.h"</a></u></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="../IntermNode.h.html">"compiler/translator/IntermNode.h"</a></u></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><b>namespace</b> <span class="namespace">sh</span></td></tr>
+<tr><th id="16">16</th><td>{</td></tr>
+<tr><th id="17">17</th><td><b>class</b> <a class="type" href="../Compiler.h.html#sh::TCompiler" title='sh::TCompiler' data-ref="sh::TCompiler" data-ref-filename="sh..TCompiler" id="sh::TCompiler">TCompiler</a>;</td></tr>
+<tr><th id="18">18</th><td><b>class</b> <a class="type" href="../SymbolTable.h.html#sh::TSymbolTable" title='sh::TSymbolTable' data-ref="sh::TSymbolTable" data-ref-filename="sh..TSymbolTable" id="sh::TSymbolTable">TSymbolTable</a>;</td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><b>typedef</b> <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<span class="namespace">sh::</span><a class="type" href="../../../../include/GLSLANG/ShaderVars.h.html#sh::ShaderVariable" title='sh::ShaderVariable' data-ref="sh::ShaderVariable" data-ref-filename="sh..ShaderVariable">ShaderVariable</a>&gt; <dfn class="typedef" id="sh::InitVariableList" title='sh::InitVariableList' data-type='std::vector&lt;sh::ShaderVariable&gt;' data-ref="sh::InitVariableList" data-ref-filename="sh..InitVariableList">InitVariableList</dfn>;</td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><i>// For all of the functions below: If canUseLoopsToInitialize is set, for loops are used instead of</i></td></tr>
+<tr><th id="23">23</th><td><i>// a large number of initializers where it can make sense, such as for initializing large arrays.</i></td></tr>
+<tr><th id="24">24</th><td><i></i></td></tr>
+<tr><th id="25">25</th><td><i>// Return a sequence of assignment operations to initialize "initializedSymbol". initializedSymbol</i></td></tr>
+<tr><th id="26">26</th><td><i>// may be an array, struct or any combination of these, as long as it contains only basic types.</i></td></tr>
+<tr><th id="27">27</th><td><a class="typedef" href="../IntermNode.h.html#sh::TIntermSequence" title='sh::TIntermSequence' data-type='TVector&lt;sh::TIntermNode *&gt;' data-ref="sh::TIntermSequence" data-ref-filename="sh..TIntermSequence">TIntermSequence</a> *<dfn class="decl fn" id="_ZN2sh14CreateInitCodeEPKNS_12TIntermTypedEbbPNS_12TSymbolTableE" title='sh::CreateInitCode' data-ref="_ZN2sh14CreateInitCodeEPKNS_12TIntermTypedEbbPNS_12TSymbolTableE" data-ref-filename="_ZN2sh14CreateInitCodeEPKNS_12TIntermTypedEbbPNS_12TSymbolTableE">CreateInitCode</dfn>(<em>const</em> <a class="type" href="../IntermNode.h.html#sh::TIntermTyped" title='sh::TIntermTyped' data-ref="sh::TIntermTyped" data-ref-filename="sh..TIntermTyped">TIntermTyped</a> *<dfn class="local col5 decl" id="625initializedSymbol" title='initializedSymbol' data-type='const sh::TIntermTyped *' data-ref="625initializedSymbol" data-ref-filename="625initializedSymbol">initializedSymbol</dfn>,</td></tr>
+<tr><th id="28">28</th><td>                                <em>bool</em> <dfn class="local col6 decl" id="626canUseLoopsToInitialize" title='canUseLoopsToInitialize' data-type='bool' data-ref="626canUseLoopsToInitialize" data-ref-filename="626canUseLoopsToInitialize">canUseLoopsToInitialize</dfn>,</td></tr>
+<tr><th id="29">29</th><td>                                <em>bool</em> <dfn class="local col7 decl" id="627highPrecisionSupported" title='highPrecisionSupported' data-type='bool' data-ref="627highPrecisionSupported" data-ref-filename="627highPrecisionSupported">highPrecisionSupported</dfn>,</td></tr>
+<tr><th id="30">30</th><td>                                <a class="type" href="../SymbolTable.h.html#sh::TSymbolTable" title='sh::TSymbolTable' data-ref="sh::TSymbolTable" data-ref-filename="sh..TSymbolTable">TSymbolTable</a> *<dfn class="local col8 decl" id="628symbolTable" title='symbolTable' data-type='sh::TSymbolTable *' data-ref="628symbolTable" data-ref-filename="628symbolTable">symbolTable</dfn>);</td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><i>// Initialize all uninitialized local variables, so that undefined behavior is avoided.</i></td></tr>
+<tr><th id="33">33</th><td><a class="macro" href="../../../common/angleutils.h.html#358" title="[[nodiscard]]" data-ref="_M/ANGLE_NO_DISCARD">ANGLE_NO_DISCARD</a> <em>bool</em> <dfn class="decl fn" id="_ZN2sh29InitializeUninitializedLocalsEPNS_9TCompilerEPNS_12TIntermBlockEibbPNS_12TSymbolTableE" title='sh::InitializeUninitializedLocals' data-ref="_ZN2sh29InitializeUninitializedLocalsEPNS_9TCompilerEPNS_12TIntermBlockEibbPNS_12TSymbolTableE" data-ref-filename="_ZN2sh29InitializeUninitializedLocalsEPNS_9TCompilerEPNS_12TIntermBlockEibbPNS_12TSymbolTableE">InitializeUninitializedLocals</dfn>(<a class="type" href="../Compiler.h.html#sh::TCompiler" title='sh::TCompiler' data-ref="sh::TCompiler" data-ref-filename="sh..TCompiler">TCompiler</a> *<dfn class="local col9 decl" id="629compiler" title='compiler' data-type='sh::TCompiler *' data-ref="629compiler" data-ref-filename="629compiler">compiler</dfn>,</td></tr>
+<tr><th id="34">34</th><td>                                                    <a class="type" href="../IntermNode.h.html#sh::TIntermBlock" title='sh::TIntermBlock' data-ref="sh::TIntermBlock" data-ref-filename="sh..TIntermBlock">TIntermBlock</a> *<dfn class="local col0 decl" id="630root" title='root' data-type='sh::TIntermBlock *' data-ref="630root" data-ref-filename="630root">root</dfn>,</td></tr>
+<tr><th id="35">35</th><td>                                                    <em>int</em> <dfn class="local col1 decl" id="631shaderVersion" title='shaderVersion' data-type='int' data-ref="631shaderVersion" data-ref-filename="631shaderVersion">shaderVersion</dfn>,</td></tr>
+<tr><th id="36">36</th><td>                                                    <em>bool</em> <dfn class="local col2 decl" id="632canUseLoopsToInitialize" title='canUseLoopsToInitialize' data-type='bool' data-ref="632canUseLoopsToInitialize" data-ref-filename="632canUseLoopsToInitialize">canUseLoopsToInitialize</dfn>,</td></tr>
+<tr><th id="37">37</th><td>                                                    <em>bool</em> <dfn class="local col3 decl" id="633highPrecisionSupported" title='highPrecisionSupported' data-type='bool' data-ref="633highPrecisionSupported" data-ref-filename="633highPrecisionSupported">highPrecisionSupported</dfn>,</td></tr>
+<tr><th id="38">38</th><td>                                                    <a class="type" href="../SymbolTable.h.html#sh::TSymbolTable" title='sh::TSymbolTable' data-ref="sh::TSymbolTable" data-ref-filename="sh..TSymbolTable">TSymbolTable</a> *<dfn class="local col4 decl" id="634symbolTable" title='symbolTable' data-type='sh::TSymbolTable *' data-ref="634symbolTable" data-ref-filename="634symbolTable">symbolTable</dfn>);</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><i>// This function can initialize all the types that CreateInitCode is able to initialize. All</i></td></tr>
+<tr><th id="41">41</th><td><i>// variables must be globals which can be found in the symbol table. For now it is used for the</i></td></tr>
+<tr><th id="42">42</th><td><i>// following two scenarios:</i></td></tr>
+<tr><th id="43">43</th><td><i>//   1. Initializing gl_Position;</i></td></tr>
+<tr><th id="44">44</th><td><i>//   2. Initializing output variables referred to in the shader source.</i></td></tr>
+<tr><th id="45">45</th><td><i>// Note: The type of each lvalue in an initializer is retrieved from the symbol table. gl_FragData</i></td></tr>
+<tr><th id="46">46</th><td><i>// requires special handling because the number of indices which can be initialized is determined by</i></td></tr>
+<tr><th id="47">47</th><td><i>// enabled extensions.</i></td></tr>
+<tr><th id="48">48</th><td><a class="macro" href="../../../common/angleutils.h.html#358" title="[[nodiscard]]" data-ref="_M/ANGLE_NO_DISCARD">ANGLE_NO_DISCARD</a> <em>bool</em> <dfn class="decl fn" id="_ZN2sh19InitializeVariablesEPNS_9TCompilerEPNS_12TIntermBlockERKNSt3__16vectorINS_14ShaderVariableENS4_9allocatorIS6_EEEEPNS_12TSymbolTableEiRKNS4_3ma16055676" title='sh::InitializeVariables' data-ref="_ZN2sh19InitializeVariablesEPNS_9TCompilerEPNS_12TIntermBlockERKNSt3__16vectorINS_14ShaderVariableENS4_9allocatorIS6_EEEEPNS_12TSymbolTableEiRKNS4_3ma16055676" data-ref-filename="_ZN2sh19InitializeVariablesEPNS_9TCompilerEPNS_12TIntermBlockERKNSt3__16vectorINS_14ShaderVariableENS4_9allocatorIS6_EEEEPNS_12TSymbolTableEiRKNS4_3ma16055676">InitializeVariables</dfn>(<a class="type" href="../Compiler.h.html#sh::TCompiler" title='sh::TCompiler' data-ref="sh::TCompiler" data-ref-filename="sh..TCompiler">TCompiler</a> *<dfn class="local col5 decl" id="635compiler" title='compiler' data-type='sh::TCompiler *' data-ref="635compiler" data-ref-filename="635compiler">compiler</dfn>,</td></tr>
+<tr><th id="49">49</th><td>                                          <a class="type" href="../IntermNode.h.html#sh::TIntermBlock" title='sh::TIntermBlock' data-ref="sh::TIntermBlock" data-ref-filename="sh..TIntermBlock">TIntermBlock</a> *<dfn class="local col6 decl" id="636root" title='root' data-type='sh::TIntermBlock *' data-ref="636root" data-ref-filename="636root">root</dfn>,</td></tr>
+<tr><th id="50">50</th><td>                                          <em>const</em> <a class="typedef" href="#sh::InitVariableList" title='sh::InitVariableList' data-type='std::vector&lt;sh::ShaderVariable&gt;' data-ref="sh::InitVariableList" data-ref-filename="sh..InitVariableList">InitVariableList</a> &amp;<dfn class="local col7 decl" id="637vars" title='vars' data-type='const sh::InitVariableList &amp;' data-ref="637vars" data-ref-filename="637vars">vars</dfn>,</td></tr>
+<tr><th id="51">51</th><td>                                          <a class="type" href="../SymbolTable.h.html#sh::TSymbolTable" title='sh::TSymbolTable' data-ref="sh::TSymbolTable" data-ref-filename="sh..TSymbolTable">TSymbolTable</a> *<dfn class="local col8 decl" id="638symbolTable" title='symbolTable' data-type='sh::TSymbolTable *' data-ref="638symbolTable" data-ref-filename="638symbolTable">symbolTable</dfn>,</td></tr>
+<tr><th id="52">52</th><td>                                          <em>int</em> <dfn class="local col9 decl" id="639shaderVersion" title='shaderVersion' data-type='int' data-ref="639shaderVersion" data-ref-filename="639shaderVersion">shaderVersion</dfn>,</td></tr>
+<tr><th id="53">53</th><td>                                          <em>const</em> <a class="typedef" href="../ExtensionBehavior.h.html#sh::TExtensionBehavior" title='sh::TExtensionBehavior' data-type='std::map&lt;TExtension, TBehavior&gt;' data-ref="sh::TExtensionBehavior" data-ref-filename="sh..TExtensionBehavior">TExtensionBehavior</a> &amp;<dfn class="local col0 decl" id="640extensionBehavior" title='extensionBehavior' data-type='const sh::TExtensionBehavior &amp;' data-ref="640extensionBehavior" data-ref-filename="640extensionBehavior">extensionBehavior</dfn>,</td></tr>
+<tr><th id="54">54</th><td>                                          <em>bool</em> <dfn class="local col1 decl" id="641canUseLoopsToInitialize" title='canUseLoopsToInitialize' data-type='bool' data-ref="641canUseLoopsToInitialize" data-ref-filename="641canUseLoopsToInitialize">canUseLoopsToInitialize</dfn>,</td></tr>
+<tr><th id="55">55</th><td>                                          <em>bool</em> <dfn class="local col2 decl" id="642highPrecisionSupported" title='highPrecisionSupported' data-type='bool' data-ref="642highPrecisionSupported" data-ref-filename="642highPrecisionSupported">highPrecisionSupported</dfn>);</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td>}  <i>// namespace sh</i></td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><u>#<span data-ppcond="7">endif</span>  // COMPILER_TRANSLATOR_TREEOPS_INITIALIZEVARIABLES_H_</u></td></tr>
+<tr><th id="60">60</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../Compiler.cpp.html'>webkit/Source/ThirdParty/ANGLE/src/compiler/translator/Compiler.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

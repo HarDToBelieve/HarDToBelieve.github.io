@@ -1,0 +1,313 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>hpke.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/hpke.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="evp_hpke_ctx_st,evp_hpke_key_st "/>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/hpke.h'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>third_party</a>/<a href='../../..'>boringssl</a>/<a href='../..'>src</a>/<a href='..'>include</a>/<a href='./'>openssl</a>/<a href='hpke.h.html'>hpke.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/* Copyright (c) 2020, Google Inc.</i></td></tr>
+<tr><th id="2">2</th><td><i> *</i></td></tr>
+<tr><th id="3">3</th><td><i> * Permission to use, copy, modify, and/or distribute this software for any</i></td></tr>
+<tr><th id="4">4</th><td><i> * purpose with or without fee is hereby granted, provided that the above</i></td></tr>
+<tr><th id="5">5</th><td><i> * copyright notice and this permission notice appear in all copies.</i></td></tr>
+<tr><th id="6">6</th><td><i> *</i></td></tr>
+<tr><th id="7">7</th><td><i> * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES</i></td></tr>
+<tr><th id="8">8</th><td><i> * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF</i></td></tr>
+<tr><th id="9">9</th><td><i> * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="10">10</th><td><i> * SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES</i></td></tr>
+<tr><th id="11">11</th><td><i> * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION</i></td></tr>
+<tr><th id="12">12</th><td><i> * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN</i></td></tr>
+<tr><th id="13">13</th><td><i> * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */</i></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><u>#<span data-ppcond="15">ifndef</span> <span class="macro" data-ref="_M/OPENSSL_HEADER_CRYPTO_HPKE_INTERNAL_H">OPENSSL_HEADER_CRYPTO_HPKE_INTERNAL_H</span></u></td></tr>
+<tr><th id="16">16</th><td><u>#define <dfn class="macro" id="_M/OPENSSL_HEADER_CRYPTO_HPKE_INTERNAL_H" data-ref="_M/OPENSSL_HEADER_CRYPTO_HPKE_INTERNAL_H">OPENSSL_HEADER_CRYPTO_HPKE_INTERNAL_H</dfn></u></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="aead.h.html">&lt;openssl/aead.h&gt;</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="base.h.html">&lt;openssl/base.h&gt;</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="curve25519.h.html">&lt;openssl/curve25519.h&gt;</a></u></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="digest.h.html">&lt;openssl/digest.h&gt;</a></u></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><u>#<span data-ppcond="23">if</span> defined(<span class="macro" data-ref="_M/__cplusplus">__cplusplus</span>)</u></td></tr>
+<tr><th id="24">24</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="25">25</th><td><u>#<span data-ppcond="23">endif</span></u></td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><i>// Hybrid Public Key Encryption.</i></td></tr>
+<tr><th id="29">29</th><td><i>//</i></td></tr>
+<tr><th id="30">30</th><td><i>// Hybrid Public Key Encryption (HPKE) enables a sender to encrypt messages to a</i></td></tr>
+<tr><th id="31">31</th><td><i>// receiver with a public key.</i></td></tr>
+<tr><th id="32">32</th><td><i>//</i></td></tr>
+<tr><th id="33">33</th><td><i>// See <a href="https://tools.ietf.org/html/draft-irtf-cfrg-hpke-08">https://tools.ietf.org/html/draft-irtf-cfrg-hpke-08</a>.</i></td></tr>
+<tr><th id="34">34</th><td><i></i></td></tr>
+<tr><th id="35">35</th><td><i></i></td></tr>
+<tr><th id="36">36</th><td><i>// Parameters.</i></td></tr>
+<tr><th id="37">37</th><td><i>//</i></td></tr>
+<tr><th id="38">38</th><td><i>// An HPKE context is parameterized by KEM, KDF, and AEAD algorithms,</i></td></tr>
+<tr><th id="39">39</th><td><i>// represented by |EVP_HPKE_KEM|, |EVP_HPKE_KDF|, and |EVP_HPKE_AEAD| types,</i></td></tr>
+<tr><th id="40">40</th><td><i>// respectively.</i></td></tr>
+<tr><th id="41">41</th><td><i></i></td></tr>
+<tr><th id="42">42</th><td><i>// The following constants are KEM identifiers.</i></td></tr>
+<tr><th id="43">43</th><td><u>#define <dfn class="macro" id="_M/EVP_HPKE_DHKEM_X25519_HKDF_SHA256" data-ref="_M/EVP_HPKE_DHKEM_X25519_HKDF_SHA256">EVP_HPKE_DHKEM_X25519_HKDF_SHA256</dfn> 0x0020</u></td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td><i>// The following functions are KEM algorithms which may be used with HPKE. Note</i></td></tr>
+<tr><th id="46">46</th><td><i>// that, while some HPKE KEMs use KDFs internally, this is separate from the</i></td></tr>
+<tr><th id="47">47</th><td><i>// |EVP_HPKE_KDF| selection.</i></td></tr>
+<tr><th id="48">48</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KEM" title='EVP_HPKE_KEM' data-type='struct evp_hpke_kem_st' data-ref="EVP_HPKE_KEM" data-ref-filename="EVP_HPKE_KEM">EVP_HPKE_KEM</a> *<a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_hpke_x25519_hkdf_sha256" title='EVP_hpke_x25519_hkdf_sha256' data-ref="EVP_hpke_x25519_hkdf_sha256" data-ref-filename="EVP_hpke_x25519_hkdf_sha256" id="EVP_hpke_x25519_hkdf_sha256">EVP_hpke_x25519_hkdf_sha256</a>(<em>void</em>);</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><i>// EVP_HPKE_KEM_id returns the HPKE KEM identifier for |kem|, which</i></td></tr>
+<tr><th id="51">51</th><td><i>// will be one of the |EVP_HPKE_KEM_*| constants.</i></td></tr>
+<tr><th id="52">52</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_KEM_id" title='EVP_HPKE_KEM_id' data-ref="EVP_HPKE_KEM_id" data-ref-filename="EVP_HPKE_KEM_id" id="EVP_HPKE_KEM_id">EVP_HPKE_KEM_id</a>(<em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KEM" title='EVP_HPKE_KEM' data-type='struct evp_hpke_kem_st' data-ref="EVP_HPKE_KEM" data-ref-filename="EVP_HPKE_KEM">EVP_HPKE_KEM</a> *<dfn class="local col1 decl" id="1kem" title='kem' data-type='const EVP_HPKE_KEM *' data-ref="1kem" data-ref-filename="1kem">kem</dfn>);</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td><i>// The following constants are KDF identifiers.</i></td></tr>
+<tr><th id="55">55</th><td><u>#define <dfn class="macro" id="_M/EVP_HPKE_HKDF_SHA256" data-ref="_M/EVP_HPKE_HKDF_SHA256">EVP_HPKE_HKDF_SHA256</dfn> 0x0001</u></td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td><i>// The following functions are KDF algorithms which may be used with HPKE.</i></td></tr>
+<tr><th id="58">58</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KDF" title='EVP_HPKE_KDF' data-type='struct evp_hpke_kdf_st' data-ref="EVP_HPKE_KDF" data-ref-filename="EVP_HPKE_KDF">EVP_HPKE_KDF</a> *<a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_hpke_hkdf_sha256" title='EVP_hpke_hkdf_sha256' data-ref="EVP_hpke_hkdf_sha256" data-ref-filename="EVP_hpke_hkdf_sha256" id="EVP_hpke_hkdf_sha256">EVP_hpke_hkdf_sha256</a>(<em>void</em>);</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><i>// EVP_HPKE_KDF_id returns the HPKE KDF identifier for |kdf|.</i></td></tr>
+<tr><th id="61">61</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_KDF_id" title='EVP_HPKE_KDF_id' data-ref="EVP_HPKE_KDF_id" data-ref-filename="EVP_HPKE_KDF_id" id="EVP_HPKE_KDF_id">EVP_HPKE_KDF_id</a>(<em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KDF" title='EVP_HPKE_KDF' data-type='struct evp_hpke_kdf_st' data-ref="EVP_HPKE_KDF" data-ref-filename="EVP_HPKE_KDF">EVP_HPKE_KDF</a> *<dfn class="local col2 decl" id="2kdf" title='kdf' data-type='const EVP_HPKE_KDF *' data-ref="2kdf" data-ref-filename="2kdf">kdf</dfn>);</td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><i>// The following constants are AEAD identifiers.</i></td></tr>
+<tr><th id="64">64</th><td><u>#define <dfn class="macro" id="_M/EVP_HPKE_AES_128_GCM" data-ref="_M/EVP_HPKE_AES_128_GCM">EVP_HPKE_AES_128_GCM</dfn> 0x0001</u></td></tr>
+<tr><th id="65">65</th><td><u>#define <dfn class="macro" id="_M/EVP_HPKE_AES_256_GCM" data-ref="_M/EVP_HPKE_AES_256_GCM">EVP_HPKE_AES_256_GCM</dfn> 0x0002</u></td></tr>
+<tr><th id="66">66</th><td><u>#define <dfn class="macro" id="_M/EVP_HPKE_CHACHA20_POLY1305" data-ref="_M/EVP_HPKE_CHACHA20_POLY1305">EVP_HPKE_CHACHA20_POLY1305</dfn> 0x0003</u></td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td><i>// The following functions are AEAD algorithms which may be used with HPKE.</i></td></tr>
+<tr><th id="69">69</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_AEAD" title='EVP_HPKE_AEAD' data-type='struct evp_hpke_aead_st' data-ref="EVP_HPKE_AEAD" data-ref-filename="EVP_HPKE_AEAD">EVP_HPKE_AEAD</a> *<a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_hpke_aes_128_gcm" title='EVP_hpke_aes_128_gcm' data-ref="EVP_hpke_aes_128_gcm" data-ref-filename="EVP_hpke_aes_128_gcm" id="EVP_hpke_aes_128_gcm">EVP_hpke_aes_128_gcm</a>(<em>void</em>);</td></tr>
+<tr><th id="70">70</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_AEAD" title='EVP_HPKE_AEAD' data-type='struct evp_hpke_aead_st' data-ref="EVP_HPKE_AEAD" data-ref-filename="EVP_HPKE_AEAD">EVP_HPKE_AEAD</a> *<a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_hpke_aes_256_gcm" title='EVP_hpke_aes_256_gcm' data-ref="EVP_hpke_aes_256_gcm" data-ref-filename="EVP_hpke_aes_256_gcm" id="EVP_hpke_aes_256_gcm">EVP_hpke_aes_256_gcm</a>(<em>void</em>);</td></tr>
+<tr><th id="71">71</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_AEAD" title='EVP_HPKE_AEAD' data-type='struct evp_hpke_aead_st' data-ref="EVP_HPKE_AEAD" data-ref-filename="EVP_HPKE_AEAD">EVP_HPKE_AEAD</a> *<a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_hpke_chacha20_poly1305" title='EVP_hpke_chacha20_poly1305' data-ref="EVP_hpke_chacha20_poly1305" data-ref-filename="EVP_hpke_chacha20_poly1305" id="EVP_hpke_chacha20_poly1305">EVP_hpke_chacha20_poly1305</a>(<em>void</em>);</td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td><i>// EVP_HPKE_AEAD_id returns the HPKE AEAD identifier for |aead|.</i></td></tr>
+<tr><th id="74">74</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_AEAD_id" title='EVP_HPKE_AEAD_id' data-ref="EVP_HPKE_AEAD_id" data-ref-filename="EVP_HPKE_AEAD_id" id="EVP_HPKE_AEAD_id">EVP_HPKE_AEAD_id</a>(<em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_AEAD" title='EVP_HPKE_AEAD' data-type='struct evp_hpke_aead_st' data-ref="EVP_HPKE_AEAD" data-ref-filename="EVP_HPKE_AEAD">EVP_HPKE_AEAD</a> *<dfn class="local col3 decl" id="3aead" title='aead' data-type='const EVP_HPKE_AEAD *' data-ref="3aead" data-ref-filename="3aead">aead</dfn>);</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td><i>// Recipient keys.</i></td></tr>
+<tr><th id="78">78</th><td><i>//</i></td></tr>
+<tr><th id="79">79</th><td><i>// An HPKE recipient maintains a long-term KEM key. This library represents keys</i></td></tr>
+<tr><th id="80">80</th><td><i>// with the |EVP_HPKE_KEY| type.</i></td></tr>
+<tr><th id="81">81</th><td><i></i></td></tr>
+<tr><th id="82">82</th><td><i>// EVP_HPKE_KEY_zero sets an uninitialized |EVP_HPKE_KEY| to the zero state. The</i></td></tr>
+<tr><th id="83">83</th><td><i>// caller should then use |EVP_HPKE_KEY_init| to finish initializing |key|.</i></td></tr>
+<tr><th id="84">84</th><td><i>//</i></td></tr>
+<tr><th id="85">85</th><td><i>// It is safe, but not necessary to call |EVP_HPKE_KEY_cleanup| in this state.</i></td></tr>
+<tr><th id="86">86</th><td><i>// This may be used for more uniform cleanup of |EVP_HPKE_KEY|.</i></td></tr>
+<tr><th id="87">87</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>void</em> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_KEY_zero" title='EVP_HPKE_KEY_zero' data-ref="EVP_HPKE_KEY_zero" data-ref-filename="EVP_HPKE_KEY_zero" id="EVP_HPKE_KEY_zero">EVP_HPKE_KEY_zero</a>(<a class="typedef" href="base.h.html#EVP_HPKE_KEY" title='EVP_HPKE_KEY' data-type='struct evp_hpke_key_st' data-ref="EVP_HPKE_KEY" data-ref-filename="EVP_HPKE_KEY">EVP_HPKE_KEY</a> *<dfn class="local col4 decl" id="4key" title='key' data-type='EVP_HPKE_KEY *' data-ref="4key" data-ref-filename="4key">key</dfn>);</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td><i>// EVP_HPKE_KEY_cleanup releases memory referenced by |key|.</i></td></tr>
+<tr><th id="90">90</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>void</em> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_KEY_cleanup" title='EVP_HPKE_KEY_cleanup' data-ref="EVP_HPKE_KEY_cleanup" data-ref-filename="EVP_HPKE_KEY_cleanup" id="EVP_HPKE_KEY_cleanup">EVP_HPKE_KEY_cleanup</a>(<a class="typedef" href="base.h.html#EVP_HPKE_KEY" title='EVP_HPKE_KEY' data-type='struct evp_hpke_key_st' data-ref="EVP_HPKE_KEY" data-ref-filename="EVP_HPKE_KEY">EVP_HPKE_KEY</a> *<dfn class="local col5 decl" id="5key" title='key' data-type='EVP_HPKE_KEY *' data-ref="5key" data-ref-filename="5key">key</dfn>);</td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td><i>// EVP_HPKE_KEY_init decodes |priv_key| as a private key for |kem| and</i></td></tr>
+<tr><th id="93">93</th><td><i>// initializes |key| with the result. It returns one on success and zero if</i></td></tr>
+<tr><th id="94">94</th><td><i>// |priv_key| was invalid. On success, the caller must call</i></td></tr>
+<tr><th id="95">95</th><td><i>// |EVP_HPKE_KEY_cleanup| to release the key. On failure, calling</i></td></tr>
+<tr><th id="96">96</th><td><i>// |EVP_HPKE_KEY_cleanup| is safe, but not necessary.</i></td></tr>
+<tr><th id="97">97</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_KEY_init" title='EVP_HPKE_KEY_init' data-ref="EVP_HPKE_KEY_init" data-ref-filename="EVP_HPKE_KEY_init" id="EVP_HPKE_KEY_init">EVP_HPKE_KEY_init</a>(<a class="typedef" href="base.h.html#EVP_HPKE_KEY" title='EVP_HPKE_KEY' data-type='struct evp_hpke_key_st' data-ref="EVP_HPKE_KEY" data-ref-filename="EVP_HPKE_KEY">EVP_HPKE_KEY</a> *<dfn class="local col6 decl" id="6key" title='key' data-type='EVP_HPKE_KEY *' data-ref="6key" data-ref-filename="6key">key</dfn>, <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KEM" title='EVP_HPKE_KEM' data-type='struct evp_hpke_kem_st' data-ref="EVP_HPKE_KEM" data-ref-filename="EVP_HPKE_KEM">EVP_HPKE_KEM</a> *<dfn class="local col7 decl" id="7kem" title='kem' data-type='const EVP_HPKE_KEM *' data-ref="7kem" data-ref-filename="7kem">kem</dfn>,</td></tr>
+<tr><th id="98">98</th><td>                                     <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col8 decl" id="8priv_key" title='priv_key' data-type='const uint8_t *' data-ref="8priv_key" data-ref-filename="8priv_key">priv_key</dfn>,</td></tr>
+<tr><th id="99">99</th><td>                                     <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="9priv_key_len" title='priv_key_len' data-type='size_t' data-ref="9priv_key_len" data-ref-filename="9priv_key_len">priv_key_len</dfn>);</td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td><i>// EVP_HPKE_MAX_PUBLIC_KEY_LENGTH is the maximum length of a public key for all</i></td></tr>
+<tr><th id="102">102</th><td><i>// KEMs supported by this library.</i></td></tr>
+<tr><th id="103">103</th><td><u>#define <dfn class="macro" id="_M/EVP_HPKE_MAX_PUBLIC_KEY_LENGTH" data-ref="_M/EVP_HPKE_MAX_PUBLIC_KEY_LENGTH">EVP_HPKE_MAX_PUBLIC_KEY_LENGTH</dfn> 32</u></td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td><i>// EVP_HPKE_KEY_public_key writes |key|'s public key to |out| and sets</i></td></tr>
+<tr><th id="106">106</th><td><i>// |*out_len| to the number of bytes written. On success, it returns one and</i></td></tr>
+<tr><th id="107">107</th><td><i>// writes at most |max_out| bytes. If |max_out| is too small, it returns zero.</i></td></tr>
+<tr><th id="108">108</th><td><i>// Setting |max_out| to |EVP_HPKE_MAX_PUBLIC_KEY_LENGTH| will ensure the public</i></td></tr>
+<tr><th id="109">109</th><td><i>// key fits.</i></td></tr>
+<tr><th id="110">110</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_KEY_public_key" title='EVP_HPKE_KEY_public_key' data-ref="EVP_HPKE_KEY_public_key" data-ref-filename="EVP_HPKE_KEY_public_key" id="EVP_HPKE_KEY_public_key">EVP_HPKE_KEY_public_key</a>(<em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KEY" title='EVP_HPKE_KEY' data-type='struct evp_hpke_key_st' data-ref="EVP_HPKE_KEY" data-ref-filename="EVP_HPKE_KEY">EVP_HPKE_KEY</a> *<dfn class="local col0 decl" id="10key" title='key' data-type='const EVP_HPKE_KEY *' data-ref="10key" data-ref-filename="10key">key</dfn>,</td></tr>
+<tr><th id="111">111</th><td>                                           <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col1 decl" id="11out" title='out' data-type='uint8_t *' data-ref="11out" data-ref-filename="11out">out</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col2 decl" id="12out_len" title='out_len' data-type='size_t *' data-ref="12out_len" data-ref-filename="12out_len">out_len</dfn>,</td></tr>
+<tr><th id="112">112</th><td>                                           <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="13max_out" title='max_out' data-type='size_t' data-ref="13max_out" data-ref-filename="13max_out">max_out</dfn>);</td></tr>
+<tr><th id="113">113</th><td></td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td><i>// Encryption contexts.</i></td></tr>
+<tr><th id="116">116</th><td><i>//</i></td></tr>
+<tr><th id="117">117</th><td><i>// An HPKE encryption context is represented by the |EVP_HPKE_CTX| type.</i></td></tr>
+<tr><th id="118">118</th><td><i></i></td></tr>
+<tr><th id="119">119</th><td><i>// EVP_HPKE_CTX_zero sets an uninitialized |EVP_HPKE_CTX| to the zero state. The</i></td></tr>
+<tr><th id="120">120</th><td><i>// caller should then use one of the |EVP_HPKE_CTX_setup_*| functions to finish</i></td></tr>
+<tr><th id="121">121</th><td><i>// setting up |ctx|.</i></td></tr>
+<tr><th id="122">122</th><td><i>//</i></td></tr>
+<tr><th id="123">123</th><td><i>// It is safe, but not necessary to call |EVP_HPKE_CTX_cleanup| in this state.</i></td></tr>
+<tr><th id="124">124</th><td><i>// This may be used for more uniform cleanup of |EVP_HPKE_CTX|.</i></td></tr>
+<tr><th id="125">125</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>void</em> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_CTX_zero" title='EVP_HPKE_CTX_zero' data-ref="EVP_HPKE_CTX_zero" data-ref-filename="EVP_HPKE_CTX_zero" id="EVP_HPKE_CTX_zero">EVP_HPKE_CTX_zero</a>(<a class="typedef" href="base.h.html#EVP_HPKE_CTX" title='EVP_HPKE_CTX' data-type='struct evp_hpke_ctx_st' data-ref="EVP_HPKE_CTX" data-ref-filename="EVP_HPKE_CTX">EVP_HPKE_CTX</a> *<dfn class="local col4 decl" id="14ctx" title='ctx' data-type='EVP_HPKE_CTX *' data-ref="14ctx" data-ref-filename="14ctx">ctx</dfn>);</td></tr>
+<tr><th id="126">126</th><td></td></tr>
+<tr><th id="127">127</th><td><i>// EVP_HPKE_CTX_cleanup releases memory referenced by |ctx|. |ctx| must have</i></td></tr>
+<tr><th id="128">128</th><td><i>// been initialized with |EVP_HPKE_CTX_zero| or one of the</i></td></tr>
+<tr><th id="129">129</th><td><i>// |EVP_HPKE_CTX_setup_*| functions.</i></td></tr>
+<tr><th id="130">130</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>void</em> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_CTX_cleanup" title='EVP_HPKE_CTX_cleanup' data-ref="EVP_HPKE_CTX_cleanup" data-ref-filename="EVP_HPKE_CTX_cleanup" id="EVP_HPKE_CTX_cleanup">EVP_HPKE_CTX_cleanup</a>(<a class="typedef" href="base.h.html#EVP_HPKE_CTX" title='EVP_HPKE_CTX' data-type='struct evp_hpke_ctx_st' data-ref="EVP_HPKE_CTX" data-ref-filename="EVP_HPKE_CTX">EVP_HPKE_CTX</a> *<dfn class="local col5 decl" id="15ctx" title='ctx' data-type='EVP_HPKE_CTX *' data-ref="15ctx" data-ref-filename="15ctx">ctx</dfn>);</td></tr>
+<tr><th id="131">131</th><td></td></tr>
+<tr><th id="132">132</th><td><i>// EVP_HPKE_MAX_ENC_LENGTH is the maximum length of "enc", the encapsulated</i></td></tr>
+<tr><th id="133">133</th><td><i>// shared secret, for all supported KEMs in this library.</i></td></tr>
+<tr><th id="134">134</th><td><u>#define <dfn class="macro" id="_M/EVP_HPKE_MAX_ENC_LENGTH" data-ref="_M/EVP_HPKE_MAX_ENC_LENGTH">EVP_HPKE_MAX_ENC_LENGTH</dfn> 32</u></td></tr>
+<tr><th id="135">135</th><td></td></tr>
+<tr><th id="136">136</th><td><i>// EVP_HPKE_CTX_setup_sender implements the SetupBaseS HPKE operation. It</i></td></tr>
+<tr><th id="137">137</th><td><i>// encapsulates a shared secret for |peer_public_key| and sets up |ctx| as a</i></td></tr>
+<tr><th id="138">138</th><td><i>// sender context. It writes the encapsulated shared secret to |out_enc| and</i></td></tr>
+<tr><th id="139">139</th><td><i>// sets |*out_enc_len| to the number of bytes written. It writes at most</i></td></tr>
+<tr><th id="140">140</th><td><i>// |max_enc| bytes and fails if the buffer is too small. Setting |max_enc| to at</i></td></tr>
+<tr><th id="141">141</th><td><i>// least |EVP_HPKE_MAX_ENC_LENGTH| will ensure the buffer is large enough.</i></td></tr>
+<tr><th id="142">142</th><td><i>//</i></td></tr>
+<tr><th id="143">143</th><td><i>// This function returns one on success and zero on error. Note that</i></td></tr>
+<tr><th id="144">144</th><td><i>// |peer_public_key| may be invalid, in which case this function will return an</i></td></tr>
+<tr><th id="145">145</th><td><i>// error.</i></td></tr>
+<tr><th id="146">146</th><td><i>//</i></td></tr>
+<tr><th id="147">147</th><td><i>// On success, callers may call |EVP_HPKE_CTX_seal| to encrypt messages for the</i></td></tr>
+<tr><th id="148">148</th><td><i>// recipient. Callers must then call |EVP_HPKE_CTX_cleanup| when done. On</i></td></tr>
+<tr><th id="149">149</th><td><i>// failure, calling |EVP_HPKE_CTX_cleanup| is safe, but not required.</i></td></tr>
+<tr><th id="150">150</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_CTX_setup_sender" title='EVP_HPKE_CTX_setup_sender' data-ref="EVP_HPKE_CTX_setup_sender" data-ref-filename="EVP_HPKE_CTX_setup_sender" id="EVP_HPKE_CTX_setup_sender">EVP_HPKE_CTX_setup_sender</a>(</td></tr>
+<tr><th id="151">151</th><td>    <a class="typedef" href="base.h.html#EVP_HPKE_CTX" title='EVP_HPKE_CTX' data-type='struct evp_hpke_ctx_st' data-ref="EVP_HPKE_CTX" data-ref-filename="EVP_HPKE_CTX">EVP_HPKE_CTX</a> *<dfn class="local col6 decl" id="16ctx" title='ctx' data-type='EVP_HPKE_CTX *' data-ref="16ctx" data-ref-filename="16ctx">ctx</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col7 decl" id="17out_enc" title='out_enc' data-type='uint8_t *' data-ref="17out_enc" data-ref-filename="17out_enc">out_enc</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col8 decl" id="18out_enc_len" title='out_enc_len' data-type='size_t *' data-ref="18out_enc_len" data-ref-filename="18out_enc_len">out_enc_len</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="19max_enc" title='max_enc' data-type='size_t' data-ref="19max_enc" data-ref-filename="19max_enc">max_enc</dfn>,</td></tr>
+<tr><th id="152">152</th><td>    <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KEM" title='EVP_HPKE_KEM' data-type='struct evp_hpke_kem_st' data-ref="EVP_HPKE_KEM" data-ref-filename="EVP_HPKE_KEM">EVP_HPKE_KEM</a> *<dfn class="local col0 decl" id="20kem" title='kem' data-type='const EVP_HPKE_KEM *' data-ref="20kem" data-ref-filename="20kem">kem</dfn>, <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KDF" title='EVP_HPKE_KDF' data-type='struct evp_hpke_kdf_st' data-ref="EVP_HPKE_KDF" data-ref-filename="EVP_HPKE_KDF">EVP_HPKE_KDF</a> *<dfn class="local col1 decl" id="21kdf" title='kdf' data-type='const EVP_HPKE_KDF *' data-ref="21kdf" data-ref-filename="21kdf">kdf</dfn>, <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_AEAD" title='EVP_HPKE_AEAD' data-type='struct evp_hpke_aead_st' data-ref="EVP_HPKE_AEAD" data-ref-filename="EVP_HPKE_AEAD">EVP_HPKE_AEAD</a> *<dfn class="local col2 decl" id="22aead" title='aead' data-type='const EVP_HPKE_AEAD *' data-ref="22aead" data-ref-filename="22aead">aead</dfn>,</td></tr>
+<tr><th id="153">153</th><td>    <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col3 decl" id="23peer_public_key" title='peer_public_key' data-type='const uint8_t *' data-ref="23peer_public_key" data-ref-filename="23peer_public_key">peer_public_key</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="24peer_public_key_len" title='peer_public_key_len' data-type='size_t' data-ref="24peer_public_key_len" data-ref-filename="24peer_public_key_len">peer_public_key_len</dfn>,</td></tr>
+<tr><th id="154">154</th><td>    <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col5 decl" id="25info" title='info' data-type='const uint8_t *' data-ref="25info" data-ref-filename="25info">info</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="26info_len" title='info_len' data-type='size_t' data-ref="26info_len" data-ref-filename="26info_len">info_len</dfn>);</td></tr>
+<tr><th id="155">155</th><td></td></tr>
+<tr><th id="156">156</th><td><i>// EVP_HPKE_CTX_setup_sender_with_seed_for_testing behaves like</i></td></tr>
+<tr><th id="157">157</th><td><i>// |EVP_HPKE_CTX_setup_sender|, but takes a seed to behave deterministically.</i></td></tr>
+<tr><th id="158">158</th><td><i>// The seed's format depends on |kem|. For X25519, it is the sender's</i></td></tr>
+<tr><th id="159">159</th><td><i>// ephemeral private key.</i></td></tr>
+<tr><th id="160">160</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_CTX_setup_sender_with_seed_for_testing" title='EVP_HPKE_CTX_setup_sender_with_seed_for_testing' data-ref="EVP_HPKE_CTX_setup_sender_with_seed_for_testing" data-ref-filename="EVP_HPKE_CTX_setup_sender_with_seed_for_testing" id="EVP_HPKE_CTX_setup_sender_with_seed_for_testing">EVP_HPKE_CTX_setup_sender_with_seed_for_testing</a>(</td></tr>
+<tr><th id="161">161</th><td>    <a class="typedef" href="base.h.html#EVP_HPKE_CTX" title='EVP_HPKE_CTX' data-type='struct evp_hpke_ctx_st' data-ref="EVP_HPKE_CTX" data-ref-filename="EVP_HPKE_CTX">EVP_HPKE_CTX</a> *<dfn class="local col7 decl" id="27ctx" title='ctx' data-type='EVP_HPKE_CTX *' data-ref="27ctx" data-ref-filename="27ctx">ctx</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col8 decl" id="28out_enc" title='out_enc' data-type='uint8_t *' data-ref="28out_enc" data-ref-filename="28out_enc">out_enc</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col9 decl" id="29out_enc_len" title='out_enc_len' data-type='size_t *' data-ref="29out_enc_len" data-ref-filename="29out_enc_len">out_enc_len</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="30max_enc" title='max_enc' data-type='size_t' data-ref="30max_enc" data-ref-filename="30max_enc">max_enc</dfn>,</td></tr>
+<tr><th id="162">162</th><td>    <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KEM" title='EVP_HPKE_KEM' data-type='struct evp_hpke_kem_st' data-ref="EVP_HPKE_KEM" data-ref-filename="EVP_HPKE_KEM">EVP_HPKE_KEM</a> *<dfn class="local col1 decl" id="31kem" title='kem' data-type='const EVP_HPKE_KEM *' data-ref="31kem" data-ref-filename="31kem">kem</dfn>, <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KDF" title='EVP_HPKE_KDF' data-type='struct evp_hpke_kdf_st' data-ref="EVP_HPKE_KDF" data-ref-filename="EVP_HPKE_KDF">EVP_HPKE_KDF</a> *<dfn class="local col2 decl" id="32kdf" title='kdf' data-type='const EVP_HPKE_KDF *' data-ref="32kdf" data-ref-filename="32kdf">kdf</dfn>, <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_AEAD" title='EVP_HPKE_AEAD' data-type='struct evp_hpke_aead_st' data-ref="EVP_HPKE_AEAD" data-ref-filename="EVP_HPKE_AEAD">EVP_HPKE_AEAD</a> *<dfn class="local col3 decl" id="33aead" title='aead' data-type='const EVP_HPKE_AEAD *' data-ref="33aead" data-ref-filename="33aead">aead</dfn>,</td></tr>
+<tr><th id="163">163</th><td>    <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col4 decl" id="34peer_public_key" title='peer_public_key' data-type='const uint8_t *' data-ref="34peer_public_key" data-ref-filename="34peer_public_key">peer_public_key</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="35peer_public_key_len" title='peer_public_key_len' data-type='size_t' data-ref="35peer_public_key_len" data-ref-filename="35peer_public_key_len">peer_public_key_len</dfn>,</td></tr>
+<tr><th id="164">164</th><td>    <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col6 decl" id="36info" title='info' data-type='const uint8_t *' data-ref="36info" data-ref-filename="36info">info</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="37info_len" title='info_len' data-type='size_t' data-ref="37info_len" data-ref-filename="37info_len">info_len</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col8 decl" id="38seed" title='seed' data-type='const uint8_t *' data-ref="38seed" data-ref-filename="38seed">seed</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="39seed_len" title='seed_len' data-type='size_t' data-ref="39seed_len" data-ref-filename="39seed_len">seed_len</dfn>);</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td><i>// EVP_HPKE_CTX_setup_recipient implements the SetupBaseR HPKE operation. It</i></td></tr>
+<tr><th id="167">167</th><td><i>// decapsulates the shared secret in |enc| with |key| and sets up |ctx| as a</i></td></tr>
+<tr><th id="168">168</th><td><i>// recipient context. It returns one on success and zero on failure. Note that</i></td></tr>
+<tr><th id="169">169</th><td><i>// |enc| may be invalid, in which case this function will return an error.</i></td></tr>
+<tr><th id="170">170</th><td><i>//</i></td></tr>
+<tr><th id="171">171</th><td><i>// On success, callers may call |EVP_HPKE_CTX_open| to decrypt messages from the</i></td></tr>
+<tr><th id="172">172</th><td><i>// sender. Callers must then call |EVP_HPKE_CTX_cleanup| when done. On failure,</i></td></tr>
+<tr><th id="173">173</th><td><i>// calling |EVP_HPKE_CTX_cleanup| is safe, but not required.</i></td></tr>
+<tr><th id="174">174</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_CTX_setup_recipient" title='EVP_HPKE_CTX_setup_recipient' data-ref="EVP_HPKE_CTX_setup_recipient" data-ref-filename="EVP_HPKE_CTX_setup_recipient" id="EVP_HPKE_CTX_setup_recipient">EVP_HPKE_CTX_setup_recipient</a>(</td></tr>
+<tr><th id="175">175</th><td>    <a class="typedef" href="base.h.html#EVP_HPKE_CTX" title='EVP_HPKE_CTX' data-type='struct evp_hpke_ctx_st' data-ref="EVP_HPKE_CTX" data-ref-filename="EVP_HPKE_CTX">EVP_HPKE_CTX</a> *<dfn class="local col0 decl" id="40ctx" title='ctx' data-type='EVP_HPKE_CTX *' data-ref="40ctx" data-ref-filename="40ctx">ctx</dfn>, <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KEY" title='EVP_HPKE_KEY' data-type='struct evp_hpke_key_st' data-ref="EVP_HPKE_KEY" data-ref-filename="EVP_HPKE_KEY">EVP_HPKE_KEY</a> *<dfn class="local col1 decl" id="41key" title='key' data-type='const EVP_HPKE_KEY *' data-ref="41key" data-ref-filename="41key">key</dfn>, <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KDF" title='EVP_HPKE_KDF' data-type='struct evp_hpke_kdf_st' data-ref="EVP_HPKE_KDF" data-ref-filename="EVP_HPKE_KDF">EVP_HPKE_KDF</a> *<dfn class="local col2 decl" id="42kdf" title='kdf' data-type='const EVP_HPKE_KDF *' data-ref="42kdf" data-ref-filename="42kdf">kdf</dfn>,</td></tr>
+<tr><th id="176">176</th><td>    <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_AEAD" title='EVP_HPKE_AEAD' data-type='struct evp_hpke_aead_st' data-ref="EVP_HPKE_AEAD" data-ref-filename="EVP_HPKE_AEAD">EVP_HPKE_AEAD</a> *<dfn class="local col3 decl" id="43aead" title='aead' data-type='const EVP_HPKE_AEAD *' data-ref="43aead" data-ref-filename="43aead">aead</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col4 decl" id="44enc" title='enc' data-type='const uint8_t *' data-ref="44enc" data-ref-filename="44enc">enc</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="45enc_len" title='enc_len' data-type='size_t' data-ref="45enc_len" data-ref-filename="45enc_len">enc_len</dfn>,</td></tr>
+<tr><th id="177">177</th><td>    <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col6 decl" id="46info" title='info' data-type='const uint8_t *' data-ref="46info" data-ref-filename="46info">info</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="47info_len" title='info_len' data-type='size_t' data-ref="47info_len" data-ref-filename="47info_len">info_len</dfn>);</td></tr>
+<tr><th id="178">178</th><td></td></tr>
+<tr><th id="179">179</th><td></td></tr>
+<tr><th id="180">180</th><td><i>// Using an HPKE context.</i></td></tr>
+<tr><th id="181">181</th><td><i>//</i></td></tr>
+<tr><th id="182">182</th><td><i>// Once set up, callers may encrypt or decrypt with an |EVP_HPKE_CTX| using the</i></td></tr>
+<tr><th id="183">183</th><td><i>// following functions.</i></td></tr>
+<tr><th id="184">184</th><td><i></i></td></tr>
+<tr><th id="185">185</th><td><i>// EVP_HPKE_CTX_open uses the HPKE context |ctx| to authenticate |in_len| bytes</i></td></tr>
+<tr><th id="186">186</th><td><i>// from |in| and |ad_len| bytes from |ad| and to decrypt at most |in_len| bytes</i></td></tr>
+<tr><th id="187">187</th><td><i>// into |out|. It returns one on success, and zero otherwise.</i></td></tr>
+<tr><th id="188">188</th><td><i>//</i></td></tr>
+<tr><th id="189">189</th><td><i>// This operation will fail if the |ctx| context is not set up as a receiver.</i></td></tr>
+<tr><th id="190">190</th><td><i>//</i></td></tr>
+<tr><th id="191">191</th><td><i>// Note that HPKE encryption is stateful and ordered. The sender's first call to</i></td></tr>
+<tr><th id="192">192</th><td><i>// |EVP_HPKE_CTX_seal| must correspond to the recipient's first call to</i></td></tr>
+<tr><th id="193">193</th><td><i>// |EVP_HPKE_CTX_open|, etc.</i></td></tr>
+<tr><th id="194">194</th><td><i>//</i></td></tr>
+<tr><th id="195">195</th><td><i>// At most |in_len| bytes are written to |out|. In order to ensure success,</i></td></tr>
+<tr><th id="196">196</th><td><i>// |max_out_len| should be at least |in_len|. On successful return, |*out_len|</i></td></tr>
+<tr><th id="197">197</th><td><i>// is set to the actual number of bytes written.</i></td></tr>
+<tr><th id="198">198</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_CTX_open" title='EVP_HPKE_CTX_open' data-ref="EVP_HPKE_CTX_open" data-ref-filename="EVP_HPKE_CTX_open" id="EVP_HPKE_CTX_open">EVP_HPKE_CTX_open</a>(<a class="typedef" href="base.h.html#EVP_HPKE_CTX" title='EVP_HPKE_CTX' data-type='struct evp_hpke_ctx_st' data-ref="EVP_HPKE_CTX" data-ref-filename="EVP_HPKE_CTX">EVP_HPKE_CTX</a> *<dfn class="local col8 decl" id="48ctx" title='ctx' data-type='EVP_HPKE_CTX *' data-ref="48ctx" data-ref-filename="48ctx">ctx</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col9 decl" id="49out" title='out' data-type='uint8_t *' data-ref="49out" data-ref-filename="49out">out</dfn>,</td></tr>
+<tr><th id="199">199</th><td>                                     <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col0 decl" id="50out_len" title='out_len' data-type='size_t *' data-ref="50out_len" data-ref-filename="50out_len">out_len</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="51max_out_len" title='max_out_len' data-type='size_t' data-ref="51max_out_len" data-ref-filename="51max_out_len">max_out_len</dfn>,</td></tr>
+<tr><th id="200">200</th><td>                                     <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col2 decl" id="52in" title='in' data-type='const uint8_t *' data-ref="52in" data-ref-filename="52in">in</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="53in_len" title='in_len' data-type='size_t' data-ref="53in_len" data-ref-filename="53in_len">in_len</dfn>,</td></tr>
+<tr><th id="201">201</th><td>                                     <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col4 decl" id="54ad" title='ad' data-type='const uint8_t *' data-ref="54ad" data-ref-filename="54ad">ad</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="55ad_len" title='ad_len' data-type='size_t' data-ref="55ad_len" data-ref-filename="55ad_len">ad_len</dfn>);</td></tr>
+<tr><th id="202">202</th><td></td></tr>
+<tr><th id="203">203</th><td><i>// EVP_HPKE_CTX_seal uses the HPKE context |ctx| to encrypt and authenticate</i></td></tr>
+<tr><th id="204">204</th><td><i>// |in_len| bytes of ciphertext |in| and authenticate |ad_len| bytes from |ad|,</i></td></tr>
+<tr><th id="205">205</th><td><i>// writing the result to |out|. It returns one on success and zero otherwise.</i></td></tr>
+<tr><th id="206">206</th><td><i>//</i></td></tr>
+<tr><th id="207">207</th><td><i>// This operation will fail if the |ctx| context is not set up as a sender.</i></td></tr>
+<tr><th id="208">208</th><td><i>//</i></td></tr>
+<tr><th id="209">209</th><td><i>// Note that HPKE encryption is stateful and ordered. The sender's first call to</i></td></tr>
+<tr><th id="210">210</th><td><i>// |EVP_HPKE_CTX_seal| must correspond to the recipient's first call to</i></td></tr>
+<tr><th id="211">211</th><td><i>// |EVP_HPKE_CTX_open|, etc.</i></td></tr>
+<tr><th id="212">212</th><td><i>//</i></td></tr>
+<tr><th id="213">213</th><td><i>// At most, |max_out_len| encrypted bytes are written to |out|. On successful</i></td></tr>
+<tr><th id="214">214</th><td><i>// return, |*out_len| is set to the actual number of bytes written.</i></td></tr>
+<tr><th id="215">215</th><td><i>//</i></td></tr>
+<tr><th id="216">216</th><td><i>// To ensure success, |max_out_len| should be |in_len| plus the result of</i></td></tr>
+<tr><th id="217">217</th><td><i>// |EVP_HPKE_CTX_max_overhead| or |EVP_HPKE_MAX_OVERHEAD|.</i></td></tr>
+<tr><th id="218">218</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_CTX_seal" title='EVP_HPKE_CTX_seal' data-ref="EVP_HPKE_CTX_seal" data-ref-filename="EVP_HPKE_CTX_seal" id="EVP_HPKE_CTX_seal">EVP_HPKE_CTX_seal</a>(<a class="typedef" href="base.h.html#EVP_HPKE_CTX" title='EVP_HPKE_CTX' data-type='struct evp_hpke_ctx_st' data-ref="EVP_HPKE_CTX" data-ref-filename="EVP_HPKE_CTX">EVP_HPKE_CTX</a> *<dfn class="local col6 decl" id="56ctx" title='ctx' data-type='EVP_HPKE_CTX *' data-ref="56ctx" data-ref-filename="56ctx">ctx</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col7 decl" id="57out" title='out' data-type='uint8_t *' data-ref="57out" data-ref-filename="57out">out</dfn>,</td></tr>
+<tr><th id="219">219</th><td>                                     <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col8 decl" id="58out_len" title='out_len' data-type='size_t *' data-ref="58out_len" data-ref-filename="58out_len">out_len</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="59max_out_len" title='max_out_len' data-type='size_t' data-ref="59max_out_len" data-ref-filename="59max_out_len">max_out_len</dfn>,</td></tr>
+<tr><th id="220">220</th><td>                                     <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col0 decl" id="60in" title='in' data-type='const uint8_t *' data-ref="60in" data-ref-filename="60in">in</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="61in_len" title='in_len' data-type='size_t' data-ref="61in_len" data-ref-filename="61in_len">in_len</dfn>,</td></tr>
+<tr><th id="221">221</th><td>                                     <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col2 decl" id="62ad" title='ad' data-type='const uint8_t *' data-ref="62ad" data-ref-filename="62ad">ad</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="63ad_len" title='ad_len' data-type='size_t' data-ref="63ad_len" data-ref-filename="63ad_len">ad_len</dfn>);</td></tr>
+<tr><th id="222">222</th><td></td></tr>
+<tr><th id="223">223</th><td><i>// EVP_HPKE_CTX_export uses the HPKE context |ctx| to export a secret of</i></td></tr>
+<tr><th id="224">224</th><td><i>// |secret_len| bytes into |out|. This function uses |context_len| bytes from</i></td></tr>
+<tr><th id="225">225</th><td><i>// |context| as a context string for the secret. This is necessary to separate</i></td></tr>
+<tr><th id="226">226</th><td><i>// different uses of exported secrets and bind relevant caller-specific context</i></td></tr>
+<tr><th id="227">227</th><td><i>// into the output. It returns one on success and zero otherwise.</i></td></tr>
+<tr><th id="228">228</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_CTX_export" title='EVP_HPKE_CTX_export' data-ref="EVP_HPKE_CTX_export" data-ref-filename="EVP_HPKE_CTX_export" id="EVP_HPKE_CTX_export">EVP_HPKE_CTX_export</a>(<em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_CTX" title='EVP_HPKE_CTX' data-type='struct evp_hpke_ctx_st' data-ref="EVP_HPKE_CTX" data-ref-filename="EVP_HPKE_CTX">EVP_HPKE_CTX</a> *<dfn class="local col4 decl" id="64ctx" title='ctx' data-type='const EVP_HPKE_CTX *' data-ref="64ctx" data-ref-filename="64ctx">ctx</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col5 decl" id="65out" title='out' data-type='uint8_t *' data-ref="65out" data-ref-filename="65out">out</dfn>,</td></tr>
+<tr><th id="229">229</th><td>                                       <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="66secret_len" title='secret_len' data-type='size_t' data-ref="66secret_len" data-ref-filename="66secret_len">secret_len</dfn>,</td></tr>
+<tr><th id="230">230</th><td>                                       <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col7 decl" id="67context" title='context' data-type='const uint8_t *' data-ref="67context" data-ref-filename="67context">context</dfn>,</td></tr>
+<tr><th id="231">231</th><td>                                       <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="68context_len" title='context_len' data-type='size_t' data-ref="68context_len" data-ref-filename="68context_len">context_len</dfn>);</td></tr>
+<tr><th id="232">232</th><td></td></tr>
+<tr><th id="233">233</th><td><i>// EVP_HPKE_MAX_OVERHEAD contains the largest value that</i></td></tr>
+<tr><th id="234">234</th><td><i>// |EVP_HPKE_CTX_max_overhead| would ever return for any context.</i></td></tr>
+<tr><th id="235">235</th><td><u>#define <dfn class="macro" id="_M/EVP_HPKE_MAX_OVERHEAD" data-ref="_M/EVP_HPKE_MAX_OVERHEAD">EVP_HPKE_MAX_OVERHEAD</dfn> EVP_AEAD_MAX_OVERHEAD</u></td></tr>
+<tr><th id="236">236</th><td></td></tr>
+<tr><th id="237">237</th><td><i>// EVP_HPKE_CTX_max_overhead returns the maximum number of additional bytes</i></td></tr>
+<tr><th id="238">238</th><td><i>// added by sealing data with |EVP_HPKE_CTX_seal|. The |ctx| context must be set</i></td></tr>
+<tr><th id="239">239</th><td><i>// up as a sender.</i></td></tr>
+<tr><th id="240">240</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_CTX_max_overhead" title='EVP_HPKE_CTX_max_overhead' data-ref="EVP_HPKE_CTX_max_overhead" data-ref-filename="EVP_HPKE_CTX_max_overhead" id="EVP_HPKE_CTX_max_overhead">EVP_HPKE_CTX_max_overhead</a>(<em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_CTX" title='EVP_HPKE_CTX' data-type='struct evp_hpke_ctx_st' data-ref="EVP_HPKE_CTX" data-ref-filename="EVP_HPKE_CTX">EVP_HPKE_CTX</a> *<dfn class="local col9 decl" id="69ctx" title='ctx' data-type='const EVP_HPKE_CTX *' data-ref="69ctx" data-ref-filename="69ctx">ctx</dfn>);</td></tr>
+<tr><th id="241">241</th><td></td></tr>
+<tr><th id="242">242</th><td><i>// EVP_HPKE_CTX_aead returns |ctx|'s configured AEAD, or NULL if the context has</i></td></tr>
+<tr><th id="243">243</th><td><i>// not been set up.</i></td></tr>
+<tr><th id="244">244</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_AEAD" title='EVP_HPKE_AEAD' data-type='struct evp_hpke_aead_st' data-ref="EVP_HPKE_AEAD" data-ref-filename="EVP_HPKE_AEAD">EVP_HPKE_AEAD</a> *<a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_CTX_aead" title='EVP_HPKE_CTX_aead' data-ref="EVP_HPKE_CTX_aead" data-ref-filename="EVP_HPKE_CTX_aead" id="EVP_HPKE_CTX_aead">EVP_HPKE_CTX_aead</a>(<em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_CTX" title='EVP_HPKE_CTX' data-type='struct evp_hpke_ctx_st' data-ref="EVP_HPKE_CTX" data-ref-filename="EVP_HPKE_CTX">EVP_HPKE_CTX</a> *<dfn class="local col0 decl" id="70ctx" title='ctx' data-type='const EVP_HPKE_CTX *' data-ref="70ctx" data-ref-filename="70ctx">ctx</dfn>);</td></tr>
+<tr><th id="245">245</th><td></td></tr>
+<tr><th id="246">246</th><td><i>// EVP_HPKE_CTX_kdf returns |ctx|'s configured KDF, or NULL if the context has</i></td></tr>
+<tr><th id="247">247</th><td><i>// not been set up.</i></td></tr>
+<tr><th id="248">248</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KDF" title='EVP_HPKE_KDF' data-type='struct evp_hpke_kdf_st' data-ref="EVP_HPKE_KDF" data-ref-filename="EVP_HPKE_KDF">EVP_HPKE_KDF</a> *<a class="decl fn" href="../../crypto/hpke/hpke.c.html#EVP_HPKE_CTX_kdf" title='EVP_HPKE_CTX_kdf' data-ref="EVP_HPKE_CTX_kdf" data-ref-filename="EVP_HPKE_CTX_kdf" id="EVP_HPKE_CTX_kdf">EVP_HPKE_CTX_kdf</a>(<em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_CTX" title='EVP_HPKE_CTX' data-type='struct evp_hpke_ctx_st' data-ref="EVP_HPKE_CTX" data-ref-filename="EVP_HPKE_CTX">EVP_HPKE_CTX</a> *<dfn class="local col1 decl" id="71ctx" title='ctx' data-type='const EVP_HPKE_CTX *' data-ref="71ctx" data-ref-filename="71ctx">ctx</dfn>);</td></tr>
+<tr><th id="249">249</th><td></td></tr>
+<tr><th id="250">250</th><td></td></tr>
+<tr><th id="251">251</th><td><i>// Private structures.</i></td></tr>
+<tr><th id="252">252</th><td><i>//</i></td></tr>
+<tr><th id="253">253</th><td><i>// The following structures are exported so their types are stack-allocatable,</i></td></tr>
+<tr><th id="254">254</th><td><i>// but accessing or modifying their fields is forbidden.</i></td></tr>
+<tr><th id="255">255</th><td></td></tr>
+<tr><th id="256">256</th><td><b>struct</b> <dfn class="type def" id="evp_hpke_ctx_st" title='evp_hpke_ctx_st' data-ref="evp_hpke_ctx_st" data-ref-filename="evp_hpke_ctx_st">evp_hpke_ctx_st</dfn> {</td></tr>
+<tr><th id="257">257</th><td>  <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_AEAD" title='EVP_HPKE_AEAD' data-type='struct evp_hpke_aead_st' data-ref="EVP_HPKE_AEAD" data-ref-filename="EVP_HPKE_AEAD">EVP_HPKE_AEAD</a> *<dfn class="decl field" id="evp_hpke_ctx_st::aead" title='evp_hpke_ctx_st::aead' data-ref="evp_hpke_ctx_st::aead" data-ref-filename="evp_hpke_ctx_st..aead">aead</dfn>;</td></tr>
+<tr><th id="258">258</th><td>  <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KDF" title='EVP_HPKE_KDF' data-type='struct evp_hpke_kdf_st' data-ref="EVP_HPKE_KDF" data-ref-filename="EVP_HPKE_KDF">EVP_HPKE_KDF</a> *<dfn class="decl field" id="evp_hpke_ctx_st::kdf" title='evp_hpke_ctx_st::kdf' data-ref="evp_hpke_ctx_st::kdf" data-ref-filename="evp_hpke_ctx_st..kdf">kdf</dfn>;</td></tr>
+<tr><th id="259">259</th><td>  <a class="typedef" href="aead.h.html#EVP_AEAD_CTX" title='EVP_AEAD_CTX' data-type='struct evp_aead_ctx_st' data-ref="EVP_AEAD_CTX" data-ref-filename="EVP_AEAD_CTX">EVP_AEAD_CTX</a> <dfn class="decl field" id="evp_hpke_ctx_st::aead_ctx" title='evp_hpke_ctx_st::aead_ctx' data-ref="evp_hpke_ctx_st::aead_ctx" data-ref-filename="evp_hpke_ctx_st..aead_ctx">aead_ctx</dfn>;</td></tr>
+<tr><th id="260">260</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="evp_hpke_ctx_st::base_nonce" title='evp_hpke_ctx_st::base_nonce' data-ref="evp_hpke_ctx_st::base_nonce" data-ref-filename="evp_hpke_ctx_st..base_nonce">base_nonce</dfn>[<a class="macro" href="aead.h.html#231" title="24" data-ref="_M/EVP_AEAD_MAX_NONCE_LENGTH">EVP_AEAD_MAX_NONCE_LENGTH</a>];</td></tr>
+<tr><th id="261">261</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="evp_hpke_ctx_st::exporter_secret" title='evp_hpke_ctx_st::exporter_secret' data-ref="evp_hpke_ctx_st::exporter_secret" data-ref-filename="evp_hpke_ctx_st..exporter_secret">exporter_secret</dfn>[<a class="macro" href="digest.h.html#152" title="64" data-ref="_M/EVP_MAX_MD_SIZE">EVP_MAX_MD_SIZE</a>];</td></tr>
+<tr><th id="262">262</th><td>  <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="decl field" id="evp_hpke_ctx_st::seq" title='evp_hpke_ctx_st::seq' data-ref="evp_hpke_ctx_st::seq" data-ref-filename="evp_hpke_ctx_st..seq">seq</dfn>;</td></tr>
+<tr><th id="263">263</th><td>  <em>int</em> <dfn class="decl field" id="evp_hpke_ctx_st::is_sender" title='evp_hpke_ctx_st::is_sender' data-ref="evp_hpke_ctx_st::is_sender" data-ref-filename="evp_hpke_ctx_st..is_sender">is_sender</dfn>;</td></tr>
+<tr><th id="264">264</th><td>};</td></tr>
+<tr><th id="265">265</th><td></td></tr>
+<tr><th id="266">266</th><td><b>struct</b> <dfn class="type def" id="evp_hpke_key_st" title='evp_hpke_key_st' data-ref="evp_hpke_key_st" data-ref-filename="evp_hpke_key_st">evp_hpke_key_st</dfn> {</td></tr>
+<tr><th id="267">267</th><td>  <em>const</em> <a class="typedef" href="base.h.html#EVP_HPKE_KEM" title='EVP_HPKE_KEM' data-type='struct evp_hpke_kem_st' data-ref="EVP_HPKE_KEM" data-ref-filename="EVP_HPKE_KEM">EVP_HPKE_KEM</a> *<dfn class="decl field" id="evp_hpke_key_st::kem" title='evp_hpke_key_st::kem' data-ref="evp_hpke_key_st::kem" data-ref-filename="evp_hpke_key_st..kem">kem</dfn>;</td></tr>
+<tr><th id="268">268</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="evp_hpke_key_st::private_key" title='evp_hpke_key_st::private_key' data-ref="evp_hpke_key_st::private_key" data-ref-filename="evp_hpke_key_st..private_key">private_key</dfn>[<a class="macro" href="curve25519.h.html#36" title="32" data-ref="_M/X25519_PRIVATE_KEY_LEN">X25519_PRIVATE_KEY_LEN</a>];</td></tr>
+<tr><th id="269">269</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="evp_hpke_key_st::public_key" title='evp_hpke_key_st::public_key' data-ref="evp_hpke_key_st::public_key" data-ref-filename="evp_hpke_key_st..public_key">public_key</dfn>[<a class="macro" href="curve25519.h.html#37" title="32" data-ref="_M/X25519_PUBLIC_VALUE_LEN">X25519_PUBLIC_VALUE_LEN</a>];</td></tr>
+<tr><th id="270">270</th><td>};</td></tr>
+<tr><th id="271">271</th><td></td></tr>
+<tr><th id="272">272</th><td></td></tr>
+<tr><th id="273">273</th><td><u>#<span data-ppcond="273">if</span> defined(<span class="macro" data-ref="_M/__cplusplus">__cplusplus</span>)</u></td></tr>
+<tr><th id="274">274</th><td>}  <i>// extern C</i></td></tr>
+<tr><th id="275">275</th><td><u>#<span data-ppcond="273">endif</span></u></td></tr>
+<tr><th id="276">276</th><td></td></tr>
+<tr><th id="277">277</th><td><u>#<span data-ppcond="277">if</span> !defined(<a class="macro" href="base.h.html#465" data-ref="_M/BORINGSSL_NO_CXX">BORINGSSL_NO_CXX</a>)</u></td></tr>
+<tr><th id="278">278</th><td><b>extern</b> <q>"C++"</q> {</td></tr>
+<tr><th id="279">279</th><td></td></tr>
+<tr><th id="280">280</th><td>BSSL_NAMESPACE_BEGIN</td></tr>
+<tr><th id="281">281</th><td></td></tr>
+<tr><th id="282">282</th><td>using ScopedEVP_HPKE_CTX =</td></tr>
+<tr><th id="283">283</th><td>    internal::StackAllocated&lt;EVP_HPKE_CTX, <em>void</em>, EVP_HPKE_CTX_zero,</td></tr>
+<tr><th id="284">284</th><td>                             EVP_HPKE_CTX_cleanup&gt;;</td></tr>
+<tr><th id="285">285</th><td>using ScopedEVP_HPKE_KEY =</td></tr>
+<tr><th id="286">286</th><td>    internal::StackAllocated&lt;EVP_HPKE_KEY, <em>void</em>, EVP_HPKE_KEY_zero,</td></tr>
+<tr><th id="287">287</th><td>                             EVP_HPKE_KEY_cleanup&gt;;</td></tr>
+<tr><th id="288">288</th><td></td></tr>
+<tr><th id="289">289</th><td>BSSL_NAMESPACE_END</td></tr>
+<tr><th id="290">290</th><td></td></tr>
+<tr><th id="291">291</th><td>}  <i>// extern C++</i></td></tr>
+<tr><th id="292">292</th><td><u>#<span data-ppcond="277">endif</span></u></td></tr>
+<tr><th id="293">293</th><td></td></tr>
+<tr><th id="294">294</th><td><u>#<span data-ppcond="15">endif</span>  // OPENSSL_HEADER_CRYPTO_HPKE_INTERNAL_H</u></td></tr>
+<tr><th id="295">295</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../crypto/hpke/hpke.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/hpke/hpke.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

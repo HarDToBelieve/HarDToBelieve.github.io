@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ExitKind.h source code [webkit/Source/JavaScriptCore/bytecode/ExitKind.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="JSC::ExitKind "/>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/JavaScriptCore/bytecode/ExitKind.h'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>JavaScriptCore</a>/<a href='./'>bytecode</a>/<a href='ExitKind.h.html'>ExitKind.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2012-2016 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><b>namespace</b> <span class="namespace">JSC</span> {</td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><b>enum</b> <dfn class="type def" id="JSC::ExitKind" title='JSC::ExitKind' data-ref="JSC::ExitKind" data-ref-filename="JSC..ExitKind">ExitKind</dfn> : uint8_t {</td></tr>
+<tr><th id="31">31</th><td>    <dfn class="enum" id="JSC::ExitKindUnset" title='JSC::ExitKindUnset' data-ref="JSC::ExitKindUnset" data-ref-filename="JSC..ExitKindUnset">ExitKindUnset</dfn>,</td></tr>
+<tr><th id="32">32</th><td>    <dfn class="enum" id="JSC::BadType" title='JSC::BadType' data-ref="JSC::BadType" data-ref-filename="JSC..BadType">BadType</dfn>, <i>// We exited because a type prediction was wrong.</i></td></tr>
+<tr><th id="33">33</th><td>    <dfn class="enum" id="JSC::BadConstantValue" title='JSC::BadConstantValue' data-ref="JSC::BadConstantValue" data-ref-filename="JSC..BadConstantValue">BadConstantValue</dfn>, <i>// We exited because we made an incorrect assumption about what value we would see. Usually used for function checks.</i></td></tr>
+<tr><th id="34">34</th><td>    <dfn class="enum" id="JSC::BadIdent" title='JSC::BadIdent' data-ref="JSC::BadIdent" data-ref-filename="JSC..BadIdent">BadIdent</dfn>, <i>// We exited because we made an incorrect assumption about what identifier we would see. Usually used for cached Id check in get_by_val.</i></td></tr>
+<tr><th id="35">35</th><td>    <dfn class="enum" id="JSC::BadExecutable" title='JSC::BadExecutable' data-ref="JSC::BadExecutable" data-ref-filename="JSC..BadExecutable">BadExecutable</dfn>, <i>// We exited because we made an incorrect assumption about what executable we would see.</i></td></tr>
+<tr><th id="36">36</th><td>    <dfn class="enum" id="JSC::BadCache" title='JSC::BadCache' data-ref="JSC::BadCache" data-ref-filename="JSC..BadCache">BadCache</dfn>, <i>// We exited because an inline cache was wrong.</i></td></tr>
+<tr><th id="37">37</th><td>    <dfn class="enum" id="JSC::BadConstantCache" title='JSC::BadConstantCache' data-ref="JSC::BadConstantCache" data-ref-filename="JSC..BadConstantCache">BadConstantCache</dfn>, <i>// We exited because a cache on a weak constant (usually a prototype) was wrong.</i></td></tr>
+<tr><th id="38">38</th><td>    <dfn class="enum" id="JSC::BadIndexingType" title='JSC::BadIndexingType' data-ref="JSC::BadIndexingType" data-ref-filename="JSC..BadIndexingType">BadIndexingType</dfn>, <i>// We exited because an indexing type was wrong.</i></td></tr>
+<tr><th id="39">39</th><td>    <dfn class="enum" id="JSC::BadTypeInfoFlags" title='JSC::BadTypeInfoFlags' data-ref="JSC::BadTypeInfoFlags" data-ref-filename="JSC..BadTypeInfoFlags">BadTypeInfoFlags</dfn>, <i>// We exited because we made an incorrect assumption about what TypeInfo flags we would see.</i></td></tr>
+<tr><th id="40">40</th><td>    <dfn class="enum" id="JSC::Overflow" title='JSC::Overflow' data-ref="JSC::Overflow" data-ref-filename="JSC..Overflow">Overflow</dfn>, <i>// We exited because of overflow.</i></td></tr>
+<tr><th id="41">41</th><td>    <dfn class="enum" id="JSC::NegativeZero" title='JSC::NegativeZero' data-ref="JSC::NegativeZero" data-ref-filename="JSC..NegativeZero">NegativeZero</dfn>, <i>// We exited because we encountered negative zero.</i></td></tr>
+<tr><th id="42">42</th><td>    <dfn class="enum" id="JSC::NegativeIndex" title='JSC::NegativeIndex' data-ref="JSC::NegativeIndex" data-ref-filename="JSC..NegativeIndex">NegativeIndex</dfn>, <i>// We exited because we encountered a negative index in a place we didn't want to see it.</i></td></tr>
+<tr><th id="43">43</th><td>    <dfn class="enum" id="JSC::Int52Overflow" title='JSC::Int52Overflow' data-ref="JSC::Int52Overflow" data-ref-filename="JSC..Int52Overflow">Int52Overflow</dfn>, <i>// We exited because of an Int52 overflow.</i></td></tr>
+<tr><th id="44">44</th><td>    <dfn class="enum" id="JSC::StoreToHole" title='JSC::StoreToHole' data-ref="JSC::StoreToHole" data-ref-filename="JSC..StoreToHole">StoreToHole</dfn>, <i>// We had a store to a hole.</i></td></tr>
+<tr><th id="45">45</th><td>    <dfn class="enum" id="JSC::LoadFromHole" title='JSC::LoadFromHole' data-ref="JSC::LoadFromHole" data-ref-filename="JSC..LoadFromHole">LoadFromHole</dfn>, <i>// We had a load from a hole.</i></td></tr>
+<tr><th id="46">46</th><td>    <dfn class="enum" id="JSC::OutOfBounds" title='JSC::OutOfBounds' data-ref="JSC::OutOfBounds" data-ref-filename="JSC..OutOfBounds">OutOfBounds</dfn>, <i>// We had an out-of-bounds access to an array.</i></td></tr>
+<tr><th id="47">47</th><td>    <dfn class="enum" id="JSC::InadequateCoverage" title='JSC::InadequateCoverage' data-ref="JSC::InadequateCoverage" data-ref-filename="JSC..InadequateCoverage">InadequateCoverage</dfn>, <i>// We exited because we ended up in code that didn't have profiling coverage.</i></td></tr>
+<tr><th id="48">48</th><td>    <dfn class="enum" id="JSC::ArgumentsEscaped" title='JSC::ArgumentsEscaped' data-ref="JSC::ArgumentsEscaped" data-ref-filename="JSC..ArgumentsEscaped">ArgumentsEscaped</dfn>, <i>// We exited because arguments escaped but we didn't expect them to.</i></td></tr>
+<tr><th id="49">49</th><td>    <dfn class="enum" id="JSC::ExoticObjectMode" title='JSC::ExoticObjectMode' data-ref="JSC::ExoticObjectMode" data-ref-filename="JSC..ExoticObjectMode">ExoticObjectMode</dfn>, <i>// We exited because some exotic object that we were accessing was in an exotic mode (like Arguments with slow arguments).</i></td></tr>
+<tr><th id="50">50</th><td>    <dfn class="enum" id="JSC::VarargsOverflow" title='JSC::VarargsOverflow' data-ref="JSC::VarargsOverflow" data-ref-filename="JSC..VarargsOverflow">VarargsOverflow</dfn>, <i>// We exited because a varargs call passed more arguments than we expected.</i></td></tr>
+<tr><th id="51">51</th><td>    <dfn class="enum" id="JSC::TDZFailure" title='JSC::TDZFailure' data-ref="JSC::TDZFailure" data-ref-filename="JSC..TDZFailure">TDZFailure</dfn>, <i>// We exited because we were in the TDZ and accessed the variable.</i></td></tr>
+<tr><th id="52">52</th><td>    <dfn class="enum" id="JSC::HoistingFailed" title='JSC::HoistingFailed' data-ref="JSC::HoistingFailed" data-ref-filename="JSC..HoistingFailed">HoistingFailed</dfn>, <i>// Something that was hoisted exited. So, assume that hoisting is a bad idea.</i></td></tr>
+<tr><th id="53">53</th><td>    <dfn class="enum" id="JSC::Uncountable" title='JSC::Uncountable' data-ref="JSC::Uncountable" data-ref-filename="JSC..Uncountable">Uncountable</dfn>, <i>// We exited for none of the above reasons, and we should not count it. Most uses of this should be viewed as a FIXME.</i></td></tr>
+<tr><th id="54">54</th><td>    <dfn class="enum" id="JSC::UncountableInvalidation" title='JSC::UncountableInvalidation' data-ref="JSC::UncountableInvalidation" data-ref-filename="JSC..UncountableInvalidation">UncountableInvalidation</dfn>, <i>// We exited because the code block was invalidated; this means that we've already counted the reasons why the code block was invalidated.</i></td></tr>
+<tr><th id="55">55</th><td>    <dfn class="enum" id="JSC::WatchdogTimerFired" title='JSC::WatchdogTimerFired' data-ref="JSC::WatchdogTimerFired" data-ref-filename="JSC..WatchdogTimerFired">WatchdogTimerFired</dfn>, <i>// We exited because we need to service the watchdog timer.</i></td></tr>
+<tr><th id="56">56</th><td>    <dfn class="enum" id="JSC::DebuggerEvent" title='JSC::DebuggerEvent' data-ref="JSC::DebuggerEvent" data-ref-filename="JSC..DebuggerEvent">DebuggerEvent</dfn>, <i>// We exited because we need to service the debugger.</i></td></tr>
+<tr><th id="57">57</th><td>    <dfn class="enum" id="JSC::ExceptionCheck" title='JSC::ExceptionCheck' data-ref="JSC::ExceptionCheck" data-ref-filename="JSC..ExceptionCheck">ExceptionCheck</dfn>, <i>// We exited because a direct exception check showed that we threw an exception from a C call.</i></td></tr>
+<tr><th id="58">58</th><td>    <dfn class="enum" id="JSC::GenericUnwind" title='JSC::GenericUnwind' data-ref="JSC::GenericUnwind" data-ref-filename="JSC..GenericUnwind">GenericUnwind</dfn>, <i>// We exited because we arrived at this OSR exit from genericUnwind.</i></td></tr>
+<tr><th id="59">59</th><td>    <dfn class="enum" id="JSC::BigInt32Overflow" title='JSC::BigInt32Overflow' data-ref="JSC::BigInt32Overflow" data-ref-filename="JSC..BigInt32Overflow">BigInt32Overflow</dfn>, <i>// We exited because of an BigInt32 overflow.</i></td></tr>
+<tr><th id="60">60</th><td>};</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><em>const</em> <em>char</em>* <dfn class="decl fn" id="_ZN3JSC16exitKindToStringENS_8ExitKindE" title='JSC::exitKindToString' data-ref="_ZN3JSC16exitKindToStringENS_8ExitKindE" data-ref-filename="_ZN3JSC16exitKindToStringENS_8ExitKindE">exitKindToString</dfn>(<a class="type" href="#JSC::ExitKind" title='JSC::ExitKind' data-ref="JSC::ExitKind" data-ref-filename="JSC..ExitKind">ExitKind</a>);</td></tr>
+<tr><th id="63">63</th><td><em>bool</em> <dfn class="decl fn" id="_ZN3JSC19exitKindMayJettisonENS_8ExitKindE" title='JSC::exitKindMayJettison' data-ref="_ZN3JSC19exitKindMayJettisonENS_8ExitKindE" data-ref-filename="_ZN3JSC19exitKindMayJettisonENS_8ExitKindE">exitKindMayJettison</dfn>(<a class="type" href="#JSC::ExitKind" title='JSC::ExitKind' data-ref="JSC::ExitKind" data-ref-filename="JSC..ExitKind">ExitKind</a>);</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td>} <i>// namespace JSC</i></td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td><b>class</b> <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PrintStream.h.html#WTF::PrintStream" title='WTF::PrintStream' data-ref="WTF::PrintStream" data-ref-filename="WTF..PrintStream" id="WTF::PrintStream">PrintStream</a>;</td></tr>
+<tr><th id="70">70</th><td><em>void</em> <dfn class="decl fn" id="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC8ExitKindE" title='WTF::printInternal' data-ref="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC8ExitKindE" data-ref-filename="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC8ExitKindE">printInternal</dfn>(<a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PrintStream.h.html#WTF::PrintStream" title='WTF::PrintStream' data-ref="WTF::PrintStream" data-ref-filename="WTF..PrintStream">PrintStream</a>&amp;, <span class="namespace">JSC::</span><a class="type" href="#JSC::ExitKind" title='JSC::ExitKind' data-ref="JSC::ExitKind" data-ref-filename="JSC..ExitKind">ExitKind</a>);</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="73">73</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../API/tests/JSONParseTest.cpp.html'>webkit/Source/JavaScriptCore/API/tests/JSONParseTest.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

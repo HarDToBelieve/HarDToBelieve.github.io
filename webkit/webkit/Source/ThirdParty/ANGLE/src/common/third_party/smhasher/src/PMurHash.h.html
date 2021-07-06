@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>PMurHash.h source code [webkit/Source/ThirdParty/ANGLE/src/common/third_party/smhasher/src/PMurHash.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/ANGLE/src/common/third_party/smhasher/src/PMurHash.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>ANGLE</a>/<a href='../../../..'>src</a>/<a href='../../..'>common</a>/<a href='../..'>third_party</a>/<a href='..'>smhasher</a>/<a href='./'>src</a>/<a href='PMurHash.h.html'>PMurHash.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*-----------------------------------------------------------------------------</i></td></tr>
+<tr><th id="2">2</th><td><i> * MurmurHash3 was written by Austin Appleby, and is placed in the public</i></td></tr>
+<tr><th id="3">3</th><td><i> * domain.</i></td></tr>
+<tr><th id="4">4</th><td><i> *</i></td></tr>
+<tr><th id="5">5</th><td><i> * This implementation was written by Shane Day, and is also public domain.</i></td></tr>
+<tr><th id="6">6</th><td><i> *</i></td></tr>
+<tr><th id="7">7</th><td><i> * This is a portable ANSI C implementation of MurmurHash3_x86_32 (Murmur3A)</i></td></tr>
+<tr><th id="8">8</th><td><i> * with support for progressive processing.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><i>/* ------------------------------------------------------------------------- */</i></td></tr>
+<tr><th id="12">12</th><td><i>/* Determine what native type to use for uint32_t */</i></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><i>/* We can't use the name 'uint32_t' here because it will conflict with</i></td></tr>
+<tr><th id="15">15</th><td><i> * any version provided by the system headers or application. */</i></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><i>/* First look for special cases */</i></td></tr>
+<tr><th id="18">18</th><td><u>#<span data-ppcond="18">if</span> defined(<span class="macro" data-ref="_M/_MSC_VER">_MSC_VER</span>)</u></td></tr>
+<tr><th id="19">19</th><td><u>#    define MH_UINT32 unsigned long</u></td></tr>
+<tr><th id="20">20</th><td><u>#<span data-ppcond="18">endif</span></u></td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><i>/* If the compiler says it's C99 then take its word for it */</i></td></tr>
+<tr><th id="23">23</th><td><u>#<span data-ppcond="23">if</span> !defined(<span class="macro" data-ref="_M/MH_UINT32">MH_UINT32</span>) &amp;&amp; (defined(<span class="macro" data-ref="_M/__STDC_VERSION__">__STDC_VERSION__</span>) &amp;&amp; __STDC_VERSION__ &gt;= 199901L)</u></td></tr>
+<tr><th id="24">24</th><td><u>#    include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="25">25</th><td><u>#    define MH_UINT32 uint32_t</u></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="23">endif</span></u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><i>/* Otherwise try testing against max value macros from limit.h */</i></td></tr>
+<tr><th id="29">29</th><td><u>#<span data-ppcond="29">if</span> !defined(<span class="macro" data-ref="_M/MH_UINT32">MH_UINT32</span>)</u></td></tr>
+<tr><th id="30">30</th><td><u>#    include &lt;limits.h&gt;</u></td></tr>
+<tr><th id="31">31</th><td><u>#    <span data-ppcond="31">if</span> (<span class="macro" title="(32767 *2 +1)" data-ref="_M/USHRT_MAX">USHRT_MAX</span> == 0xffffffffUL)</u></td></tr>
+<tr><th id="32">32</th><td><u>#        define MH_UINT32 unsigned short</u></td></tr>
+<tr><th id="33">33</th><td><u>#    <span data-ppcond="31">elif</span> (<span class="macro" title="(2147483647 *2U +1U)" data-ref="_M/UINT_MAX">UINT_MAX</span> == 0xffffffffUL)</u></td></tr>
+<tr><th id="34">34</th><td><u>#        define <dfn class="macro" id="_M/MH_UINT32" data-ref="_M/MH_UINT32">MH_UINT32</dfn> unsigned int</u></td></tr>
+<tr><th id="35">35</th><td><u>#    <span data-ppcond="31">elif</span> (ULONG_MAX == 0xffffffffUL)</u></td></tr>
+<tr><th id="36">36</th><td><u>#        define MH_UINT32 unsigned long</u></td></tr>
+<tr><th id="37">37</th><td><u>#    <span data-ppcond="31">endif</span></u></td></tr>
+<tr><th id="38">38</th><td><u>#<span data-ppcond="29">endif</span></u></td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><u>#<span data-ppcond="40">if</span> !defined(<a class="macro" href="#34" data-ref="_M/MH_UINT32">MH_UINT32</a>)</u></td></tr>
+<tr><th id="41">41</th><td><u>#    error Unable to determine type name for unsigned 32-bit int</u></td></tr>
+<tr><th id="42">42</th><td><u>#<span data-ppcond="40">endif</span></u></td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><i>/* I'm yet to work on a platform where 'unsigned char' is not 8 bits */</i></td></tr>
+<tr><th id="45">45</th><td><u>#define <dfn class="macro" id="_M/MH_UINT8" data-ref="_M/MH_UINT8">MH_UINT8</dfn> unsigned char</u></td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td><i>/* ------------------------------------------------------------------------- */</i></td></tr>
+<tr><th id="48">48</th><td><i>/* Prototypes */</i></td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><b>namespace</b> <span class="namespace">angle</span></td></tr>
+<tr><th id="51">51</th><td>{</td></tr>
+<tr><th id="52">52</th><td><em>void</em> <a class="decl fn" href="PMurHash.cpp.html#_ZN5angle18PMurHash32_ProcessEPjS0_PKvi" title='angle::PMurHash32_Process' data-ref="_ZN5angle18PMurHash32_ProcessEPjS0_PKvi" data-ref-filename="_ZN5angle18PMurHash32_ProcessEPjS0_PKvi" id="_ZN5angle18PMurHash32_ProcessEPjS0_PKvi">PMurHash32_Process</a>(<a class="macro" href="#34" title="unsigned int" data-ref="_M/MH_UINT32">MH_UINT32</a> *<dfn class="local col1 decl" id="1ph1" title='ph1' data-type='unsigned int *' data-ref="1ph1" data-ref-filename="1ph1">ph1</dfn>, <a class="macro" href="#34" title="unsigned int" data-ref="_M/MH_UINT32">MH_UINT32</a> *<dfn class="local col2 decl" id="2pcarry" title='pcarry' data-type='unsigned int *' data-ref="2pcarry" data-ref-filename="2pcarry">pcarry</dfn>, <em>const</em> <em>void</em> *<dfn class="local col3 decl" id="3key" title='key' data-type='const void *' data-ref="3key" data-ref-filename="3key">key</dfn>, <em>int</em> <dfn class="local col4 decl" id="4len" title='len' data-type='int' data-ref="4len" data-ref-filename="4len">len</dfn>);</td></tr>
+<tr><th id="53">53</th><td><a class="macro" href="#34" title="unsigned int" data-ref="_M/MH_UINT32">MH_UINT32</a> <a class="decl fn" href="PMurHash.cpp.html#_ZN5angle17PMurHash32_ResultEjjj" title='angle::PMurHash32_Result' data-ref="_ZN5angle17PMurHash32_ResultEjjj" data-ref-filename="_ZN5angle17PMurHash32_ResultEjjj" id="_ZN5angle17PMurHash32_ResultEjjj">PMurHash32_Result</a>(<a class="macro" href="#34" title="unsigned int" data-ref="_M/MH_UINT32">MH_UINT32</a> <dfn class="local col5 decl" id="5h1" title='h1' data-type='unsigned int' data-ref="5h1" data-ref-filename="5h1">h1</dfn>, <a class="macro" href="#34" title="unsigned int" data-ref="_M/MH_UINT32">MH_UINT32</a> <dfn class="local col6 decl" id="6carry" title='carry' data-type='unsigned int' data-ref="6carry" data-ref-filename="6carry">carry</dfn>, <a class="macro" href="#34" title="unsigned int" data-ref="_M/MH_UINT32">MH_UINT32</a> <dfn class="local col7 decl" id="7total_length" title='total_length' data-type='unsigned int' data-ref="7total_length" data-ref-filename="7total_length">total_length</dfn>);</td></tr>
+<tr><th id="54">54</th><td><a class="macro" href="#34" title="unsigned int" data-ref="_M/MH_UINT32">MH_UINT32</a> <a class="decl fn" href="PMurHash.cpp.html#_ZN5angle10PMurHash32EjPKvi" title='angle::PMurHash32' data-ref="_ZN5angle10PMurHash32EjPKvi" data-ref-filename="_ZN5angle10PMurHash32EjPKvi" id="_ZN5angle10PMurHash32EjPKvi">PMurHash32</a>(<a class="macro" href="#34" title="unsigned int" data-ref="_M/MH_UINT32">MH_UINT32</a> <dfn class="local col8 decl" id="8seed" title='seed' data-type='unsigned int' data-ref="8seed" data-ref-filename="8seed">seed</dfn>, <em>const</em> <em>void</em> *<dfn class="local col9 decl" id="9key" title='key' data-type='const void *' data-ref="9key" data-ref-filename="9key">key</dfn>, <em>int</em> <dfn class="local col0 decl" id="10len" title='len' data-type='int' data-ref="10len" data-ref-filename="10len">len</dfn>);</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td><em>void</em> <a class="decl fn" href="PMurHash.cpp.html#_ZN5angle15PMurHash32_testEPKvijPv" title='angle::PMurHash32_test' data-ref="_ZN5angle15PMurHash32_testEPKvijPv" data-ref-filename="_ZN5angle15PMurHash32_testEPKvijPv" id="_ZN5angle15PMurHash32_testEPKvijPv">PMurHash32_test</a>(<em>const</em> <em>void</em> *<dfn class="local col1 decl" id="11key" title='key' data-type='const void *' data-ref="11key" data-ref-filename="11key">key</dfn>, <em>int</em> <dfn class="local col2 decl" id="12len" title='len' data-type='int' data-ref="12len" data-ref-filename="12len">len</dfn>, <a class="macro" href="#34" title="unsigned int" data-ref="_M/MH_UINT32">MH_UINT32</a> <dfn class="local col3 decl" id="13seed" title='seed' data-type='unsigned int' data-ref="13seed" data-ref-filename="13seed">seed</dfn>, <em>void</em> *<dfn class="local col4 decl" id="14out" title='out' data-type='void *' data-ref="14out" data-ref-filename="14out">out</dfn>);</td></tr>
+<tr><th id="57">57</th><td>}  <i>// namespace angle</i></td></tr>
+<tr><th id="58">58</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='PMurHash.cpp.html'>webkit/Source/ThirdParty/ANGLE/src/common/third_party/smhasher/src/PMurHash.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

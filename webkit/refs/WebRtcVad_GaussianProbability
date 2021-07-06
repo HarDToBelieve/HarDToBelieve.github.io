@@ -1,0 +1,31 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/vad/vad_gmm.h' l='34' type='int32_t WebRtcVad_GaussianProbability(int16_t input, int16_t mean, int16_t std, int16_t * delta)'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/vad/vad_core.c' l='197' u='c' c='GmmProbability'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/vad/vad_core.c' l='206' u='c' c='GmmProbability'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/vad/vad_gmm.h' l='18'>// Calculates the probability for |input|, given that |input| comes from a
+// normal distribution with mean and standard deviation (|mean|, |std|).
+//
+// Inputs:
+//      - input         : input sample in Q4.
+//      - mean          : mean input in the statistical model, Q7.
+//      - std           : standard deviation, Q7.
+//
+// Output:
+//
+//      - delta         : input used when updating the model, Q11.
+//                        |delta| = (|input| - |mean|) / |std|^2.
+//
+// Return:
+//   (probability for |input|) =
+//    1 / |std| * exp(-(|input| - |mean|)^2 / (2 * |std|^2));</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/vad/vad_gmm.c' l='29' ll='82' type='int32_t WebRtcVad_GaussianProbability(int16_t input, int16_t mean, int16_t std, int16_t * delta)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/vad/vad_gmm.c' l='18'>// For a normal distribution, the probability of |input| is calculated and
+// returned (in Q20). The formula for normal distributed probability is
+//
+// 1 / s * exp(-(x - m)^2 / (2 * s^2))
+//
+// where the parameters are given in the following Q domains:
+// m = |mean| (Q7)
+// s = |std| (Q7)
+// x = |input| (Q4)
+// in addition to the probability we output |delta| (in Q11) used when updating
+// the noise/speech model.</doc>

@@ -1,0 +1,29 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/internal.h' l='956' type='enum ssl_open_record_t bssl::tls_open_record(SSL * ssl, uint8_t * out_type, Span&lt;uint8_t&gt; * out, size_t * out_consumed, uint8_t * out_alert, Span&lt;uint8_t&gt; in)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/internal.h' l='933'>// tls_open_record decrypts a record from |in| in-place.
+//
+// If the input did not contain a complete record, it returns
+// |ssl_open_record_partial|. It sets |*out_consumed| to the total number of
+// bytes necessary. It is guaranteed that a successful call to |tls_open_record|
+// will consume at least that many bytes.
+//
+// Otherwise, it sets |*out_consumed| to the number of bytes of input
+// consumed. Note that input may be consumed on all return codes if a record was
+// decrypted.
+//
+// On success, it returns |ssl_open_record_success|. It sets |*out_type| to the
+// record type and |*out| to the record body in |in|. Note that |*out| may be
+// empty.
+//
+// If a record was successfully processed but should be discarded, it returns
+// |ssl_open_record_discard|.
+//
+// If a record was successfully processed but is a close_notify, it returns
+// |ssl_open_record_close_notify|.
+//
+// On failure or fatal alert, it returns |ssl_open_record_error| and sets
+// |*out_alert| to an alert to emit, or zero if no alert should be emitted.</doc>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/s3_both.cc' l='609' u='c' c='_ZN4bssl18tls_open_handshakeEP6ssl_stPmPhNS_4SpanIhEE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/s3_pkt.cc' l='305' u='c' c='_ZN4bssl17tls_open_app_dataEP6ssl_stPNS_4SpanIhEEPmPhS3_'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/s3_pkt.cc' l='358' u='c' c='_ZN4bssl27tls_open_change_cipher_specEP6ssl_stPmPhNS_4SpanIhEE'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/tls_record.cc' l='206' ll='374' type='bssl::ssl_open_record_t bssl::tls_open_record(SSL * ssl, uint8_t * out_type, Span&lt;uint8_t&gt; * out, size_t * out_consumed, uint8_t * out_alert, Span&lt;uint8_t&gt; in)'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/tls_record.cc' l='620' u='c' c='_ZN4bssl10OpenRecordEP6ssl_stPNS_4SpanIhEEPmPhS3_'/>

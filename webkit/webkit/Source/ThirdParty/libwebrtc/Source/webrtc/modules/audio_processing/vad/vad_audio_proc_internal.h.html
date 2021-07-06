@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>vad_audio_proc_internal.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/vad/vad_audio_proc_internal.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/vad/vad_audio_proc_internal.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>audio_processing</a>/<a href='./'>vad</a>/<a href='vad_audio_proc_internal.h.html'>vad_audio_proc_internal.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/MODULES_AUDIO_PROCESSING_VAD_VAD_AUDIO_PROC_INTERNAL_H_">MODULES_AUDIO_PROCESSING_VAD_VAD_AUDIO_PROC_INTERNAL_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/MODULES_AUDIO_PROCESSING_VAD_VAD_AUDIO_PROC_INTERNAL_H_" data-ref="_M/MODULES_AUDIO_PROCESSING_VAD_VAD_AUDIO_PROC_INTERNAL_H_">MODULES_AUDIO_PROCESSING_VAD_VAD_AUDIO_PROC_INTERNAL_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><i>// These values should match MATLAB counterparts for unit-tests to pass.</i></td></tr>
+<tr><th id="17">17</th><td><em>static</em> <em>const</em> <em>double</em> <dfn class="decl def" id="webrtc::kCorrWeight" title='webrtc::kCorrWeight' data-ref="webrtc::kCorrWeight" data-ref-filename="webrtc..kCorrWeight">kCorrWeight</dfn>[] = {</td></tr>
+<tr><th id="18">18</th><td>    <var>1.000000</var>, <var>0.985000</var>, <var>0.970225</var>, <var>0.955672</var>, <var>0.941337</var>, <var>0.927217</var>,</td></tr>
+<tr><th id="19">19</th><td>    <var>0.913308</var>, <var>0.899609</var>, <var>0.886115</var>, <var>0.872823</var>, <var>0.859730</var>, <var>0.846834</var>,</td></tr>
+<tr><th id="20">20</th><td>    <var>0.834132</var>, <var>0.821620</var>, <var>0.809296</var>, <var>0.797156</var>, <var>0.785199</var>};</td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><em>static</em> <em>const</em> <em>double</em> <dfn class="decl def" id="webrtc::kLpcAnalWin" title='webrtc::kLpcAnalWin' data-ref="webrtc::kLpcAnalWin" data-ref-filename="webrtc..kLpcAnalWin">kLpcAnalWin</dfn>[] = {</td></tr>
+<tr><th id="23">23</th><td>    <var>0.00000000</var>, <var>0.01314436</var>, <var>0.02628645</var>, <var>0.03942400</var>, <var>0.05255473</var>, <var>0.06567639</var>,</td></tr>
+<tr><th id="24">24</th><td>    <var>0.07878670</var>, <var>0.09188339</var>, <var>0.10496421</var>, <var>0.11802689</var>, <var>0.13106918</var>, <var>0.14408883</var>,</td></tr>
+<tr><th id="25">25</th><td>    <var>0.15708358</var>, <var>0.17005118</var>, <var>0.18298941</var>, <var>0.19589602</var>, <var>0.20876878</var>, <var>0.22160547</var>,</td></tr>
+<tr><th id="26">26</th><td>    <var>0.23440387</var>, <var>0.24716177</var>, <var>0.25987696</var>, <var>0.27254725</var>, <var>0.28517045</var>, <var>0.29774438</var>,</td></tr>
+<tr><th id="27">27</th><td>    <var>0.31026687</var>, <var>0.32273574</var>, <var>0.33514885</var>, <var>0.34750406</var>, <var>0.35979922</var>, <var>0.37203222</var>,</td></tr>
+<tr><th id="28">28</th><td>    <var>0.38420093</var>, <var>0.39630327</var>, <var>0.40833713</var>, <var>0.42030043</var>, <var>0.43219112</var>, <var>0.44400713</var>,</td></tr>
+<tr><th id="29">29</th><td>    <var>0.45574642</var>, <var>0.46740697</var>, <var>0.47898676</var>, <var>0.49048379</var>, <var>0.50189608</var>, <var>0.51322164</var>,</td></tr>
+<tr><th id="30">30</th><td>    <var>0.52445853</var>, <var>0.53560481</var>, <var>0.54665854</var>, <var>0.55761782</var>, <var>0.56848075</var>, <var>0.57924546</var>,</td></tr>
+<tr><th id="31">31</th><td>    <var>0.58991008</var>, <var>0.60047278</var>, <var>0.61093173</var>, <var>0.62128512</var>, <var>0.63153117</var>, <var>0.64166810</var>,</td></tr>
+<tr><th id="32">32</th><td>    <var>0.65169416</var>, <var>0.66160761</var>, <var>0.67140676</var>, <var>0.68108990</var>, <var>0.69065536</var>, <var>0.70010148</var>,</td></tr>
+<tr><th id="33">33</th><td>    <var>0.70942664</var>, <var>0.71862923</var>, <var>0.72770765</var>, <var>0.73666033</var>, <var>0.74548573</var>, <var>0.75418233</var>,</td></tr>
+<tr><th id="34">34</th><td>    <var>0.76274862</var>, <var>0.77118312</var>, <var>0.77948437</var>, <var>0.78765094</var>, <var>0.79568142</var>, <var>0.80357442</var>,</td></tr>
+<tr><th id="35">35</th><td>    <var>0.81132858</var>, <var>0.81894256</var>, <var>0.82641504</var>, <var>0.83374472</var>, <var>0.84093036</var>, <var>0.84797069</var>,</td></tr>
+<tr><th id="36">36</th><td>    <var>0.85486451</var>, <var>0.86161063</var>, <var>0.86820787</var>, <var>0.87465511</var>, <var>0.88095122</var>, <var>0.88709512</var>,</td></tr>
+<tr><th id="37">37</th><td>    <var>0.89308574</var>, <var>0.89892206</var>, <var>0.90460306</var>, <var>0.91012776</var>, <var>0.91549520</var>, <var>0.92070447</var>,</td></tr>
+<tr><th id="38">38</th><td>    <var>0.92575465</var>, <var>0.93064488</var>, <var>0.93537432</var>, <var>0.93994213</var>, <var>0.94434755</var>, <var>0.94858979</var>,</td></tr>
+<tr><th id="39">39</th><td>    <var>0.95266814</var>, <var>0.95658189</var>, <var>0.96033035</var>, <var>0.96391289</var>, <var>0.96732888</var>, <var>0.97057773</var>,</td></tr>
+<tr><th id="40">40</th><td>    <var>0.97365889</var>, <var>0.97657181</var>, <var>0.97931600</var>, <var>0.98189099</var>, <var>0.98429632</var>, <var>0.98653158</var>,</td></tr>
+<tr><th id="41">41</th><td>    <var>0.98859639</var>, <var>0.99049038</var>, <var>0.99221324</var>, <var>0.99376466</var>, <var>0.99514438</var>, <var>0.99635215</var>,</td></tr>
+<tr><th id="42">42</th><td>    <var>0.99738778</var>, <var>0.99825107</var>, <var>0.99894188</var>, <var>0.99946010</var>, <var>0.99980562</var>, <var>0.99997840</var>,</td></tr>
+<tr><th id="43">43</th><td>    <var>0.99997840</var>, <var>0.99980562</var>, <var>0.99946010</var>, <var>0.99894188</var>, <var>0.99825107</var>, <var>0.99738778</var>,</td></tr>
+<tr><th id="44">44</th><td>    <var>0.99635215</var>, <var>0.99514438</var>, <var>0.99376466</var>, <var>0.99221324</var>, <var>0.99049038</var>, <var>0.98859639</var>,</td></tr>
+<tr><th id="45">45</th><td>    <var>0.98653158</var>, <var>0.98429632</var>, <var>0.98189099</var>, <var>0.97931600</var>, <var>0.97657181</var>, <var>0.97365889</var>,</td></tr>
+<tr><th id="46">46</th><td>    <var>0.97057773</var>, <var>0.96732888</var>, <var>0.96391289</var>, <var>0.96033035</var>, <var>0.95658189</var>, <var>0.95266814</var>,</td></tr>
+<tr><th id="47">47</th><td>    <var>0.94858979</var>, <var>0.94434755</var>, <var>0.93994213</var>, <var>0.93537432</var>, <var>0.93064488</var>, <var>0.92575465</var>,</td></tr>
+<tr><th id="48">48</th><td>    <var>0.92070447</var>, <var>0.91549520</var>, <var>0.91012776</var>, <var>0.90460306</var>, <var>0.89892206</var>, <var>0.89308574</var>,</td></tr>
+<tr><th id="49">49</th><td>    <var>0.88709512</var>, <var>0.88095122</var>, <var>0.87465511</var>, <var>0.86820787</var>, <var>0.86161063</var>, <var>0.85486451</var>,</td></tr>
+<tr><th id="50">50</th><td>    <var>0.84797069</var>, <var>0.84093036</var>, <var>0.83374472</var>, <var>0.82641504</var>, <var>0.81894256</var>, <var>0.81132858</var>,</td></tr>
+<tr><th id="51">51</th><td>    <var>0.80357442</var>, <var>0.79568142</var>, <var>0.78765094</var>, <var>0.77948437</var>, <var>0.77118312</var>, <var>0.76274862</var>,</td></tr>
+<tr><th id="52">52</th><td>    <var>0.75418233</var>, <var>0.74548573</var>, <var>0.73666033</var>, <var>0.72770765</var>, <var>0.71862923</var>, <var>0.70942664</var>,</td></tr>
+<tr><th id="53">53</th><td>    <var>0.70010148</var>, <var>0.69065536</var>, <var>0.68108990</var>, <var>0.67140676</var>, <var>0.66160761</var>, <var>0.65169416</var>,</td></tr>
+<tr><th id="54">54</th><td>    <var>0.64166810</var>, <var>0.63153117</var>, <var>0.62128512</var>, <var>0.61093173</var>, <var>0.60047278</var>, <var>0.58991008</var>,</td></tr>
+<tr><th id="55">55</th><td>    <var>0.57924546</var>, <var>0.56848075</var>, <var>0.55761782</var>, <var>0.54665854</var>, <var>0.53560481</var>, <var>0.52445853</var>,</td></tr>
+<tr><th id="56">56</th><td>    <var>0.51322164</var>, <var>0.50189608</var>, <var>0.49048379</var>, <var>0.47898676</var>, <var>0.46740697</var>, <var>0.45574642</var>,</td></tr>
+<tr><th id="57">57</th><td>    <var>0.44400713</var>, <var>0.43219112</var>, <var>0.42030043</var>, <var>0.40833713</var>, <var>0.39630327</var>, <var>0.38420093</var>,</td></tr>
+<tr><th id="58">58</th><td>    <var>0.37203222</var>, <var>0.35979922</var>, <var>0.34750406</var>, <var>0.33514885</var>, <var>0.32273574</var>, <var>0.31026687</var>,</td></tr>
+<tr><th id="59">59</th><td>    <var>0.29774438</var>, <var>0.28517045</var>, <var>0.27254725</var>, <var>0.25987696</var>, <var>0.24716177</var>, <var>0.23440387</var>,</td></tr>
+<tr><th id="60">60</th><td>    <var>0.22160547</var>, <var>0.20876878</var>, <var>0.19589602</var>, <var>0.18298941</var>, <var>0.17005118</var>, <var>0.15708358</var>,</td></tr>
+<tr><th id="61">61</th><td>    <var>0.14408883</var>, <var>0.13106918</var>, <var>0.11802689</var>, <var>0.10496421</var>, <var>0.09188339</var>, <var>0.07878670</var>,</td></tr>
+<tr><th id="62">62</th><td>    <var>0.06567639</var>, <var>0.05255473</var>, <var>0.03942400</var>, <var>0.02628645</var>, <var>0.01314436</var>, <var>0.00000000</var>};</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td><em>static</em> <em>const</em> <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl def" id="webrtc::kFilterOrder" title='webrtc::kFilterOrder' data-ref="webrtc::kFilterOrder" data-ref-filename="webrtc..kFilterOrder">kFilterOrder</dfn> = <var>2</var>;</td></tr>
+<tr><th id="65">65</th><td><em>static</em> <em>const</em> <em>float</em> <dfn class="decl def" id="webrtc::kCoeffNumerator" title='webrtc::kCoeffNumerator' data-ref="webrtc::kCoeffNumerator" data-ref-filename="webrtc..kCoeffNumerator">kCoeffNumerator</dfn>[<a class="ref" href="#webrtc::kFilterOrder" title='webrtc::kFilterOrder' data-ref="webrtc::kFilterOrder" data-ref-filename="webrtc..kFilterOrder">kFilterOrder</a> + <var>1</var>] = {<var>0.974827f</var>, -<var>1.949650f</var>,</td></tr>
+<tr><th id="66">66</th><td>                                                        <var>0.974827f</var>};</td></tr>
+<tr><th id="67">67</th><td><em>static</em> <em>const</em> <em>float</em> <dfn class="decl def" id="webrtc::kCoeffDenominator" title='webrtc::kCoeffDenominator' data-ref="webrtc::kCoeffDenominator" data-ref-filename="webrtc..kCoeffDenominator">kCoeffDenominator</dfn>[<a class="ref" href="#webrtc::kFilterOrder" title='webrtc::kFilterOrder' data-ref="webrtc::kFilterOrder" data-ref-filename="webrtc..kFilterOrder">kFilterOrder</a> + <var>1</var>] = {<var>1.0f</var>, -<var>1.971999f</var>,</td></tr>
+<tr><th id="68">68</th><td>                                                          <var>0.972457f</var>};</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td><b>static_assert</b>(<a class="ref" href="#webrtc::kFilterOrder" title='webrtc::kFilterOrder' data-ref="webrtc::kFilterOrder" data-ref-filename="webrtc..kFilterOrder">kFilterOrder</a> + <var>1</var> ==</td></tr>
+<tr><th id="71">71</th><td>                  <b>sizeof</b>(<a class="ref" href="#webrtc::kCoeffNumerator" title='webrtc::kCoeffNumerator' data-ref="webrtc::kCoeffNumerator" data-ref-filename="webrtc..kCoeffNumerator">kCoeffNumerator</a>) / <b>sizeof</b>(<a class="ref" href="#webrtc::kCoeffNumerator" title='webrtc::kCoeffNumerator' data-ref="webrtc::kCoeffNumerator" data-ref-filename="webrtc..kCoeffNumerator">kCoeffNumerator</a>[<var>0</var>]),</td></tr>
+<tr><th id="72">72</th><td>              <q>"numerator coefficients incorrect size"</q>);</td></tr>
+<tr><th id="73">73</th><td><b>static_assert</b>(<a class="ref" href="#webrtc::kFilterOrder" title='webrtc::kFilterOrder' data-ref="webrtc::kFilterOrder" data-ref-filename="webrtc..kFilterOrder">kFilterOrder</a> + <var>1</var> ==</td></tr>
+<tr><th id="74">74</th><td>                  <b>sizeof</b>(<a class="ref" href="#webrtc::kCoeffDenominator" title='webrtc::kCoeffDenominator' data-ref="webrtc::kCoeffDenominator" data-ref-filename="webrtc..kCoeffDenominator">kCoeffDenominator</a>) / <b>sizeof</b>(<a class="ref" href="#webrtc::kCoeffDenominator" title='webrtc::kCoeffDenominator' data-ref="webrtc::kCoeffDenominator" data-ref-filename="webrtc..kCoeffDenominator">kCoeffDenominator</a>[<var>0</var>]),</td></tr>
+<tr><th id="75">75</th><td>              <q>"denominator coefficients incorrect size"</q>);</td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td><u>#<span data-ppcond="11">endif</span>  // MODULES_AUDIO_PROCESSING_VAD_VAD_AUDIO_PROCESSING_H_</u></td></tr>
+<tr><th id="80">80</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='vad_audio_proc.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/vad/vad_audio_proc.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

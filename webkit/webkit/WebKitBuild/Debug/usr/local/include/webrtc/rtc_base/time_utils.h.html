@@ -1,0 +1,164 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>time_utils.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/time_utils.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::ClockInterface,rtc::TimestampWrapAroundHandler "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/time_utils.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>WebKitBuild</a>/<a href='../../../../..'>Debug</a>/<a href='../../../..'>usr</a>/<a href='../../..'>local</a>/<a href='../..'>include</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='time_utils.h.html'>time_utils.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2005 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_TIME_UTILS_H_">RTC_BASE_TIME_UTILS_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_TIME_UTILS_H_" data-ref="_M/RTC_BASE_TIME_UTILS_H_">RTC_BASE_TIME_UTILS_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;time.h&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="checks.h.html">"rtc_base/checks.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="system/rtc_export.h.html">"rtc_base/system/rtc_export.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="system_time.h.html">"rtc_base/system_time.h"</a></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><em>static</em> <em>const</em> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl def" id="rtc::kNumMillisecsPerSec" title='rtc::kNumMillisecsPerSec' data-ref="rtc::kNumMillisecsPerSec" data-ref-filename="rtc..kNumMillisecsPerSec">kNumMillisecsPerSec</dfn> = <span class="macro" title="(1000LL)" data-ref="_M/INT64_C">INT64_C</span>(<var>1000</var>);</td></tr>
+<tr><th id="24">24</th><td><em>static</em> <em>const</em> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl def" id="rtc::kNumMicrosecsPerSec" title='rtc::kNumMicrosecsPerSec' data-ref="rtc::kNumMicrosecsPerSec" data-ref-filename="rtc..kNumMicrosecsPerSec">kNumMicrosecsPerSec</dfn> = <span class="macro" title="(1000000LL)" data-ref="_M/INT64_C">INT64_C</span>(<var>1000000</var>);</td></tr>
+<tr><th id="25">25</th><td><em>static</em> <em>const</em> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl def" id="rtc::kNumNanosecsPerSec" title='rtc::kNumNanosecsPerSec' data-ref="rtc::kNumNanosecsPerSec" data-ref-filename="rtc..kNumNanosecsPerSec">kNumNanosecsPerSec</dfn> = <span class="macro" title="(1000000000LL)" data-ref="_M/INT64_C">INT64_C</span>(<var>1000000000</var>);</td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td><em>static</em> <em>const</em> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl def" id="rtc::kNumMicrosecsPerMillisec" title='rtc::kNumMicrosecsPerMillisec' data-ref="rtc::kNumMicrosecsPerMillisec" data-ref-filename="rtc..kNumMicrosecsPerMillisec">kNumMicrosecsPerMillisec</dfn> =</td></tr>
+<tr><th id="28">28</th><td>    <a class="ref" href="#rtc::kNumMicrosecsPerSec" title='rtc::kNumMicrosecsPerSec' data-ref="rtc::kNumMicrosecsPerSec" data-ref-filename="rtc..kNumMicrosecsPerSec">kNumMicrosecsPerSec</a> / <a class="ref" href="#rtc::kNumMillisecsPerSec" title='rtc::kNumMillisecsPerSec' data-ref="rtc::kNumMillisecsPerSec" data-ref-filename="rtc..kNumMillisecsPerSec">kNumMillisecsPerSec</a>;</td></tr>
+<tr><th id="29">29</th><td><em>static</em> <em>const</em> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl def" id="rtc::kNumNanosecsPerMillisec" title='rtc::kNumNanosecsPerMillisec' data-ref="rtc::kNumNanosecsPerMillisec" data-ref-filename="rtc..kNumNanosecsPerMillisec">kNumNanosecsPerMillisec</dfn> =</td></tr>
+<tr><th id="30">30</th><td>    <a class="ref" href="#rtc::kNumNanosecsPerSec" title='rtc::kNumNanosecsPerSec' data-ref="rtc::kNumNanosecsPerSec" data-ref-filename="rtc..kNumNanosecsPerSec">kNumNanosecsPerSec</a> / <a class="ref" href="#rtc::kNumMillisecsPerSec" title='rtc::kNumMillisecsPerSec' data-ref="rtc::kNumMillisecsPerSec" data-ref-filename="rtc..kNumMillisecsPerSec">kNumMillisecsPerSec</a>;</td></tr>
+<tr><th id="31">31</th><td><em>static</em> <em>const</em> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl def" id="rtc::kNumNanosecsPerMicrosec" title='rtc::kNumNanosecsPerMicrosec' data-ref="rtc::kNumNanosecsPerMicrosec" data-ref-filename="rtc..kNumNanosecsPerMicrosec">kNumNanosecsPerMicrosec</dfn> =</td></tr>
+<tr><th id="32">32</th><td>    <a class="ref" href="#rtc::kNumNanosecsPerSec" title='rtc::kNumNanosecsPerSec' data-ref="rtc::kNumNanosecsPerSec" data-ref-filename="rtc..kNumNanosecsPerSec">kNumNanosecsPerSec</a> / <a class="ref" href="#rtc::kNumMicrosecsPerSec" title='rtc::kNumMicrosecsPerSec' data-ref="rtc::kNumMicrosecsPerSec" data-ref-filename="rtc..kNumMicrosecsPerSec">kNumMicrosecsPerSec</a>;</td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><i>// TODO(honghaiz): Define a type for the time value specifically.</i></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><b>class</b> <dfn class="type def" id="rtc::ClockInterface" title='rtc::ClockInterface' data-ref="rtc::ClockInterface" data-ref-filename="rtc..ClockInterface">ClockInterface</dfn> {</td></tr>
+<tr><th id="37">37</th><td> <b>public</b>:</td></tr>
+<tr><th id="38">38</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN3rtc14ClockInterfaceD1Ev" title='rtc::ClockInterface::~ClockInterface' data-ref="_ZN3rtc14ClockInterfaceD1Ev" data-ref-filename="_ZN3rtc14ClockInterfaceD1Ev">~ClockInterface</dfn>() {}</td></tr>
+<tr><th id="39">39</th><td>  <b>virtual</b> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="virtual decl fn" id="_ZNK3rtc14ClockInterface9TimeNanosEv" title='rtc::ClockInterface::TimeNanos' data-ref="_ZNK3rtc14ClockInterface9TimeNanosEv" data-ref-filename="_ZNK3rtc14ClockInterface9TimeNanosEv">TimeNanos</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="40">40</th><td>};</td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td><i>// Sets the global source of time. This is useful mainly for unit tests.</i></td></tr>
+<tr><th id="43">43</th><td><i>//</i></td></tr>
+<tr><th id="44">44</th><td><i>// Returns the previously set ClockInterface, or nullptr if none is set.</i></td></tr>
+<tr><th id="45">45</th><td><i>//</i></td></tr>
+<tr><th id="46">46</th><td><i>// Does not transfer ownership of the clock. SetClockForTesting(nullptr)</i></td></tr>
+<tr><th id="47">47</th><td><i>// should be called before the ClockInterface is deleted.</i></td></tr>
+<tr><th id="48">48</th><td><i>//</i></td></tr>
+<tr><th id="49">49</th><td><i>// This method is not thread-safe; it should only be used when no other thread</i></td></tr>
+<tr><th id="50">50</th><td><i>// is running (for example, at the start/end of a unit test, or start/end of</i></td></tr>
+<tr><th id="51">51</th><td><i>// main()).</i></td></tr>
+<tr><th id="52">52</th><td><i>//</i></td></tr>
+<tr><th id="53">53</th><td><i>// TODO(deadbeef): Instead of having functions that access this global</i></td></tr>
+<tr><th id="54">54</th><td><i>// ClockInterface, we may want to pass the ClockInterface into everything</i></td></tr>
+<tr><th id="55">55</th><td><i>// that uses it, eliminating the need for a global variable and this function.</i></td></tr>
+<tr><th id="56">56</th><td><a class="macro" href="system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <a class="type" href="#rtc::ClockInterface" title='rtc::ClockInterface' data-ref="rtc::ClockInterface" data-ref-filename="rtc..ClockInterface">ClockInterface</a>* <dfn class="decl fn" id="_ZN3rtc18SetClockForTestingEPNS_14ClockInterfaceE" title='rtc::SetClockForTesting' data-ref="_ZN3rtc18SetClockForTestingEPNS_14ClockInterfaceE" data-ref-filename="_ZN3rtc18SetClockForTestingEPNS_14ClockInterfaceE">SetClockForTesting</dfn>(<a class="type" href="#rtc::ClockInterface" title='rtc::ClockInterface' data-ref="rtc::ClockInterface" data-ref-filename="rtc..ClockInterface">ClockInterface</a>* <dfn class="local col0 decl" id="930clock" title='clock' data-type='rtc::ClockInterface *' data-ref="930clock" data-ref-filename="930clock">clock</dfn>);</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><i>// Returns previously set clock, or nullptr if no custom clock is being used.</i></td></tr>
+<tr><th id="59">59</th><td><a class="macro" href="system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <a class="type" href="#rtc::ClockInterface" title='rtc::ClockInterface' data-ref="rtc::ClockInterface" data-ref-filename="rtc..ClockInterface">ClockInterface</a>* <dfn class="decl fn" id="_ZN3rtc18GetClockForTestingEv" title='rtc::GetClockForTesting' data-ref="_ZN3rtc18GetClockForTestingEv" data-ref-filename="_ZN3rtc18GetClockForTestingEv">GetClockForTesting</dfn>();</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td><u>#<span data-ppcond="61">if</span> defined(<span class="macro" data-ref="_M/WINUWP">WINUWP</span>)</u></td></tr>
+<tr><th id="62">62</th><td><i>// Synchronizes the current clock based upon an NTP server's epoch in</i></td></tr>
+<tr><th id="63">63</th><td><i>// milliseconds.</i></td></tr>
+<tr><th id="64">64</th><td><em>void</em> SyncWithNtp(int64_t time_from_ntp_server_ms);</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td><i>// Returns the current time in nanoseconds. The clock is synchonized with the</i></td></tr>
+<tr><th id="67">67</th><td><i>// system wall clock time upon instatiation. It may also be synchronized using</i></td></tr>
+<tr><th id="68">68</th><td><i>// the SyncWithNtp() function above. Please note that the clock will most likely</i></td></tr>
+<tr><th id="69">69</th><td><i>// drift away from the system wall clock time as time goes by.</i></td></tr>
+<tr><th id="70">70</th><td>int64_t WinUwpSystemTimeNanos();</td></tr>
+<tr><th id="71">71</th><td><u>#<span data-ppcond="61">endif</span>  // defined(WINUWP)</u></td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td><i>// Returns the actual system time, even if a clock is set for testing.</i></td></tr>
+<tr><th id="74">74</th><td><i>// Useful for timeouts while using a test clock, or for logging.</i></td></tr>
+<tr><th id="75">75</th><td><span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl fn" id="_ZN3rtc16SystemTimeMillisEv" title='rtc::SystemTimeMillis' data-ref="_ZN3rtc16SystemTimeMillisEv" data-ref-filename="_ZN3rtc16SystemTimeMillisEv">SystemTimeMillis</dfn>();</td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td><i>// Returns the current time in milliseconds in 32 bits.</i></td></tr>
+<tr><th id="78">78</th><td><span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl fn" id="_ZN3rtc6Time32Ev" title='rtc::Time32' data-ref="_ZN3rtc6Time32Ev" data-ref-filename="_ZN3rtc6Time32Ev">Time32</dfn>();</td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td><i>// Returns the current time in milliseconds in 64 bits.</i></td></tr>
+<tr><th id="81">81</th><td><a class="macro" href="system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl fn" id="_ZN3rtc10TimeMillisEv" title='rtc::TimeMillis' data-ref="_ZN3rtc10TimeMillisEv" data-ref-filename="_ZN3rtc10TimeMillisEv">TimeMillis</dfn>();</td></tr>
+<tr><th id="82">82</th><td><i>// Deprecated. Do not use this in any new code.</i></td></tr>
+<tr><th id="83">83</th><td><b>inline</b> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl def fn" id="_ZN3rtc4TimeEv" title='rtc::Time' data-ref="_ZN3rtc4TimeEv" data-ref-filename="_ZN3rtc4TimeEv">Time</dfn>() {</td></tr>
+<tr><th id="84">84</th><td>  <b>return</b> <a class="ref fn" href="#_ZN3rtc10TimeMillisEv" title='rtc::TimeMillis' data-ref="_ZN3rtc10TimeMillisEv" data-ref-filename="_ZN3rtc10TimeMillisEv">TimeMillis</a>();</td></tr>
+<tr><th id="85">85</th><td>}</td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td><i>// Returns the current time in microseconds.</i></td></tr>
+<tr><th id="88">88</th><td><a class="macro" href="system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl fn" id="_ZN3rtc10TimeMicrosEv" title='rtc::TimeMicros' data-ref="_ZN3rtc10TimeMicrosEv" data-ref-filename="_ZN3rtc10TimeMicrosEv">TimeMicros</dfn>();</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td><i>// Returns the current time in nanoseconds.</i></td></tr>
+<tr><th id="91">91</th><td><a class="macro" href="system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl fn" id="_ZN3rtc9TimeNanosEv" title='rtc::TimeNanos' data-ref="_ZN3rtc9TimeNanosEv" data-ref-filename="_ZN3rtc9TimeNanosEv">TimeNanos</dfn>();</td></tr>
+<tr><th id="92">92</th><td></td></tr>
+<tr><th id="93">93</th><td><i>// Returns a future timestamp, 'elapsed' milliseconds from now.</i></td></tr>
+<tr><th id="94">94</th><td><span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl fn" id="_ZN3rtc9TimeAfterEx" title='rtc::TimeAfter' data-ref="_ZN3rtc9TimeAfterEx" data-ref-filename="_ZN3rtc9TimeAfterEx">TimeAfter</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col1 decl" id="931elapsed" title='elapsed' data-type='int64_t' data-ref="931elapsed" data-ref-filename="931elapsed">elapsed</dfn>);</td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td><i>// Number of milliseconds that would elapse between 'earlier' and 'later'</i></td></tr>
+<tr><th id="97">97</th><td><i>// timestamps.  The value is negative if 'later' occurs before 'earlier'.</i></td></tr>
+<tr><th id="98">98</th><td><span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl fn" id="_ZN3rtc8TimeDiffExx" title='rtc::TimeDiff' data-ref="_ZN3rtc8TimeDiffExx" data-ref-filename="_ZN3rtc8TimeDiffExx">TimeDiff</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col2 decl" id="932later" title='later' data-type='int64_t' data-ref="932later" data-ref-filename="932later">later</dfn>, <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col3 decl" id="933earlier" title='earlier' data-type='int64_t' data-ref="933earlier" data-ref-filename="933earlier">earlier</dfn>);</td></tr>
+<tr><th id="99">99</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl fn" id="_ZN3rtc10TimeDiff32Ejj" title='rtc::TimeDiff32' data-ref="_ZN3rtc10TimeDiff32Ejj" data-ref-filename="_ZN3rtc10TimeDiff32Ejj">TimeDiff32</dfn>(<span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col4 decl" id="934later" title='later' data-type='uint32_t' data-ref="934later" data-ref-filename="934later">later</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col5 decl" id="935earlier" title='earlier' data-type='uint32_t' data-ref="935earlier" data-ref-filename="935earlier">earlier</dfn>);</td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td><i>// The number of milliseconds that have elapsed since 'earlier'.</i></td></tr>
+<tr><th id="102">102</th><td><b>inline</b> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl def fn" id="_ZN3rtc9TimeSinceEx" title='rtc::TimeSince' data-ref="_ZN3rtc9TimeSinceEx" data-ref-filename="_ZN3rtc9TimeSinceEx">TimeSince</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col6 decl" id="936earlier" title='earlier' data-type='int64_t' data-ref="936earlier" data-ref-filename="936earlier">earlier</dfn>) {</td></tr>
+<tr><th id="103">103</th><td>  <b>return</b> <a class="ref fn" href="#_ZN3rtc10TimeMillisEv" title='rtc::TimeMillis' data-ref="_ZN3rtc10TimeMillisEv" data-ref-filename="_ZN3rtc10TimeMillisEv">TimeMillis</a>() - <a class="local col6 ref" href="#936earlier" title='earlier' data-ref="936earlier" data-ref-filename="936earlier">earlier</a>;</td></tr>
+<tr><th id="104">104</th><td>}</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td><i>// The number of milliseconds that will elapse between now and 'later'.</i></td></tr>
+<tr><th id="107">107</th><td><b>inline</b> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl def fn" id="_ZN3rtc9TimeUntilEx" title='rtc::TimeUntil' data-ref="_ZN3rtc9TimeUntilEx" data-ref-filename="_ZN3rtc9TimeUntilEx">TimeUntil</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col7 decl" id="937later" title='later' data-type='int64_t' data-ref="937later" data-ref-filename="937later">later</dfn>) {</td></tr>
+<tr><th id="108">108</th><td>  <b>return</b> <a class="local col7 ref" href="#937later" title='later' data-ref="937later" data-ref-filename="937later">later</a> - <a class="ref fn" href="#_ZN3rtc10TimeMillisEv" title='rtc::TimeMillis' data-ref="_ZN3rtc10TimeMillisEv" data-ref-filename="_ZN3rtc10TimeMillisEv">TimeMillis</a>();</td></tr>
+<tr><th id="109">109</th><td>}</td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td><b>class</b> <dfn class="type def" id="rtc::TimestampWrapAroundHandler" title='rtc::TimestampWrapAroundHandler' data-ref="rtc::TimestampWrapAroundHandler" data-ref-filename="rtc..TimestampWrapAroundHandler">TimestampWrapAroundHandler</dfn> {</td></tr>
+<tr><th id="112">112</th><td> <b>public</b>:</td></tr>
+<tr><th id="113">113</th><td>  <dfn class="decl fn" id="_ZN3rtc26TimestampWrapAroundHandlerC1Ev" title='rtc::TimestampWrapAroundHandler::TimestampWrapAroundHandler' data-ref="_ZN3rtc26TimestampWrapAroundHandlerC1Ev" data-ref-filename="_ZN3rtc26TimestampWrapAroundHandlerC1Ev">TimestampWrapAroundHandler</dfn>();</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl fn" id="_ZN3rtc26TimestampWrapAroundHandler6UnwrapEj" title='rtc::TimestampWrapAroundHandler::Unwrap' data-ref="_ZN3rtc26TimestampWrapAroundHandler6UnwrapEj" data-ref-filename="_ZN3rtc26TimestampWrapAroundHandler6UnwrapEj">Unwrap</dfn>(<span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col8 decl" id="938ts" title='ts' data-type='uint32_t' data-ref="938ts" data-ref-filename="938ts">ts</dfn>);</td></tr>
+<tr><th id="116">116</th><td></td></tr>
+<tr><th id="117">117</th><td> <b>private</b>:</td></tr>
+<tr><th id="118">118</th><td>  <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="rtc::TimestampWrapAroundHandler::last_ts_" title='rtc::TimestampWrapAroundHandler::last_ts_' data-ref="rtc::TimestampWrapAroundHandler::last_ts_" data-ref-filename="rtc..TimestampWrapAroundHandler..last_ts_">last_ts_</dfn>;</td></tr>
+<tr><th id="119">119</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl field" id="rtc::TimestampWrapAroundHandler::num_wrap_" title='rtc::TimestampWrapAroundHandler::num_wrap_' data-ref="rtc::TimestampWrapAroundHandler::num_wrap_" data-ref-filename="rtc..TimestampWrapAroundHandler..num_wrap_">num_wrap_</dfn>;</td></tr>
+<tr><th id="120">120</th><td>};</td></tr>
+<tr><th id="121">121</th><td></td></tr>
+<tr><th id="122">122</th><td><i>// Convert from tm, which is relative to 1900-01-01 00:00 to number of</i></td></tr>
+<tr><th id="123">123</th><td><i>// seconds from 1970-01-01 00:00 ("epoch"). Don't return time_t since that</i></td></tr>
+<tr><th id="124">124</th><td><i>// is still 32 bits on many systems.</i></td></tr>
+<tr><th id="125">125</th><td><span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl fn" id="_ZN3rtc11TmToSecondsERK2tm" title='rtc::TmToSeconds' data-ref="_ZN3rtc11TmToSecondsERK2tm" data-ref-filename="_ZN3rtc11TmToSecondsERK2tm">TmToSeconds</dfn>(<em>const</em> <span class='type' title='tm' data-ref="tm" data-ref-filename="tm">tm</span>&amp; <dfn class="local col9 decl" id="939tm" title='tm' data-type='const tm &amp;' data-ref="939tm" data-ref-filename="939tm">tm</dfn>);</td></tr>
+<tr><th id="126">126</th><td></td></tr>
+<tr><th id="127">127</th><td><i>// Return the number of microseconds since January 1, 1970, UTC.</i></td></tr>
+<tr><th id="128">128</th><td><i>// Useful mainly when producing logs to be correlated with other</i></td></tr>
+<tr><th id="129">129</th><td><i>// devices, and when the devices in question all have properly</i></td></tr>
+<tr><th id="130">130</th><td><i>// synchronized clocks.</i></td></tr>
+<tr><th id="131">131</th><td><i>//</i></td></tr>
+<tr><th id="132">132</th><td><i>// Note that this function obeys the system's idea about what the time</i></td></tr>
+<tr><th id="133">133</th><td><i>// is. It is not guaranteed to be monotonic; it will jump in case the</i></td></tr>
+<tr><th id="134">134</th><td><i>// system time is changed, e.g., by some other process calling</i></td></tr>
+<tr><th id="135">135</th><td><i>// settimeofday. Always use rtc::TimeMicros(), not this function, for</i></td></tr>
+<tr><th id="136">136</th><td><i>// measuring time intervals and timeouts.</i></td></tr>
+<tr><th id="137">137</th><td><span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl fn" id="_ZN3rtc13TimeUTCMicrosEv" title='rtc::TimeUTCMicros' data-ref="_ZN3rtc13TimeUTCMicrosEv" data-ref-filename="_ZN3rtc13TimeUTCMicrosEv">TimeUTCMicros</dfn>();</td></tr>
+<tr><th id="138">138</th><td></td></tr>
+<tr><th id="139">139</th><td><i>// Return the number of milliseconds since January 1, 1970, UTC.</i></td></tr>
+<tr><th id="140">140</th><td><i>// See above.</i></td></tr>
+<tr><th id="141">141</th><td><span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl fn" id="_ZN3rtc13TimeUTCMillisEv" title='rtc::TimeUTCMillis' data-ref="_ZN3rtc13TimeUTCMillisEv" data-ref-filename="_ZN3rtc13TimeUTCMillisEv">TimeUTCMillis</dfn>();</td></tr>
+<tr><th id="142">142</th><td></td></tr>
+<tr><th id="143">143</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="144">144</th><td></td></tr>
+<tr><th id="145">145</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_TIME_UTILS_H_</u></td></tr>
+<tr><th id="146">146</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

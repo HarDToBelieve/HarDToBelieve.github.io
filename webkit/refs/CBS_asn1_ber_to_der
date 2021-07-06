@@ -1,0 +1,20 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/bytestring/internal.h' l='40' type='int CBS_asn1_ber_to_der(CBS * in, CBS * out, uint8_t ** out_storage)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/bytestring/internal.h' l='25'>// CBS_asn1_ber_to_der reads a BER element from |in|. If it finds
+// indefinite-length elements or constructed strings then it converts the BER
+// data to DER, sets |out| to the converted contents and |*out_storage| to a
+// buffer which the caller must release with |OPENSSL_free|. Otherwise, it sets
+// |out| to the original BER element in |in| and |*out_storage| to NULL.
+// Additionally, |*in| will be advanced over the BER element.
+//
+// This function should successfully process any valid BER input, however it
+// will not convert all of BER&apos;s deviations from DER. BER is ambiguous between
+// implicitly-tagged SEQUENCEs of strings and implicitly-tagged constructed
+// strings. Implicitly-tagged strings must be parsed with
+// |CBS_get_ber_implicitly_tagged_string| instead of |CBS_get_asn1|. The caller
+// must also account for BER variations in the contents of a primitive.
+//
+// It returns one on success and zero otherwise.</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/bytestring/ber.c' l='191' ll='219' type='int CBS_asn1_ber_to_der(CBS * in, CBS * out, uint8_t ** out_storage)'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/pkcs7/pkcs7.c' l='49' u='c' c='pkcs7_parse_header'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/pkcs8/pkcs8_x509.c' l='296' u='c' c='PKCS12_handle_sequence'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/pkcs8/pkcs8_x509.c' l='644' u='c' c='PKCS12_get_key_and_certs'/>

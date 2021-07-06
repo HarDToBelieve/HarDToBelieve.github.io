@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FunctionOverridesTest.cpp source code [webkit/Source/JavaScriptCore/API/tests/FunctionOverridesTest.cpp] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/JavaScriptCore/API/tests/FunctionOverridesTest.cpp'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>JavaScriptCore</a>/<a href='..'>API</a>/<a href='./'>tests</a>/<a href='FunctionOverridesTest.cpp.html'>FunctionOverridesTest.cpp</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2016-2020 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#include <a href="../../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#include <a href="FunctionOverridesTest.h.html">"FunctionOverridesTest.h"</a></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="../../tools/FunctionOverrides.h.html">"FunctionOverrides.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="../../runtime/InitializeThreading.h.html">"InitializeThreading.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="../JavaScript.h.html">"JavaScript.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="../../runtime/Options.h.html">"Options.h"</a></u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><b>using</b> <span class="namespace">JSC::</span>Options;</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><em>int</em> <dfn class="decl def fn" id="testFunctionOverrides" title='testFunctionOverrides' data-ref="testFunctionOverrides" data-ref-filename="testFunctionOverrides">testFunctionOverrides</dfn>()</td></tr>
+<tr><th id="37">37</th><td>{</td></tr>
+<tr><th id="38">38</th><td>    <em>bool</em> <dfn class="local col6 decl" id="2826failed" title='failed' data-type='bool' data-ref="2826failed" data-ref-filename="2826failed">failed</dfn> = <b>false</b>;</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td>    <span class="namespace">JSC::</span><a class="ref fn" href="../../runtime/InitializeThreading.h.html#_ZN3JSC10initializeEv" title='JSC::initialize' data-ref="_ZN3JSC10initializeEv" data-ref-filename="_ZN3JSC10initializeEv">initialize</a>();</td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td>    <em>const</em> <em>char</em>* <dfn class="local col7 decl" id="2827oldFunctionOverrides" title='oldFunctionOverrides' data-type='const char *' data-ref="2827oldFunctionOverrides" data-ref-filename="2827oldFunctionOverrides">oldFunctionOverrides</dfn> = <a class="type" href="../../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../../runtime/Options.h.html#132" title='JSC::Options::functionOverrides' data-ref="_ZN3JSC7Options17functionOverridesEv" data-ref-filename="_ZN3JSC7Options17functionOverridesEv">functionOverrides</a>();</td></tr>
+<tr><th id="43">43</th><td>    </td></tr>
+<tr><th id="44">44</th><td>    <a class="type" href="../../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../../runtime/Options.h.html#132" title='JSC::Options::functionOverrides' data-ref="_ZN3JSC7Options17functionOverridesEv" data-ref-filename="_ZN3JSC7Options17functionOverridesEv">functionOverrides</a>() = <q>"./testapiScripts/testapi-function-overrides.js"</q>;</td></tr>
+<tr><th id="45">45</th><td>    <span class="namespace">JSC::</span><a class="type" href="../../tools/FunctionOverrides.h.html#JSC::FunctionOverrides" title='JSC::FunctionOverrides' data-ref="JSC::FunctionOverrides" data-ref-filename="JSC..FunctionOverrides">FunctionOverrides</a>::<a class="ref fn" href="../../tools/FunctionOverrides.h.html#_ZN3JSC17FunctionOverrides18reinstallOverridesEv" title='JSC::FunctionOverrides::reinstallOverrides' data-ref="_ZN3JSC17FunctionOverrides18reinstallOverridesEv" data-ref-filename="_ZN3JSC17FunctionOverrides18reinstallOverridesEv">reinstallOverrides</a>();</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td>    <a class="typedef" href="../JSBase.h.html#JSGlobalContextRef" title='JSGlobalContextRef' data-type='struct OpaqueJSContext *' data-ref="JSGlobalContextRef" data-ref-filename="JSGlobalContextRef">JSGlobalContextRef</a> <dfn class="local col8 decl" id="2828context" title='context' data-type='JSGlobalContextRef' data-ref="2828context" data-ref-filename="2828context">context</dfn> = <a class="ref fn" href="../JSContextRef.h.html#JSGlobalContextCreateInGroup" title='JSGlobalContextCreateInGroup' data-ref="JSGlobalContextCreateInGroup" data-ref-filename="JSGlobalContextCreateInGroup">JSGlobalContextCreateInGroup</a>(<b>nullptr</b>, <b>nullptr</b>);</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td>    <a class="typedef" href="../JSBase.h.html#JSObjectRef" title='JSObjectRef' data-type='struct OpaqueJSValue *' data-ref="JSObjectRef" data-ref-filename="JSObjectRef">JSObjectRef</a> <dfn class="local col9 decl" id="2829globalObject" title='globalObject' data-type='JSObjectRef' data-ref="2829globalObject" data-ref-filename="2829globalObject">globalObject</dfn> = <a class="ref fn" href="../JSContextRef.h.html#JSContextGetGlobalObject" title='JSContextGetGlobalObject' data-ref="JSContextGetGlobalObject" data-ref-filename="JSContextGetGlobalObject">JSContextGetGlobalObject</a>(<a class="local col8 ref" href="#2828context" title='context' data-ref="2828context" data-ref-filename="2828context">context</a>);</td></tr>
+<tr><th id="50">50</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#385" title="do { if (!(JSValueIsObject(context, globalObject))) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/API/tests/FunctionOverridesTest.cpp&quot;, 50, __PRETTY_FUNCTION__, &quot;JSValueIsObject(context, globalObject)&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(50, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/API/tests/FunctionOverridesTest.cpp&quot;, __PRETTY_FUNCTION__, 1356); } while (false); } } while (0)" data-ref="_M/ASSERT_UNUSED">ASSERT_UNUSED</a>(globalObject, <a class="ref fn" href="../JSValueRef.h.html#JSValueIsObject" title='JSValueIsObject' data-ref="JSValueIsObject" data-ref-filename="JSValueIsObject">JSValueIsObject</a>(<a class="local col8 ref" href="#2828context" title='context' data-ref="2828context" data-ref-filename="2828context">context</a>, <a class="local col9 ref" href="#2829globalObject" title='globalObject' data-ref="2829globalObject" data-ref-filename="2829globalObject">globalObject</a>));</td></tr>
+<tr><th id="51">51</th><td></td></tr>
+<tr><th id="52">52</th><td>    <em>const</em> <em>char</em>* <dfn class="local col0 decl" id="2830scriptString" title='scriptString' data-type='const char *' data-ref="2830scriptString" data-ref-filename="2830scriptString">scriptString</dfn> =</td></tr>
+<tr><th id="53">53</th><td>        <q>"var str = '';"</q> <q>"\n"</q></td></tr>
+<tr><th id="54">54</th><td>        <q>"function f1() { /* Original f1 */ }"</q> <q>"\n"</q></td></tr>
+<tr><th id="55">55</th><td>        <q>"str += f1 + '\\n';"</q> <q>"\n"</q></td></tr>
+<tr><th id="56">56</th><td>        <q>"var f2 = function() {"</q> <q>"\n"</q></td></tr>
+<tr><th id="57">57</th><td>        <q>"    // Original f2"</q> <q>"\n"</q></td></tr>
+<tr><th id="58">58</th><td>        <q>"}"</q> <q>"\n"</q></td></tr>
+<tr><th id="59">59</th><td>        <q>"str += f2 + '\\n';"</q> <q>"\n"</q></td></tr>
+<tr><th id="60">60</th><td>        <q>"str += (function() { /* Original f3 */ }) + '\\n';"</q> <q>"\n"</q></td></tr>
+<tr><th id="61">61</th><td>        <q>"var f4Source = '/* Original f4 */'"</q> <q>"\n"</q></td></tr>
+<tr><th id="62">62</th><td>        <q>"var f4 =  new Function(f4Source);"</q> <q>"\n"</q></td></tr>
+<tr><th id="63">63</th><td>        <q>"str += f4 + '\\n';"</q> <q>"\n"</q></td></tr>
+<tr><th id="64">64</th><td>        <q>"\n"</q></td></tr>
+<tr><th id="65">65</th><td>        <q>"var expectedStr ="</q> <q>"\n"</q></td></tr>
+<tr><th id="66">66</th><td>        <q>"'function f1() { /* Overridden f1 */ }\\n"</q></td></tr>
+<tr><th id="67">67</th><td>        <q>"function () { /* Overridden f2 */ }\\n"</q></td></tr>
+<tr><th id="68">68</th><td>        <q>"function () { /* Overridden f3 */ }\\n"</q></td></tr>
+<tr><th id="69">69</th><td>        <q>"function anonymous() { /* Overridden f4 */ }\\n';"</q></td></tr>
+<tr><th id="70">70</th><td>        <q>"var result = (str == expectedStr);"</q> <q>"\n"</q></td></tr>
+<tr><th id="71">71</th><td>        <q>"result"</q>;</td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td>    <a class="typedef" href="../JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="local col1 decl" id="2831script" title='script' data-type='JSStringRef' data-ref="2831script" data-ref-filename="2831script">script</dfn> = <a class="ref fn" href="../JSStringRef.h.html#JSStringCreateWithUTF8CString" title='JSStringCreateWithUTF8CString' data-ref="JSStringCreateWithUTF8CString" data-ref-filename="JSStringCreateWithUTF8CString">JSStringCreateWithUTF8CString</a>(<a class="local col0 ref" href="#2830scriptString" title='scriptString' data-ref="2830scriptString" data-ref-filename="2830scriptString">scriptString</a>);</td></tr>
+<tr><th id="74">74</th><td>    <a class="typedef" href="../JSBase.h.html#JSValueRef" title='JSValueRef' data-type='const struct OpaqueJSValue *' data-ref="JSValueRef" data-ref-filename="JSValueRef">JSValueRef</a> <dfn class="local col2 decl" id="2832exception" title='exception' data-type='JSValueRef' data-ref="2832exception" data-ref-filename="2832exception">exception</dfn> = <b>nullptr</b>;</td></tr>
+<tr><th id="75">75</th><td>    <a class="typedef" href="../JSBase.h.html#JSValueRef" title='JSValueRef' data-type='const struct OpaqueJSValue *' data-ref="JSValueRef" data-ref-filename="JSValueRef">JSValueRef</a> <dfn class="local col3 decl" id="2833resultRef" title='resultRef' data-type='JSValueRef' data-ref="2833resultRef" data-ref-filename="2833resultRef">resultRef</dfn> = <a class="ref fn" href="../JSBase.h.html#JSEvaluateScript" title='JSEvaluateScript' data-ref="JSEvaluateScript" data-ref-filename="JSEvaluateScript">JSEvaluateScript</a>(<a class="local col8 ref" href="#2828context" title='context' data-ref="2828context" data-ref-filename="2828context">context</a>, <a class="local col1 ref" href="#2831script" title='script' data-ref="2831script" data-ref-filename="2831script">script</a>, <b>nullptr</b>, <b>nullptr</b>, <var>1</var>, &amp;<a class="local col2 ref" href="#2832exception" title='exception' data-ref="2832exception" data-ref-filename="2832exception">exception</a>);</td></tr>
+<tr><th id="76">76</th><td>    <a class="ref fn" href="../JSStringRef.h.html#JSStringRelease" title='JSStringRelease' data-ref="JSStringRelease" data-ref-filename="JSStringRelease">JSStringRelease</a>(<a class="local col1 ref" href="#2831script" title='script' data-ref="2831script" data-ref-filename="2831script">script</a>);</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td>    <b>if</b> (!<a class="ref fn" href="../JSValueRef.h.html#JSValueIsBoolean" title='JSValueIsBoolean' data-ref="JSValueIsBoolean" data-ref-filename="JSValueIsBoolean">JSValueIsBoolean</a>(<a class="local col8 ref" href="#2828context" title='context' data-ref="2828context" data-ref-filename="2828context">context</a>, <a class="local col3 ref" href="#2833resultRef" title='resultRef' data-ref="2833resultRef" data-ref-filename="2833resultRef">resultRef</a>) || !<a class="ref fn" href="../JSValueRef.h.html#JSValueToBoolean" title='JSValueToBoolean' data-ref="JSValueToBoolean" data-ref-filename="JSValueToBoolean">JSValueToBoolean</a>(<a class="local col8 ref" href="#2828context" title='context' data-ref="2828context" data-ref-filename="2828context">context</a>, <a class="local col3 ref" href="#2833resultRef" title='resultRef' data-ref="2833resultRef" data-ref-filename="2833resultRef">resultRef</a>))</td></tr>
+<tr><th id="79">79</th><td>        <a class="local col6 ref" href="#2826failed" title='failed' data-ref="2826failed" data-ref-filename="2826failed">failed</a> = <b>true</b>;</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>    <a class="ref fn" href="../JSContextRef.h.html#JSGlobalContextRelease" title='JSGlobalContextRelease' data-ref="JSGlobalContextRelease" data-ref-filename="JSGlobalContextRelease">JSGlobalContextRelease</a>(<a class="local col8 ref" href="#2828context" title='context' data-ref="2828context" data-ref-filename="2828context">context</a>);</td></tr>
+<tr><th id="82">82</th><td>    </td></tr>
+<tr><th id="83">83</th><td>    <span class="namespace">JSC::</span><a class="type" href="../../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../../runtime/Options.h.html#132" title='JSC::Options::functionOverrides' data-ref="_ZN3JSC7Options17functionOverridesEv" data-ref-filename="_ZN3JSC7Options17functionOverridesEv">functionOverrides</a>() = <a class="local col7 ref" href="#2827oldFunctionOverrides" title='oldFunctionOverrides' data-ref="2827oldFunctionOverrides" data-ref-filename="2827oldFunctionOverrides">oldFunctionOverrides</a>;</td></tr>
+<tr><th id="84">84</th><td>    <span class="namespace">JSC::</span><a class="type" href="../../tools/FunctionOverrides.h.html#JSC::FunctionOverrides" title='JSC::FunctionOverrides' data-ref="JSC::FunctionOverrides" data-ref-filename="JSC..FunctionOverrides">FunctionOverrides</a>::<a class="ref fn" href="../../tools/FunctionOverrides.h.html#_ZN3JSC17FunctionOverrides18reinstallOverridesEv" title='JSC::FunctionOverrides::reinstallOverrides' data-ref="_ZN3JSC17FunctionOverrides18reinstallOverridesEv" data-ref-filename="_ZN3JSC17FunctionOverrides18reinstallOverridesEv">reinstallOverrides</a>();</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>    <span class='ref fn' title='printf' data-ref="printf" data-ref-filename="printf">printf</span>(<q>"%s: function override tests.\n"</q>, <a class="local col6 ref" href="#2826failed" title='failed' data-ref="2826failed" data-ref-filename="2826failed">failed</a> ? <q>"FAIL"</q> : <q>"PASS"</q>);</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td>    <b>return</b> <a class="local col6 ref" href="#2826failed" title='failed' data-ref="2826failed" data-ref-filename="2826failed">failed</a>;</td></tr>
+<tr><th id="89">89</th><td>}</td></tr>
+<tr><th id="90">90</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

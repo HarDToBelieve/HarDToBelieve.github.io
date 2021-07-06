@@ -1,0 +1,178 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Bag.h source code [webkit/WebKitBuild/Debug/usr/local/include/wtf/Bag.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="WTF::Bag,WTF::BagNode "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/wtf/Bag.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>wtf</a>/<a href='Bag.h.html'>Bag.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2013-2019 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="FastMalloc.h.html">&lt;wtf/FastMalloc.h&gt;</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="Noncopyable.h.html">&lt;wtf/Noncopyable.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="Packed.h.html">&lt;wtf/Packed.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="RawPtrTraits.h.html">&lt;wtf/RawPtrTraits.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><a class="macro" href="DebugHeap.h.html#91" title="using BagNodeMalloc = FastMalloc" data-ref="_M/DECLARE_ALLOCATOR_WITH_HEAP_IDENTIFIER">DECLARE_ALLOCATOR_WITH_HEAP_IDENTIFIER</a>(BagNode);</td></tr>
+<tr><th id="36">36</th><td><b>template</b>&lt;<b>typename</b> T, <b>typename</b> PassedPtrTraits = <a class="type" href="Forward.h.html#WTF::RawPtrTraits" title='WTF::RawPtrTraits' data-ref="WTF::RawPtrTraits" data-ref-filename="WTF..RawPtrTraits">RawPtrTraits</a>&lt;T&gt;&gt;</td></tr>
+<tr><th id="37">37</th><td><b>class</b> <dfn class="type def" id="WTF::BagNode" title='WTF::BagNode' data-ref="WTF::BagNode" data-ref-filename="WTF..BagNode">BagNode</dfn> {</td></tr>
+<tr><th id="38">38</th><td>    <a class="macro" href="FastMalloc.h.html#460" title="public: void* operator new(size_t, void* p) { return p; } void* operator new[](size_t, void* p) { return p; } void* operator new(size_t size) { return ::WTF::fastMalloc(size); } void operator delete(void* p) { ::WTF::fastFree(p); } void* operator new[](size_t size) { return ::WTF::fastMalloc(size); } void operator delete[](void* p) { ::WTF::fastFree(p); } void* operator new(size_t, NotNullTag, void* location) { do { if (!(location)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/Bag.h&quot;, 38, __PRETTY_FUNCTION__, &quot;location&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(38, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/Bag.h&quot;, __PRETTY_FUNCTION__, 867); } while (false); } } while (0); return location; } using webkitFastMalloced = int; private: using __thisIsHereToForceASemicolonAfterThisMacro __attribute__((unused)) = int" data-ref="_M/WTF_MAKE_FAST_ALLOCATED_WITH_HEAP_IDENTIFIER">WTF_MAKE_FAST_ALLOCATED_WITH_HEAP_IDENTIFIER</a>(BagNode);</td></tr>
+<tr><th id="39">39</th><td><b>public</b>:</td></tr>
+<tr><th id="40">40</th><td>    <b>using</b> <dfn class="typedef" id="WTF::BagNode::PtrTraits" title='WTF::BagNode::PtrTraits' data-type='typename PassedPtrTraits::template RebindTraits&lt;BagNode&lt;T, PassedPtrTraits&gt;&gt;' data-ref="WTF::BagNode::PtrTraits" data-ref-filename="WTF..BagNode..PtrTraits">PtrTraits</dfn> = <b>typename</b> PassedPtrTraits::<b>template</b> RebindTraits&lt;BagNode&gt;;</td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td>    <b>template</b>&lt;<b>typename</b>... Args&gt;</td></tr>
+<tr><th id="43">43</th><td>    <dfn class="decl def fn" id="_ZN3WTF7BagNodeC1EDpOTL0__" title='WTF::BagNode::BagNode&lt;T, PassedPtrTraits&gt;' data-ref="_ZN3WTF7BagNodeC1EDpOTL0__" data-ref-filename="_ZN3WTF7BagNodeC1EDpOTL0__">BagNode</dfn>(Args&amp;&amp;... <dfn class="local col1 decl" id="811args" title='args' data-type='Args &amp;&amp;...' data-ref="811args" data-ref-filename="811args">args</dfn>)</td></tr>
+<tr><th id="44">44</th><td>        : <a class="member field" href="#WTF::BagNode::m_item" title='WTF::BagNode::m_item' data-ref="WTF::BagNode::m_item" data-ref-filename="WTF..BagNode..m_item">m_item</a>(<span class="namespace">std::</span>forward&lt;Args&gt;(<a class="local col1 ref" href="#811args" title='args' data-ref="811args" data-ref-filename="811args">args</a>)...)</td></tr>
+<tr><th id="45">45</th><td>    { }</td></tr>
+<tr><th id="46">46</th><td>    </td></tr>
+<tr><th id="47">47</th><td>    T <dfn class="decl field" id="WTF::BagNode::m_item" title='WTF::BagNode::m_item' data-ref="WTF::BagNode::m_item" data-ref-filename="WTF..BagNode..m_item">m_item</dfn>;</td></tr>
+<tr><th id="48">48</th><td>    <b>typename</b> <a class="typedef" href="#WTF::BagNode::PtrTraits" title='WTF::BagNode::PtrTraits' data-type='typename PassedPtrTraits::template RebindTraits&lt;BagNode&lt;T, PassedPtrTraits&gt;&gt;' data-ref="WTF::BagNode::PtrTraits" data-ref-filename="WTF..BagNode..PtrTraits">PtrTraits</a>::StorageType <dfn class="decl field" id="WTF::BagNode::m_next" title='WTF::BagNode::m_next' data-ref="WTF::BagNode::m_next" data-ref-filename="WTF..BagNode..m_next">m_next</dfn> { <b>nullptr</b> };</td></tr>
+<tr><th id="49">49</th><td>};</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><b>template</b>&lt;<b>typename</b> T, <b>typename</b> PassedPtrTraits = <a class="type" href="Forward.h.html#WTF::RawPtrTraits" title='WTF::RawPtrTraits' data-ref="WTF::RawPtrTraits" data-ref-filename="WTF..RawPtrTraits">RawPtrTraits</a>&lt;T&gt;&gt;</td></tr>
+<tr><th id="52">52</th><td><b>class</b> <dfn class="type def" id="WTF::Bag" title='WTF::Bag' data-ref="WTF::Bag" data-ref-filename="WTF..Bag">Bag</dfn> final {</td></tr>
+<tr><th id="53">53</th><td>    <a class="macro" href="Noncopyable.h.html#23" title="Bag(const Bag&amp;) = delete; Bag&amp; operator=(const Bag&amp;) = delete;" data-ref="_M/WTF_MAKE_NONCOPYABLE">WTF_MAKE_NONCOPYABLE</a>(<dfn class="decl def fn" id="_ZN3WTF3BagC1ERKNS_3BagIT_T0_EE" title='WTF::Bag::Bag&lt;T, PassedPtrTraits&gt;' data-ref="_ZN3WTF3BagC1ERKNS_3BagIT_T0_EE" data-ref-filename="_ZN3WTF3BagC1ERKNS_3BagIT_T0_EE">Bag</dfn>);</td></tr>
+<tr><th id="54">54</th><td>    <a class="macro" href="FastMalloc.h.html#399" title="public: void* operator new(size_t, void* p) { return p; } void* operator new[](size_t, void* p) { return p; } void* operator new(size_t size) { return ::WTF::fastMalloc(size); } void operator delete(void* p) { ::WTF::fastFree(p); } void* operator new[](size_t size) { return ::WTF::fastMalloc(size); } void operator delete[](void* p) { ::WTF::fastFree(p); } void* operator new(size_t, NotNullTag, void* location) { do { if (!(location)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/Bag.h&quot;, 54, __PRETTY_FUNCTION__, &quot;location&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(54, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/Bag.h&quot;, __PRETTY_FUNCTION__, 869); } while (false); } } while (0); return location; } using webkitFastMalloced = int; private: using __thisIsHereToForceASemicolonAfterThisMacro __attribute__((unused)) = int" data-ref="_M/WTF_MAKE_FAST_ALLOCATED">WTF_MAKE_FAST_ALLOCATED</a>;</td></tr>
+<tr><th id="55">55</th><td>    <b>using</b> <dfn class="typedef" id="WTF::Bag::Node" title='WTF::Bag::Node' data-type='BagNode&lt;T, PassedPtrTraits&gt;' data-ref="WTF::Bag::Node" data-ref-filename="WTF..Bag..Node">Node</dfn> = <a class="type" href="#WTF::BagNode" title='WTF::BagNode' data-ref="WTF::BagNode" data-ref-filename="WTF..BagNode">BagNode</a>&lt;T, PassedPtrTraits&gt;;</td></tr>
+<tr><th id="56">56</th><td>    <b>using</b> <dfn class="typedef" id="WTF::Bag::PtrTraits" title='WTF::Bag::PtrTraits' data-type='typename PassedPtrTraits::template RebindTraits&lt;WTF::Bag::Node&gt;' data-ref="WTF::Bag::PtrTraits" data-ref-filename="WTF..Bag..PtrTraits">PtrTraits</dfn> = <b>typename</b> PassedPtrTraits::<b>template</b> RebindTraits&lt;<a class="typedef" href="#WTF::Bag::Node" title='WTF::Bag::Node' data-type='BagNode&lt;T, PassedPtrTraits&gt;' data-ref="WTF::Bag::Node" data-ref-filename="WTF..Bag..Node">Node</a>&gt;;</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><b>public</b>:</td></tr>
+<tr><th id="59">59</th><td>    <dfn class="decl def fn" id="_ZN3WTF3BagC1Ev" title='WTF::Bag::Bag&lt;T, PassedPtrTraits&gt;' data-ref="_ZN3WTF3BagC1Ev" data-ref-filename="_ZN3WTF3BagC1Ev">Bag</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td>    <b>template</b>&lt;<b>typename</b> U&gt;</td></tr>
+<tr><th id="62">62</th><td>    <dfn class="decl def fn" id="_ZN3WTF3BagC1EONS_3BagIT_TL0__EE" title='WTF::Bag::Bag&lt;T, PassedPtrTraits&gt;' data-ref="_ZN3WTF3BagC1EONS_3BagIT_TL0__EE" data-ref-filename="_ZN3WTF3BagC1EONS_3BagIT_TL0__EE">Bag</dfn>(<a class="type" href="#WTF::Bag" title='WTF::Bag' data-ref="WTF::Bag" data-ref-filename="WTF..Bag">Bag</a>&lt;T, U&gt;&amp;&amp; <dfn class="local col2 decl" id="812other" title='other' data-type='Bag&lt;T, U&gt; &amp;&amp;' data-ref="812other" data-ref-filename="812other">other</dfn>)</td></tr>
+<tr><th id="63">63</th><td>    {</td></tr>
+<tr><th id="64">64</th><td>        <a class="macro" href="Assertions.h.html#347" title="do { if (!(!m_head)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/Bag.h&quot;, 64, __PRETTY_FUNCTION__, &quot;!m_head&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(64, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/Bag.h&quot;, __PRETTY_FUNCTION__, 871); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(!<a class="member field" href="#WTF::Bag::m_head" title='WTF::Bag::m_head' data-ref="WTF::Bag::m_head" data-ref-filename="WTF..Bag..m_head">m_head</a>);</td></tr>
+<tr><th id="65">65</th><td>        <a class="member field" href="#WTF::Bag::m_head" title='WTF::Bag::m_head' data-ref="WTF::Bag::m_head" data-ref-filename="WTF..Bag..m_head">m_head</a> = <a class="local col2 ref" href="#812other" title='other' data-ref="812other" data-ref-filename="812other">other</a>.unwrappedHead();</td></tr>
+<tr><th id="66">66</th><td>        <a class="local col2 ref" href="#812other" title='other' data-ref="812other" data-ref-filename="812other">other</a>.m_head = <b>nullptr</b>;</td></tr>
+<tr><th id="67">67</th><td>    }</td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td>    <dfn class="decl def fn" id="_ZN3WTF3BagD1Ev" title='WTF::Bag::~Bag&lt;T, PassedPtrTraits&gt;' data-ref="_ZN3WTF3BagD1Ev" data-ref-filename="_ZN3WTF3BagD1Ev">~Bag</dfn>()</td></tr>
+<tr><th id="70">70</th><td>    {</td></tr>
+<tr><th id="71">71</th><td>        <a class="member fn" href="#_ZN3WTF3Bag5clearEv" title='WTF::Bag::clear' data-ref="_ZN3WTF3Bag5clearEv" data-ref-filename="_ZN3WTF3Bag5clearEv">clear</a>();</td></tr>
+<tr><th id="72">72</th><td>    }</td></tr>
+<tr><th id="73">73</th><td>    </td></tr>
+<tr><th id="74">74</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN3WTF3Bag5clearEv" title='WTF::Bag::clear' data-ref="_ZN3WTF3Bag5clearEv" data-ref-filename="_ZN3WTF3Bag5clearEv">clear</dfn>()</td></tr>
+<tr><th id="75">75</th><td>    {</td></tr>
+<tr><th id="76">76</th><td>        <a class="typedef" href="#WTF::Bag::Node" title='WTF::Bag::Node' data-type='BagNode&lt;T, PassedPtrTraits&gt;' data-ref="WTF::Bag::Node" data-ref-filename="WTF..Bag..Node">Node</a>* <dfn class="local col3 decl" id="813head" title='head' data-type='WTF::Bag::Node *' data-ref="813head" data-ref-filename="813head">head</dfn> = <b>this</b>-&gt;unwrappedHead();</td></tr>
+<tr><th id="77">77</th><td>        <b>while</b> (<a class="local col3 ref" href="#813head" title='head' data-ref="813head" data-ref-filename="813head">head</a>) {</td></tr>
+<tr><th id="78">78</th><td>            <a class="typedef" href="#WTF::Bag::Node" title='WTF::Bag::Node' data-type='BagNode&lt;T, PassedPtrTraits&gt;' data-ref="WTF::Bag::Node" data-ref-filename="WTF..Bag..Node">Node</a>* <dfn class="local col4 decl" id="814current" title='current' data-type='WTF::Bag::Node *' data-ref="814current" data-ref-filename="814current">current</dfn> = <a class="local col3 ref" href="#813head" title='head' data-ref="813head" data-ref-filename="813head">head</a>;</td></tr>
+<tr><th id="79">79</th><td>            <a class="local col3 ref" href="#813head" title='head' data-ref="813head" data-ref-filename="813head">head</a> = <a class="typedef" href="#WTF::Bag::Node" title='WTF::Bag::Node' data-type='BagNode&lt;T, PassedPtrTraits&gt;' data-ref="WTF::Bag::Node" data-ref-filename="WTF..Bag..Node">Node</a>::PtrTraits::unwrap(<a class="local col4 ref" href="#814current" title='current' data-ref="814current" data-ref-filename="814current">current</a>-&gt;m_next);</td></tr>
+<tr><th id="80">80</th><td>            <b>delete</b> <a class="local col4 ref" href="#814current" title='current' data-ref="814current" data-ref-filename="814current">current</a>;</td></tr>
+<tr><th id="81">81</th><td>        }</td></tr>
+<tr><th id="82">82</th><td>        <a class="member field" href="#WTF::Bag::m_head" title='WTF::Bag::m_head' data-ref="WTF::Bag::m_head" data-ref-filename="WTF..Bag..m_head">m_head</a> = <b>nullptr</b>;</td></tr>
+<tr><th id="83">83</th><td>    }</td></tr>
+<tr><th id="84">84</th><td>    </td></tr>
+<tr><th id="85">85</th><td>    <b>template</b>&lt;<b>typename</b>... Args&gt;</td></tr>
+<tr><th id="86">86</th><td>    T* <dfn class="decl def fn" id="_ZN3WTF3Bag3addEDpOTL0__" title='WTF::Bag::add' data-ref="_ZN3WTF3Bag3addEDpOTL0__" data-ref-filename="_ZN3WTF3Bag3addEDpOTL0__">add</dfn>(Args&amp;&amp;... <dfn class="local col5 decl" id="815args" title='args' data-type='Args &amp;&amp;...' data-ref="815args" data-ref-filename="815args">args</dfn>)</td></tr>
+<tr><th id="87">87</th><td>    {</td></tr>
+<tr><th id="88">88</th><td>        <a class="typedef" href="#WTF::Bag::Node" title='WTF::Bag::Node' data-type='BagNode&lt;T, PassedPtrTraits&gt;' data-ref="WTF::Bag::Node" data-ref-filename="WTF..Bag..Node">Node</a>* <dfn class="local col6 decl" id="816newNode" title='newNode' data-type='WTF::Bag::Node *' data-ref="816newNode" data-ref-filename="816newNode">newNode</dfn> = <b>new</b> <a class="typedef" href="#WTF::Bag::Node" title='WTF::Bag::Node' data-type='BagNode&lt;T, PassedPtrTraits&gt;' data-ref="WTF::Bag::Node" data-ref-filename="WTF..Bag..Node">Node</a>(<span class="namespace">std::</span>forward&lt;Args&gt;(<a class="local col5 ref" href="#815args" title='args' data-ref="815args" data-ref-filename="815args">args</a>)...);</td></tr>
+<tr><th id="89">89</th><td>        <a class="local col6 ref" href="#816newNode" title='newNode' data-ref="816newNode" data-ref-filename="816newNode">newNode</a>-&gt;m_next = <a class="member fn" href="#_ZNK3WTF3Bag13unwrappedHeadEv" title='WTF::Bag::unwrappedHead' data-ref="_ZNK3WTF3Bag13unwrappedHeadEv" data-ref-filename="_ZNK3WTF3Bag13unwrappedHeadEv">unwrappedHead</a>();</td></tr>
+<tr><th id="90">90</th><td>        <a class="member field" href="#WTF::Bag::m_head" title='WTF::Bag::m_head' data-ref="WTF::Bag::m_head" data-ref-filename="WTF..Bag..m_head">m_head</a> = <a class="local col6 ref" href="#816newNode" title='newNode' data-ref="816newNode" data-ref-filename="816newNode">newNode</a>;</td></tr>
+<tr><th id="91">91</th><td>        <b>return</b> &amp;<a class="local col6 ref" href="#816newNode" title='newNode' data-ref="816newNode" data-ref-filename="816newNode">newNode</a>-&gt;m_item;</td></tr>
+<tr><th id="92">92</th><td>    }</td></tr>
+<tr><th id="93">93</th><td>    </td></tr>
+<tr><th id="94">94</th><td>    <b>class</b> <dfn class="type def" id="WTF::Bag::iterator" title='WTF::Bag::iterator' data-ref="WTF::Bag::iterator" data-ref-filename="WTF..Bag..iterator">iterator</dfn> {</td></tr>
+<tr><th id="95">95</th><td>        <a class="macro" href="FastMalloc.h.html#399" title="public: void* operator new(size_t, void* p) { return p; } void* operator new[](size_t, void* p) { return p; } void* operator new(size_t size) { return ::WTF::fastMalloc(size); } void operator delete(void* p) { ::WTF::fastFree(p); } void* operator new[](size_t size) { return ::WTF::fastMalloc(size); } void operator delete[](void* p) { ::WTF::fastFree(p); } void* operator new(size_t, NotNullTag, void* location) { do { if (!(location)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/Bag.h&quot;, 95, __PRETTY_FUNCTION__, &quot;location&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(95, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/Bag.h&quot;, __PRETTY_FUNCTION__, 873); } while (false); } } while (0); return location; } using webkitFastMalloced = int; private: using __thisIsHereToForceASemicolonAfterThisMacro __attribute__((unused)) = int" data-ref="_M/WTF_MAKE_FAST_ALLOCATED">WTF_MAKE_FAST_ALLOCATED</a>;</td></tr>
+<tr><th id="96">96</th><td>    <b>public</b>:</td></tr>
+<tr><th id="97">97</th><td>        <dfn class="decl def fn" id="_ZN3WTF3Bag8iteratorC1Ev" title='WTF::Bag::iterator::iterator' data-ref="_ZN3WTF3Bag8iteratorC1Ev" data-ref-filename="_ZN3WTF3Bag8iteratorC1Ev">iterator</dfn>()</td></tr>
+<tr><th id="98">98</th><td>            : <a class="member field" href="#WTF::Bag::iterator::m_node" title='WTF::Bag::iterator::m_node' data-ref="WTF::Bag::iterator::m_node" data-ref-filename="WTF..Bag..iterator..m_node">m_node</a>(<var>0</var>)</td></tr>
+<tr><th id="99">99</th><td>        {</td></tr>
+<tr><th id="100">100</th><td>        }</td></tr>
+<tr><th id="101">101</th><td>        </td></tr>
+<tr><th id="102">102</th><td>        <i>// This is sort of cheating; it's equivalent to iter == end().</i></td></tr>
+<tr><th id="103">103</th><td>        <em>bool</em> <dfn class="decl def fn" id="_ZNK3WTF3Bag8iteratorntEv" title='WTF::Bag::iterator::operator!' data-ref="_ZNK3WTF3Bag8iteratorntEv" data-ref-filename="_ZNK3WTF3Bag8iteratorntEv"><b>operator</b>!</dfn>() <em>const</em> { <b>return</b> !<a class="member field" href="#WTF::Bag::iterator::m_node" title='WTF::Bag::iterator::m_node' data-ref="WTF::Bag::iterator::m_node" data-ref-filename="WTF..Bag..iterator..m_node">m_node</a>; }</td></tr>
+<tr><th id="104">104</th><td>        </td></tr>
+<tr><th id="105">105</th><td>        T* <dfn class="decl def fn" id="_ZNK3WTF3Bag8iteratordeEv" title='WTF::Bag::iterator::operator*' data-ref="_ZNK3WTF3Bag8iteratordeEv" data-ref-filename="_ZNK3WTF3Bag8iteratordeEv"><b>operator</b>*</dfn>() <em>const</em> { <b>return</b> &amp;<a class="member field" href="#WTF::Bag::iterator::m_node" title='WTF::Bag::iterator::m_node' data-ref="WTF::Bag::iterator::m_node" data-ref-filename="WTF..Bag..iterator..m_node">m_node</a>-&gt;m_item; }</td></tr>
+<tr><th id="106">106</th><td>        </td></tr>
+<tr><th id="107">107</th><td>        <a class="type" href="#WTF::Bag::iterator" title='WTF::Bag::iterator' data-ref="WTF::Bag::iterator" data-ref-filename="WTF..Bag..iterator">iterator</a>&amp; <dfn class="decl def fn" id="_ZN3WTF3Bag8iteratorppEv" title='WTF::Bag::iterator::operator++' data-ref="_ZN3WTF3Bag8iteratorppEv" data-ref-filename="_ZN3WTF3Bag8iteratorppEv"><b>operator</b>++</dfn>()</td></tr>
+<tr><th id="108">108</th><td>        {</td></tr>
+<tr><th id="109">109</th><td>            <a class="member field" href="#WTF::Bag::iterator::m_node" title='WTF::Bag::iterator::m_node' data-ref="WTF::Bag::iterator::m_node" data-ref-filename="WTF..Bag..iterator..m_node">m_node</a> = <a class="typedef" href="#WTF::Bag::Node" title='WTF::Bag::Node' data-type='BagNode&lt;T, PassedPtrTraits&gt;' data-ref="WTF::Bag::Node" data-ref-filename="WTF..Bag..Node">Node</a>::PtrTraits::unwrap(<a class="member field" href="#WTF::Bag::iterator::m_node" title='WTF::Bag::iterator::m_node' data-ref="WTF::Bag::iterator::m_node" data-ref-filename="WTF..Bag..iterator..m_node">m_node</a>-&gt;m_next);</td></tr>
+<tr><th id="110">110</th><td>            <b>return</b> *<b>this</b>;</td></tr>
+<tr><th id="111">111</th><td>        }</td></tr>
+<tr><th id="112">112</th><td>        </td></tr>
+<tr><th id="113">113</th><td>        <em>bool</em> <dfn class="decl def fn" id="_ZNK3WTF3Bag8iteratoreqERKS1_" title='WTF::Bag::iterator::operator==' data-ref="_ZNK3WTF3Bag8iteratoreqERKS1_" data-ref-filename="_ZNK3WTF3Bag8iteratoreqERKS1_"><b>operator</b>==</dfn>(<em>const</em> <a class="type" href="#WTF::Bag::iterator" title='WTF::Bag::iterator' data-ref="WTF::Bag::iterator" data-ref-filename="WTF..Bag..iterator">iterator</a>&amp; <dfn class="local col7 decl" id="817other" title='other' data-type='const WTF::Bag::iterator &amp;' data-ref="817other" data-ref-filename="817other">other</dfn>) <em>const</em></td></tr>
+<tr><th id="114">114</th><td>        {</td></tr>
+<tr><th id="115">115</th><td>            <b>return</b> <a class="member field" href="#WTF::Bag::iterator::m_node" title='WTF::Bag::iterator::m_node' data-ref="WTF::Bag::iterator::m_node" data-ref-filename="WTF..Bag..iterator..m_node">m_node</a> == <a class="local col7 ref" href="#817other" title='other' data-ref="817other" data-ref-filename="817other">other</a>.m_node;</td></tr>
+<tr><th id="116">116</th><td>        }</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td>        <em>bool</em> <dfn class="decl def fn" id="_ZNK3WTF3Bag8iteratorneERKS1_" title='WTF::Bag::iterator::operator!=' data-ref="_ZNK3WTF3Bag8iteratorneERKS1_" data-ref-filename="_ZNK3WTF3Bag8iteratorneERKS1_"><b>operator</b>!=</dfn>(<em>const</em> <a class="type" href="#WTF::Bag::iterator" title='WTF::Bag::iterator' data-ref="WTF::Bag::iterator" data-ref-filename="WTF..Bag..iterator">iterator</a>&amp; <dfn class="local col8 decl" id="818other" title='other' data-type='const WTF::Bag::iterator &amp;' data-ref="818other" data-ref-filename="818other">other</dfn>) <em>const</em></td></tr>
+<tr><th id="119">119</th><td>        {</td></tr>
+<tr><th id="120">120</th><td>            <b>return</b> !(*<b>this</b> == <a class="local col8 ref" href="#818other" title='other' data-ref="818other" data-ref-filename="818other">other</a>);</td></tr>
+<tr><th id="121">121</th><td>        }</td></tr>
+<tr><th id="122">122</th><td></td></tr>
+<tr><th id="123">123</th><td>    <b>private</b>:</td></tr>
+<tr><th id="124">124</th><td>        <b>template</b>&lt;<b>typename</b>, <b>typename</b>&gt; <b>friend</b> <b>class</b> <span class="namespace">WTF::</span><dfn class="type" id="WTF::Bag" title='WTF::Bag' data-ref="WTF::Bag" data-ref-filename="WTF..Bag">Bag</dfn>;</td></tr>
+<tr><th id="125">125</th><td>        <a class="typedef" href="#WTF::Bag::Node" title='WTF::Bag::Node' data-type='BagNode&lt;T, PassedPtrTraits&gt;' data-ref="WTF::Bag::Node" data-ref-filename="WTF..Bag..Node">Node</a>* <dfn class="decl field" id="WTF::Bag::iterator::m_node" title='WTF::Bag::iterator::m_node' data-ref="WTF::Bag::iterator::m_node" data-ref-filename="WTF..Bag..iterator..m_node">m_node</dfn>;</td></tr>
+<tr><th id="126">126</th><td>    };</td></tr>
+<tr><th id="127">127</th><td>    </td></tr>
+<tr><th id="128">128</th><td>    <a class="type" href="#WTF::Bag::iterator" title='WTF::Bag::iterator' data-ref="WTF::Bag::iterator" data-ref-filename="WTF..Bag..iterator">iterator</a> <dfn class="decl def fn" id="_ZN3WTF3Bag5beginEv" title='WTF::Bag::begin' data-ref="_ZN3WTF3Bag5beginEv" data-ref-filename="_ZN3WTF3Bag5beginEv">begin</dfn>()</td></tr>
+<tr><th id="129">129</th><td>    {</td></tr>
+<tr><th id="130">130</th><td>        <a class="type" href="#WTF::Bag::iterator" title='WTF::Bag::iterator' data-ref="WTF::Bag::iterator" data-ref-filename="WTF..Bag..iterator">iterator</a> <dfn class="local col9 decl" id="819result" title='result' data-type='WTF::Bag::iterator' data-ref="819result" data-ref-filename="819result">result</dfn>;</td></tr>
+<tr><th id="131">131</th><td>        <a class="local col9 ref" href="#819result" title='result' data-ref="819result" data-ref-filename="819result">result</a>.m_node = <a class="member fn" href="#_ZNK3WTF3Bag13unwrappedHeadEv" title='WTF::Bag::unwrappedHead' data-ref="_ZNK3WTF3Bag13unwrappedHeadEv" data-ref-filename="_ZNK3WTF3Bag13unwrappedHeadEv">unwrappedHead</a>();</td></tr>
+<tr><th id="132">132</th><td>        <b>return</b> <a class="local col9 ref" href="#819result" title='result' data-ref="819result" data-ref-filename="819result">result</a>;</td></tr>
+<tr><th id="133">133</th><td>    }</td></tr>
+<tr><th id="134">134</th><td></td></tr>
+<tr><th id="135">135</th><td>    <em>const</em> <a class="type" href="#WTF::Bag::iterator" title='WTF::Bag::iterator' data-ref="WTF::Bag::iterator" data-ref-filename="WTF..Bag..iterator">iterator</a> <dfn class="decl def fn" id="_ZNK3WTF3Bag5beginEv" title='WTF::Bag::begin' data-ref="_ZNK3WTF3Bag5beginEv" data-ref-filename="_ZNK3WTF3Bag5beginEv">begin</dfn>() <em>const</em></td></tr>
+<tr><th id="136">136</th><td>    {</td></tr>
+<tr><th id="137">137</th><td>        <a class="type" href="#WTF::Bag::iterator" title='WTF::Bag::iterator' data-ref="WTF::Bag::iterator" data-ref-filename="WTF..Bag..iterator">iterator</a> <dfn class="local col0 decl" id="820result" title='result' data-type='WTF::Bag::iterator' data-ref="820result" data-ref-filename="820result">result</dfn>;</td></tr>
+<tr><th id="138">138</th><td>        <a class="local col0 ref" href="#820result" title='result' data-ref="820result" data-ref-filename="820result">result</a>.m_node = <a class="member fn" href="#_ZNK3WTF3Bag13unwrappedHeadEv" title='WTF::Bag::unwrappedHead' data-ref="_ZNK3WTF3Bag13unwrappedHeadEv" data-ref-filename="_ZNK3WTF3Bag13unwrappedHeadEv">unwrappedHead</a>();</td></tr>
+<tr><th id="139">139</th><td>        <b>return</b> <a class="local col0 ref" href="#820result" title='result' data-ref="820result" data-ref-filename="820result">result</a>;</td></tr>
+<tr><th id="140">140</th><td>    }</td></tr>
+<tr><th id="141">141</th><td></td></tr>
+<tr><th id="142">142</th><td></td></tr>
+<tr><th id="143">143</th><td>    <a class="type" href="#WTF::Bag::iterator" title='WTF::Bag::iterator' data-ref="WTF::Bag::iterator" data-ref-filename="WTF..Bag..iterator">iterator</a> <dfn class="decl def fn" id="_ZNK3WTF3Bag3endEv" title='WTF::Bag::end' data-ref="_ZNK3WTF3Bag3endEv" data-ref-filename="_ZNK3WTF3Bag3endEv">end</dfn>() <em>const</em> { <b>return</b> <a class="type" href="#WTF::Bag::iterator" title='WTF::Bag::iterator' data-ref="WTF::Bag::iterator" data-ref-filename="WTF..Bag..iterator">iterator</a>(); }</td></tr>
+<tr><th id="144">144</th><td>    </td></tr>
+<tr><th id="145">145</th><td>    <em>bool</em> <dfn class="decl def fn" id="_ZNK3WTF3Bag7isEmptyEv" title='WTF::Bag::isEmpty' data-ref="_ZNK3WTF3Bag7isEmptyEv" data-ref-filename="_ZNK3WTF3Bag7isEmptyEv">isEmpty</dfn>() <em>const</em> { <b>return</b> !<a class="member field" href="#WTF::Bag::m_head" title='WTF::Bag::m_head' data-ref="WTF::Bag::m_head" data-ref-filename="WTF..Bag..m_head">m_head</a>; }</td></tr>
+<tr><th id="146">146</th><td>    </td></tr>
+<tr><th id="147">147</th><td><b>private</b>:</td></tr>
+<tr><th id="148">148</th><td>    <a class="typedef" href="#WTF::Bag::Node" title='WTF::Bag::Node' data-type='BagNode&lt;T, PassedPtrTraits&gt;' data-ref="WTF::Bag::Node" data-ref-filename="WTF..Bag..Node">Node</a>* <dfn class="decl def fn" id="_ZNK3WTF3Bag13unwrappedHeadEv" title='WTF::Bag::unwrappedHead' data-ref="_ZNK3WTF3Bag13unwrappedHeadEv" data-ref-filename="_ZNK3WTF3Bag13unwrappedHeadEv">unwrappedHead</dfn>() <em>const</em> { <b>return</b> <a class="typedef" href="#WTF::Bag::PtrTraits" title='WTF::Bag::PtrTraits' data-type='typename PassedPtrTraits::template RebindTraits&lt;WTF::Bag::Node&gt;' data-ref="WTF::Bag::PtrTraits" data-ref-filename="WTF..Bag..PtrTraits">PtrTraits</a>::unwrap(<a class="member field" href="#WTF::Bag::m_head" title='WTF::Bag::m_head' data-ref="WTF::Bag::m_head" data-ref-filename="WTF..Bag..m_head">m_head</a>); }</td></tr>
+<tr><th id="149">149</th><td></td></tr>
+<tr><th id="150">150</th><td>    <b>typename</b> <a class="typedef" href="#WTF::Bag::PtrTraits" title='WTF::Bag::PtrTraits' data-type='typename PassedPtrTraits::template RebindTraits&lt;WTF::Bag::Node&gt;' data-ref="WTF::Bag::PtrTraits" data-ref-filename="WTF..Bag..PtrTraits">PtrTraits</a>::StorageType <dfn class="decl field" id="WTF::Bag::m_head" title='WTF::Bag::m_head' data-ref="WTF::Bag::m_head" data-ref-filename="WTF..Bag..m_head">m_head</dfn> { <b>nullptr</b> };</td></tr>
+<tr><th id="151">151</th><td>};</td></tr>
+<tr><th id="152">152</th><td></td></tr>
+<tr><th id="153">153</th><td><b>template</b>&lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="154">154</th><td><b>using</b> <dfn class="typedef" id="WTF::PackedBag" title='WTF::PackedBag' data-type='Bag&lt;T, PackedPtrTraits&lt;T&gt;&gt;' data-ref="WTF::PackedBag" data-ref-filename="WTF..PackedBag">PackedBag</dfn> = <a class="type" href="#WTF::Bag" title='WTF::Bag' data-ref="WTF::Bag" data-ref-filename="WTF..Bag">Bag</a>&lt;T, <a class="type" href="Packed.h.html#WTF::PackedPtrTraits" title='WTF::PackedPtrTraits' data-ref="WTF::PackedPtrTraits" data-ref-filename="WTF..PackedPtrTraits">PackedPtrTraits</a>&lt;T&gt;&gt;;</td></tr>
+<tr><th id="155">155</th><td></td></tr>
+<tr><th id="156">156</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="157">157</th><td></td></tr>
+<tr><th id="158">158</th><td><b>using</b> <span class="namespace">WTF::</span>Bag;</td></tr>
+<tr><th id="159">159</th><td><b>using</b> <span class="namespace">WTF::</span>PackedBag;</td></tr>
+<tr><th id="160">160</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/JavaScriptCore/API/tests/FunctionOverridesTest.cpp.html'>webkit/Source/JavaScriptCore/API/tests/FunctionOverridesTest.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

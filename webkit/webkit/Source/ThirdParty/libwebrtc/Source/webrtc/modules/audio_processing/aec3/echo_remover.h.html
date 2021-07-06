@@ -1,0 +1,80 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>echo_remover.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/aec3/echo_remover.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::EchoRemover "/>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/aec3/echo_remover.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>audio_processing</a>/<a href='./'>aec3</a>/<a href='echo_remover.h.html'>echo_remover.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2017 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/MODULES_AUDIO_PROCESSING_AEC3_ECHO_REMOVER_H_">MODULES_AUDIO_PROCESSING_AEC3_ECHO_REMOVER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/MODULES_AUDIO_PROCESSING_AEC3_ECHO_REMOVER_H_" data-ref="_M/MODULES_AUDIO_PROCESSING_AEC3_ECHO_REMOVER_H_">MODULES_AUDIO_PROCESSING_AEC3_ECHO_REMOVER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;vector&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="../../../../third_party/abseil-cpp/absl/types/optional.h.html">"absl/types/optional.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../../../api/audio/echo_canceller3_config.h.html">"api/audio/echo_canceller3_config.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../../../api/audio/echo_control.h.html">"api/audio/echo_control.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="delay_estimate.h.html">"modules/audio_processing/aec3/delay_estimate.h"</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="echo_path_variability.h.html">"modules/audio_processing/aec3/echo_path_variability.h"</a></u></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="render_buffer.h.html">"modules/audio_processing/aec3/render_buffer.h"</a></u></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="24">24</th><td></td></tr>
+<tr><th id="25">25</th><td><i>// Class for removing the echo from the capture signal.</i></td></tr>
+<tr><th id="26">26</th><td><b>class</b> <dfn class="type def" id="webrtc::EchoRemover" title='webrtc::EchoRemover' data-ref="webrtc::EchoRemover" data-ref-filename="webrtc..EchoRemover">EchoRemover</dfn> {</td></tr>
+<tr><th id="27">27</th><td> <b>public</b>:</td></tr>
+<tr><th id="28">28</th><td>  <em>static</em> <a class="type" href="#webrtc::EchoRemover" title='webrtc::EchoRemover' data-ref="webrtc::EchoRemover" data-ref-filename="webrtc..EchoRemover">EchoRemover</a>* <dfn class="decl fn" id="_ZN6webrtc11EchoRemover6CreateERKNS_20EchoCanceller3ConfigEimm" title='webrtc::EchoRemover::Create' data-ref="_ZN6webrtc11EchoRemover6CreateERKNS_20EchoCanceller3ConfigEimm" data-ref-filename="_ZN6webrtc11EchoRemover6CreateERKNS_20EchoCanceller3ConfigEimm">Create</dfn>(<em>const</em> <a class="type" href="../../../api/audio/echo_canceller3_config.h.html#webrtc::EchoCanceller3Config" title='webrtc::EchoCanceller3Config' data-ref="webrtc::EchoCanceller3Config" data-ref-filename="webrtc..EchoCanceller3Config">EchoCanceller3Config</a>&amp; <dfn class="local col8 decl" id="368config" title='config' data-type='const webrtc::EchoCanceller3Config &amp;' data-ref="368config" data-ref-filename="368config">config</dfn>,</td></tr>
+<tr><th id="29">29</th><td>                             <em>int</em> <dfn class="local col9 decl" id="369sample_rate_hz" title='sample_rate_hz' data-type='int' data-ref="369sample_rate_hz" data-ref-filename="369sample_rate_hz">sample_rate_hz</dfn>,</td></tr>
+<tr><th id="30">30</th><td>                             <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="370num_render_channels" title='num_render_channels' data-type='size_t' data-ref="370num_render_channels" data-ref-filename="370num_render_channels">num_render_channels</dfn>,</td></tr>
+<tr><th id="31">31</th><td>                             <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="371num_capture_channels" title='num_capture_channels' data-type='size_t' data-ref="371num_capture_channels" data-ref-filename="371num_capture_channels">num_capture_channels</dfn>);</td></tr>
+<tr><th id="32">32</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc11EchoRemoverD1Ev" title='webrtc::EchoRemover::~EchoRemover' data-ref="_ZN6webrtc11EchoRemoverD1Ev" data-ref-filename="_ZN6webrtc11EchoRemoverD1Ev">~EchoRemover</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td>  <i>// Get current metrics.</i></td></tr>
+<tr><th id="35">35</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZNK6webrtc11EchoRemover10GetMetricsEPNS_11EchoControl7MetricsE" title='webrtc::EchoRemover::GetMetrics' data-ref="_ZNK6webrtc11EchoRemover10GetMetricsEPNS_11EchoControl7MetricsE" data-ref-filename="_ZNK6webrtc11EchoRemover10GetMetricsEPNS_11EchoControl7MetricsE">GetMetrics</dfn>(<a class="type" href="../../../api/audio/echo_control.h.html#webrtc::EchoControl" title='webrtc::EchoControl' data-ref="webrtc::EchoControl" data-ref-filename="webrtc..EchoControl">EchoControl</a>::<a class="type" href="../../../api/audio/echo_control.h.html#webrtc::EchoControl::Metrics" title='webrtc::EchoControl::Metrics' data-ref="webrtc::EchoControl::Metrics" data-ref-filename="webrtc..EchoControl..Metrics">Metrics</a>* <dfn class="local col2 decl" id="372metrics" title='metrics' data-type='EchoControl::Metrics *' data-ref="372metrics" data-ref-filename="372metrics">metrics</dfn>) <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td>  <i>// Removes the echo from a block of samples from the capture signal. The</i></td></tr>
+<tr><th id="38">38</th><td><i>  // supplied render signal is assumed to be pre-aligned with the capture</i></td></tr>
+<tr><th id="39">39</th><td><i>  // signal.</i></td></tr>
+<tr><th id="40">40</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc11EchoRemover14ProcessCaptureENS_19EchoPathVariabilityEbRKNSt3__18optionalINS_13DelayEstimateEEEPNS_12RenderBufferEPNS2_6vectorINSA_INSA_IfN1450745" title='webrtc::EchoRemover::ProcessCapture' data-ref="_ZN6webrtc11EchoRemover14ProcessCaptureENS_19EchoPathVariabilityEbRKNSt3__18optionalINS_13DelayEstimateEEEPNS_12RenderBufferEPNS2_6vectorINSA_INSA_IfN1450745" data-ref-filename="_ZN6webrtc11EchoRemover14ProcessCaptureENS_19EchoPathVariabilityEbRKNSt3__18optionalINS_13DelayEstimateEEEPNS_12RenderBufferEPNS2_6vectorINSA_INSA_IfN1450745">ProcessCapture</dfn>(</td></tr>
+<tr><th id="41">41</th><td>      <a class="type" href="echo_path_variability.h.html#webrtc::EchoPathVariability" title='webrtc::EchoPathVariability' data-ref="webrtc::EchoPathVariability" data-ref-filename="webrtc..EchoPathVariability">EchoPathVariability</a> <dfn class="local col3 decl" id="373echo_path_variability" title='echo_path_variability' data-type='webrtc::EchoPathVariability' data-ref="373echo_path_variability" data-ref-filename="373echo_path_variability">echo_path_variability</dfn>,</td></tr>
+<tr><th id="42">42</th><td>      <em>bool</em> <dfn class="local col4 decl" id="374capture_signal_saturation" title='capture_signal_saturation' data-type='bool' data-ref="374capture_signal_saturation" data-ref-filename="374capture_signal_saturation">capture_signal_saturation</dfn>,</td></tr>
+<tr><th id="43">43</th><td>      <em>const</em> <span class="namespace">absl::</span><span class='type' title='std::__1::optional' data-ref="std::__1::optional" data-ref-filename="std..__1..optional">optional</span>&lt;<a class="type" href="delay_estimate.h.html#webrtc::DelayEstimate" title='webrtc::DelayEstimate' data-ref="webrtc::DelayEstimate" data-ref-filename="webrtc..DelayEstimate">DelayEstimate</a>&gt;&amp; <dfn class="local col5 decl" id="375external_delay" title='external_delay' data-type='const absl::optional&lt;DelayEstimate&gt; &amp;' data-ref="375external_delay" data-ref-filename="375external_delay">external_delay</dfn>,</td></tr>
+<tr><th id="44">44</th><td>      <a class="type" href="render_buffer.h.html#webrtc::RenderBuffer" title='webrtc::RenderBuffer' data-ref="webrtc::RenderBuffer" data-ref-filename="webrtc..RenderBuffer">RenderBuffer</a>* <dfn class="local col6 decl" id="376render_buffer" title='render_buffer' data-type='webrtc::RenderBuffer *' data-ref="376render_buffer" data-ref-filename="376render_buffer">render_buffer</dfn>,</td></tr>
+<tr><th id="45">45</th><td>      <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<em>float</em>&gt;&gt;&gt;* <dfn class="local col7 decl" id="377linear_output" title='linear_output' data-type='std::vector&lt;std::vector&lt;std::vector&lt;float&gt;&gt;&gt; *' data-ref="377linear_output" data-ref-filename="377linear_output">linear_output</dfn>,</td></tr>
+<tr><th id="46">46</th><td>      <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<em>float</em>&gt;&gt;&gt;* <dfn class="local col8 decl" id="378capture" title='capture' data-type='std::vector&lt;std::vector&lt;std::vector&lt;float&gt;&gt;&gt; *' data-ref="378capture" data-ref-filename="378capture">capture</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td>  <i>// Updates the status on whether echo leakage is detected in the output of the</i></td></tr>
+<tr><th id="49">49</th><td><i>  // echo remover.</i></td></tr>
+<tr><th id="50">50</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc11EchoRemover23UpdateEchoLeakageStatusEb" title='webrtc::EchoRemover::UpdateEchoLeakageStatus' data-ref="_ZN6webrtc11EchoRemover23UpdateEchoLeakageStatusEb" data-ref-filename="_ZN6webrtc11EchoRemover23UpdateEchoLeakageStatusEb">UpdateEchoLeakageStatus</dfn>(<em>bool</em> <dfn class="local col9 decl" id="379leakage_detected" title='leakage_detected' data-type='bool' data-ref="379leakage_detected" data-ref-filename="379leakage_detected">leakage_detected</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="51">51</th><td></td></tr>
+<tr><th id="52">52</th><td>  <i>// Specifies whether the capture output will be used. The purpose of this is</i></td></tr>
+<tr><th id="53">53</th><td><i>  // to allow the echo remover to deactivate some of the processing when the</i></td></tr>
+<tr><th id="54">54</th><td><i>  // resulting output is anyway not used, for instance when the endpoint is</i></td></tr>
+<tr><th id="55">55</th><td><i>  // muted.</i></td></tr>
+<tr><th id="56">56</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc11EchoRemover21SetCaptureOutputUsageEb" title='webrtc::EchoRemover::SetCaptureOutputUsage' data-ref="_ZN6webrtc11EchoRemover21SetCaptureOutputUsageEb" data-ref-filename="_ZN6webrtc11EchoRemover21SetCaptureOutputUsageEb">SetCaptureOutputUsage</dfn>(<em>bool</em> <dfn class="local col0 decl" id="380capture_output_used" title='capture_output_used' data-type='bool' data-ref="380capture_output_used" data-ref-filename="380capture_output_used">capture_output_used</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="57">57</th><td>};</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td><u>#<span data-ppcond="11">endif</span>  // MODULES_AUDIO_PROCESSING_AEC3_ECHO_REMOVER_H_</u></td></tr>
+<tr><th id="62">62</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../api/audio/echo_canceller3_factory.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/audio/echo_canceller3_factory.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

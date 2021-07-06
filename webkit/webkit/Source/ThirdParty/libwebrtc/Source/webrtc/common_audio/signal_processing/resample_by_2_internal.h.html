@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>resample_by_2_internal.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/signal_processing/resample_by_2_internal.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/signal_processing/resample_by_2_internal.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>webrtc</a>/<a href='..'>common_audio</a>/<a href='./'>signal_processing</a>/<a href='resample_by_2_internal.h.html'>resample_by_2_internal.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2011 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><i>/*</i></td></tr>
+<tr><th id="12">12</th><td><i> * This header file contains some internal resampling functions.</i></td></tr>
+<tr><th id="13">13</th><td><i> *</i></td></tr>
+<tr><th id="14">14</th><td><i> */</i></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#<span data-ppcond="16">ifndef</span> <span class="macro" data-ref="_M/COMMON_AUDIO_SIGNAL_PROCESSING_RESAMPLE_BY_2_INTERNAL_H_">COMMON_AUDIO_SIGNAL_PROCESSING_RESAMPLE_BY_2_INTERNAL_H_</span></u></td></tr>
+<tr><th id="17">17</th><td><u>#define <dfn class="macro" id="_M/COMMON_AUDIO_SIGNAL_PROCESSING_RESAMPLE_BY_2_INTERNAL_H_" data-ref="_M/COMMON_AUDIO_SIGNAL_PROCESSING_RESAMPLE_BY_2_INTERNAL_H_">COMMON_AUDIO_SIGNAL_PROCESSING_RESAMPLE_BY_2_INTERNAL_H_</dfn></u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><i>/*******************************************************************</i></td></tr>
+<tr><th id="22">22</th><td><i> * resample_by_2_fast.c</i></td></tr>
+<tr><th id="23">23</th><td><i> * Functions for internal use in the other resample functions</i></td></tr>
+<tr><th id="24">24</th><td><i> ******************************************************************/</i></td></tr>
+<tr><th id="25">25</th><td><em>void</em> <dfn class="decl fn" id="WebRtcSpl_DownBy2IntToShort" title='WebRtcSpl_DownBy2IntToShort' data-ref="WebRtcSpl_DownBy2IntToShort" data-ref-filename="WebRtcSpl_DownBy2IntToShort">WebRtcSpl_DownBy2IntToShort</dfn>(<span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col1 decl" id="1in" title='in' data-type='int32_t *' data-ref="1in" data-ref-filename="1in">in</dfn>,</td></tr>
+<tr><th id="26">26</th><td>                                 <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col2 decl" id="2len" title='len' data-type='int32_t' data-ref="2len" data-ref-filename="2len">len</dfn>,</td></tr>
+<tr><th id="27">27</th><td>                                 <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col3 decl" id="3out" title='out' data-type='int16_t *' data-ref="3out" data-ref-filename="3out">out</dfn>,</td></tr>
+<tr><th id="28">28</th><td>                                 <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col4 decl" id="4state" title='state' data-type='int32_t *' data-ref="4state" data-ref-filename="4state">state</dfn>);</td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><em>void</em> <dfn class="decl fn" id="WebRtcSpl_DownBy2ShortToInt" title='WebRtcSpl_DownBy2ShortToInt' data-ref="WebRtcSpl_DownBy2ShortToInt" data-ref-filename="WebRtcSpl_DownBy2ShortToInt">WebRtcSpl_DownBy2ShortToInt</dfn>(<em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col5 decl" id="5in" title='in' data-type='const int16_t *' data-ref="5in" data-ref-filename="5in">in</dfn>,</td></tr>
+<tr><th id="31">31</th><td>                                 <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col6 decl" id="6len" title='len' data-type='int32_t' data-ref="6len" data-ref-filename="6len">len</dfn>,</td></tr>
+<tr><th id="32">32</th><td>                                 <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col7 decl" id="7out" title='out' data-type='int32_t *' data-ref="7out" data-ref-filename="7out">out</dfn>,</td></tr>
+<tr><th id="33">33</th><td>                                 <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col8 decl" id="8state" title='state' data-type='int32_t *' data-ref="8state" data-ref-filename="8state">state</dfn>);</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><em>void</em> <dfn class="decl fn" id="WebRtcSpl_UpBy2ShortToInt" title='WebRtcSpl_UpBy2ShortToInt' data-ref="WebRtcSpl_UpBy2ShortToInt" data-ref-filename="WebRtcSpl_UpBy2ShortToInt">WebRtcSpl_UpBy2ShortToInt</dfn>(<em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col9 decl" id="9in" title='in' data-type='const int16_t *' data-ref="9in" data-ref-filename="9in">in</dfn>,</td></tr>
+<tr><th id="36">36</th><td>                               <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col0 decl" id="10len" title='len' data-type='int32_t' data-ref="10len" data-ref-filename="10len">len</dfn>,</td></tr>
+<tr><th id="37">37</th><td>                               <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col1 decl" id="11out" title='out' data-type='int32_t *' data-ref="11out" data-ref-filename="11out">out</dfn>,</td></tr>
+<tr><th id="38">38</th><td>                               <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col2 decl" id="12state" title='state' data-type='int32_t *' data-ref="12state" data-ref-filename="12state">state</dfn>);</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><em>void</em> <dfn class="decl fn" id="WebRtcSpl_UpBy2IntToInt" title='WebRtcSpl_UpBy2IntToInt' data-ref="WebRtcSpl_UpBy2IntToInt" data-ref-filename="WebRtcSpl_UpBy2IntToInt">WebRtcSpl_UpBy2IntToInt</dfn>(<em>const</em> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col3 decl" id="13in" title='in' data-type='const int32_t *' data-ref="13in" data-ref-filename="13in">in</dfn>,</td></tr>
+<tr><th id="41">41</th><td>                             <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col4 decl" id="14len" title='len' data-type='int32_t' data-ref="14len" data-ref-filename="14len">len</dfn>,</td></tr>
+<tr><th id="42">42</th><td>                             <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col5 decl" id="15out" title='out' data-type='int32_t *' data-ref="15out" data-ref-filename="15out">out</dfn>,</td></tr>
+<tr><th id="43">43</th><td>                             <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col6 decl" id="16state" title='state' data-type='int32_t *' data-ref="16state" data-ref-filename="16state">state</dfn>);</td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td><em>void</em> <dfn class="decl fn" id="WebRtcSpl_UpBy2IntToShort" title='WebRtcSpl_UpBy2IntToShort' data-ref="WebRtcSpl_UpBy2IntToShort" data-ref-filename="WebRtcSpl_UpBy2IntToShort">WebRtcSpl_UpBy2IntToShort</dfn>(<em>const</em> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col7 decl" id="17in" title='in' data-type='const int32_t *' data-ref="17in" data-ref-filename="17in">in</dfn>,</td></tr>
+<tr><th id="46">46</th><td>                               <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col8 decl" id="18len" title='len' data-type='int32_t' data-ref="18len" data-ref-filename="18len">len</dfn>,</td></tr>
+<tr><th id="47">47</th><td>                               <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col9 decl" id="19out" title='out' data-type='int16_t *' data-ref="19out" data-ref-filename="19out">out</dfn>,</td></tr>
+<tr><th id="48">48</th><td>                               <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col0 decl" id="20state" title='state' data-type='int32_t *' data-ref="20state" data-ref-filename="20state">state</dfn>);</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><em>void</em> <dfn class="decl fn" id="WebRtcSpl_LPBy2ShortToInt" title='WebRtcSpl_LPBy2ShortToInt' data-ref="WebRtcSpl_LPBy2ShortToInt" data-ref-filename="WebRtcSpl_LPBy2ShortToInt">WebRtcSpl_LPBy2ShortToInt</dfn>(<em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col1 decl" id="21in" title='in' data-type='const int16_t *' data-ref="21in" data-ref-filename="21in">in</dfn>,</td></tr>
+<tr><th id="51">51</th><td>                               <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col2 decl" id="22len" title='len' data-type='int32_t' data-ref="22len" data-ref-filename="22len">len</dfn>,</td></tr>
+<tr><th id="52">52</th><td>                               <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col3 decl" id="23out" title='out' data-type='int32_t *' data-ref="23out" data-ref-filename="23out">out</dfn>,</td></tr>
+<tr><th id="53">53</th><td>                               <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col4 decl" id="24state" title='state' data-type='int32_t *' data-ref="24state" data-ref-filename="24state">state</dfn>);</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><em>void</em> <dfn class="decl fn" id="WebRtcSpl_LPBy2IntToInt" title='WebRtcSpl_LPBy2IntToInt' data-ref="WebRtcSpl_LPBy2IntToInt" data-ref-filename="WebRtcSpl_LPBy2IntToInt">WebRtcSpl_LPBy2IntToInt</dfn>(<em>const</em> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col5 decl" id="25in" title='in' data-type='const int32_t *' data-ref="25in" data-ref-filename="25in">in</dfn>,</td></tr>
+<tr><th id="56">56</th><td>                             <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col6 decl" id="26len" title='len' data-type='int32_t' data-ref="26len" data-ref-filename="26len">len</dfn>,</td></tr>
+<tr><th id="57">57</th><td>                             <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col7 decl" id="27out" title='out' data-type='int32_t *' data-ref="27out" data-ref-filename="27out">out</dfn>,</td></tr>
+<tr><th id="58">58</th><td>                             <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>* <dfn class="local col8 decl" id="28state" title='state' data-type='int32_t *' data-ref="28state" data-ref-filename="28state">state</dfn>);</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><u>#<span data-ppcond="16">endif</span>  // COMMON_AUDIO_SIGNAL_PROCESSING_RESAMPLE_BY_2_INTERNAL_H_</u></td></tr>
+<tr><th id="61">61</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='resample.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/signal_processing/resample.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

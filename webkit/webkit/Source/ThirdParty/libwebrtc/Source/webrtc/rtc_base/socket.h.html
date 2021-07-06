@@ -1,0 +1,155 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>socket.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/socket.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::Socket "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/socket.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='socket.h.html'>socket.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2004 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_SOCKET_H_">RTC_BASE_SOCKET_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_SOCKET_H_" data-ref="_M/RTC_BASE_SOCKET_H_">RTC_BASE_SOCKET_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;errno.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#<span data-ppcond="16">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_POSIX">WEBRTC_POSIX</span>)</u></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;arpa/inet.h&gt;</u></td></tr>
+<tr><th id="18">18</th><td><u>#include &lt;netinet/in.h&gt;</u></td></tr>
+<tr><th id="19">19</th><td><u>#include &lt;sys/socket.h&gt;</u></td></tr>
+<tr><th id="20">20</th><td><u>#include &lt;sys/types.h&gt;</u></td></tr>
+<tr><th id="21">21</th><td><u>#define <dfn class="macro" id="_M/SOCKET_EACCES" data-ref="_M/SOCKET_EACCES">SOCKET_EACCES</dfn> EACCES</u></td></tr>
+<tr><th id="22">22</th><td><u>#<span data-ppcond="16">endif</span></u></td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><u>#<span data-ppcond="24">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_WIN">WEBRTC_WIN</span>)</u></td></tr>
+<tr><th id="25">25</th><td><u>#include "rtc_base/win32.h"</u></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="24">endif</span></u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="constructor_magic.h.html">"rtc_base/constructor_magic.h"</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="socket_address.h.html">"rtc_base/socket_address.h"</a></u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><i>// Rather than converting errors into a private namespace,</i></td></tr>
+<tr><th id="32">32</th><td><i>// Reuse the POSIX socket api errors. Note this depends on</i></td></tr>
+<tr><th id="33">33</th><td><i>// Win32 compatibility.</i></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><u>#<span data-ppcond="35">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_WIN">WEBRTC_WIN</span>)</u></td></tr>
+<tr><th id="36">36</th><td><u>#undef EWOULDBLOCK  // Remove errno.h's definition for each macro below.</u></td></tr>
+<tr><th id="37">37</th><td><u>#define EWOULDBLOCK WSAEWOULDBLOCK</u></td></tr>
+<tr><th id="38">38</th><td><u>#undef EINPROGRESS</u></td></tr>
+<tr><th id="39">39</th><td><u>#define EINPROGRESS WSAEINPROGRESS</u></td></tr>
+<tr><th id="40">40</th><td><u>#undef EALREADY</u></td></tr>
+<tr><th id="41">41</th><td><u>#define EALREADY WSAEALREADY</u></td></tr>
+<tr><th id="42">42</th><td><u>#undef EMSGSIZE</u></td></tr>
+<tr><th id="43">43</th><td><u>#define EMSGSIZE WSAEMSGSIZE</u></td></tr>
+<tr><th id="44">44</th><td><u>#undef EADDRINUSE</u></td></tr>
+<tr><th id="45">45</th><td><u>#define EADDRINUSE WSAEADDRINUSE</u></td></tr>
+<tr><th id="46">46</th><td><u>#undef EADDRNOTAVAIL</u></td></tr>
+<tr><th id="47">47</th><td><u>#define EADDRNOTAVAIL WSAEADDRNOTAVAIL</u></td></tr>
+<tr><th id="48">48</th><td><u>#undef ENETDOWN</u></td></tr>
+<tr><th id="49">49</th><td><u>#define ENETDOWN WSAENETDOWN</u></td></tr>
+<tr><th id="50">50</th><td><u>#undef ECONNABORTED</u></td></tr>
+<tr><th id="51">51</th><td><u>#define ECONNABORTED WSAECONNABORTED</u></td></tr>
+<tr><th id="52">52</th><td><u>#undef ENOBUFS</u></td></tr>
+<tr><th id="53">53</th><td><u>#define ENOBUFS WSAENOBUFS</u></td></tr>
+<tr><th id="54">54</th><td><u>#undef EISCONN</u></td></tr>
+<tr><th id="55">55</th><td><u>#define EISCONN WSAEISCONN</u></td></tr>
+<tr><th id="56">56</th><td><u>#undef ENOTCONN</u></td></tr>
+<tr><th id="57">57</th><td><u>#define ENOTCONN WSAENOTCONN</u></td></tr>
+<tr><th id="58">58</th><td><u>#undef ECONNREFUSED</u></td></tr>
+<tr><th id="59">59</th><td><u>#define ECONNREFUSED WSAECONNREFUSED</u></td></tr>
+<tr><th id="60">60</th><td><u>#undef EHOSTUNREACH</u></td></tr>
+<tr><th id="61">61</th><td><u>#define EHOSTUNREACH WSAEHOSTUNREACH</u></td></tr>
+<tr><th id="62">62</th><td><u>#undef ENETUNREACH</u></td></tr>
+<tr><th id="63">63</th><td><u>#define ENETUNREACH WSAENETUNREACH</u></td></tr>
+<tr><th id="64">64</th><td><u>#define SOCKET_EACCES WSAEACCES</u></td></tr>
+<tr><th id="65">65</th><td><u>#<span data-ppcond="35">endif</span>  // WEBRTC_WIN</u></td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><u>#<span data-ppcond="67">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_POSIX">WEBRTC_POSIX</span>)</u></td></tr>
+<tr><th id="68">68</th><td><u>#define <dfn class="macro" id="_M/INVALID_SOCKET" data-ref="_M/INVALID_SOCKET">INVALID_SOCKET</dfn> (-1)</u></td></tr>
+<tr><th id="69">69</th><td><u>#define <dfn class="macro" id="_M/SOCKET_ERROR" data-ref="_M/SOCKET_ERROR">SOCKET_ERROR</dfn> (-1)</u></td></tr>
+<tr><th id="70">70</th><td><u>#define <dfn class="macro" id="_M/closesocket" data-ref="_M/closesocket">closesocket</dfn>(s) close(s)</u></td></tr>
+<tr><th id="71">71</th><td><u>#<span data-ppcond="67">endif</span>  // WEBRTC_POSIX</u></td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3rtc15IsBlockingErrorEi" title='rtc::IsBlockingError' data-ref="_ZN3rtc15IsBlockingErrorEi" data-ref-filename="_ZN3rtc15IsBlockingErrorEi">IsBlockingError</dfn>(<em>int</em> <dfn class="local col0 decl" id="460e" title='e' data-type='int' data-ref="460e" data-ref-filename="460e">e</dfn>) {</td></tr>
+<tr><th id="76">76</th><td>  <b>return</b> (<a class="local col0 ref" href="#460e" title='e' data-ref="460e" data-ref-filename="460e">e</a> == <span class="macro" title="35" data-ref="_M/EWOULDBLOCK">EWOULDBLOCK</span>) || (<a class="local col0 ref" href="#460e" title='e' data-ref="460e" data-ref-filename="460e">e</a> == <span class="macro" title="35" data-ref="_M/EAGAIN">EAGAIN</span>) || (<a class="local col0 ref" href="#460e" title='e' data-ref="460e" data-ref-filename="460e">e</a> == <span class="macro" title="36" data-ref="_M/EINPROGRESS">EINPROGRESS</span>);</td></tr>
+<tr><th id="77">77</th><td>}</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td><i>// General interface for the socket implementations of various networks.  The</i></td></tr>
+<tr><th id="80">80</th><td><i>// methods match those of normal UNIX sockets very closely.</i></td></tr>
+<tr><th id="81">81</th><td><b>class</b> <dfn class="type def" id="rtc::Socket" title='rtc::Socket' data-ref="rtc::Socket" data-ref-filename="rtc..Socket">Socket</dfn> {</td></tr>
+<tr><th id="82">82</th><td> <b>public</b>:</td></tr>
+<tr><th id="83">83</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN3rtc6SocketD1Ev" title='rtc::Socket::~Socket' data-ref="_ZN3rtc6SocketD1Ev" data-ref-filename="_ZN3rtc6SocketD1Ev">~Socket</dfn>() {}</td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td>  <i>// Returns the address to which the socket is bound.  If the socket is not</i></td></tr>
+<tr><th id="86">86</th><td><i>  // bound, then the any-address is returned.</i></td></tr>
+<tr><th id="87">87</th><td>  <b>virtual</b> <a class="type" href="socket_address.h.html#rtc::SocketAddress" title='rtc::SocketAddress' data-ref="rtc::SocketAddress" data-ref-filename="rtc..SocketAddress">SocketAddress</a> <dfn class="virtual decl fn" id="_ZNK3rtc6Socket15GetLocalAddressEv" title='rtc::Socket::GetLocalAddress' data-ref="_ZNK3rtc6Socket15GetLocalAddressEv" data-ref-filename="_ZNK3rtc6Socket15GetLocalAddressEv">GetLocalAddress</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td>  <i>// Returns the address to which the socket is connected.  If the socket is</i></td></tr>
+<tr><th id="90">90</th><td><i>  // not connected, then the any-address is returned.</i></td></tr>
+<tr><th id="91">91</th><td>  <b>virtual</b> <a class="type" href="socket_address.h.html#rtc::SocketAddress" title='rtc::SocketAddress' data-ref="rtc::SocketAddress" data-ref-filename="rtc..SocketAddress">SocketAddress</a> <dfn class="virtual decl fn" id="_ZNK3rtc6Socket16GetRemoteAddressEv" title='rtc::Socket::GetRemoteAddress' data-ref="_ZNK3rtc6Socket16GetRemoteAddressEv" data-ref-filename="_ZNK3rtc6Socket16GetRemoteAddressEv">GetRemoteAddress</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="92">92</th><td></td></tr>
+<tr><th id="93">93</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZN3rtc6Socket4BindERKNS_13SocketAddressE" title='rtc::Socket::Bind' data-ref="_ZN3rtc6Socket4BindERKNS_13SocketAddressE" data-ref-filename="_ZN3rtc6Socket4BindERKNS_13SocketAddressE">Bind</dfn>(<em>const</em> <a class="type" href="socket_address.h.html#rtc::SocketAddress" title='rtc::SocketAddress' data-ref="rtc::SocketAddress" data-ref-filename="rtc..SocketAddress">SocketAddress</a>&amp; <dfn class="local col1 decl" id="461addr" title='addr' data-type='const rtc::SocketAddress &amp;' data-ref="461addr" data-ref-filename="461addr">addr</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="94">94</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZN3rtc6Socket7ConnectERKNS_13SocketAddressE" title='rtc::Socket::Connect' data-ref="_ZN3rtc6Socket7ConnectERKNS_13SocketAddressE" data-ref-filename="_ZN3rtc6Socket7ConnectERKNS_13SocketAddressE">Connect</dfn>(<em>const</em> <a class="type" href="socket_address.h.html#rtc::SocketAddress" title='rtc::SocketAddress' data-ref="rtc::SocketAddress" data-ref-filename="rtc..SocketAddress">SocketAddress</a>&amp; <dfn class="local col2 decl" id="462addr" title='addr' data-type='const rtc::SocketAddress &amp;' data-ref="462addr" data-ref-filename="462addr">addr</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="95">95</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZN3rtc6Socket4SendEPKvm" title='rtc::Socket::Send' data-ref="_ZN3rtc6Socket4SendEPKvm" data-ref-filename="_ZN3rtc6Socket4SendEPKvm">Send</dfn>(<em>const</em> <em>void</em>* <dfn class="local col3 decl" id="463pv" title='pv' data-type='const void *' data-ref="463pv" data-ref-filename="463pv">pv</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="464cb" title='cb' data-type='size_t' data-ref="464cb" data-ref-filename="464cb">cb</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="96">96</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZN3rtc6Socket6SendToEPKvmRKNS_13SocketAddressE" title='rtc::Socket::SendTo' data-ref="_ZN3rtc6Socket6SendToEPKvmRKNS_13SocketAddressE" data-ref-filename="_ZN3rtc6Socket6SendToEPKvmRKNS_13SocketAddressE">SendTo</dfn>(<em>const</em> <em>void</em>* <dfn class="local col5 decl" id="465pv" title='pv' data-type='const void *' data-ref="465pv" data-ref-filename="465pv">pv</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="466cb" title='cb' data-type='size_t' data-ref="466cb" data-ref-filename="466cb">cb</dfn>, <em>const</em> <a class="type" href="socket_address.h.html#rtc::SocketAddress" title='rtc::SocketAddress' data-ref="rtc::SocketAddress" data-ref-filename="rtc..SocketAddress">SocketAddress</a>&amp; <dfn class="local col7 decl" id="467addr" title='addr' data-type='const rtc::SocketAddress &amp;' data-ref="467addr" data-ref-filename="467addr">addr</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="97">97</th><td>  <i>// |timestamp| is in units of microseconds.</i></td></tr>
+<tr><th id="98">98</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZN3rtc6Socket4RecvEPvmPx" title='rtc::Socket::Recv' data-ref="_ZN3rtc6Socket4RecvEPvmPx" data-ref-filename="_ZN3rtc6Socket4RecvEPvmPx">Recv</dfn>(<em>void</em>* <dfn class="local col8 decl" id="468pv" title='pv' data-type='void *' data-ref="468pv" data-ref-filename="468pv">pv</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="469cb" title='cb' data-type='size_t' data-ref="469cb" data-ref-filename="469cb">cb</dfn>, <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span>* <dfn class="local col0 decl" id="470timestamp" title='timestamp' data-type='int64_t *' data-ref="470timestamp" data-ref-filename="470timestamp">timestamp</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="99">99</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZN3rtc6Socket8RecvFromEPvmPNS_13SocketAddressEPx" title='rtc::Socket::RecvFrom' data-ref="_ZN3rtc6Socket8RecvFromEPvmPNS_13SocketAddressEPx" data-ref-filename="_ZN3rtc6Socket8RecvFromEPvmPNS_13SocketAddressEPx">RecvFrom</dfn>(<em>void</em>* <dfn class="local col1 decl" id="471pv" title='pv' data-type='void *' data-ref="471pv" data-ref-filename="471pv">pv</dfn>,</td></tr>
+<tr><th id="100">100</th><td>                       <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="472cb" title='cb' data-type='size_t' data-ref="472cb" data-ref-filename="472cb">cb</dfn>,</td></tr>
+<tr><th id="101">101</th><td>                       <a class="type" href="socket_address.h.html#rtc::SocketAddress" title='rtc::SocketAddress' data-ref="rtc::SocketAddress" data-ref-filename="rtc..SocketAddress">SocketAddress</a>* <dfn class="local col3 decl" id="473paddr" title='paddr' data-type='rtc::SocketAddress *' data-ref="473paddr" data-ref-filename="473paddr">paddr</dfn>,</td></tr>
+<tr><th id="102">102</th><td>                       <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span>* <dfn class="local col4 decl" id="474timestamp" title='timestamp' data-type='int64_t *' data-ref="474timestamp" data-ref-filename="474timestamp">timestamp</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="103">103</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZN3rtc6Socket6ListenEi" title='rtc::Socket::Listen' data-ref="_ZN3rtc6Socket6ListenEi" data-ref-filename="_ZN3rtc6Socket6ListenEi">Listen</dfn>(<em>int</em> <dfn class="local col5 decl" id="475backlog" title='backlog' data-type='int' data-ref="475backlog" data-ref-filename="475backlog">backlog</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="104">104</th><td>  <b>virtual</b> <a class="type" href="#rtc::Socket" title='rtc::Socket' data-ref="rtc::Socket" data-ref-filename="rtc..Socket">Socket</a>* <dfn class="virtual decl fn" id="_ZN3rtc6Socket6AcceptEPNS_13SocketAddressE" title='rtc::Socket::Accept' data-ref="_ZN3rtc6Socket6AcceptEPNS_13SocketAddressE" data-ref-filename="_ZN3rtc6Socket6AcceptEPNS_13SocketAddressE">Accept</dfn>(<a class="type" href="socket_address.h.html#rtc::SocketAddress" title='rtc::SocketAddress' data-ref="rtc::SocketAddress" data-ref-filename="rtc..SocketAddress">SocketAddress</a>* <dfn class="local col6 decl" id="476paddr" title='paddr' data-type='rtc::SocketAddress *' data-ref="476paddr" data-ref-filename="476paddr">paddr</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="105">105</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZN3rtc6Socket5CloseEv" title='rtc::Socket::Close' data-ref="_ZN3rtc6Socket5CloseEv" data-ref-filename="_ZN3rtc6Socket5CloseEv">Close</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="106">106</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK3rtc6Socket8GetErrorEv" title='rtc::Socket::GetError' data-ref="_ZNK3rtc6Socket8GetErrorEv" data-ref-filename="_ZNK3rtc6Socket8GetErrorEv">GetError</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="107">107</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN3rtc6Socket8SetErrorEi" title='rtc::Socket::SetError' data-ref="_ZN3rtc6Socket8SetErrorEi" data-ref-filename="_ZN3rtc6Socket8SetErrorEi">SetError</dfn>(<em>int</em> <dfn class="local col7 decl" id="477error" title='error' data-type='int' data-ref="477error" data-ref-filename="477error">error</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="108">108</th><td>  <b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZNK3rtc6Socket10IsBlockingEv" title='rtc::Socket::IsBlocking' data-ref="_ZNK3rtc6Socket10IsBlockingEv" data-ref-filename="_ZNK3rtc6Socket10IsBlockingEv">IsBlocking</dfn>() <em>const</em> { <b>return</b> <a class="ref fn" href="#_ZN3rtc15IsBlockingErrorEi" title='rtc::IsBlockingError' data-ref="_ZN3rtc15IsBlockingErrorEi" data-ref-filename="_ZN3rtc15IsBlockingErrorEi">IsBlockingError</a>(<a class="virtual member fn" href="#_ZNK3rtc6Socket8GetErrorEv" title='rtc::Socket::GetError' data-ref="_ZNK3rtc6Socket8GetErrorEv" data-ref-filename="_ZNK3rtc6Socket8GetErrorEv">GetError</a>()); }</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td>  <b>enum</b> <dfn class="type def" id="rtc::Socket::ConnState" title='rtc::Socket::ConnState' data-ref="rtc::Socket::ConnState" data-ref-filename="rtc..Socket..ConnState">ConnState</dfn> { <dfn class="enum" id="rtc::Socket::CS_CLOSED" title='rtc::Socket::CS_CLOSED' data-ref="rtc::Socket::CS_CLOSED" data-ref-filename="rtc..Socket..CS_CLOSED">CS_CLOSED</dfn>, <dfn class="enum" id="rtc::Socket::CS_CONNECTING" title='rtc::Socket::CS_CONNECTING' data-ref="rtc::Socket::CS_CONNECTING" data-ref-filename="rtc..Socket..CS_CONNECTING">CS_CONNECTING</dfn>, <dfn class="enum" id="rtc::Socket::CS_CONNECTED" title='rtc::Socket::CS_CONNECTED' data-ref="rtc::Socket::CS_CONNECTED" data-ref-filename="rtc..Socket..CS_CONNECTED">CS_CONNECTED</dfn> };</td></tr>
+<tr><th id="111">111</th><td>  <b>virtual</b> <a class="type" href="#rtc::Socket::ConnState" title='rtc::Socket::ConnState' data-ref="rtc::Socket::ConnState" data-ref-filename="rtc..Socket..ConnState">ConnState</a> <dfn class="virtual decl fn" id="_ZNK3rtc6Socket8GetStateEv" title='rtc::Socket::GetState' data-ref="_ZNK3rtc6Socket8GetStateEv" data-ref-filename="_ZNK3rtc6Socket8GetStateEv">GetState</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td>  <b>enum</b> <dfn class="type def" id="rtc::Socket::Option" title='rtc::Socket::Option' data-ref="rtc::Socket::Option" data-ref-filename="rtc..Socket..Option">Option</dfn> {</td></tr>
+<tr><th id="114">114</th><td>    <dfn class="enum" id="rtc::Socket::OPT_DONTFRAGMENT" title='rtc::Socket::OPT_DONTFRAGMENT' data-ref="rtc::Socket::OPT_DONTFRAGMENT" data-ref-filename="rtc..Socket..OPT_DONTFRAGMENT">OPT_DONTFRAGMENT</dfn>,</td></tr>
+<tr><th id="115">115</th><td>    <dfn class="enum" id="rtc::Socket::OPT_RCVBUF" title='rtc::Socket::OPT_RCVBUF' data-ref="rtc::Socket::OPT_RCVBUF" data-ref-filename="rtc..Socket..OPT_RCVBUF">OPT_RCVBUF</dfn>,                <i>// receive buffer size</i></td></tr>
+<tr><th id="116">116</th><td>    <dfn class="enum" id="rtc::Socket::OPT_SNDBUF" title='rtc::Socket::OPT_SNDBUF' data-ref="rtc::Socket::OPT_SNDBUF" data-ref-filename="rtc..Socket..OPT_SNDBUF">OPT_SNDBUF</dfn>,                <i>// send buffer size</i></td></tr>
+<tr><th id="117">117</th><td>    <dfn class="enum" id="rtc::Socket::OPT_NODELAY" title='rtc::Socket::OPT_NODELAY' data-ref="rtc::Socket::OPT_NODELAY" data-ref-filename="rtc..Socket..OPT_NODELAY">OPT_NODELAY</dfn>,               <i>// whether Nagle algorithm is enabled</i></td></tr>
+<tr><th id="118">118</th><td>    <dfn class="enum" id="rtc::Socket::OPT_IPV6_V6ONLY" title='rtc::Socket::OPT_IPV6_V6ONLY' data-ref="rtc::Socket::OPT_IPV6_V6ONLY" data-ref-filename="rtc..Socket..OPT_IPV6_V6ONLY">OPT_IPV6_V6ONLY</dfn>,           <i>// Whether the socket is IPv6 only.</i></td></tr>
+<tr><th id="119">119</th><td>    <dfn class="enum" id="rtc::Socket::OPT_DSCP" title='rtc::Socket::OPT_DSCP' data-ref="rtc::Socket::OPT_DSCP" data-ref-filename="rtc..Socket..OPT_DSCP">OPT_DSCP</dfn>,                  <i>// DSCP code</i></td></tr>
+<tr><th id="120">120</th><td>    <dfn class="enum" id="rtc::Socket::OPT_RTP_SENDTIME_EXTN_ID" title='rtc::Socket::OPT_RTP_SENDTIME_EXTN_ID' data-ref="rtc::Socket::OPT_RTP_SENDTIME_EXTN_ID" data-ref-filename="rtc..Socket..OPT_RTP_SENDTIME_EXTN_ID">OPT_RTP_SENDTIME_EXTN_ID</dfn>,  <i>// This is a non-traditional socket option param.</i></td></tr>
+<tr><th id="121">121</th><td>                               <i>// This is specific to libjingle and will be used</i></td></tr>
+<tr><th id="122">122</th><td><i>                               // if SendTime option is needed at socket level.</i></td></tr>
+<tr><th id="123">123</th><td>  };</td></tr>
+<tr><th id="124">124</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZN3rtc6Socket9GetOptionENS0_6OptionEPi" title='rtc::Socket::GetOption' data-ref="_ZN3rtc6Socket9GetOptionENS0_6OptionEPi" data-ref-filename="_ZN3rtc6Socket9GetOptionENS0_6OptionEPi">GetOption</dfn>(<a class="type" href="#rtc::Socket::Option" title='rtc::Socket::Option' data-ref="rtc::Socket::Option" data-ref-filename="rtc..Socket..Option">Option</a> <dfn class="local col8 decl" id="478opt" title='opt' data-type='rtc::Socket::Option' data-ref="478opt" data-ref-filename="478opt">opt</dfn>, <em>int</em>* <dfn class="local col9 decl" id="479value" title='value' data-type='int *' data-ref="479value" data-ref-filename="479value">value</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="125">125</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZN3rtc6Socket9SetOptionENS0_6OptionEi" title='rtc::Socket::SetOption' data-ref="_ZN3rtc6Socket9SetOptionENS0_6OptionEi" data-ref-filename="_ZN3rtc6Socket9SetOptionENS0_6OptionEi">SetOption</dfn>(<a class="type" href="#rtc::Socket::Option" title='rtc::Socket::Option' data-ref="rtc::Socket::Option" data-ref-filename="rtc..Socket..Option">Option</a> <dfn class="local col0 decl" id="480opt" title='opt' data-type='rtc::Socket::Option' data-ref="480opt" data-ref-filename="480opt">opt</dfn>, <em>int</em> <dfn class="local col1 decl" id="481value" title='value' data-type='int' data-ref="481value" data-ref-filename="481value">value</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="126">126</th><td></td></tr>
+<tr><th id="127">127</th><td> <b>protected</b>:</td></tr>
+<tr><th id="128">128</th><td>  <dfn class="decl def fn" id="_ZN3rtc6SocketC1Ev" title='rtc::Socket::Socket' data-ref="_ZN3rtc6SocketC1Ev" data-ref-filename="_ZN3rtc6SocketC1Ev">Socket</dfn>() {}</td></tr>
+<tr><th id="129">129</th><td></td></tr>
+<tr><th id="130">130</th><td> <b>private</b>:</td></tr>
+<tr><th id="131">131</th><td>  <a class="macro" href="constructor_magic.h.html#16" title="Socket(const Socket&amp;) = delete; Socket&amp; operator=(const Socket&amp;) = delete" data-ref="_M/RTC_DISALLOW_COPY_AND_ASSIGN">RTC_DISALLOW_COPY_AND_ASSIGN</a>(<dfn class="decl def fn" id="_ZN3rtc6SocketC1ERKS0_" title='rtc::Socket::Socket' data-ref="_ZN3rtc6SocketC1ERKS0_" data-ref-filename="_ZN3rtc6SocketC1ERKS0_"><a class="type" href="#rtc::Socket" title='rtc::Socket' data-ref="rtc::Socket" data-ref-filename="rtc..Socket"><a class="type" href="#rtc::Socket" title='rtc::Socket' data-ref="rtc::Socket" data-ref-filename="rtc..Socket"><a class="type" href="#rtc::Socket" title='rtc::Socket' data-ref="rtc::Socket" data-ref-filename="rtc..Socket">Socket</a></a></a></dfn>);</td></tr>
+<tr><th id="132">132</th><td>};</td></tr>
+<tr><th id="133">133</th><td></td></tr>
+<tr><th id="134">134</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="135">135</th><td></td></tr>
+<tr><th id="136">136</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_SOCKET_H_</u></td></tr>
+<tr><th id="137">137</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../api/create_peerconnection_factory.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/create_peerconnection_factory.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

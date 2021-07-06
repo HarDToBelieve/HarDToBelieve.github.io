@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>OSLogPrintStream.h source code [webkit/WebKitBuild/Debug/usr/local/include/wtf/OSLogPrintStream.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="WTF::OSLogPrintStream "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/wtf/OSLogPrintStream.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>wtf</a>/<a href='OSLogPrintStream.h.html'>OSLogPrintStream.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2020 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="28">if</span> <a class="macro" href="PlatformOS.h.html#43" title="(defined 1 &amp;&amp; 1)" data-ref="_M/OS">OS</a>(DARWIN)</u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="Lock.h.html">&lt;wtf/Lock.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="PrintStream.h.html">&lt;wtf/PrintStream.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="RecursiveLockAdapter.h.html">&lt;wtf/RecursiveLockAdapter.h&gt;</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#include <a href="text/CString.h.html">&lt;wtf/text/CString.h&gt;</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#include <a href="Vector.h.html">&lt;wtf/Vector.h&gt;</a></u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><u>#include &lt;os/log.h&gt;</u></td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><b>class</b> <a class="macro" href="ExportMacros.h.html#66" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WTF_EXPORT_PRIVATE">WTF_EXPORT_PRIVATE</a> <dfn class="type def" id="WTF::OSLogPrintStream" title='WTF::OSLogPrintStream' data-ref="WTF::OSLogPrintStream" data-ref-filename="WTF..OSLogPrintStream">OSLogPrintStream</dfn> final : <b>public</b> <a class="type" href="PrintStream.h.html#WTF::PrintStream" title='WTF::PrintStream' data-ref="WTF::PrintStream" data-ref-filename="WTF..PrintStream">PrintStream</a> {</td></tr>
+<tr><th id="41">41</th><td><b>public</b>:</td></tr>
+<tr><th id="42">42</th><td>    <a class="decl fn" href="../../../../../../Source/WTF/wtf/OSLogPrintStream.cpp.html#_ZN3WTF16OSLogPrintStreamC1EP8os_log_s13os_log_type_t" title='WTF::OSLogPrintStream::OSLogPrintStream' data-ref="_ZN3WTF16OSLogPrintStreamC1EP8os_log_s13os_log_type_t" data-ref-filename="_ZN3WTF16OSLogPrintStreamC1EP8os_log_s13os_log_type_t" id="_ZN3WTF16OSLogPrintStreamC1EP8os_log_s13os_log_type_t">OSLogPrintStream</a>(<span class='typedef' title='os_log_t' data-type='struct os_log_s *' data-ref="os_log_t" data-ref-filename="os_log_t">os_log_t</span>, <span class='typedef' title='os_log_type_t' data-type='enum os_log_type_t' data-ref="os_log_type_t" data-ref-filename="os_log_type_t">os_log_type_t</span>);</td></tr>
+<tr><th id="43">43</th><td>    <a class="virtual decl fn" href="../../../../../../Source/WTF/wtf/OSLogPrintStream.cpp.html#_ZN3WTF16OSLogPrintStreamD1Ev" title='WTF::OSLogPrintStream::~OSLogPrintStream' data-ref="_ZN3WTF16OSLogPrintStreamD1Ev" data-ref-filename="_ZN3WTF16OSLogPrintStreamD1Ev" id="_ZN3WTF16OSLogPrintStreamD1Ev">~OSLogPrintStream</a>() final;</td></tr>
+<tr><th id="44">44</th><td>    </td></tr>
+<tr><th id="45">45</th><td>    <em>static</em> <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="#WTF::OSLogPrintStream" title='WTF::OSLogPrintStream' data-ref="WTF::OSLogPrintStream" data-ref-filename="WTF..OSLogPrintStream">OSLogPrintStream</a>&gt; <a class="decl fn" href="../../../../../../Source/WTF/wtf/OSLogPrintStream.cpp.html#_ZN3WTF16OSLogPrintStream4openEPKcS2_13os_log_type_t" title='WTF::OSLogPrintStream::open' data-ref="_ZN3WTF16OSLogPrintStream4openEPKcS2_13os_log_type_t" data-ref-filename="_ZN3WTF16OSLogPrintStream4openEPKcS2_13os_log_type_t" id="_ZN3WTF16OSLogPrintStream4openEPKcS2_13os_log_type_t">open</a>(<em>const</em> <em>char</em>* <dfn class="local col1 decl" id="1subsystem" title='subsystem' data-type='const char *' data-ref="1subsystem" data-ref-filename="1subsystem">subsystem</dfn>, <em>const</em> <em>char</em>* <dfn class="local col2 decl" id="2category" title='category' data-type='const char *' data-ref="2category" data-ref-filename="2category">category</dfn>, <span class='typedef' title='os_log_type_t' data-type='enum os_log_type_t' data-ref="os_log_type_t" data-ref-filename="os_log_type_t">os_log_type_t</span> = <span class='enum' title='OS_LOG_TYPE_DEFAULT' data-ref="OS_LOG_TYPE_DEFAULT" data-ref-filename="OS_LOG_TYPE_DEFAULT">OS_LOG_TYPE_DEFAULT</span>);</td></tr>
+<tr><th id="46">46</th><td>    </td></tr>
+<tr><th id="47">47</th><td>    <em>void</em> <a class="virtual decl fn" href="../../../../../../Source/WTF/wtf/OSLogPrintStream.cpp.html#_ZN3WTF16OSLogPrintStream7vprintfEPKcPc" title='WTF::OSLogPrintStream::vprintf' data-ref="_ZN3WTF16OSLogPrintStream7vprintfEPKcPc" data-ref-filename="_ZN3WTF16OSLogPrintStream7vprintfEPKcPc" id="_ZN3WTF16OSLogPrintStream7vprintfEPKcPc">vprintf</a>(<em>const</em> <em>char</em>* <dfn class="local col3 decl" id="3format" title='format' data-type='const char *' data-ref="3format" data-ref-filename="3format">format</dfn>, <span class='typedef' title='va_list' data-type='__darwin_va_list' data-ref="va_list" data-ref-filename="va_list">va_list</span>) final <a class="macro" href="Assertions.h.html#119" title="__attribute__((__format__(printf, 2, 0)))" data-ref="_M/WTF_ATTRIBUTE_PRINTF">WTF_ATTRIBUTE_PRINTF</a>(<var>2</var>, <var>0</var>);</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td><b>private</b>:</td></tr>
+<tr><th id="50">50</th><td>    <span class='typedef' title='os_log_t' data-type='struct os_log_s *' data-ref="os_log_t" data-ref-filename="os_log_t">os_log_t</span> <dfn class="decl field" id="WTF::OSLogPrintStream::m_log" title='WTF::OSLogPrintStream::m_log' data-ref="WTF::OSLogPrintStream::m_log" data-ref-filename="WTF..OSLogPrintStream..m_log">m_log</dfn>;</td></tr>
+<tr><th id="51">51</th><td>    <span class='typedef' title='os_log_type_t' data-type='enum os_log_type_t' data-ref="os_log_type_t" data-ref-filename="os_log_type_t">os_log_type_t</span> <dfn class="decl field" id="WTF::OSLogPrintStream::m_logType" title='WTF::OSLogPrintStream::m_logType' data-ref="WTF::OSLogPrintStream::m_logType" data-ref-filename="WTF..OSLogPrintStream..m_logType">m_logType</dfn>;</td></tr>
+<tr><th id="52">52</th><td>    <a class="type" href="Lock.h.html#WTF::Lock" title='WTF::Lock' data-ref="WTF::Lock" data-ref-filename="WTF..Lock">Lock</a> <dfn class="decl field" id="WTF::OSLogPrintStream::m_stringLock" title='WTF::OSLogPrintStream::m_stringLock' data-ref="WTF::OSLogPrintStream::m_stringLock" data-ref-filename="WTF..OSLogPrintStream..m_stringLock">m_stringLock</dfn>;</td></tr>
+<tr><th id="53">53</th><td>    <i>// We need a buffer because os_log doesn't wait for a new line to print the characters.</i></td></tr>
+<tr><th id="54">54</th><td>    <a class="type" href="text/CString.h.html#WTF::CString" title='WTF::CString' data-ref="WTF::CString" data-ref-filename="WTF..CString">CString</a> <dfn class="decl field" id="WTF::OSLogPrintStream::m_string" title='WTF::OSLogPrintStream::m_string' data-ref="WTF::OSLogPrintStream::m_string" data-ref-filename="WTF..OSLogPrintStream..m_string">m_string</dfn> <a class="macro" href="ThreadSafetyAnalysis.h.html#47" title="__attribute__((guarded_by(m_stringLock)))" data-ref="_M/WTF_GUARDED_BY_LOCK">WTF_GUARDED_BY_LOCK</a>(<a class="ref field" href="#WTF::OSLogPrintStream::m_stringLock" title='WTF::OSLogPrintStream::m_stringLock' data-ref="WTF::OSLogPrintStream::m_stringLock" data-ref-filename="WTF..OSLogPrintStream..m_stringLock">m_stringLock</a>);</td></tr>
+<tr><th id="55">55</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="WTF::OSLogPrintStream::m_offset" title='WTF::OSLogPrintStream::m_offset' data-ref="WTF::OSLogPrintStream::m_offset" data-ref-filename="WTF..OSLogPrintStream..m_offset">m_offset</dfn> { <var>0</var> };</td></tr>
+<tr><th id="56">56</th><td>};</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><b>using</b> <span class="namespace">WTF::</span>OSLogPrintStream;</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><u>#<span data-ppcond="28">endif</span></u></td></tr>
+<tr><th id="63">63</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/WTF/wtf/OSLogPrintStream.cpp.html'>webkit/Source/WTF/wtf/OSLogPrintStream.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

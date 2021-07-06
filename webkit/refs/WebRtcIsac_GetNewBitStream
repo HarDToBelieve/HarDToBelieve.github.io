@@ -1,0 +1,66 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/include/isac.h' l='487' type='int16_t WebRtcIsac_GetNewBitStream(ISACStruct * ISAC_main_inst, int16_t bweIndex, int16_t jitterInfo, int32_t rate, uint8_t * encoded, int16_t isRCU)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/include/isac.h' l='453'>/******************************************************************************
+ * WebRtcIsac_GetNewBitStream(...)
+ *
+ * This function returns encoded data, with the recieved bwe-index in the
+ * stream. If the rate is set to a value less than bottleneck of codec
+ * the new bistream will be re-encoded with the given target rate.
+ * It should always return a complete packet, i.e. only called once
+ * even for 60 msec frames.
+ *
+ * NOTE 1! This function does not write in the ISACStruct, it is not allowed.
+ * NOTE 2! Currently not implemented for SWB mode.
+ * NOTE 3! Rates larger than the bottleneck of the codec will be limited
+ *         to the current bottleneck.
+ *
+ * Input:
+ *        - ISAC_main_inst    : ISAC instance.
+ *        - bweIndex          : Index of bandwidth estimate to put in new
+ *                              bitstream
+ *        - rate              : target rate of the transcoder is bits/sec.
+ *                              Valid values are the accepted rate in iSAC,
+ *                              i.e. 10000 to 56000.
+ *        - isRCU                       : if the new bit-stream is an RCU
+ * stream. Note that the rate parameter always indicates the target rate of the
+ * main payload, regardless of &apos;isRCU&apos; value.
+ *
+ * Output:
+ *        - encoded           : The encoded data vector
+ *
+ * Return value               : &gt;0 - Length (in bytes) of coded data
+ *                              -1 - Error  or called in SWB mode
+ *                                 NOTE! No error code is written to
+ *                                 the struct since it is only allowed to read
+ *                                 the struct.
+ */</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/isac.c' l='708' ll='827' type='int16_t WebRtcIsac_GetNewBitStream(ISACStruct * ISAC_main_inst, int16_t bweIndex, int16_t jitterInfo, int32_t rate, uint8_t * encoded, int16_t isRCU)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/isac.c' l='678'>/******************************************************************************
+ * WebRtcIsac_GetNewBitStream(...)
+ *
+ * This function returns encoded data, with the recieved bwe-index in the
+ * stream. If the rate is set to a value less than bottleneck of codec
+ * the new bistream will be re-encoded with the given target rate.
+ * It should always return a complete packet, i.e. only called once
+ * even for 60 msec frames.
+ *
+ * NOTE 1! This function does not write in the ISACStruct, it is not allowed.
+ * NOTE 2! Rates larger than the bottleneck of the codec will be limited
+ *         to the current bottleneck.
+ *
+ * Input:
+ *        - ISAC_main_inst    : ISAC instance.
+ *        - bweIndex          : Index of bandwidth estimate to put in new
+ *                              bitstream
+ *        - rate              : target rate of the transcoder is bits/sec.
+ *                              Valid values are the accepted rate in iSAC,
+ *                              i.e. 10000 to 56000.
+ *
+ * Output:
+ *        - encoded           : The encoded data vector
+ *
+ * Return value               : &gt;0 - Length (in bytes) of coded data
+ *                              -1 - Error  or called in SWB mode
+ *                                 NOTE! No error code is written to
+ *                                 the struct since it is only allowed to read
+ *                                 the struct.
+ */</doc>

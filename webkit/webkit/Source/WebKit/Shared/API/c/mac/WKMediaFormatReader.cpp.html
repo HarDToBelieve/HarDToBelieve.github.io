@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WKMediaFormatReader.cpp source code [webkit/Source/WebKit/Shared/API/c/mac/WKMediaFormatReader.cpp] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKit/Shared/API/c/mac/WKMediaFormatReader.cpp'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>WebKit</a>/<a href='../../..'>Shared</a>/<a href='../..'>API</a>/<a href='..'>c</a>/<a href='./'>mac</a>/<a href='WKMediaFormatReader.cpp.html'>WKMediaFormatReader.cpp</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2020 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#include <a href="../../../../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#include <a href="WKMediaFormatReader.h.html">"WKMediaFormatReader.h"</a></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="../../../mac/MediaFormatReader/MediaFormatReader.h.html">"MediaFormatReader.h"</a></u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="../../../../../../WebKitBuild/Debug/usr/local/include/pal/cocoa/MediaToolboxSoftLink.h.html">&lt;pal/cocoa/MediaToolboxSoftLink.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><span class='typedef' title='OSStatus' data-type='SInt32' data-ref="OSStatus" data-ref-filename="OSStatus">OSStatus</span> <dfn class="decl def fn" id="WKMediaFormatReaderCreate" title='WKMediaFormatReaderCreate' data-ref="WKMediaFormatReaderCreate" data-ref-filename="WKMediaFormatReaderCreate">WKMediaFormatReaderCreate</dfn>(<span class='typedef' title='CFAllocatorRef' data-type='const struct __CFAllocator *' data-ref="CFAllocatorRef" data-ref-filename="CFAllocatorRef">CFAllocatorRef</span> <dfn class="local col3 decl" id="83allocator" title='allocator' data-type='CFAllocatorRef' data-ref="83allocator" data-ref-filename="83allocator">allocator</dfn>, <a class="typedef" href="WKMediaFormatReader.h.html#MTPluginFormatReaderRef" title='MTPluginFormatReaderRef' data-type='struct OpaqueMTPluginFormatReader *' data-ref="MTPluginFormatReaderRef" data-ref-filename="MTPluginFormatReaderRef">MTPluginFormatReaderRef</a>* <dfn class="local col4 decl" id="84formatReaderRef" title='formatReaderRef' data-type='MTPluginFormatReaderRef *' data-ref="84formatReaderRef" data-ref-filename="84formatReaderRef">formatReaderRef</dfn>)</td></tr>
+<tr><th id="34">34</th><td>{</td></tr>
+<tr><th id="35">35</th><td><u>#<span data-ppcond="35">if</span> <a class="macro" href="../../../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(WEBM_FORMAT_READER)</u></td></tr>
+<tr><th id="36">36</th><td>    <em>auto</em> <dfn class="local col5 decl" id="85formatReader" title='formatReader' data-type='WTF::RefPtr&lt;WebKit::MediaFormatReader, WTF::RawPtrTraits&lt;WebKit::MediaFormatReader&gt;, WTF::DefaultRefDerefTraits&lt;WebKit::MediaFormatReader&gt;&gt;' data-ref="85formatReader" data-ref-filename="85formatReader">formatReader</dfn> = <span class="namespace">WebKit::</span><a class="type" href="../../../mac/MediaFormatReader/MediaFormatReader.h.html#WebKit::MediaFormatReader" title='WebKit::MediaFormatReader' data-ref="WebKit::MediaFormatReader" data-ref-filename="WebKit..MediaFormatReader">MediaFormatReader</a>::<a class="ref fn" href="../../../mac/MediaFormatReader/MediaFormatReader.h.html#_ZN6WebKit17MediaFormatReader6createEONS_16CoreMediaWrappedIS0_E9AllocatorE" title='WebKit::MediaFormatReader::create' data-ref="_ZN6WebKit17MediaFormatReader6createEONS_16CoreMediaWrappedIS0_E9AllocatorE" data-ref-filename="_ZN6WebKit17MediaFormatReader6createEONS_16CoreMediaWrappedIS0_E9AllocatorE">create</a>(<a class="ref fn fake" href="../../../mac/MediaFormatReader/CoreMediaWrapped.h.html#_ZN6WebKit16CoreMediaWrapped9AllocatorC1EPK13__CFAllocator" title='WebKit::CoreMediaWrapped::Allocator::Allocator' data-ref="_ZN6WebKit16CoreMediaWrapped9AllocatorC1EPK13__CFAllocator" data-ref-filename="_ZN6WebKit16CoreMediaWrapped9AllocatorC1EPK13__CFAllocator"></a><a class="local col3 ref" href="#83allocator" title='allocator' data-ref="83allocator" data-ref-filename="83allocator">allocator</a>);</td></tr>
+<tr><th id="37">37</th><td>    <b>if</b> (<a class="ref fn" href="../../../../../../WebKitBuild/Debug/usr/local/include/wtf/RefPtr.h.html#_ZNK3WTF6RefPtrntEv" title='WTF::RefPtr::operator!' data-ref="_ZNK3WTF6RefPtrntEv" data-ref-filename="_ZNK3WTF6RefPtrntEv">!</a><a class="local col5 ref" href="#85formatReader" title='formatReader' data-ref="85formatReader" data-ref-filename="85formatReader">formatReader</a>)</td></tr>
+<tr><th id="38">38</th><td>        <b>return</b> <a class="enum" href="../../../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cocoa/MediaToolboxSPI.h.html#kMTPluginFormatReaderError_AllocationFailure" title='kMTPluginFormatReaderError_AllocationFailure' data-ref="kMTPluginFormatReaderError_AllocationFailure" data-ref-filename="kMTPluginFormatReaderError_AllocationFailure">kMTPluginFormatReaderError_AllocationFailure</a>;</td></tr>
+<tr><th id="39">39</th><td>    *<a class="local col4 ref" href="#84formatReaderRef" title='formatReaderRef' data-ref="84formatReaderRef" data-ref-filename="84formatReaderRef">formatReaderRef</a> = <a class="local col5 ref" href="#85formatReader" title='formatReader' data-ref="85formatReader" data-ref-filename="85formatReader">formatReader</a>.<a class="ref fn" href="../../../../../../WebKitBuild/Debug/usr/local/include/wtf/RefPtr.h.html#_ZN3WTF6RefPtr7leakRefEv" title='WTF::RefPtr::leakRef' data-ref="_ZN3WTF6RefPtr7leakRefEv" data-ref-filename="_ZN3WTF6RefPtr7leakRefEv">leakRef</a>()-&gt;<a class="ref fn" href="../../../mac/MediaFormatReader/CoreMediaWrapped.h.html#_ZNK6WebKit16CoreMediaWrapped7wrapperEv" title='WebKit::CoreMediaWrapped::wrapper' data-ref="_ZNK6WebKit16CoreMediaWrapped7wrapperEv" data-ref-filename="_ZNK6WebKit16CoreMediaWrapped7wrapperEv">wrapper</a>();</td></tr>
+<tr><th id="40">40</th><td>    <b>return</b> <span class='enum' title='noErr' data-ref="noErr" data-ref-filename="noErr">noErr</span>;</td></tr>
+<tr><th id="41">41</th><td><u>#<span data-ppcond="35">else</span></u></td></tr>
+<tr><th id="42">42</th><td>    UNUSED_PARAM(allocator);</td></tr>
+<tr><th id="43">43</th><td>    *formatReaderRef = <b>nullptr</b>;</td></tr>
+<tr><th id="44">44</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="45">45</th><td><u>#<span data-ppcond="35">endif</span></u></td></tr>
+<tr><th id="46">46</th><td>}</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td><span class='typedef' title='OSStatus' data-type='SInt32' data-ref="OSStatus" data-ref-filename="OSStatus">OSStatus</span> <dfn class="decl def fn" id="WKMediaFormatReaderStartOnMainThread" title='WKMediaFormatReaderStartOnMainThread' data-ref="WKMediaFormatReaderStartOnMainThread" data-ref-filename="WKMediaFormatReaderStartOnMainThread">WKMediaFormatReaderStartOnMainThread</dfn>(<a class="typedef" href="WKMediaFormatReader.h.html#MTPluginFormatReaderRef" title='MTPluginFormatReaderRef' data-type='struct OpaqueMTPluginFormatReader *' data-ref="MTPluginFormatReaderRef" data-ref-filename="MTPluginFormatReaderRef">MTPluginFormatReaderRef</a> <dfn class="local col6 decl" id="86formatReaderRef" title='formatReaderRef' data-type='MTPluginFormatReaderRef' data-ref="86formatReaderRef" data-ref-filename="86formatReaderRef">formatReaderRef</dfn>, <a class="typedef" href="WKMediaFormatReader.h.html#MTPluginByteSourceRef" title='MTPluginByteSourceRef' data-type='struct OpaqueMTPluginByteSource *' data-ref="MTPluginByteSourceRef" data-ref-filename="MTPluginByteSourceRef">MTPluginByteSourceRef</a> <dfn class="local col7 decl" id="87byteSource" title='byteSource' data-type='MTPluginByteSourceRef' data-ref="87byteSource" data-ref-filename="87byteSource">byteSource</dfn>)</td></tr>
+<tr><th id="49">49</th><td>{</td></tr>
+<tr><th id="50">50</th><td><u>#<span data-ppcond="50">if</span> <a class="macro" href="../../../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(WEBM_FORMAT_READER)</u></td></tr>
+<tr><th id="51">51</th><td>    <em>auto</em> <dfn class="local col8 decl" id="88formatReader" title='formatReader' data-type='WebKit::MediaFormatReader *' data-ref="88formatReader" data-ref-filename="88formatReader">formatReader</dfn> = <span class="namespace">WebKit::</span><a class="type" href="../../../mac/MediaFormatReader/MediaFormatReader.h.html#WebKit::MediaFormatReader" title='WebKit::MediaFormatReader' data-ref="WebKit::MediaFormatReader" data-ref-filename="WebKit..MediaFormatReader">MediaFormatReader</a>::<a class="ref fn" href="../../../mac/MediaFormatReader/CoreMediaWrapped.h.html#_ZN6WebKit16CoreMediaWrapped6unwrapENS_15CoreMediaTraitsIT_E3RefE" title='WebKit::CoreMediaWrapped::unwrap' data-ref="_ZN6WebKit16CoreMediaWrapped6unwrapENS_15CoreMediaTraitsIT_E3RefE" data-ref-filename="_ZN6WebKit16CoreMediaWrapped6unwrapENS_15CoreMediaTraitsIT_E3RefE">unwrap</a>(<a class="local col6 ref" href="#86formatReaderRef" title='formatReaderRef' data-ref="86formatReaderRef" data-ref-filename="86formatReaderRef">formatReaderRef</a>);</td></tr>
+<tr><th id="52">52</th><td>    <b>if</b> (!<a class="local col8 ref" href="#88formatReader" title='formatReader' data-ref="88formatReader" data-ref-filename="88formatReader">formatReader</a>)</td></tr>
+<tr><th id="53">53</th><td>        <b>return</b> <span class='enum' title='paramErr' data-ref="paramErr" data-ref-filename="paramErr">paramErr</span>;</td></tr>
+<tr><th id="54">54</th><td>    <a class="local col8 ref" href="#88formatReader" title='formatReader' data-ref="88formatReader" data-ref-filename="88formatReader">formatReader</a>-&gt;<a class="ref fn" href="../../../mac/MediaFormatReader/MediaFormatReader.h.html#_ZN6WebKit17MediaFormatReader17startOnMainThreadEP24OpaqueMTPluginByteSource" title='WebKit::MediaFormatReader::startOnMainThread' data-ref="_ZN6WebKit17MediaFormatReader17startOnMainThreadEP24OpaqueMTPluginByteSource" data-ref-filename="_ZN6WebKit17MediaFormatReader17startOnMainThreadEP24OpaqueMTPluginByteSource">startOnMainThread</a>(<a class="local col7 ref" href="#87byteSource" title='byteSource' data-ref="87byteSource" data-ref-filename="87byteSource">byteSource</a>);</td></tr>
+<tr><th id="55">55</th><td>    <b>return</b> <span class='enum' title='noErr' data-ref="noErr" data-ref-filename="noErr">noErr</span>;</td></tr>
+<tr><th id="56">56</th><td><u>#<span data-ppcond="50">else</span></u></td></tr>
+<tr><th id="57">57</th><td>    UNUSED_PARAM(formatReaderRef);</td></tr>
+<tr><th id="58">58</th><td>    UNUSED_PARAM(byteSource);</td></tr>
+<tr><th id="59">59</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="60">60</th><td><u>#<span data-ppcond="50">endif</span></u></td></tr>
+<tr><th id="61">61</th><td>}</td></tr>
+<tr><th id="62">62</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource34.cpp.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource34.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

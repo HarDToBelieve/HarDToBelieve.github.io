@@ -1,0 +1,182 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ucnv_cb.h source code [webkit/WebKitBuild/Debug/usr/local/include/unicode/ucnv_cb.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/unicode/ucnv_cb.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>unicode</a>/<a href='ucnv_cb.h.html'>ucnv_cb.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>// © 2016 and later: Unicode, Inc. and others.</i></td></tr>
+<tr><th id="2">2</th><td><i>// License &amp; terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></i></td></tr>
+<tr><th id="3">3</th><td><i>/*</i></td></tr>
+<tr><th id="4">4</th><td><i>**********************************************************************</i></td></tr>
+<tr><th id="5">5</th><td><i>*   Copyright (C) 2000-2004, International Business Machines</i></td></tr>
+<tr><th id="6">6</th><td><i>*   Corporation and others.  All Rights Reserved.</i></td></tr>
+<tr><th id="7">7</th><td><i>**********************************************************************</i></td></tr>
+<tr><th id="8">8</th><td><i> *  ucnv_cb.h:</i></td></tr>
+<tr><th id="9">9</th><td><i> *  External APIs for the ICU's codeset conversion library</i></td></tr>
+<tr><th id="10">10</th><td><i> *  Helena Shih</i></td></tr>
+<tr><th id="11">11</th><td><i> * </i></td></tr>
+<tr><th id="12">12</th><td><i> * Modification History:</i></td></tr>
+<tr><th id="13">13</th><td><i> *</i></td></tr>
+<tr><th id="14">14</th><td><i> *   Date        Name        Description</i></td></tr>
+<tr><th id="15">15</th><td><i> */</i></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="18">18</th><td><i class="doc"> *<span class="command"> \file</span> </i></td></tr>
+<tr><th id="19">19</th><td><i class="doc"> * <span class="command">\brief</span> C UConverter functions to aid the writers of callbacks</i></td></tr>
+<tr><th id="20">20</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="21">21</th><td><i class="doc"> * <span class="tag">&lt;h2&gt;</span> Callback API for UConverter <span class="tag">&lt;/h2&gt;</span></i></td></tr>
+<tr><th id="22">22</th><td><i class="doc"> * </i></td></tr>
+<tr><th id="23">23</th><td><i class="doc"> * These functions are provided here for the convenience of the callback</i></td></tr>
+<tr><th id="24">24</th><td><i class="doc"> * writer. If you are just looking for callback functions to use, please</i></td></tr>
+<tr><th id="25">25</th><td><i class="doc"> * see ucnv_err.h.  DO NOT call these functions directly when you are </i></td></tr>
+<tr><th id="26">26</th><td><i class="doc"> * working with converters, unless your code has been called as a callback</i></td></tr>
+<tr><th id="27">27</th><td><i class="doc"> * via ucnv_setFromUCallback or ucnv_setToUCallback !!</i></td></tr>
+<tr><th id="28">28</th><td><i class="doc"> * </i></td></tr>
+<tr><th id="29">29</th><td><i class="doc"> * A note about error codes and overflow.  Unlike other ICU functions,</i></td></tr>
+<tr><th id="30">30</th><td><i class="doc"> * these functions do not expect the error status to be U_ZERO_ERROR.</i></td></tr>
+<tr><th id="31">31</th><td><i class="doc"> * Callbacks must be much more careful about their error codes.</i></td></tr>
+<tr><th id="32">32</th><td><i class="doc"> * The error codes used here are in/out parameters, which should be passed</i></td></tr>
+<tr><th id="33">33</th><td><i class="doc"> * back in the callback's error parameter.</i></td></tr>
+<tr><th id="34">34</th><td><i class="doc"> * </i></td></tr>
+<tr><th id="35">35</th><td><i class="doc"> * For example, if you call ucnv_cbfromUWriteBytes to write data out </i></td></tr>
+<tr><th id="36">36</th><td><i class="doc"> * to the output codepage, it may return U_BUFFER_OVERFLOW_ERROR if </i></td></tr>
+<tr><th id="37">37</th><td><i class="doc"> * the data did not fit in the target. But this isn't a failing error, </i></td></tr>
+<tr><th id="38">38</th><td><i class="doc"> * in fact, ucnv_cbfromUWriteBytes may be called AGAIN with the error</i></td></tr>
+<tr><th id="39">39</th><td><i class="doc"> * status still U_BUFFER_OVERFLOW_ERROR to attempt to write further bytes,</i></td></tr>
+<tr><th id="40">40</th><td><i class="doc"> * which will also go into the internal overflow buffers.</i></td></tr>
+<tr><th id="41">41</th><td><i class="doc"> * </i></td></tr>
+<tr><th id="42">42</th><td><i class="doc"> * Concerning offsets, the 'offset' parameters here are relative to the start</i></td></tr>
+<tr><th id="43">43</th><td><i class="doc"> * of SOURCE.  For example, Suppose the string "ABCD" was being converted </i></td></tr>
+<tr><th id="44">44</th><td><i class="doc"> * from Unicode into a codepage which doesn't have a mapping for 'B'.</i></td></tr>
+<tr><th id="45">45</th><td><i class="doc"> * 'A' will be written out correctly, but</i></td></tr>
+<tr><th id="46">46</th><td><i class="doc"> * The FromU Callback will be called on an unassigned character for 'B'.</i></td></tr>
+<tr><th id="47">47</th><td><i class="doc"> * At this point, this is the state of the world:</i></td></tr>
+<tr><th id="48">48</th><td><i class="doc"> *    Target:    A [..]     [points after A]</i></td></tr>
+<tr><th id="49">49</th><td><i class="doc"> *    Source:  A B [C] D    [points to C - B has been consumed]</i></td></tr>
+<tr><th id="50">50</th><td><i class="doc"> *             0 1  2  3 </i></td></tr>
+<tr><th id="51">51</th><td><i class="doc"> *    codePoint = "B"       [the unassigned codepoint] </i></td></tr>
+<tr><th id="52">52</th><td><i class="doc"> * </i></td></tr>
+<tr><th id="53">53</th><td><i class="doc"> * Now, suppose a callback wants to write the substitution character '?' to</i></td></tr>
+<tr><th id="54">54</th><td><i class="doc"> * the target. It calls ucnv_cbFromUWriteBytes() to write the ?. </i></td></tr>
+<tr><th id="55">55</th><td><i class="doc"> * It should pass ZERO as the offset, because the offset as far as the </i></td></tr>
+<tr><th id="56">56</th><td><i class="doc"> * callback is concerned is relative to the SOURCE pointer [which points </i></td></tr>
+<tr><th id="57">57</th><td><i class="doc"> * before 'C'.]  If the callback goes into the args and consumes 'C' also,</i></td></tr>
+<tr><th id="58">58</th><td><i class="doc"> * it would call FromUWriteBytes with an offset of 1 (and advance the source</i></td></tr>
+<tr><th id="59">59</th><td><i class="doc"> * pointer).</i></td></tr>
+<tr><th id="60">60</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="61">61</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><u>#<span data-ppcond="63">ifndef</span> <span class="macro" data-ref="_M/UCNV_CB_H">UCNV_CB_H</span></u></td></tr>
+<tr><th id="64">64</th><td><u>#define <dfn class="macro" id="_M/UCNV_CB_H" data-ref="_M/UCNV_CB_H">UCNV_CB_H</dfn></u></td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td><u>#include <a href="utypes.h.html">"unicode/utypes.h"</a></u></td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td><u>#<span data-ppcond="68">if</span> !<a class="macro" href="uconfig.h.html#276" title="0" data-ref="_M/UCONFIG_NO_CONVERSION">UCONFIG_NO_CONVERSION</a></u></td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td><u>#include <a href="ucnv.h.html">"unicode/ucnv.h"</a></u></td></tr>
+<tr><th id="71">71</th><td><u>#include <a href="ucnv_err.h.html">"unicode/ucnv_err.h"</a></u></td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="74">74</th><td><i class="doc"> * ONLY used by FromU callback functions.</i></td></tr>
+<tr><th id="75">75</th><td><i class="doc"> * Writes out the specified byte output bytes to the target byte buffer or to converter internal buffers.</i></td></tr>
+<tr><th id="76">76</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="77">77</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">args</span> callback fromUnicode arguments</i></td></tr>
+<tr><th id="78">78</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">source</span> source bytes to write</i></td></tr>
+<tr><th id="79">79</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">length</span> length of bytes to write</i></td></tr>
+<tr><th id="80">80</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">offsetIndex</span> the relative offset index from callback.</i></td></tr>
+<tr><th id="81">81</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">err</span> error status. If &lt;TT&gt;U_BUFFER_OVERFLOW&lt;/TT&gt; is returned, then U_BUFFER_OVERFLOW &lt;STRONG&gt;must&lt;/STRONG&gt; </i></td></tr>
+<tr><th id="82">82</th><td><i class="doc"> * be returned to the user, because it means that not all data could be written into the target buffer, and some is </i></td></tr>
+<tr><th id="83">83</th><td><i class="doc"> * in the converter error buffer.</i></td></tr>
+<tr><th id="84">84</th><td><i class="doc"> * <span class="command">@see</span> ucnv_cbFromUWriteSub</i></td></tr>
+<tr><th id="85">85</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="86">86</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="87">87</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>void</em> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="88">88</th><td><dfn class="decl fn" id="ucnv_cbFromUWriteBytes" title='ucnv_cbFromUWriteBytes' data-ref="ucnv_cbFromUWriteBytes" data-ref-filename="ucnv_cbFromUWriteBytes">ucnv_cbFromUWriteBytes</dfn> (<a class="typedef" href="ucnv_err.h.html#UConverterFromUnicodeArgs" title='UConverterFromUnicodeArgs' data-type='struct UConverterFromUnicodeArgs' data-ref="UConverterFromUnicodeArgs" data-ref-filename="UConverterFromUnicodeArgs">UConverterFromUnicodeArgs</a> *<dfn class="local col9 decl" id="219args" title='args' data-type='UConverterFromUnicodeArgs *' data-ref="219args" data-ref-filename="219args">args</dfn>,</td></tr>
+<tr><th id="89">89</th><td>                        <em>const</em> <em>char</em>* <dfn class="local col0 decl" id="220source" title='source' data-type='const char *' data-ref="220source" data-ref-filename="220source">source</dfn>,</td></tr>
+<tr><th id="90">90</th><td>                        <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col1 decl" id="221length" title='length' data-type='int32_t' data-ref="221length" data-ref-filename="221length">length</dfn>,</td></tr>
+<tr><th id="91">91</th><td>                        <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col2 decl" id="222offsetIndex" title='offsetIndex' data-type='int32_t' data-ref="222offsetIndex" data-ref-filename="222offsetIndex">offsetIndex</dfn>,</td></tr>
+<tr><th id="92">92</th><td>                        <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> * <dfn class="local col3 decl" id="223err" title='err' data-type='UErrorCode *' data-ref="223err" data-ref-filename="223err">err</dfn>);</td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="95">95</th><td><i class="doc"> * ONLY used by FromU callback functions.  </i></td></tr>
+<tr><th id="96">96</th><td><i class="doc"> * This function will write out the correct substitution character sequence </i></td></tr>
+<tr><th id="97">97</th><td><i class="doc"> * to the target.</i></td></tr>
+<tr><th id="98">98</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="99">99</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">args</span> callback fromUnicode arguments</i></td></tr>
+<tr><th id="100">100</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">offsetIndex</span> the relative offset index from the current source pointer to be used</i></td></tr>
+<tr><th id="101">101</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">err</span> error status. If &lt;TT&gt;U_BUFFER_OVERFLOW&lt;/TT&gt; is returned, then U_BUFFER_OVERFLOW &lt;STRONG&gt;must&lt;/STRONG&gt; </i></td></tr>
+<tr><th id="102">102</th><td><i class="doc"> * be returned to the user, because it means that not all data could be written into the target buffer, and some is </i></td></tr>
+<tr><th id="103">103</th><td><i class="doc"> * in the converter error buffer.</i></td></tr>
+<tr><th id="104">104</th><td><i class="doc"> * <span class="command">@see</span> ucnv_cbFromUWriteBytes</i></td></tr>
+<tr><th id="105">105</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="106">106</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="107">107</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>void</em> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> </td></tr>
+<tr><th id="108">108</th><td><dfn class="decl fn" id="ucnv_cbFromUWriteSub" title='ucnv_cbFromUWriteSub' data-ref="ucnv_cbFromUWriteSub" data-ref-filename="ucnv_cbFromUWriteSub">ucnv_cbFromUWriteSub</dfn> (<a class="typedef" href="ucnv_err.h.html#UConverterFromUnicodeArgs" title='UConverterFromUnicodeArgs' data-type='struct UConverterFromUnicodeArgs' data-ref="UConverterFromUnicodeArgs" data-ref-filename="UConverterFromUnicodeArgs">UConverterFromUnicodeArgs</a> *<dfn class="local col4 decl" id="224args" title='args' data-type='UConverterFromUnicodeArgs *' data-ref="224args" data-ref-filename="224args">args</dfn>,</td></tr>
+<tr><th id="109">109</th><td>                      <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col5 decl" id="225offsetIndex" title='offsetIndex' data-type='int32_t' data-ref="225offsetIndex" data-ref-filename="225offsetIndex">offsetIndex</dfn>,</td></tr>
+<tr><th id="110">110</th><td>                      <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> * <dfn class="local col6 decl" id="226err" title='err' data-type='UErrorCode *' data-ref="226err" data-ref-filename="226err">err</dfn>);</td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc"> * ONLY used by fromU callback functions.  </i></td></tr>
+<tr><th id="114">114</th><td><i class="doc"> * This function will write out the error character(s) to the target UChar buffer.</i></td></tr>
+<tr><th id="115">115</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="116">116</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">args</span> callback fromUnicode arguments</i></td></tr>
+<tr><th id="117">117</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">source</span> pointer to pointer to first UChar to write [on exit: 1 after last UChar processed]</i></td></tr>
+<tr><th id="118">118</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">sourceLimit</span> pointer after last UChar to write</i></td></tr>
+<tr><th id="119">119</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">offsetIndex</span> the relative offset index from callback which will be set</i></td></tr>
+<tr><th id="120">120</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">err</span> error status &lt;TT&gt;U_BUFFER_OVERFLOW&lt;/TT&gt;</i></td></tr>
+<tr><th id="121">121</th><td><i class="doc"> * <span class="command">@see</span> ucnv_cbToUWriteSub</i></td></tr>
+<tr><th id="122">122</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="123">123</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="124">124</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>void</em> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> <dfn class="decl fn" id="ucnv_cbFromUWriteUChars" title='ucnv_cbFromUWriteUChars' data-ref="ucnv_cbFromUWriteUChars" data-ref-filename="ucnv_cbFromUWriteUChars">ucnv_cbFromUWriteUChars</dfn>(<a class="typedef" href="ucnv_err.h.html#UConverterFromUnicodeArgs" title='UConverterFromUnicodeArgs' data-type='struct UConverterFromUnicodeArgs' data-ref="UConverterFromUnicodeArgs" data-ref-filename="UConverterFromUnicodeArgs">UConverterFromUnicodeArgs</a> *<dfn class="local col7 decl" id="227args" title='args' data-type='UConverterFromUnicodeArgs *' data-ref="227args" data-ref-filename="227args">args</dfn>,</td></tr>
+<tr><th id="125">125</th><td>                             <em>const</em> <a class="typedef" href="umachine.h.html#UChar" title='UChar' data-type='char16_t' data-ref="UChar" data-ref-filename="UChar">UChar</a>** <dfn class="local col8 decl" id="228source" title='source' data-type='const UChar **' data-ref="228source" data-ref-filename="228source">source</dfn>,</td></tr>
+<tr><th id="126">126</th><td>                             <em>const</em> <a class="typedef" href="umachine.h.html#UChar" title='UChar' data-type='char16_t' data-ref="UChar" data-ref-filename="UChar">UChar</a>*  <dfn class="local col9 decl" id="229sourceLimit" title='sourceLimit' data-type='const UChar *' data-ref="229sourceLimit" data-ref-filename="229sourceLimit">sourceLimit</dfn>,</td></tr>
+<tr><th id="127">127</th><td>                             <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col0 decl" id="230offsetIndex" title='offsetIndex' data-type='int32_t' data-ref="230offsetIndex" data-ref-filename="230offsetIndex">offsetIndex</dfn>,</td></tr>
+<tr><th id="128">128</th><td>                             <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> * <dfn class="local col1 decl" id="231err" title='err' data-type='UErrorCode *' data-ref="231err" data-ref-filename="231err">err</dfn>);</td></tr>
+<tr><th id="129">129</th><td></td></tr>
+<tr><th id="130">130</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="131">131</th><td><i class="doc"> * ONLY used by ToU callback functions.</i></td></tr>
+<tr><th id="132">132</th><td><i class="doc"> *  This function will write out the specified characters to the target </i></td></tr>
+<tr><th id="133">133</th><td><i class="doc"> * UChar buffer.</i></td></tr>
+<tr><th id="134">134</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="135">135</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">args</span> callback toUnicode arguments</i></td></tr>
+<tr><th id="136">136</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">source</span> source string to write</i></td></tr>
+<tr><th id="137">137</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">length</span> the length of source string</i></td></tr>
+<tr><th id="138">138</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">offsetIndex</span> the relative offset index which will be written.</i></td></tr>
+<tr><th id="139">139</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">err</span> error status &lt;TT&gt;U_BUFFER_OVERFLOW&lt;/TT&gt;</i></td></tr>
+<tr><th id="140">140</th><td><i class="doc"> * <span class="command">@see</span> ucnv_cbToUWriteSub</i></td></tr>
+<tr><th id="141">141</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="142">142</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="143">143</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>void</em> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> <dfn class="decl fn" id="ucnv_cbToUWriteUChars" title='ucnv_cbToUWriteUChars' data-ref="ucnv_cbToUWriteUChars" data-ref-filename="ucnv_cbToUWriteUChars">ucnv_cbToUWriteUChars</dfn> (<a class="typedef" href="ucnv_err.h.html#UConverterToUnicodeArgs" title='UConverterToUnicodeArgs' data-type='struct UConverterToUnicodeArgs' data-ref="UConverterToUnicodeArgs" data-ref-filename="UConverterToUnicodeArgs">UConverterToUnicodeArgs</a> *<dfn class="local col2 decl" id="232args" title='args' data-type='UConverterToUnicodeArgs *' data-ref="232args" data-ref-filename="232args">args</dfn>,</td></tr>
+<tr><th id="144">144</th><td>                                             <em>const</em> <a class="typedef" href="umachine.h.html#UChar" title='UChar' data-type='char16_t' data-ref="UChar" data-ref-filename="UChar">UChar</a>* <dfn class="local col3 decl" id="233source" title='source' data-type='const UChar *' data-ref="233source" data-ref-filename="233source">source</dfn>,</td></tr>
+<tr><th id="145">145</th><td>                                             <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col4 decl" id="234length" title='length' data-type='int32_t' data-ref="234length" data-ref-filename="234length">length</dfn>,</td></tr>
+<tr><th id="146">146</th><td>                                             <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col5 decl" id="235offsetIndex" title='offsetIndex' data-type='int32_t' data-ref="235offsetIndex" data-ref-filename="235offsetIndex">offsetIndex</dfn>,</td></tr>
+<tr><th id="147">147</th><td>                                             <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> * <dfn class="local col6 decl" id="236err" title='err' data-type='UErrorCode *' data-ref="236err" data-ref-filename="236err">err</dfn>);</td></tr>
+<tr><th id="148">148</th><td></td></tr>
+<tr><th id="149">149</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="150">150</th><td><i class="doc"> * ONLY used by ToU  callback functions.  </i></td></tr>
+<tr><th id="151">151</th><td><i class="doc"> * This function will write out the Unicode substitution character (U+FFFD).</i></td></tr>
+<tr><th id="152">152</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="153">153</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">args</span> callback fromUnicode arguments</i></td></tr>
+<tr><th id="154">154</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">offsetIndex</span> the relative offset index from callback.</i></td></tr>
+<tr><th id="155">155</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">err</span> error status &lt;TT&gt;U_BUFFER_OVERFLOW&lt;/TT&gt;</i></td></tr>
+<tr><th id="156">156</th><td><i class="doc"> * <span class="command">@see</span> ucnv_cbToUWriteUChars</i></td></tr>
+<tr><th id="157">157</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="158">158</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="159">159</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>void</em> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> <dfn class="decl fn" id="ucnv_cbToUWriteSub" title='ucnv_cbToUWriteSub' data-ref="ucnv_cbToUWriteSub" data-ref-filename="ucnv_cbToUWriteSub">ucnv_cbToUWriteSub</dfn> (<a class="typedef" href="ucnv_err.h.html#UConverterToUnicodeArgs" title='UConverterToUnicodeArgs' data-type='struct UConverterToUnicodeArgs' data-ref="UConverterToUnicodeArgs" data-ref-filename="UConverterToUnicodeArgs">UConverterToUnicodeArgs</a> *<dfn class="local col7 decl" id="237args" title='args' data-type='UConverterToUnicodeArgs *' data-ref="237args" data-ref-filename="237args">args</dfn>,</td></tr>
+<tr><th id="160">160</th><td>                       <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col8 decl" id="238offsetIndex" title='offsetIndex' data-type='int32_t' data-ref="238offsetIndex" data-ref-filename="238offsetIndex">offsetIndex</dfn>,</td></tr>
+<tr><th id="161">161</th><td>                       <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> * <dfn class="local col9 decl" id="239err" title='err' data-type='UErrorCode *' data-ref="239err" data-ref-filename="239err">err</dfn>);</td></tr>
+<tr><th id="162">162</th><td><u>#<span data-ppcond="68">endif</span></u></td></tr>
+<tr><th id="163">163</th><td></td></tr>
+<tr><th id="164">164</th><td><u>#<span data-ppcond="63">endif</span></u></td></tr>
+<tr><th id="165">165</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../DerivedSources/WebCore/unified-sources/UnifiedSource309.cpp.html'>webkit/WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource309.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

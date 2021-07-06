@@ -1,0 +1,241 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>codec.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/codec.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/codec.h'; var root_path = '../../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../../..'>Source</a>/<a href='../../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../../..'>libwebrtc</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>webrtc</a>/<a href='../../../../..'>modules</a>/<a href='../../../..'>audio_coding</a>/<a href='../../..'>codecs</a>/<a href='../..'>isac</a>/<a href='..'>main</a>/<a href='./'>source</a>/<a href='codec.h.html'>codec.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><i>/*</i></td></tr>
+<tr><th id="12">12</th><td><i> * codec.h</i></td></tr>
+<tr><th id="13">13</th><td><i> *</i></td></tr>
+<tr><th id="14">14</th><td><i> * This header file contains the calls to the internal encoder</i></td></tr>
+<tr><th id="15">15</th><td><i> * and decoder functions.</i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> */</i></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#<span data-ppcond="19">ifndef</span> <span class="macro" data-ref="_M/MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_CODEC_H_">MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_CODEC_H_</span></u></td></tr>
+<tr><th id="20">20</th><td><u>#define <dfn class="macro" id="_M/MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_CODEC_H_" data-ref="_M/MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_CODEC_H_">MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_CODEC_H_</dfn></u></td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><u>#include <a href="structs.h.html">"modules/audio_coding/codecs/isac/main/source/structs.h"</a></u></td></tr>
+<tr><th id="25">25</th><td><u>#include <a href="../../../../../third_party/fft/fft.h.html">"modules/third_party/fft/fft.h"</a></u></td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td><em>void</em> <dfn class="decl fn" id="WebRtcIsac_ResetBitstream" title='WebRtcIsac_ResetBitstream' data-ref="WebRtcIsac_ResetBitstream" data-ref-filename="WebRtcIsac_ResetBitstream">WebRtcIsac_ResetBitstream</dfn>(<a class="typedef" href="structs.h.html#Bitstr" title='Bitstr' data-type='struct Bitstreamstruct' data-ref="Bitstr" data-ref-filename="Bitstr">Bitstr</a>* <dfn class="local col1 decl" id="1bit_stream" title='bit_stream' data-type='Bitstr *' data-ref="1bit_stream" data-ref-filename="1bit_stream">bit_stream</dfn>);</td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><em>int</em> <dfn class="decl fn" id="WebRtcIsac_EstimateBandwidth" title='WebRtcIsac_EstimateBandwidth' data-ref="WebRtcIsac_EstimateBandwidth" data-ref-filename="WebRtcIsac_EstimateBandwidth">WebRtcIsac_EstimateBandwidth</dfn>(<a class="typedef" href="structs.h.html#BwEstimatorstr" title='BwEstimatorstr' data-type='struct BwEstimatorstr' data-ref="BwEstimatorstr" data-ref-filename="BwEstimatorstr">BwEstimatorstr</a>* <dfn class="local col2 decl" id="2bwest_str" title='bwest_str' data-type='BwEstimatorstr *' data-ref="2bwest_str" data-ref-filename="2bwest_str">bwest_str</dfn>,</td></tr>
+<tr><th id="30">30</th><td>                                 <a class="typedef" href="structs.h.html#Bitstr" title='Bitstr' data-type='struct Bitstreamstruct' data-ref="Bitstr" data-ref-filename="Bitstr">Bitstr</a>* <dfn class="local col3 decl" id="3streamdata" title='streamdata' data-type='Bitstr *' data-ref="3streamdata" data-ref-filename="3streamdata">streamdata</dfn>,</td></tr>
+<tr><th id="31">31</th><td>                                 <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="4packet_size" title='packet_size' data-type='size_t' data-ref="4packet_size" data-ref-filename="4packet_size">packet_size</dfn>,</td></tr>
+<tr><th id="32">32</th><td>                                 <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="local col5 decl" id="5rtp_seq_number" title='rtp_seq_number' data-type='uint16_t' data-ref="5rtp_seq_number" data-ref-filename="5rtp_seq_number">rtp_seq_number</dfn>,</td></tr>
+<tr><th id="33">33</th><td>                                 <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col6 decl" id="6send_ts" title='send_ts' data-type='uint32_t' data-ref="6send_ts" data-ref-filename="6send_ts">send_ts</dfn>,</td></tr>
+<tr><th id="34">34</th><td>                                 <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col7 decl" id="7arr_ts" title='arr_ts' data-type='uint32_t' data-ref="7arr_ts" data-ref-filename="7arr_ts">arr_ts</dfn>,</td></tr>
+<tr><th id="35">35</th><td>                                 <b>enum</b> <a class="type" href="settings.h.html#IsacSamplingRate" title='IsacSamplingRate' data-ref="IsacSamplingRate" data-ref-filename="IsacSamplingRate">IsacSamplingRate</a> <dfn class="local col8 decl" id="8encoderSampRate" title='encoderSampRate' data-type='enum IsacSamplingRate' data-ref="8encoderSampRate" data-ref-filename="8encoderSampRate">encoderSampRate</dfn>,</td></tr>
+<tr><th id="36">36</th><td>                                 <b>enum</b> <a class="type" href="settings.h.html#IsacSamplingRate" title='IsacSamplingRate' data-ref="IsacSamplingRate" data-ref-filename="IsacSamplingRate">IsacSamplingRate</a> <dfn class="local col9 decl" id="9decoderSampRate" title='decoderSampRate' data-type='enum IsacSamplingRate' data-ref="9decoderSampRate" data-ref-filename="9decoderSampRate">decoderSampRate</dfn>);</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><em>int</em> <a class="decl fn" href="decode.c.html#WebRtcIsac_DecodeLb" title='WebRtcIsac_DecodeLb' data-ref="WebRtcIsac_DecodeLb" data-ref-filename="WebRtcIsac_DecodeLb" id="WebRtcIsac_DecodeLb">WebRtcIsac_DecodeLb</a>(<em>const</em> <a class="typedef" href="structs.h.html#TransformTables" title='TransformTables' data-type='struct TransformTables' data-ref="TransformTables" data-ref-filename="TransformTables">TransformTables</a>* <dfn class="local col0 decl" id="10transform_tables" title='transform_tables' data-type='const TransformTables *' data-ref="10transform_tables" data-ref-filename="10transform_tables">transform_tables</dfn>,</td></tr>
+<tr><th id="39">39</th><td>                        <em>float</em>* <dfn class="local col1 decl" id="11signal_out" title='signal_out' data-type='float *' data-ref="11signal_out" data-ref-filename="11signal_out">signal_out</dfn>,</td></tr>
+<tr><th id="40">40</th><td>                        <a class="typedef" href="structs.h.html#ISACLBDecStruct" title='ISACLBDecStruct' data-type='struct ISACLBDecStruct' data-ref="ISACLBDecStruct" data-ref-filename="ISACLBDecStruct">ISACLBDecStruct</a>* <dfn class="local col2 decl" id="12ISACdec_obj" title='ISACdec_obj' data-type='ISACLBDecStruct *' data-ref="12ISACdec_obj" data-ref-filename="12ISACdec_obj">ISACdec_obj</dfn>,</td></tr>
+<tr><th id="41">41</th><td>                        <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col3 decl" id="13current_framesamples" title='current_framesamples' data-type='int16_t *' data-ref="13current_framesamples" data-ref-filename="13current_framesamples">current_framesamples</dfn>,</td></tr>
+<tr><th id="42">42</th><td>                        <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col4 decl" id="14isRCUPayload" title='isRCUPayload' data-type='int16_t' data-ref="14isRCUPayload" data-ref-filename="14isRCUPayload">isRCUPayload</dfn>);</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><em>int</em> <dfn class="decl fn" id="WebRtcIsac_DecodeRcuLb" title='WebRtcIsac_DecodeRcuLb' data-ref="WebRtcIsac_DecodeRcuLb" data-ref-filename="WebRtcIsac_DecodeRcuLb">WebRtcIsac_DecodeRcuLb</dfn>(<em>float</em>* <dfn class="local col5 decl" id="15signal_out" title='signal_out' data-type='float *' data-ref="15signal_out" data-ref-filename="15signal_out">signal_out</dfn>,</td></tr>
+<tr><th id="45">45</th><td>                           <a class="typedef" href="structs.h.html#ISACLBDecStruct" title='ISACLBDecStruct' data-type='struct ISACLBDecStruct' data-ref="ISACLBDecStruct" data-ref-filename="ISACLBDecStruct">ISACLBDecStruct</a>* <dfn class="local col6 decl" id="16ISACdec_obj" title='ISACdec_obj' data-type='ISACLBDecStruct *' data-ref="16ISACdec_obj" data-ref-filename="16ISACdec_obj">ISACdec_obj</dfn>,</td></tr>
+<tr><th id="46">46</th><td>                           <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col7 decl" id="17current_framesamples" title='current_framesamples' data-type='int16_t *' data-ref="17current_framesamples" data-ref-filename="17current_framesamples">current_framesamples</dfn>);</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td><em>int</em> <dfn class="decl fn" id="WebRtcIsac_EncodeLb" title='WebRtcIsac_EncodeLb' data-ref="WebRtcIsac_EncodeLb" data-ref-filename="WebRtcIsac_EncodeLb">WebRtcIsac_EncodeLb</dfn>(<em>const</em> <a class="typedef" href="structs.h.html#TransformTables" title='TransformTables' data-type='struct TransformTables' data-ref="TransformTables" data-ref-filename="TransformTables">TransformTables</a>* <dfn class="local col8 decl" id="18transform_tables" title='transform_tables' data-type='const TransformTables *' data-ref="18transform_tables" data-ref-filename="18transform_tables">transform_tables</dfn>,</td></tr>
+<tr><th id="49">49</th><td>                        <em>float</em>* <dfn class="local col9 decl" id="19in" title='in' data-type='float *' data-ref="19in" data-ref-filename="19in">in</dfn>,</td></tr>
+<tr><th id="50">50</th><td>                        <a class="typedef" href="structs.h.html#ISACLBEncStruct" title='ISACLBEncStruct' data-type='struct ISACLBEncStruct' data-ref="ISACLBEncStruct" data-ref-filename="ISACLBEncStruct">ISACLBEncStruct</a>* <dfn class="local col0 decl" id="20ISACencLB_obj" title='ISACencLB_obj' data-type='ISACLBEncStruct *' data-ref="20ISACencLB_obj" data-ref-filename="20ISACencLB_obj">ISACencLB_obj</dfn>,</td></tr>
+<tr><th id="51">51</th><td>                        <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col1 decl" id="21codingMode" title='codingMode' data-type='int16_t' data-ref="21codingMode" data-ref-filename="21codingMode">codingMode</dfn>,</td></tr>
+<tr><th id="52">52</th><td>                        <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col2 decl" id="22bottleneckIndex" title='bottleneckIndex' data-type='int16_t' data-ref="22bottleneckIndex" data-ref-filename="22bottleneckIndex">bottleneckIndex</dfn>);</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td><em>int</em> <dfn class="decl fn" id="WebRtcIsac_EncodeStoredDataLb" title='WebRtcIsac_EncodeStoredDataLb' data-ref="WebRtcIsac_EncodeStoredDataLb" data-ref-filename="WebRtcIsac_EncodeStoredDataLb">WebRtcIsac_EncodeStoredDataLb</dfn>(<em>const</em> <a class="typedef" href="structs.h.html#IsacSaveEncoderData" title='IsacSaveEncoderData' data-type='struct IsacSaveEncoderData' data-ref="IsacSaveEncoderData" data-ref-filename="IsacSaveEncoderData">IsacSaveEncoderData</a>* <dfn class="local col3 decl" id="23ISACSavedEnc_obj" title='ISACSavedEnc_obj' data-type='const IsacSaveEncoderData *' data-ref="23ISACSavedEnc_obj" data-ref-filename="23ISACSavedEnc_obj">ISACSavedEnc_obj</dfn>,</td></tr>
+<tr><th id="55">55</th><td>                                  <a class="typedef" href="structs.h.html#Bitstr" title='Bitstr' data-type='struct Bitstreamstruct' data-ref="Bitstr" data-ref-filename="Bitstr">Bitstr</a>* <dfn class="local col4 decl" id="24ISACBitStr_obj" title='ISACBitStr_obj' data-type='Bitstr *' data-ref="24ISACBitStr_obj" data-ref-filename="24ISACBitStr_obj">ISACBitStr_obj</dfn>,</td></tr>
+<tr><th id="56">56</th><td>                                  <em>int</em> <dfn class="local col5 decl" id="25BWnumber" title='BWnumber' data-type='int' data-ref="25BWnumber" data-ref-filename="25BWnumber">BWnumber</dfn>,</td></tr>
+<tr><th id="57">57</th><td>                                  <em>float</em> <dfn class="local col6 decl" id="26scale" title='scale' data-type='float' data-ref="26scale" data-ref-filename="26scale">scale</dfn>);</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><em>int</em> <dfn class="decl fn" id="WebRtcIsac_EncodeStoredDataUb" title='WebRtcIsac_EncodeStoredDataUb' data-ref="WebRtcIsac_EncodeStoredDataUb" data-ref-filename="WebRtcIsac_EncodeStoredDataUb">WebRtcIsac_EncodeStoredDataUb</dfn>(</td></tr>
+<tr><th id="60">60</th><td>    <em>const</em> <a class="typedef" href="structs.h.html#ISACUBSaveEncDataStruct" title='ISACUBSaveEncDataStruct' data-type='struct ISACUBSaveEncDataStruct' data-ref="ISACUBSaveEncDataStruct" data-ref-filename="ISACUBSaveEncDataStruct">ISACUBSaveEncDataStruct</a>* <dfn class="local col7 decl" id="27ISACSavedEnc_obj" title='ISACSavedEnc_obj' data-type='const ISACUBSaveEncDataStruct *' data-ref="27ISACSavedEnc_obj" data-ref-filename="27ISACSavedEnc_obj">ISACSavedEnc_obj</dfn>,</td></tr>
+<tr><th id="61">61</th><td>    <a class="typedef" href="structs.h.html#Bitstr" title='Bitstr' data-type='struct Bitstreamstruct' data-ref="Bitstr" data-ref-filename="Bitstr">Bitstr</a>* <dfn class="local col8 decl" id="28bitStream" title='bitStream' data-type='Bitstr *' data-ref="28bitStream" data-ref-filename="28bitStream">bitStream</dfn>,</td></tr>
+<tr><th id="62">62</th><td>    <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col9 decl" id="29jitterInfo" title='jitterInfo' data-type='int32_t' data-ref="29jitterInfo" data-ref-filename="29jitterInfo">jitterInfo</dfn>,</td></tr>
+<tr><th id="63">63</th><td>    <em>float</em> <dfn class="local col0 decl" id="30scale" title='scale' data-type='float' data-ref="30scale" data-ref-filename="30scale">scale</dfn>,</td></tr>
+<tr><th id="64">64</th><td>    <b>enum</b> <a class="type" href="settings.h.html#ISACBandwidth" title='ISACBandwidth' data-ref="ISACBandwidth" data-ref-filename="ISACBandwidth">ISACBandwidth</a> <dfn class="local col1 decl" id="31bandwidth" title='bandwidth' data-type='enum ISACBandwidth' data-ref="31bandwidth" data-ref-filename="31bandwidth">bandwidth</dfn>);</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td><span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="decl fn" id="WebRtcIsac_GetRedPayloadUb" title='WebRtcIsac_GetRedPayloadUb' data-ref="WebRtcIsac_GetRedPayloadUb" data-ref-filename="WebRtcIsac_GetRedPayloadUb">WebRtcIsac_GetRedPayloadUb</dfn>(</td></tr>
+<tr><th id="67">67</th><td>    <em>const</em> <a class="typedef" href="structs.h.html#ISACUBSaveEncDataStruct" title='ISACUBSaveEncDataStruct' data-type='struct ISACUBSaveEncDataStruct' data-ref="ISACUBSaveEncDataStruct" data-ref-filename="ISACUBSaveEncDataStruct">ISACUBSaveEncDataStruct</a>* <dfn class="local col2 decl" id="32ISACSavedEncObj" title='ISACSavedEncObj' data-type='const ISACUBSaveEncDataStruct *' data-ref="32ISACSavedEncObj" data-ref-filename="32ISACSavedEncObj">ISACSavedEncObj</dfn>,</td></tr>
+<tr><th id="68">68</th><td>    <a class="typedef" href="structs.h.html#Bitstr" title='Bitstr' data-type='struct Bitstreamstruct' data-ref="Bitstr" data-ref-filename="Bitstr">Bitstr</a>* <dfn class="local col3 decl" id="33bitStreamObj" title='bitStreamObj' data-type='Bitstr *' data-ref="33bitStreamObj" data-ref-filename="33bitStreamObj">bitStreamObj</dfn>,</td></tr>
+<tr><th id="69">69</th><td>    <b>enum</b> <a class="type" href="settings.h.html#ISACBandwidth" title='ISACBandwidth' data-ref="ISACBandwidth" data-ref-filename="ISACBandwidth">ISACBandwidth</a> <dfn class="local col4 decl" id="34bandwidth" title='bandwidth' data-type='enum ISACBandwidth' data-ref="34bandwidth" data-ref-filename="34bandwidth">bandwidth</dfn>);</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><i>/******************************************************************************</i></td></tr>
+<tr><th id="72">72</th><td><i> * WebRtcIsac_RateAllocation()</i></td></tr>
+<tr><th id="73">73</th><td><i> * Internal function to perform a rate-allocation for upper and lower-band,</i></td></tr>
+<tr><th id="74">74</th><td><i> * given a total rate.</i></td></tr>
+<tr><th id="75">75</th><td><i> *</i></td></tr>
+<tr><th id="76">76</th><td><i> * Input:</i></td></tr>
+<tr><th id="77">77</th><td><i> *   - inRateBitPerSec           : a total bit-rate in bits/sec.</i></td></tr>
+<tr><th id="78">78</th><td><i> *</i></td></tr>
+<tr><th id="79">79</th><td><i> * Output:</i></td></tr>
+<tr><th id="80">80</th><td><i> *   - rateLBBitPerSec           : a bit-rate allocated to the lower-band</i></td></tr>
+<tr><th id="81">81</th><td><i> *                                 in bits/sec.</i></td></tr>
+<tr><th id="82">82</th><td><i> *   - rateUBBitPerSec           : a bit-rate allocated to the upper-band</i></td></tr>
+<tr><th id="83">83</th><td><i> *                                 in bits/sec.</i></td></tr>
+<tr><th id="84">84</th><td><i> *</i></td></tr>
+<tr><th id="85">85</th><td><i> * Return value                  : 0 if rate allocation has been successful.</i></td></tr>
+<tr><th id="86">86</th><td><i> *                                -1 if failed to allocate rates.</i></td></tr>
+<tr><th id="87">87</th><td><i> */</i></td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td><span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="decl fn" id="WebRtcIsac_RateAllocation" title='WebRtcIsac_RateAllocation' data-ref="WebRtcIsac_RateAllocation" data-ref-filename="WebRtcIsac_RateAllocation">WebRtcIsac_RateAllocation</dfn>(<span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col5 decl" id="35inRateBitPerSec" title='inRateBitPerSec' data-type='int32_t' data-ref="35inRateBitPerSec" data-ref-filename="35inRateBitPerSec">inRateBitPerSec</dfn>,</td></tr>
+<tr><th id="90">90</th><td>                                  <em>double</em>* <dfn class="local col6 decl" id="36rateLBBitPerSec" title='rateLBBitPerSec' data-type='double *' data-ref="36rateLBBitPerSec" data-ref-filename="36rateLBBitPerSec">rateLBBitPerSec</dfn>,</td></tr>
+<tr><th id="91">91</th><td>                                  <em>double</em>* <dfn class="local col7 decl" id="37rateUBBitPerSec" title='rateUBBitPerSec' data-type='double *' data-ref="37rateUBBitPerSec" data-ref-filename="37rateUBBitPerSec">rateUBBitPerSec</dfn>,</td></tr>
+<tr><th id="92">92</th><td>                                  <b>enum</b> <a class="type" href="settings.h.html#ISACBandwidth" title='ISACBandwidth' data-ref="ISACBandwidth" data-ref-filename="ISACBandwidth">ISACBandwidth</a>* <dfn class="local col8 decl" id="38bandwidthKHz" title='bandwidthKHz' data-type='enum ISACBandwidth *' data-ref="38bandwidthKHz" data-ref-filename="38bandwidthKHz">bandwidthKHz</dfn>);</td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td><i>/******************************************************************************</i></td></tr>
+<tr><th id="95">95</th><td><i> * WebRtcIsac_DecodeUb16()</i></td></tr>
+<tr><th id="96">96</th><td><i> *</i></td></tr>
+<tr><th id="97">97</th><td><i> * Decode the upper-band if the codec is in 0-16 kHz mode.</i></td></tr>
+<tr><th id="98">98</th><td><i> *</i></td></tr>
+<tr><th id="99">99</th><td><i> * Input/Output:</i></td></tr>
+<tr><th id="100">100</th><td><i> *       -ISACdec_obj        : pointer to the upper-band decoder object. The</i></td></tr>
+<tr><th id="101">101</th><td><i> *                             bit-stream is stored inside the decoder object.</i></td></tr>
+<tr><th id="102">102</th><td><i> *</i></td></tr>
+<tr><th id="103">103</th><td><i> * Output:</i></td></tr>
+<tr><th id="104">104</th><td><i> *       -signal_out         : decoded audio, 480 samples 30 ms.</i></td></tr>
+<tr><th id="105">105</th><td><i> *</i></td></tr>
+<tr><th id="106">106</th><td><i> * Return value              : &gt;0 number of decoded bytes.</i></td></tr>
+<tr><th id="107">107</th><td><i> *                             &lt;0 if an error occurred.</i></td></tr>
+<tr><th id="108">108</th><td><i> */</i></td></tr>
+<tr><th id="109">109</th><td><em>int</em> <a class="decl fn" href="decode.c.html#WebRtcIsac_DecodeUb16" title='WebRtcIsac_DecodeUb16' data-ref="WebRtcIsac_DecodeUb16" data-ref-filename="WebRtcIsac_DecodeUb16" id="WebRtcIsac_DecodeUb16">WebRtcIsac_DecodeUb16</a>(<em>const</em> <a class="typedef" href="structs.h.html#TransformTables" title='TransformTables' data-type='struct TransformTables' data-ref="TransformTables" data-ref-filename="TransformTables">TransformTables</a>* <dfn class="local col9 decl" id="39transform_tables" title='transform_tables' data-type='const TransformTables *' data-ref="39transform_tables" data-ref-filename="39transform_tables">transform_tables</dfn>,</td></tr>
+<tr><th id="110">110</th><td>                          <em>float</em>* <dfn class="local col0 decl" id="40signal_out" title='signal_out' data-type='float *' data-ref="40signal_out" data-ref-filename="40signal_out">signal_out</dfn>,</td></tr>
+<tr><th id="111">111</th><td>                          <a class="typedef" href="structs.h.html#ISACUBDecStruct" title='ISACUBDecStruct' data-type='struct ISACUBDecStruct' data-ref="ISACUBDecStruct" data-ref-filename="ISACUBDecStruct">ISACUBDecStruct</a>* <dfn class="local col1 decl" id="41ISACdec_obj" title='ISACdec_obj' data-type='ISACUBDecStruct *' data-ref="41ISACdec_obj" data-ref-filename="41ISACdec_obj">ISACdec_obj</dfn>,</td></tr>
+<tr><th id="112">112</th><td>                          <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col2 decl" id="42isRCUPayload" title='isRCUPayload' data-type='int16_t' data-ref="42isRCUPayload" data-ref-filename="42isRCUPayload">isRCUPayload</dfn>);</td></tr>
+<tr><th id="113">113</th><td></td></tr>
+<tr><th id="114">114</th><td><i>/******************************************************************************</i></td></tr>
+<tr><th id="115">115</th><td><i> * WebRtcIsac_DecodeUb12()</i></td></tr>
+<tr><th id="116">116</th><td><i> *</i></td></tr>
+<tr><th id="117">117</th><td><i> * Decode the upper-band if the codec is in 0-12 kHz mode.</i></td></tr>
+<tr><th id="118">118</th><td><i> *</i></td></tr>
+<tr><th id="119">119</th><td><i> * Input/Output:</i></td></tr>
+<tr><th id="120">120</th><td><i> *       -ISACdec_obj        : pointer to the upper-band decoder object. The</i></td></tr>
+<tr><th id="121">121</th><td><i> *                             bit-stream is stored inside the decoder object.</i></td></tr>
+<tr><th id="122">122</th><td><i> *</i></td></tr>
+<tr><th id="123">123</th><td><i> * Output:</i></td></tr>
+<tr><th id="124">124</th><td><i> *       -signal_out         : decoded audio, 480 samples 30 ms.</i></td></tr>
+<tr><th id="125">125</th><td><i> *</i></td></tr>
+<tr><th id="126">126</th><td><i> * Return value              : &gt;0 number of decoded bytes.</i></td></tr>
+<tr><th id="127">127</th><td><i> *                             &lt;0 if an error occurred.</i></td></tr>
+<tr><th id="128">128</th><td><i> */</i></td></tr>
+<tr><th id="129">129</th><td><em>int</em> <a class="decl fn" href="decode.c.html#WebRtcIsac_DecodeUb12" title='WebRtcIsac_DecodeUb12' data-ref="WebRtcIsac_DecodeUb12" data-ref-filename="WebRtcIsac_DecodeUb12" id="WebRtcIsac_DecodeUb12">WebRtcIsac_DecodeUb12</a>(<em>const</em> <a class="typedef" href="structs.h.html#TransformTables" title='TransformTables' data-type='struct TransformTables' data-ref="TransformTables" data-ref-filename="TransformTables">TransformTables</a>* <dfn class="local col3 decl" id="43transform_tables" title='transform_tables' data-type='const TransformTables *' data-ref="43transform_tables" data-ref-filename="43transform_tables">transform_tables</dfn>,</td></tr>
+<tr><th id="130">130</th><td>                          <em>float</em>* <dfn class="local col4 decl" id="44signal_out" title='signal_out' data-type='float *' data-ref="44signal_out" data-ref-filename="44signal_out">signal_out</dfn>,</td></tr>
+<tr><th id="131">131</th><td>                          <a class="typedef" href="structs.h.html#ISACUBDecStruct" title='ISACUBDecStruct' data-type='struct ISACUBDecStruct' data-ref="ISACUBDecStruct" data-ref-filename="ISACUBDecStruct">ISACUBDecStruct</a>* <dfn class="local col5 decl" id="45ISACdec_obj" title='ISACdec_obj' data-type='ISACUBDecStruct *' data-ref="45ISACdec_obj" data-ref-filename="45ISACdec_obj">ISACdec_obj</dfn>,</td></tr>
+<tr><th id="132">132</th><td>                          <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col6 decl" id="46isRCUPayload" title='isRCUPayload' data-type='int16_t' data-ref="46isRCUPayload" data-ref-filename="46isRCUPayload">isRCUPayload</dfn>);</td></tr>
+<tr><th id="133">133</th><td></td></tr>
+<tr><th id="134">134</th><td><i>/******************************************************************************</i></td></tr>
+<tr><th id="135">135</th><td><i> * WebRtcIsac_EncodeUb16()</i></td></tr>
+<tr><th id="136">136</th><td><i> *</i></td></tr>
+<tr><th id="137">137</th><td><i> * Encode the upper-band if the codec is in 0-16 kHz mode.</i></td></tr>
+<tr><th id="138">138</th><td><i> *</i></td></tr>
+<tr><th id="139">139</th><td><i> * Input:</i></td></tr>
+<tr><th id="140">140</th><td><i> *       -in                 : upper-band audio, 160 samples (10 ms).</i></td></tr>
+<tr><th id="141">141</th><td><i> *</i></td></tr>
+<tr><th id="142">142</th><td><i> * Input/Output:</i></td></tr>
+<tr><th id="143">143</th><td><i> *       -ISACdec_obj        : pointer to the upper-band encoder object. The</i></td></tr>
+<tr><th id="144">144</th><td><i> *                             bit-stream is stored inside the encoder object.</i></td></tr>
+<tr><th id="145">145</th><td><i> *</i></td></tr>
+<tr><th id="146">146</th><td><i> * Return value              : &gt;0 number of encoded bytes.</i></td></tr>
+<tr><th id="147">147</th><td><i> *                             &lt;0 if an error occurred.</i></td></tr>
+<tr><th id="148">148</th><td><i> */</i></td></tr>
+<tr><th id="149">149</th><td><em>int</em> <dfn class="decl fn" id="WebRtcIsac_EncodeUb16" title='WebRtcIsac_EncodeUb16' data-ref="WebRtcIsac_EncodeUb16" data-ref-filename="WebRtcIsac_EncodeUb16">WebRtcIsac_EncodeUb16</dfn>(<em>const</em> <a class="typedef" href="structs.h.html#TransformTables" title='TransformTables' data-type='struct TransformTables' data-ref="TransformTables" data-ref-filename="TransformTables">TransformTables</a>* <dfn class="local col7 decl" id="47transform_tables" title='transform_tables' data-type='const TransformTables *' data-ref="47transform_tables" data-ref-filename="47transform_tables">transform_tables</dfn>,</td></tr>
+<tr><th id="150">150</th><td>                          <em>float</em>* <dfn class="local col8 decl" id="48in" title='in' data-type='float *' data-ref="48in" data-ref-filename="48in">in</dfn>,</td></tr>
+<tr><th id="151">151</th><td>                          <a class="typedef" href="structs.h.html#ISACUBEncStruct" title='ISACUBEncStruct' data-type='struct ISACUBEncStruct' data-ref="ISACUBEncStruct" data-ref-filename="ISACUBEncStruct">ISACUBEncStruct</a>* <dfn class="local col9 decl" id="49ISACenc_obj" title='ISACenc_obj' data-type='ISACUBEncStruct *' data-ref="49ISACenc_obj" data-ref-filename="49ISACenc_obj">ISACenc_obj</dfn>,</td></tr>
+<tr><th id="152">152</th><td>                          <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col0 decl" id="50jitterInfo" title='jitterInfo' data-type='int32_t' data-ref="50jitterInfo" data-ref-filename="50jitterInfo">jitterInfo</dfn>);</td></tr>
+<tr><th id="153">153</th><td></td></tr>
+<tr><th id="154">154</th><td><i>/******************************************************************************</i></td></tr>
+<tr><th id="155">155</th><td><i> * WebRtcIsac_EncodeUb12()</i></td></tr>
+<tr><th id="156">156</th><td><i> *</i></td></tr>
+<tr><th id="157">157</th><td><i> * Encode the upper-band if the codec is in 0-12 kHz mode.</i></td></tr>
+<tr><th id="158">158</th><td><i> *</i></td></tr>
+<tr><th id="159">159</th><td><i> * Input:</i></td></tr>
+<tr><th id="160">160</th><td><i> *       -in                 : upper-band audio, 160 samples (10 ms).</i></td></tr>
+<tr><th id="161">161</th><td><i> *</i></td></tr>
+<tr><th id="162">162</th><td><i> * Input/Output:</i></td></tr>
+<tr><th id="163">163</th><td><i> *       -ISACdec_obj        : pointer to the upper-band encoder object. The</i></td></tr>
+<tr><th id="164">164</th><td><i> *                             bit-stream is stored inside the encoder object.</i></td></tr>
+<tr><th id="165">165</th><td><i> *</i></td></tr>
+<tr><th id="166">166</th><td><i> * Return value              : &gt;0 number of encoded bytes.</i></td></tr>
+<tr><th id="167">167</th><td><i> *                             &lt;0 if an error occurred.</i></td></tr>
+<tr><th id="168">168</th><td><i> */</i></td></tr>
+<tr><th id="169">169</th><td><em>int</em> <dfn class="decl fn" id="WebRtcIsac_EncodeUb12" title='WebRtcIsac_EncodeUb12' data-ref="WebRtcIsac_EncodeUb12" data-ref-filename="WebRtcIsac_EncodeUb12">WebRtcIsac_EncodeUb12</dfn>(<em>const</em> <a class="typedef" href="structs.h.html#TransformTables" title='TransformTables' data-type='struct TransformTables' data-ref="TransformTables" data-ref-filename="TransformTables">TransformTables</a>* <dfn class="local col1 decl" id="51transform_tables" title='transform_tables' data-type='const TransformTables *' data-ref="51transform_tables" data-ref-filename="51transform_tables">transform_tables</dfn>,</td></tr>
+<tr><th id="170">170</th><td>                          <em>float</em>* <dfn class="local col2 decl" id="52in" title='in' data-type='float *' data-ref="52in" data-ref-filename="52in">in</dfn>,</td></tr>
+<tr><th id="171">171</th><td>                          <a class="typedef" href="structs.h.html#ISACUBEncStruct" title='ISACUBEncStruct' data-type='struct ISACUBEncStruct' data-ref="ISACUBEncStruct" data-ref-filename="ISACUBEncStruct">ISACUBEncStruct</a>* <dfn class="local col3 decl" id="53ISACenc_obj" title='ISACenc_obj' data-type='ISACUBEncStruct *' data-ref="53ISACenc_obj" data-ref-filename="53ISACenc_obj">ISACenc_obj</dfn>,</td></tr>
+<tr><th id="172">172</th><td>                          <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col4 decl" id="54jitterInfo" title='jitterInfo' data-type='int32_t' data-ref="54jitterInfo" data-ref-filename="54jitterInfo">jitterInfo</dfn>);</td></tr>
+<tr><th id="173">173</th><td></td></tr>
+<tr><th id="174">174</th><td><i>/************************** initialization functions *************************/</i></td></tr>
+<tr><th id="175">175</th><td></td></tr>
+<tr><th id="176">176</th><td><em>void</em> <dfn class="decl fn" id="WebRtcIsac_InitMasking" title='WebRtcIsac_InitMasking' data-ref="WebRtcIsac_InitMasking" data-ref-filename="WebRtcIsac_InitMasking">WebRtcIsac_InitMasking</dfn>(<a class="typedef" href="structs.h.html#MaskFiltstr" title='MaskFiltstr' data-type='struct MaskFiltstr' data-ref="MaskFiltstr" data-ref-filename="MaskFiltstr">MaskFiltstr</a>* <dfn class="local col5 decl" id="55maskdata" title='maskdata' data-type='MaskFiltstr *' data-ref="55maskdata" data-ref-filename="55maskdata">maskdata</dfn>);</td></tr>
+<tr><th id="177">177</th><td></td></tr>
+<tr><th id="178">178</th><td><em>void</em> <dfn class="decl fn" id="WebRtcIsac_InitPostFilterbank" title='WebRtcIsac_InitPostFilterbank' data-ref="WebRtcIsac_InitPostFilterbank" data-ref-filename="WebRtcIsac_InitPostFilterbank">WebRtcIsac_InitPostFilterbank</dfn>(<a class="typedef" href="structs.h.html#PostFiltBankstr" title='PostFiltBankstr' data-type='struct PostFiltBankstr' data-ref="PostFiltBankstr" data-ref-filename="PostFiltBankstr">PostFiltBankstr</a>* <dfn class="local col6 decl" id="56postfiltdata" title='postfiltdata' data-type='PostFiltBankstr *' data-ref="56postfiltdata" data-ref-filename="56postfiltdata">postfiltdata</dfn>);</td></tr>
+<tr><th id="179">179</th><td></td></tr>
+<tr><th id="180">180</th><td><i>/**************************** transform functions ****************************/</i></td></tr>
+<tr><th id="181">181</th><td></td></tr>
+<tr><th id="182">182</th><td><em>void</em> <dfn class="decl fn" id="WebRtcIsac_InitTransform" title='WebRtcIsac_InitTransform' data-ref="WebRtcIsac_InitTransform" data-ref-filename="WebRtcIsac_InitTransform">WebRtcIsac_InitTransform</dfn>(<a class="typedef" href="structs.h.html#TransformTables" title='TransformTables' data-type='struct TransformTables' data-ref="TransformTables" data-ref-filename="TransformTables">TransformTables</a>* <dfn class="local col7 decl" id="57tables" title='tables' data-type='TransformTables *' data-ref="57tables" data-ref-filename="57tables">tables</dfn>);</td></tr>
+<tr><th id="183">183</th><td></td></tr>
+<tr><th id="184">184</th><td><em>void</em> <dfn class="decl fn" id="WebRtcIsac_Time2Spec" title='WebRtcIsac_Time2Spec' data-ref="WebRtcIsac_Time2Spec" data-ref-filename="WebRtcIsac_Time2Spec">WebRtcIsac_Time2Spec</dfn>(<em>const</em> <a class="typedef" href="structs.h.html#TransformTables" title='TransformTables' data-type='struct TransformTables' data-ref="TransformTables" data-ref-filename="TransformTables">TransformTables</a>* <dfn class="local col8 decl" id="58tables" title='tables' data-type='const TransformTables *' data-ref="58tables" data-ref-filename="58tables">tables</dfn>,</td></tr>
+<tr><th id="185">185</th><td>                          <em>double</em>* <dfn class="local col9 decl" id="59inre1" title='inre1' data-type='double *' data-ref="59inre1" data-ref-filename="59inre1">inre1</dfn>,</td></tr>
+<tr><th id="186">186</th><td>                          <em>double</em>* <dfn class="local col0 decl" id="60inre2" title='inre2' data-type='double *' data-ref="60inre2" data-ref-filename="60inre2">inre2</dfn>,</td></tr>
+<tr><th id="187">187</th><td>                          <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col1 decl" id="61outre" title='outre' data-type='int16_t *' data-ref="61outre" data-ref-filename="61outre">outre</dfn>,</td></tr>
+<tr><th id="188">188</th><td>                          <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col2 decl" id="62outim" title='outim' data-type='int16_t *' data-ref="62outim" data-ref-filename="62outim">outim</dfn>,</td></tr>
+<tr><th id="189">189</th><td>                          <a class="typedef" href="../../../../../third_party/fft/fft.h.html#FFTstr" title='FFTstr' data-type='struct FFTstr' data-ref="FFTstr" data-ref-filename="FFTstr">FFTstr</a>* <dfn class="local col3 decl" id="63fftstr_obj" title='fftstr_obj' data-type='FFTstr *' data-ref="63fftstr_obj" data-ref-filename="63fftstr_obj">fftstr_obj</dfn>);</td></tr>
+<tr><th id="190">190</th><td></td></tr>
+<tr><th id="191">191</th><td><em>void</em> <dfn class="decl fn" id="WebRtcIsac_Spec2time" title='WebRtcIsac_Spec2time' data-ref="WebRtcIsac_Spec2time" data-ref-filename="WebRtcIsac_Spec2time">WebRtcIsac_Spec2time</dfn>(<em>const</em> <a class="typedef" href="structs.h.html#TransformTables" title='TransformTables' data-type='struct TransformTables' data-ref="TransformTables" data-ref-filename="TransformTables">TransformTables</a>* <dfn class="local col4 decl" id="64tables" title='tables' data-type='const TransformTables *' data-ref="64tables" data-ref-filename="64tables">tables</dfn>,</td></tr>
+<tr><th id="192">192</th><td>                          <em>double</em>* <dfn class="local col5 decl" id="65inre" title='inre' data-type='double *' data-ref="65inre" data-ref-filename="65inre">inre</dfn>,</td></tr>
+<tr><th id="193">193</th><td>                          <em>double</em>* <dfn class="local col6 decl" id="66inim" title='inim' data-type='double *' data-ref="66inim" data-ref-filename="66inim">inim</dfn>,</td></tr>
+<tr><th id="194">194</th><td>                          <em>double</em>* <dfn class="local col7 decl" id="67outre1" title='outre1' data-type='double *' data-ref="67outre1" data-ref-filename="67outre1">outre1</dfn>,</td></tr>
+<tr><th id="195">195</th><td>                          <em>double</em>* <dfn class="local col8 decl" id="68outre2" title='outre2' data-type='double *' data-ref="68outre2" data-ref-filename="68outre2">outre2</dfn>,</td></tr>
+<tr><th id="196">196</th><td>                          <a class="typedef" href="../../../../../third_party/fft/fft.h.html#FFTstr" title='FFTstr' data-type='struct FFTstr' data-ref="FFTstr" data-ref-filename="FFTstr">FFTstr</a>* <dfn class="local col9 decl" id="69fftstr_obj" title='fftstr_obj' data-type='FFTstr *' data-ref="69fftstr_obj" data-ref-filename="69fftstr_obj">fftstr_obj</dfn>);</td></tr>
+<tr><th id="197">197</th><td></td></tr>
+<tr><th id="198">198</th><td><i>/***************************** filterbank functions **************************/</i></td></tr>
+<tr><th id="199">199</th><td></td></tr>
+<tr><th id="200">200</th><td><em>void</em> <dfn class="decl fn" id="WebRtcIsac_FilterAndCombineFloat" title='WebRtcIsac_FilterAndCombineFloat' data-ref="WebRtcIsac_FilterAndCombineFloat" data-ref-filename="WebRtcIsac_FilterAndCombineFloat">WebRtcIsac_FilterAndCombineFloat</dfn>(<em>float</em>* <dfn class="local col0 decl" id="70InLP" title='InLP' data-type='float *' data-ref="70InLP" data-ref-filename="70InLP">InLP</dfn>,</td></tr>
+<tr><th id="201">201</th><td>                                      <em>float</em>* <dfn class="local col1 decl" id="71InHP" title='InHP' data-type='float *' data-ref="71InHP" data-ref-filename="71InHP">InHP</dfn>,</td></tr>
+<tr><th id="202">202</th><td>                                      <em>float</em>* <dfn class="local col2 decl" id="72Out" title='Out' data-type='float *' data-ref="72Out" data-ref-filename="72Out">Out</dfn>,</td></tr>
+<tr><th id="203">203</th><td>                                      <a class="typedef" href="structs.h.html#PostFiltBankstr" title='PostFiltBankstr' data-type='struct PostFiltBankstr' data-ref="PostFiltBankstr" data-ref-filename="PostFiltBankstr">PostFiltBankstr</a>* <dfn class="local col3 decl" id="73postfiltdata" title='postfiltdata' data-type='PostFiltBankstr *' data-ref="73postfiltdata" data-ref-filename="73postfiltdata">postfiltdata</dfn>);</td></tr>
+<tr><th id="204">204</th><td></td></tr>
+<tr><th id="205">205</th><td><i>/************************* normalized lattice filters ************************/</i></td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td><em>void</em> <dfn class="decl fn" id="WebRtcIsac_NormLatticeFilterMa" title='WebRtcIsac_NormLatticeFilterMa' data-ref="WebRtcIsac_NormLatticeFilterMa" data-ref-filename="WebRtcIsac_NormLatticeFilterMa">WebRtcIsac_NormLatticeFilterMa</dfn>(<em>int</em> <dfn class="local col4 decl" id="74orderCoef" title='orderCoef' data-type='int' data-ref="74orderCoef" data-ref-filename="74orderCoef">orderCoef</dfn>,</td></tr>
+<tr><th id="208">208</th><td>                                    <em>float</em>* <dfn class="local col5 decl" id="75stateF" title='stateF' data-type='float *' data-ref="75stateF" data-ref-filename="75stateF">stateF</dfn>,</td></tr>
+<tr><th id="209">209</th><td>                                    <em>float</em>* <dfn class="local col6 decl" id="76stateG" title='stateG' data-type='float *' data-ref="76stateG" data-ref-filename="76stateG">stateG</dfn>,</td></tr>
+<tr><th id="210">210</th><td>                                    <em>float</em>* <dfn class="local col7 decl" id="77lat_in" title='lat_in' data-type='float *' data-ref="77lat_in" data-ref-filename="77lat_in">lat_in</dfn>,</td></tr>
+<tr><th id="211">211</th><td>                                    <em>double</em>* <dfn class="local col8 decl" id="78filtcoeflo" title='filtcoeflo' data-type='double *' data-ref="78filtcoeflo" data-ref-filename="78filtcoeflo">filtcoeflo</dfn>,</td></tr>
+<tr><th id="212">212</th><td>                                    <em>double</em>* <dfn class="local col9 decl" id="79lat_out" title='lat_out' data-type='double *' data-ref="79lat_out" data-ref-filename="79lat_out">lat_out</dfn>);</td></tr>
+<tr><th id="213">213</th><td></td></tr>
+<tr><th id="214">214</th><td><em>void</em> <dfn class="decl fn" id="WebRtcIsac_NormLatticeFilterAr" title='WebRtcIsac_NormLatticeFilterAr' data-ref="WebRtcIsac_NormLatticeFilterAr" data-ref-filename="WebRtcIsac_NormLatticeFilterAr">WebRtcIsac_NormLatticeFilterAr</dfn>(<em>int</em> <dfn class="local col0 decl" id="80orderCoef" title='orderCoef' data-type='int' data-ref="80orderCoef" data-ref-filename="80orderCoef">orderCoef</dfn>,</td></tr>
+<tr><th id="215">215</th><td>                                    <em>float</em>* <dfn class="local col1 decl" id="81stateF" title='stateF' data-type='float *' data-ref="81stateF" data-ref-filename="81stateF">stateF</dfn>,</td></tr>
+<tr><th id="216">216</th><td>                                    <em>float</em>* <dfn class="local col2 decl" id="82stateG" title='stateG' data-type='float *' data-ref="82stateG" data-ref-filename="82stateG">stateG</dfn>,</td></tr>
+<tr><th id="217">217</th><td>                                    <em>double</em>* <dfn class="local col3 decl" id="83lat_in" title='lat_in' data-type='double *' data-ref="83lat_in" data-ref-filename="83lat_in">lat_in</dfn>,</td></tr>
+<tr><th id="218">218</th><td>                                    <em>double</em>* <dfn class="local col4 decl" id="84lo_filt_coef" title='lo_filt_coef' data-type='double *' data-ref="84lo_filt_coef" data-ref-filename="84lo_filt_coef">lo_filt_coef</dfn>,</td></tr>
+<tr><th id="219">219</th><td>                                    <em>float</em>* <dfn class="local col5 decl" id="85lat_out" title='lat_out' data-type='float *' data-ref="85lat_out" data-ref-filename="85lat_out">lat_out</dfn>);</td></tr>
+<tr><th id="220">220</th><td></td></tr>
+<tr><th id="221">221</th><td><em>void</em> <dfn class="decl fn" id="WebRtcIsac_Dir2Lat" title='WebRtcIsac_Dir2Lat' data-ref="WebRtcIsac_Dir2Lat" data-ref-filename="WebRtcIsac_Dir2Lat">WebRtcIsac_Dir2Lat</dfn>(<em>double</em>* <dfn class="local col6 decl" id="86a" title='a' data-type='double *' data-ref="86a" data-ref-filename="86a">a</dfn>, <em>int</em> <dfn class="local col7 decl" id="87orderCoef" title='orderCoef' data-type='int' data-ref="87orderCoef" data-ref-filename="87orderCoef">orderCoef</dfn>, <em>float</em>* <dfn class="local col8 decl" id="88sth" title='sth' data-type='float *' data-ref="88sth" data-ref-filename="88sth">sth</dfn>, <em>float</em>* <dfn class="local col9 decl" id="89cth" title='cth' data-type='float *' data-ref="89cth" data-ref-filename="89cth">cth</dfn>);</td></tr>
+<tr><th id="222">222</th><td></td></tr>
+<tr><th id="223">223</th><td><u>#<span data-ppcond="19">endif</span> /* MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_CODEC_H_ */</u></td></tr>
+<tr><th id="224">224</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='decode.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/decode.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

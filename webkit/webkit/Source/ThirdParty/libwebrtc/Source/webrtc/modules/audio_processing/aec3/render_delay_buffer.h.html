@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>render_delay_buffer.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/aec3/render_delay_buffer.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::RenderDelayBuffer "/>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/aec3/render_delay_buffer.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>audio_processing</a>/<a href='./'>aec3</a>/<a href='render_delay_buffer.h.html'>render_delay_buffer.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2017 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/MODULES_AUDIO_PROCESSING_AEC3_RENDER_DELAY_BUFFER_H_">MODULES_AUDIO_PROCESSING_AEC3_RENDER_DELAY_BUFFER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/MODULES_AUDIO_PROCESSING_AEC3_RENDER_DELAY_BUFFER_H_" data-ref="_M/MODULES_AUDIO_PROCESSING_AEC3_RENDER_DELAY_BUFFER_H_">MODULES_AUDIO_PROCESSING_AEC3_RENDER_DELAY_BUFFER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include &lt;vector&gt;</u></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../../../api/audio/echo_canceller3_config.h.html">"api/audio/echo_canceller3_config.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="downsampled_render_buffer.h.html">"modules/audio_processing/aec3/downsampled_render_buffer.h"</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="render_buffer.h.html">"modules/audio_processing/aec3/render_buffer.h"</a></u></td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><i>// Class for buffering the incoming render blocks such that these may be</i></td></tr>
+<tr><th id="25">25</th><td><i>// extracted with a specified delay.</i></td></tr>
+<tr><th id="26">26</th><td><b>class</b> <dfn class="type def" id="webrtc::RenderDelayBuffer" title='webrtc::RenderDelayBuffer' data-ref="webrtc::RenderDelayBuffer" data-ref-filename="webrtc..RenderDelayBuffer">RenderDelayBuffer</dfn> {</td></tr>
+<tr><th id="27">27</th><td> <b>public</b>:</td></tr>
+<tr><th id="28">28</th><td>  <b>enum</b> <b>class</b> <dfn class="type def" id="webrtc::RenderDelayBuffer::BufferingEvent" title='webrtc::RenderDelayBuffer::BufferingEvent' data-ref="webrtc::RenderDelayBuffer::BufferingEvent" data-ref-filename="webrtc..RenderDelayBuffer..BufferingEvent">BufferingEvent</dfn> {</td></tr>
+<tr><th id="29">29</th><td>    <dfn class="enum" id="webrtc::RenderDelayBuffer::BufferingEvent::kNone" title='webrtc::RenderDelayBuffer::BufferingEvent::kNone' data-ref="webrtc::RenderDelayBuffer::BufferingEvent::kNone" data-ref-filename="webrtc..RenderDelayBuffer..BufferingEvent..kNone">kNone</dfn>,</td></tr>
+<tr><th id="30">30</th><td>    <dfn class="enum" id="webrtc::RenderDelayBuffer::BufferingEvent::kRenderUnderrun" title='webrtc::RenderDelayBuffer::BufferingEvent::kRenderUnderrun' data-ref="webrtc::RenderDelayBuffer::BufferingEvent::kRenderUnderrun" data-ref-filename="webrtc..RenderDelayBuffer..BufferingEvent..kRenderUnderrun">kRenderUnderrun</dfn>,</td></tr>
+<tr><th id="31">31</th><td>    <dfn class="enum" id="webrtc::RenderDelayBuffer::BufferingEvent::kRenderOverrun" title='webrtc::RenderDelayBuffer::BufferingEvent::kRenderOverrun' data-ref="webrtc::RenderDelayBuffer::BufferingEvent::kRenderOverrun" data-ref-filename="webrtc..RenderDelayBuffer..BufferingEvent..kRenderOverrun">kRenderOverrun</dfn>,</td></tr>
+<tr><th id="32">32</th><td>    <dfn class="enum" id="webrtc::RenderDelayBuffer::BufferingEvent::kApiCallSkew" title='webrtc::RenderDelayBuffer::BufferingEvent::kApiCallSkew' data-ref="webrtc::RenderDelayBuffer::BufferingEvent::kApiCallSkew" data-ref-filename="webrtc..RenderDelayBuffer..BufferingEvent..kApiCallSkew">kApiCallSkew</dfn></td></tr>
+<tr><th id="33">33</th><td>  };</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td>  <em>static</em> <a class="type" href="#webrtc::RenderDelayBuffer" title='webrtc::RenderDelayBuffer' data-ref="webrtc::RenderDelayBuffer" data-ref-filename="webrtc..RenderDelayBuffer">RenderDelayBuffer</a>* <dfn class="decl fn" id="_ZN6webrtc17RenderDelayBuffer6CreateERKNS_20EchoCanceller3ConfigEim" title='webrtc::RenderDelayBuffer::Create' data-ref="_ZN6webrtc17RenderDelayBuffer6CreateERKNS_20EchoCanceller3ConfigEim" data-ref-filename="_ZN6webrtc17RenderDelayBuffer6CreateERKNS_20EchoCanceller3ConfigEim">Create</dfn>(<em>const</em> <a class="type" href="../../../api/audio/echo_canceller3_config.h.html#webrtc::EchoCanceller3Config" title='webrtc::EchoCanceller3Config' data-ref="webrtc::EchoCanceller3Config" data-ref-filename="webrtc..EchoCanceller3Config">EchoCanceller3Config</a>&amp; <dfn class="local col8 decl" id="388config" title='config' data-type='const webrtc::EchoCanceller3Config &amp;' data-ref="388config" data-ref-filename="388config">config</dfn>,</td></tr>
+<tr><th id="36">36</th><td>                                   <em>int</em> <dfn class="local col9 decl" id="389sample_rate_hz" title='sample_rate_hz' data-type='int' data-ref="389sample_rate_hz" data-ref-filename="389sample_rate_hz">sample_rate_hz</dfn>,</td></tr>
+<tr><th id="37">37</th><td>                                   <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="390num_render_channels" title='num_render_channels' data-type='size_t' data-ref="390num_render_channels" data-ref-filename="390num_render_channels">num_render_channels</dfn>);</td></tr>
+<tr><th id="38">38</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc17RenderDelayBufferD1Ev" title='webrtc::RenderDelayBuffer::~RenderDelayBuffer' data-ref="_ZN6webrtc17RenderDelayBufferD1Ev" data-ref-filename="_ZN6webrtc17RenderDelayBufferD1Ev">~RenderDelayBuffer</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td>  <i>// Resets the buffer alignment.</i></td></tr>
+<tr><th id="41">41</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc17RenderDelayBuffer5ResetEv" title='webrtc::RenderDelayBuffer::Reset' data-ref="_ZN6webrtc17RenderDelayBuffer5ResetEv" data-ref-filename="_ZN6webrtc17RenderDelayBuffer5ResetEv">Reset</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td>  <i>// Inserts a block into the buffer.</i></td></tr>
+<tr><th id="44">44</th><td>  <b>virtual</b> <a class="type" href="#webrtc::RenderDelayBuffer::BufferingEvent" title='webrtc::RenderDelayBuffer::BufferingEvent' data-ref="webrtc::RenderDelayBuffer::BufferingEvent" data-ref-filename="webrtc..RenderDelayBuffer..BufferingEvent">BufferingEvent</a> <dfn class="virtual decl fn" id="_ZN6webrtc17RenderDelayBuffer6InsertERKNSt3__16vectorINS2_INS2_IfNS1_9allocatorIfEEEENS3_IS5_EEEENS3_IS7_EEEE" title='webrtc::RenderDelayBuffer::Insert' data-ref="_ZN6webrtc17RenderDelayBuffer6InsertERKNSt3__16vectorINS2_INS2_IfNS1_9allocatorIfEEEENS3_IS5_EEEENS3_IS7_EEEE" data-ref-filename="_ZN6webrtc17RenderDelayBuffer6InsertERKNSt3__16vectorINS2_INS2_IfNS1_9allocatorIfEEEENS3_IS5_EEEENS3_IS7_EEEE">Insert</dfn>(</td></tr>
+<tr><th id="45">45</th><td>      <em>const</em> <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<em>float</em>&gt;&gt;&gt;&amp; <dfn class="local col1 decl" id="391block" title='block' data-type='const std::vector&lt;std::vector&lt;std::vector&lt;float&gt;&gt;&gt; &amp;' data-ref="391block" data-ref-filename="391block">block</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td>  <i>// Updates the buffers one step based on the specified buffer delay. Returns</i></td></tr>
+<tr><th id="48">48</th><td><i>  // an enum indicating whether there was a special event that occurred.</i></td></tr>
+<tr><th id="49">49</th><td>  <b>virtual</b> <a class="type" href="#webrtc::RenderDelayBuffer::BufferingEvent" title='webrtc::RenderDelayBuffer::BufferingEvent' data-ref="webrtc::RenderDelayBuffer::BufferingEvent" data-ref-filename="webrtc..RenderDelayBuffer..BufferingEvent">BufferingEvent</a> <dfn class="virtual decl fn" id="_ZN6webrtc17RenderDelayBuffer24PrepareCaptureProcessingEv" title='webrtc::RenderDelayBuffer::PrepareCaptureProcessing' data-ref="_ZN6webrtc17RenderDelayBuffer24PrepareCaptureProcessingEv" data-ref-filename="_ZN6webrtc17RenderDelayBuffer24PrepareCaptureProcessingEv">PrepareCaptureProcessing</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td>  <i>// Called on capture blocks where PrepareCaptureProcessing is not called.</i></td></tr>
+<tr><th id="52">52</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc17RenderDelayBuffer30HandleSkippedCaptureProcessingEv" title='webrtc::RenderDelayBuffer::HandleSkippedCaptureProcessing' data-ref="_ZN6webrtc17RenderDelayBuffer30HandleSkippedCaptureProcessingEv" data-ref-filename="_ZN6webrtc17RenderDelayBuffer30HandleSkippedCaptureProcessingEv">HandleSkippedCaptureProcessing</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td>  <i>// Sets the buffer delay and returns a bool indicating whether the delay</i></td></tr>
+<tr><th id="55">55</th><td><i>  // changed.</i></td></tr>
+<tr><th id="56">56</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZN6webrtc17RenderDelayBuffer14AlignFromDelayEm" title='webrtc::RenderDelayBuffer::AlignFromDelay' data-ref="_ZN6webrtc17RenderDelayBuffer14AlignFromDelayEm" data-ref-filename="_ZN6webrtc17RenderDelayBuffer14AlignFromDelayEm">AlignFromDelay</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="392delay" title='delay' data-type='size_t' data-ref="392delay" data-ref-filename="392delay">delay</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>  <i>// Sets the buffer delay from the most recently reported external delay.</i></td></tr>
+<tr><th id="59">59</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc17RenderDelayBuffer22AlignFromExternalDelayEv" title='webrtc::RenderDelayBuffer::AlignFromExternalDelay' data-ref="_ZN6webrtc17RenderDelayBuffer22AlignFromExternalDelayEv" data-ref-filename="_ZN6webrtc17RenderDelayBuffer22AlignFromExternalDelayEv">AlignFromExternalDelay</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td>  <i>// Gets the buffer delay.</i></td></tr>
+<tr><th id="62">62</th><td>  <b>virtual</b> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="virtual decl fn" id="_ZNK6webrtc17RenderDelayBuffer5DelayEv" title='webrtc::RenderDelayBuffer::Delay' data-ref="_ZNK6webrtc17RenderDelayBuffer5DelayEv" data-ref-filename="_ZNK6webrtc17RenderDelayBuffer5DelayEv">Delay</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td>  <i>// Gets the buffer delay.</i></td></tr>
+<tr><th id="65">65</th><td>  <b>virtual</b> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="virtual decl fn" id="_ZNK6webrtc17RenderDelayBuffer8MaxDelayEv" title='webrtc::RenderDelayBuffer::MaxDelay' data-ref="_ZNK6webrtc17RenderDelayBuffer8MaxDelayEv" data-ref-filename="_ZNK6webrtc17RenderDelayBuffer8MaxDelayEv">MaxDelay</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td>  <i>// Returns the render buffer for the echo remover.</i></td></tr>
+<tr><th id="68">68</th><td>  <b>virtual</b> <a class="type" href="render_buffer.h.html#webrtc::RenderBuffer" title='webrtc::RenderBuffer' data-ref="webrtc::RenderBuffer" data-ref-filename="webrtc..RenderBuffer">RenderBuffer</a>* <dfn class="virtual decl fn" id="_ZN6webrtc17RenderDelayBuffer15GetRenderBufferEv" title='webrtc::RenderDelayBuffer::GetRenderBuffer' data-ref="_ZN6webrtc17RenderDelayBuffer15GetRenderBufferEv" data-ref-filename="_ZN6webrtc17RenderDelayBuffer15GetRenderBufferEv">GetRenderBuffer</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td>  <i>// Returns the downsampled render buffer.</i></td></tr>
+<tr><th id="71">71</th><td>  <b>virtual</b> <em>const</em> <a class="type" href="downsampled_render_buffer.h.html#webrtc::DownsampledRenderBuffer" title='webrtc::DownsampledRenderBuffer' data-ref="webrtc::DownsampledRenderBuffer" data-ref-filename="webrtc..DownsampledRenderBuffer">DownsampledRenderBuffer</a>&amp; <dfn class="virtual decl fn" id="_ZNK6webrtc17RenderDelayBuffer26GetDownsampledRenderBufferEv" title='webrtc::RenderDelayBuffer::GetDownsampledRenderBuffer' data-ref="_ZNK6webrtc17RenderDelayBuffer26GetDownsampledRenderBufferEv" data-ref-filename="_ZNK6webrtc17RenderDelayBuffer26GetDownsampledRenderBufferEv">GetDownsampledRenderBuffer</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td>  <i>// Returns the maximum non calusal offset that can occur in the delay buffer.</i></td></tr>
+<tr><th id="74">74</th><td>  <em>static</em> <em>int</em> <dfn class="decl fn" id="_ZN6webrtc17RenderDelayBuffer20DelayEstimatorOffsetERKNS_20EchoCanceller3ConfigE" title='webrtc::RenderDelayBuffer::DelayEstimatorOffset' data-ref="_ZN6webrtc17RenderDelayBuffer20DelayEstimatorOffsetERKNS_20EchoCanceller3ConfigE" data-ref-filename="_ZN6webrtc17RenderDelayBuffer20DelayEstimatorOffsetERKNS_20EchoCanceller3ConfigE">DelayEstimatorOffset</dfn>(<em>const</em> <a class="type" href="../../../api/audio/echo_canceller3_config.h.html#webrtc::EchoCanceller3Config" title='webrtc::EchoCanceller3Config' data-ref="webrtc::EchoCanceller3Config" data-ref-filename="webrtc..EchoCanceller3Config">EchoCanceller3Config</a>&amp; <dfn class="local col3 decl" id="393config" title='config' data-type='const webrtc::EchoCanceller3Config &amp;' data-ref="393config" data-ref-filename="393config">config</dfn>);</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td>  <i>// Provides an optional external estimate of the audio buffer delay.</i></td></tr>
+<tr><th id="77">77</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc17RenderDelayBuffer19SetAudioBufferDelayEi" title='webrtc::RenderDelayBuffer::SetAudioBufferDelay' data-ref="_ZN6webrtc17RenderDelayBuffer19SetAudioBufferDelayEi" data-ref-filename="_ZN6webrtc17RenderDelayBuffer19SetAudioBufferDelayEi">SetAudioBufferDelay</dfn>(<em>int</em> <dfn class="local col4 decl" id="394delay_ms" title='delay_ms' data-type='int' data-ref="394delay_ms" data-ref-filename="394delay_ms">delay_ms</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td>  <i>// Returns whether an external delay estimate has been reported via</i></td></tr>
+<tr><th id="80">80</th><td><i>  // SetAudioBufferDelay.</i></td></tr>
+<tr><th id="81">81</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZN6webrtc17RenderDelayBuffer22HasReceivedBufferDelayEv" title='webrtc::RenderDelayBuffer::HasReceivedBufferDelay' data-ref="_ZN6webrtc17RenderDelayBuffer22HasReceivedBufferDelayEv" data-ref-filename="_ZN6webrtc17RenderDelayBuffer22HasReceivedBufferDelayEv">HasReceivedBufferDelay</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="82">82</th><td>};</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td><u>#<span data-ppcond="11">endif</span>  // MODULES_AUDIO_PROCESSING_AEC3_RENDER_DELAY_BUFFER_H_</u></td></tr>
+<tr><th id="87">87</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../api/audio/echo_canceller3_factory.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/audio/echo_canceller3_factory.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

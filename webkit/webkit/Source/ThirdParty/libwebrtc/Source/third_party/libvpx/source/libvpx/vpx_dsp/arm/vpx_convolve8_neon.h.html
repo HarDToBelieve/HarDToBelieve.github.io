@@ -1,0 +1,156 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>vpx_convolve8_neon.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_dsp/arm/vpx_convolve8_neon.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_dsp/arm/vpx_convolve8_neon.h'; var root_path = '../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../..'>Source</a>/<a href='../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../..'>libwebrtc</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>third_party</a>/<a href='../../../..'>libvpx</a>/<a href='../../..'>source</a>/<a href='../..'>libvpx</a>/<a href='..'>vpx_dsp</a>/<a href='./'>arm</a>/<a href='vpx_convolve8_neon.h.html'>vpx_convolve8_neon.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2014 The WebM project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/VPX_VPX_DSP_ARM_VPX_CONVOLVE8_NEON_H_">VPX_VPX_DSP_ARM_VPX_CONVOLVE8_NEON_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/VPX_VPX_DSP_ARM_VPX_CONVOLVE8_NEON_H_" data-ref="_M/VPX_VPX_DSP_ARM_VPX_CONVOLVE8_NEON_H_">VPX_VPX_DSP_ARM_VPX_CONVOLVE8_NEON_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include <span class='error' title="&apos;arm_neon.h&apos; file not found">&lt;</span>arm_neon.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="../../../config/ios/arm64/vpx_config.h.html">"./vpx_config.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../../../config/ios/arm64/vpx_dsp_rtcd.h.html">"./vpx_dsp_rtcd.h"</a></u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><em>static</em> <a class="macro" href="../../../config/ios/arm64/vpx_config.h.html#12" title="inline" data-ref="_M/INLINE">INLINE</a> <em>void</em> <dfn class="decl def fn" id="load_u8_8x4" title='load_u8_8x4' data-ref="load_u8_8x4" data-ref-filename="load_u8_8x4">load_u8_8x4</dfn>(<em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col1 decl" id="1s" title='s' data-type='const uint8_t *' data-ref="1s" data-ref-filename="1s">s</dfn>, <em>const</em> <span class='typedef' title='ptrdiff_t' data-type='long' data-ref="ptrdiff_t" data-ref-filename="ptrdiff_t">ptrdiff_t</span> <dfn class="local col2 decl" id="2p" title='p' data-type='const ptrdiff_t' data-ref="2p" data-ref-filename="2p">p</dfn>,</td></tr>
+<tr><th id="20">20</th><td>                               uint8x8_t *<em>const</em> <dfn class="local col3 decl" id="3s0" title='s0' data-type='int *const' data-ref="3s0" data-ref-filename="3s0">s0</dfn>, uint8x8_t *<em>const</em> <dfn class="local col4 decl" id="4s1" title='s1' data-type='int *const' data-ref="4s1" data-ref-filename="4s1">s1</dfn>,</td></tr>
+<tr><th id="21">21</th><td>                               uint8x8_t *<em>const</em> <dfn class="local col5 decl" id="5s2" title='s2' data-type='int *const' data-ref="5s2" data-ref-filename="5s2">s2</dfn>, uint8x8_t *<em>const</em> <dfn class="local col6 decl" id="6s3" title='s3' data-type='int *const' data-ref="6s3" data-ref-filename="6s3">s3</dfn>) {</td></tr>
+<tr><th id="22">22</th><td>  *s0 = vld1_u8(s);</td></tr>
+<tr><th id="23">23</th><td>  <a class="local col1 ref" href="#1s" title='s' data-ref="1s" data-ref-filename="1s">s</a> += <a class="local col2 ref" href="#2p" title='p' data-ref="2p" data-ref-filename="2p">p</a>;</td></tr>
+<tr><th id="24">24</th><td>  *s1 = vld1_u8(s);</td></tr>
+<tr><th id="25">25</th><td>  <a class="local col1 ref" href="#1s" title='s' data-ref="1s" data-ref-filename="1s">s</a> += <a class="local col2 ref" href="#2p" title='p' data-ref="2p" data-ref-filename="2p">p</a>;</td></tr>
+<tr><th id="26">26</th><td>  *s2 = vld1_u8(s);</td></tr>
+<tr><th id="27">27</th><td>  <a class="local col1 ref" href="#1s" title='s' data-ref="1s" data-ref-filename="1s">s</a> += <a class="local col2 ref" href="#2p" title='p' data-ref="2p" data-ref-filename="2p">p</a>;</td></tr>
+<tr><th id="28">28</th><td>  *s3 = vld1_u8(s);</td></tr>
+<tr><th id="29">29</th><td>}</td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><em>static</em> <a class="macro" href="../../../config/ios/arm64/vpx_config.h.html#12" title="inline" data-ref="_M/INLINE">INLINE</a> <em>void</em> <dfn class="decl def fn" id="load_u8_8x8" title='load_u8_8x8' data-ref="load_u8_8x8" data-ref-filename="load_u8_8x8">load_u8_8x8</dfn>(<em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col7 decl" id="7s" title='s' data-type='const uint8_t *' data-ref="7s" data-ref-filename="7s">s</dfn>, <em>const</em> <span class='typedef' title='ptrdiff_t' data-type='long' data-ref="ptrdiff_t" data-ref-filename="ptrdiff_t">ptrdiff_t</span> <dfn class="local col8 decl" id="8p" title='p' data-type='const ptrdiff_t' data-ref="8p" data-ref-filename="8p">p</dfn>,</td></tr>
+<tr><th id="32">32</th><td>                               <span class='error' title="unknown type name &apos;uint8x8_t&apos;">uint8x8_t</span> *<em>const</em> <dfn class="local col9 decl" id="9s0" title='s0' data-type='int *const' data-ref="9s0" data-ref-filename="9s0">s0</dfn>, <span class='error' title="unknown type name &apos;uint8x8_t&apos;">uint8x8_t</span> *<em>const</em> <dfn class="local col0 decl" id="10s1" title='s1' data-type='int *const' data-ref="10s1" data-ref-filename="10s1">s1</dfn>,</td></tr>
+<tr><th id="33">33</th><td>                               <span class='error' title="unknown type name &apos;uint8x8_t&apos;">uint8x8_t</span> *<em>const</em> <dfn class="local col1 decl" id="11s2" title='s2' data-type='int *const' data-ref="11s2" data-ref-filename="11s2">s2</dfn>, <span class='error' title="unknown type name &apos;uint8x8_t&apos;">uint8x8_t</span> *<em>const</em> <dfn class="local col2 decl" id="12s3" title='s3' data-type='int *const' data-ref="12s3" data-ref-filename="12s3">s3</dfn>,</td></tr>
+<tr><th id="34">34</th><td>                               <span class='error' title="unknown type name &apos;uint8x8_t&apos;">uint8x8_t</span> *<em>const</em> <dfn class="local col3 decl" id="13s4" title='s4' data-type='int *const' data-ref="13s4" data-ref-filename="13s4">s4</dfn>, <span class='error' title="unknown type name &apos;uint8x8_t&apos;">uint8x8_t</span> *<em>const</em> <dfn class="local col4 decl" id="14s5" title='s5' data-type='int *const' data-ref="14s5" data-ref-filename="14s5">s5</dfn>,</td></tr>
+<tr><th id="35">35</th><td>                               <span class='error' title="unknown type name &apos;uint8x8_t&apos;">uint8x8_t</span> *<em>const</em> <dfn class="local col5 decl" id="15s6" title='s6' data-type='int *const' data-ref="15s6" data-ref-filename="15s6">s6</dfn>, <span class='error' title="unknown type name &apos;uint8x8_t&apos;">uint8x8_t</span> *<em>const</em> <dfn class="local col6 decl" id="16s7" title='s7' data-type='int *const' data-ref="16s7" data-ref-filename="16s7">s7</dfn>) {</td></tr>
+<tr><th id="36">36</th><td>  *s0 = vld1_u8(s);</td></tr>
+<tr><th id="37">37</th><td>  <a class="local col7 ref" href="#7s" title='s' data-ref="7s" data-ref-filename="7s">s</a> += <a class="local col8 ref" href="#8p" title='p' data-ref="8p" data-ref-filename="8p">p</a>;</td></tr>
+<tr><th id="38">38</th><td>  *s1 = vld1_u8(s);</td></tr>
+<tr><th id="39">39</th><td>  <a class="local col7 ref" href="#7s" title='s' data-ref="7s" data-ref-filename="7s">s</a> += <a class="local col8 ref" href="#8p" title='p' data-ref="8p" data-ref-filename="8p">p</a>;</td></tr>
+<tr><th id="40">40</th><td>  *s2 = vld1_u8(s);</td></tr>
+<tr><th id="41">41</th><td>  <a class="local col7 ref" href="#7s" title='s' data-ref="7s" data-ref-filename="7s">s</a> += <a class="local col8 ref" href="#8p" title='p' data-ref="8p" data-ref-filename="8p">p</a>;</td></tr>
+<tr><th id="42">42</th><td>  *s3 = vld1_u8(s);</td></tr>
+<tr><th id="43">43</th><td>  <a class="local col7 ref" href="#7s" title='s' data-ref="7s" data-ref-filename="7s">s</a> += <a class="local col8 ref" href="#8p" title='p' data-ref="8p" data-ref-filename="8p">p</a>;</td></tr>
+<tr><th id="44">44</th><td>  *s4 = vld1_u8(s);</td></tr>
+<tr><th id="45">45</th><td>  <a class="local col7 ref" href="#7s" title='s' data-ref="7s" data-ref-filename="7s">s</a> += <a class="local col8 ref" href="#8p" title='p' data-ref="8p" data-ref-filename="8p">p</a>;</td></tr>
+<tr><th id="46">46</th><td>  *s5 = vld1_u8(s);</td></tr>
+<tr><th id="47">47</th><td>  <a class="local col7 ref" href="#7s" title='s' data-ref="7s" data-ref-filename="7s">s</a> += <a class="local col8 ref" href="#8p" title='p' data-ref="8p" data-ref-filename="8p">p</a>;</td></tr>
+<tr><th id="48">48</th><td>  *s6 = vld1_u8(s);</td></tr>
+<tr><th id="49">49</th><td>  <a class="local col7 ref" href="#7s" title='s' data-ref="7s" data-ref-filename="7s">s</a> += <a class="local col8 ref" href="#8p" title='p' data-ref="8p" data-ref-filename="8p">p</a>;</td></tr>
+<tr><th id="50">50</th><td>  *s7 = vld1_u8(s);</td></tr>
+<tr><th id="51">51</th><td>}</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td><em>static</em> <a class="macro" href="../../../config/ios/arm64/vpx_config.h.html#12" title="inline" data-ref="_M/INLINE">INLINE</a> <em>void</em> <dfn class="decl def fn" id="load_u8_16x8" title='load_u8_16x8' data-ref="load_u8_16x8" data-ref-filename="load_u8_16x8">load_u8_16x8</dfn>(<em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col7 decl" id="17s" title='s' data-type='const uint8_t *' data-ref="17s" data-ref-filename="17s">s</dfn>, <em>const</em> <span class='typedef' title='ptrdiff_t' data-type='long' data-ref="ptrdiff_t" data-ref-filename="ptrdiff_t">ptrdiff_t</span> <dfn class="local col8 decl" id="18p" title='p' data-type='const ptrdiff_t' data-ref="18p" data-ref-filename="18p">p</dfn>,</td></tr>
+<tr><th id="54">54</th><td>                                <span class='error' title="unknown type name &apos;uint8x16_t&apos;">uint8x16_t</span> *<em>const</em> <dfn class="local col9 decl" id="19s0" title='s0' data-type='int *const' data-ref="19s0" data-ref-filename="19s0">s0</dfn>, <span class='error' title="unknown type name &apos;uint8x16_t&apos;">uint8x16_t</span> *<em>const</em> <dfn class="local col0 decl" id="20s1" title='s1' data-type='int *const' data-ref="20s1" data-ref-filename="20s1">s1</dfn>,</td></tr>
+<tr><th id="55">55</th><td>                                <span class='error' title="unknown type name &apos;uint8x16_t&apos;">uint8x16_t</span> *<em>const</em> <dfn class="local col1 decl" id="21s2" title='s2' data-type='int *const' data-ref="21s2" data-ref-filename="21s2">s2</dfn>, <span class='error' title="unknown type name &apos;uint8x16_t&apos;">uint8x16_t</span> *<em>const</em> <dfn class="local col2 decl" id="22s3" title='s3' data-type='int *const' data-ref="22s3" data-ref-filename="22s3">s3</dfn>,</td></tr>
+<tr><th id="56">56</th><td>                                <span class='error' title="unknown type name &apos;uint8x16_t&apos;">uint8x16_t</span> *<em>const</em> <dfn class="local col3 decl" id="23s4" title='s4' data-type='int *const' data-ref="23s4" data-ref-filename="23s4">s4</dfn>, <span class='error' title="unknown type name &apos;uint8x16_t&apos;">uint8x16_t</span> *<em>const</em> <dfn class="local col4 decl" id="24s5" title='s5' data-type='int *const' data-ref="24s5" data-ref-filename="24s5">s5</dfn>,</td></tr>
+<tr><th id="57">57</th><td>                                <span class='error' title="unknown type name &apos;uint8x16_t&apos;">uint8x16_t</span> *<em>const</em> <dfn class="local col5 decl" id="25s6" title='s6' data-type='int *const' data-ref="25s6" data-ref-filename="25s6">s6</dfn>, <span class='error' title="unknown type name &apos;uint8x16_t&apos;">uint8x16_t</span> *<em>const</em> <dfn class="local col6 decl" id="26s7" title='s7' data-type='int *const' data-ref="26s7" data-ref-filename="26s7">s7</dfn>) {</td></tr>
+<tr><th id="58">58</th><td>  *s0 = vld1q_u8(s);</td></tr>
+<tr><th id="59">59</th><td>  <a class="local col7 ref" href="#17s" title='s' data-ref="17s" data-ref-filename="17s">s</a> += <a class="local col8 ref" href="#18p" title='p' data-ref="18p" data-ref-filename="18p">p</a>;</td></tr>
+<tr><th id="60">60</th><td>  *s1 = vld1q_u8(s);</td></tr>
+<tr><th id="61">61</th><td>  <a class="local col7 ref" href="#17s" title='s' data-ref="17s" data-ref-filename="17s">s</a> += <a class="local col8 ref" href="#18p" title='p' data-ref="18p" data-ref-filename="18p">p</a>;</td></tr>
+<tr><th id="62">62</th><td>  *s2 = vld1q_u8(s);</td></tr>
+<tr><th id="63">63</th><td>  <a class="local col7 ref" href="#17s" title='s' data-ref="17s" data-ref-filename="17s">s</a> += <a class="local col8 ref" href="#18p" title='p' data-ref="18p" data-ref-filename="18p">p</a>;</td></tr>
+<tr><th id="64">64</th><td>  *s3 = vld1q_u8(s);</td></tr>
+<tr><th id="65">65</th><td>  <a class="local col7 ref" href="#17s" title='s' data-ref="17s" data-ref-filename="17s">s</a> += <a class="local col8 ref" href="#18p" title='p' data-ref="18p" data-ref-filename="18p">p</a>;</td></tr>
+<tr><th id="66">66</th><td>  *s4 = vld1q_u8(s);</td></tr>
+<tr><th id="67">67</th><td>  <a class="local col7 ref" href="#17s" title='s' data-ref="17s" data-ref-filename="17s">s</a> += <a class="local col8 ref" href="#18p" title='p' data-ref="18p" data-ref-filename="18p">p</a>;</td></tr>
+<tr><th id="68">68</th><td>  *s5 = vld1q_u8(s);</td></tr>
+<tr><th id="69">69</th><td>  <a class="local col7 ref" href="#17s" title='s' data-ref="17s" data-ref-filename="17s">s</a> += <a class="local col8 ref" href="#18p" title='p' data-ref="18p" data-ref-filename="18p">p</a>;</td></tr>
+<tr><th id="70">70</th><td>  *s6 = vld1q_u8(s);</td></tr>
+<tr><th id="71">71</th><td>  <a class="local col7 ref" href="#17s" title='s' data-ref="17s" data-ref-filename="17s">s</a> += <a class="local col8 ref" href="#18p" title='p' data-ref="18p" data-ref-filename="18p">p</a>;</td></tr>
+<tr><th id="72">72</th><td>  *s7 = vld1q_u8(s);</td></tr>
+<tr><th id="73">73</th><td>}</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td><em>static</em> <a class="macro" href="../../../config/ios/arm64/vpx_config.h.html#12" title="inline" data-ref="_M/INLINE">INLINE</a> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> <dfn class="decl def fn" id="convolve8_4" title='convolve8_4' data-ref="convolve8_4" data-ref-filename="convolve8_4">convolve8_4</dfn>(<em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> s0, <em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> s1,</td></tr>
+<tr><th id="76">76</th><td>                                    <em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> s2, <em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> s3,</td></tr>
+<tr><th id="77">77</th><td>                                    <em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> s4, <em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> s5,</td></tr>
+<tr><th id="78">78</th><td>                                    <em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> s6, <em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> s7,</td></tr>
+<tr><th id="79">79</th><td>                                    <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> filters,</td></tr>
+<tr><th id="80">80</th><td>                                    <em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> filter3,</td></tr>
+<tr><th id="81">81</th><td>                                    <em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> filter4) {</td></tr>
+<tr><th id="82">82</th><td>  <em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> <dfn class="local col7 decl" id="27filters_lo" title='filters_lo' data-type='const int' data-ref="27filters_lo" data-ref-filename="27filters_lo">filters_lo</dfn> = vget_low_s16(filters);</td></tr>
+<tr><th id="83">83</th><td>  <em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> <dfn class="local col8 decl" id="28filters_hi" title='filters_hi' data-type='const int' data-ref="28filters_hi" data-ref-filename="28filters_hi">filters_hi</dfn> = vget_high_s16(filters);</td></tr>
+<tr><th id="84">84</th><td>  <span class='error' title="use of undeclared identifier &apos;int16x4_t&apos;">int16x4_t</span> sum;</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vmul_lane_s16(s0, filters_lo, <var>0</var>);</td></tr>
+<tr><th id="87">87</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vmla_lane_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, s1, filters_lo, <var>1</var>);</td></tr>
+<tr><th id="88">88</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vmla_lane_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, s2, filters_lo, <var>2</var>);</td></tr>
+<tr><th id="89">89</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vmla_lane_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, s5, filters_hi, <var>1</var>);</td></tr>
+<tr><th id="90">90</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vmla_lane_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, s6, filters_hi, <var>2</var>);</td></tr>
+<tr><th id="91">91</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vmla_lane_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, s7, filters_hi, <var>3</var>);</td></tr>
+<tr><th id="92">92</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vqadd_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, vmul_s16(s3, filter3));</td></tr>
+<tr><th id="93">93</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vqadd_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, vmul_s16(s4, filter4));</td></tr>
+<tr><th id="94">94</th><td>  <b>return</b> <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>;</td></tr>
+<tr><th id="95">95</th><td>}</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td><em>static</em> <a class="macro" href="../../../config/ios/arm64/vpx_config.h.html#12" title="inline" data-ref="_M/INLINE">INLINE</a> <span class='error' title="unknown type name &apos;uint8x8_t&apos;">uint8x8_t</span> <dfn class="decl def fn" id="convolve8_8" title='convolve8_8' data-ref="convolve8_8" data-ref-filename="convolve8_8">convolve8_8</dfn>(<em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> s0, <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> s1,</td></tr>
+<tr><th id="98">98</th><td>                                    <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> s2, <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> s3,</td></tr>
+<tr><th id="99">99</th><td>                                    <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> s4, <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> s5,</td></tr>
+<tr><th id="100">100</th><td>                                    <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> s6, <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> s7,</td></tr>
+<tr><th id="101">101</th><td>                                    <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> filters,</td></tr>
+<tr><th id="102">102</th><td>                                    <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> filter3,</td></tr>
+<tr><th id="103">103</th><td>                                    <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> filter4) {</td></tr>
+<tr><th id="104">104</th><td>  <em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> <dfn class="local col9 decl" id="29filters_lo" title='filters_lo' data-type='const int' data-ref="29filters_lo" data-ref-filename="29filters_lo">filters_lo</dfn> = vget_low_s16(filters);</td></tr>
+<tr><th id="105">105</th><td>  <em>const</em> <span class='error' title="unknown type name &apos;int16x4_t&apos;">int16x4_t</span> <dfn class="local col0 decl" id="30filters_hi" title='filters_hi' data-type='const int' data-ref="30filters_hi" data-ref-filename="30filters_hi">filters_hi</dfn> = vget_high_s16(filters);</td></tr>
+<tr><th id="106">106</th><td>  <span class='error' title="use of undeclared identifier &apos;int16x8_t&apos;">int16x8_t</span> sum;</td></tr>
+<tr><th id="107">107</th><td></td></tr>
+<tr><th id="108">108</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vmulq_lane_s16(s0, filters_lo, <var>0</var>);</td></tr>
+<tr><th id="109">109</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vmlaq_lane_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, s1, filters_lo, <var>1</var>);</td></tr>
+<tr><th id="110">110</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vmlaq_lane_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, s2, filters_lo, <var>2</var>);</td></tr>
+<tr><th id="111">111</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vmlaq_lane_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, s5, filters_hi, <var>1</var>);</td></tr>
+<tr><th id="112">112</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vmlaq_lane_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, s6, filters_hi, <var>2</var>);</td></tr>
+<tr><th id="113">113</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vmlaq_lane_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, s7, filters_hi, <var>3</var>);</td></tr>
+<tr><th id="114">114</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vqaddq_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, vmulq_s16(s3, filter3));</td></tr>
+<tr><th id="115">115</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span> = vqaddq_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, vmulq_s16(s4, filter4));</td></tr>
+<tr><th id="116">116</th><td>  <b>return</b> vqrshrun_n_s16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>, <var>7</var>);</td></tr>
+<tr><th id="117">117</th><td>}</td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td><em>static</em> <a class="macro" href="../../../config/ios/arm64/vpx_config.h.html#12" title="inline" data-ref="_M/INLINE">INLINE</a> <span class='error' title="unknown type name &apos;uint8x8_t&apos;">uint8x8_t</span> <dfn class="decl def fn" id="scale_filter_8" title='scale_filter_8' data-ref="scale_filter_8" data-ref-filename="scale_filter_8">scale_filter_8</dfn>(<em>const</em> <span class='error' title="unknown type name &apos;uint8x8_t&apos;">uint8x8_t</span> *<em>const</em> s,</td></tr>
+<tr><th id="120">120</th><td>                                       <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> filters) {</td></tr>
+<tr><th id="121">121</th><td>  <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> <dfn class="local col1 decl" id="31filter3" title='filter3' data-type='const int' data-ref="31filter3" data-ref-filename="31filter3">filter3</dfn> = vdupq_lane_s16(vget_low_s16(filters), <var>3</var>);</td></tr>
+<tr><th id="122">122</th><td>  <em>const</em> <span class='error' title="unknown type name &apos;int16x8_t&apos;">int16x8_t</span> <dfn class="local col2 decl" id="32filter4" title='filter4' data-type='const int' data-ref="32filter4" data-ref-filename="32filter4">filter4</dfn> = vdupq_lane_s16(vget_high_s16(filters), <var>0</var>);</td></tr>
+<tr><th id="123">123</th><td>  <span class='error' title="use of undeclared identifier &apos;int16x8_t&apos;">int16x8_t</span> ss[<var>8</var>];</td></tr>
+<tr><th id="124">124</th><td></td></tr>
+<tr><th id="125">125</th><td>  <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>0</var>] = vreinterpretq_s16_u16(vmovl_u8(s[<var>0</var>]));</td></tr>
+<tr><th id="126">126</th><td>  <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>1</var>] = vreinterpretq_s16_u16(vmovl_u8(s[<var>1</var>]));</td></tr>
+<tr><th id="127">127</th><td>  <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>2</var>] = vreinterpretq_s16_u16(vmovl_u8(s[<var>2</var>]));</td></tr>
+<tr><th id="128">128</th><td>  <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>3</var>] = vreinterpretq_s16_u16(vmovl_u8(s[<var>3</var>]));</td></tr>
+<tr><th id="129">129</th><td>  <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>4</var>] = vreinterpretq_s16_u16(vmovl_u8(s[<var>4</var>]));</td></tr>
+<tr><th id="130">130</th><td>  <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>5</var>] = vreinterpretq_s16_u16(vmovl_u8(s[<var>5</var>]));</td></tr>
+<tr><th id="131">131</th><td>  <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>6</var>] = vreinterpretq_s16_u16(vmovl_u8(s[<var>6</var>]));</td></tr>
+<tr><th id="132">132</th><td>  <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>7</var>] = vreinterpretq_s16_u16(vmovl_u8(s[<var>7</var>]));</td></tr>
+<tr><th id="133">133</th><td></td></tr>
+<tr><th id="134">134</th><td>  <b>return</b> convolve8_8(<span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>0</var>], <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>1</var>], <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>2</var>], <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>3</var>], <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>4</var>], <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>5</var>], <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>6</var>], <span class='error' title="use of undeclared identifier &apos;ss&apos;">ss</span>[<var>7</var>],</td></tr>
+<tr><th id="135">135</th><td>                     filters, filter3, filter4);</td></tr>
+<tr><th id="136">136</th><td>}</td></tr>
+<tr><th id="137">137</th><td></td></tr>
+<tr><th id="138">138</th><td><u>#<span data-ppcond="11">endif</span>  // VPX_VPX_DSP_ARM_VPX_CONVOLVE8_NEON_H_</u></td></tr>
+<tr><th id="139">139</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../vp9/encoder/arm/neon/vp9_frame_scale_neon.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp9/encoder/arm/neon/vp9_frame_scale_neon.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

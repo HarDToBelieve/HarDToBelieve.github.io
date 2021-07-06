@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>idct4x4_add_neon.c source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_dsp/arm/idct4x4_add_neon.c] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_dsp/arm/idct4x4_add_neon.c'; var root_path = '../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../..'>Source</a>/<a href='../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../..'>libwebrtc</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>third_party</a>/<a href='../../../..'>libvpx</a>/<a href='../../..'>source</a>/<a href='../..'>libvpx</a>/<a href='..'>vpx_dsp</a>/<a href='./'>arm</a>/<a href='idct4x4_add_neon.c.html'>idct4x4_add_neon.c</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2014 The WebM project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#include <span class='error' title="&apos;arm_neon.h&apos; file not found">&lt;</span>arm_neon.h&gt;</u></td></tr>
+<tr><th id="12">12</th><td><u>#include &lt;assert.h&gt;</u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="../../../config/ios/arm64/vpx_dsp_rtcd.h.html">"./vpx_dsp_rtcd.h"</a></u></td></tr>
+<tr><th id="15">15</th><td><u>#include <a href="idct_neon.h.html">"vpx_dsp/arm/idct_neon.h"</a></u></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="mem_neon.h.html">"vpx_dsp/arm/mem_neon.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../txfm_common.h.html">"vpx_dsp/txfm_common.h"</a></u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><em>void</em> <dfn class="decl def fn" id="vpx_idct4x4_16_add_neon" title='vpx_idct4x4_16_add_neon' data-ref="vpx_idct4x4_16_add_neon" data-ref-filename="vpx_idct4x4_16_add_neon">vpx_idct4x4_16_add_neon</dfn>(<em>const</em> <a class="typedef" href="../vpx_dsp_common.h.html#tran_low_t" title='tran_low_t' data-type='int16_t' data-ref="tran_low_t" data-ref-filename="tran_low_t">tran_low_t</a> *<dfn class="local col1 decl" id="1input" title='input' data-type='const tran_low_t *' data-ref="1input" data-ref-filename="1input">input</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col2 decl" id="2dest" title='dest' data-type='uint8_t *' data-ref="2dest" data-ref-filename="2dest">dest</dfn>,</td></tr>
+<tr><th id="20">20</th><td>                             <em>int</em> <dfn class="local col3 decl" id="3stride" title='stride' data-type='int' data-ref="3stride" data-ref-filename="3stride">stride</dfn>) {</td></tr>
+<tr><th id="21">21</th><td>  <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col4 decl" id="4dst" title='dst' data-type='const uint8_t *' data-ref="4dst" data-ref-filename="4dst">dst</dfn> = <a class="local col2 ref" href="#2dest" title='dest' data-ref="2dest" data-ref-filename="2dest">dest</a>;</td></tr>
+<tr><th id="22">22</th><td>  <span class='error' title="use of undeclared identifier &apos;uint32x2_t&apos;">uint32x2_t</span> s32 = vdup_n_u32(<var>0</var>);</td></tr>
+<tr><th id="23">23</th><td>  <span class='error' title="use of undeclared identifier &apos;int16x8_t&apos;">int16x8_t</span> a[<var>2</var>];</td></tr>
+<tr><th id="24">24</th><td>  <span class='error' title="use of undeclared identifier &apos;uint8x8_t&apos;">uint8x8_t</span> s, d[<var>2</var>];</td></tr>
+<tr><th id="25">25</th><td>  <span class='error' title="use of undeclared identifier &apos;uint16x8_t&apos;">uint16x8_t</span> sum[<var>2</var>];</td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td>  <span class="macro" title="(__builtin_expect(!(!((intptr_t)dest % sizeof(uint32_t))), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_dsp/arm/idct4x4_add_neon.c&quot;, 27, &quot;!((intptr_t)dest % sizeof(uint32_t))&quot;) : (void)0)" data-ref="_M/assert">assert</span>(!((<span class='typedef' title='intptr_t' data-type='__darwin_intptr_t' data-ref="intptr_t" data-ref-filename="intptr_t">intptr_t</span>)<a class="local col2 ref" href="#2dest" title='dest' data-ref="2dest" data-ref-filename="2dest">dest</a> % <b>sizeof</b>(<span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span>)));</td></tr>
+<tr><th id="28">28</th><td>  <span class="macro" title="(__builtin_expect(!(!(stride % sizeof(uint32_t))), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_dsp/arm/idct4x4_add_neon.c&quot;, 28, &quot;!(stride % sizeof(uint32_t))&quot;) : (void)0)" data-ref="_M/assert">assert</span>(!(<a class="local col3 ref" href="#3stride" title='stride' data-ref="3stride" data-ref-filename="3stride">stride</a> % <b>sizeof</b>(<span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span>)));</td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td>  <i>// Rows</i></td></tr>
+<tr><th id="31">31</th><td>  <span class='error' title="use of undeclared identifier &apos;a&apos;">a</span>[<var>0</var>] = load_tran_low_to_s16q(input);</td></tr>
+<tr><th id="32">32</th><td>  <span class='error' title="use of undeclared identifier &apos;a&apos;">a</span>[<var>1</var>] = load_tran_low_to_s16q(input + <var>8</var>);</td></tr>
+<tr><th id="33">33</th><td>  transpose_idct4x4_16_bd8(<span class='error' title="use of undeclared identifier &apos;a&apos;">a</span>);</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td>  <i>// Columns</i></td></tr>
+<tr><th id="36">36</th><td>  <span class='error' title="use of undeclared identifier &apos;a&apos;">a</span>[<var>1</var>] = vcombine_s16(vget_high_s16(<span class='error' title="use of undeclared identifier &apos;a&apos;">a</span>[<var>1</var>]), vget_low_s16(<span class='error' title="use of undeclared identifier &apos;a&apos;">a</span>[<var>1</var>]));</td></tr>
+<tr><th id="37">37</th><td>  transpose_idct4x4_16_bd8(<span class='error' title="use of undeclared identifier &apos;a&apos;">a</span>);</td></tr>
+<tr><th id="38">38</th><td>  <span class='error' title="use of undeclared identifier &apos;a&apos;">a</span>[<var>0</var>] = vrshrq_n_s16(<span class='error' title="use of undeclared identifier &apos;a&apos;">a</span>[<var>0</var>], <var>4</var>);</td></tr>
+<tr><th id="39">39</th><td>  <span class='error' title="use of undeclared identifier &apos;a&apos;">a</span>[<var>1</var>] = vrshrq_n_s16(<span class='error' title="use of undeclared identifier &apos;a&apos;">a</span>[<var>1</var>], <var>4</var>);</td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td>  <span class='error' title="use of undeclared identifier &apos;s&apos;">s</span> = load_u8(dst, stride);</td></tr>
+<tr><th id="42">42</th><td>  <a class="local col4 ref" href="#4dst" title='dst' data-ref="4dst" data-ref-filename="4dst">dst</a> += <var>2</var> * <a class="local col3 ref" href="#3stride" title='stride' data-ref="3stride" data-ref-filename="3stride">stride</a>;</td></tr>
+<tr><th id="43">43</th><td>  <i>// The elements are loaded in reverse order.</i></td></tr>
+<tr><th id="44">44</th><td>  <span class='error' title="use of undeclared identifier &apos;s32&apos;">s32</span> = vld1_lane_u32((<em>const</em> uint32_t *)dst, <span class='error' title="use of undeclared identifier &apos;s32&apos;">s32</span>, <var>1</var>);</td></tr>
+<tr><th id="45">45</th><td>  <a class="local col4 ref" href="#4dst" title='dst' data-ref="4dst" data-ref-filename="4dst">dst</a> += <a class="local col3 ref" href="#3stride" title='stride' data-ref="3stride" data-ref-filename="3stride">stride</a>;</td></tr>
+<tr><th id="46">46</th><td>  <span class='error' title="use of undeclared identifier &apos;s32&apos;">s32</span> = vld1_lane_u32((<em>const</em> uint32_t *)dst, <span class='error' title="use of undeclared identifier &apos;s32&apos;">s32</span>, <var>0</var>);</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>[<var>0</var>] = vaddw_u8(vreinterpretq_u16_s16(<span class='error' title="use of undeclared identifier &apos;a&apos;">a</span>[<var>0</var>]), <span class='error' title="use of undeclared identifier &apos;s&apos;">s</span>);</td></tr>
+<tr><th id="49">49</th><td>  <span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>[<var>1</var>] = vaddw_u8(vreinterpretq_u16_s16(<span class='error' title="use of undeclared identifier &apos;a&apos;">a</span>[<var>1</var>]), vreinterpret_u8_u32(<span class='error' title="use of undeclared identifier &apos;s32&apos;">s32</span>));</td></tr>
+<tr><th id="50">50</th><td>  <span class='error' title="use of undeclared identifier &apos;d&apos;">d</span>[<var>0</var>] = vqmovun_s16(vreinterpretq_s16_u16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>[<var>0</var>]));</td></tr>
+<tr><th id="51">51</th><td>  <span class='error' title="use of undeclared identifier &apos;d&apos;">d</span>[<var>1</var>] = vqmovun_s16(vreinterpretq_s16_u16(<span class='error' title="use of undeclared identifier &apos;sum&apos;">sum</span>[<var>1</var>]));</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td>  store_u8(dest, stride, <span class='error' title="use of undeclared identifier &apos;d&apos;">d</span>[<var>0</var>]);</td></tr>
+<tr><th id="54">54</th><td>  <a class="local col2 ref" href="#2dest" title='dest' data-ref="2dest" data-ref-filename="2dest">dest</a> += <var>2</var> * <a class="local col3 ref" href="#3stride" title='stride' data-ref="3stride" data-ref-filename="3stride">stride</a>;</td></tr>
+<tr><th id="55">55</th><td>  <i>// The elements are stored in reverse order.</i></td></tr>
+<tr><th id="56">56</th><td>  vst1_lane_u32((uint32_t *)dest, vreinterpret_u32_u8(<span class='error' title="use of undeclared identifier &apos;d&apos;">d</span>[<var>1</var>]), <var>1</var>);</td></tr>
+<tr><th id="57">57</th><td>  <a class="local col2 ref" href="#2dest" title='dest' data-ref="2dest" data-ref-filename="2dest">dest</a> += <a class="local col3 ref" href="#3stride" title='stride' data-ref="3stride" data-ref-filename="3stride">stride</a>;</td></tr>
+<tr><th id="58">58</th><td>  vst1_lane_u32((uint32_t *)dest, vreinterpret_u32_u8(<span class='error' title="use of undeclared identifier &apos;d&apos;">d</span>[<var>1</var>]), <var>0</var>);</td></tr>
+<tr><th id="59">59</th><td>}</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

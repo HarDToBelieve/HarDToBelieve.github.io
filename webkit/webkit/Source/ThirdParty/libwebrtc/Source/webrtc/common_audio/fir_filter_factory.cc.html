@@ -1,0 +1,79 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>fir_filter_factory.cc source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/fir_filter_factory.cc] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/fir_filter_factory.cc'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>common_audio</a>/<a href='fir_filter_factory.cc.html'>fir_filter_factory.cc</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2017 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#include <a href="fir_filter_factory.h.html">"common_audio/fir_filter_factory.h"</a></u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="fir_filter_c.h.html">"common_audio/fir_filter_c.h"</a></u></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="../rtc_base/checks.h.html">"rtc_base/checks.h"</a></u></td></tr>
+<tr><th id="15">15</th><td><u>#include <a href="../rtc_base/system/arch.h.html">"rtc_base/system/arch.h"</a></u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#<span data-ppcond="17">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_HAS_NEON">WEBRTC_HAS_NEON</span>)</u></td></tr>
+<tr><th id="18">18</th><td><u>#include "common_audio/fir_filter_neon.h"</u></td></tr>
+<tr><th id="19">19</th><td><u>#<span data-ppcond="17">elif</span> defined(<span class="macro" data-ref="_M/WEBRTC_ARCH_X86_FAMILY">WEBRTC_ARCH_X86_FAMILY</span>)</u></td></tr>
+<tr><th id="20">20</th><td><u>#include "common_audio/fir_filter_avx2.h"</u></td></tr>
+<tr><th id="21">21</th><td><u>#include "common_audio/fir_filter_sse.h"</u></td></tr>
+<tr><th id="22">22</th><td><u>#include "system_wrappers/include/cpu_features_wrapper.h"  // kSSE2, WebRtc_G...</u></td></tr>
+<tr><th id="23">23</th><td><u>#<span data-ppcond="17">endif</span></u></td></tr>
+<tr><th id="24">24</th><td></td></tr>
+<tr><th id="25">25</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td><a class="type" href="fir_filter.h.html#webrtc::FIRFilter" title='webrtc::FIRFilter' data-ref="webrtc::FIRFilter" data-ref-filename="webrtc..FIRFilter">FIRFilter</a>* <dfn class="decl def fn" id="_ZN6webrtc15CreateFirFilterEPKfmm" title='webrtc::CreateFirFilter' data-ref="_ZN6webrtc15CreateFirFilterEPKfmm" data-ref-filename="_ZN6webrtc15CreateFirFilterEPKfmm">CreateFirFilter</dfn>(<em>const</em> <em>float</em>* <dfn class="local col4 decl" id="4coefficients" title='coefficients' data-type='const float *' data-ref="4coefficients" data-ref-filename="4coefficients">coefficients</dfn>,</td></tr>
+<tr><th id="28">28</th><td>                           <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="5coefficients_length" title='coefficients_length' data-type='size_t' data-ref="5coefficients_length" data-ref-filename="5coefficients_length">coefficients_length</dfn>,</td></tr>
+<tr><th id="29">29</th><td>                           <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="6max_input_length" title='max_input_length' data-type='size_t' data-ref="6max_input_length" data-ref-filename="6max_input_length">max_input_length</dfn>) {</td></tr>
+<tr><th id="30">30</th><td>  <b>if</b> (!<a class="local col4 ref" href="#4coefficients" title='coefficients' data-ref="4coefficients" data-ref-filename="4coefficients">coefficients</a> || <a class="local col5 ref" href="#5coefficients_length" title='coefficients_length' data-ref="5coefficients_length" data-ref-filename="5coefficients_length">coefficients_length</a> &lt;= <var>0</var> || <a class="local col6 ref" href="#6max_input_length" title='max_input_length' data-ref="6max_input_length" data-ref-filename="6max_input_length">max_input_length</a> &lt;= <var>0</var>) {</td></tr>
+<tr><th id="31">31</th><td>    <a class="macro" href="../rtc_base/checks.h.html#447" title="(false) ? static_cast&lt;void&gt;(0) : ::rtc::webrtc_checks_impl::FatalLogCall&lt;false&gt;( &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/fir_filter_factory.cc&quot;, 31, &quot;false&quot;) &amp; ::rtc::webrtc_checks_impl::LogStreamer&lt;&gt;()" data-ref="_M/RTC_NOTREACHED">RTC_NOTREACHED</a>();</td></tr>
+<tr><th id="32">32</th><td>    <b>return</b> <b>nullptr</b>;</td></tr>
+<tr><th id="33">33</th><td>  }</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td>  <a class="type" href="fir_filter.h.html#webrtc::FIRFilter" title='webrtc::FIRFilter' data-ref="webrtc::FIRFilter" data-ref-filename="webrtc..FIRFilter">FIRFilter</a>* <dfn class="local col7 decl" id="7filter" title='filter' data-type='webrtc::FIRFilter *' data-ref="7filter" data-ref-filename="7filter">filter</dfn> = <b>nullptr</b>;</td></tr>
+<tr><th id="36">36</th><td><i>// If we know the minimum architecture at compile time, avoid CPU detection.</i></td></tr>
+<tr><th id="37">37</th><td><u>#<span data-ppcond="37">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_ARCH_X86_FAMILY">WEBRTC_ARCH_X86_FAMILY</span>)</u></td></tr>
+<tr><th id="38">38</th><td>  <i>// x86 CPU detection required.</i></td></tr>
+<tr><th id="39">39</th><td><u>#if !defined(WEBRTC_WEBKIT_BUILD)</u></td></tr>
+<tr><th id="40">40</th><td>  <b>if</b> (GetCPUInfo(kAVX2)) {</td></tr>
+<tr><th id="41">41</th><td>    filter =</td></tr>
+<tr><th id="42">42</th><td>        <b>new</b> FIRFilterAVX2(coefficients, coefficients_length, max_input_length);</td></tr>
+<tr><th id="43">43</th><td>  } <b>else</b></td></tr>
+<tr><th id="44">44</th><td><u>#endif</u></td></tr>
+<tr><th id="45">45</th><td>  <b>if</b> (GetCPUInfo(kSSE2)) {</td></tr>
+<tr><th id="46">46</th><td>    filter =</td></tr>
+<tr><th id="47">47</th><td>        <b>new</b> FIRFilterSSE2(coefficients, coefficients_length, max_input_length);</td></tr>
+<tr><th id="48">48</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="49">49</th><td>    filter = <b>new</b> FIRFilterC(coefficients, coefficients_length);</td></tr>
+<tr><th id="50">50</th><td>  }</td></tr>
+<tr><th id="51">51</th><td><u>#<span data-ppcond="37">elif</span> defined(<span class="macro" data-ref="_M/WEBRTC_HAS_NEON">WEBRTC_HAS_NEON</span>)</u></td></tr>
+<tr><th id="52">52</th><td>  filter =</td></tr>
+<tr><th id="53">53</th><td>      <b>new</b> FIRFilterNEON(coefficients, coefficients_length, max_input_length);</td></tr>
+<tr><th id="54">54</th><td><u>#<span data-ppcond="37">else</span></u></td></tr>
+<tr><th id="55">55</th><td>  <a class="local col7 ref" href="#7filter" title='filter' data-ref="7filter" data-ref-filename="7filter">filter</a> = <b>new</b> <a class="type" href="fir_filter_c.h.html#webrtc::FIRFilterC" title='webrtc::FIRFilterC' data-ref="webrtc::FIRFilterC" data-ref-filename="webrtc..FIRFilterC">FIRFilterC</a><a class="ref fn" href="fir_filter_c.h.html#_ZN6webrtc10FIRFilterCC1EPKfm" title='webrtc::FIRFilterC::FIRFilterC' data-ref="_ZN6webrtc10FIRFilterCC1EPKfm" data-ref-filename="_ZN6webrtc10FIRFilterCC1EPKfm">(</a><a class="local col4 ref" href="#4coefficients" title='coefficients' data-ref="4coefficients" data-ref-filename="4coefficients">coefficients</a>, <a class="local col5 ref" href="#5coefficients_length" title='coefficients_length' data-ref="5coefficients_length" data-ref-filename="5coefficients_length">coefficients_length</a>);</td></tr>
+<tr><th id="56">56</th><td><u>#<span data-ppcond="37">endif</span></u></td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>  <b>return</b> <a class="local col7 ref" href="#7filter" title='filter' data-ref="7filter" data-ref-filename="7filter">filter</a>;</td></tr>
+<tr><th id="59">59</th><td>}</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="62">62</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

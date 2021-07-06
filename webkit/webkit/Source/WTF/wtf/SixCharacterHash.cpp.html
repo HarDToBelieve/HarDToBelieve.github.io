@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SixCharacterHash.cpp source code [webkit/Source/WTF/wtf/SixCharacterHash.cpp] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WTF/wtf/SixCharacterHash.cpp'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>WTF</a>/<a href='./'>wtf</a>/<a href='SixCharacterHash.cpp.html'>SixCharacterHash.cpp</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2013 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#include <a href="../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/wtf/SixCharacterHash.h.html">&lt;wtf/SixCharacterHash.h&gt;</a></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/wtf/ASCIICType.h.html">&lt;wtf/ASCIICType.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><em>unsigned</em> <dfn class="decl def fn" id="_ZN3WTF31sixCharacterHashStringToIntegerEPKc" title='WTF::sixCharacterHashStringToInteger' data-ref="_ZN3WTF31sixCharacterHashStringToIntegerEPKc" data-ref-filename="_ZN3WTF31sixCharacterHashStringToIntegerEPKc">sixCharacterHashStringToInteger</dfn>(<em>const</em> <em>char</em>* <dfn class="local col1 decl" id="1string" title='string' data-type='const char *' data-ref="1string" data-ref-filename="1string">string</dfn>)</td></tr>
+<tr><th id="34">34</th><td>{</td></tr>
+<tr><th id="35">35</th><td>    <em>unsigned</em> <dfn class="local col2 decl" id="2hash" title='hash' data-type='unsigned int' data-ref="2hash" data-ref-filename="2hash">hash</dfn> = <var>0</var>;</td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td>    <b>for</b> (<em>unsigned</em> <dfn class="local col3 decl" id="3i" title='i' data-type='unsigned int' data-ref="3i" data-ref-filename="3i">i</dfn> = <var>0</var>; <a class="local col3 ref" href="#3i" title='i' data-ref="3i" data-ref-filename="3i">i</a> &lt; <var>6</var>; ++<a class="local col3 ref" href="#3i" title='i' data-ref="3i" data-ref-filename="3i">i</a>) {</td></tr>
+<tr><th id="38">38</th><td>        <a class="local col2 ref" href="#2hash" title='hash' data-ref="2hash" data-ref-filename="2hash">hash</a> *= <var>62</var>;</td></tr>
+<tr><th id="39">39</th><td>        <em>unsigned</em> <dfn class="local col4 decl" id="4c" title='c' data-type='unsigned int' data-ref="4c" data-ref-filename="4c">c</dfn> = <a class="local col1 ref" href="#1string" title='string' data-ref="1string" data-ref-filename="1string">string</a>[<a class="local col3 ref" href="#3i" title='i' data-ref="3i" data-ref-filename="3i">i</a>];</td></tr>
+<tr><th id="40">40</th><td>        <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#622" title="do { if (!(c)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/SixCharacterHash.cpp&quot;, 40, __PRETTY_FUNCTION__, &quot;c&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(40, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/SixCharacterHash.cpp&quot;, __PRETTY_FUNCTION__, 12); } while (false); } } while (0)" data-ref="_M/RELEASE_ASSERT">RELEASE_ASSERT</a>(<a class="local col4 ref" href="#4c" title='c' data-ref="4c" data-ref-filename="4c">c</a>); <i>// FIXME: Why does this need to be a RELEASE_ASSERT?</i></td></tr>
+<tr><th id="41">41</th><td>        <b>if</b> (<a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/ASCIICType.h.html#_ZN3WTF12isASCIIUpperET_" title='WTF::isASCIIUpper' data-ref="_ZN3WTF12isASCIIUpperET_" data-ref-filename="_ZN3WTF12isASCIIUpperET_">isASCIIUpper</a>(<a class="local col4 ref" href="#4c" title='c' data-ref="4c" data-ref-filename="4c">c</a>)) {</td></tr>
+<tr><th id="42">42</th><td>            <a class="local col2 ref" href="#2hash" title='hash' data-ref="2hash" data-ref-filename="2hash">hash</a> += <a class="local col4 ref" href="#4c" title='c' data-ref="4c" data-ref-filename="4c">c</a> - <kbd>'A'</kbd>;</td></tr>
+<tr><th id="43">43</th><td>            <b>continue</b>;</td></tr>
+<tr><th id="44">44</th><td>        }</td></tr>
+<tr><th id="45">45</th><td>        <b>if</b> (<a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/ASCIICType.h.html#_ZN3WTF12isASCIILowerET_" title='WTF::isASCIILower' data-ref="_ZN3WTF12isASCIILowerET_" data-ref-filename="_ZN3WTF12isASCIILowerET_">isASCIILower</a>(<a class="local col4 ref" href="#4c" title='c' data-ref="4c" data-ref-filename="4c">c</a>)) {</td></tr>
+<tr><th id="46">46</th><td>            <a class="local col2 ref" href="#2hash" title='hash' data-ref="2hash" data-ref-filename="2hash">hash</a> += <a class="local col4 ref" href="#4c" title='c' data-ref="4c" data-ref-filename="4c">c</a> - <kbd>'a'</kbd> + <var>26</var>;</td></tr>
+<tr><th id="47">47</th><td>            <b>continue</b>;</td></tr>
+<tr><th id="48">48</th><td>        }</td></tr>
+<tr><th id="49">49</th><td>        <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(isASCIIDigit(c))) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/SixCharacterHash.cpp&quot;, 49, __PRETTY_FUNCTION__, &quot;isASCIIDigit(c)&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(49, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/SixCharacterHash.cpp&quot;, __PRETTY_FUNCTION__, 14); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(<a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/ASCIICType.h.html#_ZN3WTF12isASCIIDigitET_" title='WTF::isASCIIDigit' data-ref="_ZN3WTF12isASCIIDigitET_" data-ref-filename="_ZN3WTF12isASCIIDigitET_">isASCIIDigit</a>(<a class="local col4 ref" href="#4c" title='c' data-ref="4c" data-ref-filename="4c">c</a>));</td></tr>
+<tr><th id="50">50</th><td>        <a class="local col2 ref" href="#2hash" title='hash' data-ref="2hash" data-ref-filename="2hash">hash</a> += <a class="local col4 ref" href="#4c" title='c' data-ref="4c" data-ref-filename="4c">c</a> - <kbd>'0'</kbd> + <var>26</var> * <var>2</var>;</td></tr>
+<tr><th id="51">51</th><td>    }</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#622" title="do { if (!(!string[6])) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/SixCharacterHash.cpp&quot;, 53, __PRETTY_FUNCTION__, &quot;!string[6]&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(53, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/SixCharacterHash.cpp&quot;, __PRETTY_FUNCTION__, 16); } while (false); } } while (0)" data-ref="_M/RELEASE_ASSERT">RELEASE_ASSERT</a>(!<a class="local col1 ref" href="#1string" title='string' data-ref="1string" data-ref-filename="1string">string</a>[<var>6</var>]); <i>// FIXME: Why does this need to be a RELEASE_ASSERT?</i></td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td>    <b>return</b> <a class="local col2 ref" href="#2hash" title='hash' data-ref="2hash" data-ref-filename="2hash">hash</a>;</td></tr>
+<tr><th id="56">56</th><td>}</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><span class="namespace">std::</span><span class='type' title='std::__1::array' data-ref="std::__1::array" data-ref-filename="std..__1..array">array</span>&lt;<em>char</em>, <var>7</var>&gt; <dfn class="decl def fn" id="_ZN3WTF31integerToSixCharacterHashStringEj" title='WTF::integerToSixCharacterHashString' data-ref="_ZN3WTF31integerToSixCharacterHashStringEj" data-ref-filename="_ZN3WTF31integerToSixCharacterHashStringEj">integerToSixCharacterHashString</dfn>(<em>unsigned</em> <dfn class="local col5 decl" id="5hash" title='hash' data-type='unsigned int' data-ref="5hash" data-ref-filename="5hash">hash</dfn>)</td></tr>
+<tr><th id="59">59</th><td>{</td></tr>
+<tr><th id="60">60</th><td>    <em>static</em> <em>const</em> <em>char</em> <dfn class="local col6 decl" id="6table" title='table' data-type='const char [63]' data-ref="6table" data-ref-filename="6table">table</dfn>[<var>63</var>] = <q>"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789"</q>;</td></tr>
+<tr><th id="61">61</th><td>    <span class="namespace">std::</span><span class='type' title='std::__1::array' data-ref="std::__1::array" data-ref-filename="std..__1..array">array</span>&lt;<em>char</em>, <var>7</var>&gt; <span class='ref fn fake' title='std::__1::array&lt;char, 7&gt;::array' data-ref="_ZNSt3__15arrayIcLm7EEC1Ev" data-ref-filename="_ZNSt3__15arrayIcLm7EEC1Ev"></span><dfn class="local col7 decl" id="7buffer" title='buffer' data-type='std::array&lt;char, 7&gt;' data-ref="7buffer" data-ref-filename="7buffer">buffer</dfn>;</td></tr>
+<tr><th id="62">62</th><td>    <em>unsigned</em> <dfn class="local col8 decl" id="8accumulator" title='accumulator' data-type='unsigned int' data-ref="8accumulator" data-ref-filename="8accumulator">accumulator</dfn> = <a class="local col5 ref" href="#5hash" title='hash' data-ref="5hash" data-ref-filename="5hash">hash</a>;</td></tr>
+<tr><th id="63">63</th><td>    <b>for</b> (<em>unsigned</em> <dfn class="local col9 decl" id="9i" title='i' data-type='unsigned int' data-ref="9i" data-ref-filename="9i">i</dfn> = <var>6</var>; <a class="local col9 ref" href="#9i" title='i' data-ref="9i" data-ref-filename="9i">i</a>--;) {</td></tr>
+<tr><th id="64">64</th><td>        <a class="local col7 ref" href="#7buffer" title='buffer' data-ref="7buffer" data-ref-filename="7buffer">buffer</a><span class='ref fn' title='std::__1::array::operator[]' data-ref="_ZNSt3__15arrayixEm" data-ref-filename="_ZNSt3__15arrayixEm">[<a class="local col9 ref" href="#9i" title='i' data-ref="9i" data-ref-filename="9i">i</a>]</span> = <a class="local col6 ref" href="#6table" title='table' data-ref="6table" data-ref-filename="6table">table</a>[<a class="local col8 ref" href="#8accumulator" title='accumulator' data-ref="8accumulator" data-ref-filename="8accumulator">accumulator</a> % <var>62</var>];</td></tr>
+<tr><th id="65">65</th><td>        <a class="local col8 ref" href="#8accumulator" title='accumulator' data-ref="8accumulator" data-ref-filename="8accumulator">accumulator</a> /= <var>62</var>;</td></tr>
+<tr><th id="66">66</th><td>    }</td></tr>
+<tr><th id="67">67</th><td>    <a class="local col7 ref" href="#7buffer" title='buffer' data-ref="7buffer" data-ref-filename="7buffer">buffer</a><span class='ref fn' title='std::__1::array::operator[]' data-ref="_ZNSt3__15arrayixEm" data-ref-filename="_ZNSt3__15arrayixEm">[<var>6</var>]</span> = <var>0</var>;</td></tr>
+<tr><th id="68">68</th><td>    <b>return</b> <a class="local col7 ref" href="#7buffer" title='buffer' data-ref="7buffer" data-ref-filename="7buffer">buffer</a>;</td></tr>
+<tr><th id="69">69</th><td>}</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

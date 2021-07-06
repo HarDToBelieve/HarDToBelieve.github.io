@@ -1,0 +1,353 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>DFGUseKind.h source code [webkit/Source/JavaScriptCore/dfg/DFGUseKind.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="JSC::DFG::UseKind "/>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/JavaScriptCore/dfg/DFGUseKind.h'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>JavaScriptCore</a>/<a href='./'>dfg</a>/<a href='DFGUseKind.h.html'>DFGUseKind.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2013-2020 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="28">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(DFG_JIT)</u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="DFGNodeFlags.h.html">"DFGNodeFlags.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="../bytecode/SpeculatedType.h.html">"SpeculatedType.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/wtf/PrintStream.h.html">&lt;wtf/PrintStream.h&gt;</a></u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><b>namespace</b> <span class="namespace">JSC</span> { <b>namespace</b> <span class="namespace">DFG</span> {</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::UseKind" title='JSC::DFG::UseKind' data-ref="JSC::DFG::UseKind" data-ref-filename="JSC..DFG..UseKind">UseKind</dfn> {</td></tr>
+<tr><th id="37">37</th><td>    <i>// The DFG has 3 representations of values used:</i></td></tr>
+<tr><th id="38">38</th><td><i></i></td></tr>
+<tr><th id="39">39</th><td><i>    // 1. The JSValue representation for a JSValue that must be stored in a GP</i></td></tr>
+<tr><th id="40">40</th><td><i>    //    register (or a GP register pair), and follows rules for boxing and unboxing</i></td></tr>
+<tr><th id="41">41</th><td><i>    //    that allow the JSValue to be stored as either fully boxed JSValues, or</i></td></tr>
+<tr><th id="42">42</th><td><i>    //    unboxed Int32, Booleans, Cells, etc. in 32-bit as appropriate.</i></td></tr>
+<tr><th id="43">43</th><td>    <dfn class="enum" id="JSC::DFG::UntypedUse" title='JSC::DFG::UntypedUse' data-ref="JSC::DFG::UntypedUse" data-ref-filename="JSC..DFG..UntypedUse">UntypedUse</dfn>, <i>// UntypedUse must come first (value 0).</i></td></tr>
+<tr><th id="44">44</th><td>    <dfn class="enum" id="JSC::DFG::Int32Use" title='JSC::DFG::Int32Use' data-ref="JSC::DFG::Int32Use" data-ref-filename="JSC..DFG..Int32Use">Int32Use</dfn>,</td></tr>
+<tr><th id="45">45</th><td>    <dfn class="enum" id="JSC::DFG::KnownInt32Use" title='JSC::DFG::KnownInt32Use' data-ref="JSC::DFG::KnownInt32Use" data-ref-filename="JSC..DFG..KnownInt32Use">KnownInt32Use</dfn>,</td></tr>
+<tr><th id="46">46</th><td>    <dfn class="enum" id="JSC::DFG::AnyIntUse" title='JSC::DFG::AnyIntUse' data-ref="JSC::DFG::AnyIntUse" data-ref-filename="JSC..DFG..AnyIntUse">AnyIntUse</dfn>,</td></tr>
+<tr><th id="47">47</th><td>    <dfn class="enum" id="JSC::DFG::NumberUse" title='JSC::DFG::NumberUse' data-ref="JSC::DFG::NumberUse" data-ref-filename="JSC..DFG..NumberUse">NumberUse</dfn>,</td></tr>
+<tr><th id="48">48</th><td>    <dfn class="enum" id="JSC::DFG::RealNumberUse" title='JSC::DFG::RealNumberUse' data-ref="JSC::DFG::RealNumberUse" data-ref-filename="JSC..DFG..RealNumberUse">RealNumberUse</dfn>,</td></tr>
+<tr><th id="49">49</th><td>    <dfn class="enum" id="JSC::DFG::BooleanUse" title='JSC::DFG::BooleanUse' data-ref="JSC::DFG::BooleanUse" data-ref-filename="JSC..DFG..BooleanUse">BooleanUse</dfn>,</td></tr>
+<tr><th id="50">50</th><td>    <dfn class="enum" id="JSC::DFG::KnownBooleanUse" title='JSC::DFG::KnownBooleanUse' data-ref="JSC::DFG::KnownBooleanUse" data-ref-filename="JSC..DFG..KnownBooleanUse">KnownBooleanUse</dfn>,</td></tr>
+<tr><th id="51">51</th><td>    <dfn class="enum" id="JSC::DFG::CellUse" title='JSC::DFG::CellUse' data-ref="JSC::DFG::CellUse" data-ref-filename="JSC..DFG..CellUse">CellUse</dfn>,</td></tr>
+<tr><th id="52">52</th><td>    <dfn class="enum" id="JSC::DFG::KnownCellUse" title='JSC::DFG::KnownCellUse' data-ref="JSC::DFG::KnownCellUse" data-ref-filename="JSC..DFG..KnownCellUse">KnownCellUse</dfn>,</td></tr>
+<tr><th id="53">53</th><td>    <dfn class="enum" id="JSC::DFG::CellOrOtherUse" title='JSC::DFG::CellOrOtherUse' data-ref="JSC::DFG::CellOrOtherUse" data-ref-filename="JSC..DFG..CellOrOtherUse">CellOrOtherUse</dfn>,</td></tr>
+<tr><th id="54">54</th><td>    <dfn class="enum" id="JSC::DFG::ObjectUse" title='JSC::DFG::ObjectUse' data-ref="JSC::DFG::ObjectUse" data-ref-filename="JSC..DFG..ObjectUse">ObjectUse</dfn>,</td></tr>
+<tr><th id="55">55</th><td>    <dfn class="enum" id="JSC::DFG::ArrayUse" title='JSC::DFG::ArrayUse' data-ref="JSC::DFG::ArrayUse" data-ref-filename="JSC..DFG..ArrayUse">ArrayUse</dfn>,</td></tr>
+<tr><th id="56">56</th><td>    <dfn class="enum" id="JSC::DFG::FunctionUse" title='JSC::DFG::FunctionUse' data-ref="JSC::DFG::FunctionUse" data-ref-filename="JSC..DFG..FunctionUse">FunctionUse</dfn>,</td></tr>
+<tr><th id="57">57</th><td>    <dfn class="enum" id="JSC::DFG::FinalObjectUse" title='JSC::DFG::FinalObjectUse' data-ref="JSC::DFG::FinalObjectUse" data-ref-filename="JSC..DFG..FinalObjectUse">FinalObjectUse</dfn>,</td></tr>
+<tr><th id="58">58</th><td>    <dfn class="enum" id="JSC::DFG::PromiseObjectUse" title='JSC::DFG::PromiseObjectUse' data-ref="JSC::DFG::PromiseObjectUse" data-ref-filename="JSC..DFG..PromiseObjectUse">PromiseObjectUse</dfn>,</td></tr>
+<tr><th id="59">59</th><td>    <dfn class="enum" id="JSC::DFG::RegExpObjectUse" title='JSC::DFG::RegExpObjectUse' data-ref="JSC::DFG::RegExpObjectUse" data-ref-filename="JSC..DFG..RegExpObjectUse">RegExpObjectUse</dfn>,</td></tr>
+<tr><th id="60">60</th><td>    <dfn class="enum" id="JSC::DFG::ProxyObjectUse" title='JSC::DFG::ProxyObjectUse' data-ref="JSC::DFG::ProxyObjectUse" data-ref-filename="JSC..DFG..ProxyObjectUse">ProxyObjectUse</dfn>,</td></tr>
+<tr><th id="61">61</th><td>    <dfn class="enum" id="JSC::DFG::DerivedArrayUse" title='JSC::DFG::DerivedArrayUse' data-ref="JSC::DFG::DerivedArrayUse" data-ref-filename="JSC..DFG..DerivedArrayUse">DerivedArrayUse</dfn>,</td></tr>
+<tr><th id="62">62</th><td>    <dfn class="enum" id="JSC::DFG::ObjectOrOtherUse" title='JSC::DFG::ObjectOrOtherUse' data-ref="JSC::DFG::ObjectOrOtherUse" data-ref-filename="JSC..DFG..ObjectOrOtherUse">ObjectOrOtherUse</dfn>,</td></tr>
+<tr><th id="63">63</th><td>    <dfn class="enum" id="JSC::DFG::StringIdentUse" title='JSC::DFG::StringIdentUse' data-ref="JSC::DFG::StringIdentUse" data-ref-filename="JSC..DFG..StringIdentUse">StringIdentUse</dfn>,</td></tr>
+<tr><th id="64">64</th><td>    <dfn class="enum" id="JSC::DFG::StringUse" title='JSC::DFG::StringUse' data-ref="JSC::DFG::StringUse" data-ref-filename="JSC..DFG..StringUse">StringUse</dfn>,</td></tr>
+<tr><th id="65">65</th><td>    <dfn class="enum" id="JSC::DFG::StringOrOtherUse" title='JSC::DFG::StringOrOtherUse' data-ref="JSC::DFG::StringOrOtherUse" data-ref-filename="JSC..DFG..StringOrOtherUse">StringOrOtherUse</dfn>,</td></tr>
+<tr><th id="66">66</th><td>    <dfn class="enum" id="JSC::DFG::KnownStringUse" title='JSC::DFG::KnownStringUse' data-ref="JSC::DFG::KnownStringUse" data-ref-filename="JSC..DFG..KnownStringUse">KnownStringUse</dfn>,</td></tr>
+<tr><th id="67">67</th><td>    <dfn class="enum" id="JSC::DFG::KnownPrimitiveUse" title='JSC::DFG::KnownPrimitiveUse' data-ref="JSC::DFG::KnownPrimitiveUse" data-ref-filename="JSC..DFG..KnownPrimitiveUse">KnownPrimitiveUse</dfn>, <i>// This bizarre type arises for op_strcat, which has a bytecode guarantee that it will only see primitives (i.e. not objects).</i></td></tr>
+<tr><th id="68">68</th><td>    <dfn class="enum" id="JSC::DFG::SymbolUse" title='JSC::DFG::SymbolUse' data-ref="JSC::DFG::SymbolUse" data-ref-filename="JSC..DFG..SymbolUse">SymbolUse</dfn>,</td></tr>
+<tr><th id="69">69</th><td>    <dfn class="enum" id="JSC::DFG::AnyBigIntUse" title='JSC::DFG::AnyBigIntUse' data-ref="JSC::DFG::AnyBigIntUse" data-ref-filename="JSC..DFG..AnyBigIntUse">AnyBigIntUse</dfn>,</td></tr>
+<tr><th id="70">70</th><td>    <dfn class="enum" id="JSC::DFG::HeapBigIntUse" title='JSC::DFG::HeapBigIntUse' data-ref="JSC::DFG::HeapBigIntUse" data-ref-filename="JSC..DFG..HeapBigIntUse">HeapBigIntUse</dfn>,</td></tr>
+<tr><th id="71">71</th><td>    <dfn class="enum" id="JSC::DFG::BigInt32Use" title='JSC::DFG::BigInt32Use' data-ref="JSC::DFG::BigInt32Use" data-ref-filename="JSC..DFG..BigInt32Use">BigInt32Use</dfn>,</td></tr>
+<tr><th id="72">72</th><td>    <dfn class="enum" id="JSC::DFG::DateObjectUse" title='JSC::DFG::DateObjectUse' data-ref="JSC::DFG::DateObjectUse" data-ref-filename="JSC..DFG..DateObjectUse">DateObjectUse</dfn>,</td></tr>
+<tr><th id="73">73</th><td>    <dfn class="enum" id="JSC::DFG::MapObjectUse" title='JSC::DFG::MapObjectUse' data-ref="JSC::DFG::MapObjectUse" data-ref-filename="JSC..DFG..MapObjectUse">MapObjectUse</dfn>,</td></tr>
+<tr><th id="74">74</th><td>    <dfn class="enum" id="JSC::DFG::SetObjectUse" title='JSC::DFG::SetObjectUse' data-ref="JSC::DFG::SetObjectUse" data-ref-filename="JSC..DFG..SetObjectUse">SetObjectUse</dfn>,</td></tr>
+<tr><th id="75">75</th><td>    <dfn class="enum" id="JSC::DFG::WeakMapObjectUse" title='JSC::DFG::WeakMapObjectUse' data-ref="JSC::DFG::WeakMapObjectUse" data-ref-filename="JSC..DFG..WeakMapObjectUse">WeakMapObjectUse</dfn>,</td></tr>
+<tr><th id="76">76</th><td>    <dfn class="enum" id="JSC::DFG::WeakSetObjectUse" title='JSC::DFG::WeakSetObjectUse' data-ref="JSC::DFG::WeakSetObjectUse" data-ref-filename="JSC..DFG..WeakSetObjectUse">WeakSetObjectUse</dfn>,</td></tr>
+<tr><th id="77">77</th><td>    <dfn class="enum" id="JSC::DFG::DataViewObjectUse" title='JSC::DFG::DataViewObjectUse' data-ref="JSC::DFG::DataViewObjectUse" data-ref-filename="JSC..DFG..DataViewObjectUse">DataViewObjectUse</dfn>,</td></tr>
+<tr><th id="78">78</th><td>    <dfn class="enum" id="JSC::DFG::StringObjectUse" title='JSC::DFG::StringObjectUse' data-ref="JSC::DFG::StringObjectUse" data-ref-filename="JSC..DFG..StringObjectUse">StringObjectUse</dfn>,</td></tr>
+<tr><th id="79">79</th><td>    <dfn class="enum" id="JSC::DFG::StringOrStringObjectUse" title='JSC::DFG::StringOrStringObjectUse' data-ref="JSC::DFG::StringOrStringObjectUse" data-ref-filename="JSC..DFG..StringOrStringObjectUse">StringOrStringObjectUse</dfn>,</td></tr>
+<tr><th id="80">80</th><td>    <dfn class="enum" id="JSC::DFG::NotStringVarUse" title='JSC::DFG::NotStringVarUse' data-ref="JSC::DFG::NotStringVarUse" data-ref-filename="JSC..DFG..NotStringVarUse">NotStringVarUse</dfn>,</td></tr>
+<tr><th id="81">81</th><td>    <dfn class="enum" id="JSC::DFG::NotSymbolUse" title='JSC::DFG::NotSymbolUse' data-ref="JSC::DFG::NotSymbolUse" data-ref-filename="JSC..DFG..NotSymbolUse">NotSymbolUse</dfn>,</td></tr>
+<tr><th id="82">82</th><td>    <dfn class="enum" id="JSC::DFG::NotCellUse" title='JSC::DFG::NotCellUse' data-ref="JSC::DFG::NotCellUse" data-ref-filename="JSC..DFG..NotCellUse">NotCellUse</dfn>,</td></tr>
+<tr><th id="83">83</th><td>    <dfn class="enum" id="JSC::DFG::NotCellNorBigIntUse" title='JSC::DFG::NotCellNorBigIntUse' data-ref="JSC::DFG::NotCellNorBigIntUse" data-ref-filename="JSC..DFG..NotCellNorBigIntUse">NotCellNorBigIntUse</dfn>,</td></tr>
+<tr><th id="84">84</th><td>    <dfn class="enum" id="JSC::DFG::NotDoubleUse" title='JSC::DFG::NotDoubleUse' data-ref="JSC::DFG::NotDoubleUse" data-ref-filename="JSC..DFG..NotDoubleUse">NotDoubleUse</dfn>,</td></tr>
+<tr><th id="85">85</th><td>    <dfn class="enum" id="JSC::DFG::NeitherDoubleNorHeapBigIntNorStringUse" title='JSC::DFG::NeitherDoubleNorHeapBigIntNorStringUse' data-ref="JSC::DFG::NeitherDoubleNorHeapBigIntNorStringUse" data-ref-filename="JSC..DFG..NeitherDoubleNorHeapBigIntNorStringUse">NeitherDoubleNorHeapBigIntNorStringUse</dfn>,</td></tr>
+<tr><th id="86">86</th><td>    <dfn class="enum" id="JSC::DFG::KnownOtherUse" title='JSC::DFG::KnownOtherUse' data-ref="JSC::DFG::KnownOtherUse" data-ref-filename="JSC..DFG..KnownOtherUse">KnownOtherUse</dfn>,</td></tr>
+<tr><th id="87">87</th><td>    <dfn class="enum" id="JSC::DFG::OtherUse" title='JSC::DFG::OtherUse' data-ref="JSC::DFG::OtherUse" data-ref-filename="JSC..DFG..OtherUse">OtherUse</dfn>,</td></tr>
+<tr><th id="88">88</th><td>    <dfn class="enum" id="JSC::DFG::MiscUse" title='JSC::DFG::MiscUse' data-ref="JSC::DFG::MiscUse" data-ref-filename="JSC..DFG..MiscUse">MiscUse</dfn>,</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td>    <i>// 2. The Double representation for an unboxed double value that must be stored</i></td></tr>
+<tr><th id="91">91</th><td><i>    //    in an FP register.</i></td></tr>
+<tr><th id="92">92</th><td>    <dfn class="enum" id="JSC::DFG::DoubleRepUse" title='JSC::DFG::DoubleRepUse' data-ref="JSC::DFG::DoubleRepUse" data-ref-filename="JSC..DFG..DoubleRepUse">DoubleRepUse</dfn>,</td></tr>
+<tr><th id="93">93</th><td>    <dfn class="enum" id="JSC::DFG::DoubleRepRealUse" title='JSC::DFG::DoubleRepRealUse' data-ref="JSC::DFG::DoubleRepRealUse" data-ref-filename="JSC..DFG..DoubleRepRealUse">DoubleRepRealUse</dfn>,</td></tr>
+<tr><th id="94">94</th><td>    <dfn class="enum" id="JSC::DFG::DoubleRepAnyIntUse" title='JSC::DFG::DoubleRepAnyIntUse' data-ref="JSC::DFG::DoubleRepAnyIntUse" data-ref-filename="JSC..DFG..DoubleRepAnyIntUse">DoubleRepAnyIntUse</dfn>,</td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td>    <i>// 3. The Int52 representation for an unboxed integer value that must be stored</i></td></tr>
+<tr><th id="97">97</th><td><i>    //    in a GP register.</i></td></tr>
+<tr><th id="98">98</th><td>    <dfn class="enum" id="JSC::DFG::Int52RepUse" title='JSC::DFG::Int52RepUse' data-ref="JSC::DFG::Int52RepUse" data-ref-filename="JSC..DFG..Int52RepUse">Int52RepUse</dfn>,</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td>    <dfn class="enum" id="JSC::DFG::LastUseKind" title='JSC::DFG::LastUseKind' data-ref="JSC::DFG::LastUseKind" data-ref-filename="JSC..DFG..LastUseKind">LastUseKind</dfn> <i>// Must always be the last entry in the enum, as it is used to denote the number of enum elements.</i></td></tr>
+<tr><th id="101">101</th><td>};</td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td><b>inline</b> <a class="typedef" href="../bytecode/SpeculatedType.h.html#JSC::SpeculatedType" title='JSC::SpeculatedType' data-type='uint64_t' data-ref="JSC::SpeculatedType" data-ref-filename="JSC..SpeculatedType">SpeculatedType</a> <dfn class="decl def fn" id="_ZN3JSC3DFG13typeFilterForENS0_7UseKindE" title='JSC::DFG::typeFilterFor' data-ref="_ZN3JSC3DFG13typeFilterForENS0_7UseKindE" data-ref-filename="_ZN3JSC3DFG13typeFilterForENS0_7UseKindE">typeFilterFor</dfn>(<a class="type" href="#JSC::DFG::UseKind" title='JSC::DFG::UseKind' data-ref="JSC::DFG::UseKind" data-ref-filename="JSC..DFG..UseKind">UseKind</a> <dfn class="local col7 decl" id="37useKind" title='useKind' data-type='JSC::DFG::UseKind' data-ref="37useKind" data-ref-filename="37useKind">useKind</dfn>)</td></tr>
+<tr><th id="104">104</th><td>{</td></tr>
+<tr><th id="105">105</th><td>    <b>switch</b> (<a class="local col7 ref" href="#37useKind" title='useKind' data-ref="37useKind" data-ref-filename="37useKind">useKind</a>) {</td></tr>
+<tr><th id="106">106</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::UntypedUse" title='JSC::DFG::UntypedUse' data-ref="JSC::DFG::UntypedUse" data-ref-filename="JSC..DFG..UntypedUse">UntypedUse</a>:</td></tr>
+<tr><th id="107">107</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecBytecodeTop" title='JSC::SpecBytecodeTop' data-ref="JSC::SpecBytecodeTop" data-ref-filename="JSC..SpecBytecodeTop">SpecBytecodeTop</a>;</td></tr>
+<tr><th id="108">108</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::Int32Use" title='JSC::DFG::Int32Use' data-ref="JSC::DFG::Int32Use" data-ref-filename="JSC..DFG..Int32Use">Int32Use</a>:</td></tr>
+<tr><th id="109">109</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownInt32Use" title='JSC::DFG::KnownInt32Use' data-ref="JSC::DFG::KnownInt32Use" data-ref-filename="JSC..DFG..KnownInt32Use">KnownInt32Use</a>:</td></tr>
+<tr><th id="110">110</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecInt32Only" title='JSC::SpecInt32Only' data-ref="JSC::SpecInt32Only" data-ref-filename="JSC..SpecInt32Only">SpecInt32Only</a>;</td></tr>
+<tr><th id="111">111</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::Int52RepUse" title='JSC::DFG::Int52RepUse' data-ref="JSC::DFG::Int52RepUse" data-ref-filename="JSC..DFG..Int52RepUse">Int52RepUse</a>:</td></tr>
+<tr><th id="112">112</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecInt52Any" title='JSC::SpecInt52Any' data-ref="JSC::SpecInt52Any" data-ref-filename="JSC..SpecInt52Any">SpecInt52Any</a>;</td></tr>
+<tr><th id="113">113</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::AnyIntUse" title='JSC::DFG::AnyIntUse' data-ref="JSC::DFG::AnyIntUse" data-ref-filename="JSC..DFG..AnyIntUse">AnyIntUse</a>:</td></tr>
+<tr><th id="114">114</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecInt32Only" title='JSC::SpecInt32Only' data-ref="JSC::SpecInt32Only" data-ref-filename="JSC..SpecInt32Only">SpecInt32Only</a> | <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecAnyIntAsDouble" title='JSC::SpecAnyIntAsDouble' data-ref="JSC::SpecAnyIntAsDouble" data-ref-filename="JSC..SpecAnyIntAsDouble">SpecAnyIntAsDouble</a>;</td></tr>
+<tr><th id="115">115</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::NumberUse" title='JSC::DFG::NumberUse' data-ref="JSC::DFG::NumberUse" data-ref-filename="JSC..DFG..NumberUse">NumberUse</a>:</td></tr>
+<tr><th id="116">116</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecBytecodeNumber" title='JSC::SpecBytecodeNumber' data-ref="JSC::SpecBytecodeNumber" data-ref-filename="JSC..SpecBytecodeNumber">SpecBytecodeNumber</a>;</td></tr>
+<tr><th id="117">117</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::RealNumberUse" title='JSC::DFG::RealNumberUse' data-ref="JSC::DFG::RealNumberUse" data-ref-filename="JSC..DFG..RealNumberUse">RealNumberUse</a>:</td></tr>
+<tr><th id="118">118</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecBytecodeRealNumber" title='JSC::SpecBytecodeRealNumber' data-ref="JSC::SpecBytecodeRealNumber" data-ref-filename="JSC..SpecBytecodeRealNumber">SpecBytecodeRealNumber</a>;</td></tr>
+<tr><th id="119">119</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::DoubleRepUse" title='JSC::DFG::DoubleRepUse' data-ref="JSC::DFG::DoubleRepUse" data-ref-filename="JSC..DFG..DoubleRepUse">DoubleRepUse</a>:</td></tr>
+<tr><th id="120">120</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecFullDouble" title='JSC::SpecFullDouble' data-ref="JSC::SpecFullDouble" data-ref-filename="JSC..SpecFullDouble">SpecFullDouble</a>;</td></tr>
+<tr><th id="121">121</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::DoubleRepRealUse" title='JSC::DFG::DoubleRepRealUse' data-ref="JSC::DFG::DoubleRepRealUse" data-ref-filename="JSC..DFG..DoubleRepRealUse">DoubleRepRealUse</a>:</td></tr>
+<tr><th id="122">122</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecDoubleReal" title='JSC::SpecDoubleReal' data-ref="JSC::SpecDoubleReal" data-ref-filename="JSC..SpecDoubleReal">SpecDoubleReal</a>;</td></tr>
+<tr><th id="123">123</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::DoubleRepAnyIntUse" title='JSC::DFG::DoubleRepAnyIntUse' data-ref="JSC::DFG::DoubleRepAnyIntUse" data-ref-filename="JSC..DFG..DoubleRepAnyIntUse">DoubleRepAnyIntUse</a>:</td></tr>
+<tr><th id="124">124</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecAnyIntAsDouble" title='JSC::SpecAnyIntAsDouble' data-ref="JSC::SpecAnyIntAsDouble" data-ref-filename="JSC..SpecAnyIntAsDouble">SpecAnyIntAsDouble</a>;</td></tr>
+<tr><th id="125">125</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::BooleanUse" title='JSC::DFG::BooleanUse' data-ref="JSC::DFG::BooleanUse" data-ref-filename="JSC..DFG..BooleanUse">BooleanUse</a>:</td></tr>
+<tr><th id="126">126</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownBooleanUse" title='JSC::DFG::KnownBooleanUse' data-ref="JSC::DFG::KnownBooleanUse" data-ref-filename="JSC..DFG..KnownBooleanUse">KnownBooleanUse</a>:</td></tr>
+<tr><th id="127">127</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecBoolean" title='JSC::SpecBoolean' data-ref="JSC::SpecBoolean" data-ref-filename="JSC..SpecBoolean">SpecBoolean</a>;</td></tr>
+<tr><th id="128">128</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::CellUse" title='JSC::DFG::CellUse' data-ref="JSC::DFG::CellUse" data-ref-filename="JSC..DFG..CellUse">CellUse</a>:</td></tr>
+<tr><th id="129">129</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownCellUse" title='JSC::DFG::KnownCellUse' data-ref="JSC::DFG::KnownCellUse" data-ref-filename="JSC..DFG..KnownCellUse">KnownCellUse</a>:</td></tr>
+<tr><th id="130">130</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecCellCheck" title='JSC::SpecCellCheck' data-ref="JSC::SpecCellCheck" data-ref-filename="JSC..SpecCellCheck">SpecCellCheck</a>;</td></tr>
+<tr><th id="131">131</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::CellOrOtherUse" title='JSC::DFG::CellOrOtherUse' data-ref="JSC::DFG::CellOrOtherUse" data-ref-filename="JSC..DFG..CellOrOtherUse">CellOrOtherUse</a>:</td></tr>
+<tr><th id="132">132</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecCellCheck" title='JSC::SpecCellCheck' data-ref="JSC::SpecCellCheck" data-ref-filename="JSC..SpecCellCheck">SpecCellCheck</a> | <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecOther" title='JSC::SpecOther' data-ref="JSC::SpecOther" data-ref-filename="JSC..SpecOther">SpecOther</a>;</td></tr>
+<tr><th id="133">133</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::ObjectUse" title='JSC::DFG::ObjectUse' data-ref="JSC::DFG::ObjectUse" data-ref-filename="JSC..DFG..ObjectUse">ObjectUse</a>:</td></tr>
+<tr><th id="134">134</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecObject" title='JSC::SpecObject' data-ref="JSC::SpecObject" data-ref-filename="JSC..SpecObject">SpecObject</a>;</td></tr>
+<tr><th id="135">135</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::ArrayUse" title='JSC::DFG::ArrayUse' data-ref="JSC::DFG::ArrayUse" data-ref-filename="JSC..DFG..ArrayUse">ArrayUse</a>:</td></tr>
+<tr><th id="136">136</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecArray" title='JSC::SpecArray' data-ref="JSC::SpecArray" data-ref-filename="JSC..SpecArray">SpecArray</a>;</td></tr>
+<tr><th id="137">137</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::FunctionUse" title='JSC::DFG::FunctionUse' data-ref="JSC::DFG::FunctionUse" data-ref-filename="JSC..DFG..FunctionUse">FunctionUse</a>:</td></tr>
+<tr><th id="138">138</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecFunction" title='JSC::SpecFunction' data-ref="JSC::SpecFunction" data-ref-filename="JSC..SpecFunction">SpecFunction</a>;</td></tr>
+<tr><th id="139">139</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::FinalObjectUse" title='JSC::DFG::FinalObjectUse' data-ref="JSC::DFG::FinalObjectUse" data-ref-filename="JSC..DFG..FinalObjectUse">FinalObjectUse</a>:</td></tr>
+<tr><th id="140">140</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecFinalObject" title='JSC::SpecFinalObject' data-ref="JSC::SpecFinalObject" data-ref-filename="JSC..SpecFinalObject">SpecFinalObject</a>;</td></tr>
+<tr><th id="141">141</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::RegExpObjectUse" title='JSC::DFG::RegExpObjectUse' data-ref="JSC::DFG::RegExpObjectUse" data-ref-filename="JSC..DFG..RegExpObjectUse">RegExpObjectUse</a>:</td></tr>
+<tr><th id="142">142</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecRegExpObject" title='JSC::SpecRegExpObject' data-ref="JSC::SpecRegExpObject" data-ref-filename="JSC..SpecRegExpObject">SpecRegExpObject</a>;</td></tr>
+<tr><th id="143">143</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::ProxyObjectUse" title='JSC::DFG::ProxyObjectUse' data-ref="JSC::DFG::ProxyObjectUse" data-ref-filename="JSC..DFG..ProxyObjectUse">ProxyObjectUse</a>:</td></tr>
+<tr><th id="144">144</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecProxyObject" title='JSC::SpecProxyObject' data-ref="JSC::SpecProxyObject" data-ref-filename="JSC..SpecProxyObject">SpecProxyObject</a>;</td></tr>
+<tr><th id="145">145</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::DerivedArrayUse" title='JSC::DFG::DerivedArrayUse' data-ref="JSC::DFG::DerivedArrayUse" data-ref-filename="JSC..DFG..DerivedArrayUse">DerivedArrayUse</a>:</td></tr>
+<tr><th id="146">146</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecDerivedArray" title='JSC::SpecDerivedArray' data-ref="JSC::SpecDerivedArray" data-ref-filename="JSC..SpecDerivedArray">SpecDerivedArray</a>;</td></tr>
+<tr><th id="147">147</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::ObjectOrOtherUse" title='JSC::DFG::ObjectOrOtherUse' data-ref="JSC::DFG::ObjectOrOtherUse" data-ref-filename="JSC..DFG..ObjectOrOtherUse">ObjectOrOtherUse</a>:</td></tr>
+<tr><th id="148">148</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecObject" title='JSC::SpecObject' data-ref="JSC::SpecObject" data-ref-filename="JSC..SpecObject">SpecObject</a> | <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecOther" title='JSC::SpecOther' data-ref="JSC::SpecOther" data-ref-filename="JSC..SpecOther">SpecOther</a>;</td></tr>
+<tr><th id="149">149</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::StringIdentUse" title='JSC::DFG::StringIdentUse' data-ref="JSC::DFG::StringIdentUse" data-ref-filename="JSC..DFG..StringIdentUse">StringIdentUse</a>:</td></tr>
+<tr><th id="150">150</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecStringIdent" title='JSC::SpecStringIdent' data-ref="JSC::SpecStringIdent" data-ref-filename="JSC..SpecStringIdent">SpecStringIdent</a>;</td></tr>
+<tr><th id="151">151</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::StringUse" title='JSC::DFG::StringUse' data-ref="JSC::DFG::StringUse" data-ref-filename="JSC..DFG..StringUse">StringUse</a>:</td></tr>
+<tr><th id="152">152</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownStringUse" title='JSC::DFG::KnownStringUse' data-ref="JSC::DFG::KnownStringUse" data-ref-filename="JSC..DFG..KnownStringUse">KnownStringUse</a>:</td></tr>
+<tr><th id="153">153</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecString" title='JSC::SpecString' data-ref="JSC::SpecString" data-ref-filename="JSC..SpecString">SpecString</a>;</td></tr>
+<tr><th id="154">154</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::StringOrOtherUse" title='JSC::DFG::StringOrOtherUse' data-ref="JSC::DFG::StringOrOtherUse" data-ref-filename="JSC..DFG..StringOrOtherUse">StringOrOtherUse</a>:</td></tr>
+<tr><th id="155">155</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecString" title='JSC::SpecString' data-ref="JSC::SpecString" data-ref-filename="JSC..SpecString">SpecString</a> | <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecOther" title='JSC::SpecOther' data-ref="JSC::SpecOther" data-ref-filename="JSC..SpecOther">SpecOther</a>;</td></tr>
+<tr><th id="156">156</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownPrimitiveUse" title='JSC::DFG::KnownPrimitiveUse' data-ref="JSC::DFG::KnownPrimitiveUse" data-ref-filename="JSC..DFG..KnownPrimitiveUse">KnownPrimitiveUse</a>:</td></tr>
+<tr><th id="157">157</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecHeapTop" title='JSC::SpecHeapTop' data-ref="JSC::SpecHeapTop" data-ref-filename="JSC..SpecHeapTop">SpecHeapTop</a> &amp; ~<a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecObject" title='JSC::SpecObject' data-ref="JSC::SpecObject" data-ref-filename="JSC..SpecObject">SpecObject</a>;</td></tr>
+<tr><th id="158">158</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::SymbolUse" title='JSC::DFG::SymbolUse' data-ref="JSC::DFG::SymbolUse" data-ref-filename="JSC..DFG..SymbolUse">SymbolUse</a>:</td></tr>
+<tr><th id="159">159</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecSymbol" title='JSC::SpecSymbol' data-ref="JSC::SpecSymbol" data-ref-filename="JSC..SpecSymbol">SpecSymbol</a>;</td></tr>
+<tr><th id="160">160</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::AnyBigIntUse" title='JSC::DFG::AnyBigIntUse' data-ref="JSC::DFG::AnyBigIntUse" data-ref-filename="JSC..DFG..AnyBigIntUse">AnyBigIntUse</a>:</td></tr>
+<tr><th id="161">161</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecBigInt" title='JSC::SpecBigInt' data-ref="JSC::SpecBigInt" data-ref-filename="JSC..SpecBigInt">SpecBigInt</a>;</td></tr>
+<tr><th id="162">162</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::HeapBigIntUse" title='JSC::DFG::HeapBigIntUse' data-ref="JSC::DFG::HeapBigIntUse" data-ref-filename="JSC..DFG..HeapBigIntUse">HeapBigIntUse</a>:</td></tr>
+<tr><th id="163">163</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecHeapBigInt" title='JSC::SpecHeapBigInt' data-ref="JSC::SpecHeapBigInt" data-ref-filename="JSC..SpecHeapBigInt">SpecHeapBigInt</a>;</td></tr>
+<tr><th id="164">164</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::BigInt32Use" title='JSC::DFG::BigInt32Use' data-ref="JSC::DFG::BigInt32Use" data-ref-filename="JSC..DFG..BigInt32Use">BigInt32Use</a>:</td></tr>
+<tr><th id="165">165</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecBigInt32" title='JSC::SpecBigInt32' data-ref="JSC::SpecBigInt32" data-ref-filename="JSC..SpecBigInt32">SpecBigInt32</a>;</td></tr>
+<tr><th id="166">166</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::PromiseObjectUse" title='JSC::DFG::PromiseObjectUse' data-ref="JSC::DFG::PromiseObjectUse" data-ref-filename="JSC..DFG..PromiseObjectUse">PromiseObjectUse</a>:</td></tr>
+<tr><th id="167">167</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecPromiseObject" title='JSC::SpecPromiseObject' data-ref="JSC::SpecPromiseObject" data-ref-filename="JSC..SpecPromiseObject">SpecPromiseObject</a>;</td></tr>
+<tr><th id="168">168</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::DateObjectUse" title='JSC::DFG::DateObjectUse' data-ref="JSC::DFG::DateObjectUse" data-ref-filename="JSC..DFG..DateObjectUse">DateObjectUse</a>:</td></tr>
+<tr><th id="169">169</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecDateObject" title='JSC::SpecDateObject' data-ref="JSC::SpecDateObject" data-ref-filename="JSC..SpecDateObject">SpecDateObject</a>;</td></tr>
+<tr><th id="170">170</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::MapObjectUse" title='JSC::DFG::MapObjectUse' data-ref="JSC::DFG::MapObjectUse" data-ref-filename="JSC..DFG..MapObjectUse">MapObjectUse</a>:</td></tr>
+<tr><th id="171">171</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecMapObject" title='JSC::SpecMapObject' data-ref="JSC::SpecMapObject" data-ref-filename="JSC..SpecMapObject">SpecMapObject</a>;</td></tr>
+<tr><th id="172">172</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::SetObjectUse" title='JSC::DFG::SetObjectUse' data-ref="JSC::DFG::SetObjectUse" data-ref-filename="JSC..DFG..SetObjectUse">SetObjectUse</a>:</td></tr>
+<tr><th id="173">173</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecSetObject" title='JSC::SpecSetObject' data-ref="JSC::SpecSetObject" data-ref-filename="JSC..SpecSetObject">SpecSetObject</a>;</td></tr>
+<tr><th id="174">174</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::WeakMapObjectUse" title='JSC::DFG::WeakMapObjectUse' data-ref="JSC::DFG::WeakMapObjectUse" data-ref-filename="JSC..DFG..WeakMapObjectUse">WeakMapObjectUse</a>:</td></tr>
+<tr><th id="175">175</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecWeakMapObject" title='JSC::SpecWeakMapObject' data-ref="JSC::SpecWeakMapObject" data-ref-filename="JSC..SpecWeakMapObject">SpecWeakMapObject</a>;</td></tr>
+<tr><th id="176">176</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::WeakSetObjectUse" title='JSC::DFG::WeakSetObjectUse' data-ref="JSC::DFG::WeakSetObjectUse" data-ref-filename="JSC..DFG..WeakSetObjectUse">WeakSetObjectUse</a>:</td></tr>
+<tr><th id="177">177</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecWeakSetObject" title='JSC::SpecWeakSetObject' data-ref="JSC::SpecWeakSetObject" data-ref-filename="JSC..SpecWeakSetObject">SpecWeakSetObject</a>;</td></tr>
+<tr><th id="178">178</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::DataViewObjectUse" title='JSC::DFG::DataViewObjectUse' data-ref="JSC::DFG::DataViewObjectUse" data-ref-filename="JSC..DFG..DataViewObjectUse">DataViewObjectUse</a>:</td></tr>
+<tr><th id="179">179</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecDataViewObject" title='JSC::SpecDataViewObject' data-ref="JSC::SpecDataViewObject" data-ref-filename="JSC..SpecDataViewObject">SpecDataViewObject</a>;</td></tr>
+<tr><th id="180">180</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::StringObjectUse" title='JSC::DFG::StringObjectUse' data-ref="JSC::DFG::StringObjectUse" data-ref-filename="JSC..DFG..StringObjectUse">StringObjectUse</a>:</td></tr>
+<tr><th id="181">181</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecStringObject" title='JSC::SpecStringObject' data-ref="JSC::SpecStringObject" data-ref-filename="JSC..SpecStringObject">SpecStringObject</a>;</td></tr>
+<tr><th id="182">182</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::StringOrStringObjectUse" title='JSC::DFG::StringOrStringObjectUse' data-ref="JSC::DFG::StringOrStringObjectUse" data-ref-filename="JSC..DFG..StringOrStringObjectUse">StringOrStringObjectUse</a>:</td></tr>
+<tr><th id="183">183</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecString" title='JSC::SpecString' data-ref="JSC::SpecString" data-ref-filename="JSC..SpecString">SpecString</a> | <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecStringObject" title='JSC::SpecStringObject' data-ref="JSC::SpecStringObject" data-ref-filename="JSC..SpecStringObject">SpecStringObject</a>;</td></tr>
+<tr><th id="184">184</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::NotStringVarUse" title='JSC::DFG::NotStringVarUse' data-ref="JSC::DFG::NotStringVarUse" data-ref-filename="JSC..DFG..NotStringVarUse">NotStringVarUse</a>:</td></tr>
+<tr><th id="185">185</th><td>        <b>return</b> ~<a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecStringVar" title='JSC::SpecStringVar' data-ref="JSC::SpecStringVar" data-ref-filename="JSC..SpecStringVar">SpecStringVar</a>;</td></tr>
+<tr><th id="186">186</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::NotSymbolUse" title='JSC::DFG::NotSymbolUse' data-ref="JSC::DFG::NotSymbolUse" data-ref-filename="JSC..DFG..NotSymbolUse">NotSymbolUse</a>:</td></tr>
+<tr><th id="187">187</th><td>        <b>return</b> ~<a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecSymbol" title='JSC::SpecSymbol' data-ref="JSC::SpecSymbol" data-ref-filename="JSC..SpecSymbol">SpecSymbol</a>;</td></tr>
+<tr><th id="188">188</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::NotCellUse" title='JSC::DFG::NotCellUse' data-ref="JSC::DFG::NotCellUse" data-ref-filename="JSC..DFG..NotCellUse">NotCellUse</a>:</td></tr>
+<tr><th id="189">189</th><td>        <b>return</b> ~<a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecCellCheck" title='JSC::SpecCellCheck' data-ref="JSC::SpecCellCheck" data-ref-filename="JSC..SpecCellCheck">SpecCellCheck</a>;</td></tr>
+<tr><th id="190">190</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::NotCellNorBigIntUse" title='JSC::DFG::NotCellNorBigIntUse' data-ref="JSC::DFG::NotCellNorBigIntUse" data-ref-filename="JSC..DFG..NotCellNorBigIntUse">NotCellNorBigIntUse</a>:</td></tr>
+<tr><th id="191">191</th><td>        <b>return</b> ~<a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecCellCheck" title='JSC::SpecCellCheck' data-ref="JSC::SpecCellCheck" data-ref-filename="JSC..SpecCellCheck">SpecCellCheck</a> &amp; ~<a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecBigInt" title='JSC::SpecBigInt' data-ref="JSC::SpecBigInt" data-ref-filename="JSC..SpecBigInt">SpecBigInt</a>;</td></tr>
+<tr><th id="192">192</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::NotDoubleUse" title='JSC::DFG::NotDoubleUse' data-ref="JSC::DFG::NotDoubleUse" data-ref-filename="JSC..DFG..NotDoubleUse">NotDoubleUse</a>:</td></tr>
+<tr><th id="193">193</th><td>        <b>return</b> ~<a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecFullDouble" title='JSC::SpecFullDouble' data-ref="JSC::SpecFullDouble" data-ref-filename="JSC..SpecFullDouble">SpecFullDouble</a>;</td></tr>
+<tr><th id="194">194</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::NeitherDoubleNorHeapBigIntNorStringUse" title='JSC::DFG::NeitherDoubleNorHeapBigIntNorStringUse' data-ref="JSC::DFG::NeitherDoubleNorHeapBigIntNorStringUse" data-ref-filename="JSC..DFG..NeitherDoubleNorHeapBigIntNorStringUse">NeitherDoubleNorHeapBigIntNorStringUse</a>:</td></tr>
+<tr><th id="195">195</th><td>        <b>return</b> ~(<a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecFullDouble" title='JSC::SpecFullDouble' data-ref="JSC::SpecFullDouble" data-ref-filename="JSC..SpecFullDouble">SpecFullDouble</a> | <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecHeapBigInt" title='JSC::SpecHeapBigInt' data-ref="JSC::SpecHeapBigInt" data-ref-filename="JSC..SpecHeapBigInt">SpecHeapBigInt</a> | <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecString" title='JSC::SpecString' data-ref="JSC::SpecString" data-ref-filename="JSC..SpecString">SpecString</a>);</td></tr>
+<tr><th id="196">196</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownOtherUse" title='JSC::DFG::KnownOtherUse' data-ref="JSC::DFG::KnownOtherUse" data-ref-filename="JSC..DFG..KnownOtherUse">KnownOtherUse</a>:</td></tr>
+<tr><th id="197">197</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::OtherUse" title='JSC::DFG::OtherUse' data-ref="JSC::DFG::OtherUse" data-ref-filename="JSC..DFG..OtherUse">OtherUse</a>:</td></tr>
+<tr><th id="198">198</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecOther" title='JSC::SpecOther' data-ref="JSC::SpecOther" data-ref-filename="JSC..SpecOther">SpecOther</a>;</td></tr>
+<tr><th id="199">199</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::MiscUse" title='JSC::DFG::MiscUse' data-ref="JSC::DFG::MiscUse" data-ref-filename="JSC..DFG..MiscUse">MiscUse</a>:</td></tr>
+<tr><th id="200">200</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecMisc" title='JSC::SpecMisc' data-ref="JSC::SpecMisc" data-ref-filename="JSC..SpecMisc">SpecMisc</a>;</td></tr>
+<tr><th id="201">201</th><td>    <b>default</b>:</td></tr>
+<tr><th id="202">202</th><td>        <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#625" title="do { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGUseKind.h&quot;, 202, __PRETTY_FUNCTION__, 0); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(202, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGUseKind.h&quot;, __PRETTY_FUNCTION__, 1113); } while (false); } while (0)" data-ref="_M/RELEASE_ASSERT_NOT_REACHED">RELEASE_ASSERT_NOT_REACHED</a>();</td></tr>
+<tr><th id="203">203</th><td>        <b>return</b> <a class="ref" href="../bytecode/SpeculatedType.h.html#JSC::SpecFullTop" title='JSC::SpecFullTop' data-ref="JSC::SpecFullTop" data-ref-filename="JSC..SpecFullTop">SpecFullTop</a>;</td></tr>
+<tr><th id="204">204</th><td>    }</td></tr>
+<tr><th id="205">205</th><td>}</td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG22shouldNotHaveTypeCheckENS0_7UseKindE" title='JSC::DFG::shouldNotHaveTypeCheck' data-ref="_ZN3JSC3DFG22shouldNotHaveTypeCheckENS0_7UseKindE" data-ref-filename="_ZN3JSC3DFG22shouldNotHaveTypeCheckENS0_7UseKindE">shouldNotHaveTypeCheck</dfn>(<a class="type" href="#JSC::DFG::UseKind" title='JSC::DFG::UseKind' data-ref="JSC::DFG::UseKind" data-ref-filename="JSC..DFG..UseKind">UseKind</a> <dfn class="local col8 decl" id="38kind" title='kind' data-type='JSC::DFG::UseKind' data-ref="38kind" data-ref-filename="38kind">kind</dfn>)</td></tr>
+<tr><th id="208">208</th><td>{</td></tr>
+<tr><th id="209">209</th><td>    <b>switch</b> (<a class="local col8 ref" href="#38kind" title='kind' data-ref="38kind" data-ref-filename="38kind">kind</a>) {</td></tr>
+<tr><th id="210">210</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::UntypedUse" title='JSC::DFG::UntypedUse' data-ref="JSC::DFG::UntypedUse" data-ref-filename="JSC..DFG..UntypedUse">UntypedUse</a>:</td></tr>
+<tr><th id="211">211</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownInt32Use" title='JSC::DFG::KnownInt32Use' data-ref="JSC::DFG::KnownInt32Use" data-ref-filename="JSC..DFG..KnownInt32Use">KnownInt32Use</a>:</td></tr>
+<tr><th id="212">212</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownCellUse" title='JSC::DFG::KnownCellUse' data-ref="JSC::DFG::KnownCellUse" data-ref-filename="JSC..DFG..KnownCellUse">KnownCellUse</a>:</td></tr>
+<tr><th id="213">213</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownStringUse" title='JSC::DFG::KnownStringUse' data-ref="JSC::DFG::KnownStringUse" data-ref-filename="JSC..DFG..KnownStringUse">KnownStringUse</a>:</td></tr>
+<tr><th id="214">214</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownPrimitiveUse" title='JSC::DFG::KnownPrimitiveUse' data-ref="JSC::DFG::KnownPrimitiveUse" data-ref-filename="JSC..DFG..KnownPrimitiveUse">KnownPrimitiveUse</a>:</td></tr>
+<tr><th id="215">215</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownBooleanUse" title='JSC::DFG::KnownBooleanUse' data-ref="JSC::DFG::KnownBooleanUse" data-ref-filename="JSC..DFG..KnownBooleanUse">KnownBooleanUse</a>:</td></tr>
+<tr><th id="216">216</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownOtherUse" title='JSC::DFG::KnownOtherUse' data-ref="JSC::DFG::KnownOtherUse" data-ref-filename="JSC..DFG..KnownOtherUse">KnownOtherUse</a>:</td></tr>
+<tr><th id="217">217</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::Int52RepUse" title='JSC::DFG::Int52RepUse' data-ref="JSC::DFG::Int52RepUse" data-ref-filename="JSC..DFG..Int52RepUse">Int52RepUse</a>:</td></tr>
+<tr><th id="218">218</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::DoubleRepUse" title='JSC::DFG::DoubleRepUse' data-ref="JSC::DFG::DoubleRepUse" data-ref-filename="JSC..DFG..DoubleRepUse">DoubleRepUse</a>:</td></tr>
+<tr><th id="219">219</th><td>        <b>return</b> <b>true</b>;</td></tr>
+<tr><th id="220">220</th><td>    <b>default</b>:</td></tr>
+<tr><th id="221">221</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="222">222</th><td>    }</td></tr>
+<tr><th id="223">223</th><td>}</td></tr>
+<tr><th id="224">224</th><td></td></tr>
+<tr><th id="225">225</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG16mayHaveTypeCheckENS0_7UseKindE" title='JSC::DFG::mayHaveTypeCheck' data-ref="_ZN3JSC3DFG16mayHaveTypeCheckENS0_7UseKindE" data-ref-filename="_ZN3JSC3DFG16mayHaveTypeCheckENS0_7UseKindE">mayHaveTypeCheck</dfn>(<a class="type" href="#JSC::DFG::UseKind" title='JSC::DFG::UseKind' data-ref="JSC::DFG::UseKind" data-ref-filename="JSC..DFG..UseKind">UseKind</a> <dfn class="local col9 decl" id="39kind" title='kind' data-type='JSC::DFG::UseKind' data-ref="39kind" data-ref-filename="39kind">kind</dfn>)</td></tr>
+<tr><th id="226">226</th><td>{</td></tr>
+<tr><th id="227">227</th><td>    <b>return</b> !<a class="ref fn" href="#_ZN3JSC3DFG22shouldNotHaveTypeCheckENS0_7UseKindE" title='JSC::DFG::shouldNotHaveTypeCheck' data-ref="_ZN3JSC3DFG22shouldNotHaveTypeCheckENS0_7UseKindE" data-ref-filename="_ZN3JSC3DFG22shouldNotHaveTypeCheckENS0_7UseKindE">shouldNotHaveTypeCheck</a>(<a class="local col9 ref" href="#39kind" title='kind' data-ref="39kind" data-ref-filename="39kind">kind</a>);</td></tr>
+<tr><th id="228">228</th><td>}</td></tr>
+<tr><th id="229">229</th><td></td></tr>
+<tr><th id="230">230</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG8isDoubleENS0_7UseKindE" title='JSC::DFG::isDouble' data-ref="_ZN3JSC3DFG8isDoubleENS0_7UseKindE" data-ref-filename="_ZN3JSC3DFG8isDoubleENS0_7UseKindE">isDouble</dfn>(<a class="type" href="#JSC::DFG::UseKind" title='JSC::DFG::UseKind' data-ref="JSC::DFG::UseKind" data-ref-filename="JSC..DFG..UseKind">UseKind</a> <dfn class="local col0 decl" id="40kind" title='kind' data-type='JSC::DFG::UseKind' data-ref="40kind" data-ref-filename="40kind">kind</dfn>)</td></tr>
+<tr><th id="231">231</th><td>{</td></tr>
+<tr><th id="232">232</th><td>    <b>switch</b> (<a class="local col0 ref" href="#40kind" title='kind' data-ref="40kind" data-ref-filename="40kind">kind</a>) {</td></tr>
+<tr><th id="233">233</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::DoubleRepUse" title='JSC::DFG::DoubleRepUse' data-ref="JSC::DFG::DoubleRepUse" data-ref-filename="JSC..DFG..DoubleRepUse">DoubleRepUse</a>:</td></tr>
+<tr><th id="234">234</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::DoubleRepRealUse" title='JSC::DFG::DoubleRepRealUse' data-ref="JSC::DFG::DoubleRepRealUse" data-ref-filename="JSC..DFG..DoubleRepRealUse">DoubleRepRealUse</a>:</td></tr>
+<tr><th id="235">235</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::DoubleRepAnyIntUse" title='JSC::DFG::DoubleRepAnyIntUse' data-ref="JSC::DFG::DoubleRepAnyIntUse" data-ref-filename="JSC..DFG..DoubleRepAnyIntUse">DoubleRepAnyIntUse</a>:</td></tr>
+<tr><th id="236">236</th><td>        <b>return</b> <b>true</b>;</td></tr>
+<tr><th id="237">237</th><td>    <b>default</b>:</td></tr>
+<tr><th id="238">238</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="239">239</th><td>    }</td></tr>
+<tr><th id="240">240</th><td>}</td></tr>
+<tr><th id="241">241</th><td></td></tr>
+<tr><th id="242">242</th><td><i>// Returns true if the use kind only admits cells, and is therefore appropriate for</i></td></tr>
+<tr><th id="243">243</th><td><i>// SpeculateCellOperand in the DFG or lowCell() in the FTL.</i></td></tr>
+<tr><th id="244">244</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG6isCellENS0_7UseKindE" title='JSC::DFG::isCell' data-ref="_ZN3JSC3DFG6isCellENS0_7UseKindE" data-ref-filename="_ZN3JSC3DFG6isCellENS0_7UseKindE">isCell</dfn>(<a class="type" href="#JSC::DFG::UseKind" title='JSC::DFG::UseKind' data-ref="JSC::DFG::UseKind" data-ref-filename="JSC..DFG..UseKind">UseKind</a> <dfn class="local col1 decl" id="41kind" title='kind' data-type='JSC::DFG::UseKind' data-ref="41kind" data-ref-filename="41kind">kind</dfn>)</td></tr>
+<tr><th id="245">245</th><td>{</td></tr>
+<tr><th id="246">246</th><td>    <b>switch</b> (<a class="local col1 ref" href="#41kind" title='kind' data-ref="41kind" data-ref-filename="41kind">kind</a>) {</td></tr>
+<tr><th id="247">247</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::CellUse" title='JSC::DFG::CellUse' data-ref="JSC::DFG::CellUse" data-ref-filename="JSC..DFG..CellUse">CellUse</a>:</td></tr>
+<tr><th id="248">248</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownCellUse" title='JSC::DFG::KnownCellUse' data-ref="JSC::DFG::KnownCellUse" data-ref-filename="JSC..DFG..KnownCellUse">KnownCellUse</a>:</td></tr>
+<tr><th id="249">249</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::ObjectUse" title='JSC::DFG::ObjectUse' data-ref="JSC::DFG::ObjectUse" data-ref-filename="JSC..DFG..ObjectUse">ObjectUse</a>:</td></tr>
+<tr><th id="250">250</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::ArrayUse" title='JSC::DFG::ArrayUse' data-ref="JSC::DFG::ArrayUse" data-ref-filename="JSC..DFG..ArrayUse">ArrayUse</a>:</td></tr>
+<tr><th id="251">251</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::FunctionUse" title='JSC::DFG::FunctionUse' data-ref="JSC::DFG::FunctionUse" data-ref-filename="JSC..DFG..FunctionUse">FunctionUse</a>:</td></tr>
+<tr><th id="252">252</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::FinalObjectUse" title='JSC::DFG::FinalObjectUse' data-ref="JSC::DFG::FinalObjectUse" data-ref-filename="JSC..DFG..FinalObjectUse">FinalObjectUse</a>:</td></tr>
+<tr><th id="253">253</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::RegExpObjectUse" title='JSC::DFG::RegExpObjectUse' data-ref="JSC::DFG::RegExpObjectUse" data-ref-filename="JSC..DFG..RegExpObjectUse">RegExpObjectUse</a>:</td></tr>
+<tr><th id="254">254</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::PromiseObjectUse" title='JSC::DFG::PromiseObjectUse' data-ref="JSC::DFG::PromiseObjectUse" data-ref-filename="JSC..DFG..PromiseObjectUse">PromiseObjectUse</a>:</td></tr>
+<tr><th id="255">255</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::ProxyObjectUse" title='JSC::DFG::ProxyObjectUse' data-ref="JSC::DFG::ProxyObjectUse" data-ref-filename="JSC..DFG..ProxyObjectUse">ProxyObjectUse</a>:</td></tr>
+<tr><th id="256">256</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::DerivedArrayUse" title='JSC::DFG::DerivedArrayUse' data-ref="JSC::DFG::DerivedArrayUse" data-ref-filename="JSC..DFG..DerivedArrayUse">DerivedArrayUse</a>:</td></tr>
+<tr><th id="257">257</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::StringIdentUse" title='JSC::DFG::StringIdentUse' data-ref="JSC::DFG::StringIdentUse" data-ref-filename="JSC..DFG..StringIdentUse">StringIdentUse</a>:</td></tr>
+<tr><th id="258">258</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::StringUse" title='JSC::DFG::StringUse' data-ref="JSC::DFG::StringUse" data-ref-filename="JSC..DFG..StringUse">StringUse</a>:</td></tr>
+<tr><th id="259">259</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownStringUse" title='JSC::DFG::KnownStringUse' data-ref="JSC::DFG::KnownStringUse" data-ref-filename="JSC..DFG..KnownStringUse">KnownStringUse</a>:</td></tr>
+<tr><th id="260">260</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::SymbolUse" title='JSC::DFG::SymbolUse' data-ref="JSC::DFG::SymbolUse" data-ref-filename="JSC..DFG..SymbolUse">SymbolUse</a>:</td></tr>
+<tr><th id="261">261</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::HeapBigIntUse" title='JSC::DFG::HeapBigIntUse' data-ref="JSC::DFG::HeapBigIntUse" data-ref-filename="JSC..DFG..HeapBigIntUse">HeapBigIntUse</a>:</td></tr>
+<tr><th id="262">262</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::StringObjectUse" title='JSC::DFG::StringObjectUse' data-ref="JSC::DFG::StringObjectUse" data-ref-filename="JSC..DFG..StringObjectUse">StringObjectUse</a>:</td></tr>
+<tr><th id="263">263</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::StringOrStringObjectUse" title='JSC::DFG::StringOrStringObjectUse' data-ref="JSC::DFG::StringOrStringObjectUse" data-ref-filename="JSC..DFG..StringOrStringObjectUse">StringOrStringObjectUse</a>:</td></tr>
+<tr><th id="264">264</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::DateObjectUse" title='JSC::DFG::DateObjectUse' data-ref="JSC::DFG::DateObjectUse" data-ref-filename="JSC..DFG..DateObjectUse">DateObjectUse</a>:</td></tr>
+<tr><th id="265">265</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::MapObjectUse" title='JSC::DFG::MapObjectUse' data-ref="JSC::DFG::MapObjectUse" data-ref-filename="JSC..DFG..MapObjectUse">MapObjectUse</a>:</td></tr>
+<tr><th id="266">266</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::SetObjectUse" title='JSC::DFG::SetObjectUse' data-ref="JSC::DFG::SetObjectUse" data-ref-filename="JSC..DFG..SetObjectUse">SetObjectUse</a>:</td></tr>
+<tr><th id="267">267</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::WeakMapObjectUse" title='JSC::DFG::WeakMapObjectUse' data-ref="JSC::DFG::WeakMapObjectUse" data-ref-filename="JSC..DFG..WeakMapObjectUse">WeakMapObjectUse</a>:</td></tr>
+<tr><th id="268">268</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::WeakSetObjectUse" title='JSC::DFG::WeakSetObjectUse' data-ref="JSC::DFG::WeakSetObjectUse" data-ref-filename="JSC..DFG..WeakSetObjectUse">WeakSetObjectUse</a>:</td></tr>
+<tr><th id="269">269</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::DataViewObjectUse" title='JSC::DFG::DataViewObjectUse' data-ref="JSC::DFG::DataViewObjectUse" data-ref-filename="JSC..DFG..DataViewObjectUse">DataViewObjectUse</a>:</td></tr>
+<tr><th id="270">270</th><td>        <b>return</b> <b>true</b>;</td></tr>
+<tr><th id="271">271</th><td>    <b>default</b>:</td></tr>
+<tr><th id="272">272</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="273">273</th><td>    }</td></tr>
+<tr><th id="274">274</th><td>}</td></tr>
+<tr><th id="275">275</th><td></td></tr>
+<tr><th id="276">276</th><td><i>// Returns true if we've already guaranteed the type </i></td></tr>
+<tr><th id="277">277</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG14alreadyCheckedENS0_7UseKindEy" title='JSC::DFG::alreadyChecked' data-ref="_ZN3JSC3DFG14alreadyCheckedENS0_7UseKindEy" data-ref-filename="_ZN3JSC3DFG14alreadyCheckedENS0_7UseKindEy">alreadyChecked</dfn>(<a class="type" href="#JSC::DFG::UseKind" title='JSC::DFG::UseKind' data-ref="JSC::DFG::UseKind" data-ref-filename="JSC..DFG..UseKind">UseKind</a> <dfn class="local col2 decl" id="42kind" title='kind' data-type='JSC::DFG::UseKind' data-ref="42kind" data-ref-filename="42kind">kind</dfn>, <a class="typedef" href="../bytecode/SpeculatedType.h.html#JSC::SpeculatedType" title='JSC::SpeculatedType' data-type='uint64_t' data-ref="JSC::SpeculatedType" data-ref-filename="JSC..SpeculatedType">SpeculatedType</a> <dfn class="local col3 decl" id="43type" title='type' data-type='JSC::SpeculatedType' data-ref="43type" data-ref-filename="43type">type</dfn>)</td></tr>
+<tr><th id="278">278</th><td>{</td></tr>
+<tr><th id="279">279</th><td>    <b>return</b> !(<a class="local col3 ref" href="#43type" title='type' data-ref="43type" data-ref-filename="43type">type</a> &amp; ~<a class="ref fn" href="#_ZN3JSC3DFG13typeFilterForENS0_7UseKindE" title='JSC::DFG::typeFilterFor' data-ref="_ZN3JSC3DFG13typeFilterForENS0_7UseKindE" data-ref-filename="_ZN3JSC3DFG13typeFilterForENS0_7UseKindE">typeFilterFor</a>(<a class="local col2 ref" href="#42kind" title='kind' data-ref="42kind" data-ref-filename="42kind">kind</a>));</td></tr>
+<tr><th id="280">280</th><td>}</td></tr>
+<tr><th id="281">281</th><td></td></tr>
+<tr><th id="282">282</th><td><b>inline</b> <a class="type" href="#JSC::DFG::UseKind" title='JSC::DFG::UseKind' data-ref="JSC::DFG::UseKind" data-ref-filename="JSC..DFG..UseKind">UseKind</a> <dfn class="decl def fn" id="_ZN3JSC3DFG16useKindForResultEj" title='JSC::DFG::useKindForResult' data-ref="_ZN3JSC3DFG16useKindForResultEj" data-ref-filename="_ZN3JSC3DFG16useKindForResultEj">useKindForResult</dfn>(<a class="typedef" href="DFGNodeFlags.h.html#JSC::DFG::NodeFlags" title='JSC::DFG::NodeFlags' data-type='uint32_t' data-ref="JSC::DFG::NodeFlags" data-ref-filename="JSC..DFG..NodeFlags">NodeFlags</a> <dfn class="local col4 decl" id="44result" title='result' data-type='JSC::DFG::NodeFlags' data-ref="44result" data-ref-filename="44result">result</dfn>)</td></tr>
+<tr><th id="283">283</th><td>{</td></tr>
+<tr><th id="284">284</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(!(result &amp; ~0x0007))) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGUseKind.h&quot;, 284, __PRETTY_FUNCTION__, &quot;!(result &amp; ~NodeResultMask)&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(284, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGUseKind.h&quot;, __PRETTY_FUNCTION__, 1115); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(!(<a class="local col4 ref" href="#44result" title='result' data-ref="44result" data-ref-filename="44result">result</a> &amp; ~<a class="macro" href="DFGNodeFlags.h.html#37" title="0x0007" data-ref="_M/NodeResultMask">NodeResultMask</a>));</td></tr>
+<tr><th id="285">285</th><td>    <b>switch</b> (<a class="local col4 ref" href="#44result" title='result' data-ref="44result" data-ref-filename="44result">result</a>) {</td></tr>
+<tr><th id="286">286</th><td>    <b>case</b> <a class="macro" href="DFGNodeFlags.h.html#42" title="0x0005" data-ref="_M/NodeResultInt52">NodeResultInt52</a>:</td></tr>
+<tr><th id="287">287</th><td>        <b>return</b> <a class="enum" href="#JSC::DFG::Int52RepUse" title='JSC::DFG::Int52RepUse' data-ref="JSC::DFG::Int52RepUse" data-ref-filename="JSC..DFG..Int52RepUse">Int52RepUse</a>;</td></tr>
+<tr><th id="288">288</th><td>    <b>case</b> <a class="macro" href="DFGNodeFlags.h.html#40" title="0x0003" data-ref="_M/NodeResultDouble">NodeResultDouble</a>:</td></tr>
+<tr><th id="289">289</th><td>        <b>return</b> <a class="enum" href="#JSC::DFG::DoubleRepUse" title='JSC::DFG::DoubleRepUse' data-ref="JSC::DFG::DoubleRepUse" data-ref-filename="JSC..DFG..DoubleRepUse">DoubleRepUse</a>;</td></tr>
+<tr><th id="290">290</th><td>    <b>default</b>:</td></tr>
+<tr><th id="291">291</th><td>        <b>return</b> <a class="enum" href="#JSC::DFG::UntypedUse" title='JSC::DFG::UntypedUse' data-ref="JSC::DFG::UntypedUse" data-ref-filename="JSC..DFG..UntypedUse">UntypedUse</a>;</td></tr>
+<tr><th id="292">292</th><td>    }</td></tr>
+<tr><th id="293">293</th><td>}</td></tr>
+<tr><th id="294">294</th><td></td></tr>
+<tr><th id="295">295</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG27checkMayCrashIfInputIsEmptyENS0_7UseKindE" title='JSC::DFG::checkMayCrashIfInputIsEmpty' data-ref="_ZN3JSC3DFG27checkMayCrashIfInputIsEmptyENS0_7UseKindE" data-ref-filename="_ZN3JSC3DFG27checkMayCrashIfInputIsEmptyENS0_7UseKindE">checkMayCrashIfInputIsEmpty</dfn>(<a class="type" href="#JSC::DFG::UseKind" title='JSC::DFG::UseKind' data-ref="JSC::DFG::UseKind" data-ref-filename="JSC..DFG..UseKind">UseKind</a> <dfn class="local col5 decl" id="45kind" title='kind' data-type='JSC::DFG::UseKind' data-ref="45kind" data-ref-filename="45kind">kind</dfn>)</td></tr>
+<tr><th id="296">296</th><td>{</td></tr>
+<tr><th id="297">297</th><td><u>#<span data-ppcond="297">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformUse.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/USE">USE</a>(JSVALUE64)</u></td></tr>
+<tr><th id="298">298</th><td>    <b>switch</b> (<a class="local col5 ref" href="#45kind" title='kind' data-ref="45kind" data-ref-filename="45kind">kind</a>) {</td></tr>
+<tr><th id="299">299</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::UntypedUse" title='JSC::DFG::UntypedUse' data-ref="JSC::DFG::UntypedUse" data-ref-filename="JSC..DFG..UntypedUse">UntypedUse</a>:</td></tr>
+<tr><th id="300">300</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::Int32Use" title='JSC::DFG::Int32Use' data-ref="JSC::DFG::Int32Use" data-ref-filename="JSC..DFG..Int32Use">Int32Use</a>:</td></tr>
+<tr><th id="301">301</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownInt32Use" title='JSC::DFG::KnownInt32Use' data-ref="JSC::DFG::KnownInt32Use" data-ref-filename="JSC..DFG..KnownInt32Use">KnownInt32Use</a>:</td></tr>
+<tr><th id="302">302</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::AnyIntUse" title='JSC::DFG::AnyIntUse' data-ref="JSC::DFG::AnyIntUse" data-ref-filename="JSC..DFG..AnyIntUse">AnyIntUse</a>:</td></tr>
+<tr><th id="303">303</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::NumberUse" title='JSC::DFG::NumberUse' data-ref="JSC::DFG::NumberUse" data-ref-filename="JSC..DFG..NumberUse">NumberUse</a>:</td></tr>
+<tr><th id="304">304</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::BooleanUse" title='JSC::DFG::BooleanUse' data-ref="JSC::DFG::BooleanUse" data-ref-filename="JSC..DFG..BooleanUse">BooleanUse</a>:</td></tr>
+<tr><th id="305">305</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownBooleanUse" title='JSC::DFG::KnownBooleanUse' data-ref="JSC::DFG::KnownBooleanUse" data-ref-filename="JSC..DFG..KnownBooleanUse">KnownBooleanUse</a>:</td></tr>
+<tr><th id="306">306</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::CellUse" title='JSC::DFG::CellUse' data-ref="JSC::DFG::CellUse" data-ref-filename="JSC..DFG..CellUse">CellUse</a>:</td></tr>
+<tr><th id="307">307</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownCellUse" title='JSC::DFG::KnownCellUse' data-ref="JSC::DFG::KnownCellUse" data-ref-filename="JSC..DFG..KnownCellUse">KnownCellUse</a>:</td></tr>
+<tr><th id="308">308</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::CellOrOtherUse" title='JSC::DFG::CellOrOtherUse' data-ref="JSC::DFG::CellOrOtherUse" data-ref-filename="JSC..DFG..CellOrOtherUse">CellOrOtherUse</a>:</td></tr>
+<tr><th id="309">309</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::KnownOtherUse" title='JSC::DFG::KnownOtherUse' data-ref="JSC::DFG::KnownOtherUse" data-ref-filename="JSC..DFG..KnownOtherUse">KnownOtherUse</a>:</td></tr>
+<tr><th id="310">310</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::OtherUse" title='JSC::DFG::OtherUse' data-ref="JSC::DFG::OtherUse" data-ref-filename="JSC..DFG..OtherUse">OtherUse</a>:</td></tr>
+<tr><th id="311">311</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::MiscUse" title='JSC::DFG::MiscUse' data-ref="JSC::DFG::MiscUse" data-ref-filename="JSC..DFG..MiscUse">MiscUse</a>:</td></tr>
+<tr><th id="312">312</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::NotCellUse" title='JSC::DFG::NotCellUse' data-ref="JSC::DFG::NotCellUse" data-ref-filename="JSC..DFG..NotCellUse">NotCellUse</a>:</td></tr>
+<tr><th id="313">313</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::NotCellNorBigIntUse" title='JSC::DFG::NotCellNorBigIntUse' data-ref="JSC::DFG::NotCellNorBigIntUse" data-ref-filename="JSC..DFG..NotCellNorBigIntUse">NotCellNorBigIntUse</a>:</td></tr>
+<tr><th id="314">314</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::NotDoubleUse" title='JSC::DFG::NotDoubleUse' data-ref="JSC::DFG::NotDoubleUse" data-ref-filename="JSC..DFG..NotDoubleUse">NotDoubleUse</a>:</td></tr>
+<tr><th id="315">315</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::NeitherDoubleNorHeapBigIntNorStringUse" title='JSC::DFG::NeitherDoubleNorHeapBigIntNorStringUse' data-ref="JSC::DFG::NeitherDoubleNorHeapBigIntNorStringUse" data-ref-filename="JSC..DFG..NeitherDoubleNorHeapBigIntNorStringUse">NeitherDoubleNorHeapBigIntNorStringUse</a>:</td></tr>
+<tr><th id="316">316</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="317">317</th><td>    <b>default</b>:</td></tr>
+<tr><th id="318">318</th><td>        <b>return</b> <b>true</b>;</td></tr>
+<tr><th id="319">319</th><td>    }</td></tr>
+<tr><th id="320">320</th><td><u>#<span data-ppcond="297">else</span></u></td></tr>
+<tr><th id="321">321</th><td>    UNUSED_PARAM(kind);</td></tr>
+<tr><th id="322">322</th><td>    <b>return</b> <b>true</b>;</td></tr>
+<tr><th id="323">323</th><td><u>#<span data-ppcond="297">endif</span></u></td></tr>
+<tr><th id="324">324</th><td>}</td></tr>
+<tr><th id="325">325</th><td></td></tr>
+<tr><th id="326">326</th><td>} } <i>// namespace JSC::DFG</i></td></tr>
+<tr><th id="327">327</th><td></td></tr>
+<tr><th id="328">328</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="329">329</th><td></td></tr>
+<tr><th id="330">330</th><td><em>void</em> <dfn class="decl fn" id="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG7UseKindE" title='WTF::printInternal' data-ref="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG7UseKindE" data-ref-filename="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG7UseKindE">printInternal</dfn>(<a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PrintStream.h.html#WTF::PrintStream" title='WTF::PrintStream' data-ref="WTF::PrintStream" data-ref-filename="WTF..PrintStream">PrintStream</a>&amp;, <span class="namespace">JSC::DFG::</span><a class="type" href="#JSC::DFG::UseKind" title='JSC::DFG::UseKind' data-ref="JSC::DFG::UseKind" data-ref-filename="JSC..DFG..UseKind">UseKind</a>);</td></tr>
+<tr><th id="331">331</th><td></td></tr>
+<tr><th id="332">332</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="333">333</th><td></td></tr>
+<tr><th id="334">334</th><td><u>#<span data-ppcond="28">endif</span> // ENABLE(DFG_JIT)</u></td></tr>
+<tr><th id="335">335</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='DFGSpeculativeJIT.cpp.html'>webkit/Source/JavaScriptCore/dfg/DFGSpeculativeJIT.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

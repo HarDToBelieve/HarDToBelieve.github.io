@@ -1,0 +1,19 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/dh.h' l='187' type='int DH_compute_key_padded(uint8_t * out, const BIGNUM * peers_key, DH * dh)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/dh.h' l='171'>// DH_compute_key_padded calculates the shared key between |dh| and |peers_key|
+// and writes it as a big-endian integer into |out|, padded up to |DH_size|
+// bytes. It returns the number of bytes written, which is always |DH_size|, or
+// a negative number on error. |out| must have |DH_size| bytes of space.
+//
+// WARNING: this differs from the usual BoringSSL return-value convention.
+//
+// Note this function differs from |DH_compute_key| in that it preserves leading
+// zeros in the secret. This function is the preferred variant. It matches PKCS
+// #3 and avoids some side channel attacks. However, the two functions are not
+// drop-in replacements for each other. Using a different variant than the
+// application expects will result in sporadic key mismatches.
+//
+// Callers that expect a fixed-width secret should use this function over
+// |DH_compute_key|. Callers that use either function should migrate to a modern
+// primitive such as X25519 or ECDH with P-256 instead.</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/dh/dh.c' l='325' ll='344' type='int DH_compute_key_padded(unsigned char * out, const BIGNUM * peers_key, DH * dh)'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/dh/dh.c' l='385' u='c' c='DH_compute_key_hashed'/>

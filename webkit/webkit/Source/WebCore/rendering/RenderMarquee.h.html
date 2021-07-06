@@ -1,0 +1,116 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>RenderMarquee.h source code [webkit/Source/WebCore/rendering/RenderMarquee.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="WebCore::RenderMarquee "/>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebCore/rendering/RenderMarquee.h'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>WebCore</a>/<a href='./'>rendering</a>/<a href='RenderMarquee.h.html'>RenderMarquee.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2003 Apple Inc.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Portions are Copyright (C) 1998 Netscape Communications Corporation.</i></td></tr>
+<tr><th id="5">5</th><td><i> *</i></td></tr>
+<tr><th id="6">6</th><td><i> * Other contributors:</i></td></tr>
+<tr><th id="7">7</th><td><i> *   Robert O'Callahan &lt;roc+@cs.cmu.edu&gt;</i></td></tr>
+<tr><th id="8">8</th><td><i> *   David Baron &lt;dbaron@fas.harvard.edu&gt;</i></td></tr>
+<tr><th id="9">9</th><td><i> *   Christian Biesinger &lt;cbiesinger@web.de&gt;</i></td></tr>
+<tr><th id="10">10</th><td><i> *   Randall Jesup &lt;rjesup@wgate.com&gt;</i></td></tr>
+<tr><th id="11">11</th><td><i> *   Roland Mainz &lt;roland.mainz@informatik.med.uni-giessen.de&gt;</i></td></tr>
+<tr><th id="12">12</th><td><i> *   Josh Soref &lt;timeless@mac.com&gt;</i></td></tr>
+<tr><th id="13">13</th><td><i> *   Boris Zbarsky &lt;bzbarsky@mit.edu&gt;</i></td></tr>
+<tr><th id="14">14</th><td><i> *</i></td></tr>
+<tr><th id="15">15</th><td><i> * This library is free software; you can redistribute it and/or</i></td></tr>
+<tr><th id="16">16</th><td><i> * modify it under the terms of the GNU Lesser General Public</i></td></tr>
+<tr><th id="17">17</th><td><i> * License as published by the Free Software Foundation; either</i></td></tr>
+<tr><th id="18">18</th><td><i> * version 2.1 of the License, or (at your option) any later version.</i></td></tr>
+<tr><th id="19">19</th><td><i> *</i></td></tr>
+<tr><th id="20">20</th><td><i> * This library is distributed in the hope that it will be useful,</i></td></tr>
+<tr><th id="21">21</th><td><i> * but WITHOUT ANY WARRANTY; without even the implied warranty of</i></td></tr>
+<tr><th id="22">22</th><td><i> * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU</i></td></tr>
+<tr><th id="23">23</th><td><i> * Lesser General Public License for more details.</i></td></tr>
+<tr><th id="24">24</th><td><i> *</i></td></tr>
+<tr><th id="25">25</th><td><i> * You should have received a copy of the GNU Lesser General Public</i></td></tr>
+<tr><th id="26">26</th><td><i> * License along with this library; if not, write to the Free Software</i></td></tr>
+<tr><th id="27">27</th><td><i> * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA</i></td></tr>
+<tr><th id="28">28</th><td><i> *</i></td></tr>
+<tr><th id="29">29</th><td><i> * Alternatively, the contents of this file may be used under the terms</i></td></tr>
+<tr><th id="30">30</th><td><i> * of either the Mozilla Public License Version 1.1, found at</i></td></tr>
+<tr><th id="31">31</th><td><i> * <a href="http://www.mozilla.org/MPL/">http://www.mozilla.org/MPL/</a> (the "MPL") or the GNU General Public</i></td></tr>
+<tr><th id="32">32</th><td><i> * License Version 2.0, found at <a href="http://www.fsf.org/copyleft/gpl.html">http://www.fsf.org/copyleft/gpl.html</a></i></td></tr>
+<tr><th id="33">33</th><td><i> * (the "GPL"), in which case the provisions of the MPL or the GPL are</i></td></tr>
+<tr><th id="34">34</th><td><i> * applicable instead of those above.  If you wish to allow use of your</i></td></tr>
+<tr><th id="35">35</th><td><i> * version of this file only under the terms of one of those two</i></td></tr>
+<tr><th id="36">36</th><td><i> * licenses (the MPL or the GPL) and not to allow others to use your</i></td></tr>
+<tr><th id="37">37</th><td><i> * version of this file under the LGPL, indicate your decision by</i></td></tr>
+<tr><th id="38">38</th><td><i> * deletingthe provisions above and replace them with the notice and</i></td></tr>
+<tr><th id="39">39</th><td><i> * other provisions required by the MPL or the GPL, as the case may be.</i></td></tr>
+<tr><th id="40">40</th><td><i> * If you do not delete the provisions above, a recipient may use your</i></td></tr>
+<tr><th id="41">41</th><td><i> * version of this file under any of the LGPL, the MPL or the GPL.</i></td></tr>
+<tr><th id="42">42</th><td><i> */</i></td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><u>#pragma once</u></td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td><u>#include <a href="../platform/Length.h.html">"Length.h"</a></u></td></tr>
+<tr><th id="47">47</th><td><u>#include <a href="style/RenderStyleConstants.h.html">"RenderStyleConstants.h"</a></u></td></tr>
+<tr><th id="48">48</th><td><u>#include <a href="../platform/Timer.h.html">"Timer.h"</a></u></td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><b>namespace</b> <span class="namespace">WebCore</span> {</td></tr>
+<tr><th id="51">51</th><td></td></tr>
+<tr><th id="52">52</th><td><b>class</b> <a class="type" href="RenderLayer.h.html#WebCore::RenderLayer" title='WebCore::RenderLayer' data-ref="WebCore::RenderLayer" data-ref-filename="WebCore..RenderLayer" id="WebCore::RenderLayer">RenderLayer</a>;</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td><i>// This class handles the auto-scrolling for &lt;marquee&gt;</i></td></tr>
+<tr><th id="55">55</th><td><b>class</b> <dfn class="type def" id="WebCore::RenderMarquee" title='WebCore::RenderMarquee' data-ref="WebCore::RenderMarquee" data-ref-filename="WebCore..RenderMarquee">RenderMarquee</dfn> final {</td></tr>
+<tr><th id="56">56</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Noncopyable.h.html#23" title="RenderMarquee(const RenderMarquee&amp;) = delete; RenderMarquee&amp; operator=(const RenderMarquee&amp;) = delete;" data-ref="_M/WTF_MAKE_NONCOPYABLE">WTF_MAKE_NONCOPYABLE</a>(<dfn class="decl def fn" id="_ZN7WebCore13RenderMarqueeC1ERKS0_" title='WebCore::RenderMarquee::RenderMarquee' data-ref="_ZN7WebCore13RenderMarqueeC1ERKS0_" data-ref-filename="_ZN7WebCore13RenderMarqueeC1ERKS0_"><a class="type" href="#WebCore::RenderMarquee" title='WebCore::RenderMarquee' data-ref="WebCore::RenderMarquee" data-ref-filename="WebCore..RenderMarquee"><a class="type" href="#WebCore::RenderMarquee" title='WebCore::RenderMarquee' data-ref="WebCore::RenderMarquee" data-ref-filename="WebCore..RenderMarquee"><a class="type" href="#WebCore::RenderMarquee" title='WebCore::RenderMarquee' data-ref="WebCore::RenderMarquee" data-ref-filename="WebCore..RenderMarquee">RenderMarquee</a></a></a></dfn>); <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#399" title="public: void* operator new(size_t, void* p) { return p; } void* operator new[](size_t, void* p) { return p; } void* operator new(size_t size) { return ::WTF::fastMalloc(size); } void operator delete(void* p) { ::WTF::fastFree(p); } void* operator new[](size_t size) { return ::WTF::fastMalloc(size); } void operator delete[](void* p) { ::WTF::fastFree(p); } void* operator new(size_t, NotNullTag, void* location) { do { if (!(location)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebCore/rendering/RenderMarquee.h&quot;, 56, __PRETTY_FUNCTION__, &quot;location&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(56, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebCore/rendering/RenderMarquee.h&quot;, __PRETTY_FUNCTION__, 951); } while (false); } } while (0); return location; } using webkitFastMalloced = int; private: using __thisIsHereToForceASemicolonAfterThisMacro __attribute__((unused)) = int" data-ref="_M/WTF_MAKE_FAST_ALLOCATED">WTF_MAKE_FAST_ALLOCATED</a>;</td></tr>
+<tr><th id="57">57</th><td><b>public</b>:</td></tr>
+<tr><th id="58">58</th><td>    <b>explicit</b> <dfn class="decl fn" id="_ZN7WebCore13RenderMarqueeC1EPNS_11RenderLayerE" title='WebCore::RenderMarquee::RenderMarquee' data-ref="_ZN7WebCore13RenderMarqueeC1EPNS_11RenderLayerE" data-ref-filename="_ZN7WebCore13RenderMarqueeC1EPNS_11RenderLayerE">RenderMarquee</dfn>(<a class="type" href="RenderLayer.h.html#WebCore::RenderLayer" title='WebCore::RenderLayer' data-ref="WebCore::RenderLayer" data-ref-filename="WebCore..RenderLayer">RenderLayer</a>*);</td></tr>
+<tr><th id="59">59</th><td>    <dfn class="decl fn" id="_ZN7WebCore13RenderMarqueeD1Ev" title='WebCore::RenderMarquee::~RenderMarquee' data-ref="_ZN7WebCore13RenderMarqueeD1Ev" data-ref-filename="_ZN7WebCore13RenderMarqueeD1Ev">~RenderMarquee</dfn>();</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td>    <em>bool</em> <dfn class="decl fn" id="_ZNK7WebCore13RenderMarquee12isHorizontalEv" title='WebCore::RenderMarquee::isHorizontal' data-ref="_ZNK7WebCore13RenderMarquee12isHorizontalEv" data-ref-filename="_ZNK7WebCore13RenderMarquee12isHorizontalEv">isHorizontal</dfn>() <em>const</em>;</td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN7WebCore13RenderMarquee5startEv" title='WebCore::RenderMarquee::start' data-ref="_ZN7WebCore13RenderMarquee5startEv" data-ref-filename="_ZN7WebCore13RenderMarquee5startEv">start</dfn>();</td></tr>
+<tr><th id="64">64</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN7WebCore13RenderMarquee7suspendEv" title='WebCore::RenderMarquee::suspend' data-ref="_ZN7WebCore13RenderMarquee7suspendEv" data-ref-filename="_ZN7WebCore13RenderMarquee7suspendEv">suspend</dfn>();</td></tr>
+<tr><th id="65">65</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN7WebCore13RenderMarquee4stopEv" title='WebCore::RenderMarquee::stop' data-ref="_ZN7WebCore13RenderMarquee4stopEv" data-ref-filename="_ZN7WebCore13RenderMarquee4stopEv">stop</dfn>();</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN7WebCore13RenderMarquee18updateMarqueeStyleEv" title='WebCore::RenderMarquee::updateMarqueeStyle' data-ref="_ZN7WebCore13RenderMarquee18updateMarqueeStyleEv" data-ref-filename="_ZN7WebCore13RenderMarquee18updateMarqueeStyleEv">updateMarqueeStyle</dfn>();</td></tr>
+<tr><th id="68">68</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN7WebCore13RenderMarquee21updateMarqueePositionEv" title='WebCore::RenderMarquee::updateMarqueePosition' data-ref="_ZN7WebCore13RenderMarquee21updateMarqueePositionEv" data-ref-filename="_ZN7WebCore13RenderMarquee21updateMarqueePositionEv">updateMarqueePosition</dfn>();</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td><b>private</b>:</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td>    <em>int</em> <dfn class="decl def fn" id="_ZNK7WebCore13RenderMarquee5speedEv" title='WebCore::RenderMarquee::speed' data-ref="_ZNK7WebCore13RenderMarquee5speedEv" data-ref-filename="_ZNK7WebCore13RenderMarquee5speedEv">speed</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#WebCore::RenderMarquee::m_speed" title='WebCore::RenderMarquee::m_speed' data-ref="WebCore::RenderMarquee::m_speed" data-ref-filename="WebCore..RenderMarquee..m_speed">m_speed</a>; }</td></tr>
+<tr><th id="73">73</th><td>    <em>int</em> <dfn class="decl fn" id="_ZNK7WebCore13RenderMarquee12marqueeSpeedEv" title='WebCore::RenderMarquee::marqueeSpeed' data-ref="_ZNK7WebCore13RenderMarquee12marqueeSpeedEv" data-ref-filename="_ZNK7WebCore13RenderMarquee12marqueeSpeedEv">marqueeSpeed</dfn>() <em>const</em>;</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td>    <a class="type" href="style/RenderStyleConstants.h.html#WebCore::MarqueeDirection" title='WebCore::MarqueeDirection' data-ref="WebCore::MarqueeDirection" data-ref-filename="WebCore..MarqueeDirection">MarqueeDirection</a> <dfn class="decl fn" id="_ZNK7WebCore13RenderMarquee9directionEv" title='WebCore::RenderMarquee::direction' data-ref="_ZNK7WebCore13RenderMarquee9directionEv" data-ref-filename="_ZNK7WebCore13RenderMarquee9directionEv">direction</dfn>() <em>const</em>;</td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td>    <em>int</em> <dfn class="decl fn" id="_ZN7WebCore13RenderMarquee15computePositionENS_16MarqueeDirectionEb" title='WebCore::RenderMarquee::computePosition' data-ref="_ZN7WebCore13RenderMarquee15computePositionENS_16MarqueeDirectionEb" data-ref-filename="_ZN7WebCore13RenderMarquee15computePositionENS_16MarqueeDirectionEb">computePosition</dfn>(<a class="type" href="style/RenderStyleConstants.h.html#WebCore::MarqueeDirection" title='WebCore::MarqueeDirection' data-ref="WebCore::MarqueeDirection" data-ref-filename="WebCore..MarqueeDirection">MarqueeDirection</a>, <em>bool</em> <dfn class="local col9 decl" id="19stopAtClientEdge" title='stopAtClientEdge' data-type='bool' data-ref="19stopAtClientEdge" data-ref-filename="19stopAtClientEdge">stopAtClientEdge</dfn>);</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN7WebCore13RenderMarquee6setEndEi" title='WebCore::RenderMarquee::setEnd' data-ref="_ZN7WebCore13RenderMarquee6setEndEi" data-ref-filename="_ZN7WebCore13RenderMarquee6setEndEi">setEnd</dfn>(<em>int</em> <dfn class="local col0 decl" id="20end" title='end' data-type='int' data-ref="20end" data-ref-filename="20end">end</dfn>) { <a class="member field" href="#WebCore::RenderMarquee::m_end" title='WebCore::RenderMarquee::m_end' data-ref="WebCore::RenderMarquee::m_end" data-ref-filename="WebCore..RenderMarquee..m_end">m_end</a> = <a class="local col0 ref" href="#20end" title='end' data-ref="20end" data-ref-filename="20end">end</a>; }</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN7WebCore13RenderMarquee10timerFiredEv" title='WebCore::RenderMarquee::timerFired' data-ref="_ZN7WebCore13RenderMarquee10timerFiredEv" data-ref-filename="_ZN7WebCore13RenderMarquee10timerFiredEv">timerFired</dfn>();</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td>    <a class="type" href="RenderLayer.h.html#WebCore::RenderLayer" title='WebCore::RenderLayer' data-ref="WebCore::RenderLayer" data-ref-filename="WebCore..RenderLayer">RenderLayer</a>* <dfn class="decl field" id="WebCore::RenderMarquee::m_layer" title='WebCore::RenderMarquee::m_layer' data-ref="WebCore::RenderMarquee::m_layer" data-ref-filename="WebCore..RenderMarquee..m_layer">m_layer</dfn>;</td></tr>
+<tr><th id="84">84</th><td>    <a class="type" href="../platform/Timer.h.html#WebCore::Timer" title='WebCore::Timer' data-ref="WebCore::Timer" data-ref-filename="WebCore..Timer">Timer</a> <dfn class="decl field" id="WebCore::RenderMarquee::m_timer" title='WebCore::RenderMarquee::m_timer' data-ref="WebCore::RenderMarquee::m_timer" data-ref-filename="WebCore..RenderMarquee..m_timer">m_timer</dfn>;</td></tr>
+<tr><th id="85">85</th><td>    <em>int</em> <dfn class="decl field" id="WebCore::RenderMarquee::m_currentLoop" title='WebCore::RenderMarquee::m_currentLoop' data-ref="WebCore::RenderMarquee::m_currentLoop" data-ref-filename="WebCore..RenderMarquee..m_currentLoop">m_currentLoop</dfn> { <var>0</var> };</td></tr>
+<tr><th id="86">86</th><td>    <em>int</em> <dfn class="decl field" id="WebCore::RenderMarquee::m_totalLoops" title='WebCore::RenderMarquee::m_totalLoops' data-ref="WebCore::RenderMarquee::m_totalLoops" data-ref-filename="WebCore..RenderMarquee..m_totalLoops">m_totalLoops</dfn> { <var>0</var> };</td></tr>
+<tr><th id="87">87</th><td>    <em>int</em> <dfn class="decl field" id="WebCore::RenderMarquee::m_start" title='WebCore::RenderMarquee::m_start' data-ref="WebCore::RenderMarquee::m_start" data-ref-filename="WebCore..RenderMarquee..m_start">m_start</dfn> { <var>0</var> };</td></tr>
+<tr><th id="88">88</th><td>    <em>int</em> <dfn class="decl field" id="WebCore::RenderMarquee::m_end" title='WebCore::RenderMarquee::m_end' data-ref="WebCore::RenderMarquee::m_end" data-ref-filename="WebCore..RenderMarquee..m_end">m_end</dfn> { <var>0</var> };</td></tr>
+<tr><th id="89">89</th><td>    <em>int</em> <dfn class="decl field" id="WebCore::RenderMarquee::m_speed" title='WebCore::RenderMarquee::m_speed' data-ref="WebCore::RenderMarquee::m_speed" data-ref-filename="WebCore..RenderMarquee..m_speed">m_speed</dfn> { <var>0</var> };</td></tr>
+<tr><th id="90">90</th><td>    <a class="type" href="../platform/Length.h.html#WebCore::Length" title='WebCore::Length' data-ref="WebCore::Length" data-ref-filename="WebCore..Length">Length</a> <dfn class="decl field" id="WebCore::RenderMarquee::m_height" title='WebCore::RenderMarquee::m_height' data-ref="WebCore::RenderMarquee::m_height" data-ref-filename="WebCore..RenderMarquee..m_height">m_height</dfn>;</td></tr>
+<tr><th id="91">91</th><td>    <a class="type" href="style/RenderStyleConstants.h.html#WebCore::MarqueeDirection" title='WebCore::MarqueeDirection' data-ref="WebCore::MarqueeDirection" data-ref-filename="WebCore..MarqueeDirection">MarqueeDirection</a> <dfn class="decl field" id="WebCore::RenderMarquee::m_direction" title='WebCore::RenderMarquee::m_direction' data-ref="WebCore::RenderMarquee::m_direction" data-ref-filename="WebCore..RenderMarquee..m_direction">m_direction</dfn> { <a class="type" href="style/RenderStyleConstants.h.html#WebCore::MarqueeDirection" title='WebCore::MarqueeDirection' data-ref="WebCore::MarqueeDirection" data-ref-filename="WebCore..MarqueeDirection">MarqueeDirection</a>::<a class="enum" href="style/RenderStyleConstants.h.html#WebCore::MarqueeDirection::Auto" title='WebCore::MarqueeDirection::Auto' data-ref="WebCore::MarqueeDirection::Auto" data-ref-filename="WebCore..MarqueeDirection..Auto">Auto</a> };</td></tr>
+<tr><th id="92">92</th><td>    <em>bool</em> <dfn class="decl field" id="WebCore::RenderMarquee::m_reset" title='WebCore::RenderMarquee::m_reset' data-ref="WebCore::RenderMarquee::m_reset" data-ref-filename="WebCore..RenderMarquee..m_reset">m_reset</dfn> { <b>false</b> };</td></tr>
+<tr><th id="93">93</th><td>    <em>bool</em> <dfn class="decl field" id="WebCore::RenderMarquee::m_suspended" title='WebCore::RenderMarquee::m_suspended' data-ref="WebCore::RenderMarquee::m_suspended" data-ref-filename="WebCore..RenderMarquee..m_suspended">m_suspended</dfn> { <b>false</b> };</td></tr>
+<tr><th id="94">94</th><td>    <em>bool</em> <dfn class="decl field" id="WebCore::RenderMarquee::m_stopped" title='WebCore::RenderMarquee::m_stopped' data-ref="WebCore::RenderMarquee::m_stopped" data-ref-filename="WebCore..RenderMarquee..m_stopped">m_stopped</dfn> { <b>false</b> };</td></tr>
+<tr><th id="95">95</th><td>};</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td>} <i>// namespace WebCore</i></td></tr>
+<tr><th id="98">98</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource166.cpp.html'>webkit/WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource166.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

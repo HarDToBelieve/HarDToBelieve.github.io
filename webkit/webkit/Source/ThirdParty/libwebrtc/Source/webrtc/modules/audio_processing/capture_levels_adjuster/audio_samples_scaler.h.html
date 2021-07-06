@@ -1,0 +1,65 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>audio_samples_scaler.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/capture_levels_adjuster/audio_samples_scaler.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::AudioSamplesScaler "/>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/capture_levels_adjuster/audio_samples_scaler.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>audio_processing</a>/<a href='./'>capture_levels_adjuster</a>/<a href='audio_samples_scaler.h.html'>audio_samples_scaler.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2021 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/MODULES_AUDIO_PROCESSING_CAPTURE_LEVELS_ADJUSTER_AUDIO_SAMPLES_SCALER_H_">MODULES_AUDIO_PROCESSING_CAPTURE_LEVELS_ADJUSTER_AUDIO_SAMPLES_SCALER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/MODULES_AUDIO_PROCESSING_CAPTURE_LEVELS_ADJUSTER_AUDIO_SAMPLES_SCALER_H_" data-ref="_M/MODULES_AUDIO_PROCESSING_CAPTURE_LEVELS_ADJUSTER_AUDIO_SAMPLES_SCALER_H_">MODULES_AUDIO_PROCESSING_CAPTURE_LEVELS_ADJUSTER_AUDIO_SAMPLES_SCALER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="../audio_buffer.h.html">"modules/audio_processing/audio_buffer.h"</a></u></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><i>// Handles and applies a gain to the samples in an audio buffer.</i></td></tr>
+<tr><th id="21">21</th><td><i>// The gain is applied for each sample and any changes in the gain take effect</i></td></tr>
+<tr><th id="22">22</th><td><i>// gradually (in a linear manner) over one frame.</i></td></tr>
+<tr><th id="23">23</th><td><b>class</b> <dfn class="type def" id="webrtc::AudioSamplesScaler" title='webrtc::AudioSamplesScaler' data-ref="webrtc::AudioSamplesScaler" data-ref-filename="webrtc..AudioSamplesScaler">AudioSamplesScaler</dfn> {</td></tr>
+<tr><th id="24">24</th><td> <b>public</b>:</td></tr>
+<tr><th id="25">25</th><td>  <i>// C-tor. The supplied `initial_gain` is used immediately at the first call to</i></td></tr>
+<tr><th id="26">26</th><td><i>  // Process(), i.e., in contrast to the gain supplied by SetGain(...) there is</i></td></tr>
+<tr><th id="27">27</th><td><i>  // no gradual change to the `initial_gain`.</i></td></tr>
+<tr><th id="28">28</th><td>  <b>explicit</b> <dfn class="decl fn" id="_ZN6webrtc18AudioSamplesScalerC1Ef" title='webrtc::AudioSamplesScaler::AudioSamplesScaler' data-ref="_ZN6webrtc18AudioSamplesScalerC1Ef" data-ref-filename="_ZN6webrtc18AudioSamplesScalerC1Ef">AudioSamplesScaler</dfn>(<em>float</em> <dfn class="local col1 decl" id="1initial_gain" title='initial_gain' data-type='float' data-ref="1initial_gain" data-ref-filename="1initial_gain">initial_gain</dfn>);</td></tr>
+<tr><th id="29">29</th><td>  <dfn class="decl def fn" id="_ZN6webrtc18AudioSamplesScalerC1ERKS0_" title='webrtc::AudioSamplesScaler::AudioSamplesScaler' data-ref="_ZN6webrtc18AudioSamplesScalerC1ERKS0_" data-ref-filename="_ZN6webrtc18AudioSamplesScalerC1ERKS0_">AudioSamplesScaler</dfn>(<em>const</em> <a class="type" href="#webrtc::AudioSamplesScaler" title='webrtc::AudioSamplesScaler' data-ref="webrtc::AudioSamplesScaler" data-ref-filename="webrtc..AudioSamplesScaler">AudioSamplesScaler</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="30">30</th><td>  <a class="type" href="#webrtc::AudioSamplesScaler" title='webrtc::AudioSamplesScaler' data-ref="webrtc::AudioSamplesScaler" data-ref-filename="webrtc..AudioSamplesScaler">AudioSamplesScaler</a>&amp; <dfn class="decl def fn" id="_ZN6webrtc18AudioSamplesScaleraSERKS0_" title='webrtc::AudioSamplesScaler::operator=' data-ref="_ZN6webrtc18AudioSamplesScaleraSERKS0_" data-ref-filename="_ZN6webrtc18AudioSamplesScaleraSERKS0_"><b>operator</b>=</dfn>(<em>const</em> <a class="type" href="#webrtc::AudioSamplesScaler" title='webrtc::AudioSamplesScaler' data-ref="webrtc::AudioSamplesScaler" data-ref-filename="webrtc..AudioSamplesScaler">AudioSamplesScaler</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td>  <i>// Applies the specified gain to the audio in `audio_buffer`.</i></td></tr>
+<tr><th id="33">33</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN6webrtc18AudioSamplesScaler7ProcessERNS_11AudioBufferE" title='webrtc::AudioSamplesScaler::Process' data-ref="_ZN6webrtc18AudioSamplesScaler7ProcessERNS_11AudioBufferE" data-ref-filename="_ZN6webrtc18AudioSamplesScaler7ProcessERNS_11AudioBufferE">Process</dfn>(<a class="type" href="../audio_buffer.h.html#webrtc::AudioBuffer" title='webrtc::AudioBuffer' data-ref="webrtc::AudioBuffer" data-ref-filename="webrtc..AudioBuffer">AudioBuffer</a>&amp; <dfn class="local col2 decl" id="2audio_buffer" title='audio_buffer' data-type='webrtc::AudioBuffer &amp;' data-ref="2audio_buffer" data-ref-filename="2audio_buffer">audio_buffer</dfn>);</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td>  <i>// Sets the gain to apply to each sample.</i></td></tr>
+<tr><th id="36">36</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN6webrtc18AudioSamplesScaler7SetGainEf" title='webrtc::AudioSamplesScaler::SetGain' data-ref="_ZN6webrtc18AudioSamplesScaler7SetGainEf" data-ref-filename="_ZN6webrtc18AudioSamplesScaler7SetGainEf">SetGain</dfn>(<em>float</em> <dfn class="local col3 decl" id="3gain" title='gain' data-type='float' data-ref="3gain" data-ref-filename="3gain">gain</dfn>) { <a class="member field" href="#webrtc::AudioSamplesScaler::target_gain_" title='webrtc::AudioSamplesScaler::target_gain_' data-ref="webrtc::AudioSamplesScaler::target_gain_" data-ref-filename="webrtc..AudioSamplesScaler..target_gain_">target_gain_</a> = <a class="local col3 ref" href="#3gain" title='gain' data-ref="3gain" data-ref-filename="3gain">gain</a>; }</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td> <b>private</b>:</td></tr>
+<tr><th id="39">39</th><td>  <em>float</em> <dfn class="decl field" id="webrtc::AudioSamplesScaler::previous_gain_" title='webrtc::AudioSamplesScaler::previous_gain_' data-ref="webrtc::AudioSamplesScaler::previous_gain_" data-ref-filename="webrtc..AudioSamplesScaler..previous_gain_">previous_gain_</dfn> = <var>1.f</var>;</td></tr>
+<tr><th id="40">40</th><td>  <em>float</em> <dfn class="decl field" id="webrtc::AudioSamplesScaler::target_gain_" title='webrtc::AudioSamplesScaler::target_gain_' data-ref="webrtc::AudioSamplesScaler::target_gain_" data-ref-filename="webrtc..AudioSamplesScaler..target_gain_">target_gain_</dfn> = <var>1.f</var>;</td></tr>
+<tr><th id="41">41</th><td>  <em>int</em> <dfn class="decl field" id="webrtc::AudioSamplesScaler::samples_per_channel_" title='webrtc::AudioSamplesScaler::samples_per_channel_' data-ref="webrtc::AudioSamplesScaler::samples_per_channel_" data-ref-filename="webrtc..AudioSamplesScaler..samples_per_channel_">samples_per_channel_</dfn> = -<var>1</var>;</td></tr>
+<tr><th id="42">42</th><td>  <em>float</em> <dfn class="decl field" id="webrtc::AudioSamplesScaler::one_by_samples_per_channel_" title='webrtc::AudioSamplesScaler::one_by_samples_per_channel_' data-ref="webrtc::AudioSamplesScaler::one_by_samples_per_channel_" data-ref-filename="webrtc..AudioSamplesScaler..one_by_samples_per_channel_">one_by_samples_per_channel_</dfn> = -<var>1.f</var>;</td></tr>
+<tr><th id="43">43</th><td>};</td></tr>
+<tr><th id="44">44</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td><u>#<span data-ppcond="11">endif</span>  // MODULES_AUDIO_PROCESSING_CAPTURE_LEVELS_ADJUSTER_AUDIO_SAMPLES_SCALER_H_</u></td></tr>
+<tr><th id="47">47</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../audio_processing_builder_impl.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/audio_processing_builder_impl.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

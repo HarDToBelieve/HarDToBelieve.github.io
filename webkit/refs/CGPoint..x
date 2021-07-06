@@ -1,0 +1,170 @@
+<use f='webkit/Source/JavaScriptCore/API/tests/testapi.mm' l='950' u='r' c='_ZL21testObjectiveCAPIMainv'/>
+<use f='webkit/Source/JavaScriptCore/API/tests/testapi.mm' l='1068' u='r' c='_ZL21testObjectiveCAPIMainv'/>
+<use f='webkit/Source/WebCore/platform/graphics/GlyphBufferMembers.h' l='122' u='r' c='_ZN7WebCore5pointERK7CGPoint'/>
+<use f='webkit/Source/WebCore/platform/graphics/GlyphBufferMembers.h' l='127' u='w' c='_ZN7WebCore4setXER7CGPointf'/>
+<use f='webkit/Source/WebCore/platform/graphics/GlyphBufferMembers.h' l='137' u='r' c='_ZN7WebCore1xERK7CGPoint'/>
+<use f='webkit/Source/WebCore/PAL/pal/system/mac/PopupMenu.mm' l='50' u='w' c='_ZN3PAL9popUpMenuEP6NSMenu7CGPointfP6NSViewiP6NSFont13NSControlSizeb'/>
+<use f='webkit/Source/WebCore/accessibility/mac/WebAccessibilityObjectWrapperBase.mm' l='392' u='r' c='_ZL32convertPathToScreenSpaceFunctionR18PathConversionInfoRKN7WebCore11PathElementE'/>
+<use f='webkit/Source/WebCore/accessibility/mac/WebAccessibilityObjectWrapperBase.mm' l='399' u='r' c='_ZL32convertPathToScreenSpaceFunctionR18PathConversionInfoRKN7WebCore11PathElementE'/>
+<use f='webkit/Source/WebCore/accessibility/mac/WebAccessibilityObjectWrapperBase.mm' l='409' u='r' c='_ZL32convertPathToScreenSpaceFunctionR18PathConversionInfoRKN7WebCore11PathElementE'/>
+<use f='webkit/Source/WebCore/accessibility/mac/WebAccessibilityObjectWrapperBase.mm' l='409' u='r' c='_ZL32convertPathToScreenSpaceFunctionR18PathConversionInfoRKN7WebCore11PathElementE'/>
+<use f='webkit/Source/WebCore/accessibility/mac/WebAccessibilityObjectWrapperBase.mm' l='422' u='r' c='_ZL32convertPathToScreenSpaceFunctionR18PathConversionInfoRKN7WebCore11PathElementE'/>
+<use f='webkit/Source/WebCore/accessibility/mac/WebAccessibilityObjectWrapperBase.mm' l='422' u='r' c='_ZL32convertPathToScreenSpaceFunctionR18PathConversionInfoRKN7WebCore11PathElementE'/>
+<use f='webkit/Source/WebCore/accessibility/mac/WebAccessibilityObjectWrapperBase.mm' l='422' u='r' c='_ZL32convertPathToScreenSpaceFunctionR18PathConversionInfoRKN7WebCore11PathElementE'/>
+<use f='webkit/Source/WebCore/platform/mac/ScrollAnimatorMac.mm' l='778' u='r' c='_ZN7WebCore17ScrollAnimatorMac6scrollENS_20ScrollbarOrientationENS_17ScrollGranularityEffN3WTF9OptionSetINS_14ScrollAnimator14ScrollBehaviorEEE'/>
+<use f='webkit/WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/GlyphBufferMembers.h' l='122' u='r' c='_ZN7WebCore5pointERK7CGPoint'/>
+<use f='webkit/WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/GlyphBufferMembers.h' l='127' u='w' c='_ZN7WebCore4setXER7CGPointf'/>
+<use f='webkit/WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/GlyphBufferMembers.h' l='137' u='r' c='_ZN7WebCore1xERK7CGPoint'/>
+<use f='webkit/Source/WebKit/UIProcess/Cocoa/WKShareSheet.mm' l='177' u='r'/>
+<use f='webkit/Source/WebKit/UIProcess/PDF/WKPDFHUDView.mm' l='219' u='w'/>
+<use f='webkit/Source/WebKit/UIProcess/PDF/WKPDFHUDView.mm' l='219' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/Misc/WebKitNSStringExtras.mm' l='89' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/Misc/WebNSViewExtras.m' l='104' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/Misc/WebNSViewExtras.m' l='104' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/Misc/WebNSViewExtras.m' l='104' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/Misc/WebNSViewExtras.m' l='104' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/Misc/WebNSWindowExtras.m' l='49' u='w'/>
+<use f='webkit/Source/WebKitLegacy/mac/Misc/WebNSWindowExtras.m' l='49' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/Plugins/Hosted/NetscapePluginInstanceProxy.mm' l='276' u='r' c='_ZN6WebKit27NetscapePluginInstanceProxy6resizeE6CGRectS1_'/>
+<use f='webkit/Source/WebKitLegacy/mac/Plugins/Hosted/NetscapePluginInstanceProxy.mm' l='277' u='r' c='_ZN6WebKit27NetscapePluginInstanceProxy6resizeE6CGRectS1_'/>
+<use f='webkit/Source/WebKitLegacy/mac/Plugins/Hosted/NetscapePluginInstanceProxy.mm' l='417' u='r' c='_ZN6WebKit27NetscapePluginInstanceProxy18windowFrameChangedE6CGRect'/>
+<use f='webkit/Source/WebKitLegacy/mac/Plugins/Hosted/NetscapePluginInstanceProxy.mm' l='443' u='r' c='_ZN6WebKit27NetscapePluginInstanceProxy10mouseEventEP6NSViewP7NSEvent16NPCocoaEventType'/>
+<use f='webkit/Source/WebKitLegacy/mac/Plugins/Hosted/NetscapePluginInstanceProxy.mm' l='444' u='r' c='_ZN6WebKit27NetscapePluginInstanceProxy10mouseEventEP6NSViewP7NSEvent16NPCocoaEventType'/>
+<use f='webkit/Source/WebKitLegacy/mac/Plugins/Hosted/NetscapePluginInstanceProxy.mm' l='497' u='r' c='_ZN6WebKit27NetscapePluginInstanceProxy10wheelEventEP6NSViewP7NSEvent'/>
+<use f='webkit/Source/WebKitLegacy/mac/Plugins/Hosted/WebTextInputWindowController.m' l='79' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm' l='795' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/Plugins/WebNetscapePluginEventHandlerCocoa.mm' l='52' u='r' c='_ZN34WebNetscapePluginEventHandlerCocoa8drawRectEP9CGContextRK6CGRect'/>
+<use f='webkit/Source/WebKitLegacy/mac/Plugins/WebNetscapePluginEventHandlerCocoa.mm' l='113' u='r' c='_ZN34WebNetscapePluginEventHandlerCocoa14sendMouseEventEP7NSEvent16NPCocoaEventType'/>
+<use f='webkit/Source/WebKitLegacy/mac/Plugins/WebNetscapePluginView.mm' l='198' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/Plugins/WebNetscapePluginView.mm' l='177' u='r' c='_ZL9getNPRectRK6CGRectR7_NPRect'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebDynamicScrollBarsView.mm' l='206' u='w'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebDynamicScrollBarsView.mm' l='206' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebDynamicScrollBarsView.mm' l='270' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebDynamicScrollBarsView.mm' l='270' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebDynamicScrollBarsView.mm' l='380' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebDynamicScrollBarsView.mm' l='390' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebDynamicScrollBarsView.mm' l='391' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebDynamicScrollBarsView.mm' l='599' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebDynamicScrollBarsView.mm' l='605' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebDynamicScrollBarsView.mm' l='605' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebWindowAnimation.mm' l='46' u='w' c='_ZL10scaledRect6CGRectS_d'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebWindowAnimation.mm' l='55' u='r' c='_ZL15squaredDistance7CGPointS_'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebWindowAnimation.mm' l='55' u='r' c='_ZL15squaredDistance7CGPointS_'/>
+<use f='webkit/Tools/MiniBrowser/mac/WK2BrowserWindowController.m' l='227' u='r'/>
+<use f='webkit/Source/WebCore/page/cocoa/WebTextIndicatorLayer.mm' l='173' u='r'/>
+<use f='webkit/Source/WebCore/page/mac/TextIndicatorWindow.mm' l='102' u='r' c='_ZN7WebCore19TextIndicatorWindow16setTextIndicatorEN3WTF3RefINS_13TextIndicatorENS1_12RawPtrTraitsIS3_EEEE6CGRectNS_21TextIndicatorLifetimeE'/>
+<use f='webkit/Source/WebCore/page/mac/TextIndicatorWindow.mm' l='102' u='r' c='_ZN7WebCore19TextIndicatorWindow16setTextIndicatorEN3WTF3RefINS_13TextIndicatorENS1_12RawPtrTraitsIS3_EEEE6CGRectNS_21TextIndicatorLifetimeE'/>
+<use f='webkit/Source/WebCore/page/mac/WheelEventDeltaFilterMac.mm' l='56' u='r' c='_ZN7WebCore24WheelEventDeltaFilterMac15updateFromDeltaERKNS_9FloatSizeE'/>
+<use f='webkit/Source/WebCore/page/mac/WheelEventDeltaFilterMac.mm' l='57' u='r' c='_ZN7WebCore24WheelEventDeltaFilterMac15updateFromDeltaERKNS_9FloatSizeE'/>
+<use f='webkit/Source/WebCore/page/scrolling/mac/ScrollingTreeFrameScrollingNodeMac.mm' l='187' u='r' c='_ZN7WebCore34ScrollingTreeFrameScrollingNodeMac23repositionRelatedLayersEv'/>
+<use f='webkit/Source/WebCore/platform/graphics/ca/cocoa/PlatformCALayerCocoa.mm' l='605' u='r' c='_ZNK7WebCore20PlatformCALayerCocoa8positionEv'/>
+<use f='webkit/Source/WebCore/platform/graphics/ca/cocoa/PlatformCALayerCocoa.mm' l='621' u='r' c='_ZNK7WebCore20PlatformCALayerCocoa11anchorPointEv'/>
+<use f='webkit/Source/WebCore/platform/graphics/cocoa/GraphicsContextCocoa.mm' l='159' u='r' c='_ZN7WebCoreL26setPatternPhaseInUserSpaceEP9CGContext7CGPoint'/>
+<use f='webkit/Source/WebCore/platform/graphics/cocoa/WebCoreCALayerExtras.mm' l='70' u='r'/>
+<use f='webkit/Source/WebCore/platform/graphics/cocoa/WebCoreCALayerExtras.mm' l='70' u='r'/>
+<use f='webkit/Source/WebCore/platform/graphics/cocoa/WebCoreCALayerExtras.mm' l='71' u='r'/>
+<use f='webkit/Source/WebCore/platform/graphics/cocoa/WebCoreCALayerExtras.mm' l='73' u='r'/>
+<use f='webkit/Source/WebCore/platform/graphics/cocoa/WebCoreCALayerExtras.mm' l='73' u='r'/>
+<use f='webkit/Source/WebCore/platform/graphics/cocoa/WebCoreCALayerExtras.mm' l='73' u='r'/>
+<use f='webkit/Source/WebCore/platform/graphics/cocoa/WebGLLayer.mm' l='75' u='r'/>
+<use f='webkit/Source/WebCore/platform/graphics/ca/TileGrid.cpp' l='694' u='r' c='_ZNK7WebCore8TileGrid19drawTileMapContentsEP9CGContext6CGRect'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/FloatPointCG.cpp' l='36' u='r' c='_ZN7WebCore10FloatPointC1ERK7CGPoint'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/GradientCG.cpp' l='138' u='r' c='_ZN7WebCore8Gradient5paintEP9CGContext'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/GraphicsContextCG.cpp' l='1296' u='w' c='_ZN7WebCore17GraphicsContextCG19roundToDevicePixelsERKNS_9FloatRectENS_15GraphicsContext12RoundingModeE'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/GraphicsContextCG.cpp' l='1296' u='r' c='_ZN7WebCore17GraphicsContextCG19roundToDevicePixelsERKNS_9FloatRectENS_15GraphicsContext12RoundingModeE'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/GraphicsContextCG.cpp' l='1299' u='w' c='_ZN7WebCore17GraphicsContextCG19roundToDevicePixelsERKNS_9FloatRectENS_15GraphicsContext12RoundingModeE'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/GraphicsContextCG.cpp' l='1299' u='r' c='_ZN7WebCore17GraphicsContextCG19roundToDevicePixelsERKNS_9FloatRectENS_15GraphicsContext12RoundingModeE'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/GraphicsContextCG.cpp' l='1302' u='w' c='_ZN7WebCore17GraphicsContextCG19roundToDevicePixelsERKNS_9FloatRectENS_15GraphicsContext12RoundingModeE'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/GraphicsContextCG.cpp' l='1302' u='r' c='_ZN7WebCore17GraphicsContextCG19roundToDevicePixelsERKNS_9FloatRectENS_15GraphicsContext12RoundingModeE'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/GraphicsContextCG.cpp' l='1309' u='r' c='_ZN7WebCore17GraphicsContextCG19roundToDevicePixelsERKNS_9FloatRectENS_15GraphicsContext12RoundingModeE'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/GraphicsContextCG.cpp' l='1309' u='r' c='_ZN7WebCore17GraphicsContextCG19roundToDevicePixelsERKNS_9FloatRectENS_15GraphicsContext12RoundingModeE'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/GraphicsContextCG.cpp' l='1310' u='w' c='_ZN7WebCore17GraphicsContextCG19roundToDevicePixelsERKNS_9FloatRectENS_15GraphicsContext12RoundingModeE'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/GraphicsContextCG.cpp' l='1312' u='r' c='_ZN7WebCore17GraphicsContextCG19roundToDevicePixelsERKNS_9FloatRectENS_15GraphicsContext12RoundingModeE'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/GraphicsContextCG.cpp' l='1313' u='r' c='_ZN7WebCore17GraphicsContextCG19roundToDevicePixelsERKNS_9FloatRectENS_15GraphicsContext12RoundingModeE'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/IntPointCG.cpp' l='35' u='r' c='_ZN7WebCore8IntPointC1ERK7CGPoint'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/IntRectCG.cpp' l='42' u='r' c='_ZN7WebCore16enclosingIntRectERK6CGRect'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/PathCG.cpp' l='196' u='r' c='_ZN7WebCoreL34copyClosingSubpathsApplierFunctionEPvPK13CGPathElement'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/PathCG.cpp' l='199' u='r' c='_ZN7WebCoreL34copyClosingSubpathsApplierFunctionEPvPK13CGPathElement'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/PathCG.cpp' l='202' u='r' c='_ZN7WebCoreL34copyClosingSubpathsApplierFunctionEPvPK13CGPathElement'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/PathCG.cpp' l='202' u='r' c='_ZN7WebCoreL34copyClosingSubpathsApplierFunctionEPvPK13CGPathElement'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/PathCG.cpp' l='205' u='r' c='_ZN7WebCoreL34copyClosingSubpathsApplierFunctionEPvPK13CGPathElement'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/PathCG.cpp' l='205' u='r' c='_ZN7WebCoreL34copyClosingSubpathsApplierFunctionEPvPK13CGPathElement'/>
+<use f='webkit/Source/WebCore/platform/graphics/cg/PathCG.cpp' l='205' u='r' c='_ZN7WebCoreL34copyClosingSubpathsApplierFunctionEPvPK13CGPathElement'/>
+<use f='webkit/Source/WebCore/platform/graphics/coretext/FontCascadeCoreText.cpp' l='135' u='w' c='_ZN7WebCore38fillVectorWithHorizontalGlyphPositionsERN3WTF6VectorI7CGPointLm256ENS0_15CrashOnOverflowELm16ENS0_10FastMallocEEEP9CGContextPK6CGSizejRKNS_10FloatPointE'/>
+<use f='webkit/Source/WebCore/platform/graphics/coretext/FontCascadeCoreText.cpp' l='135' u='r' c='_ZN7WebCore38fillVectorWithHorizontalGlyphPositionsERN3WTF6VectorI7CGPointLm256ENS0_15CrashOnOverflowELm16ENS0_10FastMallocEEEP9CGContextPK6CGSizejRKNS_10FloatPointE'/>
+<use f='webkit/Source/WebCore/platform/graphics/coretext/FontCascadeCoreText.cpp' l='147' u='r' c='_ZN7WebCoreL36fillVectorWithVerticalGlyphPositionsERN3WTF6VectorI7CGPointLm256ENS0_15CrashOnOverflowELm16ENS0_10FastMallocEEEP9CGContextPK6CGSizeSB_jRKNS_10FloatPointEf'/>
+<use f='webkit/Source/WebCore/platform/graphics/coretext/FontCascadeCoreText.cpp' l='148' u='w' c='_ZN7WebCoreL36fillVectorWithVerticalGlyphPositionsERN3WTF6VectorI7CGPointLm256ENS0_15CrashOnOverflowELm16ENS0_10FastMallocEEEP9CGContextPK6CGSizeSB_jRKNS_10FloatPointEf'/>
+<use f='webkit/Source/WebCore/platform/graphics/displaylists/DisplayListDrawGlyphsRecorderCoreText.cpp' l='286' u='r' c='_ZN7WebCore11DisplayListL28computeAdvancesFromPositionsEPK7CGPointmRK17CGAffineTransform'/>
+<use f='webkit/Source/WebCore/platform/graphics/displaylists/DisplayListDrawGlyphsRecorderCoreText.cpp' l='286' u='r' c='_ZN7WebCore11DisplayListL28computeAdvancesFromPositionsEPK7CGPointmRK17CGAffineTransform'/>
+<use f='webkit/Source/WebCore/platform/graphics/displaylists/DisplayListDrawGlyphsRecorderCoreText.cpp' l='304' u='r' c='_ZN7WebCore11DisplayList18DrawGlyphsRecorder16recordDrawGlyphsEP16CGRenderingStateP8CGGStatePK17CGAffineTransformPKtPK7CGPointm'/>
+<use f='webkit/Source/WebCore/platform/graphics/mac/WebLayer.mm' l='102' u='r'/>
+<use f='webkit/Source/WebCore/platform/graphics/mac/WebLayer.mm' l='156' u='r'/>
+<use f='webkit/Source/WebCore/platform/graphics/mac/WebLayer.mm' l='157' u='r'/>
+<use f='webkit/Source/WebCore/platform/mac/PasteboardMac.mm' l='787' u='r' c='_ZN7WebCoreL16setDragImageImplEP7NSImage7CGPoint'/>
+<use f='webkit/Source/WebCore/platform/mac/PasteboardMac.mm' l='788' u='w' c='_ZN7WebCoreL16setDragImageImplEP7NSImage7CGPoint'/>
+<use f='webkit/Source/WebCore/platform/mac/PasteboardMac.mm' l='788' u='r' c='_ZN7WebCoreL16setDragImageImplEP7NSImage7CGPoint'/>
+<use f='webkit/Source/WebCore/platform/mac/ScrollViewMac.mm' l='207' u='r' c='_ZN7WebCore10ScrollView25platformSetScrollPositionERKNS_8IntPointE'/>
+<use f='webkit/Source/WebCore/platform/mac/ScrollViewMac.mm' l='207' u='r' c='_ZN7WebCore10ScrollView25platformSetScrollPositionERKNS_8IntPointE'/>
+<use f='webkit/Source/WebCore/platform/mac/ScrollViewMac.mm' l='211' u='w' c='_ZN7WebCore10ScrollView25platformSetScrollPositionERKNS_8IntPointE'/>
+<use f='webkit/Source/WebCore/platform/mac/ScrollViewMac.mm' l='211' u='r' c='_ZN7WebCore10ScrollView25platformSetScrollPositionERKNS_8IntPointE'/>
+<use f='webkit/Source/WebCore/platform/mac/WidgetMac.mm' l='251' u='r' c='_ZN7WebCore6Widget5paintERNS_15GraphicsContextERKNS_7IntRectENS0_25SecurityOriginPaintPolicyEPNS_18EventRegionContextE'/>
+<use f='webkit/Source/WebCore/platform/mac/WidgetMac.mm' l='251' u='r' c='_ZN7WebCore6Widget5paintERNS_15GraphicsContextERKNS_7IntRectENS0_25SecurityOriginPaintPolicyEPNS_18EventRegionContextE'/>
+<use f='webkit/Source/WebCore/rendering/RenderThemeMac.mm' l='191' u='r'/>
+<use f='webkit/Source/WebCore/rendering/RenderThemeMac.mm' l='192' u='r'/>
+<use f='webkit/Source/WebCore/rendering/RenderThemeMac.mm' l='194' u='r'/>
+<use f='webkit/Source/WebCore/rendering/RenderThemeMac.mm' l='195' u='r'/>
+<use f='webkit/Source/WebCore/rendering/RenderThemeMac.mm' l='995' u='w' c='_ZN7WebCore14RenderThemeMac23paintListButtonForInputERKNS_12RenderObjectERNS_15GraphicsContextERKNS_9FloatRectE'/>
+<use f='webkit/Source/WebCore/accessibility/mac/AccessibilityObjectMac.mm' l='80' u='r' c='_ZNK7WebCore19AccessibilityObject26convertRectToPlatformSpaceERKNS_9FloatRectENS_28AccessibilityConversionSpaceE'/>
+<use f='webkit/Source/WebKit/Shared/mac/WebCoreArgumentCodersMac.mm' l='339' u='a' c='_ZN3IPC13ArgumentCoderI7CGPointvE6encodeERNS_7EncoderES1_'/>
+<use f='webkit/Source/WebKit/Shared/mac/WebCoreArgumentCodersMac.mm' l='345' u='a' c='_ZN3IPC13ArgumentCoderI7CGPointvE6decodeERNS_7DecoderE'/>
+<use f='webkit/Source/WebKit/UIProcess/Cocoa/WebViewImpl.mm' l='1981' u='r' c='_ZN6WebKit11WebViewImpl8drawRectE6CGRect'/>
+<use f='webkit/Source/WebKit/UIProcess/Cocoa/WebViewImpl.mm' l='5226' u='r' c='_ZN6WebKit11WebViewImpl26firstRectForCharacterRangeE8_NSRangeU13block_pointerFv6CGRectS1_E'/>
+<use f='webkit/Source/WebKit/UIProcess/Cocoa/WebViewImpl.mm' l='5233' u='r' c='_ZN6WebKit11WebViewImpl22characterIndexForPointE7CGPointU13block_pointerFvmE'/>
+<use f='webkit/Source/WebKit/UIProcess/Cocoa/WebViewImpl.mm' l='5659' u='r' c='_ZN6WebKit11WebViewImpl29windowIsFrontWindowUnderMouseEP7NSEvent'/>
+<use f='webkit/Source/WebKit/UIProcess/mac/WKPrintingView.mm' l='444' u='r'/>
+<use f='webkit/Source/WebKit/UIProcess/mac/WKPrintingView.mm' l='474' u='r'/>
+<use f='webkit/Source/WebKit/UIProcess/mac/WKPrintingView.mm' l='567' u='r'/>
+<use f='webkit/Source/WebKit/UIProcess/mac/WKPrintingView.mm' l='615' u='r'/>
+<use f='webkit/Source/WebKit/UIProcess/mac/WKPrintingView.mm' l='332' u='r' c='_ZL23pageDidComputePageRectsRKN3WTF6VectorIN7WebCore7IntRectELm0ENS_15CrashOnOverflowELm16ENS_10FastMallocEEEdRKNS1_9RectEdgesIfEEP18IPCCallbackContext'/>
+<use f='webkit/Source/WebKit/UIProcess/mac/WKPrintingView.mm' l='453' u='r' c='_ZL19linkDestinationNameP11PDFDocumentP14PDFDestination'/>
+<use f='webkit/Source/WebKit/UIProcess/mac/WKTextInputWindowController.mm' l='81' u='r'/>
+<use f='webkit/Source/WebKit/UIProcess/mac/WebDateTimePickerMac.mm' l='164' u='r'/>
+<use f='webkit/Source/WebKit/UIProcess/mac/WebDateTimePickerMac.mm' l='165' u='r'/>
+<use f='webkit/Source/WebKit/UIProcess/mac/WebDateTimePickerMac.mm' l='166' u='r'/>
+<use f='webkit/Source/WebKit/UIProcess/mac/WebDateTimePickerMac.mm' l='167' u='r'/>
+<use f='webkit/Source/WebKit/UIProcess/mac/WebDateTimePickerMac.mm' l='168' u='r'/>
+<use f='webkit/Source/WebKit/UIProcess/mac/WebDateTimePickerMac.mm' l='169' u='r'/>
+<use f='webkit/Source/WebKit/WebProcess/Plugins/PDF/PDFPlugin.mm' l='2648' u='r' c='_ZN6WebKit9PDFPlugin33showDefinitionForAttributedStringEP18NSAttributedString7CGPoint'/>
+<use f='webkit/Source/WebKit/WebProcess/Plugins/PDF/PDFPlugin.mm' l='2851' u='r' c='_ZN6WebKitL39pointInLayoutSpaceForPointInWindowSpaceEP18PDFLayerController7CGPoint'/>
+<use f='webkit/Source/WebKit/WebProcess/Plugins/PDF/PDFPlugin.mm' l='2851' u='r' c='_ZN6WebKitL39pointInLayoutSpaceForPointInWindowSpaceEP18PDFLayerController7CGPoint'/>
+<use f='webkit/Source/WebKit/WebProcess/Plugins/PDF/PDFPlugin.mm' l='2852' u='w' c='_ZN6WebKitL39pointInLayoutSpaceForPointInWindowSpaceEP18PDFLayerController7CGPoint'/>
+<use f='webkit/Source/WebKit/WebProcess/Plugins/PDF/PDFPlugin.mm' l='2908' u='w' c='_ZN6WebKitL35rectInViewSpaceForRectInLayoutSpaceEP18PDFLayerController6CGRect'/>
+<use f='webkit/Source/WebKit/WebProcess/Plugins/PDF/PDFPlugin.mm' l='2913' u='w' c='_ZN6WebKitL35rectInViewSpaceForRectInLayoutSpaceEP18PDFLayerController6CGRect'/>
+<use f='webkit/Source/WebKit/WebProcess/Plugins/PDF/PDFPlugin.mm' l='2913' u='r' c='_ZN6WebKitL35rectInViewSpaceForRectInLayoutSpaceEP18PDFLayerController6CGRect'/>
+<use f='webkit/Source/WebKit/WebProcess/Plugins/PDF/PDFPluginAnnotation.mm' l='108' u='r' c='_ZN6WebKit19PDFPluginAnnotation14updateGeometryEv'/>
+<use f='webkit/Source/WebKit/WebProcess/WebPage/RemoteLayerTree/PlatformCALayerRemoteCustom.mm' l='87' u='r' c='_ZN6WebKit27PlatformCALayerRemoteCustomC1EN7WebCore15PlatformCALayer9LayerTypeEP7CALayerPNS1_21PlatformCALayerClientERNS_22RemoteLayerTreeContextE'/>
+<use f='webkit/Source/WebKit/WebProcess/WebPage/RemoteLayerTree/PlatformCALayerRemoteCustom.mm' l='88' u='r' c='_ZN6WebKit27PlatformCALayerRemoteCustomC1EN7WebCore15PlatformCALayer9LayerTypeEP7CALayerPNS1_21PlatformCALayerClientERNS_22RemoteLayerTreeContextE'/>
+<use f='webkit/Source/WebKit/WebProcess/WebPage/mac/WKAccessibilityWebPageObjectMac.mm' l='136' u='r'/>
+<use f='webkit/Source/WebKit/UIProcess/ios/fullscreen/FullscreenTouchSecheuristic.cpp' l='50' u='r' c='_ZN6WebKit27FullscreenTouchSecheuristic16scoreOfNextTouchE7CGPointRKN3WTF7SecondsE'/>
+<use f='webkit/Source/WebKit/UIProcess/ios/fullscreen/FullscreenTouchSecheuristic.cpp' l='71' u='r' c='_ZN6WebKit27FullscreenTouchSecheuristic13distanceScoreERK7CGPointS3_RKN3WTF7SecondsE'/>
+<use f='webkit/Source/WebKit/UIProcess/ios/fullscreen/FullscreenTouchSecheuristic.cpp' l='71' u='r' c='_ZN6WebKit27FullscreenTouchSecheuristic13distanceScoreERK7CGPointS3_RKN3WTF7SecondsE'/>
+<use f='webkit/Source/WebKitLegacy/mac/DOM/DOM.mm' l='559' u='w'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebFrameView.mm' l='572' u='w'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebFrameView.mm' l='572' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebFrameView.mm' l='641' u='w'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebFrameView.mm' l='641' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebFrameView.mm' l='660' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebFrameView.mm' l='662' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebFrameView.mm' l='672' u='w'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebFrameView.mm' l='672' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebFrameView.mm' l='727' u='w'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebHTMLView.mm' l='1924' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebHTMLView.mm' l='3844' u='w'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebHTMLView.mm' l='3844' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebHTMLView.mm' l='3844' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebHTMLView.mm' l='4337' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebHTMLView.mm' l='6345' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebHTMLView.mm' l='6350' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebHTMLView.mm' l='6384' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebView.mm' l='9077' u='r'/>
+<use f='webkit/Source/WebKitLegacy/mac/WebView/WebView.mm' l='9086' u='r'/>

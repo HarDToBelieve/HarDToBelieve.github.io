@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>vp9_temporal_filter.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp9/encoder/vp9_temporal_filter.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp9/encoder/vp9_temporal_filter.h'; var root_path = '../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../..'>Source</a>/<a href='../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../..'>libwebrtc</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>third_party</a>/<a href='../../../..'>libvpx</a>/<a href='../../..'>source</a>/<a href='../..'>libvpx</a>/<a href='..'>vp9</a>/<a href='./'>encoder</a>/<a href='vp9_temporal_filter.h.html'>vp9_temporal_filter.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2010 The WebM project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/VPX_VP9_ENCODER_VP9_TEMPORAL_FILTER_H_">VPX_VP9_ENCODER_VP9_TEMPORAL_FILTER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/VPX_VP9_ENCODER_VP9_TEMPORAL_FILTER_H_" data-ref="_M/VPX_VP9_ENCODER_VP9_TEMPORAL_FILTER_H_">VPX_VP9_ENCODER_VP9_TEMPORAL_FILTER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#<span data-ppcond="14">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="15">15</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="16">16</th><td><u>#<span data-ppcond="14">endif</span></u></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><u>#define <dfn class="macro" id="_M/ARNR_FILT_QINDEX" data-ref="_M/ARNR_FILT_QINDEX">ARNR_FILT_QINDEX</dfn> 128</u></td></tr>
+<tr><th id="19">19</th><td><em>static</em> <em>const</em> <a class="typedef" href="../common/vp9_mv.h.html#MV" title='MV' data-type='struct mv' data-ref="MV" data-ref-filename="MV">MV</a> <dfn class="decl def" id="kZeroMv" title='kZeroMv' data-ref="kZeroMv" data-ref-filename="kZeroMv">kZeroMv</dfn> = { <var>0</var>, <var>0</var> };</td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><i>// Block size used in temporal filtering</i></td></tr>
+<tr><th id="22">22</th><td><u>#define <dfn class="macro" id="_M/TF_BLOCK" data-ref="_M/TF_BLOCK">TF_BLOCK</dfn> BLOCK_32X32</u></td></tr>
+<tr><th id="23">23</th><td><u>#define <dfn class="macro" id="_M/BH" data-ref="_M/BH">BH</dfn> 32</u></td></tr>
+<tr><th id="24">24</th><td><u>#define <dfn class="macro" id="_M/BH_LOG2" data-ref="_M/BH_LOG2">BH_LOG2</dfn> 5</u></td></tr>
+<tr><th id="25">25</th><td><u>#define <dfn class="macro" id="_M/BW" data-ref="_M/BW">BW</dfn> 32</u></td></tr>
+<tr><th id="26">26</th><td><u>#define <dfn class="macro" id="_M/BW_LOG2" data-ref="_M/BW_LOG2">BW_LOG2</dfn> 5</u></td></tr>
+<tr><th id="27">27</th><td><u>#define <dfn class="macro" id="_M/BLK_PELS" data-ref="_M/BLK_PELS">BLK_PELS</dfn> ((BH) * (BW))  // Pixels in the block</u></td></tr>
+<tr><th id="28">28</th><td><u>#define <dfn class="macro" id="_M/TF_SHIFT" data-ref="_M/TF_SHIFT">TF_SHIFT</dfn> 2</u></td></tr>
+<tr><th id="29">29</th><td><u>#define <dfn class="macro" id="_M/TF_ROUND" data-ref="_M/TF_ROUND">TF_ROUND</dfn> 3</u></td></tr>
+<tr><th id="30">30</th><td><u>#define <dfn class="macro" id="_M/THR_SHIFT" data-ref="_M/THR_SHIFT">THR_SHIFT</dfn> 2</u></td></tr>
+<tr><th id="31">31</th><td><u>#define <dfn class="macro" id="_M/TF_SUB_BLOCK" data-ref="_M/TF_SUB_BLOCK">TF_SUB_BLOCK</dfn> BLOCK_16X16</u></td></tr>
+<tr><th id="32">32</th><td><u>#define <dfn class="macro" id="_M/SUB_BH" data-ref="_M/SUB_BH">SUB_BH</dfn> 16</u></td></tr>
+<tr><th id="33">33</th><td><u>#define <dfn class="macro" id="_M/SUB_BW" data-ref="_M/SUB_BW">SUB_BW</dfn> 16</u></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><em>void</em> <dfn class="decl fn" id="vp9_temporal_filter_init" title='vp9_temporal_filter_init' data-ref="vp9_temporal_filter_init" data-ref-filename="vp9_temporal_filter_init">vp9_temporal_filter_init</dfn>(<em>void</em>);</td></tr>
+<tr><th id="36">36</th><td><em>void</em> <dfn class="decl fn" id="vp9_temporal_filter" title='vp9_temporal_filter' data-ref="vp9_temporal_filter" data-ref-filename="vp9_temporal_filter">vp9_temporal_filter</dfn>(<a class="typedef" href="vp9_encoder.h.html#VP9_COMP" title='VP9_COMP' data-type='struct VP9_COMP' data-ref="VP9_COMP" data-ref-filename="VP9_COMP">VP9_COMP</a> *<dfn class="local col4 decl" id="54cpi" title='cpi' data-type='VP9_COMP *' data-ref="54cpi" data-ref-filename="54cpi">cpi</dfn>, <em>int</em> <dfn class="local col5 decl" id="55distance" title='distance' data-type='int' data-ref="55distance" data-ref-filename="55distance">distance</dfn>);</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><em>void</em> <dfn class="decl fn" id="vp9_temporal_filter_iterate_row_c" title='vp9_temporal_filter_iterate_row_c' data-ref="vp9_temporal_filter_iterate_row_c" data-ref-filename="vp9_temporal_filter_iterate_row_c">vp9_temporal_filter_iterate_row_c</dfn>(<a class="typedef" href="vp9_encoder.h.html#VP9_COMP" title='VP9_COMP' data-type='struct VP9_COMP' data-ref="VP9_COMP" data-ref-filename="VP9_COMP">VP9_COMP</a> *<dfn class="local col6 decl" id="56cpi" title='cpi' data-type='VP9_COMP *' data-ref="56cpi" data-ref-filename="56cpi">cpi</dfn>, <a class="typedef" href="vp9_encoder.h.html#ThreadData" title='ThreadData' data-type='struct ThreadData' data-ref="ThreadData" data-ref-filename="ThreadData">ThreadData</a> *<dfn class="local col7 decl" id="57td" title='td' data-type='ThreadData *' data-ref="57td" data-ref-filename="57td">td</dfn>,</td></tr>
+<tr><th id="39">39</th><td>                                       <em>int</em> <dfn class="local col8 decl" id="58mb_row" title='mb_row' data-type='int' data-ref="58mb_row" data-ref-filename="58mb_row">mb_row</dfn>, <em>int</em> <dfn class="local col9 decl" id="59mb_col_start" title='mb_col_start' data-type='int' data-ref="59mb_col_start" data-ref-filename="59mb_col_start">mb_col_start</dfn>,</td></tr>
+<tr><th id="40">40</th><td>                                       <em>int</em> <dfn class="local col0 decl" id="60mb_col_end" title='mb_col_end' data-type='int' data-ref="60mb_col_end" data-ref-filename="60mb_col_end">mb_col_end</dfn>);</td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td><u>#<span data-ppcond="42">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="43">43</th><td>}  <i>// extern "C"</i></td></tr>
+<tr><th id="44">44</th><td><u>#<span data-ppcond="42">endif</span></u></td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td><u>#<span data-ppcond="11">endif</span>  // VPX_VP9_ENCODER_VP9_TEMPORAL_FILTER_H_</u></td></tr>
+<tr><th id="47">47</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='vp9_encoder.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp9/encoder/vp9_encoder.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

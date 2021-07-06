@@ -1,0 +1,40 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='347' type='const webrtc::CryptoOptions'/>
+<offset>2016</offset>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='330'>// TODO(tommi): This field shouldn&apos;t be necessary. It&apos;s a copy of
+  // PeerConnection::GetCryptoOptions(), which is const state. It&apos;s also only
+  // used to filter header extensions when calling
+  // `rtp_transport_-&gt;UpdateRtpHeaderExtensionMap()` when the local/remote
+  // content description is updated. Since the transport is actually owned
+  // by the transport controller that also gets updated whenever the content
+  // description changes, it seems we have two paths into the transports, along
+  // with several thread hops via various classes (such as the Channel classes)
+  // that only serve as additional layers and store duplicate state. The Jsep*
+  // family of classes already apply session description updates on the network
+  // thread every time it changes.
+  // For the Channel classes, we should be able to get rid of:
+  // * crypto_options (and fewer construction parameters)_
+  // * UpdateRtpHeaderExtensionMap
+  // * GetFilteredRtpHeaderExtensions
+  // * Blocking thread hop to the network thread for every call to set
+  //   local/remote content is updated.</doc>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.cc' l='131' u='w' c='_ZN7cricket11BaseChannelC1EPN3rtc6ThreadES3_S3_NSt3__110unique_ptrINS_12MediaChannelENS4_14default_deleteIS6_EEEERKNS4_12basic_stringIcNS4_11char_trai71856'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.cc' l='753' u='m' c='_ZN7cricket11BaseChannel30GetFilteredRtpHeaderExtensionsERKNSt3__16vectorIN6webrtc12RtpExtensionENS1_9allocatorIS4_EEEE'/>
+<dec f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='347' type='const webrtc::CryptoOptions'/>
+<offset>2016</offset>
+<doc f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='330'>// TODO(tommi): This field shouldn&apos;t be necessary. It&apos;s a copy of
+  // PeerConnection::GetCryptoOptions(), which is const state. It&apos;s also only
+  // used to filter header extensions when calling
+  // `rtp_transport_-&gt;UpdateRtpHeaderExtensionMap()` when the local/remote
+  // content description is updated. Since the transport is actually owned
+  // by the transport controller that also gets updated whenever the content
+  // description changes, it seems we have two paths into the transports, along
+  // with several thread hops via various classes (such as the Channel classes)
+  // that only serve as additional layers and store duplicate state. The Jsep*
+  // family of classes already apply session description updates on the network
+  // thread every time it changes.
+  // For the Channel classes, we should be able to get rid of:
+  // * crypto_options (and fewer construction parameters)_
+  // * UpdateRtpHeaderExtensionMap
+  // * GetFilteredRtpHeaderExtensions
+  // * Blocking thread hop to the network thread for every call to set
+  //   local/remote content is updated.</doc>

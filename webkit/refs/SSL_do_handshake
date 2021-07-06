@@ -1,0 +1,19 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='343' type='int SSL_do_handshake(SSL * ssl)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='330'>// SSL_do_handshake continues the current handshake. If there is none or the
+// handshake has completed or False Started, it returns one. Otherwise, it
+// returns &lt;= 0. The caller should pass the value into |SSL_get_error| to
+// determine how to proceed.
+//
+// In DTLS, the caller must drive retransmissions. Whenever |SSL_get_error|
+// signals |SSL_ERROR_WANT_READ|, use |DTLSv1_get_timeout| to determine the
+// current timeout. If it expires before the next retry, call
+// |DTLSv1_handle_timeout|. Note that DTLS handshake retransmissions use fresh
+// sequence numbers, so it is not sufficient to replay packets at the transport.
+//
+// TODO(davidben): Ensure 0 is only returned on transport EOF.
+// https://crbug.com/466303.</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_lib.cc' l='871' ll='901' type='int SSL_do_handshake(SSL * ssl)'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_lib.cc' l='909' u='c' c='SSL_connect'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_lib.cc' l='918' u='c' c='SSL_accept'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_lib.cc' l='1007' u='c' c='_ZL13ssl_read_implP6ssl_st'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_lib.cc' l='1111' u='c' c='SSL_write'/>

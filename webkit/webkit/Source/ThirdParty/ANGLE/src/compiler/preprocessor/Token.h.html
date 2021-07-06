@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Token.h source code [webkit/Source/ThirdParty/ANGLE/src/compiler/preprocessor/Token.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="angle::pp::Token "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/ANGLE/src/compiler/preprocessor/Token.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>ANGLE</a>/<a href='../..'>src</a>/<a href='..'>compiler</a>/<a href='./'>preprocessor</a>/<a href='Token.h.html'>Token.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>//</i></td></tr>
+<tr><th id="2">2</th><td><i>// Copyright 2011 The ANGLE Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i>// Use of this source code is governed by a BSD-style license that can be</i></td></tr>
+<tr><th id="4">4</th><td><i>// found in the LICENSE file.</i></td></tr>
+<tr><th id="5">5</th><td><i>//</i></td></tr>
+<tr><th id="6">6</th><td></td></tr>
+<tr><th id="7">7</th><td><u>#<span data-ppcond="7">ifndef</span> <span class="macro" data-ref="_M/COMPILER_PREPROCESSOR_TOKEN_H_">COMPILER_PREPROCESSOR_TOKEN_H_</span></u></td></tr>
+<tr><th id="8">8</th><td><u>#define <dfn class="macro" id="_M/COMPILER_PREPROCESSOR_TOKEN_H_" data-ref="_M/COMPILER_PREPROCESSOR_TOKEN_H_">COMPILER_PREPROCESSOR_TOKEN_H_</dfn></u></td></tr>
+<tr><th id="9">9</th><td></td></tr>
+<tr><th id="10">10</th><td><u>#include &lt;ostream&gt;</u></td></tr>
+<tr><th id="11">11</th><td><u>#include &lt;string&gt;</u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="SourceLocation.h.html">"compiler/preprocessor/SourceLocation.h"</a></u></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><b>namespace</b> <span class="namespace">angle</span></td></tr>
+<tr><th id="16">16</th><td>{</td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><b>namespace</b> <span class="namespace">pp</span></td></tr>
+<tr><th id="19">19</th><td>{</td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><b>struct</b> <dfn class="type def" id="angle::pp::Token" title='angle::pp::Token' data-ref="angle::pp::Token" data-ref-filename="angle..pp..Token">Token</dfn></td></tr>
+<tr><th id="22">22</th><td>{</td></tr>
+<tr><th id="23">23</th><td>    <b>enum</b> <dfn class="type def" id="angle::pp::Token::Type" title='angle::pp::Token::Type' data-ref="angle::pp::Token::Type" data-ref-filename="angle..pp..Token..Type">Type</dfn></td></tr>
+<tr><th id="24">24</th><td>    {</td></tr>
+<tr><th id="25">25</th><td>        <i>// Calling this ERROR causes a conflict with wingdi.h</i></td></tr>
+<tr><th id="26">26</th><td>        <dfn class="enum" id="angle::pp::Token::GOT_ERROR" title='angle::pp::Token::GOT_ERROR' data-ref="angle::pp::Token::GOT_ERROR" data-ref-filename="angle..pp..Token..GOT_ERROR">GOT_ERROR</dfn> = -<var>1</var>,</td></tr>
+<tr><th id="27">27</th><td>        <dfn class="enum" id="angle::pp::Token::LAST" title='angle::pp::Token::LAST' data-ref="angle::pp::Token::LAST" data-ref-filename="angle..pp..Token..LAST">LAST</dfn>      = <var>0</var>,  <i>// EOF.</i></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td>        <dfn class="enum" id="angle::pp::Token::IDENTIFIER" title='angle::pp::Token::IDENTIFIER' data-ref="angle::pp::Token::IDENTIFIER" data-ref-filename="angle..pp..Token..IDENTIFIER">IDENTIFIER</dfn> = <var>258</var>,</td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td>        <dfn class="enum" id="angle::pp::Token::CONST_INT" title='angle::pp::Token::CONST_INT' data-ref="angle::pp::Token::CONST_INT" data-ref-filename="angle..pp..Token..CONST_INT">CONST_INT</dfn>,</td></tr>
+<tr><th id="32">32</th><td>        <dfn class="enum" id="angle::pp::Token::CONST_FLOAT" title='angle::pp::Token::CONST_FLOAT' data-ref="angle::pp::Token::CONST_FLOAT" data-ref-filename="angle..pp..Token..CONST_FLOAT">CONST_FLOAT</dfn>,</td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td>        <dfn class="enum" id="angle::pp::Token::OP_INC" title='angle::pp::Token::OP_INC' data-ref="angle::pp::Token::OP_INC" data-ref-filename="angle..pp..Token..OP_INC">OP_INC</dfn>,</td></tr>
+<tr><th id="35">35</th><td>        <dfn class="enum" id="angle::pp::Token::OP_DEC" title='angle::pp::Token::OP_DEC' data-ref="angle::pp::Token::OP_DEC" data-ref-filename="angle..pp..Token..OP_DEC">OP_DEC</dfn>,</td></tr>
+<tr><th id="36">36</th><td>        <dfn class="enum" id="angle::pp::Token::OP_LEFT" title='angle::pp::Token::OP_LEFT' data-ref="angle::pp::Token::OP_LEFT" data-ref-filename="angle..pp..Token..OP_LEFT">OP_LEFT</dfn>,</td></tr>
+<tr><th id="37">37</th><td>        <dfn class="enum" id="angle::pp::Token::OP_RIGHT" title='angle::pp::Token::OP_RIGHT' data-ref="angle::pp::Token::OP_RIGHT" data-ref-filename="angle..pp..Token..OP_RIGHT">OP_RIGHT</dfn>,</td></tr>
+<tr><th id="38">38</th><td>        <dfn class="enum" id="angle::pp::Token::OP_LE" title='angle::pp::Token::OP_LE' data-ref="angle::pp::Token::OP_LE" data-ref-filename="angle..pp..Token..OP_LE">OP_LE</dfn>,</td></tr>
+<tr><th id="39">39</th><td>        <dfn class="enum" id="angle::pp::Token::OP_GE" title='angle::pp::Token::OP_GE' data-ref="angle::pp::Token::OP_GE" data-ref-filename="angle..pp..Token..OP_GE">OP_GE</dfn>,</td></tr>
+<tr><th id="40">40</th><td>        <dfn class="enum" id="angle::pp::Token::OP_EQ" title='angle::pp::Token::OP_EQ' data-ref="angle::pp::Token::OP_EQ" data-ref-filename="angle..pp..Token..OP_EQ">OP_EQ</dfn>,</td></tr>
+<tr><th id="41">41</th><td>        <dfn class="enum" id="angle::pp::Token::OP_NE" title='angle::pp::Token::OP_NE' data-ref="angle::pp::Token::OP_NE" data-ref-filename="angle..pp..Token..OP_NE">OP_NE</dfn>,</td></tr>
+<tr><th id="42">42</th><td>        <dfn class="enum" id="angle::pp::Token::OP_AND" title='angle::pp::Token::OP_AND' data-ref="angle::pp::Token::OP_AND" data-ref-filename="angle..pp..Token..OP_AND">OP_AND</dfn>,</td></tr>
+<tr><th id="43">43</th><td>        <dfn class="enum" id="angle::pp::Token::OP_XOR" title='angle::pp::Token::OP_XOR' data-ref="angle::pp::Token::OP_XOR" data-ref-filename="angle..pp..Token..OP_XOR">OP_XOR</dfn>,</td></tr>
+<tr><th id="44">44</th><td>        <dfn class="enum" id="angle::pp::Token::OP_OR" title='angle::pp::Token::OP_OR' data-ref="angle::pp::Token::OP_OR" data-ref-filename="angle..pp..Token..OP_OR">OP_OR</dfn>,</td></tr>
+<tr><th id="45">45</th><td>        <dfn class="enum" id="angle::pp::Token::OP_ADD_ASSIGN" title='angle::pp::Token::OP_ADD_ASSIGN' data-ref="angle::pp::Token::OP_ADD_ASSIGN" data-ref-filename="angle..pp..Token..OP_ADD_ASSIGN">OP_ADD_ASSIGN</dfn>,</td></tr>
+<tr><th id="46">46</th><td>        <dfn class="enum" id="angle::pp::Token::OP_SUB_ASSIGN" title='angle::pp::Token::OP_SUB_ASSIGN' data-ref="angle::pp::Token::OP_SUB_ASSIGN" data-ref-filename="angle..pp..Token..OP_SUB_ASSIGN">OP_SUB_ASSIGN</dfn>,</td></tr>
+<tr><th id="47">47</th><td>        <dfn class="enum" id="angle::pp::Token::OP_MUL_ASSIGN" title='angle::pp::Token::OP_MUL_ASSIGN' data-ref="angle::pp::Token::OP_MUL_ASSIGN" data-ref-filename="angle..pp..Token..OP_MUL_ASSIGN">OP_MUL_ASSIGN</dfn>,</td></tr>
+<tr><th id="48">48</th><td>        <dfn class="enum" id="angle::pp::Token::OP_DIV_ASSIGN" title='angle::pp::Token::OP_DIV_ASSIGN' data-ref="angle::pp::Token::OP_DIV_ASSIGN" data-ref-filename="angle..pp..Token..OP_DIV_ASSIGN">OP_DIV_ASSIGN</dfn>,</td></tr>
+<tr><th id="49">49</th><td>        <dfn class="enum" id="angle::pp::Token::OP_MOD_ASSIGN" title='angle::pp::Token::OP_MOD_ASSIGN' data-ref="angle::pp::Token::OP_MOD_ASSIGN" data-ref-filename="angle..pp..Token..OP_MOD_ASSIGN">OP_MOD_ASSIGN</dfn>,</td></tr>
+<tr><th id="50">50</th><td>        <dfn class="enum" id="angle::pp::Token::OP_LEFT_ASSIGN" title='angle::pp::Token::OP_LEFT_ASSIGN' data-ref="angle::pp::Token::OP_LEFT_ASSIGN" data-ref-filename="angle..pp..Token..OP_LEFT_ASSIGN">OP_LEFT_ASSIGN</dfn>,</td></tr>
+<tr><th id="51">51</th><td>        <dfn class="enum" id="angle::pp::Token::OP_RIGHT_ASSIGN" title='angle::pp::Token::OP_RIGHT_ASSIGN' data-ref="angle::pp::Token::OP_RIGHT_ASSIGN" data-ref-filename="angle..pp..Token..OP_RIGHT_ASSIGN">OP_RIGHT_ASSIGN</dfn>,</td></tr>
+<tr><th id="52">52</th><td>        <dfn class="enum" id="angle::pp::Token::OP_AND_ASSIGN" title='angle::pp::Token::OP_AND_ASSIGN' data-ref="angle::pp::Token::OP_AND_ASSIGN" data-ref-filename="angle..pp..Token..OP_AND_ASSIGN">OP_AND_ASSIGN</dfn>,</td></tr>
+<tr><th id="53">53</th><td>        <dfn class="enum" id="angle::pp::Token::OP_XOR_ASSIGN" title='angle::pp::Token::OP_XOR_ASSIGN' data-ref="angle::pp::Token::OP_XOR_ASSIGN" data-ref-filename="angle..pp..Token..OP_XOR_ASSIGN">OP_XOR_ASSIGN</dfn>,</td></tr>
+<tr><th id="54">54</th><td>        <dfn class="enum" id="angle::pp::Token::OP_OR_ASSIGN" title='angle::pp::Token::OP_OR_ASSIGN' data-ref="angle::pp::Token::OP_OR_ASSIGN" data-ref-filename="angle..pp..Token..OP_OR_ASSIGN">OP_OR_ASSIGN</dfn>,</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td>        <i>// Preprocessing token types.</i></td></tr>
+<tr><th id="57">57</th><td><i>        // These types are used by the preprocessor internally.</i></td></tr>
+<tr><th id="58">58</th><td><i>        // Preprocessor clients must not depend or check for them.</i></td></tr>
+<tr><th id="59">59</th><td>        <dfn class="enum" id="angle::pp::Token::PP_HASH" title='angle::pp::Token::PP_HASH' data-ref="angle::pp::Token::PP_HASH" data-ref-filename="angle..pp..Token..PP_HASH">PP_HASH</dfn>,</td></tr>
+<tr><th id="60">60</th><td>        <dfn class="enum" id="angle::pp::Token::PP_NUMBER" title='angle::pp::Token::PP_NUMBER' data-ref="angle::pp::Token::PP_NUMBER" data-ref-filename="angle..pp..Token..PP_NUMBER">PP_NUMBER</dfn>,</td></tr>
+<tr><th id="61">61</th><td>        <dfn class="enum" id="angle::pp::Token::PP_OTHER" title='angle::pp::Token::PP_OTHER' data-ref="angle::pp::Token::PP_OTHER" data-ref-filename="angle..pp..Token..PP_OTHER">PP_OTHER</dfn></td></tr>
+<tr><th id="62">62</th><td>    };</td></tr>
+<tr><th id="63">63</th><td>    <b>enum</b> <dfn class="type def" id="angle::pp::Token::Flags" title='angle::pp::Token::Flags' data-ref="angle::pp::Token::Flags" data-ref-filename="angle..pp..Token..Flags">Flags</dfn></td></tr>
+<tr><th id="64">64</th><td>    {</td></tr>
+<tr><th id="65">65</th><td>        <dfn class="enum" id="angle::pp::Token::AT_START_OF_LINE" title='angle::pp::Token::AT_START_OF_LINE' data-ref="angle::pp::Token::AT_START_OF_LINE" data-ref-filename="angle..pp..Token..AT_START_OF_LINE">AT_START_OF_LINE</dfn>   = <var>1</var> &lt;&lt; <var>0</var>,</td></tr>
+<tr><th id="66">66</th><td>        <dfn class="enum" id="angle::pp::Token::HAS_LEADING_SPACE" title='angle::pp::Token::HAS_LEADING_SPACE' data-ref="angle::pp::Token::HAS_LEADING_SPACE" data-ref-filename="angle..pp..Token..HAS_LEADING_SPACE">HAS_LEADING_SPACE</dfn>  = <var>1</var> &lt;&lt; <var>1</var>,</td></tr>
+<tr><th id="67">67</th><td>        <dfn class="enum" id="angle::pp::Token::EXPANSION_DISABLED" title='angle::pp::Token::EXPANSION_DISABLED' data-ref="angle::pp::Token::EXPANSION_DISABLED" data-ref-filename="angle..pp..Token..EXPANSION_DISABLED">EXPANSION_DISABLED</dfn> = <var>1</var> &lt;&lt; <var>2</var></td></tr>
+<tr><th id="68">68</th><td>    };</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td>    <dfn class="decl def fn" id="_ZN5angle2pp5TokenC1Ev" title='angle::pp::Token::Token' data-ref="_ZN5angle2pp5TokenC1Ev" data-ref-filename="_ZN5angle2pp5TokenC1Ev">Token</dfn>() : <a class="member field" href="#angle::pp::Token::type" title='angle::pp::Token::type' data-ref="angle::pp::Token::type" data-ref-filename="angle..pp..Token..type">type</a>(<var>0</var>), <a class="member field" href="#angle::pp::Token::flags" title='angle::pp::Token::flags' data-ref="angle::pp::Token::flags" data-ref-filename="angle..pp..Token..flags">flags</a>(<var>0</var>) {}</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN5angle2pp5Token5resetEv" title='angle::pp::Token::reset' data-ref="_ZN5angle2pp5Token5resetEv" data-ref-filename="_ZN5angle2pp5Token5resetEv">reset</dfn>();</td></tr>
+<tr><th id="73">73</th><td>    <em>bool</em> <dfn class="decl fn" id="_ZNK5angle2pp5Token6equalsERKS1_" title='angle::pp::Token::equals' data-ref="_ZNK5angle2pp5Token6equalsERKS1_" data-ref-filename="_ZNK5angle2pp5Token6equalsERKS1_">equals</dfn>(<em>const</em> <a class="type" href="#angle::pp::Token" title='angle::pp::Token' data-ref="angle::pp::Token" data-ref-filename="angle..pp..Token">Token</a> &amp;<dfn class="local col5 decl" id="75other" title='other' data-type='const angle::pp::Token &amp;' data-ref="75other" data-ref-filename="75other">other</dfn>) <em>const</em>;</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td>    <i>// Returns true if this is the first token on line.</i></td></tr>
+<tr><th id="76">76</th><td><i>    // It disregards any leading whitespace.</i></td></tr>
+<tr><th id="77">77</th><td>    <em>bool</em> <dfn class="decl def fn" id="_ZNK5angle2pp5Token13atStartOfLineEv" title='angle::pp::Token::atStartOfLine' data-ref="_ZNK5angle2pp5Token13atStartOfLineEv" data-ref-filename="_ZNK5angle2pp5Token13atStartOfLineEv">atStartOfLine</dfn>() <em>const</em> { <b>return</b> (<a class="member field" href="#angle::pp::Token::flags" title='angle::pp::Token::flags' data-ref="angle::pp::Token::flags" data-ref-filename="angle..pp..Token..flags">flags</a> &amp; <a class="enum" href="#angle::pp::Token::AT_START_OF_LINE" title='angle::pp::Token::AT_START_OF_LINE' data-ref="angle::pp::Token::AT_START_OF_LINE" data-ref-filename="angle..pp..Token..AT_START_OF_LINE">AT_START_OF_LINE</a>) != <var>0</var>; }</td></tr>
+<tr><th id="78">78</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN5angle2pp5Token16setAtStartOfLineEb" title='angle::pp::Token::setAtStartOfLine' data-ref="_ZN5angle2pp5Token16setAtStartOfLineEb" data-ref-filename="_ZN5angle2pp5Token16setAtStartOfLineEb">setAtStartOfLine</dfn>(<em>bool</em> <dfn class="local col6 decl" id="76start" title='start' data-type='bool' data-ref="76start" data-ref-filename="76start">start</dfn>);</td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td>    <em>bool</em> <dfn class="decl def fn" id="_ZNK5angle2pp5Token15hasLeadingSpaceEv" title='angle::pp::Token::hasLeadingSpace' data-ref="_ZNK5angle2pp5Token15hasLeadingSpaceEv" data-ref-filename="_ZNK5angle2pp5Token15hasLeadingSpaceEv">hasLeadingSpace</dfn>() <em>const</em> { <b>return</b> (<a class="member field" href="#angle::pp::Token::flags" title='angle::pp::Token::flags' data-ref="angle::pp::Token::flags" data-ref-filename="angle..pp..Token..flags">flags</a> &amp; <a class="enum" href="#angle::pp::Token::HAS_LEADING_SPACE" title='angle::pp::Token::HAS_LEADING_SPACE' data-ref="angle::pp::Token::HAS_LEADING_SPACE" data-ref-filename="angle..pp..Token..HAS_LEADING_SPACE">HAS_LEADING_SPACE</a>) != <var>0</var>; }</td></tr>
+<tr><th id="81">81</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN5angle2pp5Token18setHasLeadingSpaceEb" title='angle::pp::Token::setHasLeadingSpace' data-ref="_ZN5angle2pp5Token18setHasLeadingSpaceEb" data-ref-filename="_ZN5angle2pp5Token18setHasLeadingSpaceEb">setHasLeadingSpace</dfn>(<em>bool</em> <dfn class="local col7 decl" id="77space" title='space' data-type='bool' data-ref="77space" data-ref-filename="77space">space</dfn>);</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td>    <em>bool</em> <dfn class="decl def fn" id="_ZNK5angle2pp5Token17expansionDisabledEv" title='angle::pp::Token::expansionDisabled' data-ref="_ZNK5angle2pp5Token17expansionDisabledEv" data-ref-filename="_ZNK5angle2pp5Token17expansionDisabledEv">expansionDisabled</dfn>() <em>const</em> { <b>return</b> (<a class="member field" href="#angle::pp::Token::flags" title='angle::pp::Token::flags' data-ref="angle::pp::Token::flags" data-ref-filename="angle..pp..Token..flags">flags</a> &amp; <a class="enum" href="#angle::pp::Token::EXPANSION_DISABLED" title='angle::pp::Token::EXPANSION_DISABLED' data-ref="angle::pp::Token::EXPANSION_DISABLED" data-ref-filename="angle..pp..Token..EXPANSION_DISABLED">EXPANSION_DISABLED</a>) != <var>0</var>; }</td></tr>
+<tr><th id="84">84</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN5angle2pp5Token20setExpansionDisabledEb" title='angle::pp::Token::setExpansionDisabled' data-ref="_ZN5angle2pp5Token20setExpansionDisabledEb" data-ref-filename="_ZN5angle2pp5Token20setExpansionDisabledEb">setExpansionDisabled</dfn>(<em>bool</em> <dfn class="local col8 decl" id="78disable" title='disable' data-type='bool' data-ref="78disable" data-ref-filename="78disable">disable</dfn>);</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>    <i>// Converts text into numeric value for CONST_INT and CONST_FLOAT token.</i></td></tr>
+<tr><th id="87">87</th><td><i>    // Returns false if the parsed value cannot fit into an int or float.</i></td></tr>
+<tr><th id="88">88</th><td>    <em>bool</em> <dfn class="decl fn" id="_ZNK5angle2pp5Token6iValueEPi" title='angle::pp::Token::iValue' data-ref="_ZNK5angle2pp5Token6iValueEPi" data-ref-filename="_ZNK5angle2pp5Token6iValueEPi">iValue</dfn>(<em>int</em> *<dfn class="local col9 decl" id="79value" title='value' data-type='int *' data-ref="79value" data-ref-filename="79value">value</dfn>) <em>const</em>;</td></tr>
+<tr><th id="89">89</th><td>    <em>bool</em> <dfn class="decl fn" id="_ZNK5angle2pp5Token6uValueEPj" title='angle::pp::Token::uValue' data-ref="_ZNK5angle2pp5Token6uValueEPj" data-ref-filename="_ZNK5angle2pp5Token6uValueEPj">uValue</dfn>(<em>unsigned</em> <em>int</em> *<dfn class="local col0 decl" id="80value" title='value' data-type='unsigned int *' data-ref="80value" data-ref-filename="80value">value</dfn>) <em>const</em>;</td></tr>
+<tr><th id="90">90</th><td></td></tr>
+<tr><th id="91">91</th><td>    <em>int</em> <dfn class="decl field" id="angle::pp::Token::type" title='angle::pp::Token::type' data-ref="angle::pp::Token::type" data-ref-filename="angle..pp..Token..type">type</dfn>;</td></tr>
+<tr><th id="92">92</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="angle::pp::Token::flags" title='angle::pp::Token::flags' data-ref="angle::pp::Token::flags" data-ref-filename="angle..pp..Token..flags">flags</dfn>;</td></tr>
+<tr><th id="93">93</th><td>    <a class="type" href="SourceLocation.h.html#angle::pp::SourceLocation" title='angle::pp::SourceLocation' data-ref="angle::pp::SourceLocation" data-ref-filename="angle..pp..SourceLocation">SourceLocation</a> <dfn class="decl field" id="angle::pp::Token::location" title='angle::pp::Token::location' data-ref="angle::pp::Token::location" data-ref-filename="angle..pp..Token..location">location</dfn>;</td></tr>
+<tr><th id="94">94</th><td>    <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span> <dfn class="decl field" id="angle::pp::Token::text" title='angle::pp::Token::text' data-ref="angle::pp::Token::text" data-ref-filename="angle..pp..Token..text">text</dfn>;</td></tr>
+<tr><th id="95">95</th><td>};</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN5angle2ppeqERKNS0_5TokenES3_" title='angle::pp::operator==' data-ref="_ZN5angle2ppeqERKNS0_5TokenES3_" data-ref-filename="_ZN5angle2ppeqERKNS0_5TokenES3_"><b>operator</b>==</dfn>(<em>const</em> <a class="type" href="#angle::pp::Token" title='angle::pp::Token' data-ref="angle::pp::Token" data-ref-filename="angle..pp..Token">Token</a> &amp;<dfn class="local col1 decl" id="81lhs" title='lhs' data-type='const angle::pp::Token &amp;' data-ref="81lhs" data-ref-filename="81lhs">lhs</dfn>, <em>const</em> <a class="type" href="#angle::pp::Token" title='angle::pp::Token' data-ref="angle::pp::Token" data-ref-filename="angle..pp..Token">Token</a> &amp;<dfn class="local col2 decl" id="82rhs" title='rhs' data-type='const angle::pp::Token &amp;' data-ref="82rhs" data-ref-filename="82rhs">rhs</dfn>)</td></tr>
+<tr><th id="98">98</th><td>{</td></tr>
+<tr><th id="99">99</th><td>    <b>return</b> <a class="local col1 ref" href="#81lhs" title='lhs' data-ref="81lhs" data-ref-filename="81lhs">lhs</a>.<a class="ref fn" href="#_ZNK5angle2pp5Token6equalsERKS1_" title='angle::pp::Token::equals' data-ref="_ZNK5angle2pp5Token6equalsERKS1_" data-ref-filename="_ZNK5angle2pp5Token6equalsERKS1_">equals</a>(<a class="local col2 ref" href="#82rhs" title='rhs' data-ref="82rhs" data-ref-filename="82rhs">rhs</a>);</td></tr>
+<tr><th id="100">100</th><td>}</td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN5angle2ppneERKNS0_5TokenES3_" title='angle::pp::operator!=' data-ref="_ZN5angle2ppneERKNS0_5TokenES3_" data-ref-filename="_ZN5angle2ppneERKNS0_5TokenES3_"><b>operator</b>!=</dfn>(<em>const</em> <a class="type" href="#angle::pp::Token" title='angle::pp::Token' data-ref="angle::pp::Token" data-ref-filename="angle..pp..Token">Token</a> &amp;<dfn class="local col3 decl" id="83lhs" title='lhs' data-type='const angle::pp::Token &amp;' data-ref="83lhs" data-ref-filename="83lhs">lhs</dfn>, <em>const</em> <a class="type" href="#angle::pp::Token" title='angle::pp::Token' data-ref="angle::pp::Token" data-ref-filename="angle..pp..Token">Token</a> &amp;<dfn class="local col4 decl" id="84rhs" title='rhs' data-type='const angle::pp::Token &amp;' data-ref="84rhs" data-ref-filename="84rhs">rhs</dfn>)</td></tr>
+<tr><th id="103">103</th><td>{</td></tr>
+<tr><th id="104">104</th><td>    <b>return</b> !<a class="local col3 ref" href="#83lhs" title='lhs' data-ref="83lhs" data-ref-filename="83lhs">lhs</a>.<a class="ref fn" href="#_ZNK5angle2pp5Token6equalsERKS1_" title='angle::pp::Token::equals' data-ref="_ZNK5angle2pp5Token6equalsERKS1_" data-ref-filename="_ZNK5angle2pp5Token6equalsERKS1_">equals</a>(<a class="local col4 ref" href="#84rhs" title='rhs' data-ref="84rhs" data-ref-filename="84rhs">rhs</a>);</td></tr>
+<tr><th id="105">105</th><td>}</td></tr>
+<tr><th id="106">106</th><td></td></tr>
+<tr><th id="107">107</th><td><span class="namespace">std::</span><span class='typedef' title='std::__1::ostream' data-type='basic_ostream&lt;char&gt;' data-ref="std::__1::ostream" data-ref-filename="std..__1..ostream">ostream</span> &amp;<dfn class="decl fn" id="_ZN5angle2pplsERNSt3__113basic_ostreamIcNS1_11char_traitsIcEEEERKNS0_5TokenE" title='angle::pp::operator&lt;&lt;' data-ref="_ZN5angle2pplsERNSt3__113basic_ostreamIcNS1_11char_traitsIcEEEERKNS0_5TokenE" data-ref-filename="_ZN5angle2pplsERNSt3__113basic_ostreamIcNS1_11char_traitsIcEEEERKNS0_5TokenE"><b>operator</b>&lt;&lt;</dfn>(<span class="namespace">std::</span><span class='typedef' title='std::__1::ostream' data-type='basic_ostream&lt;char&gt;' data-ref="std::__1::ostream" data-ref-filename="std..__1..ostream">ostream</span> &amp;<dfn class="local col5 decl" id="85out" title='out' data-type='std::ostream &amp;' data-ref="85out" data-ref-filename="85out">out</dfn>, <em>const</em> <a class="type" href="#angle::pp::Token" title='angle::pp::Token' data-ref="angle::pp::Token" data-ref-filename="angle..pp..Token">Token</a> &amp;<dfn class="local col6 decl" id="86token" title='token' data-type='const angle::pp::Token &amp;' data-ref="86token" data-ref-filename="86token">token</dfn>);</td></tr>
+<tr><th id="108">108</th><td></td></tr>
+<tr><th id="109">109</th><td><b>constexpr</b> <em>char</em> <dfn class="decl def" id="angle::pp::kDefined" title='angle::pp::kDefined' data-ref="angle::pp::kDefined" data-ref-filename="angle..pp..kDefined">kDefined</dfn>[] = <q>"defined"</q>;</td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td>}  <i>// namespace pp</i></td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td>}  <i>// namespace angle</i></td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td><u>#<span data-ppcond="7">endif</span>  // COMPILER_PREPROCESSOR_TOKEN_H_</u></td></tr>
+<tr><th id="116">116</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='DirectiveParser.cpp.html'>webkit/Source/ThirdParty/ANGLE/src/compiler/preprocessor/DirectiveParser.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

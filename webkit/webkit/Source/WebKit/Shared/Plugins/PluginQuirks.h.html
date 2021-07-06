@@ -1,0 +1,141 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>PluginQuirks.h source code [webkit/Source/WebKit/Shared/Plugins/PluginQuirks.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="WebKit::PluginQuirks "/>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKit/Shared/Plugins/PluginQuirks.h'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKit</a>/<a href='..'>Shared</a>/<a href='./'>Plugins</a>/<a href='PluginQuirks.h.html'>PluginQuirks.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2010-2020 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><b>namespace</b> <span class="namespace">WebKit</span> {</td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><b>class</b> <dfn class="type def" id="WebKit::PluginQuirks" title='WebKit::PluginQuirks' data-ref="WebKit::PluginQuirks" data-ref-filename="WebKit..PluginQuirks">PluginQuirks</dfn> {</td></tr>
+<tr><th id="31">31</th><td><b>public</b>:</td></tr>
+<tr><th id="32">32</th><td>    <b>enum</b> <dfn class="type def" id="WebKit::PluginQuirks::PluginQuirk" title='WebKit::PluginQuirks::PluginQuirk' data-ref="WebKit::PluginQuirks::PluginQuirk" data-ref-filename="WebKit..PluginQuirks..PluginQuirk">PluginQuirk</dfn> {</td></tr>
+<tr><th id="33">33</th><td>        <i>// Mac specific quirks:</i></td></tr>
+<tr><th id="34">34</th><td><u>#<span data-ppcond="34">if</span> <a class="macro" href="../../config.h.html#56" title="(defined 1 &amp;&amp; 1)" data-ref="_M/PLUGIN_ARCHITECTURE">PLUGIN_ARCHITECTURE</a>(MAC)</u></td></tr>
+<tr><th id="35">35</th><td>        <i>// The plug-in wants the call to getprogname() to return "WebKitPluginHost".</i></td></tr>
+<tr><th id="36">36</th><td><i>        // Adobe Flash Will not handle key down events otherwise.</i></td></tr>
+<tr><th id="37">37</th><td>        <dfn class="enum" id="WebKit::PluginQuirks::PrognameShouldBeWebKitPluginHost" title='WebKit::PluginQuirks::PrognameShouldBeWebKitPluginHost' data-ref="WebKit::PluginQuirks::PrognameShouldBeWebKitPluginHost" data-ref-filename="WebKit..PluginQuirks..PrognameShouldBeWebKitPluginHost">PrognameShouldBeWebKitPluginHost</dfn>,</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td>        <i>// Supports receiving a paint event, even when using CoreAnimation rendering.</i></td></tr>
+<tr><th id="40">40</th><td>        <dfn class="enum" id="WebKit::PluginQuirks::SupportsSnapshotting" title='WebKit::PluginQuirks::SupportsSnapshotting' data-ref="WebKit::PluginQuirks::SupportsSnapshotting" data-ref-filename="WebKit..PluginQuirks..SupportsSnapshotting">SupportsSnapshotting</dfn>,</td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td>        <i>// Make the plug-in opaque unless it has a "background" attribute set to a transparent color</i></td></tr>
+<tr><th id="43">43</th><td><i>        // according to <a href="http://msdn.microsoft.com/en-us/library/cc838148(VS.95).aspx">http://msdn.microsoft.com/en-us/library/cc838148(VS.95).aspx</a></i></td></tr>
+<tr><th id="44">44</th><td><i>        // A non-existent "background" attribute is interpreted as the named color White which is opaque.</i></td></tr>
+<tr><th id="45">45</th><td><i>        // Microsoft Silverlight doesn't opt into transparency using NPN_SetValue and</i></td></tr>
+<tr><th id="46">46</th><td><i>        // NPPVpluginTransparentBool, so we'll always force it unless the plug-in has a "background"</i></td></tr>
+<tr><th id="47">47</th><td><i>        // attribute that specifies a opaque color.</i></td></tr>
+<tr><th id="48">48</th><td>        <dfn class="enum" id="WebKit::PluginQuirks::MakeOpaqueUnlessTransparentSilverlightBackgroundAttributeExists" title='WebKit::PluginQuirks::MakeOpaqueUnlessTransparentSilverlightBackgroundAttributeExists' data-ref="WebKit::PluginQuirks::MakeOpaqueUnlessTransparentSilverlightBackgroundAttributeExists" data-ref-filename="WebKit..PluginQuirks..MakeOpaqueUnlessTransparentSilverlightBackgroundAttributeExists">MakeOpaqueUnlessTransparentSilverlightBackgroundAttributeExists</dfn>,</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td>        <i>// Whether calling NPP_GetValue with NPPVpluginCoreAnimationLayer returns a retained Core Animation</i></td></tr>
+<tr><th id="51">51</th><td><i>        // layer or not. According to the NPAPI specifications, plug-in shouldn't return a retained layer but</i></td></tr>
+<tr><th id="52">52</th><td><i>        // WebKit1 expects a retained plug-in layer. We use this for Flash to avoid leaking OpenGL layers.</i></td></tr>
+<tr><th id="53">53</th><td>        <dfn class="enum" id="WebKit::PluginQuirks::ReturnsRetainedCoreAnimationLayer" title='WebKit::PluginQuirks::ReturnsRetainedCoreAnimationLayer' data-ref="WebKit::PluginQuirks::ReturnsRetainedCoreAnimationLayer" data-ref-filename="WebKit..PluginQuirks..ReturnsRetainedCoreAnimationLayer">ReturnsRetainedCoreAnimationLayer</dfn>,</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td>        <i>// Whether NPP_GetValue with NPPVpluginScriptableNPObject returns a non-retained NPObject or not.</i></td></tr>
+<tr><th id="56">56</th><td><i>        // Versions of Silverlight prior to 4 never retained the returned NPObject.</i></td></tr>
+<tr><th id="57">57</th><td>        <dfn class="enum" id="WebKit::PluginQuirks::ReturnsNonRetainedScriptableNPObject" title='WebKit::PluginQuirks::ReturnsNonRetainedScriptableNPObject' data-ref="WebKit::PluginQuirks::ReturnsNonRetainedScriptableNPObject" data-ref-filename="WebKit..PluginQuirks..ReturnsNonRetainedScriptableNPObject">ReturnsNonRetainedScriptableNPObject</dfn>,</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td>        <i>// Whether the plug-in wants parameter names to be lowercase.</i></td></tr>
+<tr><th id="60">60</th><td><i>        // &lt;rdar://problem/8440903&gt;: AppleConnect has a bug where it does not</i></td></tr>
+<tr><th id="61">61</th><td><i>        // understand the parameter names specified in the &lt;object&gt; element that</i></td></tr>
+<tr><th id="62">62</th><td><i>        // embeds its plug-in. </i></td></tr>
+<tr><th id="63">63</th><td>        <dfn class="enum" id="WebKit::PluginQuirks::WantsLowercaseParameterNames" title='WebKit::PluginQuirks::WantsLowercaseParameterNames' data-ref="WebKit::PluginQuirks::WantsLowercaseParameterNames" data-ref-filename="WebKit..PluginQuirks..WantsLowercaseParameterNames">WantsLowercaseParameterNames</dfn>,</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td>        <i>// Whether to append Version/3.2.1 to the user-agent passed to the plugin</i></td></tr>
+<tr><th id="66">66</th><td><i>        // This is necessary to disable Silverlight's workaround for a Safari 2 leak</i></td></tr>
+<tr><th id="67">67</th><td><i>        // which is enabled if it doesn't find Version/3 in the user-agent.</i></td></tr>
+<tr><th id="68">68</th><td>        <dfn class="enum" id="WebKit::PluginQuirks::AppendVersion3UserAgent" title='WebKit::PluginQuirks::AppendVersion3UserAgent' data-ref="WebKit::PluginQuirks::AppendVersion3UserAgent" data-ref-filename="WebKit..PluginQuirks..AppendVersion3UserAgent">AppendVersion3UserAgent</dfn>,</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td>        <i>// Whether all thrown NSExceptions should be leaked.</i></td></tr>
+<tr><th id="71">71</th><td><i>        // &lt;rdar://problem/13003470&gt; Adobe Flash has a bug where exceptions are released too early.</i></td></tr>
+<tr><th id="72">72</th><td>        <dfn class="enum" id="WebKit::PluginQuirks::LeakAllThrownNSExceptions" title='WebKit::PluginQuirks::LeakAllThrownNSExceptions' data-ref="WebKit::PluginQuirks::LeakAllThrownNSExceptions" data-ref-filename="WebKit..PluginQuirks..LeakAllThrownNSExceptions">LeakAllThrownNSExceptions</dfn>,</td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td>        <i>// X11 specific quirks:</i></td></tr>
+<tr><th id="75">75</th><td><u>#<span data-ppcond="34">elif</span> PLATFORM(X11)</u></td></tr>
+<tr><th id="76">76</th><td>        <i>// Flash and npwrapper ask the browser about which GTK version does it use</i></td></tr>
+<tr><th id="77">77</th><td><i>        // and refuse to load and work if it is not GTK 2 so we need to fake it in</i></td></tr>
+<tr><th id="78">78</th><td><i>        // NPN_GetValue even when it is a lie.</i></td></tr>
+<tr><th id="79">79</th><td>        RequiresGTKToolKit,</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>        <i>// Some version 10 releases of Flash run under nspluginwrapper will completely</i></td></tr>
+<tr><th id="82">82</th><td><i>        // freeze when sending right click events to them in windowed mode.</i></td></tr>
+<tr><th id="83">83</th><td>        IgnoreRightClickInWindowlessMode,</td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td>        <i>// Some ports don't support windowed plugins.</i></td></tr>
+<tr><th id="86">86</th><td>        ForceFlashWindowlessMode,</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td>        <i>// Flash crashes when NPP_GetValue is called for NPPVpluginCancelSrcStream in windowed mode.</i></td></tr>
+<tr><th id="89">89</th><td>        DoNotCancelSrcStreamInWindowedMode,</td></tr>
+<tr><th id="90">90</th><td><u>#<span data-ppcond="34">endif</span></u></td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td>        <i>// This isn't really a quirk as much as the opposite of a quirk. By default, we don't send wheel events</i></td></tr>
+<tr><th id="93">93</th><td><i>        // to plug-ins unless we know that they handle them correctly. Adobe Reader on Mac handles wheel events correctly.</i></td></tr>
+<tr><th id="94">94</th><td>        <dfn class="enum" id="WebKit::PluginQuirks::WantsWheelEvents" title='WebKit::PluginQuirks::WantsWheelEvents' data-ref="WebKit::PluginQuirks::WantsWheelEvents" data-ref-filename="WebKit..PluginQuirks..WantsWheelEvents">WantsWheelEvents</dfn>,</td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td>        <dfn class="enum" id="WebKit::PluginQuirks::NumPluginQuirks" title='WebKit::PluginQuirks::NumPluginQuirks' data-ref="WebKit::PluginQuirks::NumPluginQuirks" data-ref-filename="WebKit..PluginQuirks..NumPluginQuirks">NumPluginQuirks</dfn></td></tr>
+<tr><th id="97">97</th><td>    };</td></tr>
+<tr><th id="98">98</th><td>    </td></tr>
+<tr><th id="99">99</th><td>    <dfn class="decl def fn" id="_ZN6WebKit12PluginQuirksC1Ev" title='WebKit::PluginQuirks::PluginQuirks' data-ref="_ZN6WebKit12PluginQuirksC1Ev" data-ref-filename="_ZN6WebKit12PluginQuirksC1Ev">PluginQuirks</dfn>()</td></tr>
+<tr><th id="100">100</th><td>        : <a class="member field" href="#WebKit::PluginQuirks::m_quirks" title='WebKit::PluginQuirks::m_quirks' data-ref="WebKit::PluginQuirks::m_quirks" data-ref-filename="WebKit..PluginQuirks..m_quirks">m_quirks</a>(<var>0</var>)</td></tr>
+<tr><th id="101">101</th><td>    {</td></tr>
+<tr><th id="102">102</th><td>        <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#461" title="static_assert((sizeof(m_quirks) * 8 &gt;= NumPluginQuirks), &quot;not_enough_room_for_quirks&quot;)" data-ref="_M/COMPILE_ASSERT">COMPILE_ASSERT</a>(<b>sizeof</b>(<a class="member field" href="#WebKit::PluginQuirks::m_quirks" title='WebKit::PluginQuirks::m_quirks' data-ref="WebKit::PluginQuirks::m_quirks" data-ref-filename="WebKit..PluginQuirks..m_quirks">m_quirks</a>) * <var>8</var> &gt;= <a class="enum" href="#WebKit::PluginQuirks::NumPluginQuirks" title='WebKit::PluginQuirks::NumPluginQuirks' data-ref="WebKit::PluginQuirks::NumPluginQuirks" data-ref-filename="WebKit..PluginQuirks..NumPluginQuirks">NumPluginQuirks</a>, not_enough_room_for_quirks);</td></tr>
+<tr><th id="103">103</th><td>    }</td></tr>
+<tr><th id="104">104</th><td>    </td></tr>
+<tr><th id="105">105</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN6WebKit12PluginQuirks3addENS0_11PluginQuirkE" title='WebKit::PluginQuirks::add' data-ref="_ZN6WebKit12PluginQuirks3addENS0_11PluginQuirkE" data-ref-filename="_ZN6WebKit12PluginQuirks3addENS0_11PluginQuirkE">add</dfn>(<a class="type" href="#WebKit::PluginQuirks::PluginQuirk" title='WebKit::PluginQuirks::PluginQuirk' data-ref="WebKit::PluginQuirks::PluginQuirk" data-ref-filename="WebKit..PluginQuirks..PluginQuirk">PluginQuirk</a> <dfn class="local col6 decl" id="646quirk" title='quirk' data-type='WebKit::PluginQuirks::PluginQuirk' data-ref="646quirk" data-ref-filename="646quirk">quirk</dfn>)</td></tr>
+<tr><th id="106">106</th><td>    {</td></tr>
+<tr><th id="107">107</th><td>        <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(quirk &gt;= 0)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKit/Shared/Plugins/PluginQuirks.h&quot;, 107, __PRETTY_FUNCTION__, &quot;quirk &gt;= 0&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(107, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKit/Shared/Plugins/PluginQuirks.h&quot;, __PRETTY_FUNCTION__, 497); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(<a class="local col6 ref" href="#646quirk" title='quirk' data-ref="646quirk" data-ref-filename="646quirk">quirk</a> &gt;= <var>0</var>);</td></tr>
+<tr><th id="108">108</th><td>        <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#624" title="(!(quirk &lt; NumPluginQuirks) ? (WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKit/Shared/Plugins/PluginQuirks.h&quot;, 108, __PRETTY_FUNCTION__, &quot;quirk &lt; NumPluginQuirks&quot;), WTFCrashWithSecurityImplication()) : (void)0)" data-ref="_M/RELEASE_ASSERT_WITH_SECURITY_IMPLICATION">RELEASE_ASSERT_WITH_SECURITY_IMPLICATION</a>(<a class="local col6 ref" href="#646quirk" title='quirk' data-ref="646quirk" data-ref-filename="646quirk">quirk</a> &lt; <a class="enum" href="#WebKit::PluginQuirks::NumPluginQuirks" title='WebKit::PluginQuirks::NumPluginQuirks' data-ref="WebKit::PluginQuirks::NumPluginQuirks" data-ref-filename="WebKit..PluginQuirks..NumPluginQuirks">NumPluginQuirks</a>);</td></tr>
+<tr><th id="109">109</th><td>        </td></tr>
+<tr><th id="110">110</th><td>        <a class="member field" href="#WebKit::PluginQuirks::m_quirks" title='WebKit::PluginQuirks::m_quirks' data-ref="WebKit::PluginQuirks::m_quirks" data-ref-filename="WebKit..PluginQuirks..m_quirks">m_quirks</a> |= (<var>1</var> &lt;&lt; <a class="local col6 ref" href="#646quirk" title='quirk' data-ref="646quirk" data-ref-filename="646quirk">quirk</a>);</td></tr>
+<tr><th id="111">111</th><td>    }</td></tr>
+<tr><th id="112">112</th><td>    </td></tr>
+<tr><th id="113">113</th><td>    <em>bool</em> <dfn class="decl def fn" id="_ZNK6WebKit12PluginQuirks8containsENS0_11PluginQuirkE" title='WebKit::PluginQuirks::contains' data-ref="_ZNK6WebKit12PluginQuirks8containsENS0_11PluginQuirkE" data-ref-filename="_ZNK6WebKit12PluginQuirks8containsENS0_11PluginQuirkE">contains</dfn>(<a class="type" href="#WebKit::PluginQuirks::PluginQuirk" title='WebKit::PluginQuirks::PluginQuirk' data-ref="WebKit::PluginQuirks::PluginQuirk" data-ref-filename="WebKit..PluginQuirks..PluginQuirk">PluginQuirk</a> <dfn class="local col7 decl" id="647quirk" title='quirk' data-type='WebKit::PluginQuirks::PluginQuirk' data-ref="647quirk" data-ref-filename="647quirk">quirk</dfn>) <em>const</em></td></tr>
+<tr><th id="114">114</th><td>    {</td></tr>
+<tr><th id="115">115</th><td>        <b>return</b> <a class="member field" href="#WebKit::PluginQuirks::m_quirks" title='WebKit::PluginQuirks::m_quirks' data-ref="WebKit::PluginQuirks::m_quirks" data-ref-filename="WebKit..PluginQuirks..m_quirks">m_quirks</a> &amp; (<var>1</var> &lt;&lt; <a class="local col7 ref" href="#647quirk" title='quirk' data-ref="647quirk" data-ref-filename="647quirk">quirk</a>);</td></tr>
+<tr><th id="116">116</th><td>    }</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td><b>private</b>:</td></tr>
+<tr><th id="119">119</th><td>    <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="WebKit::PluginQuirks::m_quirks" title='WebKit::PluginQuirks::m_quirks' data-ref="WebKit::PluginQuirks::m_quirks" data-ref-filename="WebKit..PluginQuirks..m_quirks">m_quirks</dfn>;</td></tr>
+<tr><th id="120">120</th><td>};</td></tr>
+<tr><th id="121">121</th><td></td></tr>
+<tr><th id="122">122</th><td>} <i>// namespace WebKit</i></td></tr>
+<tr><th id="123">123</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../PluginProcess/PluginControllerProxy.cpp.html'>webkit/Source/WebKit/PluginProcess/PluginControllerProxy.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

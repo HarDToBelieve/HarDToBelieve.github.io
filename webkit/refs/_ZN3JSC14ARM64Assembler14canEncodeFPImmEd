@@ -1,0 +1,78 @@
+<def f='webkit/Source/JavaScriptCore/assembler/ARM64Assembler.h' l='481' ll='487' type='static bool JSC::ARM64Assembler::canEncodeFPImm(double d)'/>
+<use f='webkit/Source/JavaScriptCore/assembler/ARM64Assembler.h' l='503' u='c' c='_ZN3JSC14ARM64Assembler11encodeFPImmEd'/>
+<doc f='webkit/Source/JavaScriptCore/assembler/ARM64Assembler.h' l='444'>// bits(N) VFPExpandImm(bits(8) imm8);
+    //
+    // Encoding of floating point immediates is a litte complicated. Here&apos;s a
+    // high level description:
+    //     +/-m*2-n where m and n are integers, 16 &lt;= m &lt;= 31, 0 &lt;= n &lt;= 7
+    // and the algirithm for expanding to a single precision float:
+    //     return imm8&lt;7&gt;:NOT(imm8&lt;6&gt;):Replicate(imm8&lt;6&gt;,5):imm8&lt;5:0&gt;:Zeros(19);
+    //
+    // The trickiest bit is how the exponent is handled. The following table
+    // may help clarify things a little:
+    //     654
+    //     100 01111100 124 -3 1020 01111111100
+    //     101 01111101 125 -2 1021 01111111101
+    //     110 01111110 126 -1 1022 01111111110
+    //     111 01111111 127  0 1023 01111111111
+    //     000 10000000 128  1 1024 10000000000
+    //     001 10000001 129  2 1025 10000000001
+    //     010 10000010 130  3 1026 10000000010
+    //     011 10000011 131  4 1027 10000000011
+    // The first column shows the bit pattern stored in bits 6-4 of the arm
+    // encoded immediate. The second column shows the 8-bit IEEE 754 single
+    // -precision exponent in binary, the third column shows the raw decimal
+    // value. IEEE 754 single-precision numbers are stored with a bias of 127
+    // to the exponent, so the fourth column shows the resulting exponent.
+    // From this was can see that the exponent can be in the range -3..4,
+    // which agrees with the high level description given above. The fifth
+    // and sixth columns shows the value stored in a IEEE 754 double-precision
+    // number to represent these exponents in decimal and binary, given the
+    // bias of 1023.
+    //
+    // Ultimately, detecting doubles that can be encoded as immediates on arm
+    // and encoding doubles is actually not too bad. A floating point value can
+    // be encoded by retaining the sign bit, the low three bits of the exponent
+    // and the high 4 bits of the mantissa. To validly be able to encode an
+    // immediate the remainder of the mantissa must be zero, and the high part
+    // of the exponent must match the top bit retained, bar the highest bit
+    // which must be its inverse.</doc>
+<def f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/ARM64Assembler.h' l='481' ll='487' type='static bool JSC::ARM64Assembler::canEncodeFPImm(double d)'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/ARM64Assembler.h' l='503' u='c' c='_ZN3JSC14ARM64Assembler11encodeFPImmEd'/>
+<doc f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/ARM64Assembler.h' l='444'>// bits(N) VFPExpandImm(bits(8) imm8);
+    //
+    // Encoding of floating point immediates is a litte complicated. Here&apos;s a
+    // high level description:
+    //     +/-m*2-n where m and n are integers, 16 &lt;= m &lt;= 31, 0 &lt;= n &lt;= 7
+    // and the algirithm for expanding to a single precision float:
+    //     return imm8&lt;7&gt;:NOT(imm8&lt;6&gt;):Replicate(imm8&lt;6&gt;,5):imm8&lt;5:0&gt;:Zeros(19);
+    //
+    // The trickiest bit is how the exponent is handled. The following table
+    // may help clarify things a little:
+    //     654
+    //     100 01111100 124 -3 1020 01111111100
+    //     101 01111101 125 -2 1021 01111111101
+    //     110 01111110 126 -1 1022 01111111110
+    //     111 01111111 127  0 1023 01111111111
+    //     000 10000000 128  1 1024 10000000000
+    //     001 10000001 129  2 1025 10000000001
+    //     010 10000010 130  3 1026 10000000010
+    //     011 10000011 131  4 1027 10000000011
+    // The first column shows the bit pattern stored in bits 6-4 of the arm
+    // encoded immediate. The second column shows the 8-bit IEEE 754 single
+    // -precision exponent in binary, the third column shows the raw decimal
+    // value. IEEE 754 single-precision numbers are stored with a bias of 127
+    // to the exponent, so the fourth column shows the resulting exponent.
+    // From this was can see that the exponent can be in the range -3..4,
+    // which agrees with the high level description given above. The fifth
+    // and sixth columns shows the value stored in a IEEE 754 double-precision
+    // number to represent these exponents in decimal and binary, given the
+    // bias of 1023.
+    //
+    // Ultimately, detecting doubles that can be encoded as immediates on arm
+    // and encoding doubles is actually not too bad. A floating point value can
+    // be encoded by retaining the sign bit, the low three bits of the exponent
+    // and the high 4 bits of the mantissa. To validly be able to encode an
+    // immediate the remainder of the mantissa must be zero, and the high part
+    // of the exponent must match the top bit retained, bar the highest bit
+    // which must be its inverse.</doc>

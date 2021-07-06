@@ -1,0 +1,219 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>nasmlib.c source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/modules/preprocs/nasm/nasmlib.c] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/modules/preprocs/nasm/nasmlib.c'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>third_party</a>/<a href='../../..'>yasm</a>/<a href='../..'>modules</a>/<a href='..'>preprocs</a>/<a href='./'>nasm</a>/<a href='nasmlib.c.html'>nasmlib.c</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/* nasmlib.c    library routines for the Netwide Assembler</i></td></tr>
+<tr><th id="2">2</th><td><i> *</i></td></tr>
+<tr><th id="3">3</th><td><i> * The Netwide Assembler is copyright (C) 1996 Simon Tatham and</i></td></tr>
+<tr><th id="4">4</th><td><i> * Julian Hall. All rights reserved. The software is</i></td></tr>
+<tr><th id="5">5</th><td><i> * redistributable under the licence given in the file "Licence"</i></td></tr>
+<tr><th id="6">6</th><td><i> * distributed in the NASM archive.</i></td></tr>
+<tr><th id="7">7</th><td><i> */</i></td></tr>
+<tr><th id="8">8</th><td><u>#include <a href="../../../util.h.html">&lt;util.h&gt;</a></u></td></tr>
+<tr><th id="9">9</th><td><u>#include <a href="../../../libyasm/coretype.h.html">&lt;libyasm/coretype.h&gt;</a></u></td></tr>
+<tr><th id="10">10</th><td><u>#include <a href="../../../libyasm/intnum.h.html">&lt;libyasm/intnum.h&gt;</a></u></td></tr>
+<tr><th id="11">11</th><td><u>#include &lt;ctype.h&gt;</u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="nasm.h.html">"nasm.h"</a></u></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="nasmlib.h.html">"nasmlib.h"</a></u></td></tr>
+<tr><th id="15">15</th><td><i>/*#include "insns.h"*/</i>          <i>/* For MAX_KEYWORD */</i></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#define <dfn class="macro" id="_M/lib_isnumchar" data-ref="_M/lib_isnumchar">lib_isnumchar</dfn>(c)   ( <span class='ref fn' title='isalnum' data-ref="isalnum" data-ref-filename="isalnum">isalnum</span>(c) || (c) == '$')</u></td></tr>
+<tr><th id="18">18</th><td><u>#define <dfn class="macro" id="_M/numvalue" data-ref="_M/numvalue">numvalue</dfn>(c)  ((c)&gt;='a' ? (c)-'a'+10 : (c)&gt;='A' ? (c)-'A'+10 : (c)-'0')</u></td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><a class="typedef" href="../../../libyasm/coretype.h.html#yasm_intnum" title='yasm_intnum' data-type='struct yasm_intnum' data-ref="yasm_intnum" data-ref-filename="yasm_intnum">yasm_intnum</a> *<dfn class="decl def fn" id="nasm_readnum" title='nasm_readnum' data-ref="nasm_readnum" data-ref-filename="nasm_readnum">nasm_readnum</dfn> (<em>char</em> *<dfn class="local col1 decl" id="1str" title='str' data-type='char *' data-ref="1str" data-ref-filename="1str">str</dfn>, <em>int</em> *<dfn class="local col2 decl" id="2error" title='error' data-type='int *' data-ref="2error" data-ref-filename="2error">error</dfn>) </td></tr>
+<tr><th id="21">21</th><td>{</td></tr>
+<tr><th id="22">22</th><td>    <em>char</em> *<dfn class="local col3 decl" id="3r" title='r' data-type='char *' data-ref="3r" data-ref-filename="3r">r</dfn> = <a class="local col1 ref" href="#1str" title='str' data-ref="1str" data-ref-filename="1str">str</a>, *<dfn class="local col4 decl" id="4q" title='q' data-type='char *' data-ref="4q" data-ref-filename="4q">q</dfn>, *<dfn class="local col5 decl" id="5p" title='p' data-type='char *' data-ref="5p" data-ref-filename="5p">p</dfn>;</td></tr>
+<tr><th id="23">23</th><td>    <em>long</em> <dfn class="local col6 decl" id="6radix" title='radix' data-type='long' data-ref="6radix" data-ref-filename="6radix">radix</dfn>;</td></tr>
+<tr><th id="24">24</th><td>    <a class="typedef" href="../../../libyasm/coretype.h.html#yasm_intnum" title='yasm_intnum' data-type='struct yasm_intnum' data-ref="yasm_intnum" data-ref-filename="yasm_intnum">yasm_intnum</a> *<dfn class="local col7 decl" id="7intn" title='intn' data-type='yasm_intnum *' data-ref="7intn" data-ref-filename="7intn">intn</dfn>;</td></tr>
+<tr><th id="25">25</th><td>    <em>char</em> <dfn class="local col8 decl" id="8save" title='save' data-type='char' data-ref="8save" data-ref-filename="8save">save</dfn>;</td></tr>
+<tr><th id="26">26</th><td>    <em>int</em> <dfn class="local col9 decl" id="9digit" title='digit' data-type='int' data-ref="9digit" data-ref-filename="9digit">digit</dfn>;</td></tr>
+<tr><th id="27">27</th><td>    <em>int</em> <dfn class="local col0 decl" id="10sign" title='sign' data-type='int' data-ref="10sign" data-ref-filename="10sign">sign</dfn> = <var>0</var>;</td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td>    *<a class="local col2 ref" href="#2error" title='error' data-ref="2error" data-ref-filename="2error">error</a> = <a class="macro" href="nasm.h.html#18" title="0" data-ref="_M/FALSE">FALSE</a>;</td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td>    <b>while</b> (<span class='ref fn' title='isspace' data-ref="isspace" data-ref-filename="isspace">isspace</span>(*<a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>)) <a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>++;           <i>/* find start of number */</i></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td>    <i>/*</i></td></tr>
+<tr><th id="34">34</th><td><i>     * If the number came from make_tok_num (as a result of an %assign), it</i></td></tr>
+<tr><th id="35">35</th><td><i>     * might have a '-' built into it (rather than in a preceeding token).</i></td></tr>
+<tr><th id="36">36</th><td><i>     */</i></td></tr>
+<tr><th id="37">37</th><td>    <b>if</b> (*<a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a> == <kbd>'-'</kbd>)</td></tr>
+<tr><th id="38">38</th><td>    {</td></tr>
+<tr><th id="39">39</th><td>        <a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>++;</td></tr>
+<tr><th id="40">40</th><td>        <a class="local col0 ref" href="#10sign" title='sign' data-ref="10sign" data-ref-filename="10sign">sign</a> = <var>1</var>;</td></tr>
+<tr><th id="41">41</th><td>    }</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td>    <a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a> = <a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>;</td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td>    <b>while</b> (<a class="macro" href="#17" title="( isalnum(*q) || (*q) == &apos;$&apos;)" data-ref="_M/lib_isnumchar">lib_isnumchar</a>(*<a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>)) <a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>++;     <i>/* find end of number */</i></td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td>    <i>/*</i></td></tr>
+<tr><th id="48">48</th><td><i>     * If it begins 0x, 0X or $, or ends in H, it's in hex. if it</i></td></tr>
+<tr><th id="49">49</th><td><i>     * ends in Q, it's octal. if it ends in B, it's binary.</i></td></tr>
+<tr><th id="50">50</th><td><i>     * Otherwise, it's ordinary decimal.</i></td></tr>
+<tr><th id="51">51</th><td><i>     */</i></td></tr>
+<tr><th id="52">52</th><td>    <b>if</b> (*<a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>==<kbd>'0'</kbd> &amp;&amp; (<a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>[<var>1</var>]==<kbd>'x'</kbd> || <a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>[<var>1</var>]==<kbd>'X'</kbd>))</td></tr>
+<tr><th id="53">53</th><td>        <a class="local col6 ref" href="#6radix" title='radix' data-ref="6radix" data-ref-filename="6radix">radix</a> = <var>16</var>, <a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a> += <var>2</var>;</td></tr>
+<tr><th id="54">54</th><td>    <b>else</b> <b>if</b> (*<a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>==<kbd>'$'</kbd>)</td></tr>
+<tr><th id="55">55</th><td>        <a class="local col6 ref" href="#6radix" title='radix' data-ref="6radix" data-ref-filename="6radix">radix</a> = <var>16</var>, <a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>++;</td></tr>
+<tr><th id="56">56</th><td>    <b>else</b> <b>if</b> (<a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>[-<var>1</var>]==<kbd>'H'</kbd> || <a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>[-<var>1</var>]==<kbd>'h'</kbd>)</td></tr>
+<tr><th id="57">57</th><td>        <a class="local col6 ref" href="#6radix" title='radix' data-ref="6radix" data-ref-filename="6radix">radix</a> = <var>16</var> , <a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>--;</td></tr>
+<tr><th id="58">58</th><td>    <b>else</b> <b>if</b> (<a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>[-<var>1</var>]==<kbd>'Q'</kbd> || <a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>[-<var>1</var>]==<kbd>'q'</kbd> || <a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>[-<var>1</var>]==<kbd>'O'</kbd> || <a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>[-<var>1</var>]==<kbd>'o'</kbd>)</td></tr>
+<tr><th id="59">59</th><td>        <a class="local col6 ref" href="#6radix" title='radix' data-ref="6radix" data-ref-filename="6radix">radix</a> = <var>8</var> , <a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>--;</td></tr>
+<tr><th id="60">60</th><td>    <b>else</b> <b>if</b> (<a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>[-<var>1</var>]==<kbd>'B'</kbd> || <a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>[-<var>1</var>]==<kbd>'b'</kbd>)</td></tr>
+<tr><th id="61">61</th><td>        <a class="local col6 ref" href="#6radix" title='radix' data-ref="6radix" data-ref-filename="6radix">radix</a> = <var>2</var> , <a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>--;</td></tr>
+<tr><th id="62">62</th><td>    <b>else</b></td></tr>
+<tr><th id="63">63</th><td>        <a class="local col6 ref" href="#6radix" title='radix' data-ref="6radix" data-ref-filename="6radix">radix</a> = <var>10</var>;</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td>    <i>/*</i></td></tr>
+<tr><th id="66">66</th><td><i>     * If this number has been found for us by something other than</i></td></tr>
+<tr><th id="67">67</th><td><i>     * the ordinary scanners, then it might be malformed by having</i></td></tr>
+<tr><th id="68">68</th><td><i>     * nothing between the prefix and the suffix. Check this case</i></td></tr>
+<tr><th id="69">69</th><td><i>     * now.</i></td></tr>
+<tr><th id="70">70</th><td><i>     */</i></td></tr>
+<tr><th id="71">71</th><td>    <b>if</b> (<a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a> &gt;= <a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>) {</td></tr>
+<tr><th id="72">72</th><td>        *<a class="local col2 ref" href="#2error" title='error' data-ref="2error" data-ref-filename="2error">error</a> = <a class="macro" href="nasm.h.html#21" title="1" data-ref="_M/TRUE">TRUE</a>;</td></tr>
+<tr><th id="73">73</th><td>        <b>return</b> <a class="ref fn" href="../../../libyasm/intnum.h.html#yasm_intnum_create_uint" title='yasm_intnum_create_uint' data-ref="yasm_intnum_create_uint" data-ref-filename="yasm_intnum_create_uint">yasm_intnum_create_uint</a>(<var>0</var>);</td></tr>
+<tr><th id="74">74</th><td>    }</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td>    <i>/* Check for valid number of that radix */</i></td></tr>
+<tr><th id="77">77</th><td>    <a class="local col5 ref" href="#5p" title='p' data-ref="5p" data-ref-filename="5p">p</a> = <a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>;</td></tr>
+<tr><th id="78">78</th><td>    <b>while</b> (*<a class="local col5 ref" href="#5p" title='p' data-ref="5p" data-ref-filename="5p">p</a> &amp;&amp; <a class="local col5 ref" href="#5p" title='p' data-ref="5p" data-ref-filename="5p">p</a> &lt; <a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>) {</td></tr>
+<tr><th id="79">79</th><td>        <b>if</b> (*<a class="local col5 ref" href="#5p" title='p' data-ref="5p" data-ref-filename="5p">p</a>&lt;<kbd>'0'</kbd> || (*<a class="local col5 ref" href="#5p" title='p' data-ref="5p" data-ref-filename="5p">p</a>&gt;<kbd>'9'</kbd> &amp;&amp; *<a class="local col5 ref" href="#5p" title='p' data-ref="5p" data-ref-filename="5p">p</a>&lt;<kbd>'A'</kbd>) || (<a class="local col9 ref" href="#9digit" title='digit' data-ref="9digit" data-ref-filename="9digit">digit</a> = <a class="macro" href="#18" title="((*p)&gt;=&apos;a&apos; ? (*p)-&apos;a&apos;+10 : (*p)&gt;=&apos;A&apos; ? (*p)-&apos;A&apos;+10 : (*p)-&apos;0&apos;)" data-ref="_M/numvalue">numvalue</a>(*<a class="local col5 ref" href="#5p" title='p' data-ref="5p" data-ref-filename="5p">p</a>)) &gt;= <a class="local col6 ref" href="#6radix" title='radix' data-ref="6radix" data-ref-filename="6radix">radix</a>) </td></tr>
+<tr><th id="80">80</th><td>        {</td></tr>
+<tr><th id="81">81</th><td>            *<a class="local col2 ref" href="#2error" title='error' data-ref="2error" data-ref-filename="2error">error</a> = <a class="macro" href="nasm.h.html#21" title="1" data-ref="_M/TRUE">TRUE</a>;</td></tr>
+<tr><th id="82">82</th><td>            <b>return</b> <a class="ref fn" href="../../../libyasm/intnum.h.html#yasm_intnum_create_uint" title='yasm_intnum_create_uint' data-ref="yasm_intnum_create_uint" data-ref-filename="yasm_intnum_create_uint">yasm_intnum_create_uint</a>(<var>0</var>);</td></tr>
+<tr><th id="83">83</th><td>        }</td></tr>
+<tr><th id="84">84</th><td>        <a class="local col5 ref" href="#5p" title='p' data-ref="5p" data-ref-filename="5p">p</a>++;</td></tr>
+<tr><th id="85">85</th><td>    }</td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td>    <i>/* Use intnum to actually do the conversion */</i></td></tr>
+<tr><th id="88">88</th><td>    <a class="local col8 ref" href="#8save" title='save' data-ref="8save" data-ref-filename="8save">save</a> = *<a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a>;</td></tr>
+<tr><th id="89">89</th><td>    *<a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a> = <kbd>'\0'</kbd>;</td></tr>
+<tr><th id="90">90</th><td>    <b>switch</b> (<a class="local col6 ref" href="#6radix" title='radix' data-ref="6radix" data-ref-filename="6radix">radix</a>) {</td></tr>
+<tr><th id="91">91</th><td>        <b>case</b> <var>2</var>:</td></tr>
+<tr><th id="92">92</th><td>            <a class="local col7 ref" href="#7intn" title='intn' data-ref="7intn" data-ref-filename="7intn">intn</a> = <a class="ref fn" href="../../../libyasm/intnum.h.html#yasm_intnum_create_bin" title='yasm_intnum_create_bin' data-ref="yasm_intnum_create_bin" data-ref-filename="yasm_intnum_create_bin">yasm_intnum_create_bin</a>(<a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>);</td></tr>
+<tr><th id="93">93</th><td>            <b>break</b>;</td></tr>
+<tr><th id="94">94</th><td>        <b>case</b> <var>8</var>:</td></tr>
+<tr><th id="95">95</th><td>            <a class="local col7 ref" href="#7intn" title='intn' data-ref="7intn" data-ref-filename="7intn">intn</a> = <a class="ref fn" href="../../../libyasm/intnum.h.html#yasm_intnum_create_oct" title='yasm_intnum_create_oct' data-ref="yasm_intnum_create_oct" data-ref-filename="yasm_intnum_create_oct">yasm_intnum_create_oct</a>(<a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>);</td></tr>
+<tr><th id="96">96</th><td>            <b>break</b>;</td></tr>
+<tr><th id="97">97</th><td>        <b>case</b> <var>10</var>:</td></tr>
+<tr><th id="98">98</th><td>            <a class="local col7 ref" href="#7intn" title='intn' data-ref="7intn" data-ref-filename="7intn">intn</a> = <a class="ref fn" href="../../../libyasm/intnum.h.html#yasm_intnum_create_dec" title='yasm_intnum_create_dec' data-ref="yasm_intnum_create_dec" data-ref-filename="yasm_intnum_create_dec">yasm_intnum_create_dec</a>(<a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>);</td></tr>
+<tr><th id="99">99</th><td>            <b>break</b>;</td></tr>
+<tr><th id="100">100</th><td>        <b>case</b> <var>16</var>:</td></tr>
+<tr><th id="101">101</th><td>            <a class="local col7 ref" href="#7intn" title='intn' data-ref="7intn" data-ref-filename="7intn">intn</a> = <a class="ref fn" href="../../../libyasm/intnum.h.html#yasm_intnum_create_hex" title='yasm_intnum_create_hex' data-ref="yasm_intnum_create_hex" data-ref-filename="yasm_intnum_create_hex">yasm_intnum_create_hex</a>(<a class="local col3 ref" href="#3r" title='r' data-ref="3r" data-ref-filename="3r">r</a>);</td></tr>
+<tr><th id="102">102</th><td>            <b>break</b>;</td></tr>
+<tr><th id="103">103</th><td>        <b>default</b>:</td></tr>
+<tr><th id="104">104</th><td>            *<a class="local col2 ref" href="#2error" title='error' data-ref="2error" data-ref-filename="2error">error</a> = <a class="macro" href="nasm.h.html#21" title="1" data-ref="_M/TRUE">TRUE</a>;</td></tr>
+<tr><th id="105">105</th><td>            <a class="local col7 ref" href="#7intn" title='intn' data-ref="7intn" data-ref-filename="7intn">intn</a> = <a class="ref fn" href="../../../libyasm/intnum.h.html#yasm_intnum_create_uint" title='yasm_intnum_create_uint' data-ref="yasm_intnum_create_uint" data-ref-filename="yasm_intnum_create_uint">yasm_intnum_create_uint</a>(<var>0</var>);</td></tr>
+<tr><th id="106">106</th><td>            <b>break</b>;</td></tr>
+<tr><th id="107">107</th><td>    }</td></tr>
+<tr><th id="108">108</th><td>    *<a class="local col4 ref" href="#4q" title='q' data-ref="4q" data-ref-filename="4q">q</a> = <a class="local col8 ref" href="#8save" title='save' data-ref="8save" data-ref-filename="8save">save</a>;</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td>    <b>if</b> (<a class="local col0 ref" href="#10sign" title='sign' data-ref="10sign" data-ref-filename="10sign">sign</a>)</td></tr>
+<tr><th id="111">111</th><td>        <a class="ref fn" href="../../../libyasm/intnum.h.html#yasm_intnum_calc" title='yasm_intnum_calc' data-ref="yasm_intnum_calc" data-ref-filename="yasm_intnum_calc">yasm_intnum_calc</a>(<a class="local col7 ref" href="#7intn" title='intn' data-ref="7intn" data-ref-filename="7intn">intn</a>, <a class="enum" href="../../../libyasm/coretype.h.html#YASM_EXPR_NEG" title='YASM_EXPR_NEG' data-ref="YASM_EXPR_NEG" data-ref-filename="YASM_EXPR_NEG">YASM_EXPR_NEG</a>, <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>);</td></tr>
+<tr><th id="112">112</th><td>    <b>return</b> <a class="local col7 ref" href="#7intn" title='intn' data-ref="7intn" data-ref-filename="7intn">intn</a>;</td></tr>
+<tr><th id="113">113</th><td>}</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td><a class="typedef" href="../../../libyasm/coretype.h.html#yasm_intnum" title='yasm_intnum' data-type='struct yasm_intnum' data-ref="yasm_intnum" data-ref-filename="yasm_intnum">yasm_intnum</a> *<dfn class="decl def fn" id="nasm_readstrnum" title='nasm_readstrnum' data-ref="nasm_readstrnum" data-ref-filename="nasm_readstrnum">nasm_readstrnum</dfn> (<em>char</em> *<dfn class="local col1 decl" id="11str" title='str' data-type='char *' data-ref="11str" data-ref-filename="11str">str</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="12length" title='length' data-type='size_t' data-ref="12length" data-ref-filename="12length">length</dfn>, <em>int</em> *<dfn class="local col3 decl" id="13warn" title='warn' data-type='int *' data-ref="13warn" data-ref-filename="13warn">warn</dfn>) </td></tr>
+<tr><th id="116">116</th><td>{</td></tr>
+<tr><th id="117">117</th><td>    <em>char</em> <dfn class="local col4 decl" id="14save" title='save' data-type='char' data-ref="14save" data-ref-filename="14save">save</dfn>;</td></tr>
+<tr><th id="118">118</th><td>    <a class="typedef" href="../../../libyasm/coretype.h.html#yasm_intnum" title='yasm_intnum' data-type='struct yasm_intnum' data-ref="yasm_intnum" data-ref-filename="yasm_intnum">yasm_intnum</a> *<dfn class="local col5 decl" id="15intn" title='intn' data-type='yasm_intnum *' data-ref="15intn" data-ref-filename="15intn">intn</dfn>;</td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td>    *<a class="local col3 ref" href="#13warn" title='warn' data-ref="13warn" data-ref-filename="13warn">warn</a> = <a class="macro" href="nasm.h.html#18" title="0" data-ref="_M/FALSE">FALSE</a>;</td></tr>
+<tr><th id="121">121</th><td></td></tr>
+<tr><th id="122">122</th><td>    <a class="local col4 ref" href="#14save" title='save' data-ref="14save" data-ref-filename="14save">save</a> = <a class="local col1 ref" href="#11str" title='str' data-ref="11str" data-ref-filename="11str">str</a>[<a class="local col2 ref" href="#12length" title='length' data-ref="12length" data-ref-filename="12length">length</a>];</td></tr>
+<tr><th id="123">123</th><td>    <a class="local col1 ref" href="#11str" title='str' data-ref="11str" data-ref-filename="11str">str</a>[<a class="local col2 ref" href="#12length" title='length' data-ref="12length" data-ref-filename="12length">length</a>] = <kbd>'\0'</kbd>;</td></tr>
+<tr><th id="124">124</th><td>    <a class="local col5 ref" href="#15intn" title='intn' data-ref="15intn" data-ref-filename="15intn">intn</a> = <a class="ref fn" href="../../../libyasm/intnum.h.html#yasm_intnum_create_charconst_nasm" title='yasm_intnum_create_charconst_nasm' data-ref="yasm_intnum_create_charconst_nasm" data-ref-filename="yasm_intnum_create_charconst_nasm">yasm_intnum_create_charconst_nasm</a>(<a class="local col1 ref" href="#11str" title='str' data-ref="11str" data-ref-filename="11str">str</a>);</td></tr>
+<tr><th id="125">125</th><td>    <a class="local col1 ref" href="#11str" title='str' data-ref="11str" data-ref-filename="11str">str</a>[<a class="local col2 ref" href="#12length" title='length' data-ref="12length" data-ref-filename="12length">length</a>] = <a class="local col4 ref" href="#14save" title='save' data-ref="14save" data-ref-filename="14save">save</a>;</td></tr>
+<tr><th id="126">126</th><td></td></tr>
+<tr><th id="127">127</th><td>    <b>return</b> <a class="local col5 ref" href="#15intn" title='intn' data-ref="15intn" data-ref-filename="15intn">intn</a>;</td></tr>
+<tr><th id="128">128</th><td>}</td></tr>
+<tr><th id="129">129</th><td></td></tr>
+<tr><th id="130">130</th><td><em>static</em> <em>char</em> *<dfn class="tu decl def" id="file_name" title='file_name' data-type='char *' data-ref="file_name" data-ref-filename="file_name">file_name</dfn> = <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>;</td></tr>
+<tr><th id="131">131</th><td><em>static</em> <em>long</em> <dfn class="tu decl def" id="line_number" title='line_number' data-type='long' data-ref="line_number" data-ref-filename="line_number">line_number</dfn> = <var>0</var>;</td></tr>
+<tr><th id="132">132</th><td></td></tr>
+<tr><th id="133">133</th><td><em>char</em> *<dfn class="decl def fn" id="nasm_src_set_fname" title='nasm_src_set_fname' data-ref="nasm_src_set_fname" data-ref-filename="nasm_src_set_fname">nasm_src_set_fname</dfn>(<em>char</em> *<dfn class="local col6 decl" id="16newname" title='newname' data-type='char *' data-ref="16newname" data-ref-filename="16newname">newname</dfn>) </td></tr>
+<tr><th id="134">134</th><td>{</td></tr>
+<tr><th id="135">135</th><td>    <em>char</em> *<dfn class="local col7 decl" id="17oldname" title='oldname' data-type='char *' data-ref="17oldname" data-ref-filename="17oldname">oldname</dfn> = <a class="tu ref" href="#file_name" title='file_name' data-use='r' data-ref="file_name" data-ref-filename="file_name">file_name</a>;</td></tr>
+<tr><th id="136">136</th><td>    <a class="tu ref" href="#file_name" title='file_name' data-use='w' data-ref="file_name" data-ref-filename="file_name">file_name</a> = <a class="local col6 ref" href="#16newname" title='newname' data-ref="16newname" data-ref-filename="16newname">newname</a>;</td></tr>
+<tr><th id="137">137</th><td>    <b>return</b> <a class="local col7 ref" href="#17oldname" title='oldname' data-ref="17oldname" data-ref-filename="17oldname">oldname</a>;</td></tr>
+<tr><th id="138">138</th><td>}</td></tr>
+<tr><th id="139">139</th><td></td></tr>
+<tr><th id="140">140</th><td><em>char</em> *<dfn class="decl def fn" id="nasm_src_get_fname" title='nasm_src_get_fname' data-ref="nasm_src_get_fname" data-ref-filename="nasm_src_get_fname">nasm_src_get_fname</dfn>(<em>void</em>)</td></tr>
+<tr><th id="141">141</th><td>{</td></tr>
+<tr><th id="142">142</th><td>    <b>return</b> <a class="tu ref" href="#file_name" title='file_name' data-use='r' data-ref="file_name" data-ref-filename="file_name">file_name</a>;</td></tr>
+<tr><th id="143">143</th><td>}</td></tr>
+<tr><th id="144">144</th><td></td></tr>
+<tr><th id="145">145</th><td><em>long</em> <dfn class="decl def fn" id="nasm_src_set_linnum" title='nasm_src_set_linnum' data-ref="nasm_src_set_linnum" data-ref-filename="nasm_src_set_linnum">nasm_src_set_linnum</dfn>(<em>long</em> <dfn class="local col8 decl" id="18newline" title='newline' data-type='long' data-ref="18newline" data-ref-filename="18newline">newline</dfn>) </td></tr>
+<tr><th id="146">146</th><td>{</td></tr>
+<tr><th id="147">147</th><td>    <em>long</em> <dfn class="local col9 decl" id="19oldline" title='oldline' data-type='long' data-ref="19oldline" data-ref-filename="19oldline">oldline</dfn> = <a class="tu ref" href="#line_number" title='line_number' data-use='r' data-ref="line_number" data-ref-filename="line_number">line_number</a>;</td></tr>
+<tr><th id="148">148</th><td>    <a class="tu ref" href="#line_number" title='line_number' data-use='w' data-ref="line_number" data-ref-filename="line_number">line_number</a> = <a class="local col8 ref" href="#18newline" title='newline' data-ref="18newline" data-ref-filename="18newline">newline</a>;</td></tr>
+<tr><th id="149">149</th><td>    <b>return</b> <a class="local col9 ref" href="#19oldline" title='oldline' data-ref="19oldline" data-ref-filename="19oldline">oldline</a>;</td></tr>
+<tr><th id="150">150</th><td>}</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td><em>long</em> <dfn class="decl def fn" id="nasm_src_get_linnum" title='nasm_src_get_linnum' data-ref="nasm_src_get_linnum" data-ref-filename="nasm_src_get_linnum">nasm_src_get_linnum</dfn>(<em>void</em>) </td></tr>
+<tr><th id="153">153</th><td>{</td></tr>
+<tr><th id="154">154</th><td>    <b>return</b> <a class="tu ref" href="#line_number" title='line_number' data-use='r' data-ref="line_number" data-ref-filename="line_number">line_number</a>;</td></tr>
+<tr><th id="155">155</th><td>}</td></tr>
+<tr><th id="156">156</th><td></td></tr>
+<tr><th id="157">157</th><td><em>int</em> <dfn class="decl def fn" id="nasm_src_get" title='nasm_src_get' data-ref="nasm_src_get" data-ref-filename="nasm_src_get">nasm_src_get</dfn>(<em>long</em> *<dfn class="local col0 decl" id="20xline" title='xline' data-type='long *' data-ref="20xline" data-ref-filename="20xline">xline</dfn>, <em>char</em> **<dfn class="local col1 decl" id="21xname" title='xname' data-type='char **' data-ref="21xname" data-ref-filename="21xname">xname</dfn>) </td></tr>
+<tr><th id="158">158</th><td>{</td></tr>
+<tr><th id="159">159</th><td>    <b>if</b> (!<a class="tu ref" href="#file_name" title='file_name' data-use='r' data-ref="file_name" data-ref-filename="file_name">file_name</a> || !*<a class="local col1 ref" href="#21xname" title='xname' data-ref="21xname" data-ref-filename="21xname">xname</a> || <span class='ref fn' title='strcmp' data-ref="strcmp" data-ref-filename="strcmp">strcmp</span>(*<a class="local col1 ref" href="#21xname" title='xname' data-ref="21xname" data-ref-filename="21xname">xname</a>, <a class="tu ref" href="#file_name" title='file_name' data-use='r' data-ref="file_name" data-ref-filename="file_name">file_name</a>)) </td></tr>
+<tr><th id="160">160</th><td>    {</td></tr>
+<tr><th id="161">161</th><td>        <a class="macro" href="nasmlib.h.html#24" title="yasm_xfree(*xname)" data-ref="_M/nasm_free">nasm_free</a>(*<a class="local col1 ref" href="#21xname" title='xname' data-ref="21xname" data-ref-filename="21xname">xname</a>);</td></tr>
+<tr><th id="162">162</th><td>        *<a class="local col1 ref" href="#21xname" title='xname' data-ref="21xname" data-ref-filename="21xname">xname</a> = <a class="tu ref" href="#file_name" title='file_name' data-use='r' data-ref="file_name" data-ref-filename="file_name">file_name</a> ? <a class="macro" href="nasmlib.h.html#26" title="yasm__xstrdup" data-ref="_M/nasm_strdup">nasm_strdup</a>(<a class="tu ref" href="#file_name" title='file_name' data-use='r' data-ref="file_name" data-ref-filename="file_name">file_name</a>) : <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>;</td></tr>
+<tr><th id="163">163</th><td>        *<a class="local col0 ref" href="#20xline" title='xline' data-ref="20xline" data-ref-filename="20xline">xline</a> = <a class="tu ref" href="#line_number" title='line_number' data-use='r' data-ref="line_number" data-ref-filename="line_number">line_number</a>;</td></tr>
+<tr><th id="164">164</th><td>        <b>return</b> -<var>2</var>;</td></tr>
+<tr><th id="165">165</th><td>    }</td></tr>
+<tr><th id="166">166</th><td>    <b>if</b> (*<a class="local col0 ref" href="#20xline" title='xline' data-ref="20xline" data-ref-filename="20xline">xline</a> != <a class="tu ref" href="#line_number" title='line_number' data-use='r' data-ref="line_number" data-ref-filename="line_number">line_number</a>) </td></tr>
+<tr><th id="167">167</th><td>    {</td></tr>
+<tr><th id="168">168</th><td>        <em>long</em> <dfn class="local col2 decl" id="22tmp" title='tmp' data-type='long' data-ref="22tmp" data-ref-filename="22tmp">tmp</dfn> = <a class="tu ref" href="#line_number" title='line_number' data-use='r' data-ref="line_number" data-ref-filename="line_number">line_number</a> - *<a class="local col0 ref" href="#20xline" title='xline' data-ref="20xline" data-ref-filename="20xline">xline</a>;</td></tr>
+<tr><th id="169">169</th><td>        *<a class="local col0 ref" href="#20xline" title='xline' data-ref="20xline" data-ref-filename="20xline">xline</a> = <a class="tu ref" href="#line_number" title='line_number' data-use='r' data-ref="line_number" data-ref-filename="line_number">line_number</a>;</td></tr>
+<tr><th id="170">170</th><td>        <b>return</b> <a class="local col2 ref" href="#22tmp" title='tmp' data-ref="22tmp" data-ref-filename="22tmp">tmp</a>;</td></tr>
+<tr><th id="171">171</th><td>    }</td></tr>
+<tr><th id="172">172</th><td>    <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="173">173</th><td>}</td></tr>
+<tr><th id="174">174</th><td></td></tr>
+<tr><th id="175">175</th><td><em>void</em> <dfn class="decl def fn" id="nasm_quote" title='nasm_quote' data-ref="nasm_quote" data-ref-filename="nasm_quote">nasm_quote</dfn>(<em>char</em> **<dfn class="local col3 decl" id="23str" title='str' data-type='char **' data-ref="23str" data-ref-filename="23str">str</dfn>) </td></tr>
+<tr><th id="176">176</th><td>{</td></tr>
+<tr><th id="177">177</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="24ln" title='ln' data-type='size_t' data-ref="24ln" data-ref-filename="24ln">ln</dfn>=<span class='ref fn' title='strlen' data-ref="strlen" data-ref-filename="strlen">strlen</span>(*<a class="local col3 ref" href="#23str" title='str' data-ref="23str" data-ref-filename="23str">str</a>);</td></tr>
+<tr><th id="178">178</th><td>    <em>char</em> <dfn class="local col5 decl" id="25q" title='q' data-type='char' data-ref="25q" data-ref-filename="25q">q</dfn>=(*<a class="local col3 ref" href="#23str" title='str' data-ref="23str" data-ref-filename="23str">str</a>)[<var>0</var>];</td></tr>
+<tr><th id="179">179</th><td>    <em>char</em> *<dfn class="local col6 decl" id="26p" title='p' data-type='char *' data-ref="26p" data-ref-filename="26p">p</dfn>;</td></tr>
+<tr><th id="180">180</th><td>    <b>if</b> (<a class="local col4 ref" href="#24ln" title='ln' data-ref="24ln" data-ref-filename="24ln">ln</a>&gt;<var>1</var> &amp;&amp; (*<a class="local col3 ref" href="#23str" title='str' data-ref="23str" data-ref-filename="23str">str</a>)[<a class="local col4 ref" href="#24ln" title='ln' data-ref="24ln" data-ref-filename="24ln">ln</a>-<var>1</var>]==<a class="local col5 ref" href="#25q" title='q' data-ref="25q" data-ref-filename="25q">q</a> &amp;&amp; (<a class="local col5 ref" href="#25q" title='q' data-ref="25q" data-ref-filename="25q">q</a>==<kbd>'"'</kbd> || <a class="local col5 ref" href="#25q" title='q' data-ref="25q" data-ref-filename="25q">q</a>==<kbd>'\''</kbd>))</td></tr>
+<tr><th id="181">181</th><td>        <b>return</b>;</td></tr>
+<tr><th id="182">182</th><td>    <a class="local col5 ref" href="#25q" title='q' data-ref="25q" data-ref-filename="25q">q</a> = <kbd>'"'</kbd>;</td></tr>
+<tr><th id="183">183</th><td>    <b>if</b> (<span class='ref fn' title='strchr' data-ref="strchr" data-ref-filename="strchr">strchr</span>(*<a class="local col3 ref" href="#23str" title='str' data-ref="23str" data-ref-filename="23str">str</a>,<a class="local col5 ref" href="#25q" title='q' data-ref="25q" data-ref-filename="25q">q</a>))</td></tr>
+<tr><th id="184">184</th><td>        <a class="local col5 ref" href="#25q" title='q' data-ref="25q" data-ref-filename="25q">q</a> = <kbd>'\''</kbd>;</td></tr>
+<tr><th id="185">185</th><td>    <a class="local col6 ref" href="#26p" title='p' data-ref="26p" data-ref-filename="26p">p</a> = <a class="macro" href="nasmlib.h.html#19" title="yasm_xmalloc" data-ref="_M/nasm_malloc">nasm_malloc</a>(<a class="local col4 ref" href="#24ln" title='ln' data-ref="24ln" data-ref-filename="24ln">ln</a>+<var>3</var>);</td></tr>
+<tr><th id="186">186</th><td>    <span class="macro" title="__builtin___strcpy_chk (p+1, *str, __builtin_object_size (p+1, 2 &gt; 1 ? 1 : 0))" data-ref="_M/strcpy">strcpy</span>(<a class="local col6 ref" href="#26p" title='p' data-ref="26p" data-ref-filename="26p">p</a>+<var>1</var>, *<a class="local col3 ref" href="#23str" title='str' data-ref="23str" data-ref-filename="23str">str</a>);</td></tr>
+<tr><th id="187">187</th><td>    <a class="macro" href="nasmlib.h.html#24" title="yasm_xfree(*str)" data-ref="_M/nasm_free">nasm_free</a>(*<a class="local col3 ref" href="#23str" title='str' data-ref="23str" data-ref-filename="23str">str</a>);</td></tr>
+<tr><th id="188">188</th><td>    <a class="local col6 ref" href="#26p" title='p' data-ref="26p" data-ref-filename="26p">p</a>[<a class="local col4 ref" href="#24ln" title='ln' data-ref="24ln" data-ref-filename="24ln">ln</a>+<var>1</var>] = <a class="local col6 ref" href="#26p" title='p' data-ref="26p" data-ref-filename="26p">p</a>[<var>0</var>] = <a class="local col5 ref" href="#25q" title='q' data-ref="25q" data-ref-filename="25q">q</a>;</td></tr>
+<tr><th id="189">189</th><td>    <a class="local col6 ref" href="#26p" title='p' data-ref="26p" data-ref-filename="26p">p</a>[<a class="local col4 ref" href="#24ln" title='ln' data-ref="24ln" data-ref-filename="24ln">ln</a>+<var>2</var>] = <var>0</var>;</td></tr>
+<tr><th id="190">190</th><td>    *<a class="local col3 ref" href="#23str" title='str' data-ref="23str" data-ref-filename="23str">str</a> = <a class="local col6 ref" href="#26p" title='p' data-ref="26p" data-ref-filename="26p">p</a>;</td></tr>
+<tr><th id="191">191</th><td>}</td></tr>
+<tr><th id="192">192</th><td>    </td></tr>
+<tr><th id="193">193</th><td><em>char</em> *<dfn class="decl def fn" id="nasm_strcat" title='nasm_strcat' data-ref="nasm_strcat" data-ref-filename="nasm_strcat">nasm_strcat</dfn>(<em>const</em> <em>char</em> *<dfn class="local col7 decl" id="27one" title='one' data-type='const char *' data-ref="27one" data-ref-filename="27one">one</dfn>, <em>const</em> <em>char</em> *<dfn class="local col8 decl" id="28two" title='two' data-type='const char *' data-ref="28two" data-ref-filename="28two">two</dfn>) </td></tr>
+<tr><th id="194">194</th><td>{</td></tr>
+<tr><th id="195">195</th><td>    <em>char</em> *<dfn class="local col9 decl" id="29rslt" title='rslt' data-type='char *' data-ref="29rslt" data-ref-filename="29rslt">rslt</dfn>;</td></tr>
+<tr><th id="196">196</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="30l1" title='l1' data-type='size_t' data-ref="30l1" data-ref-filename="30l1">l1</dfn>=<span class='ref fn' title='strlen' data-ref="strlen" data-ref-filename="strlen">strlen</span>(<a class="local col7 ref" href="#27one" title='one' data-ref="27one" data-ref-filename="27one">one</a>);</td></tr>
+<tr><th id="197">197</th><td>    <a class="local col9 ref" href="#29rslt" title='rslt' data-ref="29rslt" data-ref-filename="29rslt">rslt</a> = <a class="macro" href="nasmlib.h.html#19" title="yasm_xmalloc" data-ref="_M/nasm_malloc">nasm_malloc</a>(<a class="local col0 ref" href="#30l1" title='l1' data-ref="30l1" data-ref-filename="30l1">l1</a>+<span class='ref fn' title='strlen' data-ref="strlen" data-ref-filename="strlen">strlen</span>(<a class="local col8 ref" href="#28two" title='two' data-ref="28two" data-ref-filename="28two">two</a>)+<var>1</var>);</td></tr>
+<tr><th id="198">198</th><td>    <span class="macro" title="__builtin___strcpy_chk (rslt, one, __builtin_object_size (rslt, 2 &gt; 1 ? 1 : 0))" data-ref="_M/strcpy">strcpy</span>(<a class="local col9 ref" href="#29rslt" title='rslt' data-ref="29rslt" data-ref-filename="29rslt">rslt</a>, <a class="local col7 ref" href="#27one" title='one' data-ref="27one" data-ref-filename="27one">one</a>);</td></tr>
+<tr><th id="199">199</th><td>    <span class="macro" title="__builtin___strcpy_chk (rslt+l1, two, __builtin_object_size (rslt+l1, 2 &gt; 1 ? 1 : 0))" data-ref="_M/strcpy">strcpy</span>(<a class="local col9 ref" href="#29rslt" title='rslt' data-ref="29rslt" data-ref-filename="29rslt">rslt</a>+<a class="local col0 ref" href="#30l1" title='l1' data-ref="30l1" data-ref-filename="30l1">l1</a>, <a class="local col8 ref" href="#28two" title='two' data-ref="28two" data-ref-filename="28two">two</a>);</td></tr>
+<tr><th id="200">200</th><td>    <b>return</b> <a class="local col9 ref" href="#29rslt" title='rslt' data-ref="29rslt" data-ref-filename="29rslt">rslt</a>;</td></tr>
+<tr><th id="201">201</th><td>}</td></tr>
+<tr><th id="202">202</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

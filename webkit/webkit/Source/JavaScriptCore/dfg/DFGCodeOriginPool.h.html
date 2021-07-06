@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>DFGCodeOriginPool.h source code [webkit/Source/JavaScriptCore/dfg/DFGCodeOriginPool.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="JSC::DFG::CodeOriginPool "/>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/JavaScriptCore/dfg/DFGCodeOriginPool.h'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>JavaScriptCore</a>/<a href='./'>dfg</a>/<a href='DFGCodeOriginPool.h.html'>DFGCodeOriginPool.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2020 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="28">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(DFG_JIT)</u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="../interpreter/CallFrame.h.html">"CallFrame.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/wtf/ThreadSafeRefCounted.h.html">&lt;wtf/ThreadSafeRefCounted.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><b>namespace</b> <span class="namespace">JSC</span> { <b>namespace</b> <span class="namespace">DFG</span> {</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><b>class</b> <dfn class="type def" id="JSC::DFG::CodeOriginPool" title='JSC::DFG::CodeOriginPool' data-ref="JSC::DFG::CodeOriginPool" data-ref-filename="JSC..DFG..CodeOriginPool">CodeOriginPool</dfn> : <b>public</b> <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/ThreadSafeRefCounted.h.html#WTF::ThreadSafeRefCounted" title='WTF::ThreadSafeRefCounted' data-ref="WTF::ThreadSafeRefCounted" data-ref-filename="WTF..ThreadSafeRefCounted">ThreadSafeRefCounted</a>&lt;<a class="type" href="#JSC::DFG::CodeOriginPool" title='JSC::DFG::CodeOriginPool' data-ref="JSC::DFG::CodeOriginPool" data-ref-filename="JSC..DFG..CodeOriginPool">CodeOriginPool</a>&gt; {</td></tr>
+<tr><th id="36">36</th><td><b>public</b>:</td></tr>
+<tr><th id="37">37</th><td>    <em>static</em> <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::Ref" title='WTF::Ref' data-ref="WTF::Ref" data-ref-filename="WTF..Ref">Ref</a>&lt;<a class="type" href="#JSC::DFG::CodeOriginPool" title='JSC::DFG::CodeOriginPool' data-ref="JSC::DFG::CodeOriginPool" data-ref-filename="JSC..DFG..CodeOriginPool">CodeOriginPool</a>&gt; <dfn class="decl def fn" id="_ZN3JSC3DFG14CodeOriginPool6createEv" title='JSC::DFG::CodeOriginPool::create' data-ref="_ZN3JSC3DFG14CodeOriginPool6createEv" data-ref-filename="_ZN3JSC3DFG14CodeOriginPool6createEv">create</dfn>()</td></tr>
+<tr><th id="38">38</th><td>    {</td></tr>
+<tr><th id="39">39</th><td>        <b>return</b> <a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Ref.h.html#_ZN3WTF8adoptRefERT_" title='WTF::adoptRef' data-ref="_ZN3WTF8adoptRefERT_" data-ref-filename="_ZN3WTF8adoptRefERT_">adoptRef</a>(<span class='refarg'>*<b>new</b> <a class="ref fn fake" href="#35" title='JSC::DFG::CodeOriginPool::CodeOriginPool' data-ref="_ZN3JSC3DFG14CodeOriginPoolC1Ev" data-ref-filename="_ZN3JSC3DFG14CodeOriginPoolC1Ev"></a><a class="type" href="#JSC::DFG::CodeOriginPool" title='JSC::DFG::CodeOriginPool' data-ref="JSC::DFG::CodeOriginPool" data-ref-filename="JSC..DFG..CodeOriginPool">CodeOriginPool</a></span>);</td></tr>
+<tr><th id="40">40</th><td>    }</td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td>    <a class="type" href="../interpreter/CallFrame.h.html#JSC::CallSiteIndex" title='JSC::CallSiteIndex' data-ref="JSC::CallSiteIndex" data-ref-filename="JSC..CallSiteIndex">CallSiteIndex</a> <dfn class="decl fn" id="_ZN3JSC3DFG14CodeOriginPool13addCodeOriginENS_10CodeOriginE" title='JSC::DFG::CodeOriginPool::addCodeOrigin' data-ref="_ZN3JSC3DFG14CodeOriginPool13addCodeOriginENS_10CodeOriginE" data-ref-filename="_ZN3JSC3DFG14CodeOriginPool13addCodeOriginENS_10CodeOriginE">addCodeOrigin</dfn>(<a class="type" href="../bytecode/CodeOrigin.h.html#JSC::CodeOrigin" title='JSC::CodeOrigin' data-ref="JSC::CodeOrigin" data-ref-filename="JSC..CodeOrigin">CodeOrigin</a>);</td></tr>
+<tr><th id="43">43</th><td>    <a class="type" href="../interpreter/CallFrame.h.html#JSC::CallSiteIndex" title='JSC::CallSiteIndex' data-ref="JSC::CallSiteIndex" data-ref-filename="JSC..CallSiteIndex">CallSiteIndex</a> <dfn class="decl fn" id="_ZN3JSC3DFG14CodeOriginPool22addUniqueCallSiteIndexENS_10CodeOriginE" title='JSC::DFG::CodeOriginPool::addUniqueCallSiteIndex' data-ref="_ZN3JSC3DFG14CodeOriginPool22addUniqueCallSiteIndexENS_10CodeOriginE" data-ref-filename="_ZN3JSC3DFG14CodeOriginPool22addUniqueCallSiteIndexENS_10CodeOriginE">addUniqueCallSiteIndex</dfn>(<a class="type" href="../bytecode/CodeOrigin.h.html#JSC::CodeOrigin" title='JSC::CodeOrigin' data-ref="JSC::CodeOrigin" data-ref-filename="JSC..CodeOrigin">CodeOrigin</a>);</td></tr>
+<tr><th id="44">44</th><td>    <a class="type" href="../interpreter/CallFrame.h.html#JSC::CallSiteIndex" title='JSC::CallSiteIndex' data-ref="JSC::CallSiteIndex" data-ref-filename="JSC..CallSiteIndex">CallSiteIndex</a> <dfn class="decl fn" id="_ZNK3JSC3DFG14CodeOriginPool12lastCallSiteEv" title='JSC::DFG::CodeOriginPool::lastCallSite' data-ref="_ZNK3JSC3DFG14CodeOriginPool12lastCallSiteEv" data-ref-filename="_ZNK3JSC3DFG14CodeOriginPool12lastCallSiteEv">lastCallSite</dfn>() <em>const</em>;</td></tr>
+<tr><th id="45">45</th><td>    <a class="type" href="../interpreter/CallFrame.h.html#JSC::DisposableCallSiteIndex" title='JSC::DisposableCallSiteIndex' data-ref="JSC::DisposableCallSiteIndex" data-ref-filename="JSC..DisposableCallSiteIndex">DisposableCallSiteIndex</a> <dfn class="decl fn" id="_ZN3JSC3DFG14CodeOriginPool26addDisposableCallSiteIndexENS_10CodeOriginE" title='JSC::DFG::CodeOriginPool::addDisposableCallSiteIndex' data-ref="_ZN3JSC3DFG14CodeOriginPool26addDisposableCallSiteIndexENS_10CodeOriginE" data-ref-filename="_ZN3JSC3DFG14CodeOriginPool26addDisposableCallSiteIndexENS_10CodeOriginE">addDisposableCallSiteIndex</dfn>(<a class="type" href="../bytecode/CodeOrigin.h.html#JSC::CodeOrigin" title='JSC::CodeOrigin' data-ref="JSC::CodeOrigin" data-ref-filename="JSC..CodeOrigin">CodeOrigin</a>);</td></tr>
+<tr><th id="46">46</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN3JSC3DFG14CodeOriginPool29removeDisposableCallSiteIndexENS_23DisposableCallSiteIndexE" title='JSC::DFG::CodeOriginPool::removeDisposableCallSiteIndex' data-ref="_ZN3JSC3DFG14CodeOriginPool29removeDisposableCallSiteIndexENS_23DisposableCallSiteIndexE" data-ref-filename="_ZN3JSC3DFG14CodeOriginPool29removeDisposableCallSiteIndexENS_23DisposableCallSiteIndexE">removeDisposableCallSiteIndex</dfn>(<a class="type" href="../interpreter/CallFrame.h.html#JSC::DisposableCallSiteIndex" title='JSC::DisposableCallSiteIndex' data-ref="JSC::DisposableCallSiteIndex" data-ref-filename="JSC..DisposableCallSiteIndex">DisposableCallSiteIndex</a>);</td></tr>
+<tr><th id="47">47</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN3JSC3DFG14CodeOriginPool11shrinkToFitEv" title='JSC::DFG::CodeOriginPool::shrinkToFit' data-ref="_ZN3JSC3DFG14CodeOriginPool11shrinkToFitEv" data-ref-filename="_ZN3JSC3DFG14CodeOriginPool11shrinkToFitEv">shrinkToFit</dfn>();</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td>    <a class="type" href="../bytecode/CodeOrigin.h.html#JSC::CodeOrigin" title='JSC::CodeOrigin' data-ref="JSC::CodeOrigin" data-ref-filename="JSC..CodeOrigin">CodeOrigin</a> <dfn class="decl def fn" id="_ZN3JSC3DFG14CodeOriginPool3getEj" title='JSC::DFG::CodeOriginPool::get' data-ref="_ZN3JSC3DFG14CodeOriginPool3getEj" data-ref-filename="_ZN3JSC3DFG14CodeOriginPool3getEj">get</dfn>(<em>unsigned</em> <dfn class="local col8 decl" id="7708index" title='index' data-type='unsigned int' data-ref="7708index" data-ref-filename="7708index">index</dfn>) { <b>return</b> <a class="ref fn fake" href="../bytecode/CodeOrigin.h.html#_ZN3JSC10CodeOriginC1ERKS0_" title='JSC::CodeOrigin::CodeOrigin' data-ref="_ZN3JSC10CodeOriginC1ERKS0_" data-ref-filename="_ZN3JSC10CodeOriginC1ERKS0_"></a><a class="member field" href="#JSC::DFG::CodeOriginPool::m_codeOrigins" title='JSC::DFG::CodeOriginPool::m_codeOrigins' data-ref="JSC::DFG::CodeOriginPool::m_codeOrigins" data-ref-filename="JSC..DFG..CodeOriginPool..m_codeOrigins">m_codeOrigins</a><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Vector.h.html#_ZN3WTF6VectorixEm" title='WTF::Vector::operator[]' data-ref="_ZN3WTF6VectorixEm" data-ref-filename="_ZN3WTF6VectorixEm">[<a class="local col8 ref" href="#7708index" title='index' data-ref="7708index" data-ref-filename="7708index">index</a>]</a>; }</td></tr>
+<tr><th id="50">50</th><td>    <em>unsigned</em> <dfn class="decl def fn" id="_ZNK3JSC3DFG14CodeOriginPool4sizeEv" title='JSC::DFG::CodeOriginPool::size' data-ref="_ZNK3JSC3DFG14CodeOriginPool4sizeEv" data-ref-filename="_ZNK3JSC3DFG14CodeOriginPool4sizeEv">size</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#JSC::DFG::CodeOriginPool::m_codeOrigins" title='JSC::DFG::CodeOriginPool::m_codeOrigins' data-ref="JSC::DFG::CodeOriginPool::m_codeOrigins" data-ref-filename="JSC..DFG..CodeOriginPool..m_codeOrigins">m_codeOrigins</a>.<a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Vector.h.html#_ZNK3WTF6Vector4sizeEv" title='WTF::Vector::size' data-ref="_ZNK3WTF6Vector4sizeEv" data-ref-filename="_ZNK3WTF6Vector4sizeEv">size</a>(); }</td></tr>
+<tr><th id="51">51</th><td></td></tr>
+<tr><th id="52">52</th><td><b>private</b>:</td></tr>
+<tr><th id="53">53</th><td>    <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::Vector" title='WTF::Vector' data-ref="WTF::Vector" data-ref-filename="WTF..Vector">Vector</a>&lt;<a class="type" href="../bytecode/CodeOrigin.h.html#JSC::CodeOrigin" title='JSC::CodeOrigin' data-ref="JSC::CodeOrigin" data-ref-filename="JSC..CodeOrigin">CodeOrigin</a>, <var>0</var>, <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Vector.h.html#WTF::UnsafeVectorOverflow" title='WTF::UnsafeVectorOverflow' data-ref="WTF::UnsafeVectorOverflow" data-ref-filename="WTF..UnsafeVectorOverflow">UnsafeVectorOverflow</a>&gt; <dfn class="decl field" id="JSC::DFG::CodeOriginPool::m_codeOrigins" title='JSC::DFG::CodeOriginPool::m_codeOrigins' data-ref="JSC::DFG::CodeOriginPool::m_codeOrigins" data-ref-filename="JSC..DFG..CodeOriginPool..m_codeOrigins">m_codeOrigins</dfn>;</td></tr>
+<tr><th id="54">54</th><td>    <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::Vector" title='WTF::Vector' data-ref="WTF::Vector" data-ref-filename="WTF..Vector">Vector</a>&lt;<em>unsigned</em>&gt; <dfn class="decl field" id="JSC::DFG::CodeOriginPool::m_callSiteIndexFreeList" title='JSC::DFG::CodeOriginPool::m_callSiteIndexFreeList' data-ref="JSC::DFG::CodeOriginPool::m_callSiteIndexFreeList" data-ref-filename="JSC..DFG..CodeOriginPool..m_callSiteIndexFreeList">m_callSiteIndexFreeList</dfn>;</td></tr>
+<tr><th id="55">55</th><td>};</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td>} } <i>// namespace JSC::DFG</i></td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><u>#<span data-ppcond="28">endif</span> // ENABLE(DFG_JIT)</u></td></tr>
+<tr><th id="60">60</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../API/tests/JSONParseTest.cpp.html'>webkit/Source/JavaScriptCore/API/tests/JSONParseTest.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,89 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FTLJITFinalizer.h source code [webkit/Source/JavaScriptCore/ftl/FTLJITFinalizer.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="JSC::FTL::JITFinalizer,JSC::FTL::OutOfLineCodeInfo "/>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/JavaScriptCore/ftl/FTLJITFinalizer.h'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>JavaScriptCore</a>/<a href='./'>ftl</a>/<a href='FTLJITFinalizer.h.html'>FTLJITFinalizer.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2013-2017 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="28">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(FTL_JIT)</u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="../dfg/DFGFinalizer.h.html">"DFGFinalizer.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="FTLGeneratedFunction.h.html">"FTLGeneratedFunction.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="FTLJITCode.h.html">"FTLJITCode.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#include <a href="../assembler/LinkBuffer.h.html">"LinkBuffer.h"</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#include <a href="../assembler/MacroAssembler.h.html">"MacroAssembler.h"</a></u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><b>namespace</b> <span class="namespace">JSC</span> { <b>namespace</b> <span class="namespace">FTL</span> {</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><b>class</b> <dfn class="type def" id="JSC::FTL::OutOfLineCodeInfo" title='JSC::FTL::OutOfLineCodeInfo' data-ref="JSC::FTL::OutOfLineCodeInfo" data-ref-filename="JSC..FTL..OutOfLineCodeInfo">OutOfLineCodeInfo</dfn> {</td></tr>
+<tr><th id="39">39</th><td><b>public</b>:</td></tr>
+<tr><th id="40">40</th><td>    <dfn class="decl def fn" id="_ZN3JSC3FTL17OutOfLineCodeInfoC1ENSt3__110unique_ptrINS_10LinkBufferENS2_14default_deleteIS4_EEEEPKc" title='JSC::FTL::OutOfLineCodeInfo::OutOfLineCodeInfo' data-ref="_ZN3JSC3FTL17OutOfLineCodeInfoC1ENSt3__110unique_ptrINS_10LinkBufferENS2_14default_deleteIS4_EEEEPKc" data-ref-filename="_ZN3JSC3FTL17OutOfLineCodeInfoC1ENSt3__110unique_ptrINS_10LinkBufferENS2_14default_deleteIS4_EEEEPKc">OutOfLineCodeInfo</dfn>(<span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="../assembler/LinkBuffer.h.html#JSC::LinkBuffer" title='JSC::LinkBuffer' data-ref="JSC::LinkBuffer" data-ref-filename="JSC..LinkBuffer">LinkBuffer</a>&gt; <dfn class="local col1 decl" id="81linkBuffer" title='linkBuffer' data-type='std::unique_ptr&lt;LinkBuffer&gt;' data-ref="81linkBuffer" data-ref-filename="81linkBuffer">linkBuffer</dfn>, <em>const</em> <em>char</em>* <dfn class="local col2 decl" id="82codeDescription" title='codeDescription' data-type='const char *' data-ref="82codeDescription" data-ref-filename="82codeDescription">codeDescription</dfn>)</td></tr>
+<tr><th id="41">41</th><td>        : <a class="member field" href="#JSC::FTL::OutOfLineCodeInfo::m_linkBuffer" title='JSC::FTL::OutOfLineCodeInfo::m_linkBuffer' data-ref="JSC::FTL::OutOfLineCodeInfo::m_linkBuffer" data-ref-filename="JSC..FTL..OutOfLineCodeInfo..m_linkBuffer">m_linkBuffer</a><span class='ref fn' title='std::__1::unique_ptr::unique_ptr&lt;_Tp, _Dp&gt;' data-ref="_ZNSt3__110unique_ptrC1EONS_10unique_ptrIT_T0_EE" data-ref-filename="_ZNSt3__110unique_ptrC1EONS_10unique_ptrIT_T0_EE">(</span><a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/StdLibExtras.h.html#568" title="std::move&lt;WTF::CheckMoveParameter&gt;(linkBuffer)" data-ref="_M/WTFMove">WTFMove</a>(<span class='refarg'><a class="local col1 ref" href="#81linkBuffer" title='linkBuffer' data-ref="81linkBuffer" data-ref-filename="81linkBuffer">linkBuffer</a></span>))</td></tr>
+<tr><th id="42">42</th><td>        , <a class="member field" href="#JSC::FTL::OutOfLineCodeInfo::m_codeDescription" title='JSC::FTL::OutOfLineCodeInfo::m_codeDescription' data-ref="JSC::FTL::OutOfLineCodeInfo::m_codeDescription" data-ref-filename="JSC..FTL..OutOfLineCodeInfo..m_codeDescription">m_codeDescription</a>(<a class="local col2 ref" href="#82codeDescription" title='codeDescription' data-ref="82codeDescription" data-ref-filename="82codeDescription">codeDescription</a>)</td></tr>
+<tr><th id="43">43</th><td>    {</td></tr>
+<tr><th id="44">44</th><td>    }</td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td>    <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="../assembler/LinkBuffer.h.html#JSC::LinkBuffer" title='JSC::LinkBuffer' data-ref="JSC::LinkBuffer" data-ref-filename="JSC..LinkBuffer">LinkBuffer</a>&gt; <dfn class="decl field" id="JSC::FTL::OutOfLineCodeInfo::m_linkBuffer" title='JSC::FTL::OutOfLineCodeInfo::m_linkBuffer' data-ref="JSC::FTL::OutOfLineCodeInfo::m_linkBuffer" data-ref-filename="JSC..FTL..OutOfLineCodeInfo..m_linkBuffer">m_linkBuffer</dfn>;</td></tr>
+<tr><th id="47">47</th><td>    <em>const</em> <em>char</em>* <dfn class="decl field" id="JSC::FTL::OutOfLineCodeInfo::m_codeDescription" title='JSC::FTL::OutOfLineCodeInfo::m_codeDescription' data-ref="JSC::FTL::OutOfLineCodeInfo::m_codeDescription" data-ref-filename="JSC..FTL..OutOfLineCodeInfo..m_codeDescription">m_codeDescription</dfn>;</td></tr>
+<tr><th id="48">48</th><td>};</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><b>class</b> <dfn class="type def" id="JSC::FTL::JITFinalizer" title='JSC::FTL::JITFinalizer' data-ref="JSC::FTL::JITFinalizer" data-ref-filename="JSC..FTL..JITFinalizer">JITFinalizer</dfn> final : <b>public</b> <span class="namespace">DFG::</span><a class="type" href="../dfg/DFGFinalizer.h.html#JSC::DFG::Finalizer" title='JSC::DFG::Finalizer' data-ref="JSC::DFG::Finalizer" data-ref-filename="JSC..DFG..Finalizer">Finalizer</a> {</td></tr>
+<tr><th id="51">51</th><td><b>public</b>:</td></tr>
+<tr><th id="52">52</th><td>    <dfn class="decl fn" id="_ZN3JSC3FTL12JITFinalizerC1ERNS_3DFG4PlanE" title='JSC::FTL::JITFinalizer::JITFinalizer' data-ref="_ZN3JSC3FTL12JITFinalizerC1ERNS_3DFG4PlanE" data-ref-filename="_ZN3JSC3FTL12JITFinalizerC1ERNS_3DFG4PlanE">JITFinalizer</dfn>(<span class="namespace">DFG::</span><a class="type" href="../dfg/DFGPlan.h.html#JSC::DFG::Plan" title='JSC::DFG::Plan' data-ref="JSC::DFG::Plan" data-ref-filename="JSC..DFG..Plan">Plan</a>&amp;);</td></tr>
+<tr><th id="53">53</th><td>    <dfn class="virtual decl fn" id="_ZN3JSC3FTL12JITFinalizerD1Ev" title='JSC::FTL::JITFinalizer::~JITFinalizer' data-ref="_ZN3JSC3FTL12JITFinalizerD1Ev" data-ref-filename="_ZN3JSC3FTL12JITFinalizerD1Ev">~JITFinalizer</dfn>() final;</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="virtual decl fn" id="_ZN3JSC3FTL12JITFinalizer8codeSizeEv" title='JSC::FTL::JITFinalizer::codeSize' data-ref="_ZN3JSC3FTL12JITFinalizer8codeSizeEv" data-ref-filename="_ZN3JSC3FTL12JITFinalizer8codeSizeEv">codeSize</dfn>() final;</td></tr>
+<tr><th id="56">56</th><td>    <em>bool</em> <dfn class="virtual decl fn" id="_ZN3JSC3FTL12JITFinalizer8finalizeEv" title='JSC::FTL::JITFinalizer::finalize' data-ref="_ZN3JSC3FTL12JITFinalizer8finalizeEv" data-ref-filename="_ZN3JSC3FTL12JITFinalizer8finalizeEv">finalize</dfn>() final;</td></tr>
+<tr><th id="57">57</th><td>    </td></tr>
+<tr><th id="58">58</th><td>    <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="../assembler/LinkBuffer.h.html#JSC::LinkBuffer" title='JSC::LinkBuffer' data-ref="JSC::LinkBuffer" data-ref-filename="JSC..LinkBuffer">LinkBuffer</a>&gt; <dfn class="decl field" id="JSC::FTL::JITFinalizer::b3CodeLinkBuffer" title='JSC::FTL::JITFinalizer::b3CodeLinkBuffer' data-ref="JSC::FTL::JITFinalizer::b3CodeLinkBuffer" data-ref-filename="JSC..FTL..JITFinalizer..b3CodeLinkBuffer">b3CodeLinkBuffer</dfn>;</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td>    <i>// Eventually, we can get rid of this with B3.</i></td></tr>
+<tr><th id="61">61</th><td>    <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="../assembler/LinkBuffer.h.html#JSC::LinkBuffer" title='JSC::LinkBuffer' data-ref="JSC::LinkBuffer" data-ref-filename="JSC..LinkBuffer">LinkBuffer</a>&gt; <dfn class="decl field" id="JSC::FTL::JITFinalizer::entrypointLinkBuffer" title='JSC::FTL::JITFinalizer::entrypointLinkBuffer' data-ref="JSC::FTL::JITFinalizer::entrypointLinkBuffer" data-ref-filename="JSC..FTL..JITFinalizer..entrypointLinkBuffer">entrypointLinkBuffer</dfn>;</td></tr>
+<tr><th id="62">62</th><td>    </td></tr>
+<tr><th id="63">63</th><td>    <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::Vector" title='WTF::Vector' data-ref="WTF::Vector" data-ref-filename="WTF..Vector">Vector</a>&lt;<a class="type" href="../jit/CCallHelpers.h.html#JSC::CCallHelpers" title='JSC::CCallHelpers' data-ref="JSC::CCallHelpers" data-ref-filename="JSC..CCallHelpers">CCallHelpers</a>::<a class="type" href="../assembler/AbstractMacroAssembler.h.html#JSC::AbstractMacroAssembler::Jump" title='JSC::AbstractMacroAssembler::Jump' data-ref="JSC::AbstractMacroAssembler::Jump" data-ref-filename="JSC..AbstractMacroAssembler..Jump">Jump</a>&gt; <dfn class="decl field" id="JSC::FTL::JITFinalizer::lazySlowPathGeneratorJumps" title='JSC::FTL::JITFinalizer::lazySlowPathGeneratorJumps' data-ref="JSC::FTL::JITFinalizer::lazySlowPathGeneratorJumps" data-ref-filename="JSC..FTL..JITFinalizer..lazySlowPathGeneratorJumps">lazySlowPathGeneratorJumps</dfn>;</td></tr>
+<tr><th id="64">64</th><td>    <a class="typedef" href="FTLGeneratedFunction.h.html#JSC::FTL::GeneratedFunction" title='JSC::FTL::GeneratedFunction' data-type='CodeLocationLabel&lt;JSEntryPtrTag&gt;' data-ref="JSC::FTL::GeneratedFunction" data-ref-filename="JSC..FTL..GeneratedFunction">GeneratedFunction</a> <dfn class="decl field" id="JSC::FTL::JITFinalizer::function" title='JSC::FTL::JITFinalizer::function' data-ref="JSC::FTL::JITFinalizer::function" data-ref-filename="JSC..FTL..JITFinalizer..function">function</dfn>;</td></tr>
+<tr><th id="65">65</th><td>    <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RefPtr" title='WTF::RefPtr' data-ref="WTF::RefPtr" data-ref-filename="WTF..RefPtr">RefPtr</a>&lt;<a class="type" href="FTLJITCode.h.html#JSC::FTL::JITCode" title='JSC::FTL::JITCode' data-ref="JSC::FTL::JITCode" data-ref-filename="JSC..FTL..JITCode">JITCode</a>&gt; <dfn class="decl field" id="JSC::FTL::JITFinalizer::jitCode" title='JSC::FTL::JITFinalizer::jitCode' data-ref="JSC::FTL::JITFinalizer::jitCode" data-ref-filename="JSC..FTL..JITFinalizer..jitCode">jitCode</dfn>;</td></tr>
+<tr><th id="66">66</th><td>};</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td>} } <i>// namespace JSC::FTL</i></td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td><u>#<span data-ppcond="28">endif</span> // ENABLE(FTL_JIT)</u></td></tr>
+<tr><th id="71">71</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='FTLLowerDFGToB3.cpp.html'>webkit/Source/JavaScriptCore/ftl/FTLLowerDFGToB3.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

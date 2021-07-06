@@ -1,0 +1,873 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>rsa.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/rsa.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rsa_meth_st,rsa_st "/>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/rsa.h'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>third_party</a>/<a href='../../..'>boringssl</a>/<a href='../..'>src</a>/<a href='..'>include</a>/<a href='./'>openssl</a>/<a href='rsa.h.html'>rsa.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)</i></td></tr>
+<tr><th id="2">2</th><td><i> * All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * This package is an SSL implementation written</i></td></tr>
+<tr><th id="5">5</th><td><i> * by Eric Young (eay@cryptsoft.com).</i></td></tr>
+<tr><th id="6">6</th><td><i> * The implementation was written so as to conform with Netscapes SSL.</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * This library is free for commercial and non-commercial use as long as</i></td></tr>
+<tr><th id="9">9</th><td><i> * the following conditions are aheared to.  The following conditions</i></td></tr>
+<tr><th id="10">10</th><td><i> * apply to all code found in this distribution, be it the RC4, RSA,</i></td></tr>
+<tr><th id="11">11</th><td><i> * lhash, DES, etc., code; not just the SSL code.  The SSL documentation</i></td></tr>
+<tr><th id="12">12</th><td><i> * included with this distribution is covered by the same copyright terms</i></td></tr>
+<tr><th id="13">13</th><td><i> * except that the holder is Tim Hudson (tjh@cryptsoft.com).</i></td></tr>
+<tr><th id="14">14</th><td><i> *</i></td></tr>
+<tr><th id="15">15</th><td><i> * Copyright remains Eric Young's, and as such any Copyright notices in</i></td></tr>
+<tr><th id="16">16</th><td><i> * the code are not to be removed.</i></td></tr>
+<tr><th id="17">17</th><td><i> * If this package is used in a product, Eric Young should be given attribution</i></td></tr>
+<tr><th id="18">18</th><td><i> * as the author of the parts of the library used.</i></td></tr>
+<tr><th id="19">19</th><td><i> * This can be in the form of a textual message at program startup or</i></td></tr>
+<tr><th id="20">20</th><td><i> * in documentation (online or textual) provided with the package.</i></td></tr>
+<tr><th id="21">21</th><td><i> *</i></td></tr>
+<tr><th id="22">22</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="23">23</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="24">24</th><td><i> * are met:</i></td></tr>
+<tr><th id="25">25</th><td><i> * 1. Redistributions of source code must retain the copyright</i></td></tr>
+<tr><th id="26">26</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="27">27</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="28">28</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="29">29</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="30">30</th><td><i> * 3. All advertising materials mentioning features or use of this software</i></td></tr>
+<tr><th id="31">31</th><td><i> *    must display the following acknowledgement:</i></td></tr>
+<tr><th id="32">32</th><td><i> *    "This product includes cryptographic software written by</i></td></tr>
+<tr><th id="33">33</th><td><i> *     Eric Young (eay@cryptsoft.com)"</i></td></tr>
+<tr><th id="34">34</th><td><i> *    The word 'cryptographic' can be left out if the rouines from the library</i></td></tr>
+<tr><th id="35">35</th><td><i> *    being used are not cryptographic related :-).</i></td></tr>
+<tr><th id="36">36</th><td><i> * 4. If you include any Windows specific code (or a derivative thereof) from</i></td></tr>
+<tr><th id="37">37</th><td><i> *    the apps directory (application code) you must include an acknowledgement:</i></td></tr>
+<tr><th id="38">38</th><td><i> *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"</i></td></tr>
+<tr><th id="39">39</th><td><i> *</i></td></tr>
+<tr><th id="40">40</th><td><i> * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND</i></td></tr>
+<tr><th id="41">41</th><td><i> * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="42">42</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</i></td></tr>
+<tr><th id="43">43</th><td><i> * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE</i></td></tr>
+<tr><th id="44">44</th><td><i> * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL</i></td></tr>
+<tr><th id="45">45</th><td><i> * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS</i></td></tr>
+<tr><th id="46">46</th><td><i> * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)</i></td></tr>
+<tr><th id="47">47</th><td><i> * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT</i></td></tr>
+<tr><th id="48">48</th><td><i> * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY</i></td></tr>
+<tr><th id="49">49</th><td><i> * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF</i></td></tr>
+<tr><th id="50">50</th><td><i> * SUCH DAMAGE.</i></td></tr>
+<tr><th id="51">51</th><td><i> *</i></td></tr>
+<tr><th id="52">52</th><td><i> * The licence and distribution terms for any publically available version or</i></td></tr>
+<tr><th id="53">53</th><td><i> * derivative of this code cannot be changed.  i.e. this code cannot simply be</i></td></tr>
+<tr><th id="54">54</th><td><i> * copied and put under another distribution licence</i></td></tr>
+<tr><th id="55">55</th><td><i> * [including the GNU Public Licence.] */</i></td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td><u>#<span data-ppcond="57">ifndef</span> <span class="macro" data-ref="_M/OPENSSL_HEADER_RSA_H">OPENSSL_HEADER_RSA_H</span></u></td></tr>
+<tr><th id="58">58</th><td><u>#define <dfn class="macro" id="_M/OPENSSL_HEADER_RSA_H" data-ref="_M/OPENSSL_HEADER_RSA_H">OPENSSL_HEADER_RSA_H</dfn></u></td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><u>#include <a href="base.h.html">&lt;openssl/base.h&gt;</a></u></td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><u>#include <a href="engine.h.html">&lt;openssl/engine.h&gt;</a></u></td></tr>
+<tr><th id="63">63</th><td><u>#include <a href="ex_data.h.html">&lt;openssl/ex_data.h&gt;</a></u></td></tr>
+<tr><th id="64">64</th><td><u>#include <a href="thread.h.html">&lt;openssl/thread.h&gt;</a></u></td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td><u>#<span data-ppcond="66">if</span> defined(<span class="macro" data-ref="_M/__cplusplus">__cplusplus</span>)</u></td></tr>
+<tr><th id="67">67</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="68">68</th><td><u>#<span data-ppcond="66">endif</span></u></td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><i>// rsa.h contains functions for handling encryption and signature using RSA.</i></td></tr>
+<tr><th id="72">72</th><td><i></i></td></tr>
+<tr><th id="73">73</th><td><i></i></td></tr>
+<tr><th id="74">74</th><td><i>// Allocation and destruction.</i></td></tr>
+<tr><th id="75">75</th><td><i>//</i></td></tr>
+<tr><th id="76">76</th><td><i>// An |RSA| object represents a public or private RSA key. A given object may be</i></td></tr>
+<tr><th id="77">77</th><td><i>// used concurrently on multiple threads by non-mutating functions, provided no</i></td></tr>
+<tr><th id="78">78</th><td><i>// other thread is concurrently calling a mutating function. Unless otherwise</i></td></tr>
+<tr><th id="79">79</th><td><i>// documented, functions which take a |const| pointer are non-mutating and</i></td></tr>
+<tr><th id="80">80</th><td><i>// functions which take a non-|const| pointer are mutating.</i></td></tr>
+<tr><th id="81">81</th><td><i></i></td></tr>
+<tr><th id="82">82</th><td><i>// RSA_new returns a new, empty |RSA| object or NULL on error.</i></td></tr>
+<tr><th id="83">83</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="decl fn" id="RSA_new" title='RSA_new' data-ref="RSA_new" data-ref-filename="RSA_new">RSA_new</dfn>(<em>void</em>);</td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td><i>// RSA_new_method acts the same as |RSA_new| but takes an explicit |ENGINE|.</i></td></tr>
+<tr><th id="86">86</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="decl fn" id="RSA_new_method" title='RSA_new_method' data-ref="RSA_new_method" data-ref-filename="RSA_new_method">RSA_new_method</dfn>(<em>const</em> <a class="typedef" href="base.h.html#ENGINE" title='ENGINE' data-type='struct engine_st' data-ref="ENGINE" data-ref-filename="ENGINE">ENGINE</a> *<dfn class="local col1 decl" id="1engine" title='engine' data-type='const ENGINE *' data-ref="1engine" data-ref-filename="1engine">engine</dfn>);</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td><i>// RSA_free decrements the reference count of |rsa| and frees it if the</i></td></tr>
+<tr><th id="89">89</th><td><i>// reference count drops to zero.</i></td></tr>
+<tr><th id="90">90</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>void</em> <dfn class="decl fn" id="RSA_free" title='RSA_free' data-ref="RSA_free" data-ref-filename="RSA_free">RSA_free</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col2 decl" id="2rsa" title='rsa' data-type='RSA *' data-ref="2rsa" data-ref-filename="2rsa">rsa</dfn>);</td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td><i>// RSA_up_ref increments the reference count of |rsa| and returns one. It does</i></td></tr>
+<tr><th id="93">93</th><td><i>// not mutate |rsa| for thread-safety purposes and may be used concurrently.</i></td></tr>
+<tr><th id="94">94</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_up_ref" title='RSA_up_ref' data-ref="RSA_up_ref" data-ref-filename="RSA_up_ref">RSA_up_ref</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col3 decl" id="3rsa" title='rsa' data-type='RSA *' data-ref="3rsa" data-ref-filename="3rsa">rsa</dfn>);</td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td><i>// Properties.</i></td></tr>
+<tr><th id="98">98</th><td><i></i></td></tr>
+<tr><th id="99">99</th><td><i>// RSA_bits returns the size of |rsa|, in bits.</i></td></tr>
+<tr><th id="100">100</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>unsigned</em> <dfn class="decl fn" id="RSA_bits" title='RSA_bits' data-ref="RSA_bits" data-ref-filename="RSA_bits">RSA_bits</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col4 decl" id="4rsa" title='rsa' data-type='const RSA *' data-ref="4rsa" data-ref-filename="4rsa">rsa</dfn>);</td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td><i>// RSA_get0_n returns |rsa|'s public modulus.</i></td></tr>
+<tr><th id="103">103</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl fn" id="RSA_get0_n" title='RSA_get0_n' data-ref="RSA_get0_n" data-ref-filename="RSA_get0_n">RSA_get0_n</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col5 decl" id="5rsa" title='rsa' data-type='const RSA *' data-ref="5rsa" data-ref-filename="5rsa">rsa</dfn>);</td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td><i>// RSA_get0_e returns |rsa|'s public exponent.</i></td></tr>
+<tr><th id="106">106</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl fn" id="RSA_get0_e" title='RSA_get0_e' data-ref="RSA_get0_e" data-ref-filename="RSA_get0_e">RSA_get0_e</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col6 decl" id="6rsa" title='rsa' data-type='const RSA *' data-ref="6rsa" data-ref-filename="6rsa">rsa</dfn>);</td></tr>
+<tr><th id="107">107</th><td></td></tr>
+<tr><th id="108">108</th><td><i>// RSA_get0_d returns |rsa|'s private exponent. If |rsa| is a public key, this</i></td></tr>
+<tr><th id="109">109</th><td><i>// value will be NULL.</i></td></tr>
+<tr><th id="110">110</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl fn" id="RSA_get0_d" title='RSA_get0_d' data-ref="RSA_get0_d" data-ref-filename="RSA_get0_d">RSA_get0_d</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col7 decl" id="7rsa" title='rsa' data-type='const RSA *' data-ref="7rsa" data-ref-filename="7rsa">rsa</dfn>);</td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td><i>// RSA_get0_p returns |rsa|'s first private prime factor. If |rsa| is a public</i></td></tr>
+<tr><th id="113">113</th><td><i>// key or lacks its prime factors, this value will be NULL.</i></td></tr>
+<tr><th id="114">114</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl fn" id="RSA_get0_p" title='RSA_get0_p' data-ref="RSA_get0_p" data-ref-filename="RSA_get0_p">RSA_get0_p</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col8 decl" id="8rsa" title='rsa' data-type='const RSA *' data-ref="8rsa" data-ref-filename="8rsa">rsa</dfn>);</td></tr>
+<tr><th id="115">115</th><td></td></tr>
+<tr><th id="116">116</th><td><i>// RSA_get0_q returns |rsa|'s second private prime factor. If |rsa| is a public</i></td></tr>
+<tr><th id="117">117</th><td><i>// key or lacks its prime factors, this value will be NULL.</i></td></tr>
+<tr><th id="118">118</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl fn" id="RSA_get0_q" title='RSA_get0_q' data-ref="RSA_get0_q" data-ref-filename="RSA_get0_q">RSA_get0_q</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col9 decl" id="9rsa" title='rsa' data-type='const RSA *' data-ref="9rsa" data-ref-filename="9rsa">rsa</dfn>);</td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td><i>// RSA_get0_dmp1 returns d (mod p-1) for |rsa|. If |rsa| is a public key or</i></td></tr>
+<tr><th id="121">121</th><td><i>// lacks CRT parameters, this value will be NULL.</i></td></tr>
+<tr><th id="122">122</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl fn" id="RSA_get0_dmp1" title='RSA_get0_dmp1' data-ref="RSA_get0_dmp1" data-ref-filename="RSA_get0_dmp1">RSA_get0_dmp1</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col0 decl" id="10rsa" title='rsa' data-type='const RSA *' data-ref="10rsa" data-ref-filename="10rsa">rsa</dfn>);</td></tr>
+<tr><th id="123">123</th><td></td></tr>
+<tr><th id="124">124</th><td><i>// RSA_get0_dmq1 returns d (mod q-1) for |rsa|. If |rsa| is a public key or</i></td></tr>
+<tr><th id="125">125</th><td><i>// lacks CRT parameters, this value will be NULL.</i></td></tr>
+<tr><th id="126">126</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl fn" id="RSA_get0_dmq1" title='RSA_get0_dmq1' data-ref="RSA_get0_dmq1" data-ref-filename="RSA_get0_dmq1">RSA_get0_dmq1</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col1 decl" id="11rsa" title='rsa' data-type='const RSA *' data-ref="11rsa" data-ref-filename="11rsa">rsa</dfn>);</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td><i>// RSA_get0_iqmp returns q^-1 (mod p). If |rsa| is a public key or lacks CRT</i></td></tr>
+<tr><th id="129">129</th><td><i>// parameters, this value will be NULL.</i></td></tr>
+<tr><th id="130">130</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl fn" id="RSA_get0_iqmp" title='RSA_get0_iqmp' data-ref="RSA_get0_iqmp" data-ref-filename="RSA_get0_iqmp">RSA_get0_iqmp</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col2 decl" id="12rsa" title='rsa' data-type='const RSA *' data-ref="12rsa" data-ref-filename="12rsa">rsa</dfn>);</td></tr>
+<tr><th id="131">131</th><td></td></tr>
+<tr><th id="132">132</th><td><i>// RSA_get0_key sets |*out_n|, |*out_e|, and |*out_d|, if non-NULL, to |rsa|'s</i></td></tr>
+<tr><th id="133">133</th><td><i>// modulus, public exponent, and private exponent, respectively. If |rsa| is a</i></td></tr>
+<tr><th id="134">134</th><td><i>// public key, the private exponent will be set to NULL.</i></td></tr>
+<tr><th id="135">135</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>void</em> <dfn class="decl fn" id="RSA_get0_key" title='RSA_get0_key' data-ref="RSA_get0_key" data-ref-filename="RSA_get0_key">RSA_get0_key</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col3 decl" id="13rsa" title='rsa' data-type='const RSA *' data-ref="13rsa" data-ref-filename="13rsa">rsa</dfn>, <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> **<dfn class="local col4 decl" id="14out_n" title='out_n' data-type='const BIGNUM **' data-ref="14out_n" data-ref-filename="14out_n">out_n</dfn>,</td></tr>
+<tr><th id="136">136</th><td>                                 <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> **<dfn class="local col5 decl" id="15out_e" title='out_e' data-type='const BIGNUM **' data-ref="15out_e" data-ref-filename="15out_e">out_e</dfn>, <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> **<dfn class="local col6 decl" id="16out_d" title='out_d' data-type='const BIGNUM **' data-ref="16out_d" data-ref-filename="16out_d">out_d</dfn>);</td></tr>
+<tr><th id="137">137</th><td></td></tr>
+<tr><th id="138">138</th><td><i>// RSA_get0_factors sets |*out_p| and |*out_q|, if non-NULL, to |rsa|'s prime</i></td></tr>
+<tr><th id="139">139</th><td><i>// factors. If |rsa| is a public key, they will be set to NULL.</i></td></tr>
+<tr><th id="140">140</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>void</em> <dfn class="decl fn" id="RSA_get0_factors" title='RSA_get0_factors' data-ref="RSA_get0_factors" data-ref-filename="RSA_get0_factors">RSA_get0_factors</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col7 decl" id="17rsa" title='rsa' data-type='const RSA *' data-ref="17rsa" data-ref-filename="17rsa">rsa</dfn>, <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> **<dfn class="local col8 decl" id="18out_p" title='out_p' data-type='const BIGNUM **' data-ref="18out_p" data-ref-filename="18out_p">out_p</dfn>,</td></tr>
+<tr><th id="141">141</th><td>                                     <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> **<dfn class="local col9 decl" id="19out_q" title='out_q' data-type='const BIGNUM **' data-ref="19out_q" data-ref-filename="19out_q">out_q</dfn>);</td></tr>
+<tr><th id="142">142</th><td></td></tr>
+<tr><th id="143">143</th><td><i>// RSA_get0_crt_params sets |*out_dmp1|, |*out_dmq1|, and |*out_iqmp|, if</i></td></tr>
+<tr><th id="144">144</th><td><i>// non-NULL, to |rsa|'s CRT parameters. These are d (mod p-1), d (mod q-1) and</i></td></tr>
+<tr><th id="145">145</th><td><i>// q^-1 (mod p), respectively. If |rsa| is a public key, each parameter will be</i></td></tr>
+<tr><th id="146">146</th><td><i>// set to NULL.</i></td></tr>
+<tr><th id="147">147</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>void</em> <dfn class="decl fn" id="RSA_get0_crt_params" title='RSA_get0_crt_params' data-ref="RSA_get0_crt_params" data-ref-filename="RSA_get0_crt_params">RSA_get0_crt_params</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col0 decl" id="20rsa" title='rsa' data-type='const RSA *' data-ref="20rsa" data-ref-filename="20rsa">rsa</dfn>, <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> **<dfn class="local col1 decl" id="21out_dmp1" title='out_dmp1' data-type='const BIGNUM **' data-ref="21out_dmp1" data-ref-filename="21out_dmp1">out_dmp1</dfn>,</td></tr>
+<tr><th id="148">148</th><td>                                        <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> **<dfn class="local col2 decl" id="22out_dmq1" title='out_dmq1' data-type='const BIGNUM **' data-ref="22out_dmq1" data-ref-filename="22out_dmq1">out_dmq1</dfn>,</td></tr>
+<tr><th id="149">149</th><td>                                        <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> **<dfn class="local col3 decl" id="23out_iqmp" title='out_iqmp' data-type='const BIGNUM **' data-ref="23out_iqmp" data-ref-filename="23out_iqmp">out_iqmp</dfn>);</td></tr>
+<tr><th id="150">150</th><td></td></tr>
+<tr><th id="151">151</th><td><i>// RSA_set0_key sets |rsa|'s modulus, public exponent, and private exponent to</i></td></tr>
+<tr><th id="152">152</th><td><i>// |n|, |e|, and |d| respectively, if non-NULL. On success, it takes ownership</i></td></tr>
+<tr><th id="153">153</th><td><i>// of each argument and returns one. Otherwise, it returns zero.</i></td></tr>
+<tr><th id="154">154</th><td><i>//</i></td></tr>
+<tr><th id="155">155</th><td><i>// |d| may be NULL, but |n| and |e| must either be non-NULL or already</i></td></tr>
+<tr><th id="156">156</th><td><i>// configured on |rsa|.</i></td></tr>
+<tr><th id="157">157</th><td><i>//</i></td></tr>
+<tr><th id="158">158</th><td><i>// It is an error to call this function after |rsa| has been used for a</i></td></tr>
+<tr><th id="159">159</th><td><i>// cryptographic operation. Construct a new |RSA| object instead.</i></td></tr>
+<tr><th id="160">160</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_set0_key" title='RSA_set0_key' data-ref="RSA_set0_key" data-ref-filename="RSA_set0_key">RSA_set0_key</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col4 decl" id="24rsa" title='rsa' data-type='RSA *' data-ref="24rsa" data-ref-filename="24rsa">rsa</dfn>, <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="local col5 decl" id="25n" title='n' data-type='BIGNUM *' data-ref="25n" data-ref-filename="25n">n</dfn>, <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="local col6 decl" id="26e" title='e' data-type='BIGNUM *' data-ref="26e" data-ref-filename="26e">e</dfn>, <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="local col7 decl" id="27d" title='d' data-type='BIGNUM *' data-ref="27d" data-ref-filename="27d">d</dfn>);</td></tr>
+<tr><th id="161">161</th><td></td></tr>
+<tr><th id="162">162</th><td><i>// RSA_set0_factors sets |rsa|'s prime factors to |p| and |q|, if non-NULL, and</i></td></tr>
+<tr><th id="163">163</th><td><i>// takes ownership of them. On success, it takes ownership of each argument and</i></td></tr>
+<tr><th id="164">164</th><td><i>// returns one. Otherwise, it returns zero.</i></td></tr>
+<tr><th id="165">165</th><td><i>//</i></td></tr>
+<tr><th id="166">166</th><td><i>// Each argument must either be non-NULL or already configured on |rsa|.</i></td></tr>
+<tr><th id="167">167</th><td><i>//</i></td></tr>
+<tr><th id="168">168</th><td><i>// It is an error to call this function after |rsa| has been used for a</i></td></tr>
+<tr><th id="169">169</th><td><i>// cryptographic operation. Construct a new |RSA| object instead.</i></td></tr>
+<tr><th id="170">170</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_set0_factors" title='RSA_set0_factors' data-ref="RSA_set0_factors" data-ref-filename="RSA_set0_factors">RSA_set0_factors</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col8 decl" id="28rsa" title='rsa' data-type='RSA *' data-ref="28rsa" data-ref-filename="28rsa">rsa</dfn>, <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="local col9 decl" id="29p" title='p' data-type='BIGNUM *' data-ref="29p" data-ref-filename="29p">p</dfn>, <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="local col0 decl" id="30q" title='q' data-type='BIGNUM *' data-ref="30q" data-ref-filename="30q">q</dfn>);</td></tr>
+<tr><th id="171">171</th><td></td></tr>
+<tr><th id="172">172</th><td><i>// RSA_set0_crt_params sets |rsa|'s CRT parameters to |dmp1|, |dmq1|, and</i></td></tr>
+<tr><th id="173">173</th><td><i>// |iqmp|, if non-NULL, and takes ownership of them. On success, it takes</i></td></tr>
+<tr><th id="174">174</th><td><i>// ownership of its parameters and returns one. Otherwise, it returns zero.</i></td></tr>
+<tr><th id="175">175</th><td><i>//</i></td></tr>
+<tr><th id="176">176</th><td><i>// Each argument must either be non-NULL or already configured on |rsa|.</i></td></tr>
+<tr><th id="177">177</th><td><i>//</i></td></tr>
+<tr><th id="178">178</th><td><i>// It is an error to call this function after |rsa| has been used for a</i></td></tr>
+<tr><th id="179">179</th><td><i>// cryptographic operation. Construct a new |RSA| object instead.</i></td></tr>
+<tr><th id="180">180</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_set0_crt_params" title='RSA_set0_crt_params' data-ref="RSA_set0_crt_params" data-ref-filename="RSA_set0_crt_params">RSA_set0_crt_params</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col1 decl" id="31rsa" title='rsa' data-type='RSA *' data-ref="31rsa" data-ref-filename="31rsa">rsa</dfn>, <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="local col2 decl" id="32dmp1" title='dmp1' data-type='BIGNUM *' data-ref="32dmp1" data-ref-filename="32dmp1">dmp1</dfn>, <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="local col3 decl" id="33dmq1" title='dmq1' data-type='BIGNUM *' data-ref="33dmq1" data-ref-filename="33dmq1">dmq1</dfn>,</td></tr>
+<tr><th id="181">181</th><td>                                       <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="local col4 decl" id="34iqmp" title='iqmp' data-type='BIGNUM *' data-ref="34iqmp" data-ref-filename="34iqmp">iqmp</dfn>);</td></tr>
+<tr><th id="182">182</th><td></td></tr>
+<tr><th id="183">183</th><td></td></tr>
+<tr><th id="184">184</th><td><i>// Key generation.</i></td></tr>
+<tr><th id="185">185</th><td><i></i></td></tr>
+<tr><th id="186">186</th><td><i>// RSA_generate_key_ex generates a new RSA key where the modulus has size</i></td></tr>
+<tr><th id="187">187</th><td><i>// |bits| and the public exponent is |e|. If unsure, |RSA_F4| is a good value</i></td></tr>
+<tr><th id="188">188</th><td><i>// for |e|. If |cb| is not NULL then it is called during the key generation</i></td></tr>
+<tr><th id="189">189</th><td><i>// process. In addition to the calls documented for |BN_generate_prime_ex|, it</i></td></tr>
+<tr><th id="190">190</th><td><i>// is called with event=2 when the n'th prime is rejected as unsuitable and</i></td></tr>
+<tr><th id="191">191</th><td><i>// with event=3 when a suitable value for |p| is found.</i></td></tr>
+<tr><th id="192">192</th><td><i>//</i></td></tr>
+<tr><th id="193">193</th><td><i>// It returns one on success or zero on error.</i></td></tr>
+<tr><th id="194">194</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_generate_key_ex" title='RSA_generate_key_ex' data-ref="RSA_generate_key_ex" data-ref-filename="RSA_generate_key_ex">RSA_generate_key_ex</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col5 decl" id="35rsa" title='rsa' data-type='RSA *' data-ref="35rsa" data-ref-filename="35rsa">rsa</dfn>, <em>int</em> <dfn class="local col6 decl" id="36bits" title='bits' data-type='int' data-ref="36bits" data-ref-filename="36bits">bits</dfn>, <em>const</em> <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="local col7 decl" id="37e" title='e' data-type='const BIGNUM *' data-ref="37e" data-ref-filename="37e">e</dfn>,</td></tr>
+<tr><th id="195">195</th><td>                                       <a class="typedef" href="base.h.html#BN_GENCB" title='BN_GENCB' data-type='struct bn_gencb_st' data-ref="BN_GENCB" data-ref-filename="BN_GENCB">BN_GENCB</a> *<dfn class="local col8 decl" id="38cb" title='cb' data-type='BN_GENCB *' data-ref="38cb" data-ref-filename="38cb">cb</dfn>);</td></tr>
+<tr><th id="196">196</th><td></td></tr>
+<tr><th id="197">197</th><td><i>// RSA_generate_key_fips behaves like |RSA_generate_key_ex| but performs</i></td></tr>
+<tr><th id="198">198</th><td><i>// additional checks for FIPS compliance. The public exponent is always 65537</i></td></tr>
+<tr><th id="199">199</th><td><i>// and |bits| must be either 2048 or 3072.</i></td></tr>
+<tr><th id="200">200</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_generate_key_fips" title='RSA_generate_key_fips' data-ref="RSA_generate_key_fips" data-ref-filename="RSA_generate_key_fips">RSA_generate_key_fips</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col9 decl" id="39rsa" title='rsa' data-type='RSA *' data-ref="39rsa" data-ref-filename="39rsa">rsa</dfn>, <em>int</em> <dfn class="local col0 decl" id="40bits" title='bits' data-type='int' data-ref="40bits" data-ref-filename="40bits">bits</dfn>, <a class="typedef" href="base.h.html#BN_GENCB" title='BN_GENCB' data-type='struct bn_gencb_st' data-ref="BN_GENCB" data-ref-filename="BN_GENCB">BN_GENCB</a> *<dfn class="local col1 decl" id="41cb" title='cb' data-type='BN_GENCB *' data-ref="41cb" data-ref-filename="41cb">cb</dfn>);</td></tr>
+<tr><th id="201">201</th><td></td></tr>
+<tr><th id="202">202</th><td></td></tr>
+<tr><th id="203">203</th><td><i>// Encryption / Decryption</i></td></tr>
+<tr><th id="204">204</th><td><i>//</i></td></tr>
+<tr><th id="205">205</th><td><i>// These functions are considered non-mutating for thread-safety purposes and</i></td></tr>
+<tr><th id="206">206</th><td><i>// may be used concurrently.</i></td></tr>
+<tr><th id="207">207</th><td><i></i></td></tr>
+<tr><th id="208">208</th><td><i>// RSA_PKCS1_PADDING denotes PKCS#1 v1.5 padding. When used with encryption,</i></td></tr>
+<tr><th id="209">209</th><td><i>// this is RSAES-PKCS1-v1_5. When used with signing, this is RSASSA-PKCS1-v1_5.</i></td></tr>
+<tr><th id="210">210</th><td><u>#define <dfn class="macro" id="_M/RSA_PKCS1_PADDING" data-ref="_M/RSA_PKCS1_PADDING">RSA_PKCS1_PADDING</dfn> 1</u></td></tr>
+<tr><th id="211">211</th><td></td></tr>
+<tr><th id="212">212</th><td><i>// RSA_NO_PADDING denotes a raw RSA operation.</i></td></tr>
+<tr><th id="213">213</th><td><u>#define <dfn class="macro" id="_M/RSA_NO_PADDING" data-ref="_M/RSA_NO_PADDING">RSA_NO_PADDING</dfn> 3</u></td></tr>
+<tr><th id="214">214</th><td></td></tr>
+<tr><th id="215">215</th><td><i>// RSA_PKCS1_OAEP_PADDING denotes the RSAES-OAEP encryption scheme.</i></td></tr>
+<tr><th id="216">216</th><td><u>#define <dfn class="macro" id="_M/RSA_PKCS1_OAEP_PADDING" data-ref="_M/RSA_PKCS1_OAEP_PADDING">RSA_PKCS1_OAEP_PADDING</dfn> 4</u></td></tr>
+<tr><th id="217">217</th><td></td></tr>
+<tr><th id="218">218</th><td><i>// RSA_PKCS1_PSS_PADDING denotes the RSASSA-PSS signature scheme. This value may</i></td></tr>
+<tr><th id="219">219</th><td><i>// not be passed into |RSA_sign_raw|, only |EVP_PKEY_CTX_set_rsa_padding|. See</i></td></tr>
+<tr><th id="220">220</th><td><i>// also |RSA_sign_pss_mgf1| and |RSA_verify_pss_mgf1|.</i></td></tr>
+<tr><th id="221">221</th><td><u>#define <dfn class="macro" id="_M/RSA_PKCS1_PSS_PADDING" data-ref="_M/RSA_PKCS1_PSS_PADDING">RSA_PKCS1_PSS_PADDING</dfn> 6</u></td></tr>
+<tr><th id="222">222</th><td></td></tr>
+<tr><th id="223">223</th><td><i>// RSA_encrypt encrypts |in_len| bytes from |in| to the public key from |rsa|</i></td></tr>
+<tr><th id="224">224</th><td><i>// and writes, at most, |max_out| bytes of encrypted data to |out|. The</i></td></tr>
+<tr><th id="225">225</th><td><i>// |max_out| argument must be, at least, |RSA_size| in order to ensure success.</i></td></tr>
+<tr><th id="226">226</th><td><i>//</i></td></tr>
+<tr><th id="227">227</th><td><i>// It returns 1 on success or zero on error.</i></td></tr>
+<tr><th id="228">228</th><td><i>//</i></td></tr>
+<tr><th id="229">229</th><td><i>// The |padding| argument must be one of the |RSA_*_PADDING| values. If in</i></td></tr>
+<tr><th id="230">230</th><td><i>// doubt, use |RSA_PKCS1_OAEP_PADDING| for new protocols but</i></td></tr>
+<tr><th id="231">231</th><td><i>// |RSA_PKCS1_PADDING| is most common.</i></td></tr>
+<tr><th id="232">232</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_encrypt" title='RSA_encrypt' data-ref="RSA_encrypt" data-ref-filename="RSA_encrypt">RSA_encrypt</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col2 decl" id="42rsa" title='rsa' data-type='RSA *' data-ref="42rsa" data-ref-filename="42rsa">rsa</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col3 decl" id="43out_len" title='out_len' data-type='size_t *' data-ref="43out_len" data-ref-filename="43out_len">out_len</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col4 decl" id="44out" title='out' data-type='uint8_t *' data-ref="44out" data-ref-filename="44out">out</dfn>,</td></tr>
+<tr><th id="233">233</th><td>                               <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="45max_out" title='max_out' data-type='size_t' data-ref="45max_out" data-ref-filename="45max_out">max_out</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col6 decl" id="46in" title='in' data-type='const uint8_t *' data-ref="46in" data-ref-filename="46in">in</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="47in_len" title='in_len' data-type='size_t' data-ref="47in_len" data-ref-filename="47in_len">in_len</dfn>,</td></tr>
+<tr><th id="234">234</th><td>                               <em>int</em> <dfn class="local col8 decl" id="48padding" title='padding' data-type='int' data-ref="48padding" data-ref-filename="48padding">padding</dfn>);</td></tr>
+<tr><th id="235">235</th><td></td></tr>
+<tr><th id="236">236</th><td><i>// RSA_decrypt decrypts |in_len| bytes from |in| with the private key from</i></td></tr>
+<tr><th id="237">237</th><td><i>// |rsa| and writes, at most, |max_out| bytes of plaintext to |out|. The</i></td></tr>
+<tr><th id="238">238</th><td><i>// |max_out| argument must be, at least, |RSA_size| in order to ensure success.</i></td></tr>
+<tr><th id="239">239</th><td><i>//</i></td></tr>
+<tr><th id="240">240</th><td><i>// It returns 1 on success or zero on error.</i></td></tr>
+<tr><th id="241">241</th><td><i>//</i></td></tr>
+<tr><th id="242">242</th><td><i>// The |padding| argument must be one of the |RSA_*_PADDING| values. If in</i></td></tr>
+<tr><th id="243">243</th><td><i>// doubt, use |RSA_PKCS1_OAEP_PADDING| for new protocols.</i></td></tr>
+<tr><th id="244">244</th><td><i>//</i></td></tr>
+<tr><th id="245">245</th><td><i>// Passing |RSA_PKCS1_PADDING| into this function is deprecated and insecure. If</i></td></tr>
+<tr><th id="246">246</th><td><i>// implementing a protocol using RSAES-PKCS1-V1_5, use |RSA_NO_PADDING| and then</i></td></tr>
+<tr><th id="247">247</th><td><i>// check padding in constant-time combined with a swap to a random session key</i></td></tr>
+<tr><th id="248">248</th><td><i>// or other mitigation. See "Chosen Ciphertext Attacks Against Protocols Based</i></td></tr>
+<tr><th id="249">249</th><td><i>// on the RSA Encryption Standard PKCS #1", Daniel Bleichenbacher, Advances in</i></td></tr>
+<tr><th id="250">250</th><td><i>// Cryptology (Crypto '98).</i></td></tr>
+<tr><th id="251">251</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_decrypt" title='RSA_decrypt' data-ref="RSA_decrypt" data-ref-filename="RSA_decrypt">RSA_decrypt</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col9 decl" id="49rsa" title='rsa' data-type='RSA *' data-ref="49rsa" data-ref-filename="49rsa">rsa</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col0 decl" id="50out_len" title='out_len' data-type='size_t *' data-ref="50out_len" data-ref-filename="50out_len">out_len</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col1 decl" id="51out" title='out' data-type='uint8_t *' data-ref="51out" data-ref-filename="51out">out</dfn>,</td></tr>
+<tr><th id="252">252</th><td>                               <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="52max_out" title='max_out' data-type='size_t' data-ref="52max_out" data-ref-filename="52max_out">max_out</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col3 decl" id="53in" title='in' data-type='const uint8_t *' data-ref="53in" data-ref-filename="53in">in</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="54in_len" title='in_len' data-type='size_t' data-ref="54in_len" data-ref-filename="54in_len">in_len</dfn>,</td></tr>
+<tr><th id="253">253</th><td>                               <em>int</em> <dfn class="local col5 decl" id="55padding" title='padding' data-type='int' data-ref="55padding" data-ref-filename="55padding">padding</dfn>);</td></tr>
+<tr><th id="254">254</th><td></td></tr>
+<tr><th id="255">255</th><td><i>// RSA_public_encrypt encrypts |flen| bytes from |from| to the public key in</i></td></tr>
+<tr><th id="256">256</th><td><i>// |rsa| and writes the encrypted data to |to|. The |to| buffer must have at</i></td></tr>
+<tr><th id="257">257</th><td><i>// least |RSA_size| bytes of space. It returns the number of bytes written, or</i></td></tr>
+<tr><th id="258">258</th><td><i>// -1 on error. The |padding| argument must be one of the |RSA_*_PADDING|</i></td></tr>
+<tr><th id="259">259</th><td><i>// values. If in doubt, use |RSA_PKCS1_OAEP_PADDING| for new protocols but</i></td></tr>
+<tr><th id="260">260</th><td><i>// |RSA_PKCS1_PADDING| is most common.</i></td></tr>
+<tr><th id="261">261</th><td><i>//</i></td></tr>
+<tr><th id="262">262</th><td><i>// WARNING: this function is dangerous because it breaks the usual return value</i></td></tr>
+<tr><th id="263">263</th><td><i>// convention. Use |RSA_encrypt| instead.</i></td></tr>
+<tr><th id="264">264</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_public_encrypt" title='RSA_public_encrypt' data-ref="RSA_public_encrypt" data-ref-filename="RSA_public_encrypt">RSA_public_encrypt</dfn>(<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="56flen" title='flen' data-type='size_t' data-ref="56flen" data-ref-filename="56flen">flen</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col7 decl" id="57from" title='from' data-type='const uint8_t *' data-ref="57from" data-ref-filename="57from">from</dfn>,</td></tr>
+<tr><th id="265">265</th><td>                                      <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col8 decl" id="58to" title='to' data-type='uint8_t *' data-ref="58to" data-ref-filename="58to">to</dfn>, <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col9 decl" id="59rsa" title='rsa' data-type='RSA *' data-ref="59rsa" data-ref-filename="59rsa">rsa</dfn>, <em>int</em> <dfn class="local col0 decl" id="60padding" title='padding' data-type='int' data-ref="60padding" data-ref-filename="60padding">padding</dfn>);</td></tr>
+<tr><th id="266">266</th><td></td></tr>
+<tr><th id="267">267</th><td><i>// RSA_private_decrypt decrypts |flen| bytes from |from| with the public key in</i></td></tr>
+<tr><th id="268">268</th><td><i>// |rsa| and writes the plaintext to |to|. The |to| buffer must have at least</i></td></tr>
+<tr><th id="269">269</th><td><i>// |RSA_size| bytes of space. It returns the number of bytes written, or -1 on</i></td></tr>
+<tr><th id="270">270</th><td><i>// error. The |padding| argument must be one of the |RSA_*_PADDING| values. If</i></td></tr>
+<tr><th id="271">271</th><td><i>// in doubt, use |RSA_PKCS1_OAEP_PADDING| for new protocols. Passing</i></td></tr>
+<tr><th id="272">272</th><td><i>// |RSA_PKCS1_PADDING| into this function is deprecated and insecure. See</i></td></tr>
+<tr><th id="273">273</th><td><i>// |RSA_decrypt|.</i></td></tr>
+<tr><th id="274">274</th><td><i>//</i></td></tr>
+<tr><th id="275">275</th><td><i>// WARNING: this function is dangerous because it breaks the usual return value</i></td></tr>
+<tr><th id="276">276</th><td><i>// convention. Use |RSA_decrypt| instead.</i></td></tr>
+<tr><th id="277">277</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_private_decrypt" title='RSA_private_decrypt' data-ref="RSA_private_decrypt" data-ref-filename="RSA_private_decrypt">RSA_private_decrypt</dfn>(<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="61flen" title='flen' data-type='size_t' data-ref="61flen" data-ref-filename="61flen">flen</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col2 decl" id="62from" title='from' data-type='const uint8_t *' data-ref="62from" data-ref-filename="62from">from</dfn>,</td></tr>
+<tr><th id="278">278</th><td>                                       <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col3 decl" id="63to" title='to' data-type='uint8_t *' data-ref="63to" data-ref-filename="63to">to</dfn>, <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col4 decl" id="64rsa" title='rsa' data-type='RSA *' data-ref="64rsa" data-ref-filename="64rsa">rsa</dfn>, <em>int</em> <dfn class="local col5 decl" id="65padding" title='padding' data-type='int' data-ref="65padding" data-ref-filename="65padding">padding</dfn>);</td></tr>
+<tr><th id="279">279</th><td></td></tr>
+<tr><th id="280">280</th><td></td></tr>
+<tr><th id="281">281</th><td><i>// Signing / Verification</i></td></tr>
+<tr><th id="282">282</th><td><i>//</i></td></tr>
+<tr><th id="283">283</th><td><i>// These functions are considered non-mutating for thread-safety purposes and</i></td></tr>
+<tr><th id="284">284</th><td><i>// may be used concurrently.</i></td></tr>
+<tr><th id="285">285</th><td><i></i></td></tr>
+<tr><th id="286">286</th><td><i>// RSA_sign signs |digest_len| bytes of digest from |digest| with |rsa| using</i></td></tr>
+<tr><th id="287">287</th><td><i>// RSASSA-PKCS1-v1_5. It writes, at most, |RSA_size(rsa)| bytes to |out|. On</i></td></tr>
+<tr><th id="288">288</th><td><i>// successful return, the actual number of bytes written is written to</i></td></tr>
+<tr><th id="289">289</th><td><i>// |*out_len|.</i></td></tr>
+<tr><th id="290">290</th><td><i>//</i></td></tr>
+<tr><th id="291">291</th><td><i>// The |hash_nid| argument identifies the hash function used to calculate</i></td></tr>
+<tr><th id="292">292</th><td><i>// |digest| and is embedded in the resulting signature. For example, it might be</i></td></tr>
+<tr><th id="293">293</th><td><i>// |NID_sha256|.</i></td></tr>
+<tr><th id="294">294</th><td><i>//</i></td></tr>
+<tr><th id="295">295</th><td><i>// It returns 1 on success and zero on error.</i></td></tr>
+<tr><th id="296">296</th><td><i>//</i></td></tr>
+<tr><th id="297">297</th><td><i>// WARNING: |digest| must be the result of hashing the data to be signed with</i></td></tr>
+<tr><th id="298">298</th><td><i>// |hash_nid|. Passing unhashed inputs will not result in a secure signature</i></td></tr>
+<tr><th id="299">299</th><td><i>// scheme.</i></td></tr>
+<tr><th id="300">300</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_sign" title='RSA_sign' data-ref="RSA_sign" data-ref-filename="RSA_sign">RSA_sign</dfn>(<em>int</em> <dfn class="local col6 decl" id="66hash_nid" title='hash_nid' data-type='int' data-ref="66hash_nid" data-ref-filename="66hash_nid">hash_nid</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col7 decl" id="67digest" title='digest' data-type='const uint8_t *' data-ref="67digest" data-ref-filename="67digest">digest</dfn>,</td></tr>
+<tr><th id="301">301</th><td>                            <em>unsigned</em> <dfn class="local col8 decl" id="68digest_len" title='digest_len' data-type='unsigned int' data-ref="68digest_len" data-ref-filename="68digest_len">digest_len</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col9 decl" id="69out" title='out' data-type='uint8_t *' data-ref="69out" data-ref-filename="69out">out</dfn>,</td></tr>
+<tr><th id="302">302</th><td>                            <em>unsigned</em> *<dfn class="local col0 decl" id="70out_len" title='out_len' data-type='unsigned int *' data-ref="70out_len" data-ref-filename="70out_len">out_len</dfn>, <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col1 decl" id="71rsa" title='rsa' data-type='RSA *' data-ref="71rsa" data-ref-filename="71rsa">rsa</dfn>);</td></tr>
+<tr><th id="303">303</th><td></td></tr>
+<tr><th id="304">304</th><td><i>// RSA_sign_pss_mgf1 signs |digest_len| bytes from |digest| with the public key</i></td></tr>
+<tr><th id="305">305</th><td><i>// from |rsa| using RSASSA-PSS with MGF1 as the mask generation function. It</i></td></tr>
+<tr><th id="306">306</th><td><i>// writes, at most, |max_out| bytes of signature data to |out|. The |max_out|</i></td></tr>
+<tr><th id="307">307</th><td><i>// argument must be, at least, |RSA_size| in order to ensure success. It returns</i></td></tr>
+<tr><th id="308">308</th><td><i>// 1 on success or zero on error.</i></td></tr>
+<tr><th id="309">309</th><td><i>//</i></td></tr>
+<tr><th id="310">310</th><td><i>// The |md| and |mgf1_md| arguments identify the hash used to calculate |digest|</i></td></tr>
+<tr><th id="311">311</th><td><i>// and the MGF1 hash, respectively. If |mgf1_md| is NULL, |md| is</i></td></tr>
+<tr><th id="312">312</th><td><i>// used.</i></td></tr>
+<tr><th id="313">313</th><td><i>//</i></td></tr>
+<tr><th id="314">314</th><td><i>// |salt_len| specifies the expected salt length in bytes. If |salt_len| is -1,</i></td></tr>
+<tr><th id="315">315</th><td><i>// then the salt length is the same as the hash length. If -2, then the salt</i></td></tr>
+<tr><th id="316">316</th><td><i>// length is maximal given the size of |rsa|. If unsure, use -1.</i></td></tr>
+<tr><th id="317">317</th><td><i>//</i></td></tr>
+<tr><th id="318">318</th><td><i>// WARNING: |digest| must be the result of hashing the data to be signed with</i></td></tr>
+<tr><th id="319">319</th><td><i>// |md|. Passing unhashed inputs will not result in a secure signature scheme.</i></td></tr>
+<tr><th id="320">320</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_sign_pss_mgf1" title='RSA_sign_pss_mgf1' data-ref="RSA_sign_pss_mgf1" data-ref-filename="RSA_sign_pss_mgf1">RSA_sign_pss_mgf1</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col2 decl" id="72rsa" title='rsa' data-type='RSA *' data-ref="72rsa" data-ref-filename="72rsa">rsa</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col3 decl" id="73out_len" title='out_len' data-type='size_t *' data-ref="73out_len" data-ref-filename="73out_len">out_len</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col4 decl" id="74out" title='out' data-type='uint8_t *' data-ref="74out" data-ref-filename="74out">out</dfn>,</td></tr>
+<tr><th id="321">321</th><td>                                     <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="75max_out" title='max_out' data-type='size_t' data-ref="75max_out" data-ref-filename="75max_out">max_out</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col6 decl" id="76digest" title='digest' data-type='const uint8_t *' data-ref="76digest" data-ref-filename="76digest">digest</dfn>,</td></tr>
+<tr><th id="322">322</th><td>                                     <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="77digest_len" title='digest_len' data-type='size_t' data-ref="77digest_len" data-ref-filename="77digest_len">digest_len</dfn>, <em>const</em> <a class="typedef" href="base.h.html#EVP_MD" title='EVP_MD' data-type='struct env_md_st' data-ref="EVP_MD" data-ref-filename="EVP_MD">EVP_MD</a> *<dfn class="local col8 decl" id="78md" title='md' data-type='const EVP_MD *' data-ref="78md" data-ref-filename="78md">md</dfn>,</td></tr>
+<tr><th id="323">323</th><td>                                     <em>const</em> <a class="typedef" href="base.h.html#EVP_MD" title='EVP_MD' data-type='struct env_md_st' data-ref="EVP_MD" data-ref-filename="EVP_MD">EVP_MD</a> *<dfn class="local col9 decl" id="79mgf1_md" title='mgf1_md' data-type='const EVP_MD *' data-ref="79mgf1_md" data-ref-filename="79mgf1_md">mgf1_md</dfn>, <em>int</em> <dfn class="local col0 decl" id="80salt_len" title='salt_len' data-type='int' data-ref="80salt_len" data-ref-filename="80salt_len">salt_len</dfn>);</td></tr>
+<tr><th id="324">324</th><td></td></tr>
+<tr><th id="325">325</th><td><i>// RSA_sign_raw performs the private key portion of computing a signature with</i></td></tr>
+<tr><th id="326">326</th><td><i>// |rsa|. It writes, at most, |max_out| bytes of signature data to |out|. The</i></td></tr>
+<tr><th id="327">327</th><td><i>// |max_out| argument must be, at least, |RSA_size| in order to ensure the</i></td></tr>
+<tr><th id="328">328</th><td><i>// output fits. It returns 1 on success or zero on error.</i></td></tr>
+<tr><th id="329">329</th><td><i>//</i></td></tr>
+<tr><th id="330">330</th><td><i>// If |padding| is |RSA_PKCS1_PADDING|, this function wraps |in| with the</i></td></tr>
+<tr><th id="331">331</th><td><i>// padding portion of RSASSA-PKCS1-v1_5 and then performs the raw private key</i></td></tr>
+<tr><th id="332">332</th><td><i>// operation. The caller is responsible for hashing the input and wrapping it in</i></td></tr>
+<tr><th id="333">333</th><td><i>// a DigestInfo structure.</i></td></tr>
+<tr><th id="334">334</th><td><i>//</i></td></tr>
+<tr><th id="335">335</th><td><i>// If |padding| is |RSA_NO_PADDING|, this function only performs the raw private</i></td></tr>
+<tr><th id="336">336</th><td><i>// key operation, interpreting |in| as a integer modulo n. The caller is</i></td></tr>
+<tr><th id="337">337</th><td><i>// responsible for hashing the input and encoding it for the signature scheme</i></td></tr>
+<tr><th id="338">338</th><td><i>// being implemented.</i></td></tr>
+<tr><th id="339">339</th><td><i>//</i></td></tr>
+<tr><th id="340">340</th><td><i>// WARNING: This function is a building block for a signature scheme, not a</i></td></tr>
+<tr><th id="341">341</th><td><i>// complete one. |in| must be the result of hashing and encoding the data as</i></td></tr>
+<tr><th id="342">342</th><td><i>// needed for the scheme being implemented. Passing in arbitrary inputs will not</i></td></tr>
+<tr><th id="343">343</th><td><i>// result in a secure signature scheme.</i></td></tr>
+<tr><th id="344">344</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_sign_raw" title='RSA_sign_raw' data-ref="RSA_sign_raw" data-ref-filename="RSA_sign_raw">RSA_sign_raw</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col1 decl" id="81rsa" title='rsa' data-type='RSA *' data-ref="81rsa" data-ref-filename="81rsa">rsa</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col2 decl" id="82out_len" title='out_len' data-type='size_t *' data-ref="82out_len" data-ref-filename="82out_len">out_len</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col3 decl" id="83out" title='out' data-type='uint8_t *' data-ref="83out" data-ref-filename="83out">out</dfn>,</td></tr>
+<tr><th id="345">345</th><td>                                <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="84max_out" title='max_out' data-type='size_t' data-ref="84max_out" data-ref-filename="84max_out">max_out</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col5 decl" id="85in" title='in' data-type='const uint8_t *' data-ref="85in" data-ref-filename="85in">in</dfn>,</td></tr>
+<tr><th id="346">346</th><td>                                <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="86in_len" title='in_len' data-type='size_t' data-ref="86in_len" data-ref-filename="86in_len">in_len</dfn>, <em>int</em> <dfn class="local col7 decl" id="87padding" title='padding' data-type='int' data-ref="87padding" data-ref-filename="87padding">padding</dfn>);</td></tr>
+<tr><th id="347">347</th><td></td></tr>
+<tr><th id="348">348</th><td><i>// RSA_verify verifies that |sig_len| bytes from |sig| are a valid,</i></td></tr>
+<tr><th id="349">349</th><td><i>// RSASSA-PKCS1-v1_5 signature of |digest_len| bytes at |digest| by |rsa|.</i></td></tr>
+<tr><th id="350">350</th><td><i>//</i></td></tr>
+<tr><th id="351">351</th><td><i>// The |hash_nid| argument identifies the hash function used to calculate</i></td></tr>
+<tr><th id="352">352</th><td><i>// |digest| and is embedded in the resulting signature in order to prevent hash</i></td></tr>
+<tr><th id="353">353</th><td><i>// confusion attacks. For example, it might be |NID_sha256|.</i></td></tr>
+<tr><th id="354">354</th><td><i>//</i></td></tr>
+<tr><th id="355">355</th><td><i>// It returns one if the signature is valid and zero otherwise.</i></td></tr>
+<tr><th id="356">356</th><td><i>//</i></td></tr>
+<tr><th id="357">357</th><td><i>// WARNING: this differs from the original, OpenSSL function which additionally</i></td></tr>
+<tr><th id="358">358</th><td><i>// returned -1 on error.</i></td></tr>
+<tr><th id="359">359</th><td><i>//</i></td></tr>
+<tr><th id="360">360</th><td><i>// WARNING: |digest| must be the result of hashing the data to be verified with</i></td></tr>
+<tr><th id="361">361</th><td><i>// |hash_nid|. Passing unhashed input will not result in a secure signature</i></td></tr>
+<tr><th id="362">362</th><td><i>// scheme.</i></td></tr>
+<tr><th id="363">363</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_verify" title='RSA_verify' data-ref="RSA_verify" data-ref-filename="RSA_verify">RSA_verify</dfn>(<em>int</em> <dfn class="local col8 decl" id="88hash_nid" title='hash_nid' data-type='int' data-ref="88hash_nid" data-ref-filename="88hash_nid">hash_nid</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col9 decl" id="89digest" title='digest' data-type='const uint8_t *' data-ref="89digest" data-ref-filename="89digest">digest</dfn>,</td></tr>
+<tr><th id="364">364</th><td>                              <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="90digest_len" title='digest_len' data-type='size_t' data-ref="90digest_len" data-ref-filename="90digest_len">digest_len</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col1 decl" id="91sig" title='sig' data-type='const uint8_t *' data-ref="91sig" data-ref-filename="91sig">sig</dfn>,</td></tr>
+<tr><th id="365">365</th><td>                              <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="92sig_len" title='sig_len' data-type='size_t' data-ref="92sig_len" data-ref-filename="92sig_len">sig_len</dfn>, <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col3 decl" id="93rsa" title='rsa' data-type='RSA *' data-ref="93rsa" data-ref-filename="93rsa">rsa</dfn>);</td></tr>
+<tr><th id="366">366</th><td></td></tr>
+<tr><th id="367">367</th><td><i>// RSA_verify_pss_mgf1 verifies that |sig_len| bytes from |sig| are a valid,</i></td></tr>
+<tr><th id="368">368</th><td><i>// RSASSA-PSS signature of |digest_len| bytes at |digest| by |rsa|. It returns</i></td></tr>
+<tr><th id="369">369</th><td><i>// one if the signature is valid and zero otherwise. MGF1 is used as the mask</i></td></tr>
+<tr><th id="370">370</th><td><i>// generation function.</i></td></tr>
+<tr><th id="371">371</th><td><i>//</i></td></tr>
+<tr><th id="372">372</th><td><i>// The |md| and |mgf1_md| arguments identify the hash used to calculate |digest|</i></td></tr>
+<tr><th id="373">373</th><td><i>// and the MGF1 hash, respectively. If |mgf1_md| is NULL, |md| is</i></td></tr>
+<tr><th id="374">374</th><td><i>// used. |salt_len| specifies the expected salt length in bytes.</i></td></tr>
+<tr><th id="375">375</th><td><i>//</i></td></tr>
+<tr><th id="376">376</th><td><i>// If |salt_len| is -1, then the salt length is the same as the hash length. If</i></td></tr>
+<tr><th id="377">377</th><td><i>// -2, then the salt length is recovered and all values accepted. If unsure, use</i></td></tr>
+<tr><th id="378">378</th><td><i>// -1.</i></td></tr>
+<tr><th id="379">379</th><td><i>//</i></td></tr>
+<tr><th id="380">380</th><td><i>// WARNING: |digest| must be the result of hashing the data to be verified with</i></td></tr>
+<tr><th id="381">381</th><td><i>// |md|. Passing unhashed input will not result in a secure signature scheme.</i></td></tr>
+<tr><th id="382">382</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_verify_pss_mgf1" title='RSA_verify_pss_mgf1' data-ref="RSA_verify_pss_mgf1" data-ref-filename="RSA_verify_pss_mgf1">RSA_verify_pss_mgf1</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col4 decl" id="94rsa" title='rsa' data-type='RSA *' data-ref="94rsa" data-ref-filename="94rsa">rsa</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col5 decl" id="95digest" title='digest' data-type='const uint8_t *' data-ref="95digest" data-ref-filename="95digest">digest</dfn>,</td></tr>
+<tr><th id="383">383</th><td>                                       <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="96digest_len" title='digest_len' data-type='size_t' data-ref="96digest_len" data-ref-filename="96digest_len">digest_len</dfn>, <em>const</em> <a class="typedef" href="base.h.html#EVP_MD" title='EVP_MD' data-type='struct env_md_st' data-ref="EVP_MD" data-ref-filename="EVP_MD">EVP_MD</a> *<dfn class="local col7 decl" id="97md" title='md' data-type='const EVP_MD *' data-ref="97md" data-ref-filename="97md">md</dfn>,</td></tr>
+<tr><th id="384">384</th><td>                                       <em>const</em> <a class="typedef" href="base.h.html#EVP_MD" title='EVP_MD' data-type='struct env_md_st' data-ref="EVP_MD" data-ref-filename="EVP_MD">EVP_MD</a> *<dfn class="local col8 decl" id="98mgf1_md" title='mgf1_md' data-type='const EVP_MD *' data-ref="98mgf1_md" data-ref-filename="98mgf1_md">mgf1_md</dfn>, <em>int</em> <dfn class="local col9 decl" id="99salt_len" title='salt_len' data-type='int' data-ref="99salt_len" data-ref-filename="99salt_len">salt_len</dfn>,</td></tr>
+<tr><th id="385">385</th><td>                                       <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col0 decl" id="100sig" title='sig' data-type='const uint8_t *' data-ref="100sig" data-ref-filename="100sig">sig</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="101sig_len" title='sig_len' data-type='size_t' data-ref="101sig_len" data-ref-filename="101sig_len">sig_len</dfn>);</td></tr>
+<tr><th id="386">386</th><td></td></tr>
+<tr><th id="387">387</th><td><i>// RSA_verify_raw performs the public key portion of verifying |in_len| bytes of</i></td></tr>
+<tr><th id="388">388</th><td><i>// signature from |in| using the public key from |rsa|. On success, it returns</i></td></tr>
+<tr><th id="389">389</th><td><i>// one and writes, at most, |max_out| bytes of output to |out|. The |max_out|</i></td></tr>
+<tr><th id="390">390</th><td><i>// argument must be, at least, |RSA_size| in order to ensure the output fits. On</i></td></tr>
+<tr><th id="391">391</th><td><i>// failure or invalid input, it returns zero.</i></td></tr>
+<tr><th id="392">392</th><td><i>//</i></td></tr>
+<tr><th id="393">393</th><td><i>// If |padding| is |RSA_PKCS1_PADDING|, this function checks the padding portion</i></td></tr>
+<tr><th id="394">394</th><td><i>// of RSASSA-PKCS1-v1_5 and outputs the remainder of the encoded digest. The</i></td></tr>
+<tr><th id="395">395</th><td><i>// caller is responsible for checking the output is a DigestInfo-wrapped digest</i></td></tr>
+<tr><th id="396">396</th><td><i>// of the message.</i></td></tr>
+<tr><th id="397">397</th><td><i>//</i></td></tr>
+<tr><th id="398">398</th><td><i>// If |padding| is |RSA_NO_PADDING|, this function only performs the raw public</i></td></tr>
+<tr><th id="399">399</th><td><i>// key operation. The caller is responsible for checking the output is a valid</i></td></tr>
+<tr><th id="400">400</th><td><i>// result for the signature scheme being implemented.</i></td></tr>
+<tr><th id="401">401</th><td><i>//</i></td></tr>
+<tr><th id="402">402</th><td><i>// WARNING: This function is a building block for a signature scheme, not a</i></td></tr>
+<tr><th id="403">403</th><td><i>// complete one. Checking for arbitary strings in |out| will not result in a</i></td></tr>
+<tr><th id="404">404</th><td><i>// secure signature scheme.</i></td></tr>
+<tr><th id="405">405</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_verify_raw" title='RSA_verify_raw' data-ref="RSA_verify_raw" data-ref-filename="RSA_verify_raw">RSA_verify_raw</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col2 decl" id="102rsa" title='rsa' data-type='RSA *' data-ref="102rsa" data-ref-filename="102rsa">rsa</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col3 decl" id="103out_len" title='out_len' data-type='size_t *' data-ref="103out_len" data-ref-filename="103out_len">out_len</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col4 decl" id="104out" title='out' data-type='uint8_t *' data-ref="104out" data-ref-filename="104out">out</dfn>,</td></tr>
+<tr><th id="406">406</th><td>                                  <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="105max_out" title='max_out' data-type='size_t' data-ref="105max_out" data-ref-filename="105max_out">max_out</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col6 decl" id="106in" title='in' data-type='const uint8_t *' data-ref="106in" data-ref-filename="106in">in</dfn>,</td></tr>
+<tr><th id="407">407</th><td>                                  <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="107in_len" title='in_len' data-type='size_t' data-ref="107in_len" data-ref-filename="107in_len">in_len</dfn>, <em>int</em> <dfn class="local col8 decl" id="108padding" title='padding' data-type='int' data-ref="108padding" data-ref-filename="108padding">padding</dfn>);</td></tr>
+<tr><th id="408">408</th><td></td></tr>
+<tr><th id="409">409</th><td><i>// RSA_private_encrypt performs the private key portion of computing a signature</i></td></tr>
+<tr><th id="410">410</th><td><i>// with |rsa|. It takes |flen| bytes from |from| as input and writes the result</i></td></tr>
+<tr><th id="411">411</th><td><i>// to |to|. The |to| buffer must have at least |RSA_size| bytes of space. It</i></td></tr>
+<tr><th id="412">412</th><td><i>// returns the number of bytes written, or -1 on error.</i></td></tr>
+<tr><th id="413">413</th><td><i>//</i></td></tr>
+<tr><th id="414">414</th><td><i>// For the interpretation of |padding| and the input, see |RSA_sign_raw|.</i></td></tr>
+<tr><th id="415">415</th><td><i>//</i></td></tr>
+<tr><th id="416">416</th><td><i>// WARNING: This function is a building block for a signature scheme, not a</i></td></tr>
+<tr><th id="417">417</th><td><i>// complete one. See |RSA_sign_raw| for details.</i></td></tr>
+<tr><th id="418">418</th><td><i>//</i></td></tr>
+<tr><th id="419">419</th><td><i>// WARNING: This function is dangerous because it breaks the usual return value</i></td></tr>
+<tr><th id="420">420</th><td><i>// convention. Use |RSA_sign_raw| instead.</i></td></tr>
+<tr><th id="421">421</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_private_encrypt" title='RSA_private_encrypt' data-ref="RSA_private_encrypt" data-ref-filename="RSA_private_encrypt">RSA_private_encrypt</dfn>(<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="109flen" title='flen' data-type='size_t' data-ref="109flen" data-ref-filename="109flen">flen</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col0 decl" id="110from" title='from' data-type='const uint8_t *' data-ref="110from" data-ref-filename="110from">from</dfn>,</td></tr>
+<tr><th id="422">422</th><td>                                       <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col1 decl" id="111to" title='to' data-type='uint8_t *' data-ref="111to" data-ref-filename="111to">to</dfn>, <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col2 decl" id="112rsa" title='rsa' data-type='RSA *' data-ref="112rsa" data-ref-filename="112rsa">rsa</dfn>, <em>int</em> <dfn class="local col3 decl" id="113padding" title='padding' data-type='int' data-ref="113padding" data-ref-filename="113padding">padding</dfn>);</td></tr>
+<tr><th id="423">423</th><td></td></tr>
+<tr><th id="424">424</th><td><i>// RSA_public_decrypt performs the public key portion of verifying |flen| bytes</i></td></tr>
+<tr><th id="425">425</th><td><i>// of signature from |from| using the public key from |rsa|. It writes the</i></td></tr>
+<tr><th id="426">426</th><td><i>// result to |to|, which must have at least |RSA_size| bytes of space. It</i></td></tr>
+<tr><th id="427">427</th><td><i>// returns the number of bytes written, or -1 on error.</i></td></tr>
+<tr><th id="428">428</th><td><i>//</i></td></tr>
+<tr><th id="429">429</th><td><i>// For the interpretation of |padding| and the result, see |RSA_verify_raw|.</i></td></tr>
+<tr><th id="430">430</th><td><i>//</i></td></tr>
+<tr><th id="431">431</th><td><i>// WARNING: This function is a building block for a signature scheme, not a</i></td></tr>
+<tr><th id="432">432</th><td><i>// complete one. See |RSA_verify_raw| for details.</i></td></tr>
+<tr><th id="433">433</th><td><i>//</i></td></tr>
+<tr><th id="434">434</th><td><i>// WARNING: This function is dangerous because it breaks the usual return value</i></td></tr>
+<tr><th id="435">435</th><td><i>// convention. Use |RSA_verify_raw| instead.</i></td></tr>
+<tr><th id="436">436</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_public_decrypt" title='RSA_public_decrypt' data-ref="RSA_public_decrypt" data-ref-filename="RSA_public_decrypt">RSA_public_decrypt</dfn>(<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="114flen" title='flen' data-type='size_t' data-ref="114flen" data-ref-filename="114flen">flen</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col5 decl" id="115from" title='from' data-type='const uint8_t *' data-ref="115from" data-ref-filename="115from">from</dfn>,</td></tr>
+<tr><th id="437">437</th><td>                                      <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col6 decl" id="116to" title='to' data-type='uint8_t *' data-ref="116to" data-ref-filename="116to">to</dfn>, <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col7 decl" id="117rsa" title='rsa' data-type='RSA *' data-ref="117rsa" data-ref-filename="117rsa">rsa</dfn>, <em>int</em> <dfn class="local col8 decl" id="118padding" title='padding' data-type='int' data-ref="118padding" data-ref-filename="118padding">padding</dfn>);</td></tr>
+<tr><th id="438">438</th><td></td></tr>
+<tr><th id="439">439</th><td></td></tr>
+<tr><th id="440">440</th><td><i>// Utility functions.</i></td></tr>
+<tr><th id="441">441</th><td><i></i></td></tr>
+<tr><th id="442">442</th><td><i>// RSA_size returns the number of bytes in the modulus, which is also the size</i></td></tr>
+<tr><th id="443">443</th><td><i>// of a signature or encrypted value using |rsa|.</i></td></tr>
+<tr><th id="444">444</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>unsigned</em> <dfn class="decl fn" id="RSA_size" title='RSA_size' data-ref="RSA_size" data-ref-filename="RSA_size">RSA_size</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col9 decl" id="119rsa" title='rsa' data-type='const RSA *' data-ref="119rsa" data-ref-filename="119rsa">rsa</dfn>);</td></tr>
+<tr><th id="445">445</th><td></td></tr>
+<tr><th id="446">446</th><td><i>// RSA_is_opaque returns one if |rsa| is opaque and doesn't expose its key</i></td></tr>
+<tr><th id="447">447</th><td><i>// material. Otherwise it returns zero.</i></td></tr>
+<tr><th id="448">448</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_is_opaque" title='RSA_is_opaque' data-ref="RSA_is_opaque" data-ref-filename="RSA_is_opaque">RSA_is_opaque</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col0 decl" id="120rsa" title='rsa' data-type='const RSA *' data-ref="120rsa" data-ref-filename="120rsa">rsa</dfn>);</td></tr>
+<tr><th id="449">449</th><td></td></tr>
+<tr><th id="450">450</th><td><i>// RSAPublicKey_dup allocates a fresh |RSA| and copies the public key from</i></td></tr>
+<tr><th id="451">451</th><td><i>// |rsa| into it. It returns the fresh |RSA| object, or NULL on error.</i></td></tr>
+<tr><th id="452">452</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="decl fn" id="RSAPublicKey_dup" title='RSAPublicKey_dup' data-ref="RSAPublicKey_dup" data-ref-filename="RSAPublicKey_dup">RSAPublicKey_dup</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col1 decl" id="121rsa" title='rsa' data-type='const RSA *' data-ref="121rsa" data-ref-filename="121rsa">rsa</dfn>);</td></tr>
+<tr><th id="453">453</th><td></td></tr>
+<tr><th id="454">454</th><td><i>// RSAPrivateKey_dup allocates a fresh |RSA| and copies the private key from</i></td></tr>
+<tr><th id="455">455</th><td><i>// |rsa| into it. It returns the fresh |RSA| object, or NULL on error.</i></td></tr>
+<tr><th id="456">456</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="decl fn" id="RSAPrivateKey_dup" title='RSAPrivateKey_dup' data-ref="RSAPrivateKey_dup" data-ref-filename="RSAPrivateKey_dup">RSAPrivateKey_dup</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col2 decl" id="122rsa" title='rsa' data-type='const RSA *' data-ref="122rsa" data-ref-filename="122rsa">rsa</dfn>);</td></tr>
+<tr><th id="457">457</th><td></td></tr>
+<tr><th id="458">458</th><td><i>// RSA_check_key performs basic validity tests on |rsa|. It returns one if</i></td></tr>
+<tr><th id="459">459</th><td><i>// they pass and zero otherwise. Opaque keys and public keys always pass. If it</i></td></tr>
+<tr><th id="460">460</th><td><i>// returns zero then a more detailed error is available on the error queue.</i></td></tr>
+<tr><th id="461">461</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_check_key" title='RSA_check_key' data-ref="RSA_check_key" data-ref-filename="RSA_check_key">RSA_check_key</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col3 decl" id="123rsa" title='rsa' data-type='const RSA *' data-ref="123rsa" data-ref-filename="123rsa">rsa</dfn>);</td></tr>
+<tr><th id="462">462</th><td></td></tr>
+<tr><th id="463">463</th><td><i>// RSA_check_fips performs public key validity tests on |key|. It returns one if</i></td></tr>
+<tr><th id="464">464</th><td><i>// they pass and zero otherwise. Opaque keys always fail. This function does not</i></td></tr>
+<tr><th id="465">465</th><td><i>// mutate |rsa| for thread-safety purposes and may be used concurrently.</i></td></tr>
+<tr><th id="466">466</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_check_fips" title='RSA_check_fips' data-ref="RSA_check_fips" data-ref-filename="RSA_check_fips">RSA_check_fips</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col4 decl" id="124key" title='key' data-type='RSA *' data-ref="124key" data-ref-filename="124key">key</dfn>);</td></tr>
+<tr><th id="467">467</th><td></td></tr>
+<tr><th id="468">468</th><td><i>// RSA_verify_PKCS1_PSS_mgf1 verifies that |EM| is a correct PSS padding of</i></td></tr>
+<tr><th id="469">469</th><td><i>// |mHash|, where |mHash| is a digest produced by |Hash|. |EM| must point to</i></td></tr>
+<tr><th id="470">470</th><td><i>// exactly |RSA_size(rsa)| bytes of data. The |mgf1Hash| argument specifies the</i></td></tr>
+<tr><th id="471">471</th><td><i>// hash function for generating the mask. If NULL, |Hash| is used. The |sLen|</i></td></tr>
+<tr><th id="472">472</th><td><i>// argument specifies the expected salt length in bytes. If |sLen| is -1 then</i></td></tr>
+<tr><th id="473">473</th><td><i>// the salt length is the same as the hash length. If -2, then the salt length</i></td></tr>
+<tr><th id="474">474</th><td><i>// is recovered and all values accepted.</i></td></tr>
+<tr><th id="475">475</th><td><i>//</i></td></tr>
+<tr><th id="476">476</th><td><i>// If unsure, use -1.</i></td></tr>
+<tr><th id="477">477</th><td><i>//</i></td></tr>
+<tr><th id="478">478</th><td><i>// It returns one on success or zero on error.</i></td></tr>
+<tr><th id="479">479</th><td><i>//</i></td></tr>
+<tr><th id="480">480</th><td><i>// This function implements only the low-level padding logic. Use</i></td></tr>
+<tr><th id="481">481</th><td><i>// |RSA_verify_pss_mgf1| instead.</i></td></tr>
+<tr><th id="482">482</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_verify_PKCS1_PSS_mgf1" title='RSA_verify_PKCS1_PSS_mgf1' data-ref="RSA_verify_PKCS1_PSS_mgf1" data-ref-filename="RSA_verify_PKCS1_PSS_mgf1">RSA_verify_PKCS1_PSS_mgf1</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col5 decl" id="125rsa" title='rsa' data-type='const RSA *' data-ref="125rsa" data-ref-filename="125rsa">rsa</dfn>,</td></tr>
+<tr><th id="483">483</th><td>                                             <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col6 decl" id="126mHash" title='mHash' data-type='const uint8_t *' data-ref="126mHash" data-ref-filename="126mHash">mHash</dfn>,</td></tr>
+<tr><th id="484">484</th><td>                                             <em>const</em> <a class="typedef" href="base.h.html#EVP_MD" title='EVP_MD' data-type='struct env_md_st' data-ref="EVP_MD" data-ref-filename="EVP_MD">EVP_MD</a> *<dfn class="local col7 decl" id="127Hash" title='Hash' data-type='const EVP_MD *' data-ref="127Hash" data-ref-filename="127Hash">Hash</dfn>,</td></tr>
+<tr><th id="485">485</th><td>                                             <em>const</em> <a class="typedef" href="base.h.html#EVP_MD" title='EVP_MD' data-type='struct env_md_st' data-ref="EVP_MD" data-ref-filename="EVP_MD">EVP_MD</a> *<dfn class="local col8 decl" id="128mgf1Hash" title='mgf1Hash' data-type='const EVP_MD *' data-ref="128mgf1Hash" data-ref-filename="128mgf1Hash">mgf1Hash</dfn>,</td></tr>
+<tr><th id="486">486</th><td>                                             <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col9 decl" id="129EM" title='EM' data-type='const uint8_t *' data-ref="129EM" data-ref-filename="129EM">EM</dfn>, <em>int</em> <dfn class="local col0 decl" id="130sLen" title='sLen' data-type='int' data-ref="130sLen" data-ref-filename="130sLen">sLen</dfn>);</td></tr>
+<tr><th id="487">487</th><td></td></tr>
+<tr><th id="488">488</th><td><i>// RSA_padding_add_PKCS1_PSS_mgf1 writes a PSS padding of |mHash| to |EM|,</i></td></tr>
+<tr><th id="489">489</th><td><i>// where |mHash| is a digest produced by |Hash|. |RSA_size(rsa)| bytes of</i></td></tr>
+<tr><th id="490">490</th><td><i>// output will be written to |EM|. The |mgf1Hash| argument specifies the hash</i></td></tr>
+<tr><th id="491">491</th><td><i>// function for generating the mask. If NULL, |Hash| is used. The |sLen|</i></td></tr>
+<tr><th id="492">492</th><td><i>// argument specifies the expected salt length in bytes. If |sLen| is -1 then</i></td></tr>
+<tr><th id="493">493</th><td><i>// the salt length is the same as the hash length. If -2, then the salt length</i></td></tr>
+<tr><th id="494">494</th><td><i>// is maximal given the space in |EM|.</i></td></tr>
+<tr><th id="495">495</th><td><i>//</i></td></tr>
+<tr><th id="496">496</th><td><i>// It returns one on success or zero on error.</i></td></tr>
+<tr><th id="497">497</th><td><i>//</i></td></tr>
+<tr><th id="498">498</th><td><i>// This function implements only the low-level padding logic. Use</i></td></tr>
+<tr><th id="499">499</th><td><i>// |RSA_sign_pss_mgf1| instead.</i></td></tr>
+<tr><th id="500">500</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_padding_add_PKCS1_PSS_mgf1" title='RSA_padding_add_PKCS1_PSS_mgf1' data-ref="RSA_padding_add_PKCS1_PSS_mgf1" data-ref-filename="RSA_padding_add_PKCS1_PSS_mgf1">RSA_padding_add_PKCS1_PSS_mgf1</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col1 decl" id="131rsa" title='rsa' data-type='const RSA *' data-ref="131rsa" data-ref-filename="131rsa">rsa</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col2 decl" id="132EM" title='EM' data-type='uint8_t *' data-ref="132EM" data-ref-filename="132EM">EM</dfn>,</td></tr>
+<tr><th id="501">501</th><td>                                                  <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col3 decl" id="133mHash" title='mHash' data-type='const uint8_t *' data-ref="133mHash" data-ref-filename="133mHash">mHash</dfn>,</td></tr>
+<tr><th id="502">502</th><td>                                                  <em>const</em> <a class="typedef" href="base.h.html#EVP_MD" title='EVP_MD' data-type='struct env_md_st' data-ref="EVP_MD" data-ref-filename="EVP_MD">EVP_MD</a> *<dfn class="local col4 decl" id="134Hash" title='Hash' data-type='const EVP_MD *' data-ref="134Hash" data-ref-filename="134Hash">Hash</dfn>,</td></tr>
+<tr><th id="503">503</th><td>                                                  <em>const</em> <a class="typedef" href="base.h.html#EVP_MD" title='EVP_MD' data-type='struct env_md_st' data-ref="EVP_MD" data-ref-filename="EVP_MD">EVP_MD</a> *<dfn class="local col5 decl" id="135mgf1Hash" title='mgf1Hash' data-type='const EVP_MD *' data-ref="135mgf1Hash" data-ref-filename="135mgf1Hash">mgf1Hash</dfn>,</td></tr>
+<tr><th id="504">504</th><td>                                                  <em>int</em> <dfn class="local col6 decl" id="136sLen" title='sLen' data-type='int' data-ref="136sLen" data-ref-filename="136sLen">sLen</dfn>);</td></tr>
+<tr><th id="505">505</th><td></td></tr>
+<tr><th id="506">506</th><td><i>// RSA_padding_add_PKCS1_OAEP_mgf1 writes an OAEP padding of |from| to |to|</i></td></tr>
+<tr><th id="507">507</th><td><i>// with the given parameters and hash functions. If |md| is NULL then SHA-1 is</i></td></tr>
+<tr><th id="508">508</th><td><i>// used. If |mgf1md| is NULL then the value of |md| is used (which means SHA-1</i></td></tr>
+<tr><th id="509">509</th><td><i>// if that, in turn, is NULL).</i></td></tr>
+<tr><th id="510">510</th><td><i>//</i></td></tr>
+<tr><th id="511">511</th><td><i>// It returns one on success or zero on error.</i></td></tr>
+<tr><th id="512">512</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_padding_add_PKCS1_OAEP_mgf1" title='RSA_padding_add_PKCS1_OAEP_mgf1' data-ref="RSA_padding_add_PKCS1_OAEP_mgf1" data-ref-filename="RSA_padding_add_PKCS1_OAEP_mgf1">RSA_padding_add_PKCS1_OAEP_mgf1</dfn>(</td></tr>
+<tr><th id="513">513</th><td>    <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col7 decl" id="137to" title='to' data-type='uint8_t *' data-ref="137to" data-ref-filename="137to">to</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="138to_len" title='to_len' data-type='size_t' data-ref="138to_len" data-ref-filename="138to_len">to_len</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col9 decl" id="139from" title='from' data-type='const uint8_t *' data-ref="139from" data-ref-filename="139from">from</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="140from_len" title='from_len' data-type='size_t' data-ref="140from_len" data-ref-filename="140from_len">from_len</dfn>,</td></tr>
+<tr><th id="514">514</th><td>    <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col1 decl" id="141param" title='param' data-type='const uint8_t *' data-ref="141param" data-ref-filename="141param">param</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="142param_len" title='param_len' data-type='size_t' data-ref="142param_len" data-ref-filename="142param_len">param_len</dfn>, <em>const</em> <a class="typedef" href="base.h.html#EVP_MD" title='EVP_MD' data-type='struct env_md_st' data-ref="EVP_MD" data-ref-filename="EVP_MD">EVP_MD</a> *<dfn class="local col3 decl" id="143md" title='md' data-type='const EVP_MD *' data-ref="143md" data-ref-filename="143md">md</dfn>,</td></tr>
+<tr><th id="515">515</th><td>    <em>const</em> <a class="typedef" href="base.h.html#EVP_MD" title='EVP_MD' data-type='struct env_md_st' data-ref="EVP_MD" data-ref-filename="EVP_MD">EVP_MD</a> *<dfn class="local col4 decl" id="144mgf1md" title='mgf1md' data-type='const EVP_MD *' data-ref="144mgf1md" data-ref-filename="144mgf1md">mgf1md</dfn>);</td></tr>
+<tr><th id="516">516</th><td></td></tr>
+<tr><th id="517">517</th><td><i>// RSA_add_pkcs1_prefix builds a version of |digest| prefixed with the</i></td></tr>
+<tr><th id="518">518</th><td><i>// DigestInfo header for the given hash function and sets |out_msg| to point to</i></td></tr>
+<tr><th id="519">519</th><td><i>// it. On successful return, if |*is_alloced| is one, the caller must release</i></td></tr>
+<tr><th id="520">520</th><td><i>// |*out_msg| with |OPENSSL_free|.</i></td></tr>
+<tr><th id="521">521</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_add_pkcs1_prefix" title='RSA_add_pkcs1_prefix' data-ref="RSA_add_pkcs1_prefix" data-ref-filename="RSA_add_pkcs1_prefix">RSA_add_pkcs1_prefix</dfn>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> **<dfn class="local col5 decl" id="145out_msg" title='out_msg' data-type='uint8_t **' data-ref="145out_msg" data-ref-filename="145out_msg">out_msg</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col6 decl" id="146out_msg_len" title='out_msg_len' data-type='size_t *' data-ref="146out_msg_len" data-ref-filename="146out_msg_len">out_msg_len</dfn>,</td></tr>
+<tr><th id="522">522</th><td>                                        <em>int</em> *<dfn class="local col7 decl" id="147is_alloced" title='is_alloced' data-type='int *' data-ref="147is_alloced" data-ref-filename="147is_alloced">is_alloced</dfn>, <em>int</em> <dfn class="local col8 decl" id="148hash_nid" title='hash_nid' data-type='int' data-ref="148hash_nid" data-ref-filename="148hash_nid">hash_nid</dfn>,</td></tr>
+<tr><th id="523">523</th><td>                                        <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col9 decl" id="149digest" title='digest' data-type='const uint8_t *' data-ref="149digest" data-ref-filename="149digest">digest</dfn>,</td></tr>
+<tr><th id="524">524</th><td>                                        <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="150digest_len" title='digest_len' data-type='size_t' data-ref="150digest_len" data-ref-filename="150digest_len">digest_len</dfn>);</td></tr>
+<tr><th id="525">525</th><td></td></tr>
+<tr><th id="526">526</th><td></td></tr>
+<tr><th id="527">527</th><td><i>// ASN.1 functions.</i></td></tr>
+<tr><th id="528">528</th><td><i></i></td></tr>
+<tr><th id="529">529</th><td><i>// RSA_parse_public_key parses a DER-encoded RSAPublicKey structure (RFC 3447)</i></td></tr>
+<tr><th id="530">530</th><td><i>// from |cbs| and advances |cbs|. It returns a newly-allocated |RSA| or NULL on</i></td></tr>
+<tr><th id="531">531</th><td><i>// error.</i></td></tr>
+<tr><th id="532">532</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="decl fn" id="RSA_parse_public_key" title='RSA_parse_public_key' data-ref="RSA_parse_public_key" data-ref-filename="RSA_parse_public_key">RSA_parse_public_key</dfn>(<a class="typedef" href="base.h.html#CBS" title='CBS' data-type='struct cbs_st' data-ref="CBS" data-ref-filename="CBS">CBS</a> *<dfn class="local col1 decl" id="151cbs" title='cbs' data-type='CBS *' data-ref="151cbs" data-ref-filename="151cbs">cbs</dfn>);</td></tr>
+<tr><th id="533">533</th><td></td></tr>
+<tr><th id="534">534</th><td><i>// RSA_public_key_from_bytes parses |in| as a DER-encoded RSAPublicKey structure</i></td></tr>
+<tr><th id="535">535</th><td><i>// (RFC 3447). It returns a newly-allocated |RSA| or NULL on error.</i></td></tr>
+<tr><th id="536">536</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="decl fn" id="RSA_public_key_from_bytes" title='RSA_public_key_from_bytes' data-ref="RSA_public_key_from_bytes" data-ref-filename="RSA_public_key_from_bytes">RSA_public_key_from_bytes</dfn>(<em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col2 decl" id="152in" title='in' data-type='const uint8_t *' data-ref="152in" data-ref-filename="152in">in</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="153in_len" title='in_len' data-type='size_t' data-ref="153in_len" data-ref-filename="153in_len">in_len</dfn>);</td></tr>
+<tr><th id="537">537</th><td></td></tr>
+<tr><th id="538">538</th><td><i>// RSA_marshal_public_key marshals |rsa| as a DER-encoded RSAPublicKey structure</i></td></tr>
+<tr><th id="539">539</th><td><i>// (RFC 3447) and appends the result to |cbb|. It returns one on success and</i></td></tr>
+<tr><th id="540">540</th><td><i>// zero on failure.</i></td></tr>
+<tr><th id="541">541</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_marshal_public_key" title='RSA_marshal_public_key' data-ref="RSA_marshal_public_key" data-ref-filename="RSA_marshal_public_key">RSA_marshal_public_key</dfn>(<a class="typedef" href="base.h.html#CBB" title='CBB' data-type='struct cbb_st' data-ref="CBB" data-ref-filename="CBB">CBB</a> *<dfn class="local col4 decl" id="154cbb" title='cbb' data-type='CBB *' data-ref="154cbb" data-ref-filename="154cbb">cbb</dfn>, <em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col5 decl" id="155rsa" title='rsa' data-type='const RSA *' data-ref="155rsa" data-ref-filename="155rsa">rsa</dfn>);</td></tr>
+<tr><th id="542">542</th><td></td></tr>
+<tr><th id="543">543</th><td><i>// RSA_public_key_to_bytes marshals |rsa| as a DER-encoded RSAPublicKey</i></td></tr>
+<tr><th id="544">544</th><td><i>// structure (RFC 3447) and, on success, sets |*out_bytes| to a newly allocated</i></td></tr>
+<tr><th id="545">545</th><td><i>// buffer containing the result and returns one. Otherwise, it returns zero. The</i></td></tr>
+<tr><th id="546">546</th><td><i>// result should be freed with |OPENSSL_free|.</i></td></tr>
+<tr><th id="547">547</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_public_key_to_bytes" title='RSA_public_key_to_bytes' data-ref="RSA_public_key_to_bytes" data-ref-filename="RSA_public_key_to_bytes">RSA_public_key_to_bytes</dfn>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> **<dfn class="local col6 decl" id="156out_bytes" title='out_bytes' data-type='uint8_t **' data-ref="156out_bytes" data-ref-filename="156out_bytes">out_bytes</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col7 decl" id="157out_len" title='out_len' data-type='size_t *' data-ref="157out_len" data-ref-filename="157out_len">out_len</dfn>,</td></tr>
+<tr><th id="548">548</th><td>                                           <em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col8 decl" id="158rsa" title='rsa' data-type='const RSA *' data-ref="158rsa" data-ref-filename="158rsa">rsa</dfn>);</td></tr>
+<tr><th id="549">549</th><td></td></tr>
+<tr><th id="550">550</th><td><i>// RSA_parse_private_key parses a DER-encoded RSAPrivateKey structure (RFC 3447)</i></td></tr>
+<tr><th id="551">551</th><td><i>// from |cbs| and advances |cbs|. It returns a newly-allocated |RSA| or NULL on</i></td></tr>
+<tr><th id="552">552</th><td><i>// error.</i></td></tr>
+<tr><th id="553">553</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="decl fn" id="RSA_parse_private_key" title='RSA_parse_private_key' data-ref="RSA_parse_private_key" data-ref-filename="RSA_parse_private_key">RSA_parse_private_key</dfn>(<a class="typedef" href="base.h.html#CBS" title='CBS' data-type='struct cbs_st' data-ref="CBS" data-ref-filename="CBS">CBS</a> *<dfn class="local col9 decl" id="159cbs" title='cbs' data-type='CBS *' data-ref="159cbs" data-ref-filename="159cbs">cbs</dfn>);</td></tr>
+<tr><th id="554">554</th><td></td></tr>
+<tr><th id="555">555</th><td><i>// RSA_private_key_from_bytes parses |in| as a DER-encoded RSAPrivateKey</i></td></tr>
+<tr><th id="556">556</th><td><i>// structure (RFC 3447). It returns a newly-allocated |RSA| or NULL on error.</i></td></tr>
+<tr><th id="557">557</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="decl fn" id="RSA_private_key_from_bytes" title='RSA_private_key_from_bytes' data-ref="RSA_private_key_from_bytes" data-ref-filename="RSA_private_key_from_bytes">RSA_private_key_from_bytes</dfn>(<em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col0 decl" id="160in" title='in' data-type='const uint8_t *' data-ref="160in" data-ref-filename="160in">in</dfn>,</td></tr>
+<tr><th id="558">558</th><td>                                               <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="161in_len" title='in_len' data-type='size_t' data-ref="161in_len" data-ref-filename="161in_len">in_len</dfn>);</td></tr>
+<tr><th id="559">559</th><td></td></tr>
+<tr><th id="560">560</th><td><i>// RSA_marshal_private_key marshals |rsa| as a DER-encoded RSAPrivateKey</i></td></tr>
+<tr><th id="561">561</th><td><i>// structure (RFC 3447) and appends the result to |cbb|. It returns one on</i></td></tr>
+<tr><th id="562">562</th><td><i>// success and zero on failure.</i></td></tr>
+<tr><th id="563">563</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_marshal_private_key" title='RSA_marshal_private_key' data-ref="RSA_marshal_private_key" data-ref-filename="RSA_marshal_private_key">RSA_marshal_private_key</dfn>(<a class="typedef" href="base.h.html#CBB" title='CBB' data-type='struct cbb_st' data-ref="CBB" data-ref-filename="CBB">CBB</a> *<dfn class="local col2 decl" id="162cbb" title='cbb' data-type='CBB *' data-ref="162cbb" data-ref-filename="162cbb">cbb</dfn>, <em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col3 decl" id="163rsa" title='rsa' data-type='const RSA *' data-ref="163rsa" data-ref-filename="163rsa">rsa</dfn>);</td></tr>
+<tr><th id="564">564</th><td></td></tr>
+<tr><th id="565">565</th><td><i>// RSA_private_key_to_bytes marshals |rsa| as a DER-encoded RSAPrivateKey</i></td></tr>
+<tr><th id="566">566</th><td><i>// structure (RFC 3447) and, on success, sets |*out_bytes| to a newly allocated</i></td></tr>
+<tr><th id="567">567</th><td><i>// buffer containing the result and returns one. Otherwise, it returns zero. The</i></td></tr>
+<tr><th id="568">568</th><td><i>// result should be freed with |OPENSSL_free|.</i></td></tr>
+<tr><th id="569">569</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_private_key_to_bytes" title='RSA_private_key_to_bytes' data-ref="RSA_private_key_to_bytes" data-ref-filename="RSA_private_key_to_bytes">RSA_private_key_to_bytes</dfn>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> **<dfn class="local col4 decl" id="164out_bytes" title='out_bytes' data-type='uint8_t **' data-ref="164out_bytes" data-ref-filename="164out_bytes">out_bytes</dfn>,</td></tr>
+<tr><th id="570">570</th><td>                                            <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col5 decl" id="165out_len" title='out_len' data-type='size_t *' data-ref="165out_len" data-ref-filename="165out_len">out_len</dfn>, <em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col6 decl" id="166rsa" title='rsa' data-type='const RSA *' data-ref="166rsa" data-ref-filename="166rsa">rsa</dfn>);</td></tr>
+<tr><th id="571">571</th><td></td></tr>
+<tr><th id="572">572</th><td></td></tr>
+<tr><th id="573">573</th><td><i>// ex_data functions.</i></td></tr>
+<tr><th id="574">574</th><td><i>//</i></td></tr>
+<tr><th id="575">575</th><td><i>// See |ex_data.h| for details.</i></td></tr>
+<tr><th id="576">576</th><td></td></tr>
+<tr><th id="577">577</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_get_ex_new_index" title='RSA_get_ex_new_index' data-ref="RSA_get_ex_new_index" data-ref-filename="RSA_get_ex_new_index">RSA_get_ex_new_index</dfn>(<em>long</em> <dfn class="local col7 decl" id="167argl" title='argl' data-type='long' data-ref="167argl" data-ref-filename="167argl">argl</dfn>, <em>void</em> *<dfn class="local col8 decl" id="168argp" title='argp' data-type='void *' data-ref="168argp" data-ref-filename="168argp">argp</dfn>,</td></tr>
+<tr><th id="578">578</th><td>                                        <a class="typedef" href="ex_data.h.html#CRYPTO_EX_unused" title='CRYPTO_EX_unused' data-type='int' data-ref="CRYPTO_EX_unused" data-ref-filename="CRYPTO_EX_unused">CRYPTO_EX_unused</a> *<dfn class="local col9 decl" id="169unused" title='unused' data-type='CRYPTO_EX_unused *' data-ref="169unused" data-ref-filename="169unused">unused</dfn>,</td></tr>
+<tr><th id="579">579</th><td>                                        <a class="typedef" href="ex_data.h.html#CRYPTO_EX_dup" title='CRYPTO_EX_dup' data-type='int (CRYPTO_EX_DATA *, const CRYPTO_EX_DATA *, void **, int, long, void *)' data-ref="CRYPTO_EX_dup" data-ref-filename="CRYPTO_EX_dup">CRYPTO_EX_dup</a> *<dfn class="local col0 decl" id="170dup_unused" title='dup_unused' data-type='CRYPTO_EX_dup *' data-ref="170dup_unused" data-ref-filename="170dup_unused">dup_unused</dfn>,</td></tr>
+<tr><th id="580">580</th><td>                                        <a class="typedef" href="ex_data.h.html#CRYPTO_EX_free" title='CRYPTO_EX_free' data-type='void (void *, void *, CRYPTO_EX_DATA *, int, long, void *)' data-ref="CRYPTO_EX_free" data-ref-filename="CRYPTO_EX_free">CRYPTO_EX_free</a> *<dfn class="local col1 decl" id="171free_func" title='free_func' data-type='CRYPTO_EX_free *' data-ref="171free_func" data-ref-filename="171free_func">free_func</dfn>);</td></tr>
+<tr><th id="581">581</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_set_ex_data" title='RSA_set_ex_data' data-ref="RSA_set_ex_data" data-ref-filename="RSA_set_ex_data">RSA_set_ex_data</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col2 decl" id="172rsa" title='rsa' data-type='RSA *' data-ref="172rsa" data-ref-filename="172rsa">rsa</dfn>, <em>int</em> <dfn class="local col3 decl" id="173idx" title='idx' data-type='int' data-ref="173idx" data-ref-filename="173idx">idx</dfn>, <em>void</em> *<dfn class="local col4 decl" id="174arg" title='arg' data-type='void *' data-ref="174arg" data-ref-filename="174arg">arg</dfn>);</td></tr>
+<tr><th id="582">582</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>void</em> *<dfn class="decl fn" id="RSA_get_ex_data" title='RSA_get_ex_data' data-ref="RSA_get_ex_data" data-ref-filename="RSA_get_ex_data">RSA_get_ex_data</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col5 decl" id="175rsa" title='rsa' data-type='const RSA *' data-ref="175rsa" data-ref-filename="175rsa">rsa</dfn>, <em>int</em> <dfn class="local col6 decl" id="176idx" title='idx' data-type='int' data-ref="176idx" data-ref-filename="176idx">idx</dfn>);</td></tr>
+<tr><th id="583">583</th><td></td></tr>
+<tr><th id="584">584</th><td></td></tr>
+<tr><th id="585">585</th><td><i>// Flags.</i></td></tr>
+<tr><th id="586">586</th><td><i></i></td></tr>
+<tr><th id="587">587</th><td><i>// RSA_FLAG_OPAQUE specifies that this RSA_METHOD does not expose its key</i></td></tr>
+<tr><th id="588">588</th><td><i>// material. This may be set if, for instance, it is wrapping some other crypto</i></td></tr>
+<tr><th id="589">589</th><td><i>// API, like a platform key store.</i></td></tr>
+<tr><th id="590">590</th><td><u>#define <dfn class="macro" id="_M/RSA_FLAG_OPAQUE" data-ref="_M/RSA_FLAG_OPAQUE">RSA_FLAG_OPAQUE</dfn> 1</u></td></tr>
+<tr><th id="591">591</th><td></td></tr>
+<tr><th id="592">592</th><td><i>// RSA_FLAG_NO_BLINDING disables blinding of private operations, which is a</i></td></tr>
+<tr><th id="593">593</th><td><i>// dangerous thing to do. It is deprecated and should not be used. It will</i></td></tr>
+<tr><th id="594">594</th><td><i>// be ignored whenever possible.</i></td></tr>
+<tr><th id="595">595</th><td><i>//</i></td></tr>
+<tr><th id="596">596</th><td><i>// This flag must be used if a key without the public exponent |e| is used for</i></td></tr>
+<tr><th id="597">597</th><td><i>// private key operations; avoid using such keys whenever possible.</i></td></tr>
+<tr><th id="598">598</th><td><u>#define <dfn class="macro" id="_M/RSA_FLAG_NO_BLINDING" data-ref="_M/RSA_FLAG_NO_BLINDING">RSA_FLAG_NO_BLINDING</dfn> 8</u></td></tr>
+<tr><th id="599">599</th><td></td></tr>
+<tr><th id="600">600</th><td><i>// RSA_FLAG_EXT_PKEY is deprecated and ignored.</i></td></tr>
+<tr><th id="601">601</th><td><u>#define <dfn class="macro" id="_M/RSA_FLAG_EXT_PKEY" data-ref="_M/RSA_FLAG_EXT_PKEY">RSA_FLAG_EXT_PKEY</dfn> 0x20</u></td></tr>
+<tr><th id="602">602</th><td></td></tr>
+<tr><th id="603">603</th><td></td></tr>
+<tr><th id="604">604</th><td><i>// RSA public exponent values.</i></td></tr>
+<tr><th id="605">605</th><td></td></tr>
+<tr><th id="606">606</th><td><u>#define <dfn class="macro" id="_M/RSA_3" data-ref="_M/RSA_3">RSA_3</dfn> 0x3</u></td></tr>
+<tr><th id="607">607</th><td><u>#define <dfn class="macro" id="_M/RSA_F4" data-ref="_M/RSA_F4">RSA_F4</dfn> 0x10001</u></td></tr>
+<tr><th id="608">608</th><td></td></tr>
+<tr><th id="609">609</th><td></td></tr>
+<tr><th id="610">610</th><td><i>// Deprecated functions.</i></td></tr>
+<tr><th id="611">611</th><td></td></tr>
+<tr><th id="612">612</th><td><u>#define <dfn class="macro" id="_M/RSA_METHOD_FLAG_NO_CHECK" data-ref="_M/RSA_METHOD_FLAG_NO_CHECK">RSA_METHOD_FLAG_NO_CHECK</dfn> RSA_FLAG_OPAQUE</u></td></tr>
+<tr><th id="613">613</th><td></td></tr>
+<tr><th id="614">614</th><td><i>// RSA_flags returns the flags for |rsa|. These are a bitwise OR of |RSA_FLAG_*|</i></td></tr>
+<tr><th id="615">615</th><td><i>// constants.</i></td></tr>
+<tr><th id="616">616</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_flags" title='RSA_flags' data-ref="RSA_flags" data-ref-filename="RSA_flags">RSA_flags</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col7 decl" id="177rsa" title='rsa' data-type='const RSA *' data-ref="177rsa" data-ref-filename="177rsa">rsa</dfn>);</td></tr>
+<tr><th id="617">617</th><td></td></tr>
+<tr><th id="618">618</th><td><i>// RSA_blinding_on returns one.</i></td></tr>
+<tr><th id="619">619</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_blinding_on" title='RSA_blinding_on' data-ref="RSA_blinding_on" data-ref-filename="RSA_blinding_on">RSA_blinding_on</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col8 decl" id="178rsa" title='rsa' data-type='RSA *' data-ref="178rsa" data-ref-filename="178rsa">rsa</dfn>, <a class="typedef" href="base.h.html#BN_CTX" title='BN_CTX' data-type='struct bignum_ctx' data-ref="BN_CTX" data-ref-filename="BN_CTX">BN_CTX</a> *<dfn class="local col9 decl" id="179ctx" title='ctx' data-type='BN_CTX *' data-ref="179ctx" data-ref-filename="179ctx">ctx</dfn>);</td></tr>
+<tr><th id="620">620</th><td></td></tr>
+<tr><th id="621">621</th><td><i>// RSA_generate_key behaves like |RSA_generate_key_ex|, which is what you</i></td></tr>
+<tr><th id="622">622</th><td><i>// should use instead. It returns NULL on error, or a newly-allocated |RSA| on</i></td></tr>
+<tr><th id="623">623</th><td><i>// success. This function is provided for compatibility only. The |callback|</i></td></tr>
+<tr><th id="624">624</th><td><i>// and |cb_arg| parameters must be NULL.</i></td></tr>
+<tr><th id="625">625</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="decl fn" id="RSA_generate_key" title='RSA_generate_key' data-ref="RSA_generate_key" data-ref-filename="RSA_generate_key">RSA_generate_key</dfn>(<em>int</em> <dfn class="local col0 decl" id="180bits" title='bits' data-type='int' data-ref="180bits" data-ref-filename="180bits">bits</dfn>, <em>unsigned</em> <em>long</em> <dfn class="local col1 decl" id="181e" title='e' data-type='unsigned long' data-ref="181e" data-ref-filename="181e">e</dfn>, <em>void</em> *<dfn class="local col2 decl" id="182callback" title='callback' data-type='void *' data-ref="182callback" data-ref-filename="182callback">callback</dfn>,</td></tr>
+<tr><th id="626">626</th><td>                                     <em>void</em> *<dfn class="local col3 decl" id="183cb_arg" title='cb_arg' data-type='void *' data-ref="183cb_arg" data-ref-filename="183cb_arg">cb_arg</dfn>);</td></tr>
+<tr><th id="627">627</th><td></td></tr>
+<tr><th id="628">628</th><td><i>// d2i_RSAPublicKey parses an ASN.1, DER-encoded, RSA public key from |len|</i></td></tr>
+<tr><th id="629">629</th><td><i>// bytes at |*inp|. If |out| is not NULL then, on exit, a pointer to the result</i></td></tr>
+<tr><th id="630">630</th><td><i>// is in |*out|. Note that, even if |*out| is already non-NULL on entry, it</i></td></tr>
+<tr><th id="631">631</th><td><i>// will not be written to. Rather, a fresh |RSA| is allocated and the previous</i></td></tr>
+<tr><th id="632">632</th><td><i>// one is freed. On successful exit, |*inp| is advanced past the DER structure.</i></td></tr>
+<tr><th id="633">633</th><td><i>// It returns the result or NULL on error.</i></td></tr>
+<tr><th id="634">634</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="decl fn" id="d2i_RSAPublicKey" title='d2i_RSAPublicKey' data-ref="d2i_RSAPublicKey" data-ref-filename="d2i_RSAPublicKey">d2i_RSAPublicKey</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> **<dfn class="local col4 decl" id="184out" title='out' data-type='RSA **' data-ref="184out" data-ref-filename="184out">out</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> **<dfn class="local col5 decl" id="185inp" title='inp' data-type='const uint8_t **' data-ref="185inp" data-ref-filename="185inp">inp</dfn>, <em>long</em> <dfn class="local col6 decl" id="186len" title='len' data-type='long' data-ref="186len" data-ref-filename="186len">len</dfn>);</td></tr>
+<tr><th id="635">635</th><td></td></tr>
+<tr><th id="636">636</th><td><i>// i2d_RSAPublicKey marshals |in| to an ASN.1, DER structure. If |outp| is not</i></td></tr>
+<tr><th id="637">637</th><td><i>// NULL then the result is written to |*outp| and |*outp| is advanced just past</i></td></tr>
+<tr><th id="638">638</th><td><i>// the output. It returns the number of bytes in the result, whether written or</i></td></tr>
+<tr><th id="639">639</th><td><i>// not, or a negative value on error.</i></td></tr>
+<tr><th id="640">640</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="i2d_RSAPublicKey" title='i2d_RSAPublicKey' data-ref="i2d_RSAPublicKey" data-ref-filename="i2d_RSAPublicKey">i2d_RSAPublicKey</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col7 decl" id="187in" title='in' data-type='const RSA *' data-ref="187in" data-ref-filename="187in">in</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> **<dfn class="local col8 decl" id="188outp" title='outp' data-type='uint8_t **' data-ref="188outp" data-ref-filename="188outp">outp</dfn>);</td></tr>
+<tr><th id="641">641</th><td></td></tr>
+<tr><th id="642">642</th><td><i>// d2i_RSAPrivateKey parses an ASN.1, DER-encoded, RSA private key from |len|</i></td></tr>
+<tr><th id="643">643</th><td><i>// bytes at |*inp|. If |out| is not NULL then, on exit, a pointer to the result</i></td></tr>
+<tr><th id="644">644</th><td><i>// is in |*out|. Note that, even if |*out| is already non-NULL on entry, it</i></td></tr>
+<tr><th id="645">645</th><td><i>// will not be written to. Rather, a fresh |RSA| is allocated and the previous</i></td></tr>
+<tr><th id="646">646</th><td><i>// one is freed. On successful exit, |*inp| is advanced past the DER structure.</i></td></tr>
+<tr><th id="647">647</th><td><i>// It returns the result or NULL on error.</i></td></tr>
+<tr><th id="648">648</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="decl fn" id="d2i_RSAPrivateKey" title='d2i_RSAPrivateKey' data-ref="d2i_RSAPrivateKey" data-ref-filename="d2i_RSAPrivateKey">d2i_RSAPrivateKey</dfn>(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> **<dfn class="local col9 decl" id="189out" title='out' data-type='RSA **' data-ref="189out" data-ref-filename="189out">out</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> **<dfn class="local col0 decl" id="190inp" title='inp' data-type='const uint8_t **' data-ref="190inp" data-ref-filename="190inp">inp</dfn>, <em>long</em> <dfn class="local col1 decl" id="191len" title='len' data-type='long' data-ref="191len" data-ref-filename="191len">len</dfn>);</td></tr>
+<tr><th id="649">649</th><td></td></tr>
+<tr><th id="650">650</th><td><i>// i2d_RSAPrivateKey marshals |in| to an ASN.1, DER structure. If |outp| is not</i></td></tr>
+<tr><th id="651">651</th><td><i>// NULL then the result is written to |*outp| and |*outp| is advanced just past</i></td></tr>
+<tr><th id="652">652</th><td><i>// the output. It returns the number of bytes in the result, whether written or</i></td></tr>
+<tr><th id="653">653</th><td><i>// not, or a negative value on error.</i></td></tr>
+<tr><th id="654">654</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="i2d_RSAPrivateKey" title='i2d_RSAPrivateKey' data-ref="i2d_RSAPrivateKey" data-ref-filename="i2d_RSAPrivateKey">i2d_RSAPrivateKey</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col2 decl" id="192in" title='in' data-type='const RSA *' data-ref="192in" data-ref-filename="192in">in</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> **<dfn class="local col3 decl" id="193outp" title='outp' data-type='uint8_t **' data-ref="193outp" data-ref-filename="193outp">outp</dfn>);</td></tr>
+<tr><th id="655">655</th><td></td></tr>
+<tr><th id="656">656</th><td><i>// RSA_padding_add_PKCS1_PSS acts like |RSA_padding_add_PKCS1_PSS_mgf1| but the</i></td></tr>
+<tr><th id="657">657</th><td><i>// |mgf1Hash| parameter of the latter is implicitly set to |Hash|.</i></td></tr>
+<tr><th id="658">658</th><td><i>//</i></td></tr>
+<tr><th id="659">659</th><td><i>// This function implements only the low-level padding logic. Use</i></td></tr>
+<tr><th id="660">660</th><td><i>// |RSA_sign_pss_mgf1| instead.</i></td></tr>
+<tr><th id="661">661</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_padding_add_PKCS1_PSS" title='RSA_padding_add_PKCS1_PSS' data-ref="RSA_padding_add_PKCS1_PSS" data-ref-filename="RSA_padding_add_PKCS1_PSS">RSA_padding_add_PKCS1_PSS</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col4 decl" id="194rsa" title='rsa' data-type='const RSA *' data-ref="194rsa" data-ref-filename="194rsa">rsa</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col5 decl" id="195EM" title='EM' data-type='uint8_t *' data-ref="195EM" data-ref-filename="195EM">EM</dfn>,</td></tr>
+<tr><th id="662">662</th><td>                                             <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col6 decl" id="196mHash" title='mHash' data-type='const uint8_t *' data-ref="196mHash" data-ref-filename="196mHash">mHash</dfn>,</td></tr>
+<tr><th id="663">663</th><td>                                             <em>const</em> <a class="typedef" href="base.h.html#EVP_MD" title='EVP_MD' data-type='struct env_md_st' data-ref="EVP_MD" data-ref-filename="EVP_MD">EVP_MD</a> *<dfn class="local col7 decl" id="197Hash" title='Hash' data-type='const EVP_MD *' data-ref="197Hash" data-ref-filename="197Hash">Hash</dfn>, <em>int</em> <dfn class="local col8 decl" id="198sLen" title='sLen' data-type='int' data-ref="198sLen" data-ref-filename="198sLen">sLen</dfn>);</td></tr>
+<tr><th id="664">664</th><td></td></tr>
+<tr><th id="665">665</th><td><i>// RSA_verify_PKCS1_PSS acts like |RSA_verify_PKCS1_PSS_mgf1| but the</i></td></tr>
+<tr><th id="666">666</th><td><i>// |mgf1Hash| parameter of the latter is implicitly set to |Hash|.</i></td></tr>
+<tr><th id="667">667</th><td><i>//</i></td></tr>
+<tr><th id="668">668</th><td><i>// This function implements only the low-level padding logic. Use</i></td></tr>
+<tr><th id="669">669</th><td><i>// |RSA_verify_pss_mgf1| instead.</i></td></tr>
+<tr><th id="670">670</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_verify_PKCS1_PSS" title='RSA_verify_PKCS1_PSS' data-ref="RSA_verify_PKCS1_PSS" data-ref-filename="RSA_verify_PKCS1_PSS">RSA_verify_PKCS1_PSS</dfn>(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col9 decl" id="199rsa" title='rsa' data-type='const RSA *' data-ref="199rsa" data-ref-filename="199rsa">rsa</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col0 decl" id="200mHash" title='mHash' data-type='const uint8_t *' data-ref="200mHash" data-ref-filename="200mHash">mHash</dfn>,</td></tr>
+<tr><th id="671">671</th><td>                                        <em>const</em> <a class="typedef" href="base.h.html#EVP_MD" title='EVP_MD' data-type='struct env_md_st' data-ref="EVP_MD" data-ref-filename="EVP_MD">EVP_MD</a> *<dfn class="local col1 decl" id="201Hash" title='Hash' data-type='const EVP_MD *' data-ref="201Hash" data-ref-filename="201Hash">Hash</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col2 decl" id="202EM" title='EM' data-type='const uint8_t *' data-ref="202EM" data-ref-filename="202EM">EM</dfn>,</td></tr>
+<tr><th id="672">672</th><td>                                        <em>int</em> <dfn class="local col3 decl" id="203sLen" title='sLen' data-type='int' data-ref="203sLen" data-ref-filename="203sLen">sLen</dfn>);</td></tr>
+<tr><th id="673">673</th><td></td></tr>
+<tr><th id="674">674</th><td><i>// RSA_padding_add_PKCS1_OAEP acts like |RSA_padding_add_PKCS1_OAEP_mgf1| but</i></td></tr>
+<tr><th id="675">675</th><td><i>// the |md| and |mgf1md| parameters of the latter are implicitly set to NULL,</i></td></tr>
+<tr><th id="676">676</th><td><i>// which means SHA-1.</i></td></tr>
+<tr><th id="677">677</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_padding_add_PKCS1_OAEP" title='RSA_padding_add_PKCS1_OAEP' data-ref="RSA_padding_add_PKCS1_OAEP" data-ref-filename="RSA_padding_add_PKCS1_OAEP">RSA_padding_add_PKCS1_OAEP</dfn>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col4 decl" id="204to" title='to' data-type='uint8_t *' data-ref="204to" data-ref-filename="204to">to</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="205to_len" title='to_len' data-type='size_t' data-ref="205to_len" data-ref-filename="205to_len">to_len</dfn>,</td></tr>
+<tr><th id="678">678</th><td>                                              <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col6 decl" id="206from" title='from' data-type='const uint8_t *' data-ref="206from" data-ref-filename="206from">from</dfn>,</td></tr>
+<tr><th id="679">679</th><td>                                              <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="207from_len" title='from_len' data-type='size_t' data-ref="207from_len" data-ref-filename="207from_len">from_len</dfn>,</td></tr>
+<tr><th id="680">680</th><td>                                              <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col8 decl" id="208param" title='param' data-type='const uint8_t *' data-ref="208param" data-ref-filename="208param">param</dfn>,</td></tr>
+<tr><th id="681">681</th><td>                                              <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="209param_len" title='param_len' data-type='size_t' data-ref="209param_len" data-ref-filename="209param_len">param_len</dfn>);</td></tr>
+<tr><th id="682">682</th><td></td></tr>
+<tr><th id="683">683</th><td><i>// RSA_print prints a textual representation of |rsa| to |bio|. It returns one</i></td></tr>
+<tr><th id="684">684</th><td><i>// on success or zero otherwise.</i></td></tr>
+<tr><th id="685">685</th><td><a class="macro" href="base.h.html#222" title="" data-ref="_M/OPENSSL_EXPORT">OPENSSL_EXPORT</a> <em>int</em> <dfn class="decl fn" id="RSA_print" title='RSA_print' data-ref="RSA_print" data-ref-filename="RSA_print">RSA_print</dfn>(<a class="typedef" href="base.h.html#BIO" title='BIO' data-type='struct bio_st' data-ref="BIO" data-ref-filename="BIO">BIO</a> *<dfn class="local col0 decl" id="210bio" title='bio' data-type='BIO *' data-ref="210bio" data-ref-filename="210bio">bio</dfn>, <em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col1 decl" id="211rsa" title='rsa' data-type='const RSA *' data-ref="211rsa" data-ref-filename="211rsa">rsa</dfn>, <em>int</em> <dfn class="local col2 decl" id="212indent" title='indent' data-type='int' data-ref="212indent" data-ref-filename="212indent">indent</dfn>);</td></tr>
+<tr><th id="686">686</th><td></td></tr>
+<tr><th id="687">687</th><td></td></tr>
+<tr><th id="688">688</th><td><b>struct</b> <dfn class="type def" id="rsa_meth_st" title='rsa_meth_st' data-ref="rsa_meth_st" data-ref-filename="rsa_meth_st">rsa_meth_st</dfn> {</td></tr>
+<tr><th id="689">689</th><td>  <b>struct</b> <a class="type" href="engine.h.html#openssl_method_common_st" title='openssl_method_common_st' data-ref="openssl_method_common_st" data-ref-filename="openssl_method_common_st">openssl_method_common_st</a> <dfn class="decl field" id="rsa_meth_st::common" title='rsa_meth_st::common' data-ref="rsa_meth_st::common" data-ref-filename="rsa_meth_st..common">common</dfn>;</td></tr>
+<tr><th id="690">690</th><td></td></tr>
+<tr><th id="691">691</th><td>  <em>void</em> *<dfn class="decl field" id="rsa_meth_st::app_data" title='rsa_meth_st::app_data' data-ref="rsa_meth_st::app_data" data-ref-filename="rsa_meth_st..app_data">app_data</dfn>;</td></tr>
+<tr><th id="692">692</th><td></td></tr>
+<tr><th id="693">693</th><td>  <em>int</em> (*<dfn class="decl field" id="rsa_meth_st::init" title='rsa_meth_st::init' data-ref="rsa_meth_st::init" data-ref-filename="rsa_meth_st..init">init</dfn>)(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col3 decl" id="213rsa" title='rsa' data-type='RSA *' data-ref="213rsa" data-ref-filename="213rsa">rsa</dfn>);</td></tr>
+<tr><th id="694">694</th><td>  <em>int</em> (*<dfn class="decl field" id="rsa_meth_st::finish" title='rsa_meth_st::finish' data-ref="rsa_meth_st::finish" data-ref-filename="rsa_meth_st..finish">finish</dfn>)(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col4 decl" id="214rsa" title='rsa' data-type='RSA *' data-ref="214rsa" data-ref-filename="214rsa">rsa</dfn>);</td></tr>
+<tr><th id="695">695</th><td></td></tr>
+<tr><th id="696">696</th><td>  <i>// size returns the size of the RSA modulus in bytes.</i></td></tr>
+<tr><th id="697">697</th><td>  <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> (*<dfn class="decl field" id="rsa_meth_st::size" title='rsa_meth_st::size' data-ref="rsa_meth_st::size" data-ref-filename="rsa_meth_st..size">size</dfn>)(<em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col5 decl" id="215rsa" title='rsa' data-type='const RSA *' data-ref="215rsa" data-ref-filename="215rsa">rsa</dfn>);</td></tr>
+<tr><th id="698">698</th><td></td></tr>
+<tr><th id="699">699</th><td>  <em>int</em> (*<dfn class="decl field" id="rsa_meth_st::sign" title='rsa_meth_st::sign' data-ref="rsa_meth_st::sign" data-ref-filename="rsa_meth_st..sign">sign</dfn>)(<em>int</em> <dfn class="local col6 decl" id="216type" title='type' data-type='int' data-ref="216type" data-ref-filename="216type">type</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col7 decl" id="217m" title='m' data-type='const uint8_t *' data-ref="217m" data-ref-filename="217m">m</dfn>, <em>unsigned</em> <em>int</em> <dfn class="local col8 decl" id="218m_length" title='m_length' data-type='unsigned int' data-ref="218m_length" data-ref-filename="218m_length">m_length</dfn>,</td></tr>
+<tr><th id="700">700</th><td>              <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col9 decl" id="219sigret" title='sigret' data-type='uint8_t *' data-ref="219sigret" data-ref-filename="219sigret">sigret</dfn>, <em>unsigned</em> <em>int</em> *<dfn class="local col0 decl" id="220siglen" title='siglen' data-type='unsigned int *' data-ref="220siglen" data-ref-filename="220siglen">siglen</dfn>, <em>const</em> <a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col1 decl" id="221rsa" title='rsa' data-type='const RSA *' data-ref="221rsa" data-ref-filename="221rsa">rsa</dfn>);</td></tr>
+<tr><th id="701">701</th><td></td></tr>
+<tr><th id="702">702</th><td>  <i>// These functions mirror the |RSA_*| functions of the same name.</i></td></tr>
+<tr><th id="703">703</th><td>  <em>int</em> (*<dfn class="decl field" id="rsa_meth_st::sign_raw" title='rsa_meth_st::sign_raw' data-ref="rsa_meth_st::sign_raw" data-ref-filename="rsa_meth_st..sign_raw">sign_raw</dfn>)(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col2 decl" id="222rsa" title='rsa' data-type='RSA *' data-ref="222rsa" data-ref-filename="222rsa">rsa</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col3 decl" id="223out_len" title='out_len' data-type='size_t *' data-ref="223out_len" data-ref-filename="223out_len">out_len</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col4 decl" id="224out" title='out' data-type='uint8_t *' data-ref="224out" data-ref-filename="224out">out</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="225max_out" title='max_out' data-type='size_t' data-ref="225max_out" data-ref-filename="225max_out">max_out</dfn>,</td></tr>
+<tr><th id="704">704</th><td>                  <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col6 decl" id="226in" title='in' data-type='const uint8_t *' data-ref="226in" data-ref-filename="226in">in</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="227in_len" title='in_len' data-type='size_t' data-ref="227in_len" data-ref-filename="227in_len">in_len</dfn>, <em>int</em> <dfn class="local col8 decl" id="228padding" title='padding' data-type='int' data-ref="228padding" data-ref-filename="228padding">padding</dfn>);</td></tr>
+<tr><th id="705">705</th><td>  <em>int</em> (*<dfn class="decl field" id="rsa_meth_st::decrypt" title='rsa_meth_st::decrypt' data-ref="rsa_meth_st::decrypt" data-ref-filename="rsa_meth_st..decrypt">decrypt</dfn>)(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col9 decl" id="229rsa" title='rsa' data-type='RSA *' data-ref="229rsa" data-ref-filename="229rsa">rsa</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> *<dfn class="local col0 decl" id="230out_len" title='out_len' data-type='size_t *' data-ref="230out_len" data-ref-filename="230out_len">out_len</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col1 decl" id="231out" title='out' data-type='uint8_t *' data-ref="231out" data-ref-filename="231out">out</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="232max_out" title='max_out' data-type='size_t' data-ref="232max_out" data-ref-filename="232max_out">max_out</dfn>,</td></tr>
+<tr><th id="706">706</th><td>                 <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col3 decl" id="233in" title='in' data-type='const uint8_t *' data-ref="233in" data-ref-filename="233in">in</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="234in_len" title='in_len' data-type='size_t' data-ref="234in_len" data-ref-filename="234in_len">in_len</dfn>, <em>int</em> <dfn class="local col5 decl" id="235padding" title='padding' data-type='int' data-ref="235padding" data-ref-filename="235padding">padding</dfn>);</td></tr>
+<tr><th id="707">707</th><td></td></tr>
+<tr><th id="708">708</th><td>  <i>// private_transform takes a big-endian integer from |in|, calculates the</i></td></tr>
+<tr><th id="709">709</th><td><i>  // d'th power of it, modulo the RSA modulus and writes the result as a</i></td></tr>
+<tr><th id="710">710</th><td><i>  // big-endian integer to |out|. Both |in| and |out| are |len| bytes long and</i></td></tr>
+<tr><th id="711">711</th><td><i>  // |len| is always equal to |RSA_size(rsa)|. If the result of the transform</i></td></tr>
+<tr><th id="712">712</th><td><i>  // can be represented in fewer than |len| bytes, then |out| must be zero</i></td></tr>
+<tr><th id="713">713</th><td><i>  // padded on the left.</i></td></tr>
+<tr><th id="714">714</th><td><i>  //</i></td></tr>
+<tr><th id="715">715</th><td><i>  // It returns one on success and zero otherwise.</i></td></tr>
+<tr><th id="716">716</th><td><i>  //</i></td></tr>
+<tr><th id="717">717</th><td><i>  // RSA decrypt and sign operations will call this, thus an ENGINE might wish</i></td></tr>
+<tr><th id="718">718</th><td><i>  // to override it in order to avoid having to implement the padding</i></td></tr>
+<tr><th id="719">719</th><td><i>  // functionality demanded by those, higher level, operations.</i></td></tr>
+<tr><th id="720">720</th><td>  <em>int</em> (*<dfn class="decl field" id="rsa_meth_st::private_transform" title='rsa_meth_st::private_transform' data-ref="rsa_meth_st::private_transform" data-ref-filename="rsa_meth_st..private_transform">private_transform</dfn>)(<a class="typedef" href="base.h.html#RSA" title='RSA' data-type='struct rsa_st' data-ref="RSA" data-ref-filename="RSA">RSA</a> *<dfn class="local col6 decl" id="236rsa" title='rsa' data-type='RSA *' data-ref="236rsa" data-ref-filename="236rsa">rsa</dfn>, <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col7 decl" id="237out" title='out' data-type='uint8_t *' data-ref="237out" data-ref-filename="237out">out</dfn>, <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="local col8 decl" id="238in" title='in' data-type='const uint8_t *' data-ref="238in" data-ref-filename="238in">in</dfn>,</td></tr>
+<tr><th id="721">721</th><td>                           <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="239len" title='len' data-type='size_t' data-ref="239len" data-ref-filename="239len">len</dfn>);</td></tr>
+<tr><th id="722">722</th><td></td></tr>
+<tr><th id="723">723</th><td>  <em>int</em> <dfn class="decl field" id="rsa_meth_st::flags" title='rsa_meth_st::flags' data-ref="rsa_meth_st::flags" data-ref-filename="rsa_meth_st..flags">flags</dfn>;</td></tr>
+<tr><th id="724">724</th><td>};</td></tr>
+<tr><th id="725">725</th><td></td></tr>
+<tr><th id="726">726</th><td></td></tr>
+<tr><th id="727">727</th><td><i>// Private functions.</i></td></tr>
+<tr><th id="728">728</th><td></td></tr>
+<tr><th id="729">729</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="bn_blinding_st" title='bn_blinding_st' data-ref="bn_blinding_st" data-ref-filename="bn_blinding_st"><a class="type" href="#bn_blinding_st" title='bn_blinding_st' data-ref="bn_blinding_st" data-ref-filename="bn_blinding_st">bn_blinding_st</a></dfn> <dfn class="typedef" id="BN_BLINDING" title='BN_BLINDING' data-type='struct bn_blinding_st' data-ref="BN_BLINDING" data-ref-filename="BN_BLINDING">BN_BLINDING</dfn>;</td></tr>
+<tr><th id="730">730</th><td></td></tr>
+<tr><th id="731">731</th><td><b>struct</b> <dfn class="type def" id="rsa_st" title='rsa_st' data-ref="rsa_st" data-ref-filename="rsa_st">rsa_st</dfn> {</td></tr>
+<tr><th id="732">732</th><td>  <a class="typedef" href="base.h.html#RSA_METHOD" title='RSA_METHOD' data-type='struct rsa_meth_st' data-ref="RSA_METHOD" data-ref-filename="RSA_METHOD">RSA_METHOD</a> *<dfn class="decl field" id="rsa_st::meth" title='rsa_st::meth' data-ref="rsa_st::meth" data-ref-filename="rsa_st..meth">meth</dfn>;</td></tr>
+<tr><th id="733">733</th><td></td></tr>
+<tr><th id="734">734</th><td>  <i>// Access to the following fields was historically allowed, but</i></td></tr>
+<tr><th id="735">735</th><td><i>  // deprecated. Use |RSA_get0_*| and |RSA_set0_*| instead. Access to all other</i></td></tr>
+<tr><th id="736">736</th><td><i>  // fields is forbidden and will cause threading errors.</i></td></tr>
+<tr><th id="737">737</th><td>  <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl field" id="rsa_st::n" title='rsa_st::n' data-ref="rsa_st::n" data-ref-filename="rsa_st..n">n</dfn>;</td></tr>
+<tr><th id="738">738</th><td>  <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl field" id="rsa_st::e" title='rsa_st::e' data-ref="rsa_st::e" data-ref-filename="rsa_st..e">e</dfn>;</td></tr>
+<tr><th id="739">739</th><td>  <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl field" id="rsa_st::d" title='rsa_st::d' data-ref="rsa_st::d" data-ref-filename="rsa_st..d">d</dfn>;</td></tr>
+<tr><th id="740">740</th><td>  <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl field" id="rsa_st::p" title='rsa_st::p' data-ref="rsa_st::p" data-ref-filename="rsa_st..p">p</dfn>;</td></tr>
+<tr><th id="741">741</th><td>  <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl field" id="rsa_st::q" title='rsa_st::q' data-ref="rsa_st::q" data-ref-filename="rsa_st..q">q</dfn>;</td></tr>
+<tr><th id="742">742</th><td>  <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl field" id="rsa_st::dmp1" title='rsa_st::dmp1' data-ref="rsa_st::dmp1" data-ref-filename="rsa_st..dmp1">dmp1</dfn>;</td></tr>
+<tr><th id="743">743</th><td>  <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl field" id="rsa_st::dmq1" title='rsa_st::dmq1' data-ref="rsa_st::dmq1" data-ref-filename="rsa_st..dmq1">dmq1</dfn>;</td></tr>
+<tr><th id="744">744</th><td>  <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl field" id="rsa_st::iqmp" title='rsa_st::iqmp' data-ref="rsa_st::iqmp" data-ref-filename="rsa_st..iqmp">iqmp</dfn>;</td></tr>
+<tr><th id="745">745</th><td></td></tr>
+<tr><th id="746">746</th><td>  <i>// be careful using this if the RSA structure is shared</i></td></tr>
+<tr><th id="747">747</th><td>  <a class="typedef" href="ex_data.h.html#CRYPTO_EX_DATA" title='CRYPTO_EX_DATA' data-type='struct crypto_ex_data_st' data-ref="CRYPTO_EX_DATA" data-ref-filename="CRYPTO_EX_DATA">CRYPTO_EX_DATA</a> <dfn class="decl field" id="rsa_st::ex_data" title='rsa_st::ex_data' data-ref="rsa_st::ex_data" data-ref-filename="rsa_st..ex_data">ex_data</dfn>;</td></tr>
+<tr><th id="748">748</th><td>  <a class="typedef" href="thread.h.html#CRYPTO_refcount_t" title='CRYPTO_refcount_t' data-type='uint32_t' data-ref="CRYPTO_refcount_t" data-ref-filename="CRYPTO_refcount_t">CRYPTO_refcount_t</a> <dfn class="decl field" id="rsa_st::references" title='rsa_st::references' data-ref="rsa_st::references" data-ref-filename="rsa_st..references">references</dfn>;</td></tr>
+<tr><th id="749">749</th><td>  <em>int</em> <dfn class="decl field" id="rsa_st::flags" title='rsa_st::flags' data-ref="rsa_st::flags" data-ref-filename="rsa_st..flags">flags</dfn>;</td></tr>
+<tr><th id="750">750</th><td></td></tr>
+<tr><th id="751">751</th><td>  <a class="typedef" href="thread.h.html#CRYPTO_MUTEX" title='CRYPTO_MUTEX' data-type='pthread_rwlock_t' data-ref="CRYPTO_MUTEX" data-ref-filename="CRYPTO_MUTEX">CRYPTO_MUTEX</a> <dfn class="decl field" id="rsa_st::lock" title='rsa_st::lock' data-ref="rsa_st::lock" data-ref-filename="rsa_st..lock">lock</dfn>;</td></tr>
+<tr><th id="752">752</th><td></td></tr>
+<tr><th id="753">753</th><td>  <i>// Used to cache montgomery values. The creation of these values is protected</i></td></tr>
+<tr><th id="754">754</th><td><i>  // by |lock|.</i></td></tr>
+<tr><th id="755">755</th><td>  <a class="typedef" href="base.h.html#BN_MONT_CTX" title='BN_MONT_CTX' data-type='struct bn_mont_ctx_st' data-ref="BN_MONT_CTX" data-ref-filename="BN_MONT_CTX">BN_MONT_CTX</a> *<dfn class="decl field" id="rsa_st::mont_n" title='rsa_st::mont_n' data-ref="rsa_st::mont_n" data-ref-filename="rsa_st..mont_n">mont_n</dfn>;</td></tr>
+<tr><th id="756">756</th><td>  <a class="typedef" href="base.h.html#BN_MONT_CTX" title='BN_MONT_CTX' data-type='struct bn_mont_ctx_st' data-ref="BN_MONT_CTX" data-ref-filename="BN_MONT_CTX">BN_MONT_CTX</a> *<dfn class="decl field" id="rsa_st::mont_p" title='rsa_st::mont_p' data-ref="rsa_st::mont_p" data-ref-filename="rsa_st..mont_p">mont_p</dfn>;</td></tr>
+<tr><th id="757">757</th><td>  <a class="typedef" href="base.h.html#BN_MONT_CTX" title='BN_MONT_CTX' data-type='struct bn_mont_ctx_st' data-ref="BN_MONT_CTX" data-ref-filename="BN_MONT_CTX">BN_MONT_CTX</a> *<dfn class="decl field" id="rsa_st::mont_q" title='rsa_st::mont_q' data-ref="rsa_st::mont_q" data-ref-filename="rsa_st..mont_q">mont_q</dfn>;</td></tr>
+<tr><th id="758">758</th><td></td></tr>
+<tr><th id="759">759</th><td>  <i>// The following fields are copies of |d|, |dmp1|, and |dmq1|, respectively,</i></td></tr>
+<tr><th id="760">760</th><td><i>  // but with the correct widths to prevent side channels. These must use</i></td></tr>
+<tr><th id="761">761</th><td><i>  // separate copies due to threading concerns caused by OpenSSL's API</i></td></tr>
+<tr><th id="762">762</th><td><i>  // mistakes. See <a href="https://github.com/openssl/openssl/issues/5158">https://github.com/openssl/openssl/issues/5158</a> and</i></td></tr>
+<tr><th id="763">763</th><td><i>  // the |freeze_private_key| implementation.</i></td></tr>
+<tr><th id="764">764</th><td>  <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl field" id="rsa_st::d_fixed" title='rsa_st::d_fixed' data-ref="rsa_st::d_fixed" data-ref-filename="rsa_st..d_fixed">d_fixed</dfn>, *<dfn class="decl field" id="rsa_st::dmp1_fixed" title='rsa_st::dmp1_fixed' data-ref="rsa_st::dmp1_fixed" data-ref-filename="rsa_st..dmp1_fixed">dmp1_fixed</dfn>, *<dfn class="decl field" id="rsa_st::dmq1_fixed" title='rsa_st::dmq1_fixed' data-ref="rsa_st::dmq1_fixed" data-ref-filename="rsa_st..dmq1_fixed">dmq1_fixed</dfn>;</td></tr>
+<tr><th id="765">765</th><td></td></tr>
+<tr><th id="766">766</th><td>  <i>// inv_small_mod_large_mont is q^-1 mod p in Montgomery form, using |mont_p|,</i></td></tr>
+<tr><th id="767">767</th><td><i>  // if |p| &gt;= |q|. Otherwise, it is p^-1 mod q in Montgomery form, using</i></td></tr>
+<tr><th id="768">768</th><td><i>  // |mont_q|.</i></td></tr>
+<tr><th id="769">769</th><td>  <a class="typedef" href="base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="decl field" id="rsa_st::inv_small_mod_large_mont" title='rsa_st::inv_small_mod_large_mont' data-ref="rsa_st::inv_small_mod_large_mont" data-ref-filename="rsa_st..inv_small_mod_large_mont">inv_small_mod_large_mont</dfn>;</td></tr>
+<tr><th id="770">770</th><td></td></tr>
+<tr><th id="771">771</th><td>  <i>// num_blindings contains the size of the |blindings| and |blindings_inuse|</i></td></tr>
+<tr><th id="772">772</th><td><i>  // arrays. This member and the |blindings_inuse| array are protected by</i></td></tr>
+<tr><th id="773">773</th><td><i>  // |lock|.</i></td></tr>
+<tr><th id="774">774</th><td>  <em>unsigned</em> <dfn class="decl field" id="rsa_st::num_blindings" title='rsa_st::num_blindings' data-ref="rsa_st::num_blindings" data-ref-filename="rsa_st..num_blindings">num_blindings</dfn>;</td></tr>
+<tr><th id="775">775</th><td>  <i>// blindings is an array of BN_BLINDING structures that can be reserved by a</i></td></tr>
+<tr><th id="776">776</th><td><i>  // thread by locking |lock| and changing the corresponding element in</i></td></tr>
+<tr><th id="777">777</th><td><i>  // |blindings_inuse| from 0 to 1.</i></td></tr>
+<tr><th id="778">778</th><td>  <a class="typedef" href="#BN_BLINDING" title='BN_BLINDING' data-type='struct bn_blinding_st' data-ref="BN_BLINDING" data-ref-filename="BN_BLINDING">BN_BLINDING</a> **<dfn class="decl field" id="rsa_st::blindings" title='rsa_st::blindings' data-ref="rsa_st::blindings" data-ref-filename="rsa_st..blindings">blindings</dfn>;</td></tr>
+<tr><th id="779">779</th><td>  <em>unsigned</em> <em>char</em> *<dfn class="decl field" id="rsa_st::blindings_inuse" title='rsa_st::blindings_inuse' data-ref="rsa_st::blindings_inuse" data-ref-filename="rsa_st..blindings_inuse">blindings_inuse</dfn>;</td></tr>
+<tr><th id="780">780</th><td>  <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="decl field" id="rsa_st::blinding_fork_generation" title='rsa_st::blinding_fork_generation' data-ref="rsa_st::blinding_fork_generation" data-ref-filename="rsa_st..blinding_fork_generation">blinding_fork_generation</dfn>;</td></tr>
+<tr><th id="781">781</th><td></td></tr>
+<tr><th id="782">782</th><td>  <i>// private_key_frozen is one if the key has been used for a private key</i></td></tr>
+<tr><th id="783">783</th><td><i>  // operation and may no longer be mutated.</i></td></tr>
+<tr><th id="784">784</th><td>  <em>unsigned</em> <dfn class="decl field" id="rsa_st::private_key_frozen" title='rsa_st::private_key_frozen' data-ref="rsa_st::private_key_frozen" data-ref-filename="rsa_st..private_key_frozen">private_key_frozen</dfn>:<var>1</var>;</td></tr>
+<tr><th id="785">785</th><td>};</td></tr>
+<tr><th id="786">786</th><td></td></tr>
+<tr><th id="787">787</th><td></td></tr>
+<tr><th id="788">788</th><td><u>#<span data-ppcond="788">if</span> defined(<span class="macro" data-ref="_M/__cplusplus">__cplusplus</span>)</u></td></tr>
+<tr><th id="789">789</th><td>}  <i>// extern C</i></td></tr>
+<tr><th id="790">790</th><td></td></tr>
+<tr><th id="791">791</th><td><b>extern</b> <q>"C++"</q> {</td></tr>
+<tr><th id="792">792</th><td></td></tr>
+<tr><th id="793">793</th><td>BSSL_NAMESPACE_BEGIN</td></tr>
+<tr><th id="794">794</th><td></td></tr>
+<tr><th id="795">795</th><td>BORINGSSL_MAKE_DELETER(RSA, RSA_free)</td></tr>
+<tr><th id="796">796</th><td>BORINGSSL_MAKE_UP_REF(RSA, RSA_up_ref)</td></tr>
+<tr><th id="797">797</th><td></td></tr>
+<tr><th id="798">798</th><td>BSSL_NAMESPACE_END</td></tr>
+<tr><th id="799">799</th><td></td></tr>
+<tr><th id="800">800</th><td>}  <i>// extern C++</i></td></tr>
+<tr><th id="801">801</th><td></td></tr>
+<tr><th id="802">802</th><td><u>#<span data-ppcond="788">endif</span></u></td></tr>
+<tr><th id="803">803</th><td></td></tr>
+<tr><th id="804">804</th><td><u>#define <dfn class="macro" id="_M/RSA_R_BAD_ENCODING" data-ref="_M/RSA_R_BAD_ENCODING">RSA_R_BAD_ENCODING</dfn> 100</u></td></tr>
+<tr><th id="805">805</th><td><u>#define <dfn class="macro" id="_M/RSA_R_BAD_E_VALUE" data-ref="_M/RSA_R_BAD_E_VALUE">RSA_R_BAD_E_VALUE</dfn> 101</u></td></tr>
+<tr><th id="806">806</th><td><u>#define <dfn class="macro" id="_M/RSA_R_BAD_FIXED_HEADER_DECRYPT" data-ref="_M/RSA_R_BAD_FIXED_HEADER_DECRYPT">RSA_R_BAD_FIXED_HEADER_DECRYPT</dfn> 102</u></td></tr>
+<tr><th id="807">807</th><td><u>#define <dfn class="macro" id="_M/RSA_R_BAD_PAD_BYTE_COUNT" data-ref="_M/RSA_R_BAD_PAD_BYTE_COUNT">RSA_R_BAD_PAD_BYTE_COUNT</dfn> 103</u></td></tr>
+<tr><th id="808">808</th><td><u>#define <dfn class="macro" id="_M/RSA_R_BAD_RSA_PARAMETERS" data-ref="_M/RSA_R_BAD_RSA_PARAMETERS">RSA_R_BAD_RSA_PARAMETERS</dfn> 104</u></td></tr>
+<tr><th id="809">809</th><td><u>#define <dfn class="macro" id="_M/RSA_R_BAD_SIGNATURE" data-ref="_M/RSA_R_BAD_SIGNATURE">RSA_R_BAD_SIGNATURE</dfn> 105</u></td></tr>
+<tr><th id="810">810</th><td><u>#define <dfn class="macro" id="_M/RSA_R_BAD_VERSION" data-ref="_M/RSA_R_BAD_VERSION">RSA_R_BAD_VERSION</dfn> 106</u></td></tr>
+<tr><th id="811">811</th><td><u>#define <dfn class="macro" id="_M/RSA_R_BLOCK_TYPE_IS_NOT_01" data-ref="_M/RSA_R_BLOCK_TYPE_IS_NOT_01">RSA_R_BLOCK_TYPE_IS_NOT_01</dfn> 107</u></td></tr>
+<tr><th id="812">812</th><td><u>#define <dfn class="macro" id="_M/RSA_R_BN_NOT_INITIALIZED" data-ref="_M/RSA_R_BN_NOT_INITIALIZED">RSA_R_BN_NOT_INITIALIZED</dfn> 108</u></td></tr>
+<tr><th id="813">813</th><td><u>#define <dfn class="macro" id="_M/RSA_R_CANNOT_RECOVER_MULTI_PRIME_KEY" data-ref="_M/RSA_R_CANNOT_RECOVER_MULTI_PRIME_KEY">RSA_R_CANNOT_RECOVER_MULTI_PRIME_KEY</dfn> 109</u></td></tr>
+<tr><th id="814">814</th><td><u>#define <dfn class="macro" id="_M/RSA_R_CRT_PARAMS_ALREADY_GIVEN" data-ref="_M/RSA_R_CRT_PARAMS_ALREADY_GIVEN">RSA_R_CRT_PARAMS_ALREADY_GIVEN</dfn> 110</u></td></tr>
+<tr><th id="815">815</th><td><u>#define <dfn class="macro" id="_M/RSA_R_CRT_VALUES_INCORRECT" data-ref="_M/RSA_R_CRT_VALUES_INCORRECT">RSA_R_CRT_VALUES_INCORRECT</dfn> 111</u></td></tr>
+<tr><th id="816">816</th><td><u>#define <dfn class="macro" id="_M/RSA_R_DATA_LEN_NOT_EQUAL_TO_MOD_LEN" data-ref="_M/RSA_R_DATA_LEN_NOT_EQUAL_TO_MOD_LEN">RSA_R_DATA_LEN_NOT_EQUAL_TO_MOD_LEN</dfn> 112</u></td></tr>
+<tr><th id="817">817</th><td><u>#define <dfn class="macro" id="_M/RSA_R_DATA_TOO_LARGE" data-ref="_M/RSA_R_DATA_TOO_LARGE">RSA_R_DATA_TOO_LARGE</dfn> 113</u></td></tr>
+<tr><th id="818">818</th><td><u>#define <dfn class="macro" id="_M/RSA_R_DATA_TOO_LARGE_FOR_KEY_SIZE" data-ref="_M/RSA_R_DATA_TOO_LARGE_FOR_KEY_SIZE">RSA_R_DATA_TOO_LARGE_FOR_KEY_SIZE</dfn> 114</u></td></tr>
+<tr><th id="819">819</th><td><u>#define <dfn class="macro" id="_M/RSA_R_DATA_TOO_LARGE_FOR_MODULUS" data-ref="_M/RSA_R_DATA_TOO_LARGE_FOR_MODULUS">RSA_R_DATA_TOO_LARGE_FOR_MODULUS</dfn> 115</u></td></tr>
+<tr><th id="820">820</th><td><u>#define <dfn class="macro" id="_M/RSA_R_DATA_TOO_SMALL" data-ref="_M/RSA_R_DATA_TOO_SMALL">RSA_R_DATA_TOO_SMALL</dfn> 116</u></td></tr>
+<tr><th id="821">821</th><td><u>#define <dfn class="macro" id="_M/RSA_R_DATA_TOO_SMALL_FOR_KEY_SIZE" data-ref="_M/RSA_R_DATA_TOO_SMALL_FOR_KEY_SIZE">RSA_R_DATA_TOO_SMALL_FOR_KEY_SIZE</dfn> 117</u></td></tr>
+<tr><th id="822">822</th><td><u>#define <dfn class="macro" id="_M/RSA_R_DIGEST_TOO_BIG_FOR_RSA_KEY" data-ref="_M/RSA_R_DIGEST_TOO_BIG_FOR_RSA_KEY">RSA_R_DIGEST_TOO_BIG_FOR_RSA_KEY</dfn> 118</u></td></tr>
+<tr><th id="823">823</th><td><u>#define <dfn class="macro" id="_M/RSA_R_D_E_NOT_CONGRUENT_TO_1" data-ref="_M/RSA_R_D_E_NOT_CONGRUENT_TO_1">RSA_R_D_E_NOT_CONGRUENT_TO_1</dfn> 119</u></td></tr>
+<tr><th id="824">824</th><td><u>#define <dfn class="macro" id="_M/RSA_R_EMPTY_PUBLIC_KEY" data-ref="_M/RSA_R_EMPTY_PUBLIC_KEY">RSA_R_EMPTY_PUBLIC_KEY</dfn> 120</u></td></tr>
+<tr><th id="825">825</th><td><u>#define <dfn class="macro" id="_M/RSA_R_ENCODE_ERROR" data-ref="_M/RSA_R_ENCODE_ERROR">RSA_R_ENCODE_ERROR</dfn> 121</u></td></tr>
+<tr><th id="826">826</th><td><u>#define <dfn class="macro" id="_M/RSA_R_FIRST_OCTET_INVALID" data-ref="_M/RSA_R_FIRST_OCTET_INVALID">RSA_R_FIRST_OCTET_INVALID</dfn> 122</u></td></tr>
+<tr><th id="827">827</th><td><u>#define <dfn class="macro" id="_M/RSA_R_INCONSISTENT_SET_OF_CRT_VALUES" data-ref="_M/RSA_R_INCONSISTENT_SET_OF_CRT_VALUES">RSA_R_INCONSISTENT_SET_OF_CRT_VALUES</dfn> 123</u></td></tr>
+<tr><th id="828">828</th><td><u>#define <dfn class="macro" id="_M/RSA_R_INTERNAL_ERROR" data-ref="_M/RSA_R_INTERNAL_ERROR">RSA_R_INTERNAL_ERROR</dfn> 124</u></td></tr>
+<tr><th id="829">829</th><td><u>#define <dfn class="macro" id="_M/RSA_R_INVALID_MESSAGE_LENGTH" data-ref="_M/RSA_R_INVALID_MESSAGE_LENGTH">RSA_R_INVALID_MESSAGE_LENGTH</dfn> 125</u></td></tr>
+<tr><th id="830">830</th><td><u>#define <dfn class="macro" id="_M/RSA_R_KEY_SIZE_TOO_SMALL" data-ref="_M/RSA_R_KEY_SIZE_TOO_SMALL">RSA_R_KEY_SIZE_TOO_SMALL</dfn> 126</u></td></tr>
+<tr><th id="831">831</th><td><u>#define <dfn class="macro" id="_M/RSA_R_LAST_OCTET_INVALID" data-ref="_M/RSA_R_LAST_OCTET_INVALID">RSA_R_LAST_OCTET_INVALID</dfn> 127</u></td></tr>
+<tr><th id="832">832</th><td><u>#define <dfn class="macro" id="_M/RSA_R_MODULUS_TOO_LARGE" data-ref="_M/RSA_R_MODULUS_TOO_LARGE">RSA_R_MODULUS_TOO_LARGE</dfn> 128</u></td></tr>
+<tr><th id="833">833</th><td><u>#define <dfn class="macro" id="_M/RSA_R_MUST_HAVE_AT_LEAST_TWO_PRIMES" data-ref="_M/RSA_R_MUST_HAVE_AT_LEAST_TWO_PRIMES">RSA_R_MUST_HAVE_AT_LEAST_TWO_PRIMES</dfn> 129</u></td></tr>
+<tr><th id="834">834</th><td><u>#define <dfn class="macro" id="_M/RSA_R_NO_PUBLIC_EXPONENT" data-ref="_M/RSA_R_NO_PUBLIC_EXPONENT">RSA_R_NO_PUBLIC_EXPONENT</dfn> 130</u></td></tr>
+<tr><th id="835">835</th><td><u>#define <dfn class="macro" id="_M/RSA_R_NULL_BEFORE_BLOCK_MISSING" data-ref="_M/RSA_R_NULL_BEFORE_BLOCK_MISSING">RSA_R_NULL_BEFORE_BLOCK_MISSING</dfn> 131</u></td></tr>
+<tr><th id="836">836</th><td><u>#define <dfn class="macro" id="_M/RSA_R_N_NOT_EQUAL_P_Q" data-ref="_M/RSA_R_N_NOT_EQUAL_P_Q">RSA_R_N_NOT_EQUAL_P_Q</dfn> 132</u></td></tr>
+<tr><th id="837">837</th><td><u>#define <dfn class="macro" id="_M/RSA_R_OAEP_DECODING_ERROR" data-ref="_M/RSA_R_OAEP_DECODING_ERROR">RSA_R_OAEP_DECODING_ERROR</dfn> 133</u></td></tr>
+<tr><th id="838">838</th><td><u>#define <dfn class="macro" id="_M/RSA_R_ONLY_ONE_OF_P_Q_GIVEN" data-ref="_M/RSA_R_ONLY_ONE_OF_P_Q_GIVEN">RSA_R_ONLY_ONE_OF_P_Q_GIVEN</dfn> 134</u></td></tr>
+<tr><th id="839">839</th><td><u>#define <dfn class="macro" id="_M/RSA_R_OUTPUT_BUFFER_TOO_SMALL" data-ref="_M/RSA_R_OUTPUT_BUFFER_TOO_SMALL">RSA_R_OUTPUT_BUFFER_TOO_SMALL</dfn> 135</u></td></tr>
+<tr><th id="840">840</th><td><u>#define <dfn class="macro" id="_M/RSA_R_PADDING_CHECK_FAILED" data-ref="_M/RSA_R_PADDING_CHECK_FAILED">RSA_R_PADDING_CHECK_FAILED</dfn> 136</u></td></tr>
+<tr><th id="841">841</th><td><u>#define <dfn class="macro" id="_M/RSA_R_PKCS_DECODING_ERROR" data-ref="_M/RSA_R_PKCS_DECODING_ERROR">RSA_R_PKCS_DECODING_ERROR</dfn> 137</u></td></tr>
+<tr><th id="842">842</th><td><u>#define <dfn class="macro" id="_M/RSA_R_SLEN_CHECK_FAILED" data-ref="_M/RSA_R_SLEN_CHECK_FAILED">RSA_R_SLEN_CHECK_FAILED</dfn> 138</u></td></tr>
+<tr><th id="843">843</th><td><u>#define <dfn class="macro" id="_M/RSA_R_SLEN_RECOVERY_FAILED" data-ref="_M/RSA_R_SLEN_RECOVERY_FAILED">RSA_R_SLEN_RECOVERY_FAILED</dfn> 139</u></td></tr>
+<tr><th id="844">844</th><td><u>#define <dfn class="macro" id="_M/RSA_R_TOO_LONG" data-ref="_M/RSA_R_TOO_LONG">RSA_R_TOO_LONG</dfn> 140</u></td></tr>
+<tr><th id="845">845</th><td><u>#define <dfn class="macro" id="_M/RSA_R_TOO_MANY_ITERATIONS" data-ref="_M/RSA_R_TOO_MANY_ITERATIONS">RSA_R_TOO_MANY_ITERATIONS</dfn> 141</u></td></tr>
+<tr><th id="846">846</th><td><u>#define <dfn class="macro" id="_M/RSA_R_UNKNOWN_ALGORITHM_TYPE" data-ref="_M/RSA_R_UNKNOWN_ALGORITHM_TYPE">RSA_R_UNKNOWN_ALGORITHM_TYPE</dfn> 142</u></td></tr>
+<tr><th id="847">847</th><td><u>#define <dfn class="macro" id="_M/RSA_R_UNKNOWN_PADDING_TYPE" data-ref="_M/RSA_R_UNKNOWN_PADDING_TYPE">RSA_R_UNKNOWN_PADDING_TYPE</dfn> 143</u></td></tr>
+<tr><th id="848">848</th><td><u>#define <dfn class="macro" id="_M/RSA_R_VALUE_MISSING" data-ref="_M/RSA_R_VALUE_MISSING">RSA_R_VALUE_MISSING</dfn> 144</u></td></tr>
+<tr><th id="849">849</th><td><u>#define <dfn class="macro" id="_M/RSA_R_WRONG_SIGNATURE_LENGTH" data-ref="_M/RSA_R_WRONG_SIGNATURE_LENGTH">RSA_R_WRONG_SIGNATURE_LENGTH</dfn> 145</u></td></tr>
+<tr><th id="850">850</th><td><u>#define <dfn class="macro" id="_M/RSA_R_PUBLIC_KEY_VALIDATION_FAILED" data-ref="_M/RSA_R_PUBLIC_KEY_VALIDATION_FAILED">RSA_R_PUBLIC_KEY_VALIDATION_FAILED</dfn> 146</u></td></tr>
+<tr><th id="851">851</th><td><u>#define <dfn class="macro" id="_M/RSA_R_D_OUT_OF_RANGE" data-ref="_M/RSA_R_D_OUT_OF_RANGE">RSA_R_D_OUT_OF_RANGE</dfn> 147</u></td></tr>
+<tr><th id="852">852</th><td><u>#define <dfn class="macro" id="_M/RSA_R_BLOCK_TYPE_IS_NOT_02" data-ref="_M/RSA_R_BLOCK_TYPE_IS_NOT_02">RSA_R_BLOCK_TYPE_IS_NOT_02</dfn> 148</u></td></tr>
+<tr><th id="853">853</th><td></td></tr>
+<tr><th id="854">854</th><td><u>#<span data-ppcond="57">endif</span>  // OPENSSL_HEADER_RSA_H</u></td></tr>
+<tr><th id="855">855</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../crypto/engine/engine.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/engine/engine.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

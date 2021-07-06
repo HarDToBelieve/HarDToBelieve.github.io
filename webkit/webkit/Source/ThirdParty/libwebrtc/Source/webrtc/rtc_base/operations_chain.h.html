@@ -1,0 +1,220 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>operations_chain.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/operations_chain.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::OperationsChain,rtc::rtc_operations_chain_internal::Operation,rtc::rtc_operations_chain_internal::OperationWithFunctor "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/operations_chain.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='operations_chain.h.html'>operations_chain.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2019 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_OPERATIONS_CHAIN_H_">RTC_BASE_OPERATIONS_CHAIN_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_OPERATIONS_CHAIN_H_" data-ref="_M/RTC_BASE_OPERATIONS_CHAIN_H_">RTC_BASE_OPERATIONS_CHAIN_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;functional&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="16">16</th><td><u>#include &lt;queue&gt;</u></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;set&gt;</u></td></tr>
+<tr><th id="18">18</th><td><u>#include &lt;type_traits&gt;</u></td></tr>
+<tr><th id="19">19</th><td><u>#include &lt;utility&gt;</u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="../../third_party/abseil-cpp/absl/types/optional.h.html">"absl/types/optional.h"</a></u></td></tr>
+<tr><th id="22">22</th><td><u>#include <a href="../api/scoped_refptr.h.html">"api/scoped_refptr.h"</a></u></td></tr>
+<tr><th id="23">23</th><td><u>#include <a href="../api/sequence_checker.h.html">"api/sequence_checker.h"</a></u></td></tr>
+<tr><th id="24">24</th><td><u>#include <a href="checks.h.html">"rtc_base/checks.h"</a></u></td></tr>
+<tr><th id="25">25</th><td><u>#include <a href="constructor_magic.h.html">"rtc_base/constructor_magic.h"</a></u></td></tr>
+<tr><th id="26">26</th><td><u>#include <a href="ref_count.h.html">"rtc_base/ref_count.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#include <a href="ref_counted_object.h.html">"rtc_base/ref_counted_object.h"</a></u></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="system/no_unique_address.h.html">"rtc_base/system/no_unique_address.h"</a></u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><b>namespace</b> <span class="namespace">rtc_operations_chain_internal</span> {</td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><i>// Abstract base class for operations on the OperationsChain. Run() must be</i></td></tr>
+<tr><th id="35">35</th><td><i>// invoked exactly once during the Operation's lifespan.</i></td></tr>
+<tr><th id="36">36</th><td><b>class</b> <dfn class="type def" id="rtc::rtc_operations_chain_internal::Operation" title='rtc::rtc_operations_chain_internal::Operation' data-ref="rtc::rtc_operations_chain_internal::Operation" data-ref-filename="rtc..rtc_operations_chain_internal..Operation">Operation</dfn> {</td></tr>
+<tr><th id="37">37</th><td> <b>public</b>:</td></tr>
+<tr><th id="38">38</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN3rtc29rtc_operations_chain_internal9OperationD1Ev" title='rtc::rtc_operations_chain_internal::Operation::~Operation' data-ref="_ZN3rtc29rtc_operations_chain_internal9OperationD1Ev" data-ref-filename="_ZN3rtc29rtc_operations_chain_internal9OperationD1Ev">~Operation</dfn>() {}</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN3rtc29rtc_operations_chain_internal9Operation3RunEv" title='rtc::rtc_operations_chain_internal::Operation::Run' data-ref="_ZN3rtc29rtc_operations_chain_internal9Operation3RunEv" data-ref-filename="_ZN3rtc29rtc_operations_chain_internal9Operation3RunEv">Run</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="41">41</th><td>};</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><i>// FunctorT is the same as in OperationsChain::ChainOperation(). |callback_| is</i></td></tr>
+<tr><th id="44">44</th><td><i>// passed on to the |functor_| and is used to inform the OperationsChain that</i></td></tr>
+<tr><th id="45">45</th><td><i>// the operation completed. The functor is responsible for invoking the</i></td></tr>
+<tr><th id="46">46</th><td><i>// callback when the operation has completed.</i></td></tr>
+<tr><th id="47">47</th><td><b>template</b> &lt;<b>typename</b> FunctorT&gt;</td></tr>
+<tr><th id="48">48</th><td><b>class</b> <dfn class="type def" id="rtc::rtc_operations_chain_internal::OperationWithFunctor" title='rtc::rtc_operations_chain_internal::OperationWithFunctor' data-ref="rtc::rtc_operations_chain_internal::OperationWithFunctor" data-ref-filename="rtc..rtc_operations_chain_internal..OperationWithFunctor">OperationWithFunctor</dfn> final : <b>public</b> <a class="type" href="#rtc::rtc_operations_chain_internal::Operation" title='rtc::rtc_operations_chain_internal::Operation' data-ref="rtc::rtc_operations_chain_internal::Operation" data-ref-filename="rtc..rtc_operations_chain_internal..Operation">Operation</a> {</td></tr>
+<tr><th id="49">49</th><td> <b>public</b>:</td></tr>
+<tr><th id="50">50</th><td>  <dfn class="decl def fn" id="_ZN3rtc29rtc_operations_chain_internal20OperationWithFunctorC1EOT_NSt3__18functionIFvvEEE" title='rtc::rtc_operations_chain_internal::OperationWithFunctor::OperationWithFunctor&lt;FunctorT&gt;' data-ref="_ZN3rtc29rtc_operations_chain_internal20OperationWithFunctorC1EOT_NSt3__18functionIFvvEEE" data-ref-filename="_ZN3rtc29rtc_operations_chain_internal20OperationWithFunctorC1EOT_NSt3__18functionIFvvEEE">OperationWithFunctor</dfn>(FunctorT&amp;&amp; <dfn class="local col9 decl" id="689functor" title='functor' data-type='FunctorT &amp;&amp;' data-ref="689functor" data-ref-filename="689functor">functor</dfn>, <span class="namespace">std::</span><span class='type' title='std::__1::function' data-ref="std::__1::function" data-ref-filename="std..__1..function">function</span>&lt;<em>void</em>()&gt; <dfn class="local col0 decl" id="690callback" title='callback' data-type='std::function&lt;void ()&gt;' data-ref="690callback" data-ref-filename="690callback">callback</dfn>)</td></tr>
+<tr><th id="51">51</th><td>      : <a class="member field" href="#rtc::rtc_operations_chain_internal::OperationWithFunctor::functor_" title='rtc::rtc_operations_chain_internal::OperationWithFunctor::functor_' data-ref="rtc::rtc_operations_chain_internal::OperationWithFunctor::functor_" data-ref-filename="rtc..rtc_operations_chain_internal..OperationWithFunctor..functor_">functor_</a>(<span class="namespace">std::</span>forward&lt;FunctorT&gt;(<a class="local col9 ref" href="#689functor" title='functor' data-ref="689functor" data-ref-filename="689functor">functor</a>)),</td></tr>
+<tr><th id="52">52</th><td>        <a class="member field" href="#rtc::rtc_operations_chain_internal::OperationWithFunctor::callback_" title='rtc::rtc_operations_chain_internal::OperationWithFunctor::callback_' data-ref="rtc::rtc_operations_chain_internal::OperationWithFunctor::callback_" data-ref-filename="rtc..rtc_operations_chain_internal..OperationWithFunctor..callback_">callback_</a><span class='ref fn' title='std::__1::function&lt;type-parameter-0-0 (type-parameter-0-1...)&gt;::function&lt;type-parameter-0-0 (type-parameter-0-1...)&gt;' data-ref="_ZNSt3__18functionIFT_DpT0_EEC1EONS0_IS4_EE" data-ref-filename="_ZNSt3__18functionIFT_DpT0_EEC1EONS0_IS4_EE">(</span><span class="namespace">std::</span><span class='ref fn' title='std::__1::move' data-ref="_ZNSt3__1L4moveEOT_" data-ref-filename="_ZNSt3__1L4moveEOT_">move</span>(<span class='refarg'><a class="local col0 ref" href="#690callback" title='callback' data-ref="690callback" data-ref-filename="690callback">callback</a></span>)) {}</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td>  <dfn class="virtual decl def fn" id="_ZN3rtc29rtc_operations_chain_internal20OperationWithFunctorD1Ev" title='rtc::rtc_operations_chain_internal::OperationWithFunctor::~OperationWithFunctor&lt;FunctorT&gt;' data-ref="_ZN3rtc29rtc_operations_chain_internal20OperationWithFunctorD1Ev" data-ref-filename="_ZN3rtc29rtc_operations_chain_internal20OperationWithFunctorD1Ev">~OperationWithFunctor</dfn>() override {</td></tr>
+<tr><th id="55">55</th><td><u>#<span data-ppcond="55">if</span> <a class="macro" href="checks.h.html#18" title="1" data-ref="_M/RTC_DCHECK_IS_ON">RTC_DCHECK_IS_ON</a></u></td></tr>
+<tr><th id="56">56</th><td>    <a class="macro" href="checks.h.html#429" title="(has_run_) ? static_cast&lt;void&gt;(0) : ::rtc::webrtc_checks_impl::FatalLogCall&lt;false&gt;( &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/operations_chain.h&quot;, 56, &quot;has_run_&quot;) &amp; ::rtc::webrtc_checks_impl::LogStreamer&lt;&gt;()" data-ref="_M/RTC_DCHECK">RTC_DCHECK</a>(<a class="member field" href="#rtc::rtc_operations_chain_internal::OperationWithFunctor::has_run_" title='rtc::rtc_operations_chain_internal::OperationWithFunctor::has_run_' data-ref="rtc::rtc_operations_chain_internal::OperationWithFunctor::has_run_" data-ref-filename="rtc..rtc_operations_chain_internal..OperationWithFunctor..has_run_">has_run_</a>);</td></tr>
+<tr><th id="57">57</th><td><u>#<span data-ppcond="55">endif</span>  // RTC_DCHECK_IS_ON</u></td></tr>
+<tr><th id="58">58</th><td>  }</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td>  <em>void</em> <dfn class="virtual decl def fn" id="_ZN3rtc29rtc_operations_chain_internal20OperationWithFunctor3RunEv" title='rtc::rtc_operations_chain_internal::OperationWithFunctor::Run' data-ref="_ZN3rtc29rtc_operations_chain_internal20OperationWithFunctor3RunEv" data-ref-filename="_ZN3rtc29rtc_operations_chain_internal20OperationWithFunctor3RunEv">Run</dfn>() override {</td></tr>
+<tr><th id="61">61</th><td><u>#<span data-ppcond="61">if</span> <a class="macro" href="checks.h.html#18" title="1" data-ref="_M/RTC_DCHECK_IS_ON">RTC_DCHECK_IS_ON</a></u></td></tr>
+<tr><th id="62">62</th><td>    <a class="macro" href="checks.h.html#429" title="(!has_run_) ? static_cast&lt;void&gt;(0) : ::rtc::webrtc_checks_impl::FatalLogCall&lt;false&gt;( &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/operations_chain.h&quot;, 62, &quot;!has_run_&quot;) &amp; ::rtc::webrtc_checks_impl::LogStreamer&lt;&gt;()" data-ref="_M/RTC_DCHECK">RTC_DCHECK</a>(!<a class="member field" href="#rtc::rtc_operations_chain_internal::OperationWithFunctor::has_run_" title='rtc::rtc_operations_chain_internal::OperationWithFunctor::has_run_' data-ref="rtc::rtc_operations_chain_internal::OperationWithFunctor::has_run_" data-ref-filename="rtc..rtc_operations_chain_internal..OperationWithFunctor..has_run_">has_run_</a>);</td></tr>
+<tr><th id="63">63</th><td>    <a class="member field" href="#rtc::rtc_operations_chain_internal::OperationWithFunctor::has_run_" title='rtc::rtc_operations_chain_internal::OperationWithFunctor::has_run_' data-ref="rtc::rtc_operations_chain_internal::OperationWithFunctor::has_run_" data-ref-filename="rtc..rtc_operations_chain_internal..OperationWithFunctor..has_run_">has_run_</a> = <b>true</b>;</td></tr>
+<tr><th id="64">64</th><td><u>#<span data-ppcond="61">endif</span>  // RTC_DCHECK_IS_ON</u></td></tr>
+<tr><th id="65">65</th><td>    <i>// The functor being executed may invoke the callback synchronously,</i></td></tr>
+<tr><th id="66">66</th><td><i>    // marking the operation as complete. As such, |this| OperationWithFunctor</i></td></tr>
+<tr><th id="67">67</th><td><i>    // object may get deleted here, including destroying |functor_|. To</i></td></tr>
+<tr><th id="68">68</th><td><i>    // protect the functor from self-destruction while running, it is moved to</i></td></tr>
+<tr><th id="69">69</th><td><i>    // a local variable.</i></td></tr>
+<tr><th id="70">70</th><td>    <em>auto</em> <dfn class="local col1 decl" id="691functor" title='functor' data-type='auto' data-ref="691functor" data-ref-filename="691functor">functor</dfn> = <span class="namespace">std::</span>move(<a class="member field" href="#rtc::rtc_operations_chain_internal::OperationWithFunctor::functor_" title='rtc::rtc_operations_chain_internal::OperationWithFunctor::functor_' data-ref="rtc::rtc_operations_chain_internal::OperationWithFunctor::functor_" data-ref-filename="rtc..rtc_operations_chain_internal..OperationWithFunctor..functor_">functor_</a>);</td></tr>
+<tr><th id="71">71</th><td>    <a class="local col1 ref" href="#691functor" title='functor' data-ref="691functor" data-ref-filename="691functor">functor</a>(<span class="namespace">std::</span><span class='ref fn' title='std::__1::move' data-ref="_ZNSt3__1L4moveEOT_" data-ref-filename="_ZNSt3__1L4moveEOT_">move</span>(<span class='refarg'><a class="member field" href="#rtc::rtc_operations_chain_internal::OperationWithFunctor::callback_" title='rtc::rtc_operations_chain_internal::OperationWithFunctor::callback_' data-ref="rtc::rtc_operations_chain_internal::OperationWithFunctor::callback_" data-ref-filename="rtc..rtc_operations_chain_internal..OperationWithFunctor..callback_">callback_</a></span>));</td></tr>
+<tr><th id="72">72</th><td>    <i>// |this| may now be deleted; don't touch any member variables.</i></td></tr>
+<tr><th id="73">73</th><td>  }</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td> <b>private</b>:</td></tr>
+<tr><th id="76">76</th><td>  <b>typename</b> <span class="namespace">std::</span><span class='type' title='std::__1::remove_reference' data-ref="std::__1::remove_reference" data-ref-filename="std..__1..remove_reference">remove_reference</span>&lt;FunctorT&gt;::type <dfn class="decl field" id="rtc::rtc_operations_chain_internal::OperationWithFunctor::functor_" title='rtc::rtc_operations_chain_internal::OperationWithFunctor::functor_' data-ref="rtc::rtc_operations_chain_internal::OperationWithFunctor::functor_" data-ref-filename="rtc..rtc_operations_chain_internal..OperationWithFunctor..functor_">functor_</dfn>;</td></tr>
+<tr><th id="77">77</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::function' data-ref="std::__1::function" data-ref-filename="std..__1..function">function</span>&lt;<em>void</em>()&gt; <dfn class="decl field" id="rtc::rtc_operations_chain_internal::OperationWithFunctor::callback_" title='rtc::rtc_operations_chain_internal::OperationWithFunctor::callback_' data-ref="rtc::rtc_operations_chain_internal::OperationWithFunctor::callback_" data-ref-filename="rtc..rtc_operations_chain_internal..OperationWithFunctor..callback_">callback_</dfn>;</td></tr>
+<tr><th id="78">78</th><td><u>#<span data-ppcond="78">if</span> <a class="macro" href="checks.h.html#18" title="1" data-ref="_M/RTC_DCHECK_IS_ON">RTC_DCHECK_IS_ON</a></u></td></tr>
+<tr><th id="79">79</th><td>  <em>bool</em> <dfn class="decl field" id="rtc::rtc_operations_chain_internal::OperationWithFunctor::has_run_" title='rtc::rtc_operations_chain_internal::OperationWithFunctor::has_run_' data-ref="rtc::rtc_operations_chain_internal::OperationWithFunctor::has_run_" data-ref-filename="rtc..rtc_operations_chain_internal..OperationWithFunctor..has_run_">has_run_</dfn> = <b>false</b>;</td></tr>
+<tr><th id="80">80</th><td><u>#<span data-ppcond="78">endif</span>  // RTC_DCHECK_IS_ON</u></td></tr>
+<tr><th id="81">81</th><td>};</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td>}  <i>// namespace rtc_operations_chain_internal</i></td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td><i>// An implementation of an operations chain. An operations chain is used to</i></td></tr>
+<tr><th id="86">86</th><td><i>// ensure that asynchronous tasks are executed in-order with at most one task</i></td></tr>
+<tr><th id="87">87</th><td><i>// running at a time. The notion of an operation chain is defined in</i></td></tr>
+<tr><th id="88">88</th><td><i>// <a href="https://w3c.github.io/webrtc-pc/#dfn-operations-chain,">https://w3c.github.io/webrtc-pc/#dfn-operations-chain,</a> though unlike this</i></td></tr>
+<tr><th id="89">89</th><td><i>// implementation, the referenced definition is coupled with a peer connection.</i></td></tr>
+<tr><th id="90">90</th><td><i>//</i></td></tr>
+<tr><th id="91">91</th><td><i>// An operation is an asynchronous task. The operation starts when its functor</i></td></tr>
+<tr><th id="92">92</th><td><i>// is invoked, and completes when the callback that is passed to functor is</i></td></tr>
+<tr><th id="93">93</th><td><i>// invoked by the operation. The operation must start and complete on the same</i></td></tr>
+<tr><th id="94">94</th><td><i>// sequence that the operation was "chained" on. As such, the OperationsChain</i></td></tr>
+<tr><th id="95">95</th><td><i>// operates in a "single-threaded" fashion, but the asynchronous operations may</i></td></tr>
+<tr><th id="96">96</th><td><i>// use any number of threads to achieve "in parallel" behavior.</i></td></tr>
+<tr><th id="97">97</th><td><i>//</i></td></tr>
+<tr><th id="98">98</th><td><i>// When an operation is chained onto the OperationsChain, it is enqueued to be</i></td></tr>
+<tr><th id="99">99</th><td><i>// executed. Operations are executed in FIFO order, where the next operation</i></td></tr>
+<tr><th id="100">100</th><td><i>// does not start until the previous operation has completed. OperationsChain</i></td></tr>
+<tr><th id="101">101</th><td><i>// guarantees that:</i></td></tr>
+<tr><th id="102">102</th><td><i>// - If the operations chain is empty when an operation is chained, the</i></td></tr>
+<tr><th id="103">103</th><td><i>//   operation starts immediately, inside ChainOperation().</i></td></tr>
+<tr><th id="104">104</th><td><i>// - If the operations chain is not empty when an operation is chained, the</i></td></tr>
+<tr><th id="105">105</th><td><i>//   operation starts upon the previous operation completing, inside the</i></td></tr>
+<tr><th id="106">106</th><td><i>//   callback.</i></td></tr>
+<tr><th id="107">107</th><td><i>//</i></td></tr>
+<tr><th id="108">108</th><td><i>// An operation is contractually obligated to invoke the completion callback</i></td></tr>
+<tr><th id="109">109</th><td><i>// exactly once. Cancelling a chained operation is not supported by the</i></td></tr>
+<tr><th id="110">110</th><td><i>// OperationsChain; an operation that wants to be cancellable is responsible for</i></td></tr>
+<tr><th id="111">111</th><td><i>// aborting its own steps. The callback must still be invoked.</i></td></tr>
+<tr><th id="112">112</th><td><i>//</i></td></tr>
+<tr><th id="113">113</th><td><i>// The OperationsChain is kept-alive through reference counting if there are</i></td></tr>
+<tr><th id="114">114</th><td><i>// operations pending. This, together with the contract, guarantees that all</i></td></tr>
+<tr><th id="115">115</th><td><i>// operations that are chained get executed.</i></td></tr>
+<tr><th id="116">116</th><td><b>class</b> <dfn class="type def" id="rtc::OperationsChain" title='rtc::OperationsChain' data-ref="rtc::OperationsChain" data-ref-filename="rtc..OperationsChain">OperationsChain</dfn> final : <b>public</b> <a class="type" href="ref_counted_object.h.html#rtc::RefCountedObject" title='rtc::RefCountedObject' data-ref="rtc::RefCountedObject" data-ref-filename="rtc..RefCountedObject">RefCountedObject</a>&lt;<a class="type" href="ref_count.h.html#rtc::RefCountInterface" title='rtc::RefCountInterface' data-ref="rtc::RefCountInterface" data-ref-filename="rtc..RefCountInterface">RefCountInterface</a>&gt; {</td></tr>
+<tr><th id="117">117</th><td> <b>public</b>:</td></tr>
+<tr><th id="118">118</th><td>  <em>static</em> <a class="type" href="../api/scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;<a class="type" href="#rtc::OperationsChain" title='rtc::OperationsChain' data-ref="rtc::OperationsChain" data-ref-filename="rtc..OperationsChain">OperationsChain</a>&gt; <dfn class="decl fn" id="_ZN3rtc15OperationsChain6CreateEv" title='rtc::OperationsChain::Create' data-ref="_ZN3rtc15OperationsChain6CreateEv" data-ref-filename="_ZN3rtc15OperationsChain6CreateEv">Create</dfn>();</td></tr>
+<tr><th id="119">119</th><td>  <dfn class="virtual decl fn" id="_ZN3rtc15OperationsChainD1Ev" title='rtc::OperationsChain::~OperationsChain' data-ref="_ZN3rtc15OperationsChainD1Ev" data-ref-filename="_ZN3rtc15OperationsChainD1Ev">~OperationsChain</dfn>();</td></tr>
+<tr><th id="120">120</th><td></td></tr>
+<tr><th id="121">121</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN3rtc15OperationsChain23SetOnChainEmptyCallbackENSt3__18functionIFvvEEE" title='rtc::OperationsChain::SetOnChainEmptyCallback' data-ref="_ZN3rtc15OperationsChain23SetOnChainEmptyCallbackENSt3__18functionIFvvEEE" data-ref-filename="_ZN3rtc15OperationsChain23SetOnChainEmptyCallbackENSt3__18functionIFvvEEE">SetOnChainEmptyCallback</dfn>(<span class="namespace">std::</span><span class='type' title='std::__1::function' data-ref="std::__1::function" data-ref-filename="std..__1..function">function</span>&lt;<em>void</em>()&gt; <dfn class="local col2 decl" id="692on_chain_empty_callback" title='on_chain_empty_callback' data-type='std::function&lt;void ()&gt;' data-ref="692on_chain_empty_callback" data-ref-filename="692on_chain_empty_callback">on_chain_empty_callback</dfn>);</td></tr>
+<tr><th id="122">122</th><td>  <em>bool</em> <dfn class="decl fn" id="_ZNK3rtc15OperationsChain7IsEmptyEv" title='rtc::OperationsChain::IsEmpty' data-ref="_ZNK3rtc15OperationsChain7IsEmptyEv" data-ref-filename="_ZNK3rtc15OperationsChain7IsEmptyEv">IsEmpty</dfn>() <em>const</em>;</td></tr>
+<tr><th id="123">123</th><td></td></tr>
+<tr><th id="124">124</th><td>  <i>// Chains an operation. Chained operations are executed in FIFO order. The</i></td></tr>
+<tr><th id="125">125</th><td><i>  // operation starts when |functor| is executed by the OperationsChain and is</i></td></tr>
+<tr><th id="126">126</th><td><i>  // contractually obligated to invoke the callback passed to it when the</i></td></tr>
+<tr><th id="127">127</th><td><i>  // operation is complete. Operations must start and complete on the same</i></td></tr>
+<tr><th id="128">128</th><td><i>  // sequence that this method was invoked on.</i></td></tr>
+<tr><th id="129">129</th><td><i>  //</i></td></tr>
+<tr><th id="130">130</th><td><i>  // If the OperationsChain is empty, the operation starts immediately.</i></td></tr>
+<tr><th id="131">131</th><td><i>  // Otherwise it starts upon the previous operation completing.</i></td></tr>
+<tr><th id="132">132</th><td><i>  //</i></td></tr>
+<tr><th id="133">133</th><td><i>  // Requirements of FunctorT:</i></td></tr>
+<tr><th id="134">134</th><td><i>  // - FunctorT is movable.</i></td></tr>
+<tr><th id="135">135</th><td><i>  // - FunctorT implements "T operator()(std::function&lt;void()&gt; callback)" or</i></td></tr>
+<tr><th id="136">136</th><td><i>  //   "T operator()(std::function&lt;void()&gt; callback) const" for some T (if T is</i></td></tr>
+<tr><th id="137">137</th><td><i>  //   not void, the return value is discarded in the invoking sequence). The</i></td></tr>
+<tr><th id="138">138</th><td><i>  //   operator starts the operation; when the operation is complete, "callback"</i></td></tr>
+<tr><th id="139">139</th><td><i>  //   MUST be invoked, and it MUST be so on the sequence that ChainOperation()</i></td></tr>
+<tr><th id="140">140</th><td><i>  //   was invoked on.</i></td></tr>
+<tr><th id="141">141</th><td><i>  //</i></td></tr>
+<tr><th id="142">142</th><td><i>  // Lambda expressions are valid functors.</i></td></tr>
+<tr><th id="143">143</th><td>  <b>template</b> &lt;<b>typename</b> FunctorT&gt;</td></tr>
+<tr><th id="144">144</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN3rtc15OperationsChain14ChainOperationEOT_" title='rtc::OperationsChain::ChainOperation' data-ref="_ZN3rtc15OperationsChain14ChainOperationEOT_" data-ref-filename="_ZN3rtc15OperationsChain14ChainOperationEOT_">ChainOperation</dfn>(FunctorT&amp;&amp; <dfn class="local col3 decl" id="693functor" title='functor' data-type='FunctorT &amp;&amp;' data-ref="693functor" data-ref-filename="693functor">functor</dfn>) {</td></tr>
+<tr><th id="145">145</th><td>    <a class="macro" href="../api/sequence_checker.h.html#110" title="webrtc::webrtc_sequence_checker_internal::SequenceCheckerScope seq_check_scope(&amp;sequence_checker_); ((&amp;sequence_checker_)-&gt;IsCurrent()) ? static_cast&lt;void&gt;(0) : ::rtc::webrtc_checks_impl::FatalLogCall&lt;false&gt;( &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/operations_chain.h&quot;, 145, &quot;(&amp;sequence_checker_)-&gt;IsCurrent()&quot;) &amp; ::rtc::webrtc_checks_impl::LogStreamer&lt;&gt;() &lt;&lt; webrtc::webrtc_sequence_checker_internal::ExpectationToString(&amp;sequence_checker_)" data-ref="_M/RTC_DCHECK_RUN_ON">RTC_DCHECK_RUN_ON</a>(&amp;<a class="member field" href="#rtc::OperationsChain::sequence_checker_" title='rtc::OperationsChain::sequence_checker_' data-ref="rtc::OperationsChain::sequence_checker_" data-ref-filename="rtc..OperationsChain..sequence_checker_">sequence_checker_</a>);</td></tr>
+<tr><th id="146">146</th><td>    <a class="member field" href="#rtc::OperationsChain::chained_operations_" title='rtc::OperationsChain::chained_operations_' data-ref="rtc::OperationsChain::chained_operations_" data-ref-filename="rtc..OperationsChain..chained_operations_">chained_operations_</a>.push(</td></tr>
+<tr><th id="147">147</th><td>        <span class="namespace">std::</span>make_unique&lt;</td></tr>
+<tr><th id="148">148</th><td>            <span class="namespace">rtc_operations_chain_internal::</span><a class="type" href="#rtc::rtc_operations_chain_internal::OperationWithFunctor" title='rtc::rtc_operations_chain_internal::OperationWithFunctor' data-ref="rtc::rtc_operations_chain_internal::OperationWithFunctor" data-ref-filename="rtc..rtc_operations_chain_internal..OperationWithFunctor">OperationWithFunctor</a>&lt;FunctorT&gt;&gt;(</td></tr>
+<tr><th id="149">149</th><td>            <span class="namespace">std::</span>forward&lt;FunctorT&gt;(<a class="local col3 ref" href="#693functor" title='functor' data-ref="693functor" data-ref-filename="693functor">functor</a>), <a class="member fn" href="#_ZN3rtc15OperationsChain29CreateOperationsChainCallbackEv" title='rtc::OperationsChain::CreateOperationsChainCallback' data-ref="_ZN3rtc15OperationsChain29CreateOperationsChainCallbackEv" data-ref-filename="_ZN3rtc15OperationsChain29CreateOperationsChainCallbackEv">CreateOperationsChainCallback</a>()));</td></tr>
+<tr><th id="150">150</th><td>    <i>// If this is the only operation in the chain we execute it immediately.</i></td></tr>
+<tr><th id="151">151</th><td><i>    // Otherwise the callback will get invoked when the pending operation</i></td></tr>
+<tr><th id="152">152</th><td><i>    // completes which will trigger the next operation to execute.</i></td></tr>
+<tr><th id="153">153</th><td>    <b>if</b> (<a class="member field" href="#rtc::OperationsChain::chained_operations_" title='rtc::OperationsChain::chained_operations_' data-ref="rtc::OperationsChain::chained_operations_" data-ref-filename="rtc..OperationsChain..chained_operations_">chained_operations_</a>.<span class='ref fn' title='std::__1::queue::size' data-ref="_ZNKSt3__15queue4sizeEv" data-ref-filename="_ZNKSt3__15queue4sizeEv">size</span>() == <var>1</var>) {</td></tr>
+<tr><th id="154">154</th><td>      <a class="member field" href="#rtc::OperationsChain::chained_operations_" title='rtc::OperationsChain::chained_operations_' data-ref="rtc::OperationsChain::chained_operations_" data-ref-filename="rtc..OperationsChain..chained_operations_">chained_operations_</a>.<span class='ref fn' title='std::__1::queue::front' data-ref="_ZNSt3__15queue5frontEv" data-ref-filename="_ZNSt3__15queue5frontEv">front</span>()<span class='ref fn' title='std::__1::unique_ptr::operator-&gt;' data-ref="_ZNKSt3__110unique_ptrptEv" data-ref-filename="_ZNKSt3__110unique_ptrptEv">-&gt;</span><a class="virtual ref fn" href="#_ZN3rtc29rtc_operations_chain_internal9Operation3RunEv" title='rtc::rtc_operations_chain_internal::Operation::Run' data-ref="_ZN3rtc29rtc_operations_chain_internal9Operation3RunEv" data-ref-filename="_ZN3rtc29rtc_operations_chain_internal9Operation3RunEv">Run</a>();</td></tr>
+<tr><th id="155">155</th><td>    }</td></tr>
+<tr><th id="156">156</th><td>  }</td></tr>
+<tr><th id="157">157</th><td></td></tr>
+<tr><th id="158">158</th><td> <b>private</b>:</td></tr>
+<tr><th id="159">159</th><td>  <b>friend</b> <b>class</b> <a class="type" href="#rtc::CallbackHandle" title='rtc::CallbackHandle' data-ref="rtc::CallbackHandle" data-ref-filename="rtc..CallbackHandle">CallbackHandle</a>;</td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td>  <i>// The callback that is passed to an operation's functor (that is used to</i></td></tr>
+<tr><th id="162">162</th><td><i>  // inform the OperationsChain that the operation has completed) is of type</i></td></tr>
+<tr><th id="163">163</th><td><i>  // std::function&lt;void()&gt;, which is a copyable type. To allow the callback to</i></td></tr>
+<tr><th id="164">164</th><td><i>  // be copyable, it is backed up by this reference counted handle. See</i></td></tr>
+<tr><th id="165">165</th><td><i>  // CreateOperationsChainCallback().</i></td></tr>
+<tr><th id="166">166</th><td>  <b>class</b> <dfn class="type def" id="rtc::OperationsChain::CallbackHandle" title='rtc::OperationsChain::CallbackHandle' data-ref="rtc::OperationsChain::CallbackHandle" data-ref-filename="rtc..OperationsChain..CallbackHandle">CallbackHandle</dfn> final : <b>public</b> <a class="type" href="ref_counted_object.h.html#rtc::RefCountedObject" title='rtc::RefCountedObject' data-ref="rtc::RefCountedObject" data-ref-filename="rtc..RefCountedObject">RefCountedObject</a>&lt;<a class="type" href="ref_count.h.html#rtc::RefCountInterface" title='rtc::RefCountInterface' data-ref="rtc::RefCountInterface" data-ref-filename="rtc..RefCountInterface">RefCountInterface</a>&gt; {</td></tr>
+<tr><th id="167">167</th><td>   <b>public</b>:</td></tr>
+<tr><th id="168">168</th><td>    <b>explicit</b> <dfn class="decl fn" id="_ZN3rtc15OperationsChain14CallbackHandleC1ENS_13scoped_refptrIS0_EE" title='rtc::OperationsChain::CallbackHandle::CallbackHandle' data-ref="_ZN3rtc15OperationsChain14CallbackHandleC1ENS_13scoped_refptrIS0_EE" data-ref-filename="_ZN3rtc15OperationsChain14CallbackHandleC1ENS_13scoped_refptrIS0_EE">CallbackHandle</dfn>(<a class="type" href="../api/scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;<a class="type" href="#rtc::OperationsChain" title='rtc::OperationsChain' data-ref="rtc::OperationsChain" data-ref-filename="rtc..OperationsChain">OperationsChain</a>&gt; <dfn class="local col4 decl" id="694operations_chain" title='operations_chain' data-type='scoped_refptr&lt;rtc::OperationsChain&gt;' data-ref="694operations_chain" data-ref-filename="694operations_chain">operations_chain</dfn>);</td></tr>
+<tr><th id="169">169</th><td>    <dfn class="virtual decl fn" id="_ZN3rtc15OperationsChain14CallbackHandleD1Ev" title='rtc::OperationsChain::CallbackHandle::~CallbackHandle' data-ref="_ZN3rtc15OperationsChain14CallbackHandleD1Ev" data-ref-filename="_ZN3rtc15OperationsChain14CallbackHandleD1Ev">~CallbackHandle</dfn>();</td></tr>
+<tr><th id="170">170</th><td></td></tr>
+<tr><th id="171">171</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN3rtc15OperationsChain14CallbackHandle19OnOperationCompleteEv" title='rtc::OperationsChain::CallbackHandle::OnOperationComplete' data-ref="_ZN3rtc15OperationsChain14CallbackHandle19OnOperationCompleteEv" data-ref-filename="_ZN3rtc15OperationsChain14CallbackHandle19OnOperationCompleteEv">OnOperationComplete</dfn>();</td></tr>
+<tr><th id="172">172</th><td></td></tr>
+<tr><th id="173">173</th><td>   <b>private</b>:</td></tr>
+<tr><th id="174">174</th><td>    <a class="type" href="../api/scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;<a class="type" href="#rtc::OperationsChain" title='rtc::OperationsChain' data-ref="rtc::OperationsChain" data-ref-filename="rtc..OperationsChain">OperationsChain</a>&gt; <dfn class="decl field" id="rtc::OperationsChain::CallbackHandle::operations_chain_" title='rtc::OperationsChain::CallbackHandle::operations_chain_' data-ref="rtc::OperationsChain::CallbackHandle::operations_chain_" data-ref-filename="rtc..OperationsChain..CallbackHandle..operations_chain_">operations_chain_</dfn>;</td></tr>
+<tr><th id="175">175</th><td><u>#<span data-ppcond="175">if</span> <a class="macro" href="checks.h.html#18" title="1" data-ref="_M/RTC_DCHECK_IS_ON">RTC_DCHECK_IS_ON</a></u></td></tr>
+<tr><th id="176">176</th><td>    <em>bool</em> <dfn class="decl field" id="rtc::OperationsChain::CallbackHandle::has_run_" title='rtc::OperationsChain::CallbackHandle::has_run_' data-ref="rtc::OperationsChain::CallbackHandle::has_run_" data-ref-filename="rtc..OperationsChain..CallbackHandle..has_run_">has_run_</dfn> = <b>false</b>;</td></tr>
+<tr><th id="177">177</th><td><u>#<span data-ppcond="175">endif</span>  // RTC_DCHECK_IS_ON</u></td></tr>
+<tr><th id="178">178</th><td></td></tr>
+<tr><th id="179">179</th><td>    <a class="macro" href="constructor_magic.h.html#16" title="CallbackHandle(const CallbackHandle&amp;) = delete; CallbackHandle&amp; operator=(const CallbackHandle&amp;) = delete" data-ref="_M/RTC_DISALLOW_COPY_AND_ASSIGN">RTC_DISALLOW_COPY_AND_ASSIGN</a>(<dfn class="decl def fn" id="_ZN3rtc15OperationsChain14CallbackHandleC1ERKS1_" title='rtc::OperationsChain::CallbackHandle::CallbackHandle' data-ref="_ZN3rtc15OperationsChain14CallbackHandleC1ERKS1_" data-ref-filename="_ZN3rtc15OperationsChain14CallbackHandleC1ERKS1_"><a class="type" href="#rtc::OperationsChain::CallbackHandle" title='rtc::OperationsChain::CallbackHandle' data-ref="rtc::OperationsChain::CallbackHandle" data-ref-filename="rtc..OperationsChain..CallbackHandle"><a class="type" href="#rtc::OperationsChain::CallbackHandle" title='rtc::OperationsChain::CallbackHandle' data-ref="rtc::OperationsChain::CallbackHandle" data-ref-filename="rtc..OperationsChain..CallbackHandle"><a class="type" href="#rtc::OperationsChain::CallbackHandle" title='rtc::OperationsChain::CallbackHandle' data-ref="rtc::OperationsChain::CallbackHandle" data-ref-filename="rtc..OperationsChain..CallbackHandle">CallbackHandle</a></a></a></dfn>);</td></tr>
+<tr><th id="180">180</th><td>  };</td></tr>
+<tr><th id="181">181</th><td></td></tr>
+<tr><th id="182">182</th><td>  <dfn class="decl fn" id="_ZN3rtc15OperationsChainC1Ev" title='rtc::OperationsChain::OperationsChain' data-ref="_ZN3rtc15OperationsChainC1Ev" data-ref-filename="_ZN3rtc15OperationsChainC1Ev">OperationsChain</dfn>();</td></tr>
+<tr><th id="183">183</th><td></td></tr>
+<tr><th id="184">184</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::function' data-ref="std::__1::function" data-ref-filename="std..__1..function">function</span>&lt;<em>void</em>()&gt; <dfn class="decl fn" id="_ZN3rtc15OperationsChain29CreateOperationsChainCallbackEv" title='rtc::OperationsChain::CreateOperationsChainCallback' data-ref="_ZN3rtc15OperationsChain29CreateOperationsChainCallbackEv" data-ref-filename="_ZN3rtc15OperationsChain29CreateOperationsChainCallbackEv">CreateOperationsChainCallback</dfn>();</td></tr>
+<tr><th id="185">185</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN3rtc15OperationsChain19OnOperationCompleteEv" title='rtc::OperationsChain::OnOperationComplete' data-ref="_ZN3rtc15OperationsChain19OnOperationCompleteEv" data-ref-filename="_ZN3rtc15OperationsChain19OnOperationCompleteEv">OnOperationComplete</dfn>();</td></tr>
+<tr><th id="186">186</th><td></td></tr>
+<tr><th id="187">187</th><td>  <a class="macro" href="system/no_unique_address.h.html#32" title="" data-ref="_M/RTC_NO_UNIQUE_ADDRESS">RTC_NO_UNIQUE_ADDRESS</a> <span class="namespace">webrtc::</span><a class="type" href="../api/sequence_checker.h.html#webrtc::SequenceChecker" title='webrtc::SequenceChecker' data-ref="webrtc::SequenceChecker" data-ref-filename="webrtc..SequenceChecker">SequenceChecker</a> <dfn class="decl field" id="rtc::OperationsChain::sequence_checker_" title='rtc::OperationsChain::sequence_checker_' data-ref="rtc::OperationsChain::sequence_checker_" data-ref-filename="rtc..OperationsChain..sequence_checker_">sequence_checker_</dfn>;</td></tr>
+<tr><th id="188">188</th><td>  <i>// FIFO-list of operations that are chained. An operation that is executing</i></td></tr>
+<tr><th id="189">189</th><td><i>  // remains on this list until it has completed by invoking the callback passed</i></td></tr>
+<tr><th id="190">190</th><td><i>  // to it.</i></td></tr>
+<tr><th id="191">191</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::queue' data-ref="std::__1::queue" data-ref-filename="std..__1..queue">queue</span>&lt;<span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<span class="namespace">rtc_operations_chain_internal::</span><a class="type" href="#rtc::rtc_operations_chain_internal::Operation" title='rtc::rtc_operations_chain_internal::Operation' data-ref="rtc::rtc_operations_chain_internal::Operation" data-ref-filename="rtc..rtc_operations_chain_internal..Operation">Operation</a>&gt;&gt;</td></tr>
+<tr><th id="192">192</th><td>      <dfn class="decl field" id="rtc::OperationsChain::chained_operations_" title='rtc::OperationsChain::chained_operations_' data-ref="rtc::OperationsChain::chained_operations_" data-ref-filename="rtc..OperationsChain..chained_operations_">chained_operations_</dfn> <a class="macro" href="thread_annotations.h.html#31" title="__attribute__((guarded_by(sequence_checker_)))" data-ref="_M/RTC_GUARDED_BY">RTC_GUARDED_BY</a>(<a class="ref field" href="#rtc::OperationsChain::sequence_checker_" title='rtc::OperationsChain::sequence_checker_' data-ref="rtc::OperationsChain::sequence_checker_" data-ref-filename="rtc..OperationsChain..sequence_checker_">sequence_checker_</a>);</td></tr>
+<tr><th id="193">193</th><td>  <span class="namespace">absl::</span><span class='type' title='std::__1::optional' data-ref="std::__1::optional" data-ref-filename="std..__1..optional">optional</span>&lt;<span class="namespace">std::</span><span class='type' title='std::__1::function' data-ref="std::__1::function" data-ref-filename="std..__1..function">function</span>&lt;<em>void</em>()&gt;&gt; <dfn class="decl field" id="rtc::OperationsChain::on_chain_empty_callback_" title='rtc::OperationsChain::on_chain_empty_callback_' data-ref="rtc::OperationsChain::on_chain_empty_callback_" data-ref-filename="rtc..OperationsChain..on_chain_empty_callback_">on_chain_empty_callback_</dfn></td></tr>
+<tr><th id="194">194</th><td>      <a class="macro" href="thread_annotations.h.html#31" title="__attribute__((guarded_by(sequence_checker_)))" data-ref="_M/RTC_GUARDED_BY">RTC_GUARDED_BY</a>(<a class="ref field" href="#rtc::OperationsChain::sequence_checker_" title='rtc::OperationsChain::sequence_checker_' data-ref="rtc::OperationsChain::sequence_checker_" data-ref-filename="rtc..OperationsChain..sequence_checker_">sequence_checker_</a>);</td></tr>
+<tr><th id="195">195</th><td></td></tr>
+<tr><th id="196">196</th><td>  <a class="macro" href="constructor_magic.h.html#16" title="OperationsChain(const OperationsChain&amp;) = delete; OperationsChain&amp; operator=(const OperationsChain&amp;) = delete" data-ref="_M/RTC_DISALLOW_COPY_AND_ASSIGN">RTC_DISALLOW_COPY_AND_ASSIGN</a>(<dfn class="decl def fn" id="_ZN3rtc15OperationsChainC1ERKS0_" title='rtc::OperationsChain::OperationsChain' data-ref="_ZN3rtc15OperationsChainC1ERKS0_" data-ref-filename="_ZN3rtc15OperationsChainC1ERKS0_"><a class="type" href="#rtc::OperationsChain" title='rtc::OperationsChain' data-ref="rtc::OperationsChain" data-ref-filename="rtc..OperationsChain"><a class="type" href="#rtc::OperationsChain" title='rtc::OperationsChain' data-ref="rtc::OperationsChain" data-ref-filename="rtc..OperationsChain"><a class="type" href="#rtc::OperationsChain" title='rtc::OperationsChain' data-ref="rtc::OperationsChain" data-ref-filename="rtc..OperationsChain">OperationsChain</a></a></a></dfn>);</td></tr>
+<tr><th id="197">197</th><td>};</td></tr>
+<tr><th id="198">198</th><td></td></tr>
+<tr><th id="199">199</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="200">200</th><td></td></tr>
+<tr><th id="201">201</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_OPERATIONS_CHAIN_H_</u></td></tr>
+<tr><th id="202">202</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../pc/data_channel_controller.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/data_channel_controller.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

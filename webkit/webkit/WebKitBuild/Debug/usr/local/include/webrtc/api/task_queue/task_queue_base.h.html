@@ -1,0 +1,107 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>task_queue_base.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/task_queue/task_queue_base.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::TaskQueueBase,webrtc::TaskQueueDeleter "/>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/task_queue/task_queue_base.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>WebKitBuild</a>/<a href='../../../../../..'>Debug</a>/<a href='../../../../..'>usr</a>/<a href='../../../..'>local</a>/<a href='../../..'>include</a>/<a href='../..'>webrtc</a>/<a href='..'>api</a>/<a href='./'>task_queue</a>/<a href='task_queue_base.h.html'>task_queue_base.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2019 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td><u>#<span data-ppcond="10">ifndef</span> <span class="macro" data-ref="_M/API_TASK_QUEUE_TASK_QUEUE_BASE_H_">API_TASK_QUEUE_TASK_QUEUE_BASE_H_</span></u></td></tr>
+<tr><th id="11">11</th><td><u>#define <dfn class="macro" id="_M/API_TASK_QUEUE_TASK_QUEUE_BASE_H_" data-ref="_M/API_TASK_QUEUE_TASK_QUEUE_BASE_H_">API_TASK_QUEUE_TASK_QUEUE_BASE_H_</dfn></u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><u>#include <a href="queued_task.h.html">"api/task_queue/queued_task.h"</a></u></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="../../rtc_base/system/rtc_export.h.html">"rtc_base/system/rtc_export.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../../rtc_base/thread_annotations.h.html">"rtc_base/thread_annotations.h"</a></u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><i>// Asynchronously executes tasks in a way that guarantees that they're executed</i></td></tr>
+<tr><th id="22">22</th><td><i>// in FIFO order and that tasks never overlap. Tasks may always execute on the</i></td></tr>
+<tr><th id="23">23</th><td><i>// same worker thread and they may not. To DCHECK that tasks are executing on a</i></td></tr>
+<tr><th id="24">24</th><td><i>// known task queue, use IsCurrent().</i></td></tr>
+<tr><th id="25">25</th><td><b>class</b> <a class="macro" href="../../rtc_base/thread_annotations.h.html#70" title="__attribute__((lockable))" data-ref="_M/RTC_LOCKABLE">RTC_LOCKABLE</a> <a class="macro" href="../../rtc_base/system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <dfn class="type def" id="webrtc::TaskQueueBase" title='webrtc::TaskQueueBase' data-ref="webrtc::TaskQueueBase" data-ref-filename="webrtc..TaskQueueBase">TaskQueueBase</dfn> {</td></tr>
+<tr><th id="26">26</th><td> <b>public</b>:</td></tr>
+<tr><th id="27">27</th><td>  <i>// Starts destruction of the task queue.</i></td></tr>
+<tr><th id="28">28</th><td><i>  // On return ensures no task are running and no new tasks are able to start</i></td></tr>
+<tr><th id="29">29</th><td><i>  // on the task queue.</i></td></tr>
+<tr><th id="30">30</th><td><i>  // Responsible for deallocation. Deallocation may happen synchronously during</i></td></tr>
+<tr><th id="31">31</th><td><i>  // Delete or asynchronously after Delete returns.</i></td></tr>
+<tr><th id="32">32</th><td><i>  // Code not running on the TaskQueue should not make any assumption when</i></td></tr>
+<tr><th id="33">33</th><td><i>  // TaskQueue is deallocated and thus should not call any methods after Delete.</i></td></tr>
+<tr><th id="34">34</th><td><i>  // Code running on the TaskQueue should not call Delete, but can assume</i></td></tr>
+<tr><th id="35">35</th><td><i>  // TaskQueue still exists and may call other methods, e.g. PostTask.</i></td></tr>
+<tr><th id="36">36</th><td><i>  // Should be called on the same task queue or thread that this task queue</i></td></tr>
+<tr><th id="37">37</th><td><i>  // was created on.</i></td></tr>
+<tr><th id="38">38</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc13TaskQueueBase6DeleteEv" title='webrtc::TaskQueueBase::Delete' data-ref="_ZN6webrtc13TaskQueueBase6DeleteEv" data-ref-filename="_ZN6webrtc13TaskQueueBase6DeleteEv">Delete</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td>  <i>// Schedules a task to execute. Tasks are executed in FIFO order.</i></td></tr>
+<tr><th id="41">41</th><td><i>  // If |task-&gt;Run()| returns true, task is deleted on the task queue</i></td></tr>
+<tr><th id="42">42</th><td><i>  // before next QueuedTask starts executing.</i></td></tr>
+<tr><th id="43">43</th><td><i>  // When a TaskQueue is deleted, pending tasks will not be executed but they</i></td></tr>
+<tr><th id="44">44</th><td><i>  // will be deleted. The deletion of tasks may happen synchronously on the</i></td></tr>
+<tr><th id="45">45</th><td><i>  // TaskQueue or it may happen asynchronously after TaskQueue is deleted.</i></td></tr>
+<tr><th id="46">46</th><td><i>  // This may vary from one implementation to the next so assumptions about</i></td></tr>
+<tr><th id="47">47</th><td><i>  // lifetimes of pending tasks should not be made.</i></td></tr>
+<tr><th id="48">48</th><td><i>  // May be called on any thread or task queue, including this task queue.</i></td></tr>
+<tr><th id="49">49</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc13TaskQueueBase8PostTaskENSt3__110unique_ptrINS_10QueuedTaskENS1_14default_deleteIS3_EEEE" title='webrtc::TaskQueueBase::PostTask' data-ref="_ZN6webrtc13TaskQueueBase8PostTaskENSt3__110unique_ptrINS_10QueuedTaskENS1_14default_deleteIS3_EEEE" data-ref-filename="_ZN6webrtc13TaskQueueBase8PostTaskENSt3__110unique_ptrINS_10QueuedTaskENS1_14default_deleteIS3_EEEE">PostTask</dfn>(<span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="queued_task.h.html#webrtc::QueuedTask" title='webrtc::QueuedTask' data-ref="webrtc::QueuedTask" data-ref-filename="webrtc..QueuedTask">QueuedTask</a>&gt; <dfn class="local col3 decl" id="623task" title='task' data-type='std::unique_ptr&lt;QueuedTask&gt;' data-ref="623task" data-ref-filename="623task">task</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td>  <i>// Schedules a task to execute a specified number of milliseconds from when</i></td></tr>
+<tr><th id="52">52</th><td><i>  // the call is made. The precision should be considered as "best effort"</i></td></tr>
+<tr><th id="53">53</th><td><i>  // and in some cases, such as on Windows when all high precision timers have</i></td></tr>
+<tr><th id="54">54</th><td><i>  // been used up, can be off by as much as 15 millseconds.</i></td></tr>
+<tr><th id="55">55</th><td><i>  // May be called on any thread or task queue, including this task queue.</i></td></tr>
+<tr><th id="56">56</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc13TaskQueueBase15PostDelayedTaskENSt3__110unique_ptrINS_10QueuedTaskENS1_14default_deleteIS3_EEEEj" title='webrtc::TaskQueueBase::PostDelayedTask' data-ref="_ZN6webrtc13TaskQueueBase15PostDelayedTaskENSt3__110unique_ptrINS_10QueuedTaskENS1_14default_deleteIS3_EEEEj" data-ref-filename="_ZN6webrtc13TaskQueueBase15PostDelayedTaskENSt3__110unique_ptrINS_10QueuedTaskENS1_14default_deleteIS3_EEEEj">PostDelayedTask</dfn>(<span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="queued_task.h.html#webrtc::QueuedTask" title='webrtc::QueuedTask' data-ref="webrtc::QueuedTask" data-ref-filename="webrtc..QueuedTask">QueuedTask</a>&gt; <dfn class="local col4 decl" id="624task" title='task' data-type='std::unique_ptr&lt;QueuedTask&gt;' data-ref="624task" data-ref-filename="624task">task</dfn>,</td></tr>
+<tr><th id="57">57</th><td>                               <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col5 decl" id="625milliseconds" title='milliseconds' data-type='uint32_t' data-ref="625milliseconds" data-ref-filename="625milliseconds">milliseconds</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td>  <i>// Returns the task queue that is running the current thread.</i></td></tr>
+<tr><th id="60">60</th><td><i>  // Returns nullptr if this thread is not associated with any task queue.</i></td></tr>
+<tr><th id="61">61</th><td><i>  // May be called on any thread or task queue, including this task queue.</i></td></tr>
+<tr><th id="62">62</th><td>  <em>static</em> <a class="type" href="#webrtc::TaskQueueBase" title='webrtc::TaskQueueBase' data-ref="webrtc::TaskQueueBase" data-ref-filename="webrtc..TaskQueueBase">TaskQueueBase</a>* <dfn class="decl fn" id="_ZN6webrtc13TaskQueueBase7CurrentEv" title='webrtc::TaskQueueBase::Current' data-ref="_ZN6webrtc13TaskQueueBase7CurrentEv" data-ref-filename="_ZN6webrtc13TaskQueueBase7CurrentEv">Current</dfn>();</td></tr>
+<tr><th id="63">63</th><td>  <em>bool</em> <dfn class="decl def fn" id="_ZNK6webrtc13TaskQueueBase9IsCurrentEv" title='webrtc::TaskQueueBase::IsCurrent' data-ref="_ZNK6webrtc13TaskQueueBase9IsCurrentEv" data-ref-filename="_ZNK6webrtc13TaskQueueBase9IsCurrentEv">IsCurrent</dfn>() <em>const</em> { <b>return</b> <a class="member fn" href="#_ZN6webrtc13TaskQueueBase7CurrentEv" title='webrtc::TaskQueueBase::Current' data-ref="_ZN6webrtc13TaskQueueBase7CurrentEv" data-ref-filename="_ZN6webrtc13TaskQueueBase7CurrentEv">Current</a>() == <b>this</b>; }</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td> <b>protected</b>:</td></tr>
+<tr><th id="66">66</th><td>  <b>class</b> <dfn class="type def" id="webrtc::TaskQueueBase::CurrentTaskQueueSetter" title='webrtc::TaskQueueBase::CurrentTaskQueueSetter' data-ref="webrtc::TaskQueueBase::CurrentTaskQueueSetter" data-ref-filename="webrtc..TaskQueueBase..CurrentTaskQueueSetter">CurrentTaskQueueSetter</dfn> {</td></tr>
+<tr><th id="67">67</th><td>   <b>public</b>:</td></tr>
+<tr><th id="68">68</th><td>    <b>explicit</b> <dfn class="decl fn" id="_ZN6webrtc13TaskQueueBase22CurrentTaskQueueSetterC1EPS0_" title='webrtc::TaskQueueBase::CurrentTaskQueueSetter::CurrentTaskQueueSetter' data-ref="_ZN6webrtc13TaskQueueBase22CurrentTaskQueueSetterC1EPS0_" data-ref-filename="_ZN6webrtc13TaskQueueBase22CurrentTaskQueueSetterC1EPS0_">CurrentTaskQueueSetter</dfn>(<a class="type" href="#webrtc::TaskQueueBase" title='webrtc::TaskQueueBase' data-ref="webrtc::TaskQueueBase" data-ref-filename="webrtc..TaskQueueBase">TaskQueueBase</a>* <dfn class="local col6 decl" id="626task_queue" title='task_queue' data-type='webrtc::TaskQueueBase *' data-ref="626task_queue" data-ref-filename="626task_queue">task_queue</dfn>);</td></tr>
+<tr><th id="69">69</th><td>    <dfn class="decl def fn" id="_ZN6webrtc13TaskQueueBase22CurrentTaskQueueSetterC1ERKS1_" title='webrtc::TaskQueueBase::CurrentTaskQueueSetter::CurrentTaskQueueSetter' data-ref="_ZN6webrtc13TaskQueueBase22CurrentTaskQueueSetterC1ERKS1_" data-ref-filename="_ZN6webrtc13TaskQueueBase22CurrentTaskQueueSetterC1ERKS1_">CurrentTaskQueueSetter</dfn>(<em>const</em> <a class="type" href="#webrtc::TaskQueueBase::CurrentTaskQueueSetter" title='webrtc::TaskQueueBase::CurrentTaskQueueSetter' data-ref="webrtc::TaskQueueBase::CurrentTaskQueueSetter" data-ref-filename="webrtc..TaskQueueBase..CurrentTaskQueueSetter">CurrentTaskQueueSetter</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="70">70</th><td>    <a class="type" href="#webrtc::TaskQueueBase::CurrentTaskQueueSetter" title='webrtc::TaskQueueBase::CurrentTaskQueueSetter' data-ref="webrtc::TaskQueueBase::CurrentTaskQueueSetter" data-ref-filename="webrtc..TaskQueueBase..CurrentTaskQueueSetter">CurrentTaskQueueSetter</a>&amp; <dfn class="decl def fn" id="_ZN6webrtc13TaskQueueBase22CurrentTaskQueueSetteraSERKS1_" title='webrtc::TaskQueueBase::CurrentTaskQueueSetter::operator=' data-ref="_ZN6webrtc13TaskQueueBase22CurrentTaskQueueSetteraSERKS1_" data-ref-filename="_ZN6webrtc13TaskQueueBase22CurrentTaskQueueSetteraSERKS1_"><b>operator</b>=</dfn>(<em>const</em> <a class="type" href="#webrtc::TaskQueueBase::CurrentTaskQueueSetter" title='webrtc::TaskQueueBase::CurrentTaskQueueSetter' data-ref="webrtc::TaskQueueBase::CurrentTaskQueueSetter" data-ref-filename="webrtc..TaskQueueBase..CurrentTaskQueueSetter">CurrentTaskQueueSetter</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="71">71</th><td>    <dfn class="decl fn" id="_ZN6webrtc13TaskQueueBase22CurrentTaskQueueSetterD1Ev" title='webrtc::TaskQueueBase::CurrentTaskQueueSetter::~CurrentTaskQueueSetter' data-ref="_ZN6webrtc13TaskQueueBase22CurrentTaskQueueSetterD1Ev" data-ref-filename="_ZN6webrtc13TaskQueueBase22CurrentTaskQueueSetterD1Ev">~CurrentTaskQueueSetter</dfn>();</td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td>   <b>private</b>:</td></tr>
+<tr><th id="74">74</th><td>    <a class="type" href="#webrtc::TaskQueueBase" title='webrtc::TaskQueueBase' data-ref="webrtc::TaskQueueBase" data-ref-filename="webrtc..TaskQueueBase">TaskQueueBase</a>* <em>const</em> <dfn class="decl field" id="webrtc::TaskQueueBase::CurrentTaskQueueSetter::previous_" title='webrtc::TaskQueueBase::CurrentTaskQueueSetter::previous_' data-ref="webrtc::TaskQueueBase::CurrentTaskQueueSetter::previous_" data-ref-filename="webrtc..TaskQueueBase..CurrentTaskQueueSetter..previous_">previous_</dfn>;</td></tr>
+<tr><th id="75">75</th><td>  };</td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td>  <i>// Users of the TaskQueue should call Delete instead of directly deleting</i></td></tr>
+<tr><th id="78">78</th><td><i>  // this object.</i></td></tr>
+<tr><th id="79">79</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc13TaskQueueBaseD1Ev" title='webrtc::TaskQueueBase::~TaskQueueBase' data-ref="_ZN6webrtc13TaskQueueBaseD1Ev" data-ref-filename="_ZN6webrtc13TaskQueueBaseD1Ev">~TaskQueueBase</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="80">80</th><td>};</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td><b>struct</b> <dfn class="type def" id="webrtc::TaskQueueDeleter" title='webrtc::TaskQueueDeleter' data-ref="webrtc::TaskQueueDeleter" data-ref-filename="webrtc..TaskQueueDeleter">TaskQueueDeleter</dfn> {</td></tr>
+<tr><th id="83">83</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZNK6webrtc16TaskQueueDeleterclEPNS_13TaskQueueBaseE" title='webrtc::TaskQueueDeleter::operator()' data-ref="_ZNK6webrtc16TaskQueueDeleterclEPNS_13TaskQueueBaseE" data-ref-filename="_ZNK6webrtc16TaskQueueDeleterclEPNS_13TaskQueueBaseE"><b>operator</b>()</dfn>(<a class="type" href="#webrtc::TaskQueueBase" title='webrtc::TaskQueueBase' data-ref="webrtc::TaskQueueBase" data-ref-filename="webrtc..TaskQueueBase">TaskQueueBase</a>* <dfn class="local col7 decl" id="627task_queue" title='task_queue' data-type='webrtc::TaskQueueBase *' data-ref="627task_queue" data-ref-filename="627task_queue">task_queue</dfn>) <em>const</em> { <a class="local col7 ref" href="#627task_queue" title='task_queue' data-ref="627task_queue" data-ref-filename="627task_queue">task_queue</a>-&gt;<a class="virtual ref fn" href="#_ZN6webrtc13TaskQueueBase6DeleteEv" title='webrtc::TaskQueueBase::Delete' data-ref="_ZN6webrtc13TaskQueueBase6DeleteEv" data-ref-filename="_ZN6webrtc13TaskQueueBase6DeleteEv">Delete</a>(); }</td></tr>
+<tr><th id="84">84</th><td>};</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td><u>#<span data-ppcond="10">endif</span>  // API_TASK_QUEUE_TASK_QUEUE_BASE_H_</u></td></tr>
+<tr><th id="89">89</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

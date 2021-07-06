@@ -1,0 +1,25 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/bytestring.h' l='179'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/bytestring.h' l='157'>// Parsing ASN.1
+//
+// |CBS| may be used to parse DER structures. Rather than using a schema
+// compiler, the following functions act on tag-length-value elements in the
+// serialization itself. Thus the caller is responsible for looping over a
+// SEQUENCE, branching on CHOICEs or OPTIONAL fields, checking for trailing
+// data, and handling explict vs. implicit tagging.
+//
+// Tags are represented as |unsigned| values in memory. The upper few bits store
+// the class and constructed bit, and the remaining bits store the tag
+// number. Note this differs from the DER serialization, to support tag numbers
+// beyond 31. Consumers must use the constants defined below to decompose or
+// assemble tags.
+//
+// This library treats an element&apos;s constructed bit as part of its tag. In DER,
+// the constructed bit is computable from the type. The constants for universal
+// types have the bit set. Callers must set it correctly for tagged types.
+// Explicitly-tagged types are always constructed, and implicitly-tagged types
+// inherit the underlying type&apos;s bit.
+
+// CBS_ASN1_TAG_SHIFT is how much the in-memory representation shifts the class
+// and constructed bits from the DER serialization.</doc>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/bytestring/cbb.c' l='368' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/bytestring/cbs.c' l='258' u='c'/>

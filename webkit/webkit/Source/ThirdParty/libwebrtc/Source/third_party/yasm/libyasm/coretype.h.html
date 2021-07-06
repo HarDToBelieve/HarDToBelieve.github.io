@@ -1,0 +1,412 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>coretype.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/libyasm/coretype.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="yasm_assoc_data_callback,yasm_expr_op,yasm_stdmac,yasm_value "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/libyasm/coretype.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>third_party</a>/<a href='..'>yasm</a>/<a href='./'>libyasm</a>/<a href='coretype.h.html'>coretype.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="2">2</th><td><i class="doc"> *<span class="command"> \file</span> libyasm/coretype.h</i></td></tr>
+<tr><th id="3">3</th><td><i class="doc"> * <span class="command">\brief</span> YASM core types and utility functions.</i></td></tr>
+<tr><th id="4">4</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="5">5</th><td><i class="doc"> *<span class="command"> \license</span></i></td></tr>
+<tr><th id="6">6</th><td><i class="doc"> *  Copyright (C) 2001-2007  Peter Johnson</i></td></tr>
+<tr><th id="7">7</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="8">8</th><td><i class="doc"> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="9">9</th><td><i class="doc"> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="10">10</th><td><i class="doc"> * are met:</i></td></tr>
+<tr><th id="11">11</th><td><i class="doc"> *  - Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="12">12</th><td><i class="doc"> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="13">13</th><td><i class="doc"> *  - Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="14">14</th><td><i class="doc"> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="15">15</th><td><i class="doc"> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="16">16</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="17">17</th><td><i class="doc"> * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND OTHER CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="18">18</th><td><i class="doc"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="19">19</th><td><i class="doc"> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</i></td></tr>
+<tr><th id="20">20</th><td><i class="doc"> * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR OTHER CONTRIBUTORS BE</i></td></tr>
+<tr><th id="21">21</th><td><i class="doc"> * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="22">22</th><td><i class="doc"> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="23">23</th><td><i class="doc"> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="24">24</th><td><i class="doc"> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="25">25</th><td><i class="doc"> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="26">26</th><td><i class="doc"> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE</i></td></tr>
+<tr><th id="27">27</th><td><i class="doc"> * POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="28">28</th><td><i class="doc"> *<span class="command"> \endlicense</span></i></td></tr>
+<tr><th id="29">29</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="30">30</th><td><u>#<span data-ppcond="30">ifndef</span> <span class="macro" data-ref="_M/YASM_CORETYPE_H">YASM_CORETYPE_H</span></u></td></tr>
+<tr><th id="31">31</th><td><u>#define <dfn class="macro" id="_M/YASM_CORETYPE_H" data-ref="_M/YASM_CORETYPE_H">YASM_CORETYPE_H</dfn></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><u>#<span data-ppcond="33">ifndef</span> <span class="macro" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</span></u></td></tr>
+<tr><th id="34">34</th><td><u>#define <dfn class="macro" id="_M/YASM_LIB_DECL" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</dfn></u></td></tr>
+<tr><th id="35">35</th><td><u>#<span data-ppcond="33">endif</span></u></td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><i class="doc">/** Architecture instance (mostly opaque type).  <span class="command">\see</span> arch.h for details. */</i></td></tr>
+<tr><th id="38">38</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_arch" title='yasm_arch' data-ref="yasm_arch" data-ref-filename="yasm_arch"><a class="type" href="#yasm_arch" title='yasm_arch' data-ref="yasm_arch" data-ref-filename="yasm_arch">yasm_arch</a></dfn> <dfn class="typedef" id="yasm_arch" title='yasm_arch' data-type='struct yasm_arch' data-ref="yasm_arch" data-ref-filename="yasm_arch">yasm_arch</dfn>;</td></tr>
+<tr><th id="39">39</th><td><i class="doc">/** Preprocessor interface.  <span class="command">\see</span> preproc.h for details. */</i></td></tr>
+<tr><th id="40">40</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_preproc" title='yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc"><a class="type" href="#yasm_preproc" title='yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a></dfn> <dfn class="typedef" id="yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</dfn>;</td></tr>
+<tr><th id="41">41</th><td><i class="doc">/** Parser instance (mostly opaque type).  <span class="command">\see</span> parser.h for details. */</i></td></tr>
+<tr><th id="42">42</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_parser" title='yasm_parser' data-ref="yasm_parser" data-ref-filename="yasm_parser"><a class="type" href="#yasm_parser" title='yasm_parser' data-ref="yasm_parser" data-ref-filename="yasm_parser">yasm_parser</a></dfn> <dfn class="typedef" id="yasm_parser" title='yasm_parser' data-type='struct yasm_parser' data-ref="yasm_parser" data-ref-filename="yasm_parser">yasm_parser</dfn>;</td></tr>
+<tr><th id="43">43</th><td><i class="doc">/** Object format interface.  <span class="command">\see</span> objfmt.h for details. */</i></td></tr>
+<tr><th id="44">44</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_objfmt" title='yasm_objfmt' data-ref="yasm_objfmt" data-ref-filename="yasm_objfmt"><a class="type" href="#yasm_objfmt" title='yasm_objfmt' data-ref="yasm_objfmt" data-ref-filename="yasm_objfmt">yasm_objfmt</a></dfn> <dfn class="typedef" id="yasm_objfmt" title='yasm_objfmt' data-type='struct yasm_objfmt' data-ref="yasm_objfmt" data-ref-filename="yasm_objfmt">yasm_objfmt</dfn>;</td></tr>
+<tr><th id="45">45</th><td><i class="doc">/** Debug format interface.  <span class="command">\see</span> dbgfmt.h for details. */</i></td></tr>
+<tr><th id="46">46</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_dbgfmt" title='yasm_dbgfmt' data-ref="yasm_dbgfmt" data-ref-filename="yasm_dbgfmt"><a class="type" href="#yasm_dbgfmt" title='yasm_dbgfmt' data-ref="yasm_dbgfmt" data-ref-filename="yasm_dbgfmt">yasm_dbgfmt</a></dfn> <dfn class="typedef" id="yasm_dbgfmt" title='yasm_dbgfmt' data-type='struct yasm_dbgfmt' data-ref="yasm_dbgfmt" data-ref-filename="yasm_dbgfmt">yasm_dbgfmt</dfn>;</td></tr>
+<tr><th id="47">47</th><td><i class="doc">/** List format interface.  <span class="command">\see</span> listfmt.h for details. */</i></td></tr>
+<tr><th id="48">48</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_listfmt" title='yasm_listfmt' data-ref="yasm_listfmt" data-ref-filename="yasm_listfmt"><a class="type" href="#yasm_listfmt" title='yasm_listfmt' data-ref="yasm_listfmt" data-ref-filename="yasm_listfmt">yasm_listfmt</a></dfn> <dfn class="typedef" id="yasm_listfmt" title='yasm_listfmt' data-type='struct yasm_listfmt' data-ref="yasm_listfmt" data-ref-filename="yasm_listfmt">yasm_listfmt</dfn>;</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><i class="doc">/** Object format module interface.  <span class="command">\see</span> objfmt.h for details. */</i></td></tr>
+<tr><th id="51">51</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_objfmt_module" title='yasm_objfmt_module' data-ref="yasm_objfmt_module" data-ref-filename="yasm_objfmt_module"><a class="type" href="#yasm_objfmt_module" title='yasm_objfmt_module' data-ref="yasm_objfmt_module" data-ref-filename="yasm_objfmt_module">yasm_objfmt_module</a></dfn> <dfn class="typedef" id="yasm_objfmt_module" title='yasm_objfmt_module' data-type='struct yasm_objfmt_module' data-ref="yasm_objfmt_module" data-ref-filename="yasm_objfmt_module">yasm_objfmt_module</dfn>;</td></tr>
+<tr><th id="52">52</th><td><i class="doc">/** Debug format module interface.  <span class="command">\see</span> dbgfmt.h for details. */</i></td></tr>
+<tr><th id="53">53</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_dbgfmt_module" title='yasm_dbgfmt_module' data-ref="yasm_dbgfmt_module" data-ref-filename="yasm_dbgfmt_module"><a class="type" href="#yasm_dbgfmt_module" title='yasm_dbgfmt_module' data-ref="yasm_dbgfmt_module" data-ref-filename="yasm_dbgfmt_module">yasm_dbgfmt_module</a></dfn> <dfn class="typedef" id="yasm_dbgfmt_module" title='yasm_dbgfmt_module' data-type='struct yasm_dbgfmt_module' data-ref="yasm_dbgfmt_module" data-ref-filename="yasm_dbgfmt_module">yasm_dbgfmt_module</dfn>;</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><i class="doc">/** Standard macro structure for modules that allows association of a set of</i></td></tr>
+<tr><th id="56">56</th><td><i class="doc"> * standard macros with a parser/preprocessor combination.</i></td></tr>
+<tr><th id="57">57</th><td><i class="doc"> * A NULL-terminated array of these structures is used in a number of module</i></td></tr>
+<tr><th id="58">58</th><td><i class="doc"> * interfaces.</i></td></tr>
+<tr><th id="59">59</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="60">60</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="yasm_stdmac" title='yasm_stdmac' data-ref="yasm_stdmac" data-ref-filename="yasm_stdmac"><a class="type" href="#yasm_stdmac" title='yasm_stdmac' data-ref="yasm_stdmac" data-ref-filename="yasm_stdmac">yasm_stdmac</a></dfn> {</td></tr>
+<tr><th id="61">61</th><td>    <em>const</em> <em>char</em> *<dfn class="decl field" id="yasm_stdmac::parser" title='yasm_stdmac::parser' data-ref="yasm_stdmac::parser" data-ref-filename="yasm_stdmac..parser">parser</dfn>;         <i class="doc">/**&lt; Parser keyword */</i></td></tr>
+<tr><th id="62">62</th><td>    <em>const</em> <em>char</em> *<dfn class="decl field" id="yasm_stdmac::preproc" title='yasm_stdmac::preproc' data-ref="yasm_stdmac::preproc" data-ref-filename="yasm_stdmac..preproc">preproc</dfn>;        <i class="doc">/**&lt; Preprocessor keyword */</i></td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td>    <i class="doc">/** NULL-terminated array of standard macros.  May be NULL if no standard</i></td></tr>
+<tr><th id="65">65</th><td><i class="doc">     * macros should be added for this preprocessor.</i></td></tr>
+<tr><th id="66">66</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="67">67</th><td>    <em>const</em> <em>char</em> **<dfn class="decl field" id="yasm_stdmac::macros" title='yasm_stdmac::macros' data-ref="yasm_stdmac::macros" data-ref-filename="yasm_stdmac..macros">macros</dfn>;</td></tr>
+<tr><th id="68">68</th><td>} <dfn class="typedef" id="yasm_stdmac" title='yasm_stdmac' data-type='struct yasm_stdmac' data-ref="yasm_stdmac" data-ref-filename="yasm_stdmac">yasm_stdmac</dfn>;</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td><i class="doc">/** YASM associated data callback structure.  Many data structures can have</i></td></tr>
+<tr><th id="71">71</th><td><i class="doc"> * arbitrary data associated with them.</i></td></tr>
+<tr><th id="72">72</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="73">73</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="yasm_assoc_data_callback" title='yasm_assoc_data_callback' data-ref="yasm_assoc_data_callback" data-ref-filename="yasm_assoc_data_callback"><a class="type" href="#yasm_assoc_data_callback" title='yasm_assoc_data_callback' data-ref="yasm_assoc_data_callback" data-ref-filename="yasm_assoc_data_callback">yasm_assoc_data_callback</a></dfn> {</td></tr>
+<tr><th id="74">74</th><td>    <i class="doc">/** Free memory allocated for associated data.</i></td></tr>
+<tr><th id="75">75</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">data</span>      associated data</i></td></tr>
+<tr><th id="76">76</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="77">77</th><td>    <em>void</em> (*<dfn class="decl field" id="yasm_assoc_data_callback::destroy" title='yasm_assoc_data_callback::destroy' data-ref="yasm_assoc_data_callback::destroy" data-ref-filename="yasm_assoc_data_callback..destroy">destroy</dfn>) (<i>/*@only@*/</i> <em>void</em> *<dfn class="local col1 decl" id="1data" title='data' data-type='void *' data-ref="1data" data-ref-filename="1data">data</dfn>);</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td>    <i class="doc">/** Print a description of allocated data.  For debugging purposes.</i></td></tr>
+<tr><th id="80">80</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">data</span>              associated data</i></td></tr>
+<tr><th id="81">81</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">f</span>                 output file</i></td></tr>
+<tr><th id="82">82</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">indent_level</span>      indentation level</i></td></tr>
+<tr><th id="83">83</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="84">84</th><td>    <em>void</em> (*<dfn class="decl field" id="yasm_assoc_data_callback::print" title='yasm_assoc_data_callback::print' data-ref="yasm_assoc_data_callback::print" data-ref-filename="yasm_assoc_data_callback..print">print</dfn>) (<em>void</em> *<dfn class="local col2 decl" id="2data" title='data' data-type='void *' data-ref="2data" data-ref-filename="2data">data</dfn>, <span class='typedef' title='FILE' data-type='struct __sFILE' data-ref="FILE" data-ref-filename="FILE">FILE</span> *<dfn class="local col3 decl" id="3f" title='f' data-type='FILE *' data-ref="3f" data-ref-filename="3f">f</dfn>, <em>int</em> <dfn class="local col4 decl" id="4indent_level" title='indent_level' data-type='int' data-ref="4indent_level" data-ref-filename="4indent_level">indent_level</dfn>);</td></tr>
+<tr><th id="85">85</th><td>} <dfn class="typedef" id="yasm_assoc_data_callback" title='yasm_assoc_data_callback' data-type='struct yasm_assoc_data_callback' data-ref="yasm_assoc_data_callback" data-ref-filename="yasm_assoc_data_callback">yasm_assoc_data_callback</dfn>;</td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td><i class="doc">/** Set of collected error/warnings (opaque type).</i></td></tr>
+<tr><th id="88">88</th><td><i class="doc"> * <span class="command">\see</span> errwarn.h for details.</i></td></tr>
+<tr><th id="89">89</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="90">90</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_errwarns" title='yasm_errwarns' data-ref="yasm_errwarns" data-ref-filename="yasm_errwarns"><a class="type" href="#yasm_errwarns" title='yasm_errwarns' data-ref="yasm_errwarns" data-ref-filename="yasm_errwarns">yasm_errwarns</a></dfn> <dfn class="typedef" id="yasm_errwarns" title='yasm_errwarns' data-type='struct yasm_errwarns' data-ref="yasm_errwarns" data-ref-filename="yasm_errwarns">yasm_errwarns</dfn>;</td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td><i class="doc">/** Bytecode.  <span class="command">\see</span> bytecode.h for details and related functions. */</i></td></tr>
+<tr><th id="93">93</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_bytecode" title='yasm_bytecode' data-ref="yasm_bytecode" data-ref-filename="yasm_bytecode"><a class="type" href="#yasm_bytecode" title='yasm_bytecode' data-ref="yasm_bytecode" data-ref-filename="yasm_bytecode">yasm_bytecode</a></dfn> <dfn class="typedef" id="yasm_bytecode" title='yasm_bytecode' data-type='struct yasm_bytecode' data-ref="yasm_bytecode" data-ref-filename="yasm_bytecode">yasm_bytecode</dfn>;</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td><i class="doc">/** Object.  <span class="command">\see</span> section.h for details and related functions. */</i></td></tr>
+<tr><th id="96">96</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_object" title='yasm_object' data-ref="yasm_object" data-ref-filename="yasm_object"><a class="type" href="#yasm_object" title='yasm_object' data-ref="yasm_object" data-ref-filename="yasm_object">yasm_object</a></dfn> <dfn class="typedef" id="yasm_object" title='yasm_object' data-type='struct yasm_object' data-ref="yasm_object" data-ref-filename="yasm_object">yasm_object</dfn>;</td></tr>
+<tr><th id="97">97</th><td></td></tr>
+<tr><th id="98">98</th><td><i class="doc">/** Section (opaque type).  <span class="command">\see</span> section.h for related functions. */</i></td></tr>
+<tr><th id="99">99</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_section" title='yasm_section' data-ref="yasm_section" data-ref-filename="yasm_section"><a class="type" href="#yasm_section" title='yasm_section' data-ref="yasm_section" data-ref-filename="yasm_section">yasm_section</a></dfn> <dfn class="typedef" id="yasm_section" title='yasm_section' data-type='struct yasm_section' data-ref="yasm_section" data-ref-filename="yasm_section">yasm_section</dfn>;</td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td><i class="doc">/** Symbol table (opaque type).  <span class="command">\see</span> symrec.h for related functions. */</i></td></tr>
+<tr><th id="102">102</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_symtab" title='yasm_symtab' data-ref="yasm_symtab" data-ref-filename="yasm_symtab"><a class="type" href="#yasm_symtab" title='yasm_symtab' data-ref="yasm_symtab" data-ref-filename="yasm_symtab">yasm_symtab</a></dfn> <dfn class="typedef" id="yasm_symtab" title='yasm_symtab' data-type='struct yasm_symtab' data-ref="yasm_symtab" data-ref-filename="yasm_symtab">yasm_symtab</dfn>;</td></tr>
+<tr><th id="103">103</th><td></td></tr>
+<tr><th id="104">104</th><td><i class="doc">/** Symbol record (opaque type).  <span class="command">\see</span> symrec.h for related functions. */</i></td></tr>
+<tr><th id="105">105</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_symrec" title='yasm_symrec' data-ref="yasm_symrec" data-ref-filename="yasm_symrec"><a class="type" href="#yasm_symrec" title='yasm_symrec' data-ref="yasm_symrec" data-ref-filename="yasm_symrec">yasm_symrec</a></dfn> <dfn class="typedef" id="yasm_symrec" title='yasm_symrec' data-type='struct yasm_symrec' data-ref="yasm_symrec" data-ref-filename="yasm_symrec">yasm_symrec</dfn>;</td></tr>
+<tr><th id="106">106</th><td></td></tr>
+<tr><th id="107">107</th><td><i class="doc">/** Expression.  <span class="command">\see</span> expr.h for details and related functions. */</i></td></tr>
+<tr><th id="108">108</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_expr" title='yasm_expr' data-ref="yasm_expr" data-ref-filename="yasm_expr"><a class="type" href="#yasm_expr" title='yasm_expr' data-ref="yasm_expr" data-ref-filename="yasm_expr">yasm_expr</a></dfn> <dfn class="typedef" id="yasm_expr" title='yasm_expr' data-type='struct yasm_expr' data-ref="yasm_expr" data-ref-filename="yasm_expr">yasm_expr</dfn>;</td></tr>
+<tr><th id="109">109</th><td><i class="doc">/** Integer value (opaque type).  <span class="command">\see</span> intnum.h for related functions. */</i></td></tr>
+<tr><th id="110">110</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_intnum" title='yasm_intnum' data-ref="yasm_intnum" data-ref-filename="yasm_intnum"><a class="type" href="#yasm_intnum" title='yasm_intnum' data-ref="yasm_intnum" data-ref-filename="yasm_intnum">yasm_intnum</a></dfn> <dfn class="typedef" id="yasm_intnum" title='yasm_intnum' data-type='struct yasm_intnum' data-ref="yasm_intnum" data-ref-filename="yasm_intnum">yasm_intnum</dfn>;</td></tr>
+<tr><th id="111">111</th><td><i class="doc">/** Floating point value (opaque type).</i></td></tr>
+<tr><th id="112">112</th><td><i class="doc"> * <span class="command">\see</span> floatnum.h for related functions.</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="114">114</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_floatnum" title='yasm_floatnum' data-ref="yasm_floatnum" data-ref-filename="yasm_floatnum"><a class="type" href="#yasm_floatnum" title='yasm_floatnum' data-ref="yasm_floatnum" data-ref-filename="yasm_floatnum">yasm_floatnum</a></dfn> <dfn class="typedef" id="yasm_floatnum" title='yasm_floatnum' data-type='struct yasm_floatnum' data-ref="yasm_floatnum" data-ref-filename="yasm_floatnum">yasm_floatnum</dfn>;</td></tr>
+<tr><th id="115">115</th><td></td></tr>
+<tr><th id="116">116</th><td><i class="doc">/** A value.  May be absolute or relative.  Outside the parser, yasm_expr</i></td></tr>
+<tr><th id="117">117</th><td><i class="doc"> * should only be used for absolute exprs.  Anything that could contain</i></td></tr>
+<tr><th id="118">118</th><td><i class="doc"> * a relocatable value should use this structure instead.</i></td></tr>
+<tr><th id="119">119</th><td><i class="doc"> * <span class="command">\see</span> value.h for related functions.</i></td></tr>
+<tr><th id="120">120</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="121">121</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="yasm_value" title='yasm_value' data-ref="yasm_value" data-ref-filename="yasm_value"><a class="type" href="#yasm_value" title='yasm_value' data-ref="yasm_value" data-ref-filename="yasm_value">yasm_value</a></dfn> {</td></tr>
+<tr><th id="122">122</th><td>    <i class="doc">/** The absolute portion of the value.  May contain *differences* between</i></td></tr>
+<tr><th id="123">123</th><td><i class="doc">     * symrecs but not standalone symrecs.  May be NULL if there is no</i></td></tr>
+<tr><th id="124">124</th><td><i class="doc">     * absolute portion (e.g. the absolute portion is 0).</i></td></tr>
+<tr><th id="125">125</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="126">126</th><td>    <i>/*@null@*/</i> <i>/*@only@*/</i> <a class="typedef" href="#yasm_expr" title='yasm_expr' data-type='struct yasm_expr' data-ref="yasm_expr" data-ref-filename="yasm_expr">yasm_expr</a> *<dfn class="decl field" id="yasm_value::abs" title='yasm_value::abs' data-ref="yasm_value::abs" data-ref-filename="yasm_value..abs">abs</dfn>;</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td>    <i class="doc">/** The relative portion of the value.  This is the portion that may</i></td></tr>
+<tr><th id="129">129</th><td><i class="doc">     * need to generate a relocation.  May be NULL if no relative portion.</i></td></tr>
+<tr><th id="130">130</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="131">131</th><td>    <i>/*@null@*/</i> <i>/*@dependent@*/</i> <a class="typedef" href="#yasm_symrec" title='yasm_symrec' data-type='struct yasm_symrec' data-ref="yasm_symrec" data-ref-filename="yasm_symrec">yasm_symrec</a> *<dfn class="decl field" id="yasm_value::rel" title='yasm_value::rel' data-ref="yasm_value::rel" data-ref-filename="yasm_value..rel">rel</dfn>;</td></tr>
+<tr><th id="132">132</th><td></td></tr>
+<tr><th id="133">133</th><td>    <i class="doc">/** What the relative portion is in reference to.  NULL if the default. */</i></td></tr>
+<tr><th id="134">134</th><td>    <i>/*@null@*/</i> <i>/*@dependent@*/</i> <a class="typedef" href="#yasm_symrec" title='yasm_symrec' data-type='struct yasm_symrec' data-ref="yasm_symrec" data-ref-filename="yasm_symrec">yasm_symrec</a> *<dfn class="decl field" id="yasm_value::wrt" title='yasm_value::wrt' data-ref="yasm_value::wrt" data-ref-filename="yasm_value..wrt">wrt</dfn>;</td></tr>
+<tr><th id="135">135</th><td></td></tr>
+<tr><th id="136">136</th><td>    <i class="doc">/** If the segment of the relative portion should be used, not the</i></td></tr>
+<tr><th id="137">137</th><td><i class="doc">     * relative portion itself.  Boolean.</i></td></tr>
+<tr><th id="138">138</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="139">139</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="yasm_value::seg_of" title='yasm_value::seg_of' data-ref="yasm_value::seg_of" data-ref-filename="yasm_value..seg_of">seg_of</dfn> : <var>1</var>;</td></tr>
+<tr><th id="140">140</th><td></td></tr>
+<tr><th id="141">141</th><td>    <i class="doc">/** If the relative portion of the value should be shifted right</i></td></tr>
+<tr><th id="142">142</th><td><i class="doc">     * (supported only by a few object formats).  If just the absolute portion</i></td></tr>
+<tr><th id="143">143</th><td><i class="doc">     * should be shifted, that must be in the abs expr, not here!</i></td></tr>
+<tr><th id="144">144</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="145">145</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="yasm_value::rshift" title='yasm_value::rshift' data-ref="yasm_value::rshift" data-ref-filename="yasm_value..rshift">rshift</dfn> : <var>7</var>;</td></tr>
+<tr><th id="146">146</th><td></td></tr>
+<tr><th id="147">147</th><td>    <i class="doc">/** Indicates the relative portion of the value should be relocated</i></td></tr>
+<tr><th id="148">148</th><td><i class="doc">     * relative to the current assembly position rather than relative to the</i></td></tr>
+<tr><th id="149">149</th><td><i class="doc">     * section start.  "Current assembly position" here refers to the starting</i></td></tr>
+<tr><th id="150">150</th><td><i class="doc">     * address of the bytecode containing this value.  Boolean.</i></td></tr>
+<tr><th id="151">151</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="152">152</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="yasm_value::curpos_rel" title='yasm_value::curpos_rel' data-ref="yasm_value::curpos_rel" data-ref-filename="yasm_value..curpos_rel">curpos_rel</dfn> : <var>1</var>;</td></tr>
+<tr><th id="153">153</th><td></td></tr>
+<tr><th id="154">154</th><td>    <i class="doc">/** Indicates that curpos_rel was set due to IP-relative relocation;</i></td></tr>
+<tr><th id="155">155</th><td><i class="doc">     * in some objfmt/arch combinations (e.g. win64/x86-amd64) this info</i></td></tr>
+<tr><th id="156">156</th><td><i class="doc">     * is needed to generate special relocations.</i></td></tr>
+<tr><th id="157">157</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="158">158</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="yasm_value::ip_rel" title='yasm_value::ip_rel' data-ref="yasm_value::ip_rel" data-ref-filename="yasm_value..ip_rel">ip_rel</dfn> : <var>1</var>;</td></tr>
+<tr><th id="159">159</th><td></td></tr>
+<tr><th id="160">160</th><td>    <i class="doc">/** Indicates the value is a jump target address (rather than a simple</i></td></tr>
+<tr><th id="161">161</th><td><i class="doc">     * data address).  In some objfmt/arch combinations (e.g. macho/amd64)</i></td></tr>
+<tr><th id="162">162</th><td><i class="doc">     * this info is needed to generate special relocations.</i></td></tr>
+<tr><th id="163">163</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="164">164</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="yasm_value::jump_target" title='yasm_value::jump_target' data-ref="yasm_value::jump_target" data-ref-filename="yasm_value..jump_target">jump_target</dfn> : <var>1</var>;</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td>    <i class="doc">/** Indicates the relative portion of the value should be relocated</i></td></tr>
+<tr><th id="167">167</th><td><i class="doc">     * relative to its own section start rather than relative to the</i></td></tr>
+<tr><th id="168">168</th><td><i class="doc">     * section start of the bytecode containing this value.  E.g. the value</i></td></tr>
+<tr><th id="169">169</th><td><i class="doc">     * resulting from the relative portion should be the offset from its</i></td></tr>
+<tr><th id="170">170</th><td><i class="doc">     * section start.  Boolean.</i></td></tr>
+<tr><th id="171">171</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="172">172</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="yasm_value::section_rel" title='yasm_value::section_rel' data-ref="yasm_value::section_rel" data-ref-filename="yasm_value..section_rel">section_rel</dfn> : <var>1</var>;</td></tr>
+<tr><th id="173">173</th><td></td></tr>
+<tr><th id="174">174</th><td>    <i class="doc">/** Indicates overflow warnings have been disabled for this value. */</i></td></tr>
+<tr><th id="175">175</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="yasm_value::no_warn" title='yasm_value::no_warn' data-ref="yasm_value::no_warn" data-ref-filename="yasm_value..no_warn">no_warn</dfn> : <var>1</var>;</td></tr>
+<tr><th id="176">176</th><td></td></tr>
+<tr><th id="177">177</th><td>    <i class="doc">/** Sign of the value.  Nonzero if the final value should be treated as</i></td></tr>
+<tr><th id="178">178</th><td><i class="doc">     * signed, 0 if it should be treated as signed.</i></td></tr>
+<tr><th id="179">179</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="180">180</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="yasm_value::sign" title='yasm_value::sign' data-ref="yasm_value::sign" data-ref-filename="yasm_value..sign">sign</dfn> : <var>1</var>;</td></tr>
+<tr><th id="181">181</th><td></td></tr>
+<tr><th id="182">182</th><td>    <i class="doc">/** Size of the value, in bits. */</i></td></tr>
+<tr><th id="183">183</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="yasm_value::size" title='yasm_value::size' data-ref="yasm_value::size" data-ref-filename="yasm_value..size">size</dfn> : <var>8</var>;</td></tr>
+<tr><th id="184">184</th><td>} <dfn class="typedef" id="yasm_value" title='yasm_value' data-type='struct yasm_value' data-ref="yasm_value" data-ref-filename="yasm_value">yasm_value</dfn>;</td></tr>
+<tr><th id="185">185</th><td></td></tr>
+<tr><th id="186">186</th><td><i class="doc">/** Maximum value of #yasm_value.rshift */</i></td></tr>
+<tr><th id="187">187</th><td><u>#define <dfn class="macro" id="_M/YASM_VALUE_RSHIFT_MAX" data-ref="_M/YASM_VALUE_RSHIFT_MAX">YASM_VALUE_RSHIFT_MAX</dfn>   127</u></td></tr>
+<tr><th id="188">188</th><td></td></tr>
+<tr><th id="189">189</th><td><i class="doc">/** Line number mapping repository (opaque type).  <span class="command">\see</span> linemap.h for related</i></td></tr>
+<tr><th id="190">190</th><td><i class="doc"> * functions.</i></td></tr>
+<tr><th id="191">191</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="192">192</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_linemap" title='yasm_linemap' data-ref="yasm_linemap" data-ref-filename="yasm_linemap"><a class="type" href="#yasm_linemap" title='yasm_linemap' data-ref="yasm_linemap" data-ref-filename="yasm_linemap">yasm_linemap</a></dfn> <dfn class="typedef" id="yasm_linemap" title='yasm_linemap' data-type='struct yasm_linemap' data-ref="yasm_linemap" data-ref-filename="yasm_linemap">yasm_linemap</dfn>;</td></tr>
+<tr><th id="193">193</th><td></td></tr>
+<tr><th id="194">194</th><td><i class="doc">/** Value/parameter pair (opaque type).</i></td></tr>
+<tr><th id="195">195</th><td><i class="doc"> * <span class="command">\see</span> valparam.h for related functions.</i></td></tr>
+<tr><th id="196">196</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="197">197</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_valparam" title='yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam"><a class="type" href="#yasm_valparam" title='yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a></dfn> <dfn class="typedef" id="yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</dfn>;</td></tr>
+<tr><th id="198">198</th><td><i class="doc">/** List of value/parameters (opaque type).</i></td></tr>
+<tr><th id="199">199</th><td><i class="doc"> * <span class="command">\see</span> valparam.h for related functions.</i></td></tr>
+<tr><th id="200">200</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="201">201</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_valparamhead" title='yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead"><a class="type" href="#yasm_valparamhead" title='yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</a></dfn> <dfn class="typedef" id="yasm_valparamhead" title='yasm_valparamhead' data-type='struct yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</dfn>;</td></tr>
+<tr><th id="202">202</th><td><i class="doc">/** Directive list entry.</i></td></tr>
+<tr><th id="203">203</th><td><i class="doc"> * <span class="command">\see</span> valparam.h for details and related functions.</i></td></tr>
+<tr><th id="204">204</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="205">205</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_directive" title='yasm_directive' data-ref="yasm_directive" data-ref-filename="yasm_directive"><a class="type" href="#yasm_directive" title='yasm_directive' data-ref="yasm_directive" data-ref-filename="yasm_directive">yasm_directive</a></dfn> <dfn class="typedef" id="yasm_directive" title='yasm_directive' data-type='struct yasm_directive' data-ref="yasm_directive" data-ref-filename="yasm_directive">yasm_directive</dfn>;</td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td><i class="doc">/** An effective address.</i></td></tr>
+<tr><th id="208">208</th><td><i class="doc"> * <span class="command">\see</span> insn.h for related functions.</i></td></tr>
+<tr><th id="209">209</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="210">210</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_effaddr" title='yasm_effaddr' data-ref="yasm_effaddr" data-ref-filename="yasm_effaddr"><a class="type" href="#yasm_effaddr" title='yasm_effaddr' data-ref="yasm_effaddr" data-ref-filename="yasm_effaddr">yasm_effaddr</a></dfn> <dfn class="typedef" id="yasm_effaddr" title='yasm_effaddr' data-type='struct yasm_effaddr' data-ref="yasm_effaddr" data-ref-filename="yasm_effaddr">yasm_effaddr</dfn>;</td></tr>
+<tr><th id="211">211</th><td></td></tr>
+<tr><th id="212">212</th><td><i class="doc">/** An instruction.</i></td></tr>
+<tr><th id="213">213</th><td><i class="doc"> * <span class="command">\see</span> insn.h for related functions.</i></td></tr>
+<tr><th id="214">214</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="215">215</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="yasm_insn" title='yasm_insn' data-ref="yasm_insn" data-ref-filename="yasm_insn"><a class="type" href="#yasm_insn" title='yasm_insn' data-ref="yasm_insn" data-ref-filename="yasm_insn">yasm_insn</a></dfn> <dfn class="typedef" id="yasm_insn" title='yasm_insn' data-type='struct yasm_insn' data-ref="yasm_insn" data-ref-filename="yasm_insn">yasm_insn</dfn>;</td></tr>
+<tr><th id="216">216</th><td></td></tr>
+<tr><th id="217">217</th><td><i class="doc">/** Expression operators usable in #yasm_expr expressions. */</i></td></tr>
+<tr><th id="218">218</th><td><b>typedef</b> <b>enum</b> <dfn class="type def" id="yasm_expr_op" title='yasm_expr_op' data-ref="yasm_expr_op" data-ref-filename="yasm_expr_op"><a class="type" href="#yasm_expr_op" title='yasm_expr_op' data-ref="yasm_expr_op" data-ref-filename="yasm_expr_op">yasm_expr_op</a></dfn> {</td></tr>
+<tr><th id="219">219</th><td>    <dfn class="enum" id="YASM_EXPR_IDENT" title='YASM_EXPR_IDENT' data-ref="YASM_EXPR_IDENT" data-ref-filename="YASM_EXPR_IDENT">YASM_EXPR_IDENT</dfn>,    <i class="doc">/**&lt; No operation, just a value. */</i></td></tr>
+<tr><th id="220">220</th><td>    <dfn class="enum" id="YASM_EXPR_ADD" title='YASM_EXPR_ADD' data-ref="YASM_EXPR_ADD" data-ref-filename="YASM_EXPR_ADD">YASM_EXPR_ADD</dfn>,      <i class="doc">/**&lt; Arithmetic addition (+). */</i></td></tr>
+<tr><th id="221">221</th><td>    <dfn class="enum" id="YASM_EXPR_SUB" title='YASM_EXPR_SUB' data-ref="YASM_EXPR_SUB" data-ref-filename="YASM_EXPR_SUB">YASM_EXPR_SUB</dfn>,      <i class="doc">/**&lt; Arithmetic subtraction (-). */</i></td></tr>
+<tr><th id="222">222</th><td>    <dfn class="enum" id="YASM_EXPR_MUL" title='YASM_EXPR_MUL' data-ref="YASM_EXPR_MUL" data-ref-filename="YASM_EXPR_MUL">YASM_EXPR_MUL</dfn>,      <i class="doc">/**&lt; Arithmetic multiplication (*). */</i></td></tr>
+<tr><th id="223">223</th><td>    <dfn class="enum" id="YASM_EXPR_DIV" title='YASM_EXPR_DIV' data-ref="YASM_EXPR_DIV" data-ref-filename="YASM_EXPR_DIV">YASM_EXPR_DIV</dfn>,      <i class="doc">/**&lt; Arithmetic unsigned division. */</i></td></tr>
+<tr><th id="224">224</th><td>    <dfn class="enum" id="YASM_EXPR_SIGNDIV" title='YASM_EXPR_SIGNDIV' data-ref="YASM_EXPR_SIGNDIV" data-ref-filename="YASM_EXPR_SIGNDIV">YASM_EXPR_SIGNDIV</dfn>,  <i class="doc">/**&lt; Arithmetic signed division. */</i></td></tr>
+<tr><th id="225">225</th><td>    <dfn class="enum" id="YASM_EXPR_MOD" title='YASM_EXPR_MOD' data-ref="YASM_EXPR_MOD" data-ref-filename="YASM_EXPR_MOD">YASM_EXPR_MOD</dfn>,      <i class="doc">/**&lt; Arithmetic unsigned modulus. */</i></td></tr>
+<tr><th id="226">226</th><td>    <dfn class="enum" id="YASM_EXPR_SIGNMOD" title='YASM_EXPR_SIGNMOD' data-ref="YASM_EXPR_SIGNMOD" data-ref-filename="YASM_EXPR_SIGNMOD">YASM_EXPR_SIGNMOD</dfn>,  <i class="doc">/**&lt; Arithmetic signed modulus. */</i></td></tr>
+<tr><th id="227">227</th><td>    <dfn class="enum" id="YASM_EXPR_NEG" title='YASM_EXPR_NEG' data-ref="YASM_EXPR_NEG" data-ref-filename="YASM_EXPR_NEG">YASM_EXPR_NEG</dfn>,      <i class="doc">/**&lt; Arithmetic negation (-). */</i></td></tr>
+<tr><th id="228">228</th><td>    <dfn class="enum" id="YASM_EXPR_NOT" title='YASM_EXPR_NOT' data-ref="YASM_EXPR_NOT" data-ref-filename="YASM_EXPR_NOT">YASM_EXPR_NOT</dfn>,      <i class="doc">/**&lt; Bitwise negation. */</i></td></tr>
+<tr><th id="229">229</th><td>    <dfn class="enum" id="YASM_EXPR_OR" title='YASM_EXPR_OR' data-ref="YASM_EXPR_OR" data-ref-filename="YASM_EXPR_OR">YASM_EXPR_OR</dfn>,       <i class="doc">/**&lt; Bitwise OR. */</i></td></tr>
+<tr><th id="230">230</th><td>    <dfn class="enum" id="YASM_EXPR_AND" title='YASM_EXPR_AND' data-ref="YASM_EXPR_AND" data-ref-filename="YASM_EXPR_AND">YASM_EXPR_AND</dfn>,      <i class="doc">/**&lt; Bitwise AND. */</i></td></tr>
+<tr><th id="231">231</th><td>    <dfn class="enum" id="YASM_EXPR_XOR" title='YASM_EXPR_XOR' data-ref="YASM_EXPR_XOR" data-ref-filename="YASM_EXPR_XOR">YASM_EXPR_XOR</dfn>,      <i class="doc">/**&lt; Bitwise XOR. */</i></td></tr>
+<tr><th id="232">232</th><td>    <dfn class="enum" id="YASM_EXPR_XNOR" title='YASM_EXPR_XNOR' data-ref="YASM_EXPR_XNOR" data-ref-filename="YASM_EXPR_XNOR">YASM_EXPR_XNOR</dfn>,     <i class="doc">/**&lt; Bitwise XNOR. */</i></td></tr>
+<tr><th id="233">233</th><td>    <dfn class="enum" id="YASM_EXPR_NOR" title='YASM_EXPR_NOR' data-ref="YASM_EXPR_NOR" data-ref-filename="YASM_EXPR_NOR">YASM_EXPR_NOR</dfn>,      <i class="doc">/**&lt; Bitwise NOR. */</i></td></tr>
+<tr><th id="234">234</th><td>    <dfn class="enum" id="YASM_EXPR_SHL" title='YASM_EXPR_SHL' data-ref="YASM_EXPR_SHL" data-ref-filename="YASM_EXPR_SHL">YASM_EXPR_SHL</dfn>,      <i class="doc">/**&lt; Shift left (logical). */</i></td></tr>
+<tr><th id="235">235</th><td>    <dfn class="enum" id="YASM_EXPR_SHR" title='YASM_EXPR_SHR' data-ref="YASM_EXPR_SHR" data-ref-filename="YASM_EXPR_SHR">YASM_EXPR_SHR</dfn>,      <i class="doc">/**&lt; Shift right (logical). */</i></td></tr>
+<tr><th id="236">236</th><td>    <dfn class="enum" id="YASM_EXPR_LOR" title='YASM_EXPR_LOR' data-ref="YASM_EXPR_LOR" data-ref-filename="YASM_EXPR_LOR">YASM_EXPR_LOR</dfn>,      <i class="doc">/**&lt; Logical OR. */</i></td></tr>
+<tr><th id="237">237</th><td>    <dfn class="enum" id="YASM_EXPR_LAND" title='YASM_EXPR_LAND' data-ref="YASM_EXPR_LAND" data-ref-filename="YASM_EXPR_LAND">YASM_EXPR_LAND</dfn>,     <i class="doc">/**&lt; Logical AND. */</i></td></tr>
+<tr><th id="238">238</th><td>    <dfn class="enum" id="YASM_EXPR_LNOT" title='YASM_EXPR_LNOT' data-ref="YASM_EXPR_LNOT" data-ref-filename="YASM_EXPR_LNOT">YASM_EXPR_LNOT</dfn>,     <i class="doc">/**&lt; Logical negation. */</i></td></tr>
+<tr><th id="239">239</th><td>    <dfn class="enum" id="YASM_EXPR_LXOR" title='YASM_EXPR_LXOR' data-ref="YASM_EXPR_LXOR" data-ref-filename="YASM_EXPR_LXOR">YASM_EXPR_LXOR</dfn>,     <i class="doc">/**&lt; Logical XOR. */</i></td></tr>
+<tr><th id="240">240</th><td>    <dfn class="enum" id="YASM_EXPR_LXNOR" title='YASM_EXPR_LXNOR' data-ref="YASM_EXPR_LXNOR" data-ref-filename="YASM_EXPR_LXNOR">YASM_EXPR_LXNOR</dfn>,    <i class="doc">/**&lt; Logical XNOR. */</i></td></tr>
+<tr><th id="241">241</th><td>    <dfn class="enum" id="YASM_EXPR_LNOR" title='YASM_EXPR_LNOR' data-ref="YASM_EXPR_LNOR" data-ref-filename="YASM_EXPR_LNOR">YASM_EXPR_LNOR</dfn>,     <i class="doc">/**&lt; Logical NOR. */</i></td></tr>
+<tr><th id="242">242</th><td>    <dfn class="enum" id="YASM_EXPR_LT" title='YASM_EXPR_LT' data-ref="YASM_EXPR_LT" data-ref-filename="YASM_EXPR_LT">YASM_EXPR_LT</dfn>,       <i class="doc">/**&lt; Less than comparison. */</i></td></tr>
+<tr><th id="243">243</th><td>    <dfn class="enum" id="YASM_EXPR_GT" title='YASM_EXPR_GT' data-ref="YASM_EXPR_GT" data-ref-filename="YASM_EXPR_GT">YASM_EXPR_GT</dfn>,       <i class="doc">/**&lt; Greater than comparison. */</i></td></tr>
+<tr><th id="244">244</th><td>    <dfn class="enum" id="YASM_EXPR_EQ" title='YASM_EXPR_EQ' data-ref="YASM_EXPR_EQ" data-ref-filename="YASM_EXPR_EQ">YASM_EXPR_EQ</dfn>,       <i class="doc">/**&lt; Equality comparison. */</i></td></tr>
+<tr><th id="245">245</th><td>    <dfn class="enum" id="YASM_EXPR_LE" title='YASM_EXPR_LE' data-ref="YASM_EXPR_LE" data-ref-filename="YASM_EXPR_LE">YASM_EXPR_LE</dfn>,       <i class="doc">/**&lt; Less than or equal to comparison. */</i></td></tr>
+<tr><th id="246">246</th><td>    <dfn class="enum" id="YASM_EXPR_GE" title='YASM_EXPR_GE' data-ref="YASM_EXPR_GE" data-ref-filename="YASM_EXPR_GE">YASM_EXPR_GE</dfn>,       <i class="doc">/**&lt; Greater than or equal to comparison. */</i></td></tr>
+<tr><th id="247">247</th><td>    <dfn class="enum" id="YASM_EXPR_NE" title='YASM_EXPR_NE' data-ref="YASM_EXPR_NE" data-ref-filename="YASM_EXPR_NE">YASM_EXPR_NE</dfn>,       <i class="doc">/**&lt; Not equal comparison. */</i></td></tr>
+<tr><th id="248">248</th><td>    <dfn class="enum" id="YASM_EXPR_NONNUM" title='YASM_EXPR_NONNUM' data-ref="YASM_EXPR_NONNUM" data-ref-filename="YASM_EXPR_NONNUM">YASM_EXPR_NONNUM</dfn>,   <i class="doc">/**&lt; Start of non-numeric operations (not an op). */</i></td></tr>
+<tr><th id="249">249</th><td>    <dfn class="enum" id="YASM_EXPR_SEG" title='YASM_EXPR_SEG' data-ref="YASM_EXPR_SEG" data-ref-filename="YASM_EXPR_SEG">YASM_EXPR_SEG</dfn>,      <i class="doc">/**&lt; SEG operator (gets segment portion of address). */</i></td></tr>
+<tr><th id="250">250</th><td>    <dfn class="enum" id="YASM_EXPR_WRT" title='YASM_EXPR_WRT' data-ref="YASM_EXPR_WRT" data-ref-filename="YASM_EXPR_WRT">YASM_EXPR_WRT</dfn>,      <i class="doc">/**&lt; WRT operator (gets offset of address relative to</i></td></tr>
+<tr><th id="251">251</th><td><i class="doc">                         *   some other segment). */</i></td></tr>
+<tr><th id="252">252</th><td>    <dfn class="enum" id="YASM_EXPR_SEGOFF" title='YASM_EXPR_SEGOFF' data-ref="YASM_EXPR_SEGOFF" data-ref-filename="YASM_EXPR_SEGOFF">YASM_EXPR_SEGOFF</dfn>    <i class="doc">/**&lt; The ':' in segment:offset. */</i></td></tr>
+<tr><th id="253">253</th><td>} <dfn class="typedef" id="yasm_expr_op" title='yasm_expr_op' data-type='enum yasm_expr_op' data-ref="yasm_expr_op" data-ref-filename="yasm_expr_op">yasm_expr_op</dfn>;</td></tr>
+<tr><th id="254">254</th><td></td></tr>
+<tr><th id="255">255</th><td><i class="doc">/** Convert yasm_value to its byte representation.  Usually implemented by</i></td></tr>
+<tr><th id="256">256</th><td><i class="doc"> * object formats to keep track of relocations and verify legal expressions.</i></td></tr>
+<tr><th id="257">257</th><td><i class="doc"> * Must put the value into the least significant bits of the destination,</i></td></tr>
+<tr><th id="258">258</th><td><i class="doc"> * unless shifted into more significant bits by the shift parameter.  The</i></td></tr>
+<tr><th id="259">259</th><td><i class="doc"> * destination bits must be cleared before being set.</i></td></tr>
+<tr><th id="260">260</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">value</span>         value</i></td></tr>
+<tr><th id="261">261</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">buf</span>           buffer for byte representation</i></td></tr>
+<tr><th id="262">262</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">destsize</span>      destination size (in bytes)</i></td></tr>
+<tr><th id="263">263</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">offset</span>        offset (in bytes) of the expr contents from the start</i></td></tr>
+<tr><th id="264">264</th><td><i class="doc"> *                      of the bytecode (needed for relative)</i></td></tr>
+<tr><th id="265">265</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">bc</span>            current bytecode (usually passed into higher-level</i></td></tr>
+<tr><th id="266">266</th><td><i class="doc"> *                      calling function)</i></td></tr>
+<tr><th id="267">267</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">warn</span>          enables standard warnings: zero for none;</i></td></tr>
+<tr><th id="268">268</th><td><i class="doc"> *                      nonzero for overflow/underflow floating point warnings</i></td></tr>
+<tr><th id="269">269</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">d</span>             objfmt-specific data (passed into higher-level calling</i></td></tr>
+<tr><th id="270">270</th><td><i class="doc"> *                      function)</i></td></tr>
+<tr><th id="271">271</th><td><i class="doc"> * <span class="command">\return</span> Nonzero if an error occurred, 0 otherwise.</i></td></tr>
+<tr><th id="272">272</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="273">273</th><td><b>typedef</b> <em>int</em> (*<dfn class="typedef" id="yasm_output_value_func" title='yasm_output_value_func' data-type='int (*)(yasm_value *, unsigned char *, unsigned int, unsigned long, yasm_bytecode *, int, void *)' data-ref="yasm_output_value_func" data-ref-filename="yasm_output_value_func">yasm_output_value_func</dfn>)</td></tr>
+<tr><th id="274">274</th><td>    (<a class="typedef" href="#yasm_value" title='yasm_value' data-type='struct yasm_value' data-ref="yasm_value" data-ref-filename="yasm_value">yasm_value</a> *<dfn class="local col5 decl" id="5value" title='value' data-type='yasm_value *' data-ref="5value" data-ref-filename="5value">value</dfn>, <i>/*@out@*/</i> <em>unsigned</em> <em>char</em> *<dfn class="local col6 decl" id="6buf" title='buf' data-type='unsigned char *' data-ref="6buf" data-ref-filename="6buf">buf</dfn>, <em>unsigned</em> <em>int</em> <dfn class="local col7 decl" id="7destsize" title='destsize' data-type='unsigned int' data-ref="7destsize" data-ref-filename="7destsize">destsize</dfn>,</td></tr>
+<tr><th id="275">275</th><td>     <em>unsigned</em> <em>long</em> <dfn class="local col8 decl" id="8offset" title='offset' data-type='unsigned long' data-ref="8offset" data-ref-filename="8offset">offset</dfn>, <a class="typedef" href="#yasm_bytecode" title='yasm_bytecode' data-type='struct yasm_bytecode' data-ref="yasm_bytecode" data-ref-filename="yasm_bytecode">yasm_bytecode</a> *<dfn class="local col9 decl" id="9bc" title='bc' data-type='yasm_bytecode *' data-ref="9bc" data-ref-filename="9bc">bc</dfn>, <em>int</em> <dfn class="local col0 decl" id="10warn" title='warn' data-type='int' data-ref="10warn" data-ref-filename="10warn">warn</dfn>, <i>/*@null@*/</i> <em>void</em> *<dfn class="local col1 decl" id="11d" title='d' data-type='void *' data-ref="11d" data-ref-filename="11d">d</dfn>);</td></tr>
+<tr><th id="276">276</th><td></td></tr>
+<tr><th id="277">277</th><td><i class="doc">/** Convert a symbol reference to its byte representation.  Usually implemented</i></td></tr>
+<tr><th id="278">278</th><td><i class="doc"> * by object formats and debug formats to keep track of relocations generated</i></td></tr>
+<tr><th id="279">279</th><td><i class="doc"> * by themselves.</i></td></tr>
+<tr><th id="280">280</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">sym</span>           symbol</i></td></tr>
+<tr><th id="281">281</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">bc</span>            current bytecode (usually passed into higher-level</i></td></tr>
+<tr><th id="282">282</th><td><i class="doc"> *                      calling function)</i></td></tr>
+<tr><th id="283">283</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">buf</span>           buffer for byte representation</i></td></tr>
+<tr><th id="284">284</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">destsize</span>      destination size (in bytes)</i></td></tr>
+<tr><th id="285">285</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">valsize</span>       size (in bits)</i></td></tr>
+<tr><th id="286">286</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">warn</span>          enables standard warnings: zero for none;</i></td></tr>
+<tr><th id="287">287</th><td><i class="doc"> *                      nonzero for overflow/underflow floating point warnings;</i></td></tr>
+<tr><th id="288">288</th><td><i class="doc"> *                      negative for signed integer warnings,</i></td></tr>
+<tr><th id="289">289</th><td><i class="doc"> *                      positive for unsigned integer warnings</i></td></tr>
+<tr><th id="290">290</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">d</span>             objfmt-specific data (passed into higher-level calling</i></td></tr>
+<tr><th id="291">291</th><td><i class="doc"> *                      function)</i></td></tr>
+<tr><th id="292">292</th><td><i class="doc"> * <span class="command">\return</span> Nonzero if an error occurred, 0 otherwise.</i></td></tr>
+<tr><th id="293">293</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="294">294</th><td><b>typedef</b> <em>int</em> (*<dfn class="typedef" id="yasm_output_reloc_func" title='yasm_output_reloc_func' data-type='int (*)(yasm_symrec *, yasm_bytecode *, unsigned char *, unsigned int, unsigned int, int, void *)' data-ref="yasm_output_reloc_func" data-ref-filename="yasm_output_reloc_func">yasm_output_reloc_func</dfn>)</td></tr>
+<tr><th id="295">295</th><td>    (<a class="typedef" href="#yasm_symrec" title='yasm_symrec' data-type='struct yasm_symrec' data-ref="yasm_symrec" data-ref-filename="yasm_symrec">yasm_symrec</a> *<dfn class="local col2 decl" id="12sym" title='sym' data-type='yasm_symrec *' data-ref="12sym" data-ref-filename="12sym">sym</dfn>, <a class="typedef" href="#yasm_bytecode" title='yasm_bytecode' data-type='struct yasm_bytecode' data-ref="yasm_bytecode" data-ref-filename="yasm_bytecode">yasm_bytecode</a> *<dfn class="local col3 decl" id="13bc" title='bc' data-type='yasm_bytecode *' data-ref="13bc" data-ref-filename="13bc">bc</dfn>, <em>unsigned</em> <em>char</em> *<dfn class="local col4 decl" id="14buf" title='buf' data-type='unsigned char *' data-ref="14buf" data-ref-filename="14buf">buf</dfn>,</td></tr>
+<tr><th id="296">296</th><td>     <em>unsigned</em> <em>int</em> <dfn class="local col5 decl" id="15destsize" title='destsize' data-type='unsigned int' data-ref="15destsize" data-ref-filename="15destsize">destsize</dfn>, <em>unsigned</em> <em>int</em> <dfn class="local col6 decl" id="16valsize" title='valsize' data-type='unsigned int' data-ref="16valsize" data-ref-filename="16valsize">valsize</dfn>, <em>int</em> <dfn class="local col7 decl" id="17warn" title='warn' data-type='int' data-ref="17warn" data-ref-filename="17warn">warn</dfn>, <em>void</em> *<dfn class="local col8 decl" id="18d" title='d' data-type='void *' data-ref="18d" data-ref-filename="18d">d</dfn>);</td></tr>
+<tr><th id="297">297</th><td></td></tr>
+<tr><th id="298">298</th><td><i class="doc">/** Sort an array using merge sort algorithm.</i></td></tr>
+<tr><th id="299">299</th><td><i class="doc"> *<span class="command"> \internal</span></i></td></tr>
+<tr><th id="300">300</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">base</span>      base of array</i></td></tr>
+<tr><th id="301">301</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">nmemb</span>     number of elements in array</i></td></tr>
+<tr><th id="302">302</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">size</span>      size of each array element</i></td></tr>
+<tr><th id="303">303</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">compar</span>    element comparison function</i></td></tr>
+<tr><th id="304">304</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="305">305</th><td><a class="macro" href="#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="306">306</th><td><em>int</em> <dfn class="decl fn" id="yasm__mergesort" title='yasm__mergesort' data-ref="yasm__mergesort" data-ref-filename="yasm__mergesort">yasm__mergesort</dfn>(<em>void</em> *<dfn class="local col9 decl" id="19base" title='base' data-type='void *' data-ref="19base" data-ref-filename="19base">base</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="20nmemb" title='nmemb' data-type='size_t' data-ref="20nmemb" data-ref-filename="20nmemb">nmemb</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="21size" title='size' data-type='size_t' data-ref="21size" data-ref-filename="21size">size</dfn>,</td></tr>
+<tr><th id="307">307</th><td>                    <em>int</em> (*<dfn class="local col2 decl" id="22compar" title='compar' data-type='int (*)(const void *, const void *)' data-ref="22compar" data-ref-filename="22compar">compar</dfn>)(<em>const</em> <em>void</em> *, <em>const</em> <em>void</em> *));</td></tr>
+<tr><th id="308">308</th><td></td></tr>
+<tr><th id="309">309</th><td><i class="doc">/** Separate string by delimiters.</i></td></tr>
+<tr><th id="310">310</th><td><i class="doc"> *<span class="command"> \internal</span></i></td></tr>
+<tr><th id="311">311</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">stringp</span>   string</i></td></tr>
+<tr><th id="312">312</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">delim</span>     set of 1 or more delimiters</i></td></tr>
+<tr><th id="313">313</th><td><i class="doc"> * <span class="command">\return</span> First/next substring.</i></td></tr>
+<tr><th id="314">314</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="315">315</th><td><a class="macro" href="#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="316">316</th><td><i>/*@null@*/</i> <em>char</em> *<dfn class="decl fn" id="yasm__strsep" title='yasm__strsep' data-ref="yasm__strsep" data-ref-filename="yasm__strsep">yasm__strsep</dfn>(<em>char</em> **<dfn class="local col3 decl" id="23stringp" title='stringp' data-type='char **' data-ref="23stringp" data-ref-filename="23stringp">stringp</dfn>, <em>const</em> <em>char</em> *<dfn class="local col4 decl" id="24delim" title='delim' data-type='const char *' data-ref="24delim" data-ref-filename="24delim">delim</dfn>);</td></tr>
+<tr><th id="317">317</th><td></td></tr>
+<tr><th id="318">318</th><td><i class="doc">/** Compare two strings, ignoring case differences.</i></td></tr>
+<tr><th id="319">319</th><td><i class="doc"> *<span class="command"> \internal</span></i></td></tr>
+<tr><th id="320">320</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">s1</span>    string 1</i></td></tr>
+<tr><th id="321">321</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">s2</span>    string 2</i></td></tr>
+<tr><th id="322">322</th><td><i class="doc"> * <span class="command">\return</span> 0 if strings are equal, -1 if s1&lt;s2, 1 if s1&gt;s2.</i></td></tr>
+<tr><th id="323">323</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="324">324</th><td><a class="macro" href="#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="325">325</th><td><em>int</em> <dfn class="decl fn" id="yasm__strcasecmp" title='yasm__strcasecmp' data-ref="yasm__strcasecmp" data-ref-filename="yasm__strcasecmp">yasm__strcasecmp</dfn>(<em>const</em> <em>char</em> *<dfn class="local col5 decl" id="25s1" title='s1' data-type='const char *' data-ref="25s1" data-ref-filename="25s1">s1</dfn>, <em>const</em> <em>char</em> *<dfn class="local col6 decl" id="26s2" title='s2' data-type='const char *' data-ref="26s2" data-ref-filename="26s2">s2</dfn>);</td></tr>
+<tr><th id="326">326</th><td></td></tr>
+<tr><th id="327">327</th><td><i class="doc">/** Compare portion of two strings, ignoring case differences.</i></td></tr>
+<tr><th id="328">328</th><td><i class="doc"> *<span class="command"> \internal</span></i></td></tr>
+<tr><th id="329">329</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">s1</span>    string 1</i></td></tr>
+<tr><th id="330">330</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">s2</span>    string 2</i></td></tr>
+<tr><th id="331">331</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">n</span>     maximum number of characters to compare</i></td></tr>
+<tr><th id="332">332</th><td><i class="doc"> * <span class="command">\return</span> 0 if strings are equal, -1 if s1&lt;s2, 1 if s1&gt;s2.</i></td></tr>
+<tr><th id="333">333</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="334">334</th><td><a class="macro" href="#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="335">335</th><td><em>int</em> <dfn class="decl fn" id="yasm__strncasecmp" title='yasm__strncasecmp' data-ref="yasm__strncasecmp" data-ref-filename="yasm__strncasecmp">yasm__strncasecmp</dfn>(<em>const</em> <em>char</em> *<dfn class="local col7 decl" id="27s1" title='s1' data-type='const char *' data-ref="27s1" data-ref-filename="27s1">s1</dfn>, <em>const</em> <em>char</em> *<dfn class="local col8 decl" id="28s2" title='s2' data-type='const char *' data-ref="28s2" data-ref-filename="28s2">s2</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="29n" title='n' data-type='size_t' data-ref="29n" data-ref-filename="29n">n</dfn>);</td></tr>
+<tr><th id="336">336</th><td></td></tr>
+<tr><th id="337">337</th><td><i class="doc">/** strdup() implementation using yasm_xmalloc().</i></td></tr>
+<tr><th id="338">338</th><td><i class="doc"> *<span class="command"> \internal</span></i></td></tr>
+<tr><th id="339">339</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">str</span>   string</i></td></tr>
+<tr><th id="340">340</th><td><i class="doc"> * <span class="command">\return</span> Newly allocated duplicate string.</i></td></tr>
+<tr><th id="341">341</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="342">342</th><td><a class="macro" href="#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="343">343</th><td><i>/*@only@*/</i> <em>char</em> *<dfn class="decl fn" id="yasm__xstrdup" title='yasm__xstrdup' data-ref="yasm__xstrdup" data-ref-filename="yasm__xstrdup">yasm__xstrdup</dfn>(<em>const</em> <em>char</em> *<dfn class="local col0 decl" id="30str" title='str' data-type='const char *' data-ref="30str" data-ref-filename="30str">str</dfn>);</td></tr>
+<tr><th id="344">344</th><td></td></tr>
+<tr><th id="345">345</th><td><i class="doc">/** strndup() implementation using yasm_xmalloc().</i></td></tr>
+<tr><th id="346">346</th><td><i class="doc"> *<span class="command"> \internal</span></i></td></tr>
+<tr><th id="347">347</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">str</span>   string</i></td></tr>
+<tr><th id="348">348</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">max</span>   maximum number of characters to copy</i></td></tr>
+<tr><th id="349">349</th><td><i class="doc"> * <span class="command">\return</span> Newly allocated duplicate string.</i></td></tr>
+<tr><th id="350">350</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="351">351</th><td><a class="macro" href="#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="352">352</th><td><i>/*@only@*/</i> <em>char</em> *<dfn class="decl fn" id="yasm__xstrndup" title='yasm__xstrndup' data-ref="yasm__xstrndup" data-ref-filename="yasm__xstrndup">yasm__xstrndup</dfn>(<em>const</em> <em>char</em> *<dfn class="local col1 decl" id="31str" title='str' data-type='const char *' data-ref="31str" data-ref-filename="31str">str</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="32max" title='max' data-type='size_t' data-ref="32max" data-ref-filename="32max">max</dfn>);</td></tr>
+<tr><th id="353">353</th><td></td></tr>
+<tr><th id="354">354</th><td><i class="doc">/** Error-checking memory allocation.  A default implementation is provided</i></td></tr>
+<tr><th id="355">355</th><td><i class="doc"> * that calls yasm_fatal() on allocation errors.</i></td></tr>
+<tr><th id="356">356</th><td><i class="doc"> * A replacement should<span class="command"> \em</span> <span class="arg">never</span> return NULL.</i></td></tr>
+<tr><th id="357">357</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">size</span>      number of bytes to allocate</i></td></tr>
+<tr><th id="358">358</th><td><i class="doc"> * <span class="command">\return</span> Allocated memory block.</i></td></tr>
+<tr><th id="359">359</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="360">360</th><td><a class="macro" href="#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="361">361</th><td><b>extern</b> <i>/*@only@*/</i> <i>/*@out@*/</i> <em>void</em> * (*<dfn class="decl" id="yasm_xmalloc" title='yasm_xmalloc' data-ref="yasm_xmalloc" data-ref-filename="yasm_xmalloc">yasm_xmalloc</dfn>) (<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="33size" title='size' data-type='size_t' data-ref="33size" data-ref-filename="33size">size</dfn>);</td></tr>
+<tr><th id="362">362</th><td></td></tr>
+<tr><th id="363">363</th><td><i class="doc">/** Error-checking memory allocation (with clear-to-0).  A default</i></td></tr>
+<tr><th id="364">364</th><td><i class="doc"> * implementation is provided that calls yasm_fatal() on allocation errors.</i></td></tr>
+<tr><th id="365">365</th><td><i class="doc"> * A replacement should<span class="command"> \em</span> <span class="arg">never</span> return NULL.</i></td></tr>
+<tr><th id="366">366</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">size</span>      number of elements to allocate</i></td></tr>
+<tr><th id="367">367</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">elsize</span>    size (in bytes) of each element</i></td></tr>
+<tr><th id="368">368</th><td><i class="doc"> * <span class="command">\return</span> Allocated and cleared memory block.</i></td></tr>
+<tr><th id="369">369</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="370">370</th><td><a class="macro" href="#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="371">371</th><td><b>extern</b> <i>/*@only@*/</i> <em>void</em> * (*<dfn class="decl" id="yasm_xcalloc" title='yasm_xcalloc' data-ref="yasm_xcalloc" data-ref-filename="yasm_xcalloc">yasm_xcalloc</dfn>) (<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="34nelem" title='nelem' data-type='size_t' data-ref="34nelem" data-ref-filename="34nelem">nelem</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="35elsize" title='elsize' data-type='size_t' data-ref="35elsize" data-ref-filename="35elsize">elsize</dfn>);</td></tr>
+<tr><th id="372">372</th><td></td></tr>
+<tr><th id="373">373</th><td><i class="doc">/** Error-checking memory reallocation.  A default implementation is provided</i></td></tr>
+<tr><th id="374">374</th><td><i class="doc"> * that calls yasm_fatal() on allocation errors.  A replacement should</i></td></tr>
+<tr><th id="375">375</th><td><i class="doc"> *<span class="command"> \em</span> <span class="arg">never</span> return NULL.</i></td></tr>
+<tr><th id="376">376</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">oldmem</span>    memory block to resize</i></td></tr>
+<tr><th id="377">377</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">elsize</span>    new size, in bytes</i></td></tr>
+<tr><th id="378">378</th><td><i class="doc"> * <span class="command">\return</span> Re-allocated memory block.</i></td></tr>
+<tr><th id="379">379</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="380">380</th><td><a class="macro" href="#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="381">381</th><td><b>extern</b> <i>/*@only@*/</i> <em>void</em> * (*<dfn class="decl" id="yasm_xrealloc" title='yasm_xrealloc' data-ref="yasm_xrealloc" data-ref-filename="yasm_xrealloc">yasm_xrealloc</dfn>)</td></tr>
+<tr><th id="382">382</th><td>    (<i>/*@only@*/</i> <i>/*@out@*/</i> <i>/*@returned@*/</i> <i>/*@null@*/</i> <em>void</em> *<dfn class="local col6 decl" id="36oldmem" title='oldmem' data-type='void *' data-ref="36oldmem" data-ref-filename="36oldmem">oldmem</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="37size" title='size' data-type='size_t' data-ref="37size" data-ref-filename="37size">size</dfn>)</td></tr>
+<tr><th id="383">383</th><td>    <i>/*@modifies oldmem@*/</i>;</td></tr>
+<tr><th id="384">384</th><td></td></tr>
+<tr><th id="385">385</th><td><i class="doc">/** Error-checking memory deallocation.  A default implementation is provided</i></td></tr>
+<tr><th id="386">386</th><td><i class="doc"> * that calls yasm_fatal() on allocation errors.</i></td></tr>
+<tr><th id="387">387</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">p</span>     memory block to free</i></td></tr>
+<tr><th id="388">388</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="389">389</th><td><a class="macro" href="#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="390">390</th><td><b>extern</b> <em>void</em> (*<dfn class="decl" id="yasm_xfree" title='yasm_xfree' data-ref="yasm_xfree" data-ref-filename="yasm_xfree">yasm_xfree</dfn>) (<i>/*@only@*/</i> <i>/*@out@*/</i> <i>/*@null@*/</i> <em>void</em> *<dfn class="local col8 decl" id="38p" title='p' data-type='void *' data-ref="38p" data-ref-filename="38p">p</dfn>)</td></tr>
+<tr><th id="391">391</th><td>    <i>/*@modifies p@*/</i>;</td></tr>
+<tr><th id="392">392</th><td></td></tr>
+<tr><th id="393">393</th><td><u>#<span data-ppcond="30">endif</span></u></td></tr>
+<tr><th id="394">394</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../frontends/yasm/yasm-options.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/frontends/yasm/yasm-options.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

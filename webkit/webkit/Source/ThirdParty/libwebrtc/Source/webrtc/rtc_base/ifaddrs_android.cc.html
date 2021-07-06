@@ -1,0 +1,246 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ifaddrs_android.cc source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/ifaddrs_android.cc] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/ifaddrs_android.cc'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='ifaddrs_android.cc.html'>ifaddrs_android.cc</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2012 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_ANDROID">WEBRTC_ANDROID</span>)</u></td></tr>
+<tr><th id="12">12</th><td><u>#include "rtc_base/ifaddrs_android.h"</u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;errno.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;linux/netlink.h&gt;</u></td></tr>
+<tr><th id="16">16</th><td><u>#include &lt;linux/rtnetlink.h&gt;</u></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;net/if.h&gt;</u></td></tr>
+<tr><th id="18">18</th><td><u>#include &lt;netinet/in.h&gt;</u></td></tr>
+<tr><th id="19">19</th><td><u>#include &lt;stdlib.h&gt;</u></td></tr>
+<tr><th id="20">20</th><td><u>#include &lt;string.h&gt;</u></td></tr>
+<tr><th id="21">21</th><td><u>#include &lt;sys/ioctl.h&gt;</u></td></tr>
+<tr><th id="22">22</th><td><u>#include &lt;sys/socket.h&gt;</u></td></tr>
+<tr><th id="23">23</th><td><u>#include &lt;sys/types.h&gt;</u></td></tr>
+<tr><th id="24">24</th><td><u>#include &lt;sys/utsname.h&gt;</u></td></tr>
+<tr><th id="25">25</th><td><u>#include &lt;unistd.h&gt;</u></td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td><b>namespace</b> {</td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><b>struct</b> netlinkrequest {</td></tr>
+<tr><th id="30">30</th><td>  nlmsghdr header;</td></tr>
+<tr><th id="31">31</th><td>  ifaddrmsg msg;</td></tr>
+<tr><th id="32">32</th><td>};</td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><em>const</em> <em>int</em> kMaxReadSize = <var>4096</var>;</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td>}  <i>// namespace</i></td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><b>namespace</b> rtc {</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><em>int</em> set_ifname(<b>struct</b> ifaddrs* ifaddr, <em>int</em> interface) {</td></tr>
+<tr><th id="41">41</th><td>  <em>char</em> buf[IFNAMSIZ] = {<var>0</var>};</td></tr>
+<tr><th id="42">42</th><td>  <em>char</em>* name = if_indextoname(interface, buf);</td></tr>
+<tr><th id="43">43</th><td>  <b>if</b> (name == <b>nullptr</b>) {</td></tr>
+<tr><th id="44">44</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="45">45</th><td>  }</td></tr>
+<tr><th id="46">46</th><td>  ifaddr-&gt;ifa_name = <b>new</b> <em>char</em>[strlen(name) + <var>1</var>];</td></tr>
+<tr><th id="47">47</th><td>  strncpy(ifaddr-&gt;ifa_name, name, strlen(name) + <var>1</var>);</td></tr>
+<tr><th id="48">48</th><td>  <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="49">49</th><td>}</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><em>int</em> set_flags(<b>struct</b> ifaddrs* ifaddr) {</td></tr>
+<tr><th id="52">52</th><td>  <em>int</em> fd = socket(AF_INET, SOCK_DGRAM, <var>0</var>);</td></tr>
+<tr><th id="53">53</th><td>  <b>if</b> (fd == -<var>1</var>) {</td></tr>
+<tr><th id="54">54</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="55">55</th><td>  }</td></tr>
+<tr><th id="56">56</th><td>  ifreq ifr;</td></tr>
+<tr><th id="57">57</th><td>  memset(&amp;ifr, <var>0</var>, <b>sizeof</b>(ifr));</td></tr>
+<tr><th id="58">58</th><td>  strncpy(ifr.ifr_name, ifaddr-&gt;ifa_name, IFNAMSIZ - <var>1</var>);</td></tr>
+<tr><th id="59">59</th><td>  <em>int</em> rc = ioctl(fd, SIOCGIFFLAGS, &amp;ifr);</td></tr>
+<tr><th id="60">60</th><td>  close(fd);</td></tr>
+<tr><th id="61">61</th><td>  <b>if</b> (rc == -<var>1</var>) {</td></tr>
+<tr><th id="62">62</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="63">63</th><td>  }</td></tr>
+<tr><th id="64">64</th><td>  ifaddr-&gt;ifa_flags = ifr.ifr_flags;</td></tr>
+<tr><th id="65">65</th><td>  <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="66">66</th><td>}</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td><em>int</em> set_addresses(<b>struct</b> ifaddrs* ifaddr,</td></tr>
+<tr><th id="69">69</th><td>                  ifaddrmsg* msg,</td></tr>
+<tr><th id="70">70</th><td>                  <em>void</em>* data,</td></tr>
+<tr><th id="71">71</th><td>                  size_t len) {</td></tr>
+<tr><th id="72">72</th><td>  <b>if</b> (msg-&gt;ifa_family == AF_INET) {</td></tr>
+<tr><th id="73">73</th><td>    sockaddr_in* sa = <b>new</b> sockaddr_in;</td></tr>
+<tr><th id="74">74</th><td>    sa-&gt;sin_family = AF_INET;</td></tr>
+<tr><th id="75">75</th><td>    memcpy(&amp;sa-&gt;sin_addr, data, len);</td></tr>
+<tr><th id="76">76</th><td>    ifaddr-&gt;ifa_addr = <b>reinterpret_cast</b>&lt;sockaddr*&gt;(sa);</td></tr>
+<tr><th id="77">77</th><td>  } <b>else</b> <b>if</b> (msg-&gt;ifa_family == AF_INET6) {</td></tr>
+<tr><th id="78">78</th><td>    sockaddr_in6* sa = <b>new</b> sockaddr_in6;</td></tr>
+<tr><th id="79">79</th><td>    sa-&gt;sin6_family = AF_INET6;</td></tr>
+<tr><th id="80">80</th><td>    sa-&gt;sin6_scope_id = msg-&gt;ifa_index;</td></tr>
+<tr><th id="81">81</th><td>    memcpy(&amp;sa-&gt;sin6_addr, data, len);</td></tr>
+<tr><th id="82">82</th><td>    ifaddr-&gt;ifa_addr = <b>reinterpret_cast</b>&lt;sockaddr*&gt;(sa);</td></tr>
+<tr><th id="83">83</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="84">84</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="85">85</th><td>  }</td></tr>
+<tr><th id="86">86</th><td>  <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="87">87</th><td>}</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td><em>int</em> make_prefixes(<b>struct</b> ifaddrs* ifaddr, <em>int</em> family, <em>int</em> prefixlen) {</td></tr>
+<tr><th id="90">90</th><td>  <em>char</em>* prefix = <b>nullptr</b>;</td></tr>
+<tr><th id="91">91</th><td>  <b>if</b> (family == AF_INET) {</td></tr>
+<tr><th id="92">92</th><td>    sockaddr_in* mask = <b>new</b> sockaddr_in;</td></tr>
+<tr><th id="93">93</th><td>    mask-&gt;sin_family = AF_INET;</td></tr>
+<tr><th id="94">94</th><td>    memset(&amp;mask-&gt;sin_addr, <var>0</var>, <b>sizeof</b>(in_addr));</td></tr>
+<tr><th id="95">95</th><td>    ifaddr-&gt;ifa_netmask = <b>reinterpret_cast</b>&lt;sockaddr*&gt;(mask);</td></tr>
+<tr><th id="96">96</th><td>    <b>if</b> (prefixlen &gt; <var>32</var>) {</td></tr>
+<tr><th id="97">97</th><td>      prefixlen = <var>32</var>;</td></tr>
+<tr><th id="98">98</th><td>    }</td></tr>
+<tr><th id="99">99</th><td>    prefix = <b>reinterpret_cast</b>&lt;<em>char</em>*&gt;(&amp;mask-&gt;sin_addr);</td></tr>
+<tr><th id="100">100</th><td>  } <b>else</b> <b>if</b> (family == AF_INET6) {</td></tr>
+<tr><th id="101">101</th><td>    sockaddr_in6* mask = <b>new</b> sockaddr_in6;</td></tr>
+<tr><th id="102">102</th><td>    mask-&gt;sin6_family = AF_INET6;</td></tr>
+<tr><th id="103">103</th><td>    memset(&amp;mask-&gt;sin6_addr, <var>0</var>, <b>sizeof</b>(in6_addr));</td></tr>
+<tr><th id="104">104</th><td>    ifaddr-&gt;ifa_netmask = <b>reinterpret_cast</b>&lt;sockaddr*&gt;(mask);</td></tr>
+<tr><th id="105">105</th><td>    <b>if</b> (prefixlen &gt; <var>128</var>) {</td></tr>
+<tr><th id="106">106</th><td>      prefixlen = <var>128</var>;</td></tr>
+<tr><th id="107">107</th><td>    }</td></tr>
+<tr><th id="108">108</th><td>    prefix = <b>reinterpret_cast</b>&lt;<em>char</em>*&gt;(&amp;mask-&gt;sin6_addr);</td></tr>
+<tr><th id="109">109</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="110">110</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="111">111</th><td>  }</td></tr>
+<tr><th id="112">112</th><td>  <b>for</b> (<em>int</em> i = <var>0</var>; i &lt; (prefixlen / <var>8</var>); i++) {</td></tr>
+<tr><th id="113">113</th><td>    *prefix++ = <var>0xFF</var>;</td></tr>
+<tr><th id="114">114</th><td>  }</td></tr>
+<tr><th id="115">115</th><td>  <em>char</em> remainder = <var>0xff</var>;</td></tr>
+<tr><th id="116">116</th><td>  remainder &lt;&lt;= (<var>8</var> - prefixlen % <var>8</var>);</td></tr>
+<tr><th id="117">117</th><td>  *prefix = remainder;</td></tr>
+<tr><th id="118">118</th><td>  <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="119">119</th><td>}</td></tr>
+<tr><th id="120">120</th><td></td></tr>
+<tr><th id="121">121</th><td><em>int</em> populate_ifaddrs(<b>struct</b> ifaddrs* ifaddr,</td></tr>
+<tr><th id="122">122</th><td>                     ifaddrmsg* msg,</td></tr>
+<tr><th id="123">123</th><td>                     <em>void</em>* bytes,</td></tr>
+<tr><th id="124">124</th><td>                     size_t len) {</td></tr>
+<tr><th id="125">125</th><td>  <b>if</b> (set_ifname(ifaddr, msg-&gt;ifa_index) != <var>0</var>) {</td></tr>
+<tr><th id="126">126</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="127">127</th><td>  }</td></tr>
+<tr><th id="128">128</th><td>  <b>if</b> (set_flags(ifaddr) != <var>0</var>) {</td></tr>
+<tr><th id="129">129</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="130">130</th><td>  }</td></tr>
+<tr><th id="131">131</th><td>  <b>if</b> (set_addresses(ifaddr, msg, bytes, len) != <var>0</var>) {</td></tr>
+<tr><th id="132">132</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="133">133</th><td>  }</td></tr>
+<tr><th id="134">134</th><td>  <b>if</b> (make_prefixes(ifaddr, msg-&gt;ifa_family, msg-&gt;ifa_prefixlen) != <var>0</var>) {</td></tr>
+<tr><th id="135">135</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="136">136</th><td>  }</td></tr>
+<tr><th id="137">137</th><td>  <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="138">138</th><td>}</td></tr>
+<tr><th id="139">139</th><td></td></tr>
+<tr><th id="140">140</th><td><em>int</em> getifaddrs(<b>struct</b> ifaddrs** result) {</td></tr>
+<tr><th id="141">141</th><td>  <em>int</em> fd = socket(PF_NETLINK, SOCK_RAW, NETLINK_ROUTE);</td></tr>
+<tr><th id="142">142</th><td>  <b>if</b> (fd &lt; <var>0</var>) {</td></tr>
+<tr><th id="143">143</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="144">144</th><td>  }</td></tr>
+<tr><th id="145">145</th><td></td></tr>
+<tr><th id="146">146</th><td>  netlinkrequest ifaddr_request;</td></tr>
+<tr><th id="147">147</th><td>  memset(&amp;ifaddr_request, <var>0</var>, <b>sizeof</b>(ifaddr_request));</td></tr>
+<tr><th id="148">148</th><td>  ifaddr_request.header.nlmsg_flags = NLM_F_ROOT | NLM_F_REQUEST;</td></tr>
+<tr><th id="149">149</th><td>  ifaddr_request.header.nlmsg_type = RTM_GETADDR;</td></tr>
+<tr><th id="150">150</th><td>  ifaddr_request.header.nlmsg_len = NLMSG_LENGTH(<b>sizeof</b>(ifaddrmsg));</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td>  ssize_t count = send(fd, &amp;ifaddr_request, ifaddr_request.header.nlmsg_len, <var>0</var>);</td></tr>
+<tr><th id="153">153</th><td>  <b>if</b> (<b>static_cast</b>&lt;size_t&gt;(count) != ifaddr_request.header.nlmsg_len) {</td></tr>
+<tr><th id="154">154</th><td>    close(fd);</td></tr>
+<tr><th id="155">155</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="156">156</th><td>  }</td></tr>
+<tr><th id="157">157</th><td>  <b>struct</b> ifaddrs* start = <b>nullptr</b>;</td></tr>
+<tr><th id="158">158</th><td>  <b>struct</b> ifaddrs* current = <b>nullptr</b>;</td></tr>
+<tr><th id="159">159</th><td>  <em>char</em> buf[kMaxReadSize];</td></tr>
+<tr><th id="160">160</th><td>  ssize_t amount_read = recv(fd, &amp;buf, kMaxReadSize, <var>0</var>);</td></tr>
+<tr><th id="161">161</th><td>  <b>while</b> (amount_read &gt; <var>0</var>) {</td></tr>
+<tr><th id="162">162</th><td>    nlmsghdr* header = <b>reinterpret_cast</b>&lt;nlmsghdr*&gt;(&amp;buf[<var>0</var>]);</td></tr>
+<tr><th id="163">163</th><td>    size_t header_size = <b>static_cast</b>&lt;size_t&gt;(amount_read);</td></tr>
+<tr><th id="164">164</th><td>    <b>for</b> (; NLMSG_OK(header, header_size);</td></tr>
+<tr><th id="165">165</th><td>         header = NLMSG_NEXT(header, header_size)) {</td></tr>
+<tr><th id="166">166</th><td>      <b>switch</b> (header-&gt;nlmsg_type) {</td></tr>
+<tr><th id="167">167</th><td>        <b>case</b> NLMSG_DONE:</td></tr>
+<tr><th id="168">168</th><td>          <i>// Success. Return.</i></td></tr>
+<tr><th id="169">169</th><td>          *result = start;</td></tr>
+<tr><th id="170">170</th><td>          close(fd);</td></tr>
+<tr><th id="171">171</th><td>          <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="172">172</th><td>        <b>case</b> NLMSG_ERROR:</td></tr>
+<tr><th id="173">173</th><td>          close(fd);</td></tr>
+<tr><th id="174">174</th><td>          freeifaddrs(start);</td></tr>
+<tr><th id="175">175</th><td>          <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="176">176</th><td>        <b>case</b> RTM_NEWADDR: {</td></tr>
+<tr><th id="177">177</th><td>          ifaddrmsg* address_msg =</td></tr>
+<tr><th id="178">178</th><td>              <b>reinterpret_cast</b>&lt;ifaddrmsg*&gt;(NLMSG_DATA(header));</td></tr>
+<tr><th id="179">179</th><td>          rtattr* rta = IFA_RTA(address_msg);</td></tr>
+<tr><th id="180">180</th><td>          ssize_t payload_len = IFA_PAYLOAD(header);</td></tr>
+<tr><th id="181">181</th><td>          <b>while</b> (RTA_OK(rta, payload_len)) {</td></tr>
+<tr><th id="182">182</th><td>            <b>if</b> ((address_msg-&gt;ifa_family == AF_INET &amp;&amp;</td></tr>
+<tr><th id="183">183</th><td>                 rta-&gt;rta_type == IFA_LOCAL) ||</td></tr>
+<tr><th id="184">184</th><td>                (address_msg-&gt;ifa_family == AF_INET6 &amp;&amp;</td></tr>
+<tr><th id="185">185</th><td>                 rta-&gt;rta_type == IFA_ADDRESS)) {</td></tr>
+<tr><th id="186">186</th><td>              ifaddrs* newest = <b>new</b> ifaddrs;</td></tr>
+<tr><th id="187">187</th><td>              memset(newest, <var>0</var>, <b>sizeof</b>(ifaddrs));</td></tr>
+<tr><th id="188">188</th><td>              <b>if</b> (current) {</td></tr>
+<tr><th id="189">189</th><td>                current-&gt;ifa_next = newest;</td></tr>
+<tr><th id="190">190</th><td>              } <b>else</b> {</td></tr>
+<tr><th id="191">191</th><td>                start = newest;</td></tr>
+<tr><th id="192">192</th><td>              }</td></tr>
+<tr><th id="193">193</th><td>              <b>if</b> (populate_ifaddrs(newest, address_msg, RTA_DATA(rta),</td></tr>
+<tr><th id="194">194</th><td>                                   RTA_PAYLOAD(rta)) != <var>0</var>) {</td></tr>
+<tr><th id="195">195</th><td>                freeifaddrs(start);</td></tr>
+<tr><th id="196">196</th><td>                *result = <b>nullptr</b>;</td></tr>
+<tr><th id="197">197</th><td>                <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="198">198</th><td>              }</td></tr>
+<tr><th id="199">199</th><td>              current = newest;</td></tr>
+<tr><th id="200">200</th><td>            }</td></tr>
+<tr><th id="201">201</th><td>            rta = RTA_NEXT(rta, payload_len);</td></tr>
+<tr><th id="202">202</th><td>          }</td></tr>
+<tr><th id="203">203</th><td>          <b>break</b>;</td></tr>
+<tr><th id="204">204</th><td>        }</td></tr>
+<tr><th id="205">205</th><td>      }</td></tr>
+<tr><th id="206">206</th><td>    }</td></tr>
+<tr><th id="207">207</th><td>    amount_read = recv(fd, &amp;buf, kMaxReadSize, <var>0</var>);</td></tr>
+<tr><th id="208">208</th><td>  }</td></tr>
+<tr><th id="209">209</th><td>  close(fd);</td></tr>
+<tr><th id="210">210</th><td>  freeifaddrs(start);</td></tr>
+<tr><th id="211">211</th><td>  <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="212">212</th><td>}</td></tr>
+<tr><th id="213">213</th><td></td></tr>
+<tr><th id="214">214</th><td><em>void</em> freeifaddrs(<b>struct</b> ifaddrs* addrs) {</td></tr>
+<tr><th id="215">215</th><td>  <b>struct</b> ifaddrs* last = <b>nullptr</b>;</td></tr>
+<tr><th id="216">216</th><td>  <b>struct</b> ifaddrs* cursor = addrs;</td></tr>
+<tr><th id="217">217</th><td>  <b>while</b> (cursor) {</td></tr>
+<tr><th id="218">218</th><td>    <b>delete</b>[] cursor-&gt;ifa_name;</td></tr>
+<tr><th id="219">219</th><td>    <b>delete</b> cursor-&gt;ifa_addr;</td></tr>
+<tr><th id="220">220</th><td>    <b>delete</b> cursor-&gt;ifa_netmask;</td></tr>
+<tr><th id="221">221</th><td>    last = cursor;</td></tr>
+<tr><th id="222">222</th><td>    cursor = cursor-&gt;ifa_next;</td></tr>
+<tr><th id="223">223</th><td>    <b>delete</b> last;</td></tr>
+<tr><th id="224">224</th><td>  }</td></tr>
+<tr><th id="225">225</th><td>}</td></tr>
+<tr><th id="226">226</th><td></td></tr>
+<tr><th id="227">227</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="228">228</th><td><u>#<span data-ppcond="11">endif</span>  // defined(WEBRTC_ANDROID)</u></td></tr>
+<tr><th id="229">229</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

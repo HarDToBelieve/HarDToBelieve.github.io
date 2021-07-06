@@ -1,0 +1,397 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>DFGCommon.h source code [webkit/Source/JavaScriptCore/dfg/DFGCommon.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="JSC::DFG::CapabilityLevel,JSC::DFG::GraphForm,JSC::DFG::KillStatus,JSC::DFG::NodeAndIndex,JSC::DFG::OperandSpeculationMode,JSC::DFG::OptimizationFixpointState,JSC::DFG::PlanStage,JSC::DFG::PredictionPass,JSC::DFG::ProofStatus,JSC::DFG::RefChildrenMode,JSC::DFG::RefCountState,JSC::DFG::RefNodeMode,JSC::DFG::StructureRegistrationResult,JSC::DFG::StructureRegistrationState,JSC::DFG::SwitchKind,JSC::DFG::UnificationState "/>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/JavaScriptCore/dfg/DFGCommon.h'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>JavaScriptCore</a>/<a href='./'>dfg</a>/<a href='DFGCommon.h.html'>DFGCommon.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2011-2021 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="../jit/JITCompilationMode.h.html">"JITCompilationMode.h"</a></u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#<span data-ppcond="30">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(DFG_JIT)</u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="../runtime/Options.h.html">"Options.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#include &lt;limits.h&gt;</u></td></tr>
+<tr><th id="34">34</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringImpl.h.html">&lt;wtf/text/StringImpl.h&gt;</a></u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><b>namespace</b> <span class="namespace">JSC</span> { <b>namespace</b> <span class="namespace">DFG</span> {</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><b>struct</b> <dfn class="type" id="JSC::DFG::Node" title='JSC::DFG::Node' data-ref="JSC::DFG::Node" data-ref-filename="JSC..DFG..Node">Node</dfn>;</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><b>typedef</b> <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="typedef" id="JSC::DFG::BlockIndex" title='JSC::DFG::BlockIndex' data-type='uint32_t' data-ref="JSC::DFG::BlockIndex" data-ref-filename="JSC..DFG..BlockIndex">BlockIndex</dfn>;</td></tr>
+<tr><th id="41">41</th><td><em>static</em> <b>constexpr</b> <a class="typedef" href="#JSC::DFG::BlockIndex" title='JSC::DFG::BlockIndex' data-type='uint32_t' data-ref="JSC::DFG::BlockIndex" data-ref-filename="JSC..DFG..BlockIndex">BlockIndex</a> <dfn class="decl def" id="JSC::DFG::NoBlock" title='JSC::DFG::NoBlock' data-ref="JSC::DFG::NoBlock" data-ref-filename="JSC..DFG..NoBlock">NoBlock</dfn> = <span class="macro" title="(2147483647 *2U +1U)" data-ref="_M/UINT_MAX">UINT_MAX</span>;</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><b>extern</b> <em>const</em> <em>char</em>* <em>const</em> <dfn class="decl" id="JSC::DFG::tierName" title='JSC::DFG::tierName' data-ref="JSC::DFG::tierName" data-ref-filename="JSC..DFG..tierName">tierName</dfn>;</td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td><i>// Use RefChildren if the child ref counts haven't already been adjusted using</i></td></tr>
+<tr><th id="46">46</th><td><i>// other means and either of the following is true:</i></td></tr>
+<tr><th id="47">47</th><td><i>// - The node you're creating is MustGenerate.</i></td></tr>
+<tr><th id="48">48</th><td><i>// - The place where you're inserting a reference to the node you're creating</i></td></tr>
+<tr><th id="49">49</th><td><i>//   will not also do RefChildren.</i></td></tr>
+<tr><th id="50">50</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::RefChildrenMode" title='JSC::DFG::RefChildrenMode' data-ref="JSC::DFG::RefChildrenMode" data-ref-filename="JSC..DFG..RefChildrenMode">RefChildrenMode</dfn> {</td></tr>
+<tr><th id="51">51</th><td>    <dfn class="enum" id="JSC::DFG::RefChildren" title='JSC::DFG::RefChildren' data-ref="JSC::DFG::RefChildren" data-ref-filename="JSC..DFG..RefChildren">RefChildren</dfn>,</td></tr>
+<tr><th id="52">52</th><td>    <dfn class="enum" id="JSC::DFG::DontRefChildren" title='JSC::DFG::DontRefChildren' data-ref="JSC::DFG::DontRefChildren" data-ref-filename="JSC..DFG..DontRefChildren">DontRefChildren</dfn></td></tr>
+<tr><th id="53">53</th><td>};</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><i>// Use RefNode if you know that the node will be used from another node, and you</i></td></tr>
+<tr><th id="56">56</th><td><i>// will not already be ref'ing the node to account for that use.</i></td></tr>
+<tr><th id="57">57</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::RefNodeMode" title='JSC::DFG::RefNodeMode' data-ref="JSC::DFG::RefNodeMode" data-ref-filename="JSC..DFG..RefNodeMode">RefNodeMode</dfn> {</td></tr>
+<tr><th id="58">58</th><td>    <dfn class="enum" id="JSC::DFG::RefNode" title='JSC::DFG::RefNode' data-ref="JSC::DFG::RefNode" data-ref-filename="JSC..DFG..RefNode">RefNode</dfn>,</td></tr>
+<tr><th id="59">59</th><td>    <dfn class="enum" id="JSC::DFG::DontRefNode" title='JSC::DFG::DontRefNode' data-ref="JSC::DFG::DontRefNode" data-ref-filename="JSC..DFG..DontRefNode">DontRefNode</dfn></td></tr>
+<tr><th id="60">60</th><td>};</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::SwitchKind" title='JSC::DFG::SwitchKind' data-ref="JSC::DFG::SwitchKind" data-ref-filename="JSC..DFG..SwitchKind">SwitchKind</dfn> {</td></tr>
+<tr><th id="63">63</th><td>    <dfn class="enum" id="JSC::DFG::SwitchImm" title='JSC::DFG::SwitchImm' data-ref="JSC::DFG::SwitchImm" data-ref-filename="JSC..DFG..SwitchImm">SwitchImm</dfn>,</td></tr>
+<tr><th id="64">64</th><td>    <dfn class="enum" id="JSC::DFG::SwitchChar" title='JSC::DFG::SwitchChar' data-ref="JSC::DFG::SwitchChar" data-ref-filename="JSC..DFG..SwitchChar">SwitchChar</dfn>,</td></tr>
+<tr><th id="65">65</th><td>    <dfn class="enum" id="JSC::DFG::SwitchString" title='JSC::DFG::SwitchString' data-ref="JSC::DFG::SwitchString" data-ref-filename="JSC..DFG..SwitchString">SwitchString</dfn>,</td></tr>
+<tr><th id="66">66</th><td>    <dfn class="enum" id="JSC::DFG::SwitchCell" title='JSC::DFG::SwitchCell' data-ref="JSC::DFG::SwitchCell" data-ref-filename="JSC..DFG..SwitchCell">SwitchCell</dfn></td></tr>
+<tr><th id="67">67</th><td>};</td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG25verboseCompilationEnabledENS_18JITCompilationModeE" title='JSC::DFG::verboseCompilationEnabled' data-ref="_ZN3JSC3DFG25verboseCompilationEnabledENS_18JITCompilationModeE" data-ref-filename="_ZN3JSC3DFG25verboseCompilationEnabledENS_18JITCompilationModeE">verboseCompilationEnabled</dfn>(<a class="type" href="../jit/JITCompilationMode.h.html#JSC::JITCompilationMode" title='JSC::JITCompilationMode' data-ref="JSC::JITCompilationMode" data-ref-filename="JSC..JITCompilationMode">JITCompilationMode</a> <dfn class="local col0 decl" id="7710mode" title='mode' data-type='JSC::JITCompilationMode' data-ref="7710mode" data-ref-filename="7710mode">mode</dfn> = <a class="type" href="../jit/JITCompilationMode.h.html#JSC::JITCompilationMode" title='JSC::JITCompilationMode' data-ref="JSC::JITCompilationMode" data-ref-filename="JSC..JITCompilationMode">JITCompilationMode</a>::<a class="enum" href="../jit/JITCompilationMode.h.html#JSC::JITCompilationMode::DFG" title='JSC::JITCompilationMode::DFG' data-ref="JSC::JITCompilationMode::DFG" data-ref-filename="JSC..JITCompilationMode..DFG">DFG</a>)</td></tr>
+<tr><th id="70">70</th><td>{</td></tr>
+<tr><th id="71">71</th><td>    <b>return</b> <a class="type" href="../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../runtime/Options.h.html#132" title='JSC::Options::verboseCompilation' data-ref="_ZN3JSC7Options18verboseCompilationEv" data-ref-filename="_ZN3JSC7Options18verboseCompilationEv">verboseCompilation</a>() || <a class="type" href="../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../runtime/Options.h.html#132" title='JSC::Options::dumpGraphAtEachPhase' data-ref="_ZN3JSC7Options20dumpGraphAtEachPhaseEv" data-ref-filename="_ZN3JSC7Options20dumpGraphAtEachPhaseEv">dumpGraphAtEachPhase</a>() || (<a class="ref fn" href="../jit/JITCompilationMode.h.html#_ZN3JSC5isFTLENS_18JITCompilationModeE" title='JSC::isFTL' data-ref="_ZN3JSC5isFTLENS_18JITCompilationModeE" data-ref-filename="_ZN3JSC5isFTLENS_18JITCompilationModeE">isFTL</a>(<a class="local col0 ref" href="#7710mode" title='mode' data-ref="7710mode" data-ref-filename="7710mode">mode</a>) &amp;&amp; <a class="type" href="../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../runtime/Options.h.html#132" title='JSC::Options::verboseFTLCompilation' data-ref="_ZN3JSC7Options21verboseFTLCompilationEv" data-ref-filename="_ZN3JSC7Options21verboseFTLCompilationEv">verboseFTLCompilation</a>());</td></tr>
+<tr><th id="72">72</th><td>}</td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG21logCompilationChangesENS_18JITCompilationModeE" title='JSC::DFG::logCompilationChanges' data-ref="_ZN3JSC3DFG21logCompilationChangesENS_18JITCompilationModeE" data-ref-filename="_ZN3JSC3DFG21logCompilationChangesENS_18JITCompilationModeE">logCompilationChanges</dfn>(<a class="type" href="../jit/JITCompilationMode.h.html#JSC::JITCompilationMode" title='JSC::JITCompilationMode' data-ref="JSC::JITCompilationMode" data-ref-filename="JSC..JITCompilationMode">JITCompilationMode</a> <dfn class="local col1 decl" id="7711mode" title='mode' data-type='JSC::JITCompilationMode' data-ref="7711mode" data-ref-filename="7711mode">mode</dfn> = <a class="type" href="../jit/JITCompilationMode.h.html#JSC::JITCompilationMode" title='JSC::JITCompilationMode' data-ref="JSC::JITCompilationMode" data-ref-filename="JSC..JITCompilationMode">JITCompilationMode</a>::<a class="enum" href="../jit/JITCompilationMode.h.html#JSC::JITCompilationMode::DFG" title='JSC::JITCompilationMode::DFG' data-ref="JSC::JITCompilationMode::DFG" data-ref-filename="JSC..JITCompilationMode..DFG">DFG</a>)</td></tr>
+<tr><th id="75">75</th><td>{</td></tr>
+<tr><th id="76">76</th><td>    <b>return</b> <a class="ref fn" href="#_ZN3JSC3DFG25verboseCompilationEnabledENS_18JITCompilationModeE" title='JSC::DFG::verboseCompilationEnabled' data-ref="_ZN3JSC3DFG25verboseCompilationEnabledENS_18JITCompilationModeE" data-ref-filename="_ZN3JSC3DFG25verboseCompilationEnabledENS_18JITCompilationModeE">verboseCompilationEnabled</a>(<a class="local col1 ref" href="#7711mode" title='mode' data-ref="7711mode" data-ref-filename="7711mode">mode</a>) || <a class="type" href="../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../runtime/Options.h.html#132" title='JSC::Options::logCompilationChanges' data-ref="_ZN3JSC7Options21logCompilationChangesEv" data-ref-filename="_ZN3JSC7Options21logCompilationChangesEv">logCompilationChanges</a>();</td></tr>
+<tr><th id="77">77</th><td>}</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG26shouldDumpGraphAtEachPhaseENS_18JITCompilationModeE" title='JSC::DFG::shouldDumpGraphAtEachPhase' data-ref="_ZN3JSC3DFG26shouldDumpGraphAtEachPhaseENS_18JITCompilationModeE" data-ref-filename="_ZN3JSC3DFG26shouldDumpGraphAtEachPhaseENS_18JITCompilationModeE">shouldDumpGraphAtEachPhase</dfn>(<a class="type" href="../jit/JITCompilationMode.h.html#JSC::JITCompilationMode" title='JSC::JITCompilationMode' data-ref="JSC::JITCompilationMode" data-ref-filename="JSC..JITCompilationMode">JITCompilationMode</a> <dfn class="local col2 decl" id="7712mode" title='mode' data-type='JSC::JITCompilationMode' data-ref="7712mode" data-ref-filename="7712mode">mode</dfn> = <a class="type" href="../jit/JITCompilationMode.h.html#JSC::JITCompilationMode" title='JSC::JITCompilationMode' data-ref="JSC::JITCompilationMode" data-ref-filename="JSC..JITCompilationMode">JITCompilationMode</a>::<a class="enum" href="../jit/JITCompilationMode.h.html#JSC::JITCompilationMode::DFG" title='JSC::JITCompilationMode::DFG' data-ref="JSC::JITCompilationMode::DFG" data-ref-filename="JSC..JITCompilationMode..DFG">DFG</a>)</td></tr>
+<tr><th id="80">80</th><td>{</td></tr>
+<tr><th id="81">81</th><td>    <b>if</b> (<a class="ref fn" href="../jit/JITCompilationMode.h.html#_ZN3JSC5isFTLENS_18JITCompilationModeE" title='JSC::isFTL' data-ref="_ZN3JSC5isFTLENS_18JITCompilationModeE" data-ref-filename="_ZN3JSC5isFTLENS_18JITCompilationModeE">isFTL</a>(<a class="local col2 ref" href="#7712mode" title='mode' data-ref="7712mode" data-ref-filename="7712mode">mode</a>))</td></tr>
+<tr><th id="82">82</th><td>        <b>return</b> <a class="type" href="../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../runtime/Options.h.html#132" title='JSC::Options::dumpGraphAtEachPhase' data-ref="_ZN3JSC7Options20dumpGraphAtEachPhaseEv" data-ref-filename="_ZN3JSC7Options20dumpGraphAtEachPhaseEv">dumpGraphAtEachPhase</a>() || <a class="type" href="../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../runtime/Options.h.html#132" title='JSC::Options::dumpDFGFTLGraphAtEachPhase' data-ref="_ZN3JSC7Options26dumpDFGFTLGraphAtEachPhaseEv" data-ref-filename="_ZN3JSC7Options26dumpDFGFTLGraphAtEachPhaseEv">dumpDFGFTLGraphAtEachPhase</a>();</td></tr>
+<tr><th id="83">83</th><td>    <b>return</b> <a class="type" href="../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../runtime/Options.h.html#132" title='JSC::Options::dumpGraphAtEachPhase' data-ref="_ZN3JSC7Options20dumpGraphAtEachPhaseEv" data-ref-filename="_ZN3JSC7Options20dumpGraphAtEachPhaseEv">dumpGraphAtEachPhase</a>() || <a class="type" href="../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../runtime/Options.h.html#132" title='JSC::Options::dumpDFGGraphAtEachPhase' data-ref="_ZN3JSC7Options23dumpDFGGraphAtEachPhaseEv" data-ref-filename="_ZN3JSC7Options23dumpDFGGraphAtEachPhaseEv">dumpDFGGraphAtEachPhase</a>();</td></tr>
+<tr><th id="84">84</th><td>}</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG17validationEnabledEv" title='JSC::DFG::validationEnabled' data-ref="_ZN3JSC3DFG17validationEnabledEv" data-ref-filename="_ZN3JSC3DFG17validationEnabledEv">validationEnabled</dfn>()</td></tr>
+<tr><th id="87">87</th><td>{</td></tr>
+<tr><th id="88">88</th><td><u>#<span data-ppcond="88">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#68" title="1" data-ref="_M/ASSERT_ENABLED">ASSERT_ENABLED</a></u></td></tr>
+<tr><th id="89">89</th><td>    <b>return</b> <b>true</b>;</td></tr>
+<tr><th id="90">90</th><td><u>#<span data-ppcond="88">else</span></u></td></tr>
+<tr><th id="91">91</th><td>    <b>return</b> Options::validateGraph() || Options::validateGraphAtEachPhase();</td></tr>
+<tr><th id="92">92</th><td><u>#<span data-ppcond="88">endif</span></u></td></tr>
+<tr><th id="93">93</th><td>}</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG11enableInt52Ev" title='JSC::DFG::enableInt52' data-ref="_ZN3JSC3DFG11enableInt52Ev" data-ref-filename="_ZN3JSC3DFG11enableInt52Ev">enableInt52</dfn>()</td></tr>
+<tr><th id="96">96</th><td>{</td></tr>
+<tr><th id="97">97</th><td><u>#<span data-ppcond="97">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformUse.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/USE">USE</a>(JSVALUE64)</u></td></tr>
+<tr><th id="98">98</th><td>    <b>return</b> <b>true</b>;</td></tr>
+<tr><th id="99">99</th><td><u>#<span data-ppcond="97">else</span></u></td></tr>
+<tr><th id="100">100</th><td>    <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="101">101</th><td><u>#<span data-ppcond="97">endif</span></u></td></tr>
+<tr><th id="102">102</th><td>}</td></tr>
+<tr><th id="103">103</th><td></td></tr>
+<tr><th id="104">104</th><td><i>// The prediction propagator effectively does four passes, with the last pass</i></td></tr>
+<tr><th id="105">105</th><td><i>// being done by the separate FixuPhase.</i></td></tr>
+<tr><th id="106">106</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::PredictionPass" title='JSC::DFG::PredictionPass' data-ref="JSC::DFG::PredictionPass" data-ref-filename="JSC..DFG..PredictionPass">PredictionPass</dfn> {</td></tr>
+<tr><th id="107">107</th><td>    <i>// We're converging in a straight-forward forward flow fixpoint. This is the</i></td></tr>
+<tr><th id="108">108</th><td><i>    // most conventional part of the propagator - it makes only monotonic decisions</i></td></tr>
+<tr><th id="109">109</th><td><i>    // based on value profiles and rare case profiles. It ignores baseline JIT rare</i></td></tr>
+<tr><th id="110">110</th><td><i>    // case profiles. The goal here is to develop a good guess of which variables</i></td></tr>
+<tr><th id="111">111</th><td><i>    // are likely to be purely numerical, which generally doesn't require knowing</i></td></tr>
+<tr><th id="112">112</th><td><i>    // the rare case profiles.</i></td></tr>
+<tr><th id="113">113</th><td>    <dfn class="enum" id="JSC::DFG::PrimaryPass" title='JSC::DFG::PrimaryPass' data-ref="JSC::DFG::PrimaryPass" data-ref-filename="JSC..DFG..PrimaryPass">PrimaryPass</dfn>,</td></tr>
+<tr><th id="114">114</th><td>    </td></tr>
+<tr><th id="115">115</th><td>    <i>// At this point we know what is numerical and what isn't. Non-numerical inputs</i></td></tr>
+<tr><th id="116">116</th><td><i>    // to arithmetic operations will not have useful information in the Baseline JIT</i></td></tr>
+<tr><th id="117">117</th><td><i>    // rare case profiles because Baseline may take slow path on non-numerical</i></td></tr>
+<tr><th id="118">118</th><td><i>    // inputs even if the DFG could handle the input on the fast path. Boolean</i></td></tr>
+<tr><th id="119">119</th><td><i>    // inputs are the most obvious example. This pass of prediction propagation will</i></td></tr>
+<tr><th id="120">120</th><td><i>    // use Baseline rare case profiles for purely numerical operations and it will</i></td></tr>
+<tr><th id="121">121</th><td><i>    // ignore them for everything else. The point of this pass is to develop a good</i></td></tr>
+<tr><th id="122">122</th><td><i>    // guess of which variables are likely to be doubles.</i></td></tr>
+<tr><th id="123">123</th><td><i>    //</i></td></tr>
+<tr><th id="124">124</th><td><i>    // This pass is intentionally weird and goes against what is considered good</i></td></tr>
+<tr><th id="125">125</th><td><i>    // form when writing a static analysis: a new data flow of booleans will cause</i></td></tr>
+<tr><th id="126">126</th><td><i>    // us to ignore rare case profiles except that by then, we will have already</i></td></tr>
+<tr><th id="127">127</th><td><i>    // propagated double types based on our prior assumption that we shouldn't</i></td></tr>
+<tr><th id="128">128</th><td><i>    // ignore rare cases. This probably won't happen because the PrimaryPass is</i></td></tr>
+<tr><th id="129">129</th><td><i>    // almost certainly going to establish what is and isn't numerical. But it's</i></td></tr>
+<tr><th id="130">130</th><td><i>    // conceivable that during this pass we will discover a new boolean data flow.</i></td></tr>
+<tr><th id="131">131</th><td><i>    // This ends up being sound because the prediction propagator could literally</i></td></tr>
+<tr><th id="132">132</th><td><i>    // make any guesses it wants and still be sound (worst case, we OSR exit more</i></td></tr>
+<tr><th id="133">133</th><td><i>    // often or use too general of types are run a bit slower). This will converge</i></td></tr>
+<tr><th id="134">134</th><td><i>    // because we force monotonicity on the types of nodes and variables. So, the</i></td></tr>
+<tr><th id="135">135</th><td><i>    // worst thing that can happen is that we violate basic laws of theoretical</i></td></tr>
+<tr><th id="136">136</th><td><i>    // decency.</i></td></tr>
+<tr><th id="137">137</th><td>    <dfn class="enum" id="JSC::DFG::RareCasePass" title='JSC::DFG::RareCasePass' data-ref="JSC::DFG::RareCasePass" data-ref-filename="JSC..DFG..RareCasePass">RareCasePass</dfn>,</td></tr>
+<tr><th id="138">138</th><td>    </td></tr>
+<tr><th id="139">139</th><td>    <i>// At this point we know what is numerical and what isn't, and we also know what</i></td></tr>
+<tr><th id="140">140</th><td><i>    // is a double and what isn't. So, we start forcing variables to be double.</i></td></tr>
+<tr><th id="141">141</th><td><i>    // Doing so may have a cascading effect so this is a fixpoint. It's monotonic</i></td></tr>
+<tr><th id="142">142</th><td><i>    // in the sense that once a variable is forced double, it cannot be forced in</i></td></tr>
+<tr><th id="143">143</th><td><i>    // the other direction.</i></td></tr>
+<tr><th id="144">144</th><td>    <dfn class="enum" id="JSC::DFG::DoubleVotingPass" title='JSC::DFG::DoubleVotingPass' data-ref="JSC::DFG::DoubleVotingPass" data-ref-filename="JSC..DFG..DoubleVotingPass">DoubleVotingPass</dfn>,</td></tr>
+<tr><th id="145">145</th><td>    </td></tr>
+<tr><th id="146">146</th><td>    <i>// This pass occurs once we have converged. At this point we are just installing</i></td></tr>
+<tr><th id="147">147</th><td><i>    // type checks based on the conclusions we have already reached. It's important</i></td></tr>
+<tr><th id="148">148</th><td><i>    // for this pass to reach the same conclusions that DoubleVotingPass reached.</i></td></tr>
+<tr><th id="149">149</th><td>    <dfn class="enum" id="JSC::DFG::FixupPass" title='JSC::DFG::FixupPass' data-ref="JSC::DFG::FixupPass" data-ref-filename="JSC..DFG..FixupPass">FixupPass</dfn></td></tr>
+<tr><th id="150">150</th><td>};</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::StructureRegistrationState" title='JSC::DFG::StructureRegistrationState' data-ref="JSC::DFG::StructureRegistrationState" data-ref-filename="JSC..DFG..StructureRegistrationState">StructureRegistrationState</dfn> { <dfn class="enum" id="JSC::DFG::HaveNotStartedRegistering" title='JSC::DFG::HaveNotStartedRegistering' data-ref="JSC::DFG::HaveNotStartedRegistering" data-ref-filename="JSC..DFG..HaveNotStartedRegistering">HaveNotStartedRegistering</dfn>, <dfn class="enum" id="JSC::DFG::AllStructuresAreRegistered" title='JSC::DFG::AllStructuresAreRegistered' data-ref="JSC::DFG::AllStructuresAreRegistered" data-ref-filename="JSC..DFG..AllStructuresAreRegistered">AllStructuresAreRegistered</dfn> };</td></tr>
+<tr><th id="153">153</th><td></td></tr>
+<tr><th id="154">154</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::StructureRegistrationResult" title='JSC::DFG::StructureRegistrationResult' data-ref="JSC::DFG::StructureRegistrationResult" data-ref-filename="JSC..DFG..StructureRegistrationResult">StructureRegistrationResult</dfn> { <dfn class="enum" id="JSC::DFG::StructureRegisteredNormally" title='JSC::DFG::StructureRegisteredNormally' data-ref="JSC::DFG::StructureRegisteredNormally" data-ref-filename="JSC..DFG..StructureRegisteredNormally">StructureRegisteredNormally</dfn>, <dfn class="enum" id="JSC::DFG::StructureRegisteredAndWatched" title='JSC::DFG::StructureRegisteredAndWatched' data-ref="JSC::DFG::StructureRegisteredAndWatched" data-ref-filename="JSC..DFG..StructureRegisteredAndWatched">StructureRegisteredAndWatched</dfn> };</td></tr>
+<tr><th id="155">155</th><td></td></tr>
+<tr><th id="156">156</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::OptimizationFixpointState" title='JSC::DFG::OptimizationFixpointState' data-ref="JSC::DFG::OptimizationFixpointState" data-ref-filename="JSC..DFG..OptimizationFixpointState">OptimizationFixpointState</dfn> { <dfn class="enum" id="JSC::DFG::BeforeFixpoint" title='JSC::DFG::BeforeFixpoint' data-ref="JSC::DFG::BeforeFixpoint" data-ref-filename="JSC..DFG..BeforeFixpoint">BeforeFixpoint</dfn>, <dfn class="enum" id="JSC::DFG::FixpointNotConverged" title='JSC::DFG::FixpointNotConverged' data-ref="JSC::DFG::FixpointNotConverged" data-ref-filename="JSC..DFG..FixpointNotConverged">FixpointNotConverged</dfn>, <dfn class="enum" id="JSC::DFG::FixpointConverged" title='JSC::DFG::FixpointConverged' data-ref="JSC::DFG::FixpointConverged" data-ref-filename="JSC..DFG..FixpointConverged">FixpointConverged</dfn> };</td></tr>
+<tr><th id="157">157</th><td></td></tr>
+<tr><th id="158">158</th><td><i>// Describes the form you can expect the entire graph to be in.</i></td></tr>
+<tr><th id="159">159</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::GraphForm" title='JSC::DFG::GraphForm' data-ref="JSC::DFG::GraphForm" data-ref-filename="JSC..DFG..GraphForm">GraphForm</dfn> {</td></tr>
+<tr><th id="160">160</th><td>    <i>// LoadStore form means that basic blocks may freely use GetLocal, SetLocal,</i></td></tr>
+<tr><th id="161">161</th><td><i>    // and Flush for accessing local variables and indicating where their live</i></td></tr>
+<tr><th id="162">162</th><td><i>    // ranges ought to be. Data flow between local accesses is implicit. Liveness</i></td></tr>
+<tr><th id="163">163</th><td><i>    // is only explicit at block heads (variablesAtHead). This is only used by</i></td></tr>
+<tr><th id="164">164</th><td><i>    // the DFG simplifier and is only preserved by same.</i></td></tr>
+<tr><th id="165">165</th><td><i>    //</i></td></tr>
+<tr><th id="166">166</th><td><i>    // For example, LoadStore form gives no easy way to determine which SetLocal's</i></td></tr>
+<tr><th id="167">167</th><td><i>    // flow into a GetLocal. As well, LoadStore form implies no restrictions on</i></td></tr>
+<tr><th id="168">168</th><td><i>    // redundancy: you can freely emit multiple GetLocals, or multiple SetLocals</i></td></tr>
+<tr><th id="169">169</th><td><i>    // (or any combination thereof) to the same local in the same block. LoadStore</i></td></tr>
+<tr><th id="170">170</th><td><i>    // form does not require basic blocks to declare how they affect or use locals,</i></td></tr>
+<tr><th id="171">171</th><td><i>    // other than implicitly by using the local ops and by preserving</i></td></tr>
+<tr><th id="172">172</th><td><i>    // variablesAtHead. Finally, LoadStore allows flexibility in how liveness of</i></td></tr>
+<tr><th id="173">173</th><td><i>    // locals is extended; for example you can replace a GetLocal with a Phantom</i></td></tr>
+<tr><th id="174">174</th><td><i>    // and so long as the Phantom retains the GetLocal's children (i.e. the Phi</i></td></tr>
+<tr><th id="175">175</th><td><i>    // most likely) then it implies that the local is still live but that it need</i></td></tr>
+<tr><th id="176">176</th><td><i>    // not be stored to the stack necessarily. This implies that Phantom can</i></td></tr>
+<tr><th id="177">177</th><td><i>    // reference nodes that have no result, as long as those nodes are valid</i></td></tr>
+<tr><th id="178">178</th><td><i>    // GetLocal children (i.e. Phi, SetLocal, SetArgumentDefinitely, SetArgumentMaybe).</i></td></tr>
+<tr><th id="179">179</th><td><i>    //</i></td></tr>
+<tr><th id="180">180</th><td><i>    // LoadStore form also implies that Phis need not have children. By default,</i></td></tr>
+<tr><th id="181">181</th><td><i>    // they end up having no children if you enter LoadStore using the canonical</i></td></tr>
+<tr><th id="182">182</th><td><i>    // way (call Graph::dethread).</i></td></tr>
+<tr><th id="183">183</th><td><i>    //</i></td></tr>
+<tr><th id="184">184</th><td><i>    // LoadStore form is suitable for CFG transformations, as well as strength</i></td></tr>
+<tr><th id="185">185</th><td><i>    // reduction, folding, and CSE.</i></td></tr>
+<tr><th id="186">186</th><td>    <dfn class="enum" id="JSC::DFG::LoadStore" title='JSC::DFG::LoadStore' data-ref="JSC::DFG::LoadStore" data-ref-filename="JSC..DFG..LoadStore">LoadStore</dfn>,</td></tr>
+<tr><th id="187">187</th><td>    </td></tr>
+<tr><th id="188">188</th><td>    <i>// ThreadedCPS form means that basic blocks list up-front which locals they</i></td></tr>
+<tr><th id="189">189</th><td><i>    // expect to be live at the head, and which locals they make available at the</i></td></tr>
+<tr><th id="190">190</th><td><i>    // tail. ThreadedCPS form also implies that:</i></td></tr>
+<tr><th id="191">191</th><td><i>    //</i></td></tr>
+<tr><th id="192">192</th><td><i>    // - GetLocals and SetLocals are not redundant within a basic block.</i></td></tr>
+<tr><th id="193">193</th><td><i>    //</i></td></tr>
+<tr><th id="194">194</th><td><i>    // - All GetLocals and Flushes are linked directly to the last access point</i></td></tr>
+<tr><th id="195">195</th><td><i>    //   of the variable, which must not be another GetLocal.</i></td></tr>
+<tr><th id="196">196</th><td><i>    //</i></td></tr>
+<tr><th id="197">197</th><td><i>    // - Phantom(Phi) is not legal, but PhantomLocal is.</i></td></tr>
+<tr><th id="198">198</th><td><i>    //</i></td></tr>
+<tr><th id="199">199</th><td><i>    // ThreadedCPS form is suitable for data flow analysis (CFA, prediction</i></td></tr>
+<tr><th id="200">200</th><td><i>    // propagation), register allocation, and code generation.</i></td></tr>
+<tr><th id="201">201</th><td>    <dfn class="enum" id="JSC::DFG::ThreadedCPS" title='JSC::DFG::ThreadedCPS' data-ref="JSC::DFG::ThreadedCPS" data-ref-filename="JSC..DFG..ThreadedCPS">ThreadedCPS</dfn>,</td></tr>
+<tr><th id="202">202</th><td>    </td></tr>
+<tr><th id="203">203</th><td>    <i>// SSA form. See DFGSSAConversionPhase.h for a description.</i></td></tr>
+<tr><th id="204">204</th><td>    <dfn class="enum" id="JSC::DFG::SSA" title='JSC::DFG::SSA' data-ref="JSC::DFG::SSA" data-ref-filename="JSC..DFG..SSA">SSA</dfn></td></tr>
+<tr><th id="205">205</th><td>};</td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td><i>// Describes the state of the UnionFind structure of VariableAccessData's.</i></td></tr>
+<tr><th id="208">208</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::UnificationState" title='JSC::DFG::UnificationState' data-ref="JSC::DFG::UnificationState" data-ref-filename="JSC..DFG..UnificationState">UnificationState</dfn> {</td></tr>
+<tr><th id="209">209</th><td>    <i>// BasicBlock-local accesses to variables are appropriately unified with each other.</i></td></tr>
+<tr><th id="210">210</th><td>    <dfn class="enum" id="JSC::DFG::LocallyUnified" title='JSC::DFG::LocallyUnified' data-ref="JSC::DFG::LocallyUnified" data-ref-filename="JSC..DFG..LocallyUnified">LocallyUnified</dfn>,</td></tr>
+<tr><th id="211">211</th><td>    </td></tr>
+<tr><th id="212">212</th><td>    <i>// Unification has been performed globally.</i></td></tr>
+<tr><th id="213">213</th><td>    <dfn class="enum" id="JSC::DFG::GloballyUnified" title='JSC::DFG::GloballyUnified' data-ref="JSC::DFG::GloballyUnified" data-ref-filename="JSC..DFG..GloballyUnified">GloballyUnified</dfn></td></tr>
+<tr><th id="214">214</th><td>};</td></tr>
+<tr><th id="215">215</th><td></td></tr>
+<tr><th id="216">216</th><td><i>// Describes how reference counts in the graph behave.</i></td></tr>
+<tr><th id="217">217</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::RefCountState" title='JSC::DFG::RefCountState' data-ref="JSC::DFG::RefCountState" data-ref-filename="JSC..DFG..RefCountState">RefCountState</dfn> {</td></tr>
+<tr><th id="218">218</th><td>    <i>// Everything has refCount() == 1.</i></td></tr>
+<tr><th id="219">219</th><td>    <dfn class="enum" id="JSC::DFG::EverythingIsLive" title='JSC::DFG::EverythingIsLive' data-ref="JSC::DFG::EverythingIsLive" data-ref-filename="JSC..DFG..EverythingIsLive">EverythingIsLive</dfn>,</td></tr>
+<tr><th id="220">220</th><td></td></tr>
+<tr><th id="221">221</th><td>    <i>// Set after DCE has run.</i></td></tr>
+<tr><th id="222">222</th><td>    <dfn class="enum" id="JSC::DFG::ExactRefCount" title='JSC::DFG::ExactRefCount' data-ref="JSC::DFG::ExactRefCount" data-ref-filename="JSC..DFG..ExactRefCount">ExactRefCount</dfn></td></tr>
+<tr><th id="223">223</th><td>};</td></tr>
+<tr><th id="224">224</th><td></td></tr>
+<tr><th id="225">225</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::OperandSpeculationMode" title='JSC::DFG::OperandSpeculationMode' data-ref="JSC::DFG::OperandSpeculationMode" data-ref-filename="JSC..DFG..OperandSpeculationMode">OperandSpeculationMode</dfn> { <dfn class="enum" id="JSC::DFG::AutomaticOperandSpeculation" title='JSC::DFG::AutomaticOperandSpeculation' data-ref="JSC::DFG::AutomaticOperandSpeculation" data-ref-filename="JSC..DFG..AutomaticOperandSpeculation">AutomaticOperandSpeculation</dfn>, <dfn class="enum" id="JSC::DFG::ManualOperandSpeculation" title='JSC::DFG::ManualOperandSpeculation' data-ref="JSC::DFG::ManualOperandSpeculation" data-ref-filename="JSC..DFG..ManualOperandSpeculation">ManualOperandSpeculation</dfn> };</td></tr>
+<tr><th id="226">226</th><td></td></tr>
+<tr><th id="227">227</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::ProofStatus" title='JSC::DFG::ProofStatus' data-ref="JSC::DFG::ProofStatus" data-ref-filename="JSC..DFG..ProofStatus">ProofStatus</dfn> { <dfn class="enum" id="JSC::DFG::NeedsCheck" title='JSC::DFG::NeedsCheck' data-ref="JSC::DFG::NeedsCheck" data-ref-filename="JSC..DFG..NeedsCheck">NeedsCheck</dfn>, <dfn class="enum" id="JSC::DFG::IsProved" title='JSC::DFG::IsProved' data-ref="JSC::DFG::IsProved" data-ref-filename="JSC..DFG..IsProved">IsProved</dfn> };</td></tr>
+<tr><th id="228">228</th><td></td></tr>
+<tr><th id="229">229</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG8isProvedENS0_11ProofStatusE" title='JSC::DFG::isProved' data-ref="_ZN3JSC3DFG8isProvedENS0_11ProofStatusE" data-ref-filename="_ZN3JSC3DFG8isProvedENS0_11ProofStatusE">isProved</dfn>(<a class="type" href="#JSC::DFG::ProofStatus" title='JSC::DFG::ProofStatus' data-ref="JSC::DFG::ProofStatus" data-ref-filename="JSC..DFG..ProofStatus">ProofStatus</a> <dfn class="local col3 decl" id="7713proofStatus" title='proofStatus' data-type='JSC::DFG::ProofStatus' data-ref="7713proofStatus" data-ref-filename="7713proofStatus">proofStatus</dfn>)</td></tr>
+<tr><th id="230">230</th><td>{</td></tr>
+<tr><th id="231">231</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(proofStatus == IsProved || proofStatus == NeedsCheck)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGCommon.h&quot;, 231, __PRETTY_FUNCTION__, &quot;proofStatus == IsProved || proofStatus == NeedsCheck&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(231, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGCommon.h&quot;, __PRETTY_FUNCTION__, 3037); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(<a class="local col3 ref" href="#7713proofStatus" title='proofStatus' data-ref="7713proofStatus" data-ref-filename="7713proofStatus">proofStatus</a> == <a class="enum" href="#JSC::DFG::IsProved" title='JSC::DFG::IsProved' data-ref="JSC::DFG::IsProved" data-ref-filename="JSC..DFG..IsProved">IsProved</a> || <a class="local col3 ref" href="#7713proofStatus" title='proofStatus' data-ref="7713proofStatus" data-ref-filename="7713proofStatus">proofStatus</a> == <a class="enum" href="#JSC::DFG::NeedsCheck" title='JSC::DFG::NeedsCheck' data-ref="JSC::DFG::NeedsCheck" data-ref-filename="JSC..DFG..NeedsCheck">NeedsCheck</a>);</td></tr>
+<tr><th id="232">232</th><td>    <b>return</b> <a class="local col3 ref" href="#7713proofStatus" title='proofStatus' data-ref="7713proofStatus" data-ref-filename="7713proofStatus">proofStatus</a> == <a class="enum" href="#JSC::DFG::IsProved" title='JSC::DFG::IsProved' data-ref="JSC::DFG::IsProved" data-ref-filename="JSC..DFG..IsProved">IsProved</a>;</td></tr>
+<tr><th id="233">233</th><td>}</td></tr>
+<tr><th id="234">234</th><td></td></tr>
+<tr><th id="235">235</th><td><b>inline</b> <a class="type" href="#JSC::DFG::ProofStatus" title='JSC::DFG::ProofStatus' data-ref="JSC::DFG::ProofStatus" data-ref-filename="JSC..DFG..ProofStatus">ProofStatus</a> <dfn class="decl def fn" id="_ZN3JSC3DFG22proofStatusForIsProvedEb" title='JSC::DFG::proofStatusForIsProved' data-ref="_ZN3JSC3DFG22proofStatusForIsProvedEb" data-ref-filename="_ZN3JSC3DFG22proofStatusForIsProvedEb">proofStatusForIsProved</dfn>(<em>bool</em> <dfn class="local col4 decl" id="7714isProved" title='isProved' data-type='bool' data-ref="7714isProved" data-ref-filename="7714isProved">isProved</dfn>)</td></tr>
+<tr><th id="236">236</th><td>{</td></tr>
+<tr><th id="237">237</th><td>    <b>return</b> <a class="local col4 ref" href="#7714isProved" title='isProved' data-ref="7714isProved" data-ref-filename="7714isProved">isProved</a> ? <a class="enum" href="#JSC::DFG::IsProved" title='JSC::DFG::IsProved' data-ref="JSC::DFG::IsProved" data-ref-filename="JSC..DFG..IsProved">IsProved</a> : <a class="enum" href="#JSC::DFG::NeedsCheck" title='JSC::DFG::NeedsCheck' data-ref="JSC::DFG::NeedsCheck" data-ref-filename="JSC..DFG..NeedsCheck">NeedsCheck</a>;</td></tr>
+<tr><th id="238">238</th><td>}</td></tr>
+<tr><th id="239">239</th><td></td></tr>
+<tr><th id="240">240</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::KillStatus" title='JSC::DFG::KillStatus' data-ref="JSC::DFG::KillStatus" data-ref-filename="JSC..DFG..KillStatus">KillStatus</dfn> { <dfn class="enum" id="JSC::DFG::DoesNotKill" title='JSC::DFG::DoesNotKill' data-ref="JSC::DFG::DoesNotKill" data-ref-filename="JSC..DFG..DoesNotKill">DoesNotKill</dfn>, <dfn class="enum" id="JSC::DFG::DoesKill" title='JSC::DFG::DoesKill' data-ref="JSC::DFG::DoesKill" data-ref-filename="JSC..DFG..DoesKill">DoesKill</dfn> };</td></tr>
+<tr><th id="241">241</th><td></td></tr>
+<tr><th id="242">242</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG8doesKillENS0_10KillStatusE" title='JSC::DFG::doesKill' data-ref="_ZN3JSC3DFG8doesKillENS0_10KillStatusE" data-ref-filename="_ZN3JSC3DFG8doesKillENS0_10KillStatusE">doesKill</dfn>(<a class="type" href="#JSC::DFG::KillStatus" title='JSC::DFG::KillStatus' data-ref="JSC::DFG::KillStatus" data-ref-filename="JSC..DFG..KillStatus">KillStatus</a> <dfn class="local col5 decl" id="7715killStatus" title='killStatus' data-type='JSC::DFG::KillStatus' data-ref="7715killStatus" data-ref-filename="7715killStatus">killStatus</dfn>)</td></tr>
+<tr><th id="243">243</th><td>{</td></tr>
+<tr><th id="244">244</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(killStatus == DoesNotKill || killStatus == DoesKill)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGCommon.h&quot;, 244, __PRETTY_FUNCTION__, &quot;killStatus == DoesNotKill || killStatus == DoesKill&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(244, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGCommon.h&quot;, __PRETTY_FUNCTION__, 3039); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(<a class="local col5 ref" href="#7715killStatus" title='killStatus' data-ref="7715killStatus" data-ref-filename="7715killStatus">killStatus</a> == <a class="enum" href="#JSC::DFG::DoesNotKill" title='JSC::DFG::DoesNotKill' data-ref="JSC::DFG::DoesNotKill" data-ref-filename="JSC..DFG..DoesNotKill">DoesNotKill</a> || <a class="local col5 ref" href="#7715killStatus" title='killStatus' data-ref="7715killStatus" data-ref-filename="7715killStatus">killStatus</a> == <a class="enum" href="#JSC::DFG::DoesKill" title='JSC::DFG::DoesKill' data-ref="JSC::DFG::DoesKill" data-ref-filename="JSC..DFG..DoesKill">DoesKill</a>);</td></tr>
+<tr><th id="245">245</th><td>    <b>return</b> <a class="local col5 ref" href="#7715killStatus" title='killStatus' data-ref="7715killStatus" data-ref-filename="7715killStatus">killStatus</a> == <a class="enum" href="#JSC::DFG::DoesKill" title='JSC::DFG::DoesKill' data-ref="JSC::DFG::DoesKill" data-ref-filename="JSC..DFG..DoesKill">DoesKill</a>;</td></tr>
+<tr><th id="246">246</th><td>}</td></tr>
+<tr><th id="247">247</th><td></td></tr>
+<tr><th id="248">248</th><td><b>inline</b> <a class="type" href="#JSC::DFG::KillStatus" title='JSC::DFG::KillStatus' data-ref="JSC::DFG::KillStatus" data-ref-filename="JSC..DFG..KillStatus">KillStatus</a> <dfn class="decl def fn" id="_ZN3JSC3DFG21killStatusForDoesKillEb" title='JSC::DFG::killStatusForDoesKill' data-ref="_ZN3JSC3DFG21killStatusForDoesKillEb" data-ref-filename="_ZN3JSC3DFG21killStatusForDoesKillEb">killStatusForDoesKill</dfn>(<em>bool</em> <dfn class="local col6 decl" id="7716doesKill" title='doesKill' data-type='bool' data-ref="7716doesKill" data-ref-filename="7716doesKill">doesKill</dfn>)</td></tr>
+<tr><th id="249">249</th><td>{</td></tr>
+<tr><th id="250">250</th><td>    <b>return</b> <a class="local col6 ref" href="#7716doesKill" title='doesKill' data-ref="7716doesKill" data-ref-filename="7716doesKill">doesKill</a> ? <a class="enum" href="#JSC::DFG::DoesKill" title='JSC::DFG::DoesKill' data-ref="JSC::DFG::DoesKill" data-ref-filename="JSC..DFG..DoesKill">DoesKill</a> : <a class="enum" href="#JSC::DFG::DoesNotKill" title='JSC::DFG::DoesNotKill' data-ref="JSC::DFG::DoesNotKill" data-ref-filename="JSC..DFG..DoesNotKill">DoesNotKill</a>;</td></tr>
+<tr><th id="251">251</th><td>}</td></tr>
+<tr><th id="252">252</th><td></td></tr>
+<tr><th id="253">253</th><td><b>enum</b> <b>class</b> <dfn class="type def" id="JSC::DFG::PlanStage" title='JSC::DFG::PlanStage' data-ref="JSC::DFG::PlanStage" data-ref-filename="JSC..DFG..PlanStage">PlanStage</dfn> {</td></tr>
+<tr><th id="254">254</th><td>    <dfn class="enum" id="JSC::DFG::PlanStage::Initial" title='JSC::DFG::PlanStage::Initial' data-ref="JSC::DFG::PlanStage::Initial" data-ref-filename="JSC..DFG..PlanStage..Initial">Initial</dfn>,</td></tr>
+<tr><th id="255">255</th><td>    <dfn class="enum" id="JSC::DFG::PlanStage::AfterFixup" title='JSC::DFG::PlanStage::AfterFixup' data-ref="JSC::DFG::PlanStage::AfterFixup" data-ref-filename="JSC..DFG..PlanStage..AfterFixup">AfterFixup</dfn></td></tr>
+<tr><th id="256">256</th><td>};</td></tr>
+<tr><th id="257">257</th><td></td></tr>
+<tr><th id="258">258</th><td><i>// If possible, this will acquire a lock to make sure that if multiple threads</i></td></tr>
+<tr><th id="259">259</th><td><i>// start crashing at the same time, you get coherent dump output. Use this only</i></td></tr>
+<tr><th id="260">260</th><td><i>// when you're forcing a crash with diagnostics.</i></td></tr>
+<tr><th id="261">261</th><td><em>void</em> <dfn class="decl fn" id="_ZN3JSC3DFG13startCrashingEv" title='JSC::DFG::startCrashing' data-ref="_ZN3JSC3DFG13startCrashingEv" data-ref-filename="_ZN3JSC3DFG13startCrashingEv">startCrashing</dfn>();</td></tr>
+<tr><th id="262">262</th><td></td></tr>
+<tr><th id="263">263</th><td><a class="macro" href="../runtime/JSExportMacros.h.html#39" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT_PRIVATE">JS_EXPORT_PRIVATE</a> <em>bool</em> <dfn class="decl fn" id="_ZN3JSC3DFG10isCrashingEv" title='JSC::DFG::isCrashing' data-ref="_ZN3JSC3DFG10isCrashingEv" data-ref-filename="_ZN3JSC3DFG10isCrashingEv">isCrashing</dfn>();</td></tr>
+<tr><th id="264">264</th><td></td></tr>
+<tr><th id="265">265</th><td><b>struct</b> <dfn class="type def" id="JSC::DFG::NodeAndIndex" title='JSC::DFG::NodeAndIndex' data-ref="JSC::DFG::NodeAndIndex" data-ref-filename="JSC..DFG..NodeAndIndex">NodeAndIndex</dfn> {</td></tr>
+<tr><th id="266">266</th><td>    <dfn class="decl def fn" id="_ZN3JSC3DFG12NodeAndIndexC1Ev" title='JSC::DFG::NodeAndIndex::NodeAndIndex' data-ref="_ZN3JSC3DFG12NodeAndIndexC1Ev" data-ref-filename="_ZN3JSC3DFG12NodeAndIndexC1Ev">NodeAndIndex</dfn>()</td></tr>
+<tr><th id="267">267</th><td>        : <a class="member field" href="#JSC::DFG::NodeAndIndex::node" title='JSC::DFG::NodeAndIndex::node' data-ref="JSC::DFG::NodeAndIndex::node" data-ref-filename="JSC..DFG..NodeAndIndex..node">node</a>(<b>nullptr</b>)</td></tr>
+<tr><th id="268">268</th><td>        , <a class="member field" href="#JSC::DFG::NodeAndIndex::index" title='JSC::DFG::NodeAndIndex::index' data-ref="JSC::DFG::NodeAndIndex::index" data-ref-filename="JSC..DFG..NodeAndIndex..index">index</a>(<span class="macro" title="(2147483647 *2U +1U)" data-ref="_M/UINT_MAX">UINT_MAX</span>)</td></tr>
+<tr><th id="269">269</th><td>    {</td></tr>
+<tr><th id="270">270</th><td>    }</td></tr>
+<tr><th id="271">271</th><td>    </td></tr>
+<tr><th id="272">272</th><td>    <dfn class="decl def fn" id="_ZN3JSC3DFG12NodeAndIndexC1EPNS0_4NodeEj" title='JSC::DFG::NodeAndIndex::NodeAndIndex' data-ref="_ZN3JSC3DFG12NodeAndIndexC1EPNS0_4NodeEj" data-ref-filename="_ZN3JSC3DFG12NodeAndIndexC1EPNS0_4NodeEj">NodeAndIndex</dfn>(<a class="type" href="#JSC::DFG::Node" title='JSC::DFG::Node' data-ref="JSC::DFG::Node" data-ref-filename="JSC..DFG..Node">Node</a>* <dfn class="local col7 decl" id="7717node" title='node' data-type='JSC::DFG::Node *' data-ref="7717node" data-ref-filename="7717node">node</dfn>, <em>unsigned</em> <dfn class="local col8 decl" id="7718index" title='index' data-type='unsigned int' data-ref="7718index" data-ref-filename="7718index">index</dfn>)</td></tr>
+<tr><th id="273">273</th><td>        : <a class="member field" href="#JSC::DFG::NodeAndIndex::node" title='JSC::DFG::NodeAndIndex::node' data-ref="JSC::DFG::NodeAndIndex::node" data-ref-filename="JSC..DFG..NodeAndIndex..node">node</a>(<a class="local col7 ref" href="#7717node" title='node' data-ref="7717node" data-ref-filename="7717node">node</a>)</td></tr>
+<tr><th id="274">274</th><td>        , <a class="member field" href="#JSC::DFG::NodeAndIndex::index" title='JSC::DFG::NodeAndIndex::index' data-ref="JSC::DFG::NodeAndIndex::index" data-ref-filename="JSC..DFG..NodeAndIndex..index">index</a>(<a class="local col8 ref" href="#7718index" title='index' data-ref="7718index" data-ref-filename="7718index">index</a>)</td></tr>
+<tr><th id="275">275</th><td>    {</td></tr>
+<tr><th id="276">276</th><td>        <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(!node == (index == (2147483647 *2U +1U)))) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGCommon.h&quot;, 276, __PRETTY_FUNCTION__, &quot;!node == (index == UINT_MAX)&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(276, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGCommon.h&quot;, __PRETTY_FUNCTION__, 3041); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(!<a class="local col7 ref" href="#7717node" title='node' data-ref="7717node" data-ref-filename="7717node">node</a> == (<a class="local col8 ref" href="#7718index" title='index' data-ref="7718index" data-ref-filename="7718index">index</a> == <span class="macro" title="(2147483647 *2U +1U)" data-ref="_M/UINT_MAX">UINT_MAX</span>));</td></tr>
+<tr><th id="277">277</th><td>    }</td></tr>
+<tr><th id="278">278</th><td>    </td></tr>
+<tr><th id="279">279</th><td>    <em>bool</em> <dfn class="decl def fn" id="_ZNK3JSC3DFG12NodeAndIndexntEv" title='JSC::DFG::NodeAndIndex::operator!' data-ref="_ZNK3JSC3DFG12NodeAndIndexntEv" data-ref-filename="_ZNK3JSC3DFG12NodeAndIndexntEv"><b>operator</b>!</dfn>() <em>const</em></td></tr>
+<tr><th id="280">280</th><td>    {</td></tr>
+<tr><th id="281">281</th><td>        <b>return</b> !<a class="member field" href="#JSC::DFG::NodeAndIndex::node" title='JSC::DFG::NodeAndIndex::node' data-ref="JSC::DFG::NodeAndIndex::node" data-ref-filename="JSC..DFG..NodeAndIndex..node">node</a>;</td></tr>
+<tr><th id="282">282</th><td>    }</td></tr>
+<tr><th id="283">283</th><td>    </td></tr>
+<tr><th id="284">284</th><td>    <a class="type" href="#JSC::DFG::Node" title='JSC::DFG::Node' data-ref="JSC::DFG::Node" data-ref-filename="JSC..DFG..Node">Node</a>* <dfn class="decl field" id="JSC::DFG::NodeAndIndex::node" title='JSC::DFG::NodeAndIndex::node' data-ref="JSC::DFG::NodeAndIndex::node" data-ref-filename="JSC..DFG..NodeAndIndex..node">node</dfn>;</td></tr>
+<tr><th id="285">285</th><td>    <em>unsigned</em> <dfn class="decl field" id="JSC::DFG::NodeAndIndex::index" title='JSC::DFG::NodeAndIndex::index' data-ref="JSC::DFG::NodeAndIndex::index" data-ref-filename="JSC..DFG..NodeAndIndex..index">index</dfn>;</td></tr>
+<tr><th id="286">286</th><td>};</td></tr>
+<tr><th id="287">287</th><td></td></tr>
+<tr><th id="288">288</th><td><i>// A less-than operator for strings that is useful for generating string switches. Sorts by &lt;</i></td></tr>
+<tr><th id="289">289</th><td><i>// relation on characters. Ensures that if a is a prefix of b, then a &lt; b.</i></td></tr>
+<tr><th id="290">290</th><td><em>bool</em> <dfn class="decl fn" id="_ZN3JSC3DFG14stringLessThanERN3WTF10StringImplES3_" title='JSC::DFG::stringLessThan' data-ref="_ZN3JSC3DFG14stringLessThanERN3WTF10StringImplES3_" data-ref-filename="_ZN3JSC3DFG14stringLessThanERN3WTF10StringImplES3_">stringLessThan</dfn>(<a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringImpl.h.html#WTF::StringImpl" title='WTF::StringImpl' data-ref="WTF::StringImpl" data-ref-filename="WTF..StringImpl">StringImpl</a>&amp; <dfn class="local col9 decl" id="7719a" title='a' data-type='WTF::StringImpl &amp;' data-ref="7719a" data-ref-filename="7719a">a</dfn>, <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringImpl.h.html#WTF::StringImpl" title='WTF::StringImpl' data-ref="WTF::StringImpl" data-ref-filename="WTF..StringImpl">StringImpl</a>&amp; <dfn class="local col0 decl" id="7720b" title='b' data-type='WTF::StringImpl &amp;' data-ref="7720b" data-ref-filename="7720b">b</dfn>);</td></tr>
+<tr><th id="291">291</th><td></td></tr>
+<tr><th id="292">292</th><td>} } <i>// namespace JSC::DFG</i></td></tr>
+<tr><th id="293">293</th><td></td></tr>
+<tr><th id="294">294</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="295">295</th><td></td></tr>
+<tr><th id="296">296</th><td><em>void</em> <dfn class="decl fn" id="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG25OptimizationFixpointStateE" title='WTF::printInternal' data-ref="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG25OptimizationFixpointStateE" data-ref-filename="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG25OptimizationFixpointStateE">printInternal</dfn>(<a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PrintStream.h.html#WTF::PrintStream" title='WTF::PrintStream' data-ref="WTF::PrintStream" data-ref-filename="WTF..PrintStream">PrintStream</a>&amp;, <span class="namespace">JSC::DFG::</span><a class="type" href="#JSC::DFG::OptimizationFixpointState" title='JSC::DFG::OptimizationFixpointState' data-ref="JSC::DFG::OptimizationFixpointState" data-ref-filename="JSC..DFG..OptimizationFixpointState">OptimizationFixpointState</a>);</td></tr>
+<tr><th id="297">297</th><td><em>void</em> <dfn class="decl fn" id="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG9GraphFormE" title='WTF::printInternal' data-ref="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG9GraphFormE" data-ref-filename="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG9GraphFormE">printInternal</dfn>(<a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PrintStream.h.html#WTF::PrintStream" title='WTF::PrintStream' data-ref="WTF::PrintStream" data-ref-filename="WTF..PrintStream">PrintStream</a>&amp;, <span class="namespace">JSC::DFG::</span><a class="type" href="#JSC::DFG::GraphForm" title='JSC::DFG::GraphForm' data-ref="JSC::DFG::GraphForm" data-ref-filename="JSC..DFG..GraphForm">GraphForm</a>);</td></tr>
+<tr><th id="298">298</th><td><em>void</em> <dfn class="decl fn" id="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG16UnificationStateE" title='WTF::printInternal' data-ref="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG16UnificationStateE" data-ref-filename="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG16UnificationStateE">printInternal</dfn>(<a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PrintStream.h.html#WTF::PrintStream" title='WTF::PrintStream' data-ref="WTF::PrintStream" data-ref-filename="WTF..PrintStream">PrintStream</a>&amp;, <span class="namespace">JSC::DFG::</span><a class="type" href="#JSC::DFG::UnificationState" title='JSC::DFG::UnificationState' data-ref="JSC::DFG::UnificationState" data-ref-filename="JSC..DFG..UnificationState">UnificationState</a>);</td></tr>
+<tr><th id="299">299</th><td><em>void</em> <dfn class="decl fn" id="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG13RefCountStateE" title='WTF::printInternal' data-ref="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG13RefCountStateE" data-ref-filename="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG13RefCountStateE">printInternal</dfn>(<a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PrintStream.h.html#WTF::PrintStream" title='WTF::PrintStream' data-ref="WTF::PrintStream" data-ref-filename="WTF..PrintStream">PrintStream</a>&amp;, <span class="namespace">JSC::DFG::</span><a class="type" href="#JSC::DFG::RefCountState" title='JSC::DFG::RefCountState' data-ref="JSC::DFG::RefCountState" data-ref-filename="JSC..DFG..RefCountState">RefCountState</a>);</td></tr>
+<tr><th id="300">300</th><td><em>void</em> <dfn class="decl fn" id="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG11ProofStatusE" title='WTF::printInternal' data-ref="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG11ProofStatusE" data-ref-filename="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG11ProofStatusE">printInternal</dfn>(<a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PrintStream.h.html#WTF::PrintStream" title='WTF::PrintStream' data-ref="WTF::PrintStream" data-ref-filename="WTF..PrintStream">PrintStream</a>&amp;, <span class="namespace">JSC::DFG::</span><a class="type" href="#JSC::DFG::ProofStatus" title='JSC::DFG::ProofStatus' data-ref="JSC::DFG::ProofStatus" data-ref-filename="JSC..DFG..ProofStatus">ProofStatus</a>);</td></tr>
+<tr><th id="301">301</th><td></td></tr>
+<tr><th id="302">302</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="303">303</th><td></td></tr>
+<tr><th id="304">304</th><td><u>#<span data-ppcond="30">endif</span> // ENABLE(DFG_JIT)</u></td></tr>
+<tr><th id="305">305</th><td></td></tr>
+<tr><th id="306">306</th><td><b>namespace</b> <span class="namespace">JSC</span> { <b>namespace</b> <span class="namespace">DFG</span> {</td></tr>
+<tr><th id="307">307</th><td></td></tr>
+<tr><th id="308">308</th><td><i>// Put things here that must be defined even if ENABLE(DFG_JIT) is false.</i></td></tr>
+<tr><th id="309">309</th><td></td></tr>
+<tr><th id="310">310</th><td><b>enum</b> <dfn class="type def" id="JSC::DFG::CapabilityLevel" title='JSC::DFG::CapabilityLevel' data-ref="JSC::DFG::CapabilityLevel" data-ref-filename="JSC..DFG..CapabilityLevel">CapabilityLevel</dfn> {</td></tr>
+<tr><th id="311">311</th><td>    <dfn class="enum" id="JSC::DFG::CannotCompile" title='JSC::DFG::CannotCompile' data-ref="JSC::DFG::CannotCompile" data-ref-filename="JSC..DFG..CannotCompile">CannotCompile</dfn>,</td></tr>
+<tr><th id="312">312</th><td>    <dfn class="enum" id="JSC::DFG::CanCompile" title='JSC::DFG::CanCompile' data-ref="JSC::DFG::CanCompile" data-ref-filename="JSC..DFG..CanCompile">CanCompile</dfn>,</td></tr>
+<tr><th id="313">313</th><td>    <dfn class="enum" id="JSC::DFG::CanCompileAndInline" title='JSC::DFG::CanCompileAndInline' data-ref="JSC::DFG::CanCompileAndInline" data-ref-filename="JSC..DFG..CanCompileAndInline">CanCompileAndInline</dfn>,</td></tr>
+<tr><th id="314">314</th><td>    <dfn class="enum" id="JSC::DFG::CapabilityLevelNotSet" title='JSC::DFG::CapabilityLevelNotSet' data-ref="JSC::DFG::CapabilityLevelNotSet" data-ref-filename="JSC..DFG..CapabilityLevelNotSet">CapabilityLevelNotSet</dfn></td></tr>
+<tr><th id="315">315</th><td>};</td></tr>
+<tr><th id="316">316</th><td></td></tr>
+<tr><th id="317">317</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG10canCompileENS0_15CapabilityLevelE" title='JSC::DFG::canCompile' data-ref="_ZN3JSC3DFG10canCompileENS0_15CapabilityLevelE" data-ref-filename="_ZN3JSC3DFG10canCompileENS0_15CapabilityLevelE">canCompile</dfn>(<a class="type" href="#JSC::DFG::CapabilityLevel" title='JSC::DFG::CapabilityLevel' data-ref="JSC::DFG::CapabilityLevel" data-ref-filename="JSC..DFG..CapabilityLevel">CapabilityLevel</a> <dfn class="local col1 decl" id="7721level" title='level' data-type='JSC::DFG::CapabilityLevel' data-ref="7721level" data-ref-filename="7721level">level</dfn>)</td></tr>
+<tr><th id="318">318</th><td>{</td></tr>
+<tr><th id="319">319</th><td>    <b>switch</b> (<a class="local col1 ref" href="#7721level" title='level' data-ref="7721level" data-ref-filename="7721level">level</a>) {</td></tr>
+<tr><th id="320">320</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::CanCompile" title='JSC::DFG::CanCompile' data-ref="JSC::DFG::CanCompile" data-ref-filename="JSC..DFG..CanCompile">CanCompile</a>:</td></tr>
+<tr><th id="321">321</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::CanCompileAndInline" title='JSC::DFG::CanCompileAndInline' data-ref="JSC::DFG::CanCompileAndInline" data-ref-filename="JSC..DFG..CanCompileAndInline">CanCompileAndInline</a>:</td></tr>
+<tr><th id="322">322</th><td>        <b>return</b> <b>true</b>;</td></tr>
+<tr><th id="323">323</th><td>    <b>default</b>:</td></tr>
+<tr><th id="324">324</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="325">325</th><td>    }</td></tr>
+<tr><th id="326">326</th><td>}</td></tr>
+<tr><th id="327">327</th><td></td></tr>
+<tr><th id="328">328</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG9canInlineENS0_15CapabilityLevelE" title='JSC::DFG::canInline' data-ref="_ZN3JSC3DFG9canInlineENS0_15CapabilityLevelE" data-ref-filename="_ZN3JSC3DFG9canInlineENS0_15CapabilityLevelE">canInline</dfn>(<a class="type" href="#JSC::DFG::CapabilityLevel" title='JSC::DFG::CapabilityLevel' data-ref="JSC::DFG::CapabilityLevel" data-ref-filename="JSC..DFG..CapabilityLevel">CapabilityLevel</a> <dfn class="local col2 decl" id="7722level" title='level' data-type='JSC::DFG::CapabilityLevel' data-ref="7722level" data-ref-filename="7722level">level</dfn>)</td></tr>
+<tr><th id="329">329</th><td>{</td></tr>
+<tr><th id="330">330</th><td>    <b>switch</b> (<a class="local col2 ref" href="#7722level" title='level' data-ref="7722level" data-ref-filename="7722level">level</a>) {</td></tr>
+<tr><th id="331">331</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::CanCompileAndInline" title='JSC::DFG::CanCompileAndInline' data-ref="JSC::DFG::CanCompileAndInline" data-ref-filename="JSC..DFG..CanCompileAndInline">CanCompileAndInline</a>:</td></tr>
+<tr><th id="332">332</th><td>        <b>return</b> <b>true</b>;</td></tr>
+<tr><th id="333">333</th><td>    <b>default</b>:</td></tr>
+<tr><th id="334">334</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="335">335</th><td>    }</td></tr>
+<tr><th id="336">336</th><td>}</td></tr>
+<tr><th id="337">337</th><td></td></tr>
+<tr><th id="338">338</th><td><b>inline</b> <a class="type" href="#JSC::DFG::CapabilityLevel" title='JSC::DFG::CapabilityLevel' data-ref="JSC::DFG::CapabilityLevel" data-ref-filename="JSC..DFG..CapabilityLevel">CapabilityLevel</a> <dfn class="decl def fn" id="_ZN3JSC3DFG15leastUpperBoundENS0_15CapabilityLevelES1_" title='JSC::DFG::leastUpperBound' data-ref="_ZN3JSC3DFG15leastUpperBoundENS0_15CapabilityLevelES1_" data-ref-filename="_ZN3JSC3DFG15leastUpperBoundENS0_15CapabilityLevelES1_">leastUpperBound</dfn>(<a class="type" href="#JSC::DFG::CapabilityLevel" title='JSC::DFG::CapabilityLevel' data-ref="JSC::DFG::CapabilityLevel" data-ref-filename="JSC..DFG..CapabilityLevel">CapabilityLevel</a> <dfn class="local col3 decl" id="7723a" title='a' data-type='JSC::DFG::CapabilityLevel' data-ref="7723a" data-ref-filename="7723a">a</dfn>, <a class="type" href="#JSC::DFG::CapabilityLevel" title='JSC::DFG::CapabilityLevel' data-ref="JSC::DFG::CapabilityLevel" data-ref-filename="JSC..DFG..CapabilityLevel">CapabilityLevel</a> <dfn class="local col4 decl" id="7724b" title='b' data-type='JSC::DFG::CapabilityLevel' data-ref="7724b" data-ref-filename="7724b">b</dfn>)</td></tr>
+<tr><th id="339">339</th><td>{</td></tr>
+<tr><th id="340">340</th><td>    <b>switch</b> (<a class="local col3 ref" href="#7723a" title='a' data-ref="7723a" data-ref-filename="7723a">a</a>) {</td></tr>
+<tr><th id="341">341</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::CannotCompile" title='JSC::DFG::CannotCompile' data-ref="JSC::DFG::CannotCompile" data-ref-filename="JSC..DFG..CannotCompile">CannotCompile</a>:</td></tr>
+<tr><th id="342">342</th><td>        <b>return</b> <a class="enum" href="#JSC::DFG::CannotCompile" title='JSC::DFG::CannotCompile' data-ref="JSC::DFG::CannotCompile" data-ref-filename="JSC..DFG..CannotCompile">CannotCompile</a>;</td></tr>
+<tr><th id="343">343</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::CanCompile" title='JSC::DFG::CanCompile' data-ref="JSC::DFG::CanCompile" data-ref-filename="JSC..DFG..CanCompile">CanCompile</a>:</td></tr>
+<tr><th id="344">344</th><td>        <b>switch</b> (<a class="local col4 ref" href="#7724b" title='b' data-ref="7724b" data-ref-filename="7724b">b</a>) {</td></tr>
+<tr><th id="345">345</th><td>        <b>case</b> <a class="enum" href="#JSC::DFG::CanCompile" title='JSC::DFG::CanCompile' data-ref="JSC::DFG::CanCompile" data-ref-filename="JSC..DFG..CanCompile">CanCompile</a>:</td></tr>
+<tr><th id="346">346</th><td>        <b>case</b> <a class="enum" href="#JSC::DFG::CanCompileAndInline" title='JSC::DFG::CanCompileAndInline' data-ref="JSC::DFG::CanCompileAndInline" data-ref-filename="JSC..DFG..CanCompileAndInline">CanCompileAndInline</a>:</td></tr>
+<tr><th id="347">347</th><td>            <b>return</b> <a class="enum" href="#JSC::DFG::CanCompile" title='JSC::DFG::CanCompile' data-ref="JSC::DFG::CanCompile" data-ref-filename="JSC..DFG..CanCompile">CanCompile</a>;</td></tr>
+<tr><th id="348">348</th><td>        <b>default</b>:</td></tr>
+<tr><th id="349">349</th><td>            <b>return</b> <a class="enum" href="#JSC::DFG::CannotCompile" title='JSC::DFG::CannotCompile' data-ref="JSC::DFG::CannotCompile" data-ref-filename="JSC..DFG..CannotCompile">CannotCompile</a>;</td></tr>
+<tr><th id="350">350</th><td>        }</td></tr>
+<tr><th id="351">351</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::CanCompileAndInline" title='JSC::DFG::CanCompileAndInline' data-ref="JSC::DFG::CanCompileAndInline" data-ref-filename="JSC..DFG..CanCompileAndInline">CanCompileAndInline</a>:</td></tr>
+<tr><th id="352">352</th><td>        <b>return</b> <a class="local col4 ref" href="#7724b" title='b' data-ref="7724b" data-ref-filename="7724b">b</a>;</td></tr>
+<tr><th id="353">353</th><td>    <b>case</b> <a class="enum" href="#JSC::DFG::CapabilityLevelNotSet" title='JSC::DFG::CapabilityLevelNotSet' data-ref="JSC::DFG::CapabilityLevelNotSet" data-ref-filename="JSC..DFG..CapabilityLevelNotSet">CapabilityLevelNotSet</a>:</td></tr>
+<tr><th id="354">354</th><td>        <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#368" title="do { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGCommon.h&quot;, 354, __PRETTY_FUNCTION__, 0); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(354, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGCommon.h&quot;, __PRETTY_FUNCTION__, 3043); } while (false); } while (0)" data-ref="_M/ASSERT_NOT_REACHED">ASSERT_NOT_REACHED</a>();</td></tr>
+<tr><th id="355">355</th><td>        <b>return</b> <a class="enum" href="#JSC::DFG::CannotCompile" title='JSC::DFG::CannotCompile' data-ref="JSC::DFG::CannotCompile" data-ref-filename="JSC..DFG..CannotCompile">CannotCompile</a>;</td></tr>
+<tr><th id="356">356</th><td>    }</td></tr>
+<tr><th id="357">357</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#368" title="do { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGCommon.h&quot;, 357, __PRETTY_FUNCTION__, 0); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(357, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/JavaScriptCore/dfg/DFGCommon.h&quot;, __PRETTY_FUNCTION__, 3045); } while (false); } while (0)" data-ref="_M/ASSERT_NOT_REACHED">ASSERT_NOT_REACHED</a>();</td></tr>
+<tr><th id="358">358</th><td>    <b>return</b> <a class="enum" href="#JSC::DFG::CannotCompile" title='JSC::DFG::CannotCompile' data-ref="JSC::DFG::CannotCompile" data-ref-filename="JSC..DFG..CannotCompile">CannotCompile</a>;</td></tr>
+<tr><th id="359">359</th><td>}</td></tr>
+<tr><th id="360">360</th><td></td></tr>
+<tr><th id="361">361</th><td><i>// Unconditionally disable DFG disassembly support if the DFG is not compiled in.</i></td></tr>
+<tr><th id="362">362</th><td><b>inline</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3JSC3DFG21shouldDumpDisassemblyENS_18JITCompilationModeE" title='JSC::DFG::shouldDumpDisassembly' data-ref="_ZN3JSC3DFG21shouldDumpDisassemblyENS_18JITCompilationModeE" data-ref-filename="_ZN3JSC3DFG21shouldDumpDisassemblyENS_18JITCompilationModeE">shouldDumpDisassembly</dfn>(<a class="type" href="../jit/JITCompilationMode.h.html#JSC::JITCompilationMode" title='JSC::JITCompilationMode' data-ref="JSC::JITCompilationMode" data-ref-filename="JSC..JITCompilationMode">JITCompilationMode</a> <dfn class="local col5 decl" id="7725mode" title='mode' data-type='JSC::JITCompilationMode' data-ref="7725mode" data-ref-filename="7725mode">mode</dfn> = <a class="type" href="../jit/JITCompilationMode.h.html#JSC::JITCompilationMode" title='JSC::JITCompilationMode' data-ref="JSC::JITCompilationMode" data-ref-filename="JSC..JITCompilationMode">JITCompilationMode</a>::<a class="enum" href="../jit/JITCompilationMode.h.html#JSC::JITCompilationMode::DFG" title='JSC::JITCompilationMode::DFG' data-ref="JSC::JITCompilationMode::DFG" data-ref-filename="JSC..JITCompilationMode..DFG">DFG</a>)</td></tr>
+<tr><th id="363">363</th><td>{</td></tr>
+<tr><th id="364">364</th><td><u>#<span data-ppcond="364">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(DFG_JIT)</u></td></tr>
+<tr><th id="365">365</th><td>    <b>return</b> <a class="type" href="../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../runtime/Options.h.html#132" title='JSC::Options::dumpDisassembly' data-ref="_ZN3JSC7Options15dumpDisassemblyEv" data-ref-filename="_ZN3JSC7Options15dumpDisassemblyEv">dumpDisassembly</a>() || <a class="type" href="../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../runtime/Options.h.html#132" title='JSC::Options::dumpDFGDisassembly' data-ref="_ZN3JSC7Options18dumpDFGDisassemblyEv" data-ref-filename="_ZN3JSC7Options18dumpDFGDisassemblyEv">dumpDFGDisassembly</a>() || (<a class="ref fn" href="../jit/JITCompilationMode.h.html#_ZN3JSC5isFTLENS_18JITCompilationModeE" title='JSC::isFTL' data-ref="_ZN3JSC5isFTLENS_18JITCompilationModeE" data-ref-filename="_ZN3JSC5isFTLENS_18JITCompilationModeE">isFTL</a>(<a class="local col5 ref" href="#7725mode" title='mode' data-ref="7725mode" data-ref-filename="7725mode">mode</a>) &amp;&amp; <a class="type" href="../runtime/Options.h.html#JSC::Options" title='JSC::Options' data-ref="JSC::Options" data-ref-filename="JSC..Options">Options</a>::<a class="ref fn" href="../runtime/Options.h.html#132" title='JSC::Options::dumpFTLDisassembly' data-ref="_ZN3JSC7Options18dumpFTLDisassemblyEv" data-ref-filename="_ZN3JSC7Options18dumpFTLDisassemblyEv">dumpFTLDisassembly</a>());</td></tr>
+<tr><th id="366">366</th><td><u>#<span data-ppcond="364">else</span></u></td></tr>
+<tr><th id="367">367</th><td>    UNUSED_PARAM(mode);</td></tr>
+<tr><th id="368">368</th><td>    <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="369">369</th><td><u>#<span data-ppcond="364">endif</span></u></td></tr>
+<tr><th id="370">370</th><td>}</td></tr>
+<tr><th id="371">371</th><td></td></tr>
+<tr><th id="372">372</th><td>} } <i>// namespace JSC::DFG</i></td></tr>
+<tr><th id="373">373</th><td></td></tr>
+<tr><th id="374">374</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="375">375</th><td></td></tr>
+<tr><th id="376">376</th><td><em>void</em> <dfn class="decl fn" id="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG15CapabilityLevelE" title='WTF::printInternal' data-ref="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG15CapabilityLevelE" data-ref-filename="_ZN3WTF13printInternalERNS_11PrintStreamEN3JSC3DFG15CapabilityLevelE">printInternal</dfn>(<a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PrintStream.h.html#WTF::PrintStream" title='WTF::PrintStream' data-ref="WTF::PrintStream" data-ref-filename="WTF..PrintStream">PrintStream</a>&amp;, <span class="namespace">JSC::DFG::</span><a class="type" href="#JSC::DFG::CapabilityLevel" title='JSC::DFG::CapabilityLevel' data-ref="JSC::DFG::CapabilityLevel" data-ref-filename="JSC..DFG..CapabilityLevel">CapabilityLevel</a>);</td></tr>
+<tr><th id="377">377</th><td></td></tr>
+<tr><th id="378">378</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="379">379</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../API/tests/JSONParseTest.cpp.html'>webkit/Source/JavaScriptCore/API/tests/JSONParseTest.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

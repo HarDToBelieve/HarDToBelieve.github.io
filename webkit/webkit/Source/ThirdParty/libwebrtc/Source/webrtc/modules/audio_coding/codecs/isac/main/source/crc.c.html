@@ -1,0 +1,129 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>crc.c source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/crc.c] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/crc.c'; var root_path = '../../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../../..'>Source</a>/<a href='../../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../../..'>libwebrtc</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>webrtc</a>/<a href='../../../../..'>modules</a>/<a href='../../../..'>audio_coding</a>/<a href='../../..'>codecs</a>/<a href='../..'>isac</a>/<a href='..'>main</a>/<a href='./'>source</a>/<a href='crc.c.html'>crc.c</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2011 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#include &lt;stdlib.h&gt;</u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="crc.h.html">"modules/audio_coding/codecs/isac/main/source/crc.h"</a></u></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="../../../../../../common_audio/signal_processing/include/signal_processing_library.h.html">"common_audio/signal_processing/include/signal_processing_library.h"</a></u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#define <dfn class="macro" id="_M/POLYNOMIAL" data-ref="_M/POLYNOMIAL">POLYNOMIAL</dfn> 0x04c11db7L</u></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><em>static</em> <em>const</em> <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="tu decl def" id="kCrcTable" title='kCrcTable' data-type='const uint32_t [256]' data-ref="kCrcTable" data-ref-filename="kCrcTable">kCrcTable</dfn>[<var>256</var>] = {</td></tr>
+<tr><th id="20">20</th><td>  <var>0</var>,          <var>0x4c11db7</var>,  <var>0x9823b6e</var>,  <var>0xd4326d9</var>,  <var>0x130476dc</var>, <var>0x17c56b6b</var>,</td></tr>
+<tr><th id="21">21</th><td>  <var>0x1a864db2</var>, <var>0x1e475005</var>, <var>0x2608edb8</var>, <var>0x22c9f00f</var>, <var>0x2f8ad6d6</var>, <var>0x2b4bcb61</var>,</td></tr>
+<tr><th id="22">22</th><td>  <var>0x350c9b64</var>, <var>0x31cd86d3</var>, <var>0x3c8ea00a</var>, <var>0x384fbdbd</var>, <var>0x4c11db70</var>, <var>0x48d0c6c7</var>,</td></tr>
+<tr><th id="23">23</th><td>  <var>0x4593e01e</var>, <var>0x4152fda9</var>, <var>0x5f15adac</var>, <var>0x5bd4b01b</var>, <var>0x569796c2</var>, <var>0x52568b75</var>,</td></tr>
+<tr><th id="24">24</th><td>  <var>0x6a1936c8</var>, <var>0x6ed82b7f</var>, <var>0x639b0da6</var>, <var>0x675a1011</var>, <var>0x791d4014</var>, <var>0x7ddc5da3</var>,</td></tr>
+<tr><th id="25">25</th><td>  <var>0x709f7b7a</var>, <var>0x745e66cd</var>, <var>0x9823b6e0</var>, <var>0x9ce2ab57</var>, <var>0x91a18d8e</var>, <var>0x95609039</var>,</td></tr>
+<tr><th id="26">26</th><td>  <var>0x8b27c03c</var>, <var>0x8fe6dd8b</var>, <var>0x82a5fb52</var>, <var>0x8664e6e5</var>, <var>0xbe2b5b58</var>, <var>0xbaea46ef</var>,</td></tr>
+<tr><th id="27">27</th><td>  <var>0xb7a96036</var>, <var>0xb3687d81</var>, <var>0xad2f2d84</var>, <var>0xa9ee3033</var>, <var>0xa4ad16ea</var>, <var>0xa06c0b5d</var>,</td></tr>
+<tr><th id="28">28</th><td>  <var>0xd4326d90</var>, <var>0xd0f37027</var>, <var>0xddb056fe</var>, <var>0xd9714b49</var>, <var>0xc7361b4c</var>, <var>0xc3f706fb</var>,</td></tr>
+<tr><th id="29">29</th><td>  <var>0xceb42022</var>, <var>0xca753d95</var>, <var>0xf23a8028</var>, <var>0xf6fb9d9f</var>, <var>0xfbb8bb46</var>, <var>0xff79a6f1</var>,</td></tr>
+<tr><th id="30">30</th><td>  <var>0xe13ef6f4</var>, <var>0xe5ffeb43</var>, <var>0xe8bccd9a</var>, <var>0xec7dd02d</var>, <var>0x34867077</var>, <var>0x30476dc0</var>,</td></tr>
+<tr><th id="31">31</th><td>  <var>0x3d044b19</var>, <var>0x39c556ae</var>, <var>0x278206ab</var>, <var>0x23431b1c</var>, <var>0x2e003dc5</var>, <var>0x2ac12072</var>,</td></tr>
+<tr><th id="32">32</th><td>  <var>0x128e9dcf</var>, <var>0x164f8078</var>, <var>0x1b0ca6a1</var>, <var>0x1fcdbb16</var>, <var>0x18aeb13</var>,  <var>0x54bf6a4</var>,</td></tr>
+<tr><th id="33">33</th><td>  <var>0x808d07d</var>,  <var>0xcc9cdca</var>,  <var>0x7897ab07</var>, <var>0x7c56b6b0</var>, <var>0x71159069</var>, <var>0x75d48dde</var>,</td></tr>
+<tr><th id="34">34</th><td>  <var>0x6b93dddb</var>, <var>0x6f52c06c</var>, <var>0x6211e6b5</var>, <var>0x66d0fb02</var>, <var>0x5e9f46bf</var>, <var>0x5a5e5b08</var>,</td></tr>
+<tr><th id="35">35</th><td>  <var>0x571d7dd1</var>, <var>0x53dc6066</var>, <var>0x4d9b3063</var>, <var>0x495a2dd4</var>, <var>0x44190b0d</var>, <var>0x40d816ba</var>,</td></tr>
+<tr><th id="36">36</th><td>  <var>0xaca5c697</var>, <var>0xa864db20</var>, <var>0xa527fdf9</var>, <var>0xa1e6e04e</var>, <var>0xbfa1b04b</var>, <var>0xbb60adfc</var>,</td></tr>
+<tr><th id="37">37</th><td>  <var>0xb6238b25</var>, <var>0xb2e29692</var>, <var>0x8aad2b2f</var>, <var>0x8e6c3698</var>, <var>0x832f1041</var>, <var>0x87ee0df6</var>,</td></tr>
+<tr><th id="38">38</th><td>  <var>0x99a95df3</var>, <var>0x9d684044</var>, <var>0x902b669d</var>, <var>0x94ea7b2a</var>, <var>0xe0b41de7</var>, <var>0xe4750050</var>,</td></tr>
+<tr><th id="39">39</th><td>  <var>0xe9362689</var>, <var>0xedf73b3e</var>, <var>0xf3b06b3b</var>, <var>0xf771768c</var>, <var>0xfa325055</var>, <var>0xfef34de2</var>,</td></tr>
+<tr><th id="40">40</th><td>  <var>0xc6bcf05f</var>, <var>0xc27dede8</var>, <var>0xcf3ecb31</var>, <var>0xcbffd686</var>, <var>0xd5b88683</var>, <var>0xd1799b34</var>,</td></tr>
+<tr><th id="41">41</th><td>  <var>0xdc3abded</var>, <var>0xd8fba05a</var>, <var>0x690ce0ee</var>, <var>0x6dcdfd59</var>, <var>0x608edb80</var>, <var>0x644fc637</var>,</td></tr>
+<tr><th id="42">42</th><td>  <var>0x7a089632</var>, <var>0x7ec98b85</var>, <var>0x738aad5c</var>, <var>0x774bb0eb</var>, <var>0x4f040d56</var>, <var>0x4bc510e1</var>,</td></tr>
+<tr><th id="43">43</th><td>  <var>0x46863638</var>, <var>0x42472b8f</var>, <var>0x5c007b8a</var>, <var>0x58c1663d</var>, <var>0x558240e4</var>, <var>0x51435d53</var>,</td></tr>
+<tr><th id="44">44</th><td>  <var>0x251d3b9e</var>, <var>0x21dc2629</var>, <var>0x2c9f00f0</var>, <var>0x285e1d47</var>, <var>0x36194d42</var>, <var>0x32d850f5</var>,</td></tr>
+<tr><th id="45">45</th><td>  <var>0x3f9b762c</var>, <var>0x3b5a6b9b</var>,  <var>0x315d626</var>, <var>0x7d4cb91</var>,  <var>0xa97ed48</var>,  <var>0xe56f0ff</var>,</td></tr>
+<tr><th id="46">46</th><td>  <var>0x1011a0fa</var>, <var>0x14d0bd4d</var>, <var>0x19939b94</var>, <var>0x1d528623</var>, <var>0xf12f560e</var>, <var>0xf5ee4bb9</var>,</td></tr>
+<tr><th id="47">47</th><td>  <var>0xf8ad6d60</var>, <var>0xfc6c70d7</var>, <var>0xe22b20d2</var>, <var>0xe6ea3d65</var>, <var>0xeba91bbc</var>, <var>0xef68060b</var>,</td></tr>
+<tr><th id="48">48</th><td>  <var>0xd727bbb6</var>, <var>0xd3e6a601</var>, <var>0xdea580d8</var>, <var>0xda649d6f</var>, <var>0xc423cd6a</var>, <var>0xc0e2d0dd</var>,</td></tr>
+<tr><th id="49">49</th><td>  <var>0xcda1f604</var>, <var>0xc960ebb3</var>, <var>0xbd3e8d7e</var>, <var>0xb9ff90c9</var>, <var>0xb4bcb610</var>, <var>0xb07daba7</var>,</td></tr>
+<tr><th id="50">50</th><td>  <var>0xae3afba2</var>, <var>0xaafbe615</var>, <var>0xa7b8c0cc</var>, <var>0xa379dd7b</var>, <var>0x9b3660c6</var>, <var>0x9ff77d71</var>,</td></tr>
+<tr><th id="51">51</th><td>  <var>0x92b45ba8</var>, <var>0x9675461f</var>, <var>0x8832161a</var>, <var>0x8cf30bad</var>, <var>0x81b02d74</var>, <var>0x857130c3</var>,</td></tr>
+<tr><th id="52">52</th><td>  <var>0x5d8a9099</var>, <var>0x594b8d2e</var>, <var>0x5408abf7</var>, <var>0x50c9b640</var>, <var>0x4e8ee645</var>, <var>0x4a4ffbf2</var>,</td></tr>
+<tr><th id="53">53</th><td>  <var>0x470cdd2b</var>, <var>0x43cdc09c</var>, <var>0x7b827d21</var>, <var>0x7f436096</var>, <var>0x7200464f</var>, <var>0x76c15bf8</var>,</td></tr>
+<tr><th id="54">54</th><td>  <var>0x68860bfd</var>, <var>0x6c47164a</var>, <var>0x61043093</var>, <var>0x65c52d24</var>, <var>0x119b4be9</var>, <var>0x155a565e</var>,</td></tr>
+<tr><th id="55">55</th><td>  <var>0x18197087</var>, <var>0x1cd86d30</var>, <var>0x29f3d35</var>,  <var>0x65e2082</var>,  <var>0xb1d065b</var>,  <var>0xfdc1bec</var>,</td></tr>
+<tr><th id="56">56</th><td>  <var>0x3793a651</var>, <var>0x3352bbe6</var>, <var>0x3e119d3f</var>, <var>0x3ad08088</var>, <var>0x2497d08d</var>, <var>0x2056cd3a</var>,</td></tr>
+<tr><th id="57">57</th><td>  <var>0x2d15ebe3</var>, <var>0x29d4f654</var>, <var>0xc5a92679</var>, <var>0xc1683bce</var>, <var>0xcc2b1d17</var>, <var>0xc8ea00a0</var>,</td></tr>
+<tr><th id="58">58</th><td>  <var>0xd6ad50a5</var>, <var>0xd26c4d12</var>, <var>0xdf2f6bcb</var>, <var>0xdbee767c</var>, <var>0xe3a1cbc1</var>, <var>0xe760d676</var>,</td></tr>
+<tr><th id="59">59</th><td>  <var>0xea23f0af</var>, <var>0xeee2ed18</var>, <var>0xf0a5bd1d</var>, <var>0xf464a0aa</var>, <var>0xf9278673</var>, <var>0xfde69bc4</var>,</td></tr>
+<tr><th id="60">60</th><td>  <var>0x89b8fd09</var>, <var>0x8d79e0be</var>, <var>0x803ac667</var>, <var>0x84fbdbd0</var>, <var>0x9abc8bd5</var>, <var>0x9e7d9662</var>,</td></tr>
+<tr><th id="61">61</th><td>  <var>0x933eb0bb</var>, <var>0x97ffad0c</var>, <var>0xafb010b1</var>, <var>0xab710d06</var>, <var>0xa6322bdf</var>, <var>0xa2f33668</var>,</td></tr>
+<tr><th id="62">62</th><td>  <var>0xbcb4666d</var>, <var>0xb8757bda</var>, <var>0xb5365d03</var>, <var>0xb1f740b4</var></td></tr>
+<tr><th id="63">63</th><td>};</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td><i>/****************************************************************************</i></td></tr>
+<tr><th id="69">69</th><td><i> * WebRtcIsac_GetCrc(...)</i></td></tr>
+<tr><th id="70">70</th><td><i> *</i></td></tr>
+<tr><th id="71">71</th><td><i> * This function returns a 32 bit CRC checksum of a bit stream</i></td></tr>
+<tr><th id="72">72</th><td><i> *</i></td></tr>
+<tr><th id="73">73</th><td><i> * Input:</i></td></tr>
+<tr><th id="74">74</th><td><i> *  - bitstream              : payload bitstream</i></td></tr>
+<tr><th id="75">75</th><td><i> *  - len_bitstream_in_bytes : number of 8-bit words in the bit stream</i></td></tr>
+<tr><th id="76">76</th><td><i> *</i></td></tr>
+<tr><th id="77">77</th><td><i> * Output:</i></td></tr>
+<tr><th id="78">78</th><td><i> *  - crc                    : checksum</i></td></tr>
+<tr><th id="79">79</th><td><i> *</i></td></tr>
+<tr><th id="80">80</th><td><i> * Return value              :  0 - Ok</i></td></tr>
+<tr><th id="81">81</th><td><i> *                             -1 - Error</i></td></tr>
+<tr><th id="82">82</th><td><i> */</i></td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td><em>int</em> <dfn class="decl def fn" id="WebRtcIsac_GetCrc" title='WebRtcIsac_GetCrc' data-ref="WebRtcIsac_GetCrc" data-ref-filename="WebRtcIsac_GetCrc">WebRtcIsac_GetCrc</dfn>(<em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col4 decl" id="4bitstream" title='bitstream' data-type='const int16_t *' data-ref="4bitstream" data-ref-filename="4bitstream">bitstream</dfn>,</td></tr>
+<tr><th id="85">85</th><td>                      <em>int</em> <dfn class="local col5 decl" id="5len_bitstream_in_bytes" title='len_bitstream_in_bytes' data-type='int' data-ref="5len_bitstream_in_bytes" data-ref-filename="5len_bitstream_in_bytes">len_bitstream_in_bytes</dfn>,</td></tr>
+<tr><th id="86">86</th><td>                      <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span>* <dfn class="local col6 decl" id="6crc" title='crc' data-type='uint32_t *' data-ref="6crc" data-ref-filename="6crc">crc</dfn>)</td></tr>
+<tr><th id="87">87</th><td>{</td></tr>
+<tr><th id="88">88</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col7 decl" id="7bitstream_ptr_uw8" title='bitstream_ptr_uw8' data-type='uint8_t *' data-ref="7bitstream_ptr_uw8" data-ref-filename="7bitstream_ptr_uw8">bitstream_ptr_uw8</dfn>;</td></tr>
+<tr><th id="89">89</th><td>  <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col8 decl" id="8crc_state" title='crc_state' data-type='uint32_t' data-ref="8crc_state" data-ref-filename="8crc_state">crc_state</dfn>;</td></tr>
+<tr><th id="90">90</th><td>  <em>int</em> <dfn class="local col9 decl" id="9byte_cntr" title='byte_cntr' data-type='int' data-ref="9byte_cntr" data-ref-filename="9byte_cntr">byte_cntr</dfn>;</td></tr>
+<tr><th id="91">91</th><td>  <em>int</em> <dfn class="local col0 decl" id="10crc_tbl_indx" title='crc_tbl_indx' data-type='int' data-ref="10crc_tbl_indx" data-ref-filename="10crc_tbl_indx">crc_tbl_indx</dfn>;</td></tr>
+<tr><th id="92">92</th><td></td></tr>
+<tr><th id="93">93</th><td>  <i>/* Sanity Check. */</i></td></tr>
+<tr><th id="94">94</th><td>  <b>if</b> (<a class="local col4 ref" href="#4bitstream" title='bitstream' data-ref="4bitstream" data-ref-filename="4bitstream">bitstream</a> == <span class="macro" title="((void *)0)" data-ref="_M/NULL">NULL</span>) {</td></tr>
+<tr><th id="95">95</th><td>    <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="96">96</th><td>  }</td></tr>
+<tr><th id="97">97</th><td>  <i>/* cast to UWord8 pointer */</i></td></tr>
+<tr><th id="98">98</th><td>  <a class="local col7 ref" href="#7bitstream_ptr_uw8" title='bitstream_ptr_uw8' data-ref="7bitstream_ptr_uw8" data-ref-filename="7bitstream_ptr_uw8">bitstream_ptr_uw8</a> = (<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *)<a class="local col4 ref" href="#4bitstream" title='bitstream' data-ref="4bitstream" data-ref-filename="4bitstream">bitstream</a>;</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td>  <i>/* initialize */</i></td></tr>
+<tr><th id="101">101</th><td>  <a class="local col8 ref" href="#8crc_state" title='crc_state' data-ref="8crc_state" data-ref-filename="8crc_state">crc_state</a> = <var>0xFFFFFFFF</var>;</td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td>  <b>for</b> (<a class="local col9 ref" href="#9byte_cntr" title='byte_cntr' data-ref="9byte_cntr" data-ref-filename="9byte_cntr">byte_cntr</a> = <var>0</var>; <a class="local col9 ref" href="#9byte_cntr" title='byte_cntr' data-ref="9byte_cntr" data-ref-filename="9byte_cntr">byte_cntr</a> &lt; <a class="local col5 ref" href="#5len_bitstream_in_bytes" title='len_bitstream_in_bytes' data-ref="5len_bitstream_in_bytes" data-ref-filename="5len_bitstream_in_bytes">len_bitstream_in_bytes</a>; <a class="local col9 ref" href="#9byte_cntr" title='byte_cntr' data-ref="9byte_cntr" data-ref-filename="9byte_cntr">byte_cntr</a>++) {</td></tr>
+<tr><th id="104">104</th><td>    <a class="local col0 ref" href="#10crc_tbl_indx" title='crc_tbl_indx' data-ref="10crc_tbl_indx" data-ref-filename="10crc_tbl_indx">crc_tbl_indx</a> = (<a class="macro" href="../../../../../../common_audio/signal_processing/include/signal_processing_library.h.html#86" title="((uint32_t)(crc_state) &gt;&gt; (24))" data-ref="_M/WEBRTC_SPL_RSHIFT_U32">WEBRTC_SPL_RSHIFT_U32</a>(<a class="local col8 ref" href="#8crc_state" title='crc_state' data-ref="8crc_state" data-ref-filename="8crc_state">crc_state</a>, <var>24</var>) ^</td></tr>
+<tr><th id="105">105</th><td>                       <a class="local col7 ref" href="#7bitstream_ptr_uw8" title='bitstream_ptr_uw8' data-ref="7bitstream_ptr_uw8" data-ref-filename="7bitstream_ptr_uw8">bitstream_ptr_uw8</a>[<a class="local col9 ref" href="#9byte_cntr" title='byte_cntr' data-ref="9byte_cntr" data-ref-filename="9byte_cntr">byte_cntr</a>]) &amp; <var>0xFF</var>;</td></tr>
+<tr><th id="106">106</th><td>    <a class="local col8 ref" href="#8crc_state" title='crc_state' data-ref="8crc_state" data-ref-filename="8crc_state">crc_state</a> = (<a class="local col8 ref" href="#8crc_state" title='crc_state' data-ref="8crc_state" data-ref-filename="8crc_state">crc_state</a> &lt;&lt; <var>8</var>) ^ <a class="tu ref" href="#kCrcTable" title='kCrcTable' data-use='r' data-ref="kCrcTable" data-ref-filename="kCrcTable">kCrcTable</a>[<a class="local col0 ref" href="#10crc_tbl_indx" title='crc_tbl_indx' data-ref="10crc_tbl_indx" data-ref-filename="10crc_tbl_indx">crc_tbl_indx</a>];</td></tr>
+<tr><th id="107">107</th><td>  }</td></tr>
+<tr><th id="108">108</th><td></td></tr>
+<tr><th id="109">109</th><td>  *<a class="local col6 ref" href="#6crc" title='crc' data-ref="6crc" data-ref-filename="6crc">crc</a> = ~<a class="local col8 ref" href="#8crc_state" title='crc_state' data-ref="8crc_state" data-ref-filename="8crc_state">crc_state</a>;</td></tr>
+<tr><th id="110">110</th><td>  <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="111">111</th><td>}</td></tr>
+<tr><th id="112">112</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

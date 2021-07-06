@@ -1,0 +1,254 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>AvailableMemory.cpp source code [webkit/Source/bmalloc/bmalloc/AvailableMemory.cpp] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/bmalloc/bmalloc/AvailableMemory.cpp'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>bmalloc</a>/<a href='./'>bmalloc</a>/<a href='AvailableMemory.cpp.html'>AvailableMemory.cpp</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2012-2017 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#include <a href="AvailableMemory.h.html">"AvailableMemory.h"</a></u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="Environment.h.html">"Environment.h"</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#<span data-ppcond="29">if</span> <a class="macro" href="BPlatform.h.html#36" title="(defined BPLATFORM_IOS_FAMILY &amp;&amp; BPLATFORM_IOS_FAMILY)" data-ref="_M/BPLATFORM">BPLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="30">30</th><td><u>#include "MemoryStatusSPI.h"</u></td></tr>
+<tr><th id="31">31</th><td><u>#<span data-ppcond="29">endif</span></u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="PerProcess.h.html">"PerProcess.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#include <a href="Scavenger.h.html">"Scavenger.h"</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#include <a href="Sizes.h.html">"Sizes.h"</a></u></td></tr>
+<tr><th id="35">35</th><td><u>#include &lt;array&gt;</u></td></tr>
+<tr><th id="36">36</th><td><u>#include &lt;mutex&gt;</u></td></tr>
+<tr><th id="37">37</th><td><u>#<span data-ppcond="37">if</span> <a class="macro" href="BPlatform.h.html#37" title="(defined 1 &amp;&amp; 1)" data-ref="_M/BOS">BOS</a>(DARWIN)</u></td></tr>
+<tr><th id="38">38</th><td><u>#<span data-ppcond="38">if</span> <a class="macro" href="BPlatform.h.html#36" title="(defined BPLATFORM_IOS_FAMILY &amp;&amp; BPLATFORM_IOS_FAMILY)" data-ref="_M/BPLATFORM">BPLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="39">39</th><td><u>#import &lt;algorithm&gt;</u></td></tr>
+<tr><th id="40">40</th><td><u>#<span data-ppcond="38">endif</span></u></td></tr>
+<tr><th id="41">41</th><td><u>#import &lt;dispatch/dispatch.h&gt;</u></td></tr>
+<tr><th id="42">42</th><td><u>#import &lt;mach/host_info.h&gt;</u></td></tr>
+<tr><th id="43">43</th><td><u>#import &lt;mach/mach.h&gt;</u></td></tr>
+<tr><th id="44">44</th><td><u>#import &lt;mach/mach_error.h&gt;</u></td></tr>
+<tr><th id="45">45</th><td><u>#import &lt;math.h&gt;</u></td></tr>
+<tr><th id="46">46</th><td><u>#<span data-ppcond="37">elif</span> BOS(UNIX)</u></td></tr>
+<tr><th id="47">47</th><td><u>#if BOS(LINUX)</u></td></tr>
+<tr><th id="48">48</th><td><u>#include &lt;algorithm&gt;</u></td></tr>
+<tr><th id="49">49</th><td><u>#include &lt;fcntl.h&gt;</u></td></tr>
+<tr><th id="50">50</th><td><u>#elif BOS(FREEBSD)</u></td></tr>
+<tr><th id="51">51</th><td><u>#include "VMAllocate.h"</u></td></tr>
+<tr><th id="52">52</th><td><u>#include &lt;sys/sysctl.h&gt;</u></td></tr>
+<tr><th id="53">53</th><td><u>#include &lt;sys/sysinfo.h&gt;</u></td></tr>
+<tr><th id="54">54</th><td><u>#include &lt;sys/types.h&gt;</u></td></tr>
+<tr><th id="55">55</th><td><u>#include &lt;sys/user.h&gt;</u></td></tr>
+<tr><th id="56">56</th><td><u>#endif</u></td></tr>
+<tr><th id="57">57</th><td><u>#include &lt;unistd.h&gt;</u></td></tr>
+<tr><th id="58">58</th><td><u>#<span data-ppcond="37">endif</span></u></td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><b>namespace</b> <span class="namespace">bmalloc</span> {</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><em>static</em> <b>constexpr</b> <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="tu decl def" id="bmalloc::availableMemoryGuess" title='bmalloc::availableMemoryGuess' data-type='const size_t' data-ref="bmalloc::availableMemoryGuess" data-ref-filename="bmalloc..availableMemoryGuess">availableMemoryGuess</dfn> = <var>512</var> * <span class="namespace">bmalloc::</span><a class="ref" href="Sizes.h.html#bmalloc::Sizes::MB" title='bmalloc::Sizes::MB' data-ref="bmalloc::Sizes::MB" data-ref-filename="bmalloc..Sizes..MB">MB</a>;</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td><u>#<span data-ppcond="64">if</span> <a class="macro" href="BPlatform.h.html#37" title="(defined 1 &amp;&amp; 1)" data-ref="_M/BOS">BOS</a>(DARWIN)</u></td></tr>
+<tr><th id="65">65</th><td><em>static</em> <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="tu decl def fn" id="_ZN7bmallocL27memorySizeAccordingToKernelEv" title='bmalloc::memorySizeAccordingToKernel' data-type='size_t bmalloc::memorySizeAccordingToKernel()' data-ref="_ZN7bmallocL27memorySizeAccordingToKernelEv" data-ref-filename="_ZN7bmallocL27memorySizeAccordingToKernelEv">memorySizeAccordingToKernel</dfn>()</td></tr>
+<tr><th id="66">66</th><td>{</td></tr>
+<tr><th id="67">67</th><td><u>#<span data-ppcond="67">if</span> <a class="macro" href="BPlatform.h.html#36" title="(defined BPLATFORM_IOS_FAMILY_SIMULATOR &amp;&amp; BPLATFORM_IOS_FAMILY_SIMULATOR)" data-ref="_M/BPLATFORM">BPLATFORM</a>(IOS_FAMILY_SIMULATOR)</u></td></tr>
+<tr><th id="68">68</th><td>    BUNUSED_PARAM(availableMemoryGuess);</td></tr>
+<tr><th id="69">69</th><td>    <i>// Pretend we have 1024MB of memory to make cache sizes behave like on device.</i></td></tr>
+<tr><th id="70">70</th><td>    <b>return</b> <var>1024</var> * bmalloc::MB;</td></tr>
+<tr><th id="71">71</th><td><u>#<span data-ppcond="67">else</span></u></td></tr>
+<tr><th id="72">72</th><td>    <span class='typedef' title='host_basic_info_data_t' data-type='struct host_basic_info' data-ref="host_basic_info_data_t" data-ref-filename="host_basic_info_data_t">host_basic_info_data_t</span> <span class='ref fn fake' title='host_basic_info::host_basic_info' data-ref="_ZN15host_basic_infoC1Ev" data-ref-filename="_ZN15host_basic_infoC1Ev"></span><dfn class="local col1 decl" id="1hostInfo" title='hostInfo' data-type='host_basic_info_data_t' data-ref="1hostInfo" data-ref-filename="1hostInfo">hostInfo</dfn>;</td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td>    <span class='typedef' title='mach_port_t' data-type='__darwin_mach_port_t' data-ref="mach_port_t" data-ref-filename="mach_port_t">mach_port_t</span> <dfn class="local col2 decl" id="2host" title='host' data-type='mach_port_t' data-ref="2host" data-ref-filename="2host">host</dfn> = <span class='ref fn' title='mach_host_self' data-ref="mach_host_self" data-ref-filename="mach_host_self">mach_host_self</span>();</td></tr>
+<tr><th id="75">75</th><td>    <span class='typedef' title='mach_msg_type_number_t' data-type='natural_t' data-ref="mach_msg_type_number_t" data-ref-filename="mach_msg_type_number_t">mach_msg_type_number_t</span> <dfn class="local col3 decl" id="3count" title='count' data-type='mach_msg_type_number_t' data-ref="3count" data-ref-filename="3count">count</dfn> = <span class="macro" title="((mach_msg_type_number_t) (sizeof(host_basic_info_data_t)/sizeof(integer_t)))" data-ref="_M/HOST_BASIC_INFO_COUNT">HOST_BASIC_INFO_COUNT</span>;</td></tr>
+<tr><th id="76">76</th><td>    <span class='typedef' title='kern_return_t' data-type='int' data-ref="kern_return_t" data-ref-filename="kern_return_t">kern_return_t</span> <dfn class="local col4 decl" id="4r" title='r' data-type='kern_return_t' data-ref="4r" data-ref-filename="4r">r</dfn> = <span class='ref fn' title='host_info' data-ref="host_info" data-ref-filename="host_info">host_info</span>(<a class="local col2 ref" href="#2host" title='host' data-ref="2host" data-ref-filename="2host">host</a>, <span class="macro" title="1" data-ref="_M/HOST_BASIC_INFO">HOST_BASIC_INFO</span>, (<span class='typedef' title='host_info_t' data-type='integer_t *' data-ref="host_info_t" data-ref-filename="host_info_t">host_info_t</span>)&amp;<a class="local col1 ref" href="#1hostInfo" title='hostInfo' data-ref="1hostInfo" data-ref-filename="1hostInfo">hostInfo</a>, &amp;<a class="local col3 ref" href="#3count" title='count' data-ref="3count" data-ref-filename="3count">count</a>);</td></tr>
+<tr><th id="77">77</th><td>    <span class='ref fn' title='mach_port_deallocate' data-ref="mach_port_deallocate" data-ref-filename="mach_port_deallocate">mach_port_deallocate</span>(<span class="macro" title="mach_task_self_" data-ref="_M/mach_task_self">mach_task_self</span>(), <a class="local col2 ref" href="#2host" title='host' data-ref="2host" data-ref-filename="2host">host</a>);</td></tr>
+<tr><th id="78">78</th><td>    <b>if</b> (<a class="local col4 ref" href="#4r" title='r' data-ref="4r" data-ref-filename="4r">r</a> != <span class="macro" title="0" data-ref="_M/KERN_SUCCESS">KERN_SUCCESS</span>)</td></tr>
+<tr><th id="79">79</th><td>        <b>return</b> <a class="tu ref" href="#bmalloc::availableMemoryGuess" title='bmalloc::availableMemoryGuess' data-use='r' data-ref="bmalloc::availableMemoryGuess" data-ref-filename="bmalloc..availableMemoryGuess">availableMemoryGuess</a>;</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>    <b>if</b> (<a class="local col1 ref" href="#1hostInfo" title='hostInfo' data-ref="1hostInfo" data-ref-filename="1hostInfo">hostInfo</a>.<span class='ref field' title='host_basic_info::max_mem' data-ref="host_basic_info::max_mem" data-ref-filename="host_basic_info..max_mem">max_mem</span> &gt; <span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span>&gt;::<span class='ref fn' title='std::__1::numeric_limits::max' data-ref="_ZNSt3__114numeric_limits3maxEv" data-ref-filename="_ZNSt3__114numeric_limits3maxEv">max</span>())</td></tr>
+<tr><th id="82">82</th><td>        <b>return</b> <span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span>&gt;::<span class='ref fn' title='std::__1::numeric_limits::max' data-ref="_ZNSt3__114numeric_limits3maxEv" data-ref-filename="_ZNSt3__114numeric_limits3maxEv">max</span>();</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td>    <b>return</b> <b>static_cast</b>&lt;<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span>&gt;(<a class="local col1 ref" href="#1hostInfo" title='hostInfo' data-ref="1hostInfo" data-ref-filename="1hostInfo">hostInfo</a>.<span class='ref field' title='host_basic_info::max_mem' data-ref="host_basic_info::max_mem" data-ref-filename="host_basic_info..max_mem">max_mem</span>);</td></tr>
+<tr><th id="85">85</th><td><u>#<span data-ppcond="67">endif</span></u></td></tr>
+<tr><th id="86">86</th><td>}</td></tr>
+<tr><th id="87">87</th><td><u>#<span data-ppcond="64">endif</span></u></td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td><u>#<span data-ppcond="89">if</span> <a class="macro" href="BPlatform.h.html#36" title="(defined BPLATFORM_IOS_FAMILY &amp;&amp; BPLATFORM_IOS_FAMILY)" data-ref="_M/BPLATFORM">BPLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="90">90</th><td><em>static</em> size_t jetsamLimit()</td></tr>
+<tr><th id="91">91</th><td>{</td></tr>
+<tr><th id="92">92</th><td>    memorystatus_memlimit_properties_t properties;</td></tr>
+<tr><th id="93">93</th><td>    pid_t pid = getpid();</td></tr>
+<tr><th id="94">94</th><td>    <b>if</b> (memorystatus_control(MEMORYSTATUS_CMD_GET_MEMLIMIT_PROPERTIES, pid, <var>0</var>, &amp;properties, <b>sizeof</b>(properties)))</td></tr>
+<tr><th id="95">95</th><td>        <b>return</b> <var>840</var> * bmalloc::MB;</td></tr>
+<tr><th id="96">96</th><td>    <b>if</b> (properties.memlimit_active &lt; <var>0</var>)</td></tr>
+<tr><th id="97">97</th><td>        <b>return</b> std::numeric_limits&lt;size_t&gt;::max();</td></tr>
+<tr><th id="98">98</th><td>    <b>return</b> <b>static_cast</b>&lt;size_t&gt;(properties.memlimit_active) * bmalloc::MB;</td></tr>
+<tr><th id="99">99</th><td>}</td></tr>
+<tr><th id="100">100</th><td><u>#<span data-ppcond="89">endif</span></u></td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td><u>#<span data-ppcond="102">if</span> <a class="macro" href="BPlatform.h.html#37" title="(defined BOS_LINUX &amp;&amp; BOS_LINUX)" data-ref="_M/BOS">BOS</a>(LINUX)</u></td></tr>
+<tr><th id="103">103</th><td><b>struct</b> LinuxMemory {</td></tr>
+<tr><th id="104">104</th><td>    <em>static</em> <em>const</em> LinuxMemory&amp; singleton()</td></tr>
+<tr><th id="105">105</th><td>    {</td></tr>
+<tr><th id="106">106</th><td>        <em>static</em> LinuxMemory s_singleton;</td></tr>
+<tr><th id="107">107</th><td>        <em>static</em> std::once_flag s_onceFlag;</td></tr>
+<tr><th id="108">108</th><td>        std::call_once(s_onceFlag,</td></tr>
+<tr><th id="109">109</th><td>            [] {</td></tr>
+<tr><th id="110">110</th><td>                <em>long</em> numPages = sysconf(_SC_PHYS_PAGES);</td></tr>
+<tr><th id="111">111</th><td>                s_singleton.pageSize = sysconf(_SC_PAGE_SIZE);</td></tr>
+<tr><th id="112">112</th><td>                <b>if</b> (numPages == -<var>1</var> || s_singleton.pageSize == -<var>1</var>)</td></tr>
+<tr><th id="113">113</th><td>                    s_singleton.availableMemory = availableMemoryGuess;</td></tr>
+<tr><th id="114">114</th><td>                <b>else</b></td></tr>
+<tr><th id="115">115</th><td>                    s_singleton.availableMemory = numPages * s_singleton.pageSize;</td></tr>
+<tr><th id="116">116</th><td></td></tr>
+<tr><th id="117">117</th><td>                s_singleton.statmFd = open(<q>"/proc/self/statm"</q>, O_RDONLY | O_CLOEXEC);</td></tr>
+<tr><th id="118">118</th><td>            });</td></tr>
+<tr><th id="119">119</th><td>        <b>return</b> s_singleton;</td></tr>
+<tr><th id="120">120</th><td>    }</td></tr>
+<tr><th id="121">121</th><td></td></tr>
+<tr><th id="122">122</th><td>    size_t footprint() <em>const</em></td></tr>
+<tr><th id="123">123</th><td>    {</td></tr>
+<tr><th id="124">124</th><td>        <b>if</b> (statmFd == -<var>1</var>)</td></tr>
+<tr><th id="125">125</th><td>            <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="126">126</th><td></td></tr>
+<tr><th id="127">127</th><td>        std::array&lt;<em>char</em>, <var>256</var>&gt; statmBuffer;</td></tr>
+<tr><th id="128">128</th><td>        ssize_t numBytes = pread(statmFd, statmBuffer.data(), statmBuffer.size(), <var>0</var>);</td></tr>
+<tr><th id="129">129</th><td>        <b>if</b> (numBytes &lt;= <var>0</var>)</td></tr>
+<tr><th id="130">130</th><td>            <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="131">131</th><td></td></tr>
+<tr><th id="132">132</th><td>        std::array&lt;<em>char</em>, <var>32</var>&gt; rssBuffer;</td></tr>
+<tr><th id="133">133</th><td>        {</td></tr>
+<tr><th id="134">134</th><td>            <em>auto</em> begin = std::find(statmBuffer.begin(), statmBuffer.end(), <kbd>' '</kbd>);</td></tr>
+<tr><th id="135">135</th><td>            <b>if</b> (begin == statmBuffer.end())</td></tr>
+<tr><th id="136">136</th><td>                <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="137">137</th><td></td></tr>
+<tr><th id="138">138</th><td>            std::advance(begin, <var>1</var>);</td></tr>
+<tr><th id="139">139</th><td>            <em>auto</em> end = std::find(begin, statmBuffer.end(), <kbd>' '</kbd>);</td></tr>
+<tr><th id="140">140</th><td>            <b>if</b> (end == statmBuffer.end())</td></tr>
+<tr><th id="141">141</th><td>                <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="142">142</th><td></td></tr>
+<tr><th id="143">143</th><td>            <em>auto</em> last = std::copy_n(begin, std::min&lt;size_t&gt;(<var>31</var>, std::distance(begin, end)), rssBuffer.begin());</td></tr>
+<tr><th id="144">144</th><td>            *last = <kbd>'\0'</kbd>;</td></tr>
+<tr><th id="145">145</th><td>        }</td></tr>
+<tr><th id="146">146</th><td></td></tr>
+<tr><th id="147">147</th><td>        <em>unsigned</em> <em>long</em> dirtyPages = strtoul(rssBuffer.data(), <b>nullptr</b>, <var>10</var>);</td></tr>
+<tr><th id="148">148</th><td>        <b>return</b> dirtyPages * pageSize;</td></tr>
+<tr><th id="149">149</th><td>    }</td></tr>
+<tr><th id="150">150</th><td></td></tr>
+<tr><th id="151">151</th><td>    <em>long</em> pageSize { <var>0</var> };</td></tr>
+<tr><th id="152">152</th><td>    size_t availableMemory { <var>0</var> };</td></tr>
+<tr><th id="153">153</th><td></td></tr>
+<tr><th id="154">154</th><td>    <em>int</em> statmFd { -<var>1</var> };</td></tr>
+<tr><th id="155">155</th><td>};</td></tr>
+<tr><th id="156">156</th><td><u>#<span data-ppcond="102">endif</span></u></td></tr>
+<tr><th id="157">157</th><td></td></tr>
+<tr><th id="158">158</th><td><em>static</em> <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="tu decl def fn" id="_ZN7bmallocL22computeAvailableMemoryEv" title='bmalloc::computeAvailableMemory' data-type='size_t bmalloc::computeAvailableMemory()' data-ref="_ZN7bmallocL22computeAvailableMemoryEv" data-ref-filename="_ZN7bmallocL22computeAvailableMemoryEv">computeAvailableMemory</dfn>()</td></tr>
+<tr><th id="159">159</th><td>{</td></tr>
+<tr><th id="160">160</th><td><u>#<span data-ppcond="160">if</span> <a class="macro" href="BPlatform.h.html#37" title="(defined 1 &amp;&amp; 1)" data-ref="_M/BOS">BOS</a>(DARWIN)</u></td></tr>
+<tr><th id="161">161</th><td>    <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="5sizeAccordingToKernel" title='sizeAccordingToKernel' data-type='size_t' data-ref="5sizeAccordingToKernel" data-ref-filename="5sizeAccordingToKernel">sizeAccordingToKernel</dfn> = <a class="tu ref fn" href="#_ZN7bmallocL27memorySizeAccordingToKernelEv" title='bmalloc::memorySizeAccordingToKernel' data-use='c' data-ref="_ZN7bmallocL27memorySizeAccordingToKernelEv" data-ref-filename="_ZN7bmallocL27memorySizeAccordingToKernelEv">memorySizeAccordingToKernel</a>();</td></tr>
+<tr><th id="162">162</th><td><u>#<span data-ppcond="162">if</span> <a class="macro" href="BPlatform.h.html#36" title="(defined BPLATFORM_IOS_FAMILY &amp;&amp; BPLATFORM_IOS_FAMILY)" data-ref="_M/BPLATFORM">BPLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="163">163</th><td>    sizeAccordingToKernel = std::min(sizeAccordingToKernel, jetsamLimit());</td></tr>
+<tr><th id="164">164</th><td><u>#<span data-ppcond="162">endif</span></u></td></tr>
+<tr><th id="165">165</th><td>    <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="6multiple" title='multiple' data-type='size_t' data-ref="6multiple" data-ref-filename="6multiple">multiple</dfn> = <var>128</var> * <span class="namespace">bmalloc::</span><a class="ref" href="Sizes.h.html#bmalloc::Sizes::MB" title='bmalloc::Sizes::MB' data-ref="bmalloc::Sizes::MB" data-ref-filename="bmalloc..Sizes..MB">MB</a>;</td></tr>
+<tr><th id="166">166</th><td></td></tr>
+<tr><th id="167">167</th><td>    <i>// Round up the memory size to a multiple of 128MB because max_mem may not be exactly 512MB</i></td></tr>
+<tr><th id="168">168</th><td><i>    // (for example) and we have code that depends on those boundaries.</i></td></tr>
+<tr><th id="169">169</th><td>    <b>return</b> ((<a class="local col5 ref" href="#5sizeAccordingToKernel" title='sizeAccordingToKernel' data-ref="5sizeAccordingToKernel" data-ref-filename="5sizeAccordingToKernel">sizeAccordingToKernel</a> + <a class="local col6 ref" href="#6multiple" title='multiple' data-ref="6multiple" data-ref-filename="6multiple">multiple</a> - <var>1</var>) / <a class="local col6 ref" href="#6multiple" title='multiple' data-ref="6multiple" data-ref-filename="6multiple">multiple</a>) * <a class="local col6 ref" href="#6multiple" title='multiple' data-ref="6multiple" data-ref-filename="6multiple">multiple</a>;</td></tr>
+<tr><th id="170">170</th><td><u>#<span data-ppcond="160">elif</span> BOS(LINUX)</u></td></tr>
+<tr><th id="171">171</th><td>    <b>return</b> LinuxMemory::singleton().availableMemory;</td></tr>
+<tr><th id="172">172</th><td><u>#elif BOS(FREEBSD)</u></td></tr>
+<tr><th id="173">173</th><td>    <b>struct</b> sysinfo info;</td></tr>
+<tr><th id="174">174</th><td>    <b>if</b> (!sysinfo(&amp;info))</td></tr>
+<tr><th id="175">175</th><td>        <b>return</b> info.totalram * info.mem_unit;</td></tr>
+<tr><th id="176">176</th><td>    <b>return</b> availableMemoryGuess;</td></tr>
+<tr><th id="177">177</th><td><u>#elif BOS(UNIX)</u></td></tr>
+<tr><th id="178">178</th><td>    <em>long</em> pages = sysconf(_SC_PHYS_PAGES);</td></tr>
+<tr><th id="179">179</th><td>    <em>long</em> pageSize = sysconf(_SC_PAGE_SIZE);</td></tr>
+<tr><th id="180">180</th><td>    <b>if</b> (pages == -<var>1</var> || pageSize == -<var>1</var>)</td></tr>
+<tr><th id="181">181</th><td>        <b>return</b> availableMemoryGuess;</td></tr>
+<tr><th id="182">182</th><td>    <b>return</b> pages * pageSize;</td></tr>
+<tr><th id="183">183</th><td><u>#else</u></td></tr>
+<tr><th id="184">184</th><td>    <b>return</b> availableMemoryGuess;</td></tr>
+<tr><th id="185">185</th><td><u>#<span data-ppcond="160">endif</span></u></td></tr>
+<tr><th id="186">186</th><td>}</td></tr>
+<tr><th id="187">187</th><td></td></tr>
+<tr><th id="188">188</th><td><span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl def fn" id="_ZN7bmalloc15availableMemoryEv" title='bmalloc::availableMemory' data-ref="_ZN7bmalloc15availableMemoryEv" data-ref-filename="_ZN7bmalloc15availableMemoryEv">availableMemory</dfn>()</td></tr>
+<tr><th id="189">189</th><td>{</td></tr>
+<tr><th id="190">190</th><td>    <em>static</em> <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="7availableMemory" title='availableMemory' data-type='size_t' data-ref="7availableMemory" data-ref-filename="7availableMemory">availableMemory</dfn>;</td></tr>
+<tr><th id="191">191</th><td>    <em>static</em> <span class="namespace">std::</span><span class='type' title='std::__1::once_flag' data-ref="std::__1::once_flag" data-ref-filename="std..__1..once_flag">once_flag</span> <span class='ref fn fake' title='std::__1::once_flag::once_flag' data-ref="_ZNSt3__19once_flagC1Ev" data-ref-filename="_ZNSt3__19once_flagC1Ev"></span><dfn class="local col8 decl" id="8onceFlag" title='onceFlag' data-type='std::once_flag' data-ref="8onceFlag" data-ref-filename="8onceFlag">onceFlag</dfn>;</td></tr>
+<tr><th id="192">192</th><td>    <span class="namespace">std::</span><span class='ref fn' title='std::__1::call_once' data-ref="_ZNSt3__1L9call_onceERNS_9once_flagEOT_DpOT0_" data-ref-filename="_ZNSt3__1L9call_onceERNS_9once_flagEOT_DpOT0_">call_once</span>(<span class='refarg'><a class="local col8 ref" href="#8onceFlag" title='onceFlag' data-ref="8onceFlag" data-ref-filename="8onceFlag">onceFlag</a></span>, [] {</td></tr>
+<tr><th id="193">193</th><td>        <a class="local col7 ref" href="#7availableMemory" title='availableMemory' data-ref="7availableMemory" data-ref-filename="7availableMemory">availableMemory</a> = <a class="tu ref fn" href="#_ZN7bmallocL22computeAvailableMemoryEv" title='bmalloc::computeAvailableMemory' data-use='c' data-ref="_ZN7bmallocL22computeAvailableMemoryEv" data-ref-filename="_ZN7bmallocL22computeAvailableMemoryEv">computeAvailableMemory</a>();</td></tr>
+<tr><th id="194">194</th><td>    });</td></tr>
+<tr><th id="195">195</th><td>    <b>return</b> <a class="local col7 ref" href="#7availableMemory" title='availableMemory' data-ref="7availableMemory" data-ref-filename="7availableMemory">availableMemory</a>;</td></tr>
+<tr><th id="196">196</th><td>}</td></tr>
+<tr><th id="197">197</th><td></td></tr>
+<tr><th id="198">198</th><td><u>#<span data-ppcond="198">if</span> <a class="macro" href="BPlatform.h.html#36" title="(defined BPLATFORM_IOS_FAMILY &amp;&amp; BPLATFORM_IOS_FAMILY)" data-ref="_M/BPLATFORM">BPLATFORM</a>(IOS_FAMILY) || <a class="macro" href="BPlatform.h.html#37" title="(defined BOS_LINUX &amp;&amp; BOS_LINUX)" data-ref="_M/BOS">BOS</a>(LINUX) || <a class="macro" href="BPlatform.h.html#37" title="(defined BOS_FREEBSD &amp;&amp; BOS_FREEBSD)" data-ref="_M/BOS">BOS</a>(FREEBSD)</u></td></tr>
+<tr><th id="199">199</th><td>MemoryStatus memoryStatus()</td></tr>
+<tr><th id="200">200</th><td>{</td></tr>
+<tr><th id="201">201</th><td><u>#if BPLATFORM(IOS_FAMILY)</u></td></tr>
+<tr><th id="202">202</th><td>    task_vm_info_data_t vmInfo;</td></tr>
+<tr><th id="203">203</th><td>    mach_msg_type_number_t vmSize = TASK_VM_INFO_COUNT;</td></tr>
+<tr><th id="204">204</th><td>    </td></tr>
+<tr><th id="205">205</th><td>    size_t memoryFootprint = <var>0</var>;</td></tr>
+<tr><th id="206">206</th><td>    <b>if</b> (KERN_SUCCESS == task_info(mach_task_self(), TASK_VM_INFO, (task_info_t)(&amp;vmInfo), &amp;vmSize))</td></tr>
+<tr><th id="207">207</th><td>        memoryFootprint = <b>static_cast</b>&lt;size_t&gt;(vmInfo.phys_footprint);</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td>    <em>double</em> percentInUse = <b>static_cast</b>&lt;<em>double</em>&gt;(memoryFootprint) / <b>static_cast</b>&lt;<em>double</em>&gt;(availableMemory());</td></tr>
+<tr><th id="210">210</th><td><u>#elif BOS(LINUX)</u></td></tr>
+<tr><th id="211">211</th><td>    <em>auto</em>&amp; memory = LinuxMemory::singleton();</td></tr>
+<tr><th id="212">212</th><td>    size_t memoryFootprint = memory.footprint();</td></tr>
+<tr><th id="213">213</th><td>    <em>double</em> percentInUse = <b>static_cast</b>&lt;<em>double</em>&gt;(memoryFootprint) / <b>static_cast</b>&lt;<em>double</em>&gt;(memory.availableMemory);</td></tr>
+<tr><th id="214">214</th><td><u>#elif BOS(FREEBSD)</u></td></tr>
+<tr><th id="215">215</th><td>    <b>struct</b> kinfo_proc info;</td></tr>
+<tr><th id="216">216</th><td>    size_t infolen = <b>sizeof</b>(info);</td></tr>
+<tr><th id="217">217</th><td></td></tr>
+<tr><th id="218">218</th><td>    <em>int</em> mib[<var>4</var>];</td></tr>
+<tr><th id="219">219</th><td>    mib[<var>0</var>] = CTL_KERN;</td></tr>
+<tr><th id="220">220</th><td>    mib[<var>1</var>] = KERN_PROC;</td></tr>
+<tr><th id="221">221</th><td>    mib[<var>2</var>] = KERN_PROC_PID;</td></tr>
+<tr><th id="222">222</th><td>    mib[<var>3</var>] = getpid();</td></tr>
+<tr><th id="223">223</th><td></td></tr>
+<tr><th id="224">224</th><td>    size_t memoryFootprint = <var>0</var>;</td></tr>
+<tr><th id="225">225</th><td>    <b>if</b> (!sysctl(mib, <var>4</var>, &amp;info, &amp;infolen, <b>nullptr</b>, <var>0</var>))</td></tr>
+<tr><th id="226">226</th><td>        memoryFootprint = <b>static_cast</b>&lt;size_t&gt;(info.ki_rssize) * vmPageSize();</td></tr>
+<tr><th id="227">227</th><td></td></tr>
+<tr><th id="228">228</th><td>    <em>double</em> percentInUse = <b>static_cast</b>&lt;<em>double</em>&gt;(memoryFootprint) / <b>static_cast</b>&lt;<em>double</em>&gt;(availableMemory());</td></tr>
+<tr><th id="229">229</th><td><u>#endif</u></td></tr>
+<tr><th id="230">230</th><td></td></tr>
+<tr><th id="231">231</th><td>    <em>double</em> percentAvailableMemoryInUse = std::min(percentInUse, <var>1.0</var>);</td></tr>
+<tr><th id="232">232</th><td>    <b>return</b> MemoryStatus(memoryFootprint, percentAvailableMemoryInUse);</td></tr>
+<tr><th id="233">233</th><td>}</td></tr>
+<tr><th id="234">234</th><td><u>#<span data-ppcond="198">endif</span></u></td></tr>
+<tr><th id="235">235</th><td></td></tr>
+<tr><th id="236">236</th><td>} <i>// namespace bmalloc</i></td></tr>
+<tr><th id="237">237</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

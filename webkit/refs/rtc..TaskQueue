@@ -1,0 +1,191 @@
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/include/audio_processing.h' l='670' c='_ZN6webrtc15AudioProcessing22CreateAndAttachAecDumpERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEExPN3rtc9TaskQueueE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/include/audio_processing.h' l='673' c='_ZN6webrtc15AudioProcessing22CreateAndAttachAecDumpEP7__sFILExPN3rtc9TaskQueueE'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_queue.h' l='76' ll='130'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_queue.h' l='129' c='_ZN3rtc9TaskQueueC1ERKS0_'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_queue.h' l='129' c='_ZN3rtc9TaskQueueaSERKS0_'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_queue.h' l='129' c='_ZN3rtc9TaskQueueaSERKS0_'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/async_audio_processing/async_audio_processing.h' l='71'/>
+<size>8</size>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_queue.h' l='29'>// Implements a task queue that asynchronously executes tasks in a way that
+// guarantees that they&apos;re executed in FIFO order and that tasks never overlap.
+// Tasks may always execute on the same worker thread and they may not.
+// To DCHECK that tasks are executing on a known task queue, use IsCurrent().
+//
+// Here are some usage examples:
+//
+//   1) Asynchronously running a lambda:
+//
+//     class MyClass {
+//       ...
+//       TaskQueue queue_(&quot;MyQueue&quot;);
+//     };
+//
+//     void MyClass::StartWork() {
+//       queue_.PostTask([]() { Work(); });
+//     ...
+//
+//   2) Posting a custom task on a timer.  The task posts itself again after
+//      every running:
+//
+//     class TimerTask : public QueuedTask {
+//      public:
+//       TimerTask() {}
+//      private:
+//       bool Run() override {
+//         ++count_;
+//         TaskQueueBase::Current()-&gt;PostDelayedTask(
+//             absl::WrapUnique(this), 1000);
+//         // Ownership has been transferred to the next occurance,
+//         // so return false to prevent from being deleted now.
+//         return false;
+//       }
+//       int count_ = 0;
+//     };
+//     ...
+//     queue_.PostDelayedTask(std::make_unique&lt;TimerTask&gt;(), 1000);
+//
+// For more examples, see task_queue_unittests.cc.
+//
+// A note on destruction:
+//
+// When a TaskQueue is deleted, pending tasks will not be executed but they will
+// be deleted.  The deletion of tasks may happen asynchronously after the
+// TaskQueue itself has been deleted or it may happen synchronously while the
+// TaskQueue instance is being deleted.  This may vary from one OS to the next
+// so assumptions about lifetimes of pending tasks should not be made.</doc>
+<fun r='_ZN3rtc9TaskQueueC1ENSt3__110unique_ptrIN6webrtc13TaskQueueBaseENS3_16TaskQueueDeleterEEE'/>
+<fun r='_ZN3rtc9TaskQueueD1Ev'/>
+<fun r='_ZNK3rtc9TaskQueue9IsCurrentEv'/>
+<fun r='_ZN3rtc9TaskQueue3GetEv'/>
+<fun r='_ZN3rtc9TaskQueue8PostTaskENSt3__110unique_ptrIN6webrtc10QueuedTaskENS1_14default_deleteIS4_EEEE'/>
+<fun r='_ZN3rtc9TaskQueue15PostDelayedTaskENSt3__110unique_ptrIN6webrtc10QueuedTaskENS1_14default_deleteIS4_EEEEj'/>
+<fun r='_ZN3rtc9TaskQueue8PostTaskEOT_'/>
+<fun r='_ZN3rtc9TaskQueue15PostDelayedTaskEOT_j'/>
+<mbr r='rtc::TaskQueue::impl_' o='0' t='webrtc::TaskQueueBase *const'/>
+<fun r='_ZN3rtc9TaskQueueC1ERKS0_'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/video_coding/frame_buffer2.h' l='68' c='_ZN6webrtc12video_coding11FrameBuffer9NextFrameExbPN3rtc9TaskQueueENSt3__18functionIFvNS5_10unique_ptrINS_12EncodedFrameENS5_14default_deleteIS8_EEEEN9646189'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/video_coding/frame_buffer2.h' l='170'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_decoder_impl.h' l='116'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_decoder_impl.h' l='118'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.h' l='168'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/rtp_transport_controller_send_interface.h' l='95' c='_ZN6webrtc35RtpTransportControllerSendInterface14GetWorkerQueueEv'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/channel_send_frame_transformer_delegate.h' l='41' c='_ZN6webrtc35ChannelSendFrameTransformerDelegateC1ENSt3__18functionIFiNS_14AudioFrameTypeEhjN3rtc9ArrayViewIKhLln4711EEExEEENS4_13scoped_refptrINS_25Fr8840163'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/channel_send_frame_transformer_delegate.h' l='78'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/channel_send.cc' l='242'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/channel_send_frame_transformer_delegate.cc' l='66' c='_ZN6webrtc35ChannelSendFrameTransformerDelegateC1ENSt3__18functionIFiNS_14AudioFrameTypeEhjN3rtc9ArrayViewIKhLln4711EEExEEENS4_13scoped_refptrINS_25Fr8840163'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/pacing/task_queue_paced_sender.h' l='167'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/rtp_transport_controller_send.h' l='81' c='_ZN6webrtc26RtpTransportControllerSend14GetWorkerQueueEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/rtp_transport_controller_send.h' l='203'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream2.h' l='290'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_send_stream.h' l='104'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/call.cc' l='350' c='_ZNK6webrtc8internal4Call20send_transport_queueEv'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/degraded_call.h' l='127'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/call/rtp_transport_controller_send.cc' l='207' c='_ZN6webrtc26RtpTransportControllerSend14GetWorkerQueueEv'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_video/include/incoming_video_stream.h' l='43'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/media/engine/webrtc_voice_engine.h' l='99'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/aec_dump/aec_dump_factory.h' l='37' c='_ZN6webrtc14AecDumpFactory6CreateENS_11FileWrapperExPN3rtc9TaskQueueE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/aec_dump/aec_dump_factory.h' l='40' c='_ZN6webrtc14AecDumpFactory6CreateENSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEExPN3rtc9TaskQueueE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/aec_dump/aec_dump_factory.h' l='43' c='_ZN6webrtc14AecDumpFactory6CreateEP7__sFILExPN3rtc9TaskQueueE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/media/engine/webrtc_voice_engine.cc' l='294' c='_ZN7cricket17WebRtcVoiceEngine4InitEv'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_device/audio_device_buffer.h' l='150'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/aec_dump/null_aec_dump_factory.cc' l='18' c='_ZN6webrtc14AecDumpFactory6CreateENS_11FileWrapperExPN3rtc9TaskQueueE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/aec_dump/null_aec_dump_factory.cc' l='24' c='_ZN6webrtc14AecDumpFactory6CreateENSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEExPN3rtc9TaskQueueE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/aec_dump/null_aec_dump_factory.cc' l='30' c='_ZN6webrtc14AecDumpFactory6CreateEP7__sFILExPN3rtc9TaskQueueE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/audio_processing_impl.h' l='78' c='_ZN6webrtc19AudioProcessingImpl22CreateAndAttachAecDumpERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEExPN3rtc9TaskQueueE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/audio_processing_impl.h' l='81' c='_ZN6webrtc19AudioProcessingImpl22CreateAndAttachAecDumpEP7__sFILExPN3rtc9TaskQueueE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/audio_processing_impl.cc' l='1671' c='_ZN6webrtc19AudioProcessingImpl22CreateAndAttachAecDumpERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEExPN3rtc9TaskQueueE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/audio_processing_impl.cc' l='1684' c='_ZN6webrtc19AudioProcessingImpl22CreateAndAttachAecDumpEP7__sFILExPN3rtc9TaskQueueE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/video_coding/frame_buffer2.cc' l='77' c='_ZN6webrtc12video_coding11FrameBuffer9NextFrameExbPN3rtc9TaskQueueENSt3__18functionIFvNS5_10unique_ptrINS_12EncodedFrameENS5_14default_deleteIS8_EEEEN9646189'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/adaptation/video_stream_encoder_resource_manager.h' l='84' c='_ZN6webrtc33VideoStreamEncoderResourceManager10InitializeEPN3rtc9TaskQueueE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/adaptation/video_stream_encoder_resource_manager.h' l='184'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/adaptation/video_stream_encoder_resource_manager.cc' l='268' c='_ZN6webrtc33VideoStreamEncoderResourceManager10InitializeEPN3rtc9TaskQueueE'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_receive_stream.h' l='232'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_send_stream_impl.h' l='75' c='_ZN6webrtc8internal19VideoSendStreamImplC1EPNS_5ClockEPNS_19SendStatisticsProxyEPN3rtc9TaskQueueEPNS_12RtcpRttStatsEPNS_35RtpTransportControllerSendIn7476435'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_send_stream_impl.h' l='156'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.h' l='120' c='_ZN6webrtc18VideoStreamEncoder13encoder_queueEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_stream_encoder.h' l='414'/>
+<size>8</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/video/video_send_stream_impl.cc' l='195' c='_ZN6webrtc8internal19VideoSendStreamImplC1EPNS_5ClockEPNS_19SendStatisticsProxyEPN3rtc9TaskQueueEPNS_12RtcpRttStatsEPNS_35RtpTransportControllerSendIn7476435'/>
+<size>8</size>
+<def f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_queue.h' l='76' ll='130'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_queue.h' l='129' c='_ZN3rtc9TaskQueueC1ERKS0_'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_queue.h' l='129' c='_ZN3rtc9TaskQueueaSERKS0_'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_queue.h' l='129' c='_ZN3rtc9TaskQueueaSERKS0_'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/modules/async_audio_processing/async_audio_processing.h' l='71'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/modules/audio_processing/include/audio_processing.h' l='670' c='_ZN6webrtc15AudioProcessing22CreateAndAttachAecDumpERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEExPN3rtc9TaskQueueE'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/modules/audio_processing/include/audio_processing.h' l='673' c='_ZN6webrtc15AudioProcessing22CreateAndAttachAecDumpEP7__sFILExPN3rtc9TaskQueueE'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/call/rtp_transport_controller_send_interface.h' l='95' c='_ZN6webrtc35RtpTransportControllerSendInterface14GetWorkerQueueEv'/>
+<size>8</size>
+<doc f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_queue.h' l='29'>// Implements a task queue that asynchronously executes tasks in a way that
+// guarantees that they&apos;re executed in FIFO order and that tasks never overlap.
+// Tasks may always execute on the same worker thread and they may not.
+// To DCHECK that tasks are executing on a known task queue, use IsCurrent().
+//
+// Here are some usage examples:
+//
+//   1) Asynchronously running a lambda:
+//
+//     class MyClass {
+//       ...
+//       TaskQueue queue_(&quot;MyQueue&quot;);
+//     };
+//
+//     void MyClass::StartWork() {
+//       queue_.PostTask([]() { Work(); });
+//     ...
+//
+//   2) Posting a custom task on a timer.  The task posts itself again after
+//      every running:
+//
+//     class TimerTask : public QueuedTask {
+//      public:
+//       TimerTask() {}
+//      private:
+//       bool Run() override {
+//         ++count_;
+//         TaskQueueBase::Current()-&gt;PostDelayedTask(
+//             absl::WrapUnique(this), 1000);
+//         // Ownership has been transferred to the next occurance,
+//         // so return false to prevent from being deleted now.
+//         return false;
+//       }
+//       int count_ = 0;
+//     };
+//     ...
+//     queue_.PostDelayedTask(std::make_unique&lt;TimerTask&gt;(), 1000);
+//
+// For more examples, see task_queue_unittests.cc.
+//
+// A note on destruction:
+//
+// When a TaskQueue is deleted, pending tasks will not be executed but they will
+// be deleted.  The deletion of tasks may happen asynchronously after the
+// TaskQueue itself has been deleted or it may happen synchronously while the
+// TaskQueue instance is being deleted.  This may vary from one OS to the next
+// so assumptions about lifetimes of pending tasks should not be made.</doc>
+<fun r='_ZN3rtc9TaskQueueC1ENSt3__110unique_ptrIN6webrtc13TaskQueueBaseENS3_16TaskQueueDeleterEEE'/>
+<fun r='_ZN3rtc9TaskQueueD1Ev'/>
+<fun r='_ZNK3rtc9TaskQueue9IsCurrentEv'/>
+<fun r='_ZN3rtc9TaskQueue3GetEv'/>
+<fun r='_ZN3rtc9TaskQueue8PostTaskENSt3__110unique_ptrIN6webrtc10QueuedTaskENS1_14default_deleteIS4_EEEE'/>
+<fun r='_ZN3rtc9TaskQueue15PostDelayedTaskENSt3__110unique_ptrIN6webrtc10QueuedTaskENS1_14default_deleteIS4_EEEEj'/>
+<fun r='_ZN3rtc9TaskQueue8PostTaskEOT_'/>
+<fun r='_ZN3rtc9TaskQueue15PostDelayedTaskEOT_j'/>
+<mbr r='rtc::TaskQueue::impl_' o='0' t='webrtc::TaskQueueBase *const'/>
+<fun r='_ZN3rtc9TaskQueueC1ERKS0_'/>

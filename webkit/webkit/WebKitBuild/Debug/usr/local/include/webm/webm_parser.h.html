@@ -1,0 +1,152 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>webm_parser.h source code [webkit/WebKitBuild/Debug/usr/local/include/webm/webm_parser.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webm::WebmParser "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webm/webm_parser.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>webm</a>/<a href='webm_parser.h.html'>webm_parser.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>// Copyright (c) 2016 The WebM project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="2">2</th><td><i>//</i></td></tr>
+<tr><th id="3">3</th><td><i>// Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="4">4</th><td><i>// that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="5">5</th><td><i>// tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="6">6</th><td><i>// in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="7">7</th><td><i>// be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="8">8</th><td><u>#<span data-ppcond="8">ifndef</span> <span class="macro" data-ref="_M/INCLUDE_WEBM_WEBM_PARSER_H_">INCLUDE_WEBM_WEBM_PARSER_H_</span></u></td></tr>
+<tr><th id="9">9</th><td><u>#define <dfn class="macro" id="_M/INCLUDE_WEBM_WEBM_PARSER_H_" data-ref="_M/INCLUDE_WEBM_WEBM_PARSER_H_">INCLUDE_WEBM_WEBM_PARSER_H_</dfn></u></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="callback.h.html">"./callback.h"</a></u></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="reader.h.html">"./reader.h"</a></u></td></tr>
+<tr><th id="15">15</th><td><u>#include <a href="status.h.html">"./status.h"</a></u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="18">18</th><td><i class="doc"><span class="command"> \file</span></i></td></tr>
+<tr><th id="19">19</th><td><i class="doc"> The main parser class for parsing WebM files.</i></td></tr>
+<tr><th id="20">20</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><b>namespace</b> <span class="namespace">webm</span> {</td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="25">25</th><td><i class="doc"> <span class="command">\defgroup</span> <span class="verb">PUBLIC_API Public API</span></i></td></tr>
+<tr><th id="26">26</th><td><i class="doc"> Public types and header files intended for use by users.</i></td></tr>
+<tr><th id="27">27</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="30">30</th><td><i class="doc"> <span class="command">\addtogroup</span> <span class="verb">PUBLIC_API</span></i></td></tr>
+<tr><th id="31">31</th><td><i class="doc"> @{</i></td></tr>
+<tr><th id="32">32</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="35">35</th><td><i class="doc"> Incrementally parses a WebM document encoded in a byte stream.</i></td></tr>
+<tr><th id="36">36</th><td><i class="doc"></i></td></tr>
+<tr><th id="37">37</th><td><i class="doc"> It is expected that the parsing will begin at the start of the WebM</i></td></tr>
+<tr><th id="38">38</th><td><i class="doc"> file/document. Otherwise, the `DidSeek()` method should be used to inform the</i></td></tr>
+<tr><th id="39">39</th><td><i class="doc"> parser that reading may not necessarily begin at the beginning of the document</i></td></tr>
+<tr><th id="40">40</th><td><i class="doc"> and the parser should be prepared to handle data at an arbitrary point in the</i></td></tr>
+<tr><th id="41">41</th><td><i class="doc"> document.</i></td></tr>
+<tr><th id="42">42</th><td><i class="doc"></i></td></tr>
+<tr><th id="43">43</th><td><i class="doc"> WebM files are mostly a subset of Matroska, with a few small modifications.</i></td></tr>
+<tr><th id="44">44</th><td><i class="doc"> Matroska is a format built on top of EBML.</i></td></tr>
+<tr><th id="45">45</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="46">46</th><td><i class="doc">// Spec references:</i></td></tr>
+<tr><th id="47">47</th><td><i class="doc">// <a href="http://www.webmproject.org/docs/container/">http://www.webmproject.org/docs/container/</a></i></td></tr>
+<tr><th id="48">48</th><td><i class="doc">// <a href="https://matroska.org/technical/specs/index.html">https://matroska.org/technical/specs/index.html</a></i></td></tr>
+<tr><th id="49">49</th><td><i class="doc">// <a href="https://github.com/Matroska-Org/ebml-specification/blob/master/specification.markdown">https://github.com/Matroska-Org/ebml-specification/blob/master/specification.markdown</a></i></td></tr>
+<tr><th id="50">50</th><td><b>class</b> <dfn class="type def" id="webm::WebmParser" title='webm::WebmParser' data-ref="webm::WebmParser" data-ref-filename="webm..WebmParser">WebmParser</dfn> {</td></tr>
+<tr><th id="51">51</th><td> <b>public</b>:</td></tr>
+<tr><th id="52">52</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="53">53</th><td><i class="doc">   Constructs the object and prepares it for parsing.</i></td></tr>
+<tr><th id="54">54</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="55">55</th><td>  <dfn class="decl fn" id="_ZN4webm10WebmParserC1Ev" title='webm::WebmParser::WebmParser' data-ref="_ZN4webm10WebmParserC1Ev" data-ref-filename="_ZN4webm10WebmParserC1Ev">WebmParser</dfn>();</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td>  <i>/*</i></td></tr>
+<tr><th id="58">58</th><td><i>   Cleans up the parser. No further cleanup is required from the user.</i></td></tr>
+<tr><th id="59">59</th><td><i>   */</i></td></tr>
+<tr><th id="60">60</th><td>  <dfn class="decl fn" id="_ZN4webm10WebmParserD1Ev" title='webm::WebmParser::~WebmParser' data-ref="_ZN4webm10WebmParserD1Ev" data-ref-filename="_ZN4webm10WebmParserD1Ev">~WebmParser</dfn>();</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td>  <i>// Non-copyable and non-movable.</i></td></tr>
+<tr><th id="63">63</th><td>  <dfn class="decl def fn" id="_ZN4webm10WebmParserC1ERKS0_" title='webm::WebmParser::WebmParser' data-ref="_ZN4webm10WebmParserC1ERKS0_" data-ref-filename="_ZN4webm10WebmParserC1ERKS0_">WebmParser</dfn>(<em>const</em> <a class="type" href="#webm::WebmParser" title='webm::WebmParser' data-ref="webm::WebmParser" data-ref-filename="webm..WebmParser">WebmParser</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="64">64</th><td>  <a class="type" href="#webm::WebmParser" title='webm::WebmParser' data-ref="webm::WebmParser" data-ref-filename="webm..WebmParser">WebmParser</a>&amp; <dfn class="decl def fn" id="_ZN4webm10WebmParseraSERKS0_" title='webm::WebmParser::operator=' data-ref="_ZN4webm10WebmParseraSERKS0_" data-ref-filename="_ZN4webm10WebmParseraSERKS0_"><b>operator</b>=</dfn>(<em>const</em> <a class="type" href="#webm::WebmParser" title='webm::WebmParser' data-ref="webm::WebmParser" data-ref-filename="webm..WebmParser">WebmParser</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="67">67</th><td><i class="doc">   Resets the parser after a seek was performed on the reader, which prepares</i></td></tr>
+<tr><th id="68">68</th><td><i class="doc">   the parser for starting at an arbitrary point in the stream.</i></td></tr>
+<tr><th id="69">69</th><td><i class="doc"></i></td></tr>
+<tr><th id="70">70</th><td><i class="doc">   The seek must be to the start of an element (that is, it can't be any random</i></td></tr>
+<tr><th id="71">71</th><td><i class="doc">   byte) or parsing will fail.</i></td></tr>
+<tr><th id="72">72</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="73">73</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN4webm10WebmParser7DidSeekEv" title='webm::WebmParser::DidSeek' data-ref="_ZN4webm10WebmParser7DidSeekEv" data-ref-filename="_ZN4webm10WebmParser7DidSeekEv">DidSeek</dfn>();</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="76">76</th><td><i class="doc">   Feeds data into the parser from the provided reader.</i></td></tr>
+<tr><th id="77">77</th><td><i class="doc"></i></td></tr>
+<tr><th id="78">78</th><td><i class="doc">   If a parsing error code has been returned (which indicates a malformed</i></td></tr>
+<tr><th id="79">79</th><td><i class="doc">   document), calling Feed() again will just result in the same error; parsing</i></td></tr>
+<tr><th id="80">80</th><td><i class="doc">   has already failed at that point and further progress can't be made.</i></td></tr>
+<tr><th id="81">81</th><td><i class="doc"></i></td></tr>
+<tr><th id="82">82</th><td><i class="doc">   <span class="command">\param</span> <span class="arg">callback</span> The callback which receives parsing events. No internal</i></td></tr>
+<tr><th id="83">83</th><td><i class="doc">   references are maintained to `callback`, so it may be modified or freed after</i></td></tr>
+<tr><th id="84">84</th><td><i class="doc">   this method returns.</i></td></tr>
+<tr><th id="85">85</th><td><i class="doc">   <span class="command">\param</span> <span class="arg">reader</span> The reader the parser will use to request data. No internal</i></td></tr>
+<tr><th id="86">86</th><td><i class="doc">   references are maintained to `reader`, so it may be modified or freed after</i></td></tr>
+<tr><th id="87">87</th><td><i class="doc">   this method returns.</i></td></tr>
+<tr><th id="88">88</th><td><i class="doc">   <span class="command">\return</span> `Status::kOkCompleted` when parsing completes successfully.</i></td></tr>
+<tr><th id="89">89</th><td><i class="doc">   `Status::kOkPartial` or another non-parsing error code (see status.h for</i></td></tr>
+<tr><th id="90">90</th><td><i class="doc">   error codes classified as parsing errors) will be returned if parsing has</i></td></tr>
+<tr><th id="91">91</th><td><i class="doc">   only partially completed, and Feed() should be called again to resume</i></td></tr>
+<tr><th id="92">92</th><td><i class="doc">   parsing.</i></td></tr>
+<tr><th id="93">93</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="94">94</th><td>  <a class="type" href="status.h.html#webm::Status" title='webm::Status' data-ref="webm::Status" data-ref-filename="webm..Status">Status</a> <dfn class="decl fn" id="_ZN4webm10WebmParser4FeedEPNS_8CallbackEPNS_6ReaderE" title='webm::WebmParser::Feed' data-ref="_ZN4webm10WebmParser4FeedEPNS_8CallbackEPNS_6ReaderE" data-ref-filename="_ZN4webm10WebmParser4FeedEPNS_8CallbackEPNS_6ReaderE">Feed</dfn>(<a class="type" href="callback.h.html#webm::Callback" title='webm::Callback' data-ref="webm::Callback" data-ref-filename="webm..Callback">Callback</a>* <dfn class="local col0 decl" id="110callback" title='callback' data-type='webm::Callback *' data-ref="110callback" data-ref-filename="110callback">callback</dfn>, <a class="type" href="reader.h.html#webm::Reader" title='webm::Reader' data-ref="webm::Reader" data-ref-filename="webm..Reader">Reader</a>* <dfn class="local col1 decl" id="111reader" title='reader' data-type='webm::Reader *' data-ref="111reader" data-ref-filename="111reader">reader</dfn>);</td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="97">97</th><td><i class="doc">   Swaps this parser and the provided parser.</i></td></tr>
+<tr><th id="98">98</th><td><i class="doc"></i></td></tr>
+<tr><th id="99">99</th><td><i class="doc">   <span class="command">\param</span> <span class="arg">other</span> The parser to swap values/states with. Must not be null.</i></td></tr>
+<tr><th id="100">100</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="101">101</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN4webm10WebmParser4SwapEPS0_" title='webm::WebmParser::Swap' data-ref="_ZN4webm10WebmParser4SwapEPS0_" data-ref-filename="_ZN4webm10WebmParser4SwapEPS0_">Swap</dfn>(<a class="type" href="#webm::WebmParser" title='webm::WebmParser' data-ref="webm::WebmParser" data-ref-filename="webm..WebmParser">WebmParser</a>* <dfn class="local col2 decl" id="112other" title='other' data-type='webm::WebmParser *' data-ref="112other" data-ref-filename="112other">other</dfn>);</td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td> <b>private</b>:</td></tr>
+<tr><th id="104">104</th><td>  <i>// This header can only rely on sources in the public API.</i></td></tr>
+<tr><th id="105">105</th><td>  <b>class</b> <dfn class="type" id="webm::WebmParser::DocumentParser" title='webm::WebmParser::DocumentParser' data-ref="webm::WebmParser::DocumentParser" data-ref-filename="webm..WebmParser..DocumentParser">DocumentParser</dfn>;</td></tr>
+<tr><th id="106">106</th><td></td></tr>
+<tr><th id="107">107</th><td>  <i>// The internal implementation of the parser.</i></td></tr>
+<tr><th id="108">108</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="#webm::WebmParser::DocumentParser" title='webm::WebmParser::DocumentParser' data-ref="webm::WebmParser::DocumentParser" data-ref-filename="webm..WebmParser..DocumentParser">DocumentParser</a>&gt; <dfn class="decl field" id="webm::WebmParser::parser_" title='webm::WebmParser::parser_' data-ref="webm::WebmParser::parser_" data-ref-filename="webm..WebmParser..parser_">parser_</dfn>;</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td>  <i>// The status of the parser, used to prevent further progress if an</i></td></tr>
+<tr><th id="111">111</th><td><i>  // unrecoverable parsing error has already been encountered.</i></td></tr>
+<tr><th id="112">112</th><td>  <a class="type" href="status.h.html#webm::Status" title='webm::Status' data-ref="webm::Status" data-ref-filename="webm..Status">Status</a> <dfn class="decl field" id="webm::WebmParser::parsing_status_" title='webm::WebmParser::parsing_status_' data-ref="webm::WebmParser::parsing_status_" data-ref-filename="webm..WebmParser..parsing_status_">parsing_status_</dfn> = <a class="type" href="status.h.html#webm::Status" title='webm::Status' data-ref="webm::Status" data-ref-filename="webm..Status">Status</a><a class="ref fn" href="status.h.html#_ZN4webm6StatusC1ENS0_4CodeE" title='webm::Status::Status' data-ref="_ZN4webm6StatusC1ENS0_4CodeE" data-ref-filename="_ZN4webm6StatusC1ENS0_4CodeE">(</a><a class="type" href="status.h.html#webm::Status" title='webm::Status' data-ref="webm::Status" data-ref-filename="webm..Status">Status</a>::<a class="enum" href="status.h.html#webm::Status::kOkPartial" title='webm::Status::kOkPartial' data-ref="webm::Status::kOkPartial" data-ref-filename="webm..Status..kOkPartial">kOkPartial</a>);</td></tr>
+<tr><th id="113">113</th><td>};</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="116">116</th><td><i class="doc"> Swaps the two parsers.</i></td></tr>
+<tr><th id="117">117</th><td><i class="doc"></i></td></tr>
+<tr><th id="118">118</th><td><i class="doc"> This is provided so code can use argument dependent lookup in an idiomatic way</i></td></tr>
+<tr><th id="119">119</th><td><i class="doc"> when swapping (especially since `std::swap` won't work since the parser is</i></td></tr>
+<tr><th id="120">120</th><td><i class="doc"> non-movable).</i></td></tr>
+<tr><th id="121">121</th><td><i class="doc"></i></td></tr>
+<tr><th id="122">122</th><td><i class="doc"> <span class="command">\param</span> <span class="arg">left</span> The first parser to swap.</i></td></tr>
+<tr><th id="123">123</th><td><i class="doc"> <span class="command">\param</span> <span class="arg">right</span> The second parser to swap.</i></td></tr>
+<tr><th id="124">124</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="125">125</th><td><em>void</em> <dfn class="decl fn" id="_ZN4webm4swapERNS_10WebmParserES1_" title='webm::swap' data-ref="_ZN4webm4swapERNS_10WebmParserES1_" data-ref-filename="_ZN4webm4swapERNS_10WebmParserES1_">swap</dfn>(<a class="type" href="#webm::WebmParser" title='webm::WebmParser' data-ref="webm::WebmParser" data-ref-filename="webm..WebmParser">WebmParser</a>&amp; <dfn class="local col3 decl" id="113left" title='left' data-type='webm::WebmParser &amp;' data-ref="113left" data-ref-filename="113left">left</dfn>, <a class="type" href="#webm::WebmParser" title='webm::WebmParser' data-ref="webm::WebmParser" data-ref-filename="webm..WebmParser">WebmParser</a>&amp; <dfn class="local col4 decl" id="114right" title='right' data-type='webm::WebmParser &amp;' data-ref="114right" data-ref-filename="114right">right</dfn>);</td></tr>
+<tr><th id="126">126</th><td></td></tr>
+<tr><th id="127">127</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="128">128</th><td><i class="doc"> @}</i></td></tr>
+<tr><th id="129">129</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td>}  <i>// namespace webm</i></td></tr>
+<tr><th id="132">132</th><td></td></tr>
+<tr><th id="133">133</th><td><u>#<span data-ppcond="8">endif</span>  // INCLUDE_WEBM_WEBM_PARSER_H_</u></td></tr>
+<tr><th id="134">134</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../DerivedSources/WebCore/unified-sources/UnifiedSource282.cpp.html'>webkit/WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource282.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

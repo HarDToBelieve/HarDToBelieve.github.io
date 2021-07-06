@@ -1,0 +1,97 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>race_checker.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/race_checker.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::RaceChecker,rtc::internal::RaceCheckerScope,rtc::internal::RaceCheckerScopeDoNothing "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/race_checker.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='race_checker.h.html'>race_checker.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2016 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_RACE_CHECKER_H_">RTC_BASE_RACE_CHECKER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_RACE_CHECKER_H_" data-ref="_M/RTC_BASE_RACE_CHECKER_H_">RTC_BASE_RACE_CHECKER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="checks.h.html">"rtc_base/checks.h"</a></u></td></tr>
+<tr><th id="15">15</th><td><u>#include <a href="platform_thread_types.h.html">"rtc_base/platform_thread_types.h"</a></u></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="thread_annotations.h.html">"rtc_base/thread_annotations.h"</a></u></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><b>namespace</b> <span class="namespace">internal</span> {</td></tr>
+<tr><th id="21">21</th><td><b>class</b> <a class="type" href="#rtc::internal::RaceCheckerScope" title='rtc::internal::RaceCheckerScope' data-ref="rtc::internal::RaceCheckerScope" data-ref-filename="rtc..internal..RaceCheckerScope">RaceCheckerScope</a>;</td></tr>
+<tr><th id="22">22</th><td>}  <i>// namespace internal</i></td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><i>// Best-effort race-checking implementation. This primitive uses no</i></td></tr>
+<tr><th id="25">25</th><td><i>// synchronization at all to be as-fast-as-possible in the non-racy case.</i></td></tr>
+<tr><th id="26">26</th><td><b>class</b> <a class="macro" href="thread_annotations.h.html#70" title="__attribute__((lockable))" data-ref="_M/RTC_LOCKABLE">RTC_LOCKABLE</a> <dfn class="type def" id="rtc::RaceChecker" title='rtc::RaceChecker' data-ref="rtc::RaceChecker" data-ref-filename="rtc..RaceChecker">RaceChecker</dfn> {</td></tr>
+<tr><th id="27">27</th><td> <b>public</b>:</td></tr>
+<tr><th id="28">28</th><td>  <b>friend</b> <b>class</b> <span class="namespace">internal::</span><a class="type" href="#rtc::internal::RaceCheckerScope" title='rtc::internal::RaceCheckerScope' data-ref="rtc::internal::RaceCheckerScope" data-ref-filename="rtc..internal..RaceCheckerScope">RaceCheckerScope</a>;</td></tr>
+<tr><th id="29">29</th><td>  <dfn class="decl fn" id="_ZN3rtc11RaceCheckerC1Ev" title='rtc::RaceChecker::RaceChecker' data-ref="_ZN3rtc11RaceCheckerC1Ev" data-ref-filename="_ZN3rtc11RaceCheckerC1Ev">RaceChecker</dfn>();</td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td> <b>private</b>:</td></tr>
+<tr><th id="32">32</th><td>  <em>bool</em> <dfn class="decl fn" id="_ZNK3rtc11RaceChecker7AcquireEv" title='rtc::RaceChecker::Acquire' data-ref="_ZNK3rtc11RaceChecker7AcquireEv" data-ref-filename="_ZNK3rtc11RaceChecker7AcquireEv">Acquire</dfn>() <em>const</em> <a class="macro" href="thread_annotations.h.html#76" title="__attribute__((exclusive_lock_function()))" data-ref="_M/RTC_EXCLUSIVE_LOCK_FUNCTION">RTC_EXCLUSIVE_LOCK_FUNCTION</a>();</td></tr>
+<tr><th id="33">33</th><td>  <em>void</em> <dfn class="decl fn" id="_ZNK3rtc11RaceChecker7ReleaseEv" title='rtc::RaceChecker::Release' data-ref="_ZNK3rtc11RaceChecker7ReleaseEv" data-ref-filename="_ZNK3rtc11RaceChecker7ReleaseEv">Release</dfn>() <em>const</em> <a class="macro" href="thread_annotations.h.html#88" title="__attribute__((unlock_function()))" data-ref="_M/RTC_UNLOCK_FUNCTION">RTC_UNLOCK_FUNCTION</a>();</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td>  <i>// Volatile to prevent code being optimized away in Acquire()/Release().</i></td></tr>
+<tr><th id="36">36</th><td>  <em>mutable</em> <em>volatile</em> <em>int</em> <dfn class="decl field" id="rtc::RaceChecker::access_count_" title='rtc::RaceChecker::access_count_' data-ref="rtc::RaceChecker::access_count_" data-ref-filename="rtc..RaceChecker..access_count_">access_count_</dfn> = <var>0</var>;</td></tr>
+<tr><th id="37">37</th><td>  <em>mutable</em> <em>volatile</em> <a class="typedef" href="platform_thread_types.h.html#rtc::PlatformThreadRef" title='rtc::PlatformThreadRef' data-type='pthread_t' data-ref="rtc::PlatformThreadRef" data-ref-filename="rtc..PlatformThreadRef">PlatformThreadRef</a> <dfn class="decl field" id="rtc::RaceChecker::accessing_thread_" title='rtc::RaceChecker::accessing_thread_' data-ref="rtc::RaceChecker::accessing_thread_" data-ref-filename="rtc..RaceChecker..accessing_thread_">accessing_thread_</dfn>;</td></tr>
+<tr><th id="38">38</th><td>};</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><b>namespace</b> <span class="namespace">internal</span> {</td></tr>
+<tr><th id="41">41</th><td><b>class</b> <a class="macro" href="thread_annotations.h.html#73" title="__attribute__((scoped_lockable))" data-ref="_M/RTC_SCOPED_LOCKABLE">RTC_SCOPED_LOCKABLE</a> <dfn class="type def" id="rtc::internal::RaceCheckerScope" title='rtc::internal::RaceCheckerScope' data-ref="rtc::internal::RaceCheckerScope" data-ref-filename="rtc..internal..RaceCheckerScope">RaceCheckerScope</dfn> {</td></tr>
+<tr><th id="42">42</th><td> <b>public</b>:</td></tr>
+<tr><th id="43">43</th><td>  <b>explicit</b> <dfn class="decl fn" id="_ZN3rtc8internal16RaceCheckerScopeC1EPKNS_11RaceCheckerE" title='rtc::internal::RaceCheckerScope::RaceCheckerScope' data-ref="_ZN3rtc8internal16RaceCheckerScopeC1EPKNS_11RaceCheckerE" data-ref-filename="_ZN3rtc8internal16RaceCheckerScopeC1EPKNS_11RaceCheckerE">RaceCheckerScope</dfn>(<em>const</em> <a class="type" href="#rtc::RaceChecker" title='rtc::RaceChecker' data-ref="rtc::RaceChecker" data-ref-filename="rtc..RaceChecker">RaceChecker</a>* <dfn class="local col0 decl" id="510race_checker" title='race_checker' data-type='const rtc::RaceChecker *' data-ref="510race_checker" data-ref-filename="510race_checker">race_checker</dfn>)</td></tr>
+<tr><th id="44">44</th><td>      <a class="macro" href="thread_annotations.h.html#76" title="__attribute__((exclusive_lock_function(race_checker)))" data-ref="_M/RTC_EXCLUSIVE_LOCK_FUNCTION">RTC_EXCLUSIVE_LOCK_FUNCTION</a>(<a class="local col0 ref" href="#510race_checker" title='race_checker' data-ref="510race_checker" data-ref-filename="510race_checker">race_checker</a>);</td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td>  <em>bool</em> <dfn class="decl fn" id="_ZNK3rtc8internal16RaceCheckerScope12RaceDetectedEv" title='rtc::internal::RaceCheckerScope::RaceDetected' data-ref="_ZNK3rtc8internal16RaceCheckerScope12RaceDetectedEv" data-ref-filename="_ZNK3rtc8internal16RaceCheckerScope12RaceDetectedEv">RaceDetected</dfn>() <em>const</em>;</td></tr>
+<tr><th id="47">47</th><td>  <dfn class="decl fn" id="_ZN3rtc8internal16RaceCheckerScopeD1Ev" title='rtc::internal::RaceCheckerScope::~RaceCheckerScope' data-ref="_ZN3rtc8internal16RaceCheckerScopeD1Ev" data-ref-filename="_ZN3rtc8internal16RaceCheckerScopeD1Ev">~RaceCheckerScope</dfn>() <a class="macro" href="thread_annotations.h.html#88" title="__attribute__((unlock_function()))" data-ref="_M/RTC_UNLOCK_FUNCTION">RTC_UNLOCK_FUNCTION</a>();</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td> <b>private</b>:</td></tr>
+<tr><th id="50">50</th><td>  <em>const</em> <a class="type" href="#rtc::RaceChecker" title='rtc::RaceChecker' data-ref="rtc::RaceChecker" data-ref-filename="rtc..RaceChecker">RaceChecker</a>* <em>const</em> <dfn class="decl field" id="rtc::internal::RaceCheckerScope::race_checker_" title='rtc::internal::RaceCheckerScope::race_checker_' data-ref="rtc::internal::RaceCheckerScope::race_checker_" data-ref-filename="rtc..internal..RaceCheckerScope..race_checker_">race_checker_</dfn>;</td></tr>
+<tr><th id="51">51</th><td>  <em>const</em> <em>bool</em> <dfn class="decl field" id="rtc::internal::RaceCheckerScope::race_check_ok_" title='rtc::internal::RaceCheckerScope::race_check_ok_' data-ref="rtc::internal::RaceCheckerScope::race_check_ok_" data-ref-filename="rtc..internal..RaceCheckerScope..race_check_ok_">race_check_ok_</dfn>;</td></tr>
+<tr><th id="52">52</th><td>};</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td><b>class</b> <a class="macro" href="thread_annotations.h.html#73" title="__attribute__((scoped_lockable))" data-ref="_M/RTC_SCOPED_LOCKABLE">RTC_SCOPED_LOCKABLE</a> <dfn class="type def" id="rtc::internal::RaceCheckerScopeDoNothing" title='rtc::internal::RaceCheckerScopeDoNothing' data-ref="rtc::internal::RaceCheckerScopeDoNothing" data-ref-filename="rtc..internal..RaceCheckerScopeDoNothing">RaceCheckerScopeDoNothing</dfn> {</td></tr>
+<tr><th id="55">55</th><td> <b>public</b>:</td></tr>
+<tr><th id="56">56</th><td>  <b>explicit</b> <dfn class="decl def fn" id="_ZN3rtc8internal25RaceCheckerScopeDoNothingC1EPKNS_11RaceCheckerE" title='rtc::internal::RaceCheckerScopeDoNothing::RaceCheckerScopeDoNothing' data-ref="_ZN3rtc8internal25RaceCheckerScopeDoNothingC1EPKNS_11RaceCheckerE" data-ref-filename="_ZN3rtc8internal25RaceCheckerScopeDoNothingC1EPKNS_11RaceCheckerE">RaceCheckerScopeDoNothing</dfn>(<em>const</em> <a class="type" href="#rtc::RaceChecker" title='rtc::RaceChecker' data-ref="rtc::RaceChecker" data-ref-filename="rtc..RaceChecker">RaceChecker</a>* <dfn class="local col1 decl" id="511race_checker" title='race_checker' data-type='const rtc::RaceChecker *' data-ref="511race_checker" data-ref-filename="511race_checker">race_checker</dfn>)</td></tr>
+<tr><th id="57">57</th><td>      <a class="macro" href="thread_annotations.h.html#76" title="__attribute__((exclusive_lock_function(race_checker)))" data-ref="_M/RTC_EXCLUSIVE_LOCK_FUNCTION">RTC_EXCLUSIVE_LOCK_FUNCTION</a>(<a class="local col1 ref" href="#511race_checker" title='race_checker' data-ref="511race_checker" data-ref-filename="511race_checker">race_checker</a>) {}</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td>  <dfn class="decl def fn" id="_ZN3rtc8internal25RaceCheckerScopeDoNothingD1Ev" title='rtc::internal::RaceCheckerScopeDoNothing::~RaceCheckerScopeDoNothing' data-ref="_ZN3rtc8internal25RaceCheckerScopeDoNothingD1Ev" data-ref-filename="_ZN3rtc8internal25RaceCheckerScopeDoNothingD1Ev">~RaceCheckerScopeDoNothing</dfn>() <a class="macro" href="thread_annotations.h.html#88" title="__attribute__((unlock_function()))" data-ref="_M/RTC_UNLOCK_FUNCTION">RTC_UNLOCK_FUNCTION</a>() {}</td></tr>
+<tr><th id="60">60</th><td>};</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td>}  <i>// namespace internal</i></td></tr>
+<tr><th id="63">63</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td><u>#define <dfn class="macro" id="_M/RTC_CHECK_RUNS_SERIALIZED" data-ref="_M/RTC_CHECK_RUNS_SERIALIZED">RTC_CHECK_RUNS_SERIALIZED</dfn>(x)               \</u></td></tr>
+<tr><th id="66">66</th><td><u>  rtc::internal::RaceCheckerScope race_checker(x); \</u></td></tr>
+<tr><th id="67">67</th><td><u>  RTC_CHECK(!race_checker.RaceDetected())</u></td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td><u>#<span data-ppcond="69">if</span> <a class="macro" href="checks.h.html#18" title="1" data-ref="_M/RTC_DCHECK_IS_ON">RTC_DCHECK_IS_ON</a></u></td></tr>
+<tr><th id="70">70</th><td><u>#define <dfn class="macro" id="_M/RTC_DCHECK_RUNS_SERIALIZED" data-ref="_M/RTC_DCHECK_RUNS_SERIALIZED">RTC_DCHECK_RUNS_SERIALIZED</dfn>(x)              \</u></td></tr>
+<tr><th id="71">71</th><td><u>  rtc::internal::RaceCheckerScope race_checker(x); \</u></td></tr>
+<tr><th id="72">72</th><td><u>  RTC_DCHECK(!race_checker.RaceDetected())</u></td></tr>
+<tr><th id="73">73</th><td><u>#<span data-ppcond="69">else</span></u></td></tr>
+<tr><th id="74">74</th><td><u>#define RTC_DCHECK_RUNS_SERIALIZED(x) \</u></td></tr>
+<tr><th id="75">75</th><td><u>  rtc::internal::RaceCheckerScopeDoNothing race_checker(x)</u></td></tr>
+<tr><th id="76">76</th><td><u>#<span data-ppcond="69">endif</span></u></td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_RACE_CHECKER_H_</u></td></tr>
+<tr><th id="79">79</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../api/audio/echo_canceller3_factory.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/audio/echo_canceller3_factory.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

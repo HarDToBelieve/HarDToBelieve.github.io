@@ -1,0 +1,458 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>AVFoundationSPI.h source code [webkit/WebKitBuild/Debug/usr/local/include/pal/spi/cocoa/AVFoundationSPI.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/pal/spi/cocoa/AVFoundationSPI.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>WebKitBuild</a>/<a href='../../../../../..'>Debug</a>/<a href='../../../../..'>usr</a>/<a href='../../../..'>local</a>/<a href='../../..'>include</a>/<a href='../..'>pal</a>/<a href='..'>spi</a>/<a href='./'>cocoa</a>/<a href='AVFoundationSPI.h.html'>AVFoundationSPI.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2015-2020 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import &lt;objc/runtime.h&gt;</u></td></tr>
+<tr><th id="27">27</th><td><u>#import <a href="../../../wtf/Platform.h.html">&lt;wtf/Platform.h&gt;</a></u></td></tr>
+<tr><th id="28">28</th><td><u>#import <a href="../../../wtf/SoftLinking.h.html">&lt;wtf/SoftLinking.h&gt;</a></u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#<span data-ppcond="30">if</span> <a class="macro" href="../../../wtf/PlatformHave.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/HAVE">HAVE</a>(AVCONTENTKEYSESSION)</u></td></tr>
+<tr><th id="31">31</th><td><u>#import &lt;AVFoundation/AVContentKeySession.h&gt;</u></td></tr>
+<tr><th id="32">32</th><td><u>#<span data-ppcond="30">endif</span></u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><u>#<span data-ppcond="34">if</span> <a class="macro" href="../../../wtf/PlatformUse.h.html#36" title="(defined USE_APPLE_INTERNAL_SDK &amp;&amp; USE_APPLE_INTERNAL_SDK)" data-ref="_M/USE">USE</a>(APPLE_INTERNAL_SDK)</u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><u>#import &lt;AVFoundation/AVAssetCache_Private.h&gt;</u></td></tr>
+<tr><th id="37">37</th><td><u>#import &lt;AVFoundation/AVOutputContext_Private.h&gt;</u></td></tr>
+<tr><th id="38">38</th><td><u>#import &lt;AVFoundation/AVOutputDevice.h&gt;</u></td></tr>
+<tr><th id="39">39</th><td><u>#import &lt;AVFoundation/AVPlayer_Private.h&gt;</u></td></tr>
+<tr><th id="40">40</th><td><u>#import &lt;AVFoundation/AVPlayerItem_Private.h&gt;</u></td></tr>
+<tr><th id="41">41</th><td><u>#import &lt;AVFoundation/AVPlayerLayer_Private.h&gt;</u></td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><u>#if ENABLE(MEDIA_SOURCE)</u></td></tr>
+<tr><th id="44">44</th><td><u>#if PLATFORM(IOS_FAMILY_SIMULATOR)</u></td></tr>
+<tr><th id="45">45</th><td><u>#import "AVStreamDataParserSPI.h"</u></td></tr>
+<tr><th id="46">46</th><td><u>#else</u></td></tr>
+<tr><th id="47">47</th><td><u>#import &lt;AVFoundation/AVStreamDataParser.h&gt;</u></td></tr>
+<tr><th id="48">48</th><td><u>#endif</u></td></tr>
+<tr><th id="49">49</th><td><u>#endif</u></td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><u>#if PLATFORM(IOS_FAMILY)</u></td></tr>
+<tr><th id="52">52</th><td><u>#import &lt;AVFoundation/AVAudioSession_Private.h&gt;</u></td></tr>
+<tr><th id="53">53</th><td><u>#endif</u></td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><u>#<span data-ppcond="34">else</span></u></td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td><u>#import &lt;AVFoundation/AVPlayer.h&gt;</u></td></tr>
+<tr><th id="58">58</th><td><u>#import &lt;AVFoundation/AVPlayerItem.h&gt;</u></td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><u>#<span data-ppcond="60">if</span> <a class="macro" href="../../../wtf/PlatformHave.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/HAVE">HAVE</a>(AVFOUNDATION_INTERSTITIAL_EVENTS)</u></td></tr>
+<tr><th id="61">61</th><td><u>#import &lt;AVFoundation/AVPlayerInterstitialEventController.h&gt;</u></td></tr>
+<tr><th id="62">62</th><td><u>#<span data-ppcond="60">endif</span></u></td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_BEGIN">NS_ASSUME_NONNULL_BEGIN</span></td></tr>
+<tr><th id="65">65</th><td>@interface AVPlayerItem ()</td></tr>
+<tr><th id="66">66</th><td>@property (nonatomic, readonly) <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> seekableTimeRangesLastModifiedTime <span class="macro" title="__attribute__((availability(macosx,introduced=10_13)))" data-ref="_M/NS_AVAILABLE">NS_AVAILABLE</span>(<var>10_13</var>, <var>11_0</var>);</td></tr>
+<tr><th id="67">67</th><td>@property (nonatomic, readonly) <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> liveUpdateInterval;</td></tr>
+<tr><th id="68">68</th><td>@end</td></tr>
+<tr><th id="69">69</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_END">NS_ASSUME_NONNULL_END</span></td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><u>#<span data-ppcond="71">if</span> <a class="macro" href="../../../wtf/PlatformHave.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/HAVE">HAVE</a>(AVPLAYER_VIDEORANGEOVERRIDE)</u></td></tr>
+<tr><th id="72">72</th><td><b>typedef</b> NSString * <dfn class="typedef" id="AVVideoRange" title='AVVideoRange' data-type='NSString *' data-ref="AVVideoRange" data-ref-filename="AVVideoRange">AVVideoRange</dfn> <span class="macro" title="" data-ref="_M/NS_TYPED_ENUM">NS_TYPED_ENUM</span>;</td></tr>
+<tr><th id="73">73</th><td>@interface AVPlayer (AVPlayerVideoRangeOverride)</td></tr>
+<tr><th id="74">74</th><td>@property (nonatomic, copy, nullable) <a class="typedef" href="#AVVideoRange" title='AVVideoRange' data-type='NSString *' data-ref="AVVideoRange" data-ref-filename="AVVideoRange">AVVideoRange</a> videoRangeOverride;</td></tr>
+<tr><th id="75">75</th><td>+ (nullable <a class="typedef" href="#AVVideoRange" title='AVVideoRange' data-type='NSString *' data-ref="AVVideoRange" data-ref-filename="AVVideoRange">AVVideoRange</a>)preferredVideoRangeForDisplays:(nonnull NSArray &lt;NSNumber *&gt;*)<dfn class="local col1 decl" id="1displays" title='displays' data-type='NSArray&lt;NSNumber *&gt; * _Nonnull' data-ref="1displays" data-ref-filename="1displays">displays</dfn>;</td></tr>
+<tr><th id="76">76</th><td>@end</td></tr>
+<tr><th id="77">77</th><td><u>#<span data-ppcond="71">endif</span></u></td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td><u>#<span data-ppcond="79">if</span> <a class="macro" href="../../../wtf/PlatformHave.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/HAVE">HAVE</a>(AVPLAYER_SUPRESSES_AUDIO_RENDERING)</u></td></tr>
+<tr><th id="80">80</th><td>@interface AVPlayer (AVPlayerSupressesAudioRendering)</td></tr>
+<tr><th id="81">81</th><td>@property (nonatomic, getter=_suppressesAudioRendering, setter=_setSuppressesAudioRendering:) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> suppressesAudioRendering;</td></tr>
+<tr><th id="82">82</th><td>@end</td></tr>
+<tr><th id="83">83</th><td><u>#<span data-ppcond="79">endif</span></u></td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td><u>#<span data-ppcond="85">if</span> <a class="macro" href="../../../wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(WIRELESS_PLAYBACK_TARGET) || <a class="macro" href="../../../wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_BEGIN">NS_ASSUME_NONNULL_BEGIN</span></td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td>@<b>class</b> AVOutputContext;</td></tr>
+<tr><th id="90">90</th><td>@<b>class</b> AVOutputDevice;</td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td>@interface AVOutputContext : NSObject &lt;NSSecureCoding&gt;</td></tr>
+<tr><th id="93">93</th><td>@property (nonatomic, readonly) NSString *deviceName;</td></tr>
+<tr><th id="94">94</th><td>+ (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)outputContext;</td></tr>
+<tr><th id="95">95</th><td>+ (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)iTunesAudioContext;</td></tr>
+<tr><th id="96">96</th><td>+ (nullable AVOutputContext *)sharedAudioPresentationOutputContext;</td></tr>
+<tr><th id="97">97</th><td>+ (nullable AVOutputContext *)sharedSystemAudioContext;</td></tr>
+<tr><th id="98">98</th><td>+ (nullable AVOutputContext *)outputContextForID:(NSString *)<dfn class="local col2 decl" id="2ID" title='ID' data-type='NSString * _Nonnull' data-ref="2ID" data-ref-filename="2ID">ID</dfn>;</td></tr>
+<tr><th id="99">99</th><td>@property (readonly) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> supportsMultipleOutputDevices;</td></tr>
+<tr><th id="100">100</th><td>@property (readonly) NSArray&lt;AVOutputDevice *&gt; *outputDevices;</td></tr>
+<tr><th id="101">101</th><td>@property (nonatomic, readonly, nullable) AVOutputDevice *outputDevice;</td></tr>
+<tr><th id="102">102</th><td>@end</td></tr>
+<tr><th id="103">103</th><td></td></tr>
+<tr><th id="104">104</th><td><b>typedef</b> <span class="macro" title="NSUInteger AVOutputDeviceFeatures; enum __attribute__((flag_enum,enum_extensibility(open))) : NSUInteger" data-ref="_M/NS_OPTIONS">NS_OPTIONS</span>(<span class='typedef' title='NSUInteger' data-type='unsigned long' data-ref="NSUInteger" data-ref-filename="NSUInteger">NSUInteger</span>, <dfn class="typedef" id="AVOutputDeviceFeatures" title='AVOutputDeviceFeatures' data-type='NSUInteger' data-ref="AVOutputDeviceFeatures" data-ref-filename="AVOutputDeviceFeatures">AVOutputDeviceFeatures</dfn>) {</td></tr>
+<tr><th id="105">105</th><td>    <dfn class="enum" id="AVOutputDeviceFeatureAudio" title='AVOutputDeviceFeatureAudio' data-ref="AVOutputDeviceFeatureAudio" data-ref-filename="AVOutputDeviceFeatureAudio">AVOutputDeviceFeatureAudio</dfn> = (<var>1UL</var> &lt;&lt; <var>0</var>),</td></tr>
+<tr><th id="106">106</th><td>    <dfn class="enum" id="AVOutputDeviceFeatureScreen" title='AVOutputDeviceFeatureScreen' data-ref="AVOutputDeviceFeatureScreen" data-ref-filename="AVOutputDeviceFeatureScreen">AVOutputDeviceFeatureScreen</dfn> = (<var>1UL</var> &lt;&lt; <var>1</var>),</td></tr>
+<tr><th id="107">107</th><td>    <dfn class="enum" id="AVOutputDeviceFeatureVideo" title='AVOutputDeviceFeatureVideo' data-ref="AVOutputDeviceFeatureVideo" data-ref-filename="AVOutputDeviceFeatureVideo">AVOutputDeviceFeatureVideo</dfn> = (<var>1UL</var> &lt;&lt; <var>2</var>),</td></tr>
+<tr><th id="108">108</th><td>};</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td>@interface AVOutputDevice : NSObject</td></tr>
+<tr><th id="111">111</th><td>@property (nonatomic, readonly) NSString *name;</td></tr>
+<tr><th id="112">112</th><td>@property (nonatomic, readonly) NSString *deviceName;</td></tr>
+<tr><th id="113">113</th><td>@property (nonatomic, readonly) <a class="typedef" href="#104" title='AVOutputDeviceFeatures' data-type='NSUInteger' data-ref="AVOutputDeviceFeatures" data-ref-filename="AVOutputDeviceFeatures">AVOutputDeviceFeatures</a> deviceFeatures;</td></tr>
+<tr><th id="114">114</th><td>@property (nonatomic, readonly) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> supportsHeadTrackedSpatialAudio;</td></tr>
+<tr><th id="115">115</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)allowsHeadTrackedSpatialAudio;</td></tr>
+<tr><th id="116">116</th><td>@end</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td><u>#<span data-ppcond="118">if</span> !<a class="macro" href="../../../wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="119">119</th><td>@interface AVPlayer (AVPlayerExternalPlaybackSupportPrivate)</td></tr>
+<tr><th id="120">120</th><td>@property (nonatomic, retain, nullable) AVOutputContext *outputContext;</td></tr>
+<tr><th id="121">121</th><td>@end</td></tr>
+<tr><th id="122">122</th><td><u>#<span data-ppcond="118">else</span></u></td></tr>
+<tr><th id="123">123</th><td><b>typedef</b> NS_ENUM(NSInteger, AVPlayerExternalPlaybackType) {</td></tr>
+<tr><th id="124">124</th><td>    AVPlayerExternalPlaybackTypeNone,</td></tr>
+<tr><th id="125">125</th><td>    AVPlayerExternalPlaybackTypeAirPlay,</td></tr>
+<tr><th id="126">126</th><td>    AVPlayerExternalPlaybackTypeTVOut,</td></tr>
+<tr><th id="127">127</th><td>};</td></tr>
+<tr><th id="128">128</th><td></td></tr>
+<tr><th id="129">129</th><td>@interface AVPlayer (AVPlayerExternalPlaybackSupportPrivate)</td></tr>
+<tr><th id="130">130</th><td>@property (nonatomic, readonly) AVPlayerExternalPlaybackType externalPlaybackType;</td></tr>
+<tr><th id="131">131</th><td>@end</td></tr>
+<tr><th id="132">132</th><td><u>#<span data-ppcond="118">endif</span></u></td></tr>
+<tr><th id="133">133</th><td></td></tr>
+<tr><th id="134">134</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_END">NS_ASSUME_NONNULL_END</span></td></tr>
+<tr><th id="135">135</th><td></td></tr>
+<tr><th id="136">136</th><td><u>#<span data-ppcond="85">endif</span> // ENABLE(WIRELESS_PLAYBACK_TARGET) || PLATFORM(IOS_FAMILY)</u></td></tr>
+<tr><th id="137">137</th><td></td></tr>
+<tr><th id="138">138</th><td><u>#import &lt;AVFoundation/AVAssetCache.h&gt;</u></td></tr>
+<tr><th id="139">139</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_BEGIN">NS_ASSUME_NONNULL_BEGIN</span></td></tr>
+<tr><th id="140">140</th><td>@interface AVAssetCache ()</td></tr>
+<tr><th id="141">141</th><td>+ (AVAssetCache *)assetCacheWithURL:(NSURL *)<dfn class="local col3 decl" id="3URL" title='URL' data-type='NSURL * _Nonnull' data-ref="3URL" data-ref-filename="3URL">URL</dfn>;</td></tr>
+<tr><th id="142">142</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)initWithURL:(NSURL *)<dfn class="local col4 decl" id="4URL" title='URL' data-type='NSURL * _Nonnull' data-ref="4URL" data-ref-filename="4URL">URL</dfn>;</td></tr>
+<tr><th id="143">143</th><td>- (NSArray *)allKeys;</td></tr>
+<tr><th id="144">144</th><td>- (NSDate *)lastModifiedDateOfEntryForKey:(NSString *)<dfn class="local col5 decl" id="5key" title='key' data-type='NSString * _Nonnull' data-ref="5key" data-ref-filename="5key">key</dfn>;</td></tr>
+<tr><th id="145">145</th><td>- (<em>void</em>)removeEntryForKey:(NSString *)<dfn class="local col6 decl" id="6key" title='key' data-type='NSString * _Nonnull' data-ref="6key" data-ref-filename="6key">key</dfn>;</td></tr>
+<tr><th id="146">146</th><td>@property (nonatomic, readonly, copy) NSURL *URL;</td></tr>
+<tr><th id="147">147</th><td>@end</td></tr>
+<tr><th id="148">148</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_END">NS_ASSUME_NONNULL_END</span></td></tr>
+<tr><th id="149">149</th><td></td></tr>
+<tr><th id="150">150</th><td><u>#<span data-ppcond="150">if</span> <a class="macro" href="../../../wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY) &amp;&amp; !<a class="macro" href="../../../wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY_SIMULATOR &amp;&amp; WTF_PLATFORM_IOS_FAMILY_SIMULATOR)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY_SIMULATOR)</u></td></tr>
+<tr><th id="151">151</th><td>@interface AVPlayer (AVPlayerVideoSleepPrevention)</td></tr>
+<tr><th id="152">152</th><td>@property (nonatomic, getter=_preventsSleepDuringVideoPlayback, setter=_setPreventsSleepDuringVideoPlayback:) BOOL preventsSleepDuringVideoPlayback;</td></tr>
+<tr><th id="153">153</th><td>@end</td></tr>
+<tr><th id="154">154</th><td></td></tr>
+<tr><th id="155">155</th><td><u>#<span data-ppcond="150">endif</span> // PLATFORM(IOS_FAMILY) &amp;&amp; !PLATFORM(IOS_FAMILY_SIMULATOR)</u></td></tr>
+<tr><th id="156">156</th><td></td></tr>
+<tr><th id="157">157</th><td><u>#<span data-ppcond="157">if</span> <a class="macro" href="../../../wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(MEDIA_SOURCE)</u></td></tr>
+<tr><th id="158">158</th><td></td></tr>
+<tr><th id="159">159</th><td><u>#pragma mark -</u></td></tr>
+<tr><th id="160">160</th><td><u>#pragma mark AVStreamDataParser</u></td></tr>
+<tr><th id="161">161</th><td></td></tr>
+<tr><th id="162">162</th><td>@protocol AVStreamDataParserOutputHandling &lt;NSObject&gt;</td></tr>
+<tr><th id="163">163</th><td>@end</td></tr>
+<tr><th id="164">164</th><td></td></tr>
+<tr><th id="165">165</th><td><b>typedef</b> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class='typedef' title='CMPersistentTrackID' data-type='int32_t' data-ref="CMPersistentTrackID" data-ref-filename="CMPersistentTrackID" id="CMPersistentTrackID">CMPersistentTrackID</dfn>;</td></tr>
+<tr><th id="166">166</th><td></td></tr>
+<tr><th id="167">167</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_BEGIN">NS_ASSUME_NONNULL_BEGIN</span></td></tr>
+<tr><th id="168">168</th><td><b>typedef</b> <span class="macro" title="enum __attribute__((enum_extensibility(open))) AVStreamDataParserOutputMediaDataFlags : NSUInteger AVStreamDataParserOutputMediaDataFlags; enum AVStreamDataParserOutputMediaDataFlags : NSUInteger" data-ref="_M/NS_ENUM">NS_ENUM</span>(NSUInteger, <dfn class="type" id="AVStreamDataParserOutputMediaDataFlags" title='AVStreamDataParserOutputMediaDataFlags' data-ref="AVStreamDataParserOutputMediaDataFlags" data-ref-filename="AVStreamDataParserOutputMediaDataFlags"><dfn class="typedef" id="AVStreamDataParserOutputMediaDataFlags" title='AVStreamDataParserOutputMediaDataFlags' data-type='enum AVStreamDataParserOutputMediaDataFlags' data-ref="AVStreamDataParserOutputMediaDataFlags" data-ref-filename="AVStreamDataParserOutputMediaDataFlags"><a class="type" href="#168" title='AVStreamDataParserOutputMediaDataFlags' data-ref="AVStreamDataParserOutputMediaDataFlags" data-ref-filename="AVStreamDataParserOutputMediaDataFlags"><dfn class="type def" id="AVStreamDataParserOutputMediaDataFlags" title='AVStreamDataParserOutputMediaDataFlags' data-ref="AVStreamDataParserOutputMediaDataFlags" data-ref-filename="AVStreamDataParserOutputMediaDataFlags">AVStreamDataParserOutputMediaDataFlags</dfn></a></dfn></dfn>) {</td></tr>
+<tr><th id="169">169</th><td>    <dfn class="enum" id="AVStreamDataParserOutputMediaDataReserved" title='AVStreamDataParserOutputMediaDataReserved' data-ref="AVStreamDataParserOutputMediaDataReserved" data-ref-filename="AVStreamDataParserOutputMediaDataReserved">AVStreamDataParserOutputMediaDataReserved</dfn> = <var>1</var> &lt;&lt; <var>0</var></td></tr>
+<tr><th id="170">170</th><td>};</td></tr>
+<tr><th id="171">171</th><td></td></tr>
+<tr><th id="172">172</th><td><b>typedef</b> <span class="macro" title="enum __attribute__((enum_extensibility(open))) AVStreamDataParserStreamDataFlags : NSUInteger AVStreamDataParserStreamDataFlags; enum AVStreamDataParserStreamDataFlags : NSUInteger" data-ref="_M/NS_ENUM">NS_ENUM</span>(NSUInteger, <dfn class="type" id="AVStreamDataParserStreamDataFlags" title='AVStreamDataParserStreamDataFlags' data-ref="AVStreamDataParserStreamDataFlags" data-ref-filename="AVStreamDataParserStreamDataFlags"><dfn class="typedef" id="AVStreamDataParserStreamDataFlags" title='AVStreamDataParserStreamDataFlags' data-type='enum AVStreamDataParserStreamDataFlags' data-ref="AVStreamDataParserStreamDataFlags" data-ref-filename="AVStreamDataParserStreamDataFlags"><a class="type" href="#172" title='AVStreamDataParserStreamDataFlags' data-ref="AVStreamDataParserStreamDataFlags" data-ref-filename="AVStreamDataParserStreamDataFlags"><dfn class="type def" id="AVStreamDataParserStreamDataFlags" title='AVStreamDataParserStreamDataFlags' data-ref="AVStreamDataParserStreamDataFlags" data-ref-filename="AVStreamDataParserStreamDataFlags">AVStreamDataParserStreamDataFlags</dfn></a></dfn></dfn>) {</td></tr>
+<tr><th id="173">173</th><td>    <dfn class="enum" id="AVStreamDataParserStreamDataDiscontinuity" title='AVStreamDataParserStreamDataDiscontinuity' data-ref="AVStreamDataParserStreamDataDiscontinuity" data-ref-filename="AVStreamDataParserStreamDataDiscontinuity">AVStreamDataParserStreamDataDiscontinuity</dfn> = <var>1</var> &lt;&lt; <var>0</var>,</td></tr>
+<tr><th id="174">174</th><td>};</td></tr>
+<tr><th id="175">175</th><td></td></tr>
+<tr><th id="176">176</th><td>@interface AVStreamDataParser : NSObject</td></tr>
+<tr><th id="177">177</th><td>- (<em>void</em>)setDelegate:(nullable id&lt;AVStreamDataParserOutputHandling&gt;)<dfn class="local col7 decl" id="7delegate" title='delegate' data-type='id&lt;AVStreamDataParserOutputHandling&gt; _Nullable' data-ref="7delegate" data-ref-filename="7delegate">delegate</dfn>;</td></tr>
+<tr><th id="178">178</th><td>- (<em>void</em>)appendStreamData:(NSData *)<dfn class="local col8 decl" id="8data" title='data' data-type='NSData * _Nonnull' data-ref="8data" data-ref-filename="8data">data</dfn>;</td></tr>
+<tr><th id="179">179</th><td>- (<em>void</em>)appendStreamData:(NSData *)<dfn class="local col9 decl" id="9data" title='data' data-type='NSData * _Nonnull' data-ref="9data" data-ref-filename="9data">data</dfn> withFlags:(<a class="typedef" href="#172" title='AVStreamDataParserStreamDataFlags' data-type='enum AVStreamDataParserStreamDataFlags' data-ref="AVStreamDataParserStreamDataFlags" data-ref-filename="AVStreamDataParserStreamDataFlags">AVStreamDataParserStreamDataFlags</a>)<dfn class="local col0 decl" id="10flags" title='flags' data-type='AVStreamDataParserStreamDataFlags' data-ref="10flags" data-ref-filename="10flags">flags</dfn>;</td></tr>
+<tr><th id="180">180</th><td>- (<em>void</em>)setShouldProvideMediaData:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col1 decl" id="11shouldProvideMediaData" title='shouldProvideMediaData' data-type='BOOL' data-ref="11shouldProvideMediaData" data-ref-filename="11shouldProvideMediaData">shouldProvideMediaData</dfn> forTrackID:(<span class='typedef' title='CMPersistentTrackID' data-type='int32_t' data-ref="CMPersistentTrackID" data-ref-filename="CMPersistentTrackID">CMPersistentTrackID</span>)<dfn class="local col2 decl" id="12trackID" title='trackID' data-type='CMPersistentTrackID' data-ref="12trackID" data-ref-filename="12trackID">trackID</dfn>;</td></tr>
+<tr><th id="181">181</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)shouldProvideMediaDataForTrackID:(<span class='typedef' title='CMPersistentTrackID' data-type='int32_t' data-ref="CMPersistentTrackID" data-ref-filename="CMPersistentTrackID">CMPersistentTrackID</span>)<dfn class="local col3 decl" id="13trackID" title='trackID' data-type='CMPersistentTrackID' data-ref="13trackID" data-ref-filename="13trackID">trackID</dfn>;</td></tr>
+<tr><th id="182">182</th><td>- (<em>void</em>)providePendingMediaData;</td></tr>
+<tr><th id="183">183</th><td>- (<em>void</em>)processContentKeyResponseData:(NSData *)<dfn class="local col4 decl" id="14contentKeyResponseData" title='contentKeyResponseData' data-type='NSData * _Nonnull' data-ref="14contentKeyResponseData" data-ref-filename="14contentKeyResponseData">contentKeyResponseData</dfn> forTrackID:(<span class='typedef' title='CMPersistentTrackID' data-type='int32_t' data-ref="CMPersistentTrackID" data-ref-filename="CMPersistentTrackID">CMPersistentTrackID</span>)<dfn class="local col5 decl" id="15trackID" title='trackID' data-type='CMPersistentTrackID' data-ref="15trackID" data-ref-filename="15trackID">trackID</dfn>;</td></tr>
+<tr><th id="184">184</th><td>- (<em>void</em>)processContentKeyResponseError:(NSError *)<dfn class="local col6 decl" id="16error" title='error' data-type='NSError * _Nonnull' data-ref="16error" data-ref-filename="16error">error</dfn> forTrackID:(<span class='typedef' title='CMPersistentTrackID' data-type='int32_t' data-ref="CMPersistentTrackID" data-ref-filename="CMPersistentTrackID">CMPersistentTrackID</span>)<dfn class="local col7 decl" id="17trackID" title='trackID' data-type='CMPersistentTrackID' data-ref="17trackID" data-ref-filename="17trackID">trackID</dfn>;</td></tr>
+<tr><th id="185">185</th><td>- (<em>void</em>)renewExpiringContentKeyResponseDataForTrackID:(<span class='typedef' title='CMPersistentTrackID' data-type='int32_t' data-ref="CMPersistentTrackID" data-ref-filename="CMPersistentTrackID">CMPersistentTrackID</span>)<dfn class="local col8 decl" id="18trackID" title='trackID' data-type='CMPersistentTrackID' data-ref="18trackID" data-ref-filename="18trackID">trackID</dfn>;</td></tr>
+<tr><th id="186">186</th><td>- (NSData *)streamingContentKeyRequestDataForApp:(NSData *)<dfn class="local col9 decl" id="19appIdentifier" title='appIdentifier' data-type='NSData * _Nonnull' data-ref="19appIdentifier" data-ref-filename="19appIdentifier">appIdentifier</dfn> contentIdentifier:(NSData *)<dfn class="local col0 decl" id="20contentIdentifier" title='contentIdentifier' data-type='NSData * _Nonnull' data-ref="20contentIdentifier" data-ref-filename="20contentIdentifier">contentIdentifier</dfn> trackID:(<span class='typedef' title='CMPersistentTrackID' data-type='int32_t' data-ref="CMPersistentTrackID" data-ref-filename="CMPersistentTrackID">CMPersistentTrackID</span>)<dfn class="local col1 decl" id="21trackID" title='trackID' data-type='CMPersistentTrackID' data-ref="21trackID" data-ref-filename="21trackID">trackID</dfn> options:(NSDictionary *)<dfn class="local col2 decl" id="22options" title='options' data-type='NSDictionary * _Nonnull' data-ref="22options" data-ref-filename="22options">options</dfn> error:(NSError **)<dfn class="local col3 decl" id="23outError" title='outError' data-type='NSError * _Nullable * _Nullable' data-ref="23outError" data-ref-filename="23outError">outError</dfn>;</td></tr>
+<tr><th id="187">187</th><td>@end</td></tr>
+<tr><th id="188">188</th><td></td></tr>
+<tr><th id="189">189</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_END">NS_ASSUME_NONNULL_END</span></td></tr>
+<tr><th id="190">190</th><td></td></tr>
+<tr><th id="191">191</th><td><u>#<span data-ppcond="191">if</span> <a class="macro" href="../../../wtf/PlatformHave.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/HAVE">HAVE</a>(AVCONTENTKEYSESSION)</u></td></tr>
+<tr><th id="192">192</th><td>@interface AVStreamDataParser () &lt;AVContentKeyRecipient&gt;</td></tr>
+<tr><th id="193">193</th><td>@end</td></tr>
+<tr><th id="194">194</th><td><u>#<span data-ppcond="191">endif</span></u></td></tr>
+<tr><th id="195">195</th><td></td></tr>
+<tr><th id="196">196</th><td><u>#<span data-ppcond="157">endif</span> // ENABLE(MEDIA_SOURCE)</u></td></tr>
+<tr><th id="197">197</th><td></td></tr>
+<tr><th id="198">198</th><td><u>#<span data-ppcond="34">endif</span> // USE(APPLE_INTERNAL_SDK)</u></td></tr>
+<tr><th id="199">199</th><td></td></tr>
+<tr><th id="200">200</th><td><u>#import &lt;AVFoundation/AVPlayerLayer.h&gt;</u></td></tr>
+<tr><th id="201">201</th><td></td></tr>
+<tr><th id="202">202</th><td><u>#<span data-ppcond="202">if</span> <a class="macro" href="../../../wtf/PlatformHave.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/HAVE">HAVE</a>(AVCONTENTKEYSESSION)</u></td></tr>
+<tr><th id="203">203</th><td>@interface AVContentKeyReportGroup : NSObject</td></tr>
+<tr><th id="204">204</th><td>@property (readonly, nullable) NSData *contentProtectionSessionIdentifier;</td></tr>
+<tr><th id="205">205</th><td>- (<em>void</em>)expire;</td></tr>
+<tr><th id="206">206</th><td>- (<em>void</em>)processContentKeyRequestWithIdentifier:(nullable <span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col4 decl" id="24identifier" title='identifier' data-type='id _Nullable' data-ref="24identifier" data-ref-filename="24identifier">identifier</dfn> initializationData:(nullable NSData *)<dfn class="local col5 decl" id="25initializationData" title='initializationData' data-type='NSData * _Nullable' data-ref="25initializationData" data-ref-filename="25initializationData">initializationData</dfn> options:(nullable NSDictionary&lt;NSString *, <span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>&gt; *)<dfn class="local col6 decl" id="26options" title='options' data-type='NSDictionary&lt;NSString *,id&gt; * _Nullable' data-ref="26options" data-ref-filename="26options">options</dfn>;</td></tr>
+<tr><th id="207">207</th><td>- (<em>void</em>)associateContentKeyRequest:(nonnull AVContentKeyRequest *)<dfn class="local col7 decl" id="27contentKeyRequest" title='contentKeyRequest' data-type='AVContentKeyRequest * _Nonnull' data-ref="27contentKeyRequest" data-ref-filename="27contentKeyRequest">contentKeyRequest</dfn>;</td></tr>
+<tr><th id="208">208</th><td>@end</td></tr>
+<tr><th id="209">209</th><td></td></tr>
+<tr><th id="210">210</th><td>@interface AVContentKeySession (AVContentKeyGroup_Support)</td></tr>
+<tr><th id="211">211</th><td>@property (readonly, nullable) AVContentKeyReportGroup *defaultContentKeyGroup;</td></tr>
+<tr><th id="212">212</th><td>- (nonnull AVContentKeyReportGroup *)makeContentKeyGroup;</td></tr>
+<tr><th id="213">213</th><td>@end</td></tr>
+<tr><th id="214">214</th><td></td></tr>
+<tr><th id="215">215</th><td>@interface AVContentKeyRequest (OutputObscured)</td></tr>
+<tr><th id="216">216</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_BEGIN">NS_ASSUME_NONNULL_BEGIN</span></td></tr>
+<tr><th id="217">217</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)willOutputBeObscuredDueToInsufficientExternalProtectionForDisplays:(NSArray&lt;NSNumber *&gt; *)<dfn class="local col8 decl" id="28displays" title='displays' data-type='NSArray&lt;NSNumber *&gt; * _Nonnull' data-ref="28displays" data-ref-filename="28displays">displays</dfn>;</td></tr>
+<tr><th id="218">218</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_END">NS_ASSUME_NONNULL_END</span></td></tr>
+<tr><th id="219">219</th><td>@end</td></tr>
+<tr><th id="220">220</th><td></td></tr>
+<tr><th id="221">221</th><td><u>#<span data-ppcond="221">if</span> <a class="macro" href="../../../wtf/PlatformHave.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/HAVE">HAVE</a>(AVCONTENTKEYREQUEST_PENDING_PROTECTION_STATUS)</u></td></tr>
+<tr><th id="222">222</th><td><b>typedef</b> <span class="macro" title="enum __attribute__((enum_extensibility(open))) AVExternalContentProtectionStatus : NSInteger AVExternalContentProtectionStatus; enum AVExternalContentProtectionStatus : NSInteger" data-ref="_M/NS_ENUM">NS_ENUM</span>(NSInteger, <dfn class="type" id="AVExternalContentProtectionStatus" title='AVExternalContentProtectionStatus' data-ref="AVExternalContentProtectionStatus" data-ref-filename="AVExternalContentProtectionStatus"><dfn class="typedef" id="AVExternalContentProtectionStatus" title='AVExternalContentProtectionStatus' data-type='enum AVExternalContentProtectionStatus' data-ref="AVExternalContentProtectionStatus" data-ref-filename="AVExternalContentProtectionStatus"><a class="type" href="#222" title='AVExternalContentProtectionStatus' data-ref="AVExternalContentProtectionStatus" data-ref-filename="AVExternalContentProtectionStatus"><dfn class="type def" id="AVExternalContentProtectionStatus" title='AVExternalContentProtectionStatus' data-ref="AVExternalContentProtectionStatus" data-ref-filename="AVExternalContentProtectionStatus">AVExternalContentProtectionStatus</dfn></a></dfn></dfn>) {</td></tr>
+<tr><th id="223">223</th><td>    <dfn class="enum" id="AVExternalContentProtectionStatusPending" title='AVExternalContentProtectionStatusPending' data-ref="AVExternalContentProtectionStatusPending" data-ref-filename="AVExternalContentProtectionStatusPending">AVExternalContentProtectionStatusPending</dfn>      = <var>0</var>,</td></tr>
+<tr><th id="224">224</th><td>    <dfn class="enum" id="AVExternalContentProtectionStatusSufficient" title='AVExternalContentProtectionStatusSufficient' data-ref="AVExternalContentProtectionStatusSufficient" data-ref-filename="AVExternalContentProtectionStatusSufficient">AVExternalContentProtectionStatusSufficient</dfn>   = <var>1</var>,</td></tr>
+<tr><th id="225">225</th><td>    <dfn class="enum" id="AVExternalContentProtectionStatusInsufficient" title='AVExternalContentProtectionStatusInsufficient' data-ref="AVExternalContentProtectionStatusInsufficient" data-ref-filename="AVExternalContentProtectionStatusInsufficient">AVExternalContentProtectionStatusInsufficient</dfn> = <var>2</var>,</td></tr>
+<tr><th id="226">226</th><td>};</td></tr>
+<tr><th id="227">227</th><td></td></tr>
+<tr><th id="228">228</th><td>@interface AVContentKeyRequest (AVContentKeyRequest_PendingProtectionStatus)</td></tr>
+<tr><th id="229">229</th><td>- (<a class="typedef" href="#222" title='AVExternalContentProtectionStatus' data-type='enum AVExternalContentProtectionStatus' data-ref="AVExternalContentProtectionStatus" data-ref-filename="AVExternalContentProtectionStatus">AVExternalContentProtectionStatus</a>)externalContentProtectionStatus;</td></tr>
+<tr><th id="230">230</th><td>@end</td></tr>
+<tr><th id="231">231</th><td><u>#<span data-ppcond="221">endif</span></u></td></tr>
+<tr><th id="232">232</th><td></td></tr>
+<tr><th id="233">233</th><td><u>#<span data-ppcond="202">endif</span> // HAVE(AVCONTENTKEYSESSION)</u></td></tr>
+<tr><th id="234">234</th><td></td></tr>
+<tr><th id="235">235</th><td><u>#<span data-ppcond="235">if</span> <a class="macro" href="../../../wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(MEDIA_SOURCE) &amp;&amp; !<a class="macro" href="../../../wtf/PlatformUse.h.html#36" title="(defined USE_APPLE_INTERNAL_SDK &amp;&amp; USE_APPLE_INTERNAL_SDK)" data-ref="_M/USE">USE</a>(APPLE_INTERNAL_SDK)</u></td></tr>
+<tr><th id="236">236</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_BEGIN">NS_ASSUME_NONNULL_BEGIN</span></td></tr>
+<tr><th id="237">237</th><td>@interface AVStreamDataParser (AVStreamDataParserPrivate)</td></tr>
+<tr><th id="238">238</th><td>+ (NSString *)outputMIMECodecParameterForInputMIMECodecParameter:(NSString *)<dfn class="local col9 decl" id="29inputMIMECodecParameter" title='inputMIMECodecParameter' data-type='NSString * _Nonnull' data-ref="29inputMIMECodecParameter" data-ref-filename="29inputMIMECodecParameter">inputMIMECodecParameter</dfn>;</td></tr>
+<tr><th id="239">239</th><td>@end</td></tr>
+<tr><th id="240">240</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_END">NS_ASSUME_NONNULL_END</span></td></tr>
+<tr><th id="241">241</th><td><u>#<span data-ppcond="235">endif</span></u></td></tr>
+<tr><th id="242">242</th><td></td></tr>
+<tr><th id="243">243</th><td><u>#<span data-ppcond="243">if</span> <a class="macro" href="../../../wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY) &amp;&amp; (!<a class="macro" href="../../../wtf/PlatformHave.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/HAVE">HAVE</a>(AVKIT) || !<a class="macro" href="../../../wtf/PlatformUse.h.html#36" title="(defined USE_APPLE_INTERNAL_SDK &amp;&amp; USE_APPLE_INTERNAL_SDK)" data-ref="_M/USE">USE</a>(APPLE_INTERNAL_SDK))</u></td></tr>
+<tr><th id="244">244</th><td>@interface AVPlayerLayer (AVPlayerLayerPictureInPictureModeSupportPrivate)</td></tr>
+<tr><th id="245">245</th><td>- (<em>void</em>)setPIPModeEnabled:(BOOL)flag;</td></tr>
+<tr><th id="246">246</th><td>@end</td></tr>
+<tr><th id="247">247</th><td><u>#<span data-ppcond="243">endif</span> // !HAVE(AVKIT)</u></td></tr>
+<tr><th id="248">248</th><td></td></tr>
+<tr><th id="249">249</th><td><u>#<span data-ppcond="249">if</span> !<a class="macro" href="../../../wtf/PlatformUse.h.html#36" title="(defined USE_APPLE_INTERNAL_SDK &amp;&amp; USE_APPLE_INTERNAL_SDK)" data-ref="_M/USE">USE</a>(APPLE_INTERNAL_SDK) || <a class="macro" href="../../../wtf/PlatformHave.h.html#36" title="(defined HAVE_VIDEO_PERFORMANCE_METRICS &amp;&amp; HAVE_VIDEO_PERFORMANCE_METRICS)" data-ref="_M/HAVE">HAVE</a>(VIDEO_PERFORMANCE_METRICS)</u></td></tr>
+<tr><th id="250">250</th><td>@<b>class</b> AVVideoPerformanceMetrics;</td></tr>
+<tr><th id="251">251</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_BEGIN">NS_ASSUME_NONNULL_BEGIN</span></td></tr>
+<tr><th id="252">252</th><td>@interface AVPlayerLayer (AVPlayerLayerVideoPerformanceMetrics)</td></tr>
+<tr><th id="253">253</th><td>- (AVVideoPerformanceMetrics *)videoPerformanceMetrics;</td></tr>
+<tr><th id="254">254</th><td>@end</td></tr>
+<tr><th id="255">255</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_END">NS_ASSUME_NONNULL_END</span></td></tr>
+<tr><th id="256">256</th><td><u>#<span data-ppcond="249">endif</span></u></td></tr>
+<tr><th id="257">257</th><td></td></tr>
+<tr><th id="258">258</th><td><i>// FIXME: Wrap in a #if USE(APPLE_INTERNAL_SDK) once these SPI land</i></td></tr>
+<tr><th id="259">259</th><td><u>#import &lt;AVFoundation/AVAsset.h&gt;</u></td></tr>
+<tr><th id="260">260</th><td><u>#import &lt;AVFoundation/AVAssetResourceLoader.h&gt;</u></td></tr>
+<tr><th id="261">261</th><td></td></tr>
+<tr><th id="262">262</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_BEGIN">NS_ASSUME_NONNULL_BEGIN</span></td></tr>
+<tr><th id="263">263</th><td></td></tr>
+<tr><th id="264">264</th><td>@interface AVAssetResourceLoader (AVAssetResourceLoaderPrivate)</td></tr>
+<tr><th id="265">265</th><td>@property (nonatomic, readonly) id&lt;NSURLSessionDataDelegate&gt; URLSessionDataDelegate;</td></tr>
+<tr><th id="266">266</th><td>@property (nonatomic, readonly) NSOperationQueue *URLSessionDataDelegateQueue;</td></tr>
+<tr><th id="267">267</th><td>@property (nonatomic, nullable, retain) NSURLSession *URLSession;</td></tr>
+<tr><th id="268">268</th><td>@end</td></tr>
+<tr><th id="269">269</th><td></td></tr>
+<tr><th id="270">270</th><td>@interface AVAsset (AVAssetFragmentsPrivate)</td></tr>
+<tr><th id="271">271</th><td>@property (nonatomic, readonly) <span class='typedef' title='CMTime' data-type='struct CMTime' data-ref="CMTime" data-ref-filename="CMTime">CMTime</span> overallDurationHint;</td></tr>
+<tr><th id="272">272</th><td>@end</td></tr>
+<tr><th id="273">273</th><td></td></tr>
+<tr><th id="274">274</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_END">NS_ASSUME_NONNULL_END</span></td></tr>
+<tr><th id="275">275</th><td></td></tr>
+<tr><th id="276">276</th><td><u>#import &lt;CoreMedia/CMSampleBuffer.h&gt;</u></td></tr>
+<tr><th id="277">277</th><td><u>#import &lt;CoreMedia/CMSync.h&gt;</u></td></tr>
+<tr><th id="278">278</th><td></td></tr>
+<tr><th id="279">279</th><td><u>#<span data-ppcond="279">if</span> <span class="macro" title="" data-ref="_M/__has_include">__has_include</span>(&lt;AVFoundation/AVSampleBufferRenderSynchronizer.h&gt;)</u></td></tr>
+<tr><th id="280">280</th><td><u>#import &lt;AVFoundation/AVSampleBufferRenderSynchronizer.h&gt;</u></td></tr>
+<tr><th id="281">281</th><td></td></tr>
+<tr><th id="282">282</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_BEGIN">NS_ASSUME_NONNULL_BEGIN</span></td></tr>
+<tr><th id="283">283</th><td>@interface AVSampleBufferRenderSynchronizer (AVSampleBufferRenderSynchronizerPrivate)</td></tr>
+<tr><th id="284">284</th><td>- (<em>void</em>)removeRenderer:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col0 decl" id="30renderer" title='renderer' data-type='id _Nonnull' data-ref="30renderer" data-ref-filename="30renderer">renderer</dfn> atTime:(<span class='typedef' title='CMTime' data-type='struct CMTime' data-ref="CMTime" data-ref-filename="CMTime">CMTime</span>)<dfn class="local col1 decl" id="31time" title='time' data-type='CMTime' data-ref="31time" data-ref-filename="31time">time</dfn> withCompletionHandler:(<em>void</em> (^)(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col3 decl" id="33didRemoveRenderer" title='didRemoveRenderer' data-type='BOOL' data-ref="33didRemoveRenderer" data-ref-filename="33didRemoveRenderer">didRemoveRenderer</dfn>))<dfn class="local col2 decl" id="32completionHandler" title='completionHandler' data-type='void (^ _Nonnull)(BOOL)' data-ref="32completionHandler" data-ref-filename="32completionHandler">completionHandler</dfn>;</td></tr>
+<tr><th id="285">285</th><td>@end</td></tr>
+<tr><th id="286">286</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_END">NS_ASSUME_NONNULL_END</span></td></tr>
+<tr><th id="287">287</th><td></td></tr>
+<tr><th id="288">288</th><td><u>#<span data-ppcond="279">else</span></u></td></tr>
+<tr><th id="289">289</th><td></td></tr>
+<tr><th id="290">290</th><td>NS_ASSUME_NONNULL_BEGIN</td></tr>
+<tr><th id="291">291</th><td></td></tr>
+<tr><th id="292">292</th><td>@interface AVSampleBufferRenderSynchronizer : NSObject</td></tr>
+<tr><th id="293">293</th><td>- (CMTimebaseRef)timebase;</td></tr>
+<tr><th id="294">294</th><td>- (<em>float</em>)rate;</td></tr>
+<tr><th id="295">295</th><td>- (<em>void</em>)setRate:(<em>float</em>)rate;</td></tr>
+<tr><th id="296">296</th><td>- (<em>void</em>)setRate:(<em>float</em>)rate time:(CMTime)time;</td></tr>
+<tr><th id="297">297</th><td>- (NSArray *)renderers;</td></tr>
+<tr><th id="298">298</th><td>- (<em>void</em>)addRenderer:(id)renderer;</td></tr>
+<tr><th id="299">299</th><td>- (<em>void</em>)removeRenderer:(id)renderer atTime:(CMTime)time withCompletionHandler:(<em>void</em> (^)(BOOL didRemoveRenderer))completionHandler;</td></tr>
+<tr><th id="300">300</th><td>- (id)addPeriodicTimeObserverForInterval:(CMTime)interval queue:(dispatch_queue_t)queue usingBlock:(<em>void</em> (^)(CMTime time))block;</td></tr>
+<tr><th id="301">301</th><td>- (id)addBoundaryTimeObserverForTimes:(NSArray *)times queue:(dispatch_queue_t)queue usingBlock:(<em>void</em> (^)(<em>void</em>))block;</td></tr>
+<tr><th id="302">302</th><td>- (<em>void</em>)removeTimeObserver:(id)observer;</td></tr>
+<tr><th id="303">303</th><td>@end</td></tr>
+<tr><th id="304">304</th><td></td></tr>
+<tr><th id="305">305</th><td>NS_ASSUME_NONNULL_END</td></tr>
+<tr><th id="306">306</th><td></td></tr>
+<tr><th id="307">307</th><td><u>#<span data-ppcond="279">endif</span> // __has_include(&lt;AVFoundation/AVSampleBufferRenderSynchronizer.h&gt;)</u></td></tr>
+<tr><th id="308">308</th><td></td></tr>
+<tr><th id="309">309</th><td><u>#<span data-ppcond="309">if</span> <span class="macro" title="" data-ref="_M/__has_include">__has_include</span>(&lt;AVFoundation/AVSampleBufferDisplayLayer_Private.h&gt;)</u></td></tr>
+<tr><th id="310">310</th><td><u>#import &lt;AVFoundation/AVSampleBufferDisplayLayer_Private.h&gt;</u></td></tr>
+<tr><th id="311">311</th><td><u>#<span data-ppcond="309">elif</span> <span class="macro" title="" data-ref="_M/__has_include">__has_include</span>(&lt;AVFoundation/AVSampleBufferDisplayLayer.h&gt;)</u></td></tr>
+<tr><th id="312">312</th><td><u>#import &lt;AVFoundation/AVSampleBufferDisplayLayer.h&gt;</u></td></tr>
+<tr><th id="313">313</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_BEGIN">NS_ASSUME_NONNULL_BEGIN</span></td></tr>
+<tr><th id="314">314</th><td>@interface AVSampleBufferDisplayLayer (VideoPerformanceMetrics)</td></tr>
+<tr><th id="315">315</th><td>- (AVVideoPerformanceMetrics *)videoPerformanceMetrics;</td></tr>
+<tr><th id="316">316</th><td>@end</td></tr>
+<tr><th id="317">317</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_END">NS_ASSUME_NONNULL_END</span></td></tr>
+<tr><th id="318">318</th><td><u>#<span data-ppcond="309">else</span></u></td></tr>
+<tr><th id="319">319</th><td></td></tr>
+<tr><th id="320">320</th><td>NS_ASSUME_NONNULL_BEGIN</td></tr>
+<tr><th id="321">321</th><td></td></tr>
+<tr><th id="322">322</th><td><u>#pragma mark -</u></td></tr>
+<tr><th id="323">323</th><td><u>#pragma mark AVSampleBufferDisplayLayer</u></td></tr>
+<tr><th id="324">324</th><td></td></tr>
+<tr><th id="325">325</th><td>@interface AVSampleBufferDisplayLayer : CALayer</td></tr>
+<tr><th id="326">326</th><td>- (NSInteger)status;</td></tr>
+<tr><th id="327">327</th><td>- (NSError*)error;</td></tr>
+<tr><th id="328">328</th><td>- (<em>void</em>)enqueueSampleBuffer:(CMSampleBufferRef)sampleBuffer;</td></tr>
+<tr><th id="329">329</th><td>- (<em>void</em>)flush;</td></tr>
+<tr><th id="330">330</th><td>- (<em>void</em>)flushAndRemoveImage;</td></tr>
+<tr><th id="331">331</th><td>- (BOOL)isReadyForMoreMediaData;</td></tr>
+<tr><th id="332">332</th><td>- (<em>void</em>)requestMediaDataWhenReadyOnQueue:(dispatch_queue_t)queue usingBlock:(<em>void</em> (^)(<em>void</em>))block;</td></tr>
+<tr><th id="333">333</th><td>- (<em>void</em>)stopRequestingMediaData;</td></tr>
+<tr><th id="334">334</th><td>- (AVVideoPerformanceMetrics *)videoPerformanceMetrics;</td></tr>
+<tr><th id="335">335</th><td>@end</td></tr>
+<tr><th id="336">336</th><td>NS_ASSUME_NONNULL_END</td></tr>
+<tr><th id="337">337</th><td><u>#<span data-ppcond="309">endif</span> // __has_include(&lt;AVFoundation/AVSampleBufferDisplayLayer.h&gt;)</u></td></tr>
+<tr><th id="338">338</th><td></td></tr>
+<tr><th id="339">339</th><td><u>#<span data-ppcond="339">if</span> <span class="macro" title="" data-ref="_M/__has_include">__has_include</span>(&lt;AVFoundation/AVSampleBufferAudioRenderer.h&gt;)</u></td></tr>
+<tr><th id="340">340</th><td><u>#import &lt;AVFoundation/AVSampleBufferAudioRenderer.h&gt;</u></td></tr>
+<tr><th id="341">341</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_BEGIN">NS_ASSUME_NONNULL_BEGIN</span></td></tr>
+<tr><th id="342">342</th><td>@interface AVSampleBufferAudioRenderer (AVSampleBufferAudioRendererWebKitOnly)</td></tr>
+<tr><th id="343">343</th><td>- (<em>void</em>)setIsUnaccompaniedByVisuals:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col4 decl" id="34audioOnly" title='audioOnly' data-type='BOOL' data-ref="34audioOnly" data-ref-filename="34audioOnly">audioOnly</dfn> <span class="macro" title="" data-ref="_M/SPI_AVAILABLE">SPI_AVAILABLE</span>(macos(<var>12.0</var>)) <span class="macro" title="__attribute__((availability(ios,unavailable))) __attribute__((availability(tvos,unavailable))) __attribute__((availability(watchos,unavailable)))" data-ref="_M/API_UNAVAILABLE">API_UNAVAILABLE</span>(ios, tvos, watchos);</td></tr>
+<tr><th id="344">344</th><td>@end</td></tr>
+<tr><th id="345">345</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_END">NS_ASSUME_NONNULL_END</span></td></tr>
+<tr><th id="346">346</th><td><u>#<span data-ppcond="339">else</span></u></td></tr>
+<tr><th id="347">347</th><td></td></tr>
+<tr><th id="348">348</th><td>NS_ASSUME_NONNULL_BEGIN</td></tr>
+<tr><th id="349">349</th><td></td></tr>
+<tr><th id="350">350</th><td>@interface AVSampleBufferAudioRenderer : NSObject</td></tr>
+<tr><th id="351">351</th><td>- (NSInteger)status;</td></tr>
+<tr><th id="352">352</th><td>- (NSError*)error;</td></tr>
+<tr><th id="353">353</th><td>- (<em>void</em>)enqueueSampleBuffer:(CMSampleBufferRef)sampleBuffer;</td></tr>
+<tr><th id="354">354</th><td>- (<em>void</em>)flush;</td></tr>
+<tr><th id="355">355</th><td>- (BOOL)isReadyForMoreMediaData;</td></tr>
+<tr><th id="356">356</th><td>- (<em>void</em>)requestMediaDataWhenReadyOnQueue:(dispatch_queue_t)queue usingBlock:(<em>void</em> (^)(<em>void</em>))block;</td></tr>
+<tr><th id="357">357</th><td>- (<em>void</em>)stopRequestingMediaData;</td></tr>
+<tr><th id="358">358</th><td>- (<em>void</em>)setVolume:(<em>float</em>)volume;</td></tr>
+<tr><th id="359">359</th><td>- (<em>void</em>)setMuted:(BOOL)muted;</td></tr>
+<tr><th id="360">360</th><td>- (<em>void</em>)setIsUnaccompaniedByVisuals:(BOOL)audioOnly SPI_AVAILABLE(macos(<var>12.0</var>)) API_UNAVAILABLE(ios, tvos, watchos);</td></tr>
+<tr><th id="361">361</th><td>@property (nonatomic, copy) NSString *audioTimePitchAlgorithm;</td></tr>
+<tr><th id="362">362</th><td>@end</td></tr>
+<tr><th id="363">363</th><td></td></tr>
+<tr><th id="364">364</th><td>NS_ASSUME_NONNULL_END</td></tr>
+<tr><th id="365">365</th><td></td></tr>
+<tr><th id="366">366</th><td><u>#<span data-ppcond="339">endif</span> // __has_include(&lt;AVFoundation/AVSampleBufferAudioRenderer.h&gt;)</u></td></tr>
+<tr><th id="367">367</th><td></td></tr>
+<tr><th id="368">368</th><td><u>#<span data-ppcond="368">if</span> !<a class="macro" href="../../../wtf/PlatformUse.h.html#36" title="(defined USE_APPLE_INTERNAL_SDK &amp;&amp; USE_APPLE_INTERNAL_SDK)" data-ref="_M/USE">USE</a>(APPLE_INTERNAL_SDK)</u></td></tr>
+<tr><th id="369">369</th><td>@interface AVVideoPerformanceMetrics : NSObject</td></tr>
+<tr><th id="370">370</th><td>@property (nonatomic, readonly) <em>unsigned</em> <em>long</em> totalNumberOfVideoFrames;</td></tr>
+<tr><th id="371">371</th><td>@property (nonatomic, readonly) <em>unsigned</em> <em>long</em> numberOfDroppedVideoFrames;</td></tr>
+<tr><th id="372">372</th><td>@property (nonatomic, readonly) <em>unsigned</em> <em>long</em> numberOfCorruptedVideoFrames;</td></tr>
+<tr><th id="373">373</th><td>@property (nonatomic, readonly) <em>unsigned</em> <em>long</em> numberOfDisplayCompositedVideoFrames;</td></tr>
+<tr><th id="374">374</th><td>@property (nonatomic, readonly) <em>double</em> totalFrameDelay;</td></tr>
+<tr><th id="375">375</th><td>@end</td></tr>
+<tr><th id="376">376</th><td><u>#<span data-ppcond="368">else</span></u></td></tr>
+<tr><th id="377">377</th><td>@interface AVVideoPerformanceMetrics (AVVideoPerformanceMetricsDisplayCompositedVideoFrames)</td></tr>
+<tr><th id="378">378</th><td>@property (nonatomic, readonly) <em>unsigned</em> <em>long</em> numberOfDisplayCompositedVideoFrames;</td></tr>
+<tr><th id="379">379</th><td>@end</td></tr>
+<tr><th id="380">380</th><td><u>#<span data-ppcond="368">endif</span></u></td></tr>
+<tr><th id="381">381</th><td></td></tr>
+<tr><th id="382">382</th><td><u>#<span data-ppcond="382">if</span> !<a class="macro" href="../../../wtf/PlatformUse.h.html#36" title="(defined USE_APPLE_INTERNAL_SDK &amp;&amp; USE_APPLE_INTERNAL_SDK)" data-ref="_M/USE">USE</a>(APPLE_INTERNAL_SDK) || <a class="macro" href="../../../wtf/PlatformUse.h.html#36" title="(defined USE_AV_SAMPLE_BUFFER_DISPLAY_LAYER &amp;&amp; USE_AV_SAMPLE_BUFFER_DISPLAY_LAYER)" data-ref="_M/USE">USE</a>(AV_SAMPLE_BUFFER_DISPLAY_LAYER)</u></td></tr>
+<tr><th id="383">383</th><td>@interface AVSampleBufferDisplayLayer (WebCorePrivate)</td></tr>
+<tr><th id="384">384</th><td>@property (assign, nonatomic) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> preventsDisplaySleepDuringVideoPlayback;</td></tr>
+<tr><th id="385">385</th><td>@end</td></tr>
+<tr><th id="386">386</th><td><u>#<span data-ppcond="382">endif</span></u></td></tr>
+<tr><th id="387">387</th><td></td></tr>
+<tr><th id="388">388</th><td><u>#<span data-ppcond="388">if</span> !<a class="macro" href="../../../wtf/PlatformUse.h.html#36" title="(defined USE_APPLE_INTERNAL_SDK &amp;&amp; USE_APPLE_INTERNAL_SDK)" data-ref="_M/USE">USE</a>(APPLE_INTERNAL_SDK) &amp;&amp; <a class="macro" href="../../../wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY) &amp;&amp; !<a class="macro" href="../../../wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_MACCATALYST &amp;&amp; WTF_PLATFORM_MACCATALYST)" data-ref="_M/PLATFORM">PLATFORM</a>(MACCATALYST)</u></td></tr>
+<tr><th id="389">389</th><td><u>#import &lt;AVFoundation/AVAudioSession.h&gt;</u></td></tr>
+<tr><th id="390">390</th><td></td></tr>
+<tr><th id="391">391</th><td>NS_ASSUME_NONNULL_BEGIN</td></tr>
+<tr><th id="392">392</th><td></td></tr>
+<tr><th id="393">393</th><td>@interface AVAudioSession (AVAudioSessionPrivate)</td></tr>
+<tr><th id="394">394</th><td>- (instancetype)initAuxiliarySession;</td></tr>
+<tr><th id="395">395</th><td>@property (readonly) NSString* routingContextUID;</td></tr>
+<tr><th id="396">396</th><td>@property (readonly) BOOL eligibleForBTSmartRoutingConsideration;</td></tr>
+<tr><th id="397">397</th><td>- (BOOL)setEligibleForBTSmartRoutingConsideration:(BOOL)inValue error:(NSError **)outError;</td></tr>
+<tr><th id="398">398</th><td>@end</td></tr>
+<tr><th id="399">399</th><td></td></tr>
+<tr><th id="400">400</th><td>NS_ASSUME_NONNULL_END</td></tr>
+<tr><th id="401">401</th><td><u>#<span data-ppcond="388">endif</span></u></td></tr>
+<tr><th id="402">402</th><td></td></tr>
+<tr><th id="403">403</th><td><u>#<span data-ppcond="403">if</span> !<a class="macro" href="../../../wtf/PlatformUse.h.html#36" title="(defined USE_APPLE_INTERNAL_SDK &amp;&amp; USE_APPLE_INTERNAL_SDK)" data-ref="_M/USE">USE</a>(APPLE_INTERNAL_SDK) &amp;&amp; <a class="macro" href="../../../wtf/PlatformHave.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/HAVE">HAVE</a>(AVPLAYER_RESOURCE_CONSERVATION_LEVEL)</u></td></tr>
+<tr><th id="404">404</th><td>@interface AVPlayer (AVPlayerPrivate)</td></tr>
+<tr><th id="405">405</th><td></td></tr>
+<tr><th id="406">406</th><td><b>typedef</b> <span class="macro" title="enum __attribute__((enum_extensibility(open))) AVPlayerResourceConservationLevel : NSInteger AVPlayerResourceConservationLevel; enum AVPlayerResourceConservationLevel : NSInteger" data-ref="_M/NS_ENUM">NS_ENUM</span>(NSInteger, <dfn class="type" id="AVPlayerResourceConservationLevel" title='AVPlayerResourceConservationLevel' data-ref="AVPlayerResourceConservationLevel" data-ref-filename="AVPlayerResourceConservationLevel"><dfn class="typedef" id="AVPlayerResourceConservationLevel" title='AVPlayerResourceConservationLevel' data-type='enum AVPlayerResourceConservationLevel' data-ref="AVPlayerResourceConservationLevel" data-ref-filename="AVPlayerResourceConservationLevel"><a class="type" href="#406" title='AVPlayerResourceConservationLevel' data-ref="AVPlayerResourceConservationLevel" data-ref-filename="AVPlayerResourceConservationLevel"><dfn class="type def" id="AVPlayerResourceConservationLevel" title='AVPlayerResourceConservationLevel' data-ref="AVPlayerResourceConservationLevel" data-ref-filename="AVPlayerResourceConservationLevel">AVPlayerResourceConservationLevel</dfn></a></dfn></dfn>) {</td></tr>
+<tr><th id="407">407</th><td>    <dfn class="enum" id="AVPlayerResourceConservationLevelNone" title='AVPlayerResourceConservationLevelNone' data-ref="AVPlayerResourceConservationLevelNone" data-ref-filename="AVPlayerResourceConservationLevelNone">AVPlayerResourceConservationLevelNone</dfn>                                 = <var>0</var>,</td></tr>
+<tr><th id="408">408</th><td>    <dfn class="enum" id="AVPlayerResourceConservationLevelReduceReadAhead" title='AVPlayerResourceConservationLevelReduceReadAhead' data-ref="AVPlayerResourceConservationLevelReduceReadAhead" data-ref-filename="AVPlayerResourceConservationLevelReduceReadAhead">AVPlayerResourceConservationLevelReduceReadAhead</dfn>                      = <var>1</var>,</td></tr>
+<tr><th id="409">409</th><td>    <dfn class="enum" id="AVPlayerResourceConservationLevelReuseActivePlayerResources" title='AVPlayerResourceConservationLevelReuseActivePlayerResources' data-ref="AVPlayerResourceConservationLevelReuseActivePlayerResources" data-ref-filename="AVPlayerResourceConservationLevelReuseActivePlayerResources">AVPlayerResourceConservationLevelReuseActivePlayerResources</dfn>           = <var>2</var>,</td></tr>
+<tr><th id="410">410</th><td>    <dfn class="enum" id="AVPlayerResourceConservationLevelRecycleBuffer" title='AVPlayerResourceConservationLevelRecycleBuffer' data-ref="AVPlayerResourceConservationLevelRecycleBuffer" data-ref-filename="AVPlayerResourceConservationLevelRecycleBuffer">AVPlayerResourceConservationLevelRecycleBuffer</dfn>                        = <var>3</var>,</td></tr>
+<tr><th id="411">411</th><td>};</td></tr>
+<tr><th id="412">412</th><td></td></tr>
+<tr><th id="413">413</th><td>@property (nonatomic) <a class="typedef" href="#406" title='AVPlayerResourceConservationLevel' data-type='enum AVPlayerResourceConservationLevel' data-ref="AVPlayerResourceConservationLevel" data-ref-filename="AVPlayerResourceConservationLevel">AVPlayerResourceConservationLevel</a> resourceConservationLevelWhilePaused;</td></tr>
+<tr><th id="414">414</th><td></td></tr>
+<tr><th id="415">415</th><td>@end</td></tr>
+<tr><th id="416">416</th><td><u>#<span data-ppcond="403">endif</span></u></td></tr>
+<tr><th id="417">417</th><td></td></tr>
+<tr><th id="418">418</th><td><u>#<span data-ppcond="418">if</span> <a class="macro" href="../../../wtf/PlatformHave.h.html#36" title="(defined HAVE_AVSAMPLEBUFFERVIDEOOUTPUT &amp;&amp; HAVE_AVSAMPLEBUFFERVIDEOOUTPUT)" data-ref="_M/HAVE">HAVE</a>(AVSAMPLEBUFFERVIDEOOUTPUT)</u></td></tr>
+<tr><th id="419">419</th><td><u>#if USE(APPLE_INTERNAL_SDK)</u></td></tr>
+<tr><th id="420">420</th><td><u>#import &lt;AVFoundation/AVSampleBufferVideoOutput.h&gt;</u></td></tr>
+<tr><th id="421">421</th><td><u>#else</u></td></tr>
+<tr><th id="422">422</th><td></td></tr>
+<tr><th id="423">423</th><td>NS_ASSUME_NONNULL_BEGIN</td></tr>
+<tr><th id="424">424</th><td>@interface AVSampleBufferVideoOutput : NSObject</td></tr>
+<tr><th id="425">425</th><td>- (CVPixelBufferRef)copyPixelBufferForSourceTime:(CMTime)sourceTime sourceTimeForDisplay:(nullable CMTime *)outSourceTimeForDisplay;</td></tr>
+<tr><th id="426">426</th><td>@end</td></tr>
+<tr><th id="427">427</th><td>NS_ASSUME_NONNULL_END</td></tr>
+<tr><th id="428">428</th><td></td></tr>
+<tr><th id="429">429</th><td>@interface AVSampleBufferDisplayLayer (VideoOutput)</td></tr>
+<tr><th id="430">430</th><td>@property (nonatomic, nullable) AVSampleBufferVideoOutput *output;</td></tr>
+<tr><th id="431">431</th><td>@end</td></tr>
+<tr><th id="432">432</th><td></td></tr>
+<tr><th id="433">433</th><td><u>#if HAVE(AVFOUNDATION_INTERSTITIAL_EVENTS)</u></td></tr>
+<tr><th id="434">434</th><td>@interface AVPlayerItem (AVPlayerInterstitialSupport)</td></tr>
+<tr><th id="435">435</th><td>@property (nonatomic) BOOL automaticallyHandlesInterstitialEvents;</td></tr>
+<tr><th id="436">436</th><td>@end</td></tr>
+<tr><th id="437">437</th><td><u>#endif</u></td></tr>
+<tr><th id="438">438</th><td></td></tr>
+<tr><th id="439">439</th><td><u>#endif // USE(APPLE_INTERNAL_SDK)</u></td></tr>
+<tr><th id="440">440</th><td><u>#<span data-ppcond="418">endif</span> // HAVE(AVSAMPLEBUFFERVIDEOOUTPUT)</u></td></tr>
+<tr><th id="441">441</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../../Source/WebCore/PAL/pal/avfoundation/OutputContext.mm.html'>webkit/Source/WebCore/PAL/pal/avfoundation/OutputContext.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

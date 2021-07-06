@@ -1,0 +1,23 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/netinet/sctp.h' l='178'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/netinet/sctp.h' l='160'>/*
+ * Blocking I/O is enabled on any TCP type socket by default. For the UDP
+ * model if this is turned on then the socket buffer is shared for send
+ * resources amongst all associations.  The default for the UDP model is that
+ * is SS_NBIO is set.  Which means all associations have a separate send
+ * limit BUT they will NOT ever BLOCK instead you will get an error back
+ * EAGAIN if you try to send too much. If you want the blocking semantics you
+ * set this option at the cost of sharing one socket send buffer size amongst
+ * all associations. Peeled off sockets turn this option off and block. But
+ * since both TCP and peeled off sockets have only one assoc per socket this
+ * is fine. It probably does NOT make sense to set this on SS_NBIO on a TCP
+ * model OR peeled off UDP model, but we do allow you to do so. You just use
+ * the normal syscall to toggle SS_NBIO the way you want.
+ *
+ * Blocking I/O is controlled by the SS_NBIO flag on the socket state so_state
+ * field.
+ */</doc>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/netinet/sctp_usrreq.c' l='4269' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/netinet/sctp_usrreq.c' l='5374' u='c'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/user_socket.c' l='2389' u='c'/>
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/usrsctp.h' l='564'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/media/sctp/usrsctp_transport.cc' l='1001' u='c'/>

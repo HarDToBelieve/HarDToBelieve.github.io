@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>vp9_alt_ref_aq.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp9/encoder/vp9_alt_ref_aq.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="MATX_8U "/>
+<link rel="stylesheet" href="../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp9/encoder/vp9_alt_ref_aq.h'; var root_path = '../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../..'>Source</a>/<a href='../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../..'>libwebrtc</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>third_party</a>/<a href='../../../..'>libvpx</a>/<a href='../../..'>source</a>/<a href='../..'>libvpx</a>/<a href='..'>vp9</a>/<a href='./'>encoder</a>/<a href='vp9_alt_ref_aq.h.html'>vp9_alt_ref_aq.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2016 The WebM project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed  by a BSD-style license that can be</i></td></tr>
+<tr><th id="5">5</th><td><i> *  found in the LICENSE file in the root of the source tree. An additional</i></td></tr>
+<tr><th id="6">6</th><td><i> *  intellectual property  rights grant can  be found in the  file PATENTS.</i></td></tr>
+<tr><th id="7">7</th><td><i> *  All contributing  project authors may be  found in the AUTHORS  file in</i></td></tr>
+<tr><th id="8">8</th><td><i> *  the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><i>/*</i></td></tr>
+<tr><th id="12">12</th><td><i> *  \file vp9_alt_ref_aq.h</i></td></tr>
+<tr><th id="13">13</th><td><i> *</i></td></tr>
+<tr><th id="14">14</th><td><i> *  This file  contains public interface  for setting up  adaptive segmentation</i></td></tr>
+<tr><th id="15">15</th><td><i> *  for altref frames.  Go to alt_ref_aq_private.h for implmentation details.</i></td></tr>
+<tr><th id="16">16</th><td><i> */</i></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><u>#<span data-ppcond="18">ifndef</span> <span class="macro" data-ref="_M/VPX_VP9_ENCODER_VP9_ALT_REF_AQ_H_">VPX_VP9_ENCODER_VP9_ALT_REF_AQ_H_</span></u></td></tr>
+<tr><th id="19">19</th><td><u>#define <dfn class="macro" id="_M/VPX_VP9_ENCODER_VP9_ALT_REF_AQ_H_" data-ref="_M/VPX_VP9_ENCODER_VP9_ALT_REF_AQ_H_">VPX_VP9_ENCODER_VP9_ALT_REF_AQ_H_</dfn></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="../../vpx/vpx_integer.h.html">"vpx/vpx_integer.h"</a></u></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><i>// Where to disable segmentation</i></td></tr>
+<tr><th id="24">24</th><td><u>#define <dfn class="macro" id="_M/ALT_REF_AQ_LOW_BITRATE_BOUNDARY" data-ref="_M/ALT_REF_AQ_LOW_BITRATE_BOUNDARY">ALT_REF_AQ_LOW_BITRATE_BOUNDARY</dfn> 150</u></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><i>// Last frame always has overall quality = 0,</i></td></tr>
+<tr><th id="27">27</th><td><i>// so it is questionable if I can process it</i></td></tr>
+<tr><th id="28">28</th><td><u>#define <dfn class="macro" id="_M/ALT_REF_AQ_APPLY_TO_LAST_FRAME" data-ref="_M/ALT_REF_AQ_APPLY_TO_LAST_FRAME">ALT_REF_AQ_APPLY_TO_LAST_FRAME</dfn> 1</u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><i>// If I should try to compare gain</i></td></tr>
+<tr><th id="31">31</th><td><i>// against segmentation overhead</i></td></tr>
+<tr><th id="32">32</th><td><u>#define <dfn class="macro" id="_M/ALT_REF_AQ_PROTECT_GAIN" data-ref="_M/ALT_REF_AQ_PROTECT_GAIN">ALT_REF_AQ_PROTECT_GAIN</dfn> 0</u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><i>// Threshold to disable segmentation</i></td></tr>
+<tr><th id="35">35</th><td><u>#define <dfn class="macro" id="_M/ALT_REF_AQ_PROTECT_GAIN_THRESH" data-ref="_M/ALT_REF_AQ_PROTECT_GAIN_THRESH">ALT_REF_AQ_PROTECT_GAIN_THRESH</dfn> 0.5</u></td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><u>#<span data-ppcond="37">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="38">38</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="39">39</th><td><u>#<span data-ppcond="37">endif</span></u></td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><i>// Simple structure for storing images</i></td></tr>
+<tr><th id="42">42</th><td><b>struct</b> <dfn class="type def" id="MATX_8U" title='MATX_8U' data-ref="MATX_8U" data-ref-filename="MATX_8U">MATX_8U</dfn> {</td></tr>
+<tr><th id="43">43</th><td>  <em>int</em> <dfn class="decl field" id="MATX_8U::rows" title='MATX_8U::rows' data-ref="MATX_8U::rows" data-ref-filename="MATX_8U..rows">rows</dfn>;</td></tr>
+<tr><th id="44">44</th><td>  <em>int</em> <dfn class="decl field" id="MATX_8U::cols" title='MATX_8U::cols' data-ref="MATX_8U::cols" data-ref-filename="MATX_8U..cols">cols</dfn>;</td></tr>
+<tr><th id="45">45</th><td>  <em>int</em> <dfn class="decl field" id="MATX_8U::stride" title='MATX_8U::stride' data-ref="MATX_8U::stride" data-ref-filename="MATX_8U..stride">stride</dfn>;</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="decl field" id="MATX_8U::data" title='MATX_8U::data' data-ref="MATX_8U::data" data-ref-filename="MATX_8U..data">data</dfn>;</td></tr>
+<tr><th id="48">48</th><td>};</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><b>struct</b> <a class="type" href="vp9_encoder.h.html#VP9_COMP" title='VP9_COMP' data-ref="VP9_COMP" data-ref-filename="VP9_COMP" id="VP9_COMP">VP9_COMP</a>;</td></tr>
+<tr><th id="51">51</th><td><b>struct</b> <a class="type" href="vp9_alt_ref_aq.c.html#ALT_REF_AQ" title='ALT_REF_AQ' data-ref="ALT_REF_AQ" data-ref-filename="ALT_REF_AQ" id="ALT_REF_AQ">ALT_REF_AQ</a>;</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td><i class="doc">/*!<span class="command">\brief</span> Constructor</i></td></tr>
+<tr><th id="54">54</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="55">55</th><td><i class="doc"> * <span class="command">\return</span> Instance of the class</i></td></tr>
+<tr><th id="56">56</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="57">57</th><td><b>struct</b> <a class="type" href="vp9_alt_ref_aq.c.html#ALT_REF_AQ" title='ALT_REF_AQ' data-ref="ALT_REF_AQ" data-ref-filename="ALT_REF_AQ">ALT_REF_AQ</a> *<a class="decl fn" href="vp9_alt_ref_aq.c.html#vp9_alt_ref_aq_create" title='vp9_alt_ref_aq_create' data-ref="vp9_alt_ref_aq_create" data-ref-filename="vp9_alt_ref_aq_create" id="vp9_alt_ref_aq_create">vp9_alt_ref_aq_create</a>(<em>void</em>);</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><i class="doc">/*!<span class="command">\brief</span> Upload segmentation_map to self object</i></td></tr>
+<tr><th id="60">60</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="61">61</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">self</span>             Instance of the class</i></td></tr>
+<tr><th id="62">62</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">segmentation_map</span> Segmentation map to upload</i></td></tr>
+<tr><th id="63">63</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="64">64</th><td><em>void</em> <a class="decl fn" href="vp9_alt_ref_aq.c.html#vp9_alt_ref_aq_upload_map" title='vp9_alt_ref_aq_upload_map' data-ref="vp9_alt_ref_aq_upload_map" data-ref-filename="vp9_alt_ref_aq_upload_map" id="vp9_alt_ref_aq_upload_map">vp9_alt_ref_aq_upload_map</a>(<b>struct</b> <a class="type" href="vp9_alt_ref_aq.c.html#ALT_REF_AQ" title='ALT_REF_AQ' data-ref="ALT_REF_AQ" data-ref-filename="ALT_REF_AQ">ALT_REF_AQ</a> *<em>const</em> <dfn class="local col1 decl" id="1self" title='self' data-type='struct ALT_REF_AQ *const' data-ref="1self" data-ref-filename="1self">self</dfn>,</td></tr>
+<tr><th id="65">65</th><td>                               <em>const</em> <b>struct</b> <a class="type" href="#MATX_8U" title='MATX_8U' data-ref="MATX_8U" data-ref-filename="MATX_8U">MATX_8U</a> *<dfn class="local col2 decl" id="2segmentation_map" title='segmentation_map' data-type='const struct MATX_8U *' data-ref="2segmentation_map" data-ref-filename="2segmentation_map">segmentation_map</dfn>);</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><i class="doc">/*!<span class="command">\brief</span> Return pointer to the altref segmentation map</i></td></tr>
+<tr><th id="68">68</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="69">69</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">self</span>                    Instance of the class</i></td></tr>
+<tr><th id="70">70</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">segmentation_overhead</span>   Segmentation overhead in bytes</i></td></tr>
+<tr><th id="71">71</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">bandwidth</span>               Current frame bandwidth in bytes</i></td></tr>
+<tr><th id="72">72</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="73">73</th><td><i class="doc"> * <span class="command">\return</span>  Boolean value to disable segmentation</i></td></tr>
+<tr><th id="74">74</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="75">75</th><td><em>int</em> <a class="decl fn" href="vp9_alt_ref_aq.c.html#vp9_alt_ref_aq_disable_if" title='vp9_alt_ref_aq_disable_if' data-ref="vp9_alt_ref_aq_disable_if" data-ref-filename="vp9_alt_ref_aq_disable_if" id="vp9_alt_ref_aq_disable_if">vp9_alt_ref_aq_disable_if</a>(<em>const</em> <b>struct</b> <a class="type" href="vp9_alt_ref_aq.c.html#ALT_REF_AQ" title='ALT_REF_AQ' data-ref="ALT_REF_AQ" data-ref-filename="ALT_REF_AQ">ALT_REF_AQ</a> *<dfn class="local col3 decl" id="3self" title='self' data-type='const struct ALT_REF_AQ *' data-ref="3self" data-ref-filename="3self">self</dfn>,</td></tr>
+<tr><th id="76">76</th><td>                              <em>int</em> <dfn class="local col4 decl" id="4segmentation_overhead" title='segmentation_overhead' data-type='int' data-ref="4segmentation_overhead" data-ref-filename="4segmentation_overhead">segmentation_overhead</dfn>, <em>int</em> <dfn class="local col5 decl" id="5bandwidth" title='bandwidth' data-type='int' data-ref="5bandwidth" data-ref-filename="5bandwidth">bandwidth</dfn>);</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td><i class="doc">/*!<span class="command">\brief</span> Set number of segments</i></td></tr>
+<tr><th id="79">79</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="80">80</th><td><i class="doc"> * It is used for delta quantizer computations</i></td></tr>
+<tr><th id="81">81</th><td><i class="doc"> * and thus it can be larger than</i></td></tr>
+<tr><th id="82">82</th><td><i class="doc"> * maximum value of the segmentation map</i></td></tr>
+<tr><th id="83">83</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="84">84</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">self</span>        Instance of the class</i></td></tr>
+<tr><th id="85">85</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">nsegments</span>   Maximum number of segments</i></td></tr>
+<tr><th id="86">86</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="87">87</th><td><em>void</em> <a class="decl fn" href="vp9_alt_ref_aq.c.html#vp9_alt_ref_aq_set_nsegments" title='vp9_alt_ref_aq_set_nsegments' data-ref="vp9_alt_ref_aq_set_nsegments" data-ref-filename="vp9_alt_ref_aq_set_nsegments" id="vp9_alt_ref_aq_set_nsegments">vp9_alt_ref_aq_set_nsegments</a>(<b>struct</b> <a class="type" href="vp9_alt_ref_aq.c.html#ALT_REF_AQ" title='ALT_REF_AQ' data-ref="ALT_REF_AQ" data-ref-filename="ALT_REF_AQ">ALT_REF_AQ</a> *<em>const</em> <dfn class="local col6 decl" id="6self" title='self' data-type='struct ALT_REF_AQ *const' data-ref="6self" data-ref-filename="6self">self</dfn>, <em>int</em> <dfn class="local col7 decl" id="7nsegments" title='nsegments' data-type='int' data-ref="7nsegments" data-ref-filename="7nsegments">nsegments</dfn>);</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td><i class="doc">/*!<span class="command">\brief</span> Set up LOOKAHEAD_AQ segmentation mode</i></td></tr>
+<tr><th id="90">90</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="91">91</th><td><i class="doc"> * Set up segmentation mode to LOOKAHEAD_AQ</i></td></tr>
+<tr><th id="92">92</th><td><i class="doc"> * (expected future frames prediction</i></td></tr>
+<tr><th id="93">93</th><td><i class="doc"> *  quality refering to the current frame).</i></td></tr>
+<tr><th id="94">94</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="95">95</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">self</span>    Instance of the class</i></td></tr>
+<tr><th id="96">96</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">cpi</span>     Encoder context</i></td></tr>
+<tr><th id="97">97</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="98">98</th><td><em>void</em> <a class="decl fn" href="vp9_alt_ref_aq.c.html#vp9_alt_ref_aq_setup_mode" title='vp9_alt_ref_aq_setup_mode' data-ref="vp9_alt_ref_aq_setup_mode" data-ref-filename="vp9_alt_ref_aq_setup_mode" id="vp9_alt_ref_aq_setup_mode">vp9_alt_ref_aq_setup_mode</a>(<b>struct</b> <a class="type" href="vp9_alt_ref_aq.c.html#ALT_REF_AQ" title='ALT_REF_AQ' data-ref="ALT_REF_AQ" data-ref-filename="ALT_REF_AQ">ALT_REF_AQ</a> *<em>const</em> <dfn class="local col8 decl" id="8self" title='self' data-type='struct ALT_REF_AQ *const' data-ref="8self" data-ref-filename="8self">self</dfn>,</td></tr>
+<tr><th id="99">99</th><td>                               <b>struct</b> <a class="type" href="vp9_encoder.h.html#VP9_COMP" title='VP9_COMP' data-ref="VP9_COMP" data-ref-filename="VP9_COMP">VP9_COMP</a> *<em>const</em> <dfn class="local col9 decl" id="9cpi" title='cpi' data-type='struct VP9_COMP *const' data-ref="9cpi" data-ref-filename="9cpi">cpi</dfn>);</td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td><i class="doc">/*!<span class="command">\brief</span> Set up LOOKAHEAD_AQ segmentation map and delta quantizers</i></td></tr>
+<tr><th id="102">102</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="103">103</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">self</span>    Instance of the class</i></td></tr>
+<tr><th id="104">104</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">cpi</span>     Encoder context</i></td></tr>
+<tr><th id="105">105</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="106">106</th><td><em>void</em> <a class="decl fn" href="vp9_alt_ref_aq.c.html#vp9_alt_ref_aq_setup_map" title='vp9_alt_ref_aq_setup_map' data-ref="vp9_alt_ref_aq_setup_map" data-ref-filename="vp9_alt_ref_aq_setup_map" id="vp9_alt_ref_aq_setup_map">vp9_alt_ref_aq_setup_map</a>(<b>struct</b> <a class="type" href="vp9_alt_ref_aq.c.html#ALT_REF_AQ" title='ALT_REF_AQ' data-ref="ALT_REF_AQ" data-ref-filename="ALT_REF_AQ">ALT_REF_AQ</a> *<em>const</em> <dfn class="local col0 decl" id="10self" title='self' data-type='struct ALT_REF_AQ *const' data-ref="10self" data-ref-filename="10self">self</dfn>,</td></tr>
+<tr><th id="107">107</th><td>                              <b>struct</b> <a class="type" href="vp9_encoder.h.html#VP9_COMP" title='VP9_COMP' data-ref="VP9_COMP" data-ref-filename="VP9_COMP">VP9_COMP</a> *<em>const</em> <dfn class="local col1 decl" id="11cpi" title='cpi' data-type='struct VP9_COMP *const' data-ref="11cpi" data-ref-filename="11cpi">cpi</dfn>);</td></tr>
+<tr><th id="108">108</th><td></td></tr>
+<tr><th id="109">109</th><td><i class="doc">/*!<span class="command">\brief</span> Restore main segmentation map mode and reset the class variables</i></td></tr>
+<tr><th id="110">110</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="111">111</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">self</span>    Instance of the class</i></td></tr>
+<tr><th id="112">112</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">cpi</span>     Encoder context</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="114">114</th><td><em>void</em> <a class="decl fn" href="vp9_alt_ref_aq.c.html#vp9_alt_ref_aq_unset_all" title='vp9_alt_ref_aq_unset_all' data-ref="vp9_alt_ref_aq_unset_all" data-ref-filename="vp9_alt_ref_aq_unset_all" id="vp9_alt_ref_aq_unset_all">vp9_alt_ref_aq_unset_all</a>(<b>struct</b> <a class="type" href="vp9_alt_ref_aq.c.html#ALT_REF_AQ" title='ALT_REF_AQ' data-ref="ALT_REF_AQ" data-ref-filename="ALT_REF_AQ">ALT_REF_AQ</a> *<em>const</em> <dfn class="local col2 decl" id="12self" title='self' data-type='struct ALT_REF_AQ *const' data-ref="12self" data-ref-filename="12self">self</dfn>,</td></tr>
+<tr><th id="115">115</th><td>                              <b>struct</b> <a class="type" href="vp9_encoder.h.html#VP9_COMP" title='VP9_COMP' data-ref="VP9_COMP" data-ref-filename="VP9_COMP">VP9_COMP</a> *<em>const</em> <dfn class="local col3 decl" id="13cpi" title='cpi' data-type='struct VP9_COMP *const' data-ref="13cpi" data-ref-filename="13cpi">cpi</dfn>);</td></tr>
+<tr><th id="116">116</th><td></td></tr>
+<tr><th id="117">117</th><td><i class="doc">/*!<span class="command">\brief</span> Destructor</i></td></tr>
+<tr><th id="118">118</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="119">119</th><td><i class="doc"> * <span class="command">\param</span>    <span class="arg">self</span>    Instance of the class</i></td></tr>
+<tr><th id="120">120</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="121">121</th><td><em>void</em> <a class="decl fn" href="vp9_alt_ref_aq.c.html#vp9_alt_ref_aq_destroy" title='vp9_alt_ref_aq_destroy' data-ref="vp9_alt_ref_aq_destroy" data-ref-filename="vp9_alt_ref_aq_destroy" id="vp9_alt_ref_aq_destroy">vp9_alt_ref_aq_destroy</a>(<b>struct</b> <a class="type" href="vp9_alt_ref_aq.c.html#ALT_REF_AQ" title='ALT_REF_AQ' data-ref="ALT_REF_AQ" data-ref-filename="ALT_REF_AQ">ALT_REF_AQ</a> *<em>const</em> <dfn class="local col4 decl" id="14self" title='self' data-type='struct ALT_REF_AQ *const' data-ref="14self" data-ref-filename="14self">self</dfn>);</td></tr>
+<tr><th id="122">122</th><td></td></tr>
+<tr><th id="123">123</th><td><u>#<span data-ppcond="123">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="124">124</th><td>}  <i>// extern "C"</i></td></tr>
+<tr><th id="125">125</th><td><u>#<span data-ppcond="123">endif</span></u></td></tr>
+<tr><th id="126">126</th><td></td></tr>
+<tr><th id="127">127</th><td><u>#<span data-ppcond="18">endif</span>  // VPX_VP9_ENCODER_VP9_ALT_REF_AQ_H_</u></td></tr>
+<tr><th id="128">128</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='vp9_alt_ref_aq.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp9/encoder/vp9_alt_ref_aq.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

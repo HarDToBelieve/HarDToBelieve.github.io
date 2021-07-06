@@ -1,0 +1,299 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>srtp_priv.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/include/srtp_priv.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="direction_t,srtp_ctx_t_,srtp_session_keys_t,srtp_stream_ctx_t_ "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/include/srtp_priv.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>third_party</a>/<a href='..'>libsrtp</a>/<a href='./'>include</a>/<a href='srtp_priv.h.html'>srtp_priv.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * srtp_priv.h</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * private internal data structures and functions for libSRTP</i></td></tr>
+<tr><th id="5">5</th><td><i> *</i></td></tr>
+<tr><th id="6">6</th><td><i> * David A. McGrew</i></td></tr>
+<tr><th id="7">7</th><td><i> * Cisco Systems, Inc.</i></td></tr>
+<tr><th id="8">8</th><td><i> */</i></td></tr>
+<tr><th id="9">9</th><td><i>/*</i></td></tr>
+<tr><th id="10">10</th><td><i> *</i></td></tr>
+<tr><th id="11">11</th><td><i> * Copyright (c) 2001-2017 Cisco Systems, Inc.</i></td></tr>
+<tr><th id="12">12</th><td><i> * All rights reserved.</i></td></tr>
+<tr><th id="13">13</th><td><i> *</i></td></tr>
+<tr><th id="14">14</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="15">15</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="16">16</th><td><i> * are met:</i></td></tr>
+<tr><th id="17">17</th><td><i> *</i></td></tr>
+<tr><th id="18">18</th><td><i> *   Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="19">19</th><td><i> *   notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="20">20</th><td><i> *</i></td></tr>
+<tr><th id="21">21</th><td><i> *   Redistributions in binary form must reproduce the above</i></td></tr>
+<tr><th id="22">22</th><td><i> *   copyright notice, this list of conditions and the following</i></td></tr>
+<tr><th id="23">23</th><td><i> *   disclaimer in the documentation and/or other materials provided</i></td></tr>
+<tr><th id="24">24</th><td><i> *   with the distribution.</i></td></tr>
+<tr><th id="25">25</th><td><i> *</i></td></tr>
+<tr><th id="26">26</th><td><i> *   Neither the name of the Cisco Systems, Inc. nor the names of its</i></td></tr>
+<tr><th id="27">27</th><td><i> *   contributors may be used to endorse or promote products derived</i></td></tr>
+<tr><th id="28">28</th><td><i> *   from this software without specific prior written permission.</i></td></tr>
+<tr><th id="29">29</th><td><i> *</i></td></tr>
+<tr><th id="30">30</th><td><i> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</i></td></tr>
+<tr><th id="31">31</th><td><i> * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</i></td></tr>
+<tr><th id="32">32</th><td><i> * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS</i></td></tr>
+<tr><th id="33">33</th><td><i> * FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE</i></td></tr>
+<tr><th id="34">34</th><td><i> * COPYRIGHT HOLDERS OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT,</i></td></tr>
+<tr><th id="35">35</th><td><i> * INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</i></td></tr>
+<tr><th id="36">36</th><td><i> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR</i></td></tr>
+<tr><th id="37">37</th><td><i> * SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)</i></td></tr>
+<tr><th id="38">38</th><td><i> * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT,</i></td></tr>
+<tr><th id="39">39</th><td><i> * STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="40">40</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED</i></td></tr>
+<tr><th id="41">41</th><td><i> * OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="42">42</th><td><i> *</i></td></tr>
+<tr><th id="43">43</th><td><i> */</i></td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td><u>#<span data-ppcond="45">ifndef</span> <span class="macro" data-ref="_M/SRTP_PRIV_H">SRTP_PRIV_H</span></u></td></tr>
+<tr><th id="46">46</th><td><u>#define <dfn class="macro" id="_M/SRTP_PRIV_H" data-ref="_M/SRTP_PRIV_H">SRTP_PRIV_H</dfn></u></td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td><i>// Leave this as the top level import. Ensures the existence of defines</i></td></tr>
+<tr><th id="49">49</th><td><u>#include <a href="../config/config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><u>#include <a href="srtp.h.html">"srtp.h"</a></u></td></tr>
+<tr><th id="52">52</th><td><u>#include <a href="../crypto/include/rdbx.h.html">"rdbx.h"</a></u></td></tr>
+<tr><th id="53">53</th><td><u>#include <a href="../crypto/include/rdb.h.html">"rdb.h"</a></u></td></tr>
+<tr><th id="54">54</th><td><u>#include <a href="../crypto/include/integers.h.html">"integers.h"</a></u></td></tr>
+<tr><th id="55">55</th><td><u>#include <a href="../crypto/include/cipher.h.html">"cipher.h"</a></u></td></tr>
+<tr><th id="56">56</th><td><u>#include <a href="../crypto/include/auth.h.html">"auth.h"</a></u></td></tr>
+<tr><th id="57">57</th><td><u>#include <a href="../crypto/include/aes.h.html">"aes.h"</a></u></td></tr>
+<tr><th id="58">58</th><td><u>#include <a href="../crypto/include/key.h.html">"key.h"</a></u></td></tr>
+<tr><th id="59">59</th><td><u>#include <a href="../crypto/include/crypto_kernel.h.html">"crypto_kernel.h"</a></u></td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td><u>#<span data-ppcond="61">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="62">62</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="63">63</th><td><u>#<span data-ppcond="61">endif</span></u></td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td><u>#define <dfn class="macro" id="_M/SRTP_VER_STRING" data-ref="_M/SRTP_VER_STRING">SRTP_VER_STRING</dfn> PACKAGE_STRING</u></td></tr>
+<tr><th id="66">66</th><td><u>#define <dfn class="macro" id="_M/SRTP_VERSION" data-ref="_M/SRTP_VERSION">SRTP_VERSION</dfn> PACKAGE_VERSION</u></td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td><b>typedef</b> <b>struct</b> <a class="type" href="#srtp_stream_ctx_t_" title='srtp_stream_ctx_t_' data-ref="srtp_stream_ctx_t_" data-ref-filename="srtp_stream_ctx_t_">srtp_stream_ctx_t_</a> <dfn class="typedef" id="srtp_stream_ctx_t" title='srtp_stream_ctx_t' data-type='struct srtp_stream_ctx_t_' data-ref="srtp_stream_ctx_t" data-ref-filename="srtp_stream_ctx_t">srtp_stream_ctx_t</dfn>;</td></tr>
+<tr><th id="69">69</th><td><b>typedef</b> <a class="typedef" href="#srtp_stream_ctx_t" title='srtp_stream_ctx_t' data-type='struct srtp_stream_ctx_t_' data-ref="srtp_stream_ctx_t" data-ref-filename="srtp_stream_ctx_t">srtp_stream_ctx_t</a> *<dfn class="typedef" id="srtp_stream_t" title='srtp_stream_t' data-type='srtp_stream_ctx_t *' data-ref="srtp_stream_t" data-ref-filename="srtp_stream_t">srtp_stream_t</dfn>;</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><i>/*</i></td></tr>
+<tr><th id="72">72</th><td><i> * the following declarations are libSRTP internal functions</i></td></tr>
+<tr><th id="73">73</th><td><i> */</i></td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td><i>/*</i></td></tr>
+<tr><th id="76">76</th><td><i> * srtp_get_stream(ssrc) returns a pointer to the stream corresponding</i></td></tr>
+<tr><th id="77">77</th><td><i> * to ssrc, or NULL if no stream exists for that ssrc</i></td></tr>
+<tr><th id="78">78</th><td><i> */</i></td></tr>
+<tr><th id="79">79</th><td><a class="typedef" href="#srtp_stream_t" title='srtp_stream_t' data-type='srtp_stream_ctx_t *' data-ref="srtp_stream_t" data-ref-filename="srtp_stream_t">srtp_stream_t</a> <dfn class="decl fn" id="srtp_get_stream" title='srtp_get_stream' data-ref="srtp_get_stream" data-ref-filename="srtp_get_stream">srtp_get_stream</dfn>(<a class="typedef" href="srtp.h.html#srtp_t" title='srtp_t' data-type='srtp_ctx_t *' data-ref="srtp_t" data-ref-filename="srtp_t">srtp_t</a> <dfn class="local col1 decl" id="11srtp" title='srtp' data-type='srtp_t' data-ref="11srtp" data-ref-filename="11srtp">srtp</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col2 decl" id="12ssrc" title='ssrc' data-type='uint32_t' data-ref="12ssrc" data-ref-filename="12ssrc">ssrc</dfn>);</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td><i>/*</i></td></tr>
+<tr><th id="82">82</th><td><i> * srtp_stream_init_keys(s, k) (re)initializes the srtp_stream_t s by</i></td></tr>
+<tr><th id="83">83</th><td><i> * deriving all of the needed keys using the KDF and the key k.</i></td></tr>
+<tr><th id="84">84</th><td><i> */</i></td></tr>
+<tr><th id="85">85</th><td><a class="typedef" href="srtp.h.html#srtp_err_status_t" title='srtp_err_status_t' data-type='enum srtp_err_status_t' data-ref="srtp_err_status_t" data-ref-filename="srtp_err_status_t">srtp_err_status_t</a> <dfn class="decl fn" id="srtp_stream_init_keys" title='srtp_stream_init_keys' data-ref="srtp_stream_init_keys" data-ref-filename="srtp_stream_init_keys">srtp_stream_init_keys</dfn>(<a class="typedef" href="#srtp_stream_ctx_t" title='srtp_stream_ctx_t' data-type='struct srtp_stream_ctx_t_' data-ref="srtp_stream_ctx_t" data-ref-filename="srtp_stream_ctx_t">srtp_stream_ctx_t</a> *<dfn class="local col3 decl" id="13srtp" title='srtp' data-type='srtp_stream_ctx_t *' data-ref="13srtp" data-ref-filename="13srtp">srtp</dfn>,</td></tr>
+<tr><th id="86">86</th><td>                                        <a class="typedef" href="srtp.h.html#srtp_master_key_t" title='srtp_master_key_t' data-type='struct srtp_master_key_t' data-ref="srtp_master_key_t" data-ref-filename="srtp_master_key_t">srtp_master_key_t</a> *<dfn class="local col4 decl" id="14master_key" title='master_key' data-type='srtp_master_key_t *' data-ref="14master_key" data-ref-filename="14master_key">master_key</dfn>,</td></tr>
+<tr><th id="87">87</th><td>                                        <em>const</em> <em>unsigned</em> <em>int</em> <dfn class="local col5 decl" id="15current_mki_index" title='current_mki_index' data-type='const unsigned int' data-ref="15current_mki_index" data-ref-filename="15current_mki_index">current_mki_index</dfn>);</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td><i>/*</i></td></tr>
+<tr><th id="90">90</th><td><i> * srtp_stream_init_all_master_keys(s, k, m) (re)initializes the srtp_stream_t s</i></td></tr>
+<tr><th id="91">91</th><td><i> * by deriving all of the needed keys for all the master keys using the KDF and</i></td></tr>
+<tr><th id="92">92</th><td><i> * the keys from k.</i></td></tr>
+<tr><th id="93">93</th><td><i> */</i></td></tr>
+<tr><th id="94">94</th><td><a class="typedef" href="srtp.h.html#srtp_err_status_t" title='srtp_err_status_t' data-type='enum srtp_err_status_t' data-ref="srtp_err_status_t" data-ref-filename="srtp_err_status_t">srtp_err_status_t</a> <dfn class="decl fn" id="srtp_steam_init_all_master_keys" title='srtp_steam_init_all_master_keys' data-ref="srtp_steam_init_all_master_keys" data-ref-filename="srtp_steam_init_all_master_keys">srtp_steam_init_all_master_keys</dfn>(</td></tr>
+<tr><th id="95">95</th><td>    <a class="typedef" href="#srtp_stream_ctx_t" title='srtp_stream_ctx_t' data-type='struct srtp_stream_ctx_t_' data-ref="srtp_stream_ctx_t" data-ref-filename="srtp_stream_ctx_t">srtp_stream_ctx_t</a> *<dfn class="local col6 decl" id="16srtp" title='srtp' data-type='srtp_stream_ctx_t *' data-ref="16srtp" data-ref-filename="16srtp">srtp</dfn>,</td></tr>
+<tr><th id="96">96</th><td>    <em>unsigned</em> <em>char</em> *<dfn class="local col7 decl" id="17key" title='key' data-type='unsigned char *' data-ref="17key" data-ref-filename="17key">key</dfn>,</td></tr>
+<tr><th id="97">97</th><td>    <a class="typedef" href="srtp.h.html#srtp_master_key_t" title='srtp_master_key_t' data-type='struct srtp_master_key_t' data-ref="srtp_master_key_t" data-ref-filename="srtp_master_key_t">srtp_master_key_t</a> **<dfn class="local col8 decl" id="18keys" title='keys' data-type='srtp_master_key_t **' data-ref="18keys" data-ref-filename="18keys">keys</dfn>,</td></tr>
+<tr><th id="98">98</th><td>    <em>const</em> <em>unsigned</em> <em>int</em> <dfn class="local col9 decl" id="19max_master_keys" title='max_master_keys' data-type='const unsigned int' data-ref="19max_master_keys" data-ref-filename="19max_master_keys">max_master_keys</dfn>);</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td><i>/*</i></td></tr>
+<tr><th id="101">101</th><td><i> * srtp_stream_init(s, p) initializes the srtp_stream_t s to</i></td></tr>
+<tr><th id="102">102</th><td><i> * use the policy at the location p</i></td></tr>
+<tr><th id="103">103</th><td><i> */</i></td></tr>
+<tr><th id="104">104</th><td><a class="typedef" href="srtp.h.html#srtp_err_status_t" title='srtp_err_status_t' data-type='enum srtp_err_status_t' data-ref="srtp_err_status_t" data-ref-filename="srtp_err_status_t">srtp_err_status_t</a> <dfn class="decl fn" id="srtp_stream_init" title='srtp_stream_init' data-ref="srtp_stream_init" data-ref-filename="srtp_stream_init">srtp_stream_init</dfn>(<a class="typedef" href="#srtp_stream_t" title='srtp_stream_t' data-type='srtp_stream_ctx_t *' data-ref="srtp_stream_t" data-ref-filename="srtp_stream_t">srtp_stream_t</a> <dfn class="local col0 decl" id="20srtp" title='srtp' data-type='srtp_stream_t' data-ref="20srtp" data-ref-filename="20srtp">srtp</dfn>, <em>const</em> <a class="typedef" href="srtp.h.html#srtp_policy_t" title='srtp_policy_t' data-type='struct srtp_policy_t' data-ref="srtp_policy_t" data-ref-filename="srtp_policy_t">srtp_policy_t</a> *<dfn class="local col1 decl" id="21p" title='p' data-type='const srtp_policy_t *' data-ref="21p" data-ref-filename="21p">p</dfn>);</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td><i>/*</i></td></tr>
+<tr><th id="107">107</th><td><i> * libsrtp internal datatypes</i></td></tr>
+<tr><th id="108">108</th><td><i> */</i></td></tr>
+<tr><th id="109">109</th><td><b>typedef</b> <b>enum</b> <dfn class="type def" id="direction_t" title='direction_t' data-ref="direction_t" data-ref-filename="direction_t"><a class="type" href="#direction_t" title='direction_t' data-ref="direction_t" data-ref-filename="direction_t">direction_t</a></dfn> {</td></tr>
+<tr><th id="110">110</th><td>    <dfn class="enum" id="dir_unknown" title='dir_unknown' data-ref="dir_unknown" data-ref-filename="dir_unknown">dir_unknown</dfn> = <var>0</var>,</td></tr>
+<tr><th id="111">111</th><td>    <dfn class="enum" id="dir_srtp_sender" title='dir_srtp_sender' data-ref="dir_srtp_sender" data-ref-filename="dir_srtp_sender">dir_srtp_sender</dfn> = <var>1</var>,</td></tr>
+<tr><th id="112">112</th><td>    <dfn class="enum" id="dir_srtp_receiver" title='dir_srtp_receiver' data-ref="dir_srtp_receiver" data-ref-filename="dir_srtp_receiver">dir_srtp_receiver</dfn> = <var>2</var></td></tr>
+<tr><th id="113">113</th><td>} <dfn class="typedef" id="direction_t" title='direction_t' data-type='enum direction_t' data-ref="direction_t" data-ref-filename="direction_t">direction_t</dfn>;</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td><i>/*</i></td></tr>
+<tr><th id="116">116</th><td><i> * srtp_session_keys_t will contain the encryption, hmac, salt keys</i></td></tr>
+<tr><th id="117">117</th><td><i> * for both SRTP and SRTCP.  The session keys will also contain the</i></td></tr>
+<tr><th id="118">118</th><td><i> * MKI ID which is used to identify the session keys.</i></td></tr>
+<tr><th id="119">119</th><td><i> */</i></td></tr>
+<tr><th id="120">120</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="srtp_session_keys_t" title='srtp_session_keys_t' data-ref="srtp_session_keys_t" data-ref-filename="srtp_session_keys_t"><a class="type" href="#srtp_session_keys_t" title='srtp_session_keys_t' data-ref="srtp_session_keys_t" data-ref-filename="srtp_session_keys_t">srtp_session_keys_t</a></dfn> {</td></tr>
+<tr><th id="121">121</th><td>    <a class="typedef" href="../crypto/include/cipher.h.html#srtp_cipher_t" title='srtp_cipher_t' data-type='struct srtp_cipher_t' data-ref="srtp_cipher_t" data-ref-filename="srtp_cipher_t">srtp_cipher_t</a> *<dfn class="decl field" id="srtp_session_keys_t::rtp_cipher" title='srtp_session_keys_t::rtp_cipher' data-ref="srtp_session_keys_t::rtp_cipher" data-ref-filename="srtp_session_keys_t..rtp_cipher">rtp_cipher</dfn>;</td></tr>
+<tr><th id="122">122</th><td>    <a class="typedef" href="../crypto/include/cipher.h.html#srtp_cipher_t" title='srtp_cipher_t' data-type='struct srtp_cipher_t' data-ref="srtp_cipher_t" data-ref-filename="srtp_cipher_t">srtp_cipher_t</a> *<dfn class="decl field" id="srtp_session_keys_t::rtp_xtn_hdr_cipher" title='srtp_session_keys_t::rtp_xtn_hdr_cipher' data-ref="srtp_session_keys_t::rtp_xtn_hdr_cipher" data-ref-filename="srtp_session_keys_t..rtp_xtn_hdr_cipher">rtp_xtn_hdr_cipher</dfn>;</td></tr>
+<tr><th id="123">123</th><td>    <a class="typedef" href="../crypto/include/auth.h.html#srtp_auth_t" title='srtp_auth_t' data-type='struct srtp_auth_t' data-ref="srtp_auth_t" data-ref-filename="srtp_auth_t">srtp_auth_t</a> *<dfn class="decl field" id="srtp_session_keys_t::rtp_auth" title='srtp_session_keys_t::rtp_auth' data-ref="srtp_session_keys_t::rtp_auth" data-ref-filename="srtp_session_keys_t..rtp_auth">rtp_auth</dfn>;</td></tr>
+<tr><th id="124">124</th><td>    <a class="typedef" href="../crypto/include/cipher.h.html#srtp_cipher_t" title='srtp_cipher_t' data-type='struct srtp_cipher_t' data-ref="srtp_cipher_t" data-ref-filename="srtp_cipher_t">srtp_cipher_t</a> *<dfn class="decl field" id="srtp_session_keys_t::rtcp_cipher" title='srtp_session_keys_t::rtcp_cipher' data-ref="srtp_session_keys_t::rtcp_cipher" data-ref-filename="srtp_session_keys_t..rtcp_cipher">rtcp_cipher</dfn>;</td></tr>
+<tr><th id="125">125</th><td>    <a class="typedef" href="../crypto/include/auth.h.html#srtp_auth_t" title='srtp_auth_t' data-type='struct srtp_auth_t' data-ref="srtp_auth_t" data-ref-filename="srtp_auth_t">srtp_auth_t</a> *<dfn class="decl field" id="srtp_session_keys_t::rtcp_auth" title='srtp_session_keys_t::rtcp_auth' data-ref="srtp_session_keys_t::rtcp_auth" data-ref-filename="srtp_session_keys_t..rtcp_auth">rtcp_auth</dfn>;</td></tr>
+<tr><th id="126">126</th><td>    <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="srtp_session_keys_t::salt" title='srtp_session_keys_t::salt' data-ref="srtp_session_keys_t::salt" data-ref-filename="srtp_session_keys_t..salt">salt</dfn>[<a class="macro" href="srtp.h.html#110" title="12" data-ref="_M/SRTP_AEAD_SALT_LEN">SRTP_AEAD_SALT_LEN</a>];</td></tr>
+<tr><th id="127">127</th><td>    <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="srtp_session_keys_t::c_salt" title='srtp_session_keys_t::c_salt' data-ref="srtp_session_keys_t::c_salt" data-ref-filename="srtp_session_keys_t..c_salt">c_salt</dfn>[<a class="macro" href="srtp.h.html#110" title="12" data-ref="_M/SRTP_AEAD_SALT_LEN">SRTP_AEAD_SALT_LEN</a>];</td></tr>
+<tr><th id="128">128</th><td>    <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> *<dfn class="decl field" id="srtp_session_keys_t::mki_id" title='srtp_session_keys_t::mki_id' data-ref="srtp_session_keys_t::mki_id" data-ref-filename="srtp_session_keys_t..mki_id">mki_id</dfn>;</td></tr>
+<tr><th id="129">129</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="srtp_session_keys_t::mki_size" title='srtp_session_keys_t::mki_size' data-ref="srtp_session_keys_t::mki_size" data-ref-filename="srtp_session_keys_t..mki_size">mki_size</dfn>;</td></tr>
+<tr><th id="130">130</th><td>    <a class="typedef" href="../crypto/include/key.h.html#srtp_key_limit_ctx_t" title='srtp_key_limit_ctx_t' data-type='struct srtp_key_limit_ctx_t' data-ref="srtp_key_limit_ctx_t" data-ref-filename="srtp_key_limit_ctx_t">srtp_key_limit_ctx_t</a> *<dfn class="decl field" id="srtp_session_keys_t::limit" title='srtp_session_keys_t::limit' data-ref="srtp_session_keys_t::limit" data-ref-filename="srtp_session_keys_t..limit">limit</dfn>;</td></tr>
+<tr><th id="131">131</th><td>} <dfn class="typedef" id="srtp_session_keys_t" title='srtp_session_keys_t' data-type='struct srtp_session_keys_t' data-ref="srtp_session_keys_t" data-ref-filename="srtp_session_keys_t">srtp_session_keys_t</dfn>;</td></tr>
+<tr><th id="132">132</th><td></td></tr>
+<tr><th id="133">133</th><td><i>/*</i></td></tr>
+<tr><th id="134">134</th><td><i> * an srtp_stream_t has its own SSRC, encryption key, authentication</i></td></tr>
+<tr><th id="135">135</th><td><i> * key, sequence number, and replay database</i></td></tr>
+<tr><th id="136">136</th><td><i> *</i></td></tr>
+<tr><th id="137">137</th><td><i> * note that the keys might not actually be unique, in which case the</i></td></tr>
+<tr><th id="138">138</th><td><i> * srtp_cipher_t and srtp_auth_t pointers will point to the same structures</i></td></tr>
+<tr><th id="139">139</th><td><i> */</i></td></tr>
+<tr><th id="140">140</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="srtp_stream_ctx_t_" title='srtp_stream_ctx_t_' data-ref="srtp_stream_ctx_t_" data-ref-filename="srtp_stream_ctx_t_"><a class="type" href="#srtp_stream_ctx_t_" title='srtp_stream_ctx_t_' data-ref="srtp_stream_ctx_t_" data-ref-filename="srtp_stream_ctx_t_">srtp_stream_ctx_t_</a></dfn> {</td></tr>
+<tr><th id="141">141</th><td>    <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="srtp_stream_ctx_t_::ssrc" title='srtp_stream_ctx_t_::ssrc' data-ref="srtp_stream_ctx_t_::ssrc" data-ref-filename="srtp_stream_ctx_t_..ssrc">ssrc</dfn>;</td></tr>
+<tr><th id="142">142</th><td>    <a class="typedef" href="#srtp_session_keys_t" title='srtp_session_keys_t' data-type='struct srtp_session_keys_t' data-ref="srtp_session_keys_t" data-ref-filename="srtp_session_keys_t">srtp_session_keys_t</a> *<dfn class="decl field" id="srtp_stream_ctx_t_::session_keys" title='srtp_stream_ctx_t_::session_keys' data-ref="srtp_stream_ctx_t_::session_keys" data-ref-filename="srtp_stream_ctx_t_..session_keys">session_keys</dfn>;</td></tr>
+<tr><th id="143">143</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="srtp_stream_ctx_t_::num_master_keys" title='srtp_stream_ctx_t_::num_master_keys' data-ref="srtp_stream_ctx_t_::num_master_keys" data-ref-filename="srtp_stream_ctx_t_..num_master_keys">num_master_keys</dfn>;</td></tr>
+<tr><th id="144">144</th><td>    <a class="typedef" href="../crypto/include/rdbx.h.html#srtp_rdbx_t" title='srtp_rdbx_t' data-type='struct srtp_rdbx_t' data-ref="srtp_rdbx_t" data-ref-filename="srtp_rdbx_t">srtp_rdbx_t</a> <dfn class="decl field" id="srtp_stream_ctx_t_::rtp_rdbx" title='srtp_stream_ctx_t_::rtp_rdbx' data-ref="srtp_stream_ctx_t_::rtp_rdbx" data-ref-filename="srtp_stream_ctx_t_..rtp_rdbx">rtp_rdbx</dfn>;</td></tr>
+<tr><th id="145">145</th><td>    <a class="typedef" href="srtp.h.html#srtp_sec_serv_t" title='srtp_sec_serv_t' data-type='enum srtp_sec_serv_t' data-ref="srtp_sec_serv_t" data-ref-filename="srtp_sec_serv_t">srtp_sec_serv_t</a> <dfn class="decl field" id="srtp_stream_ctx_t_::rtp_services" title='srtp_stream_ctx_t_::rtp_services' data-ref="srtp_stream_ctx_t_::rtp_services" data-ref-filename="srtp_stream_ctx_t_..rtp_services">rtp_services</dfn>;</td></tr>
+<tr><th id="146">146</th><td>    <a class="typedef" href="../crypto/include/rdb.h.html#srtp_rdb_t" title='srtp_rdb_t' data-type='struct srtp_rdb_t' data-ref="srtp_rdb_t" data-ref-filename="srtp_rdb_t">srtp_rdb_t</a> <dfn class="decl field" id="srtp_stream_ctx_t_::rtcp_rdb" title='srtp_stream_ctx_t_::rtcp_rdb' data-ref="srtp_stream_ctx_t_::rtcp_rdb" data-ref-filename="srtp_stream_ctx_t_..rtcp_rdb">rtcp_rdb</dfn>;</td></tr>
+<tr><th id="147">147</th><td>    <a class="typedef" href="srtp.h.html#srtp_sec_serv_t" title='srtp_sec_serv_t' data-type='enum srtp_sec_serv_t' data-ref="srtp_sec_serv_t" data-ref-filename="srtp_sec_serv_t">srtp_sec_serv_t</a> <dfn class="decl field" id="srtp_stream_ctx_t_::rtcp_services" title='srtp_stream_ctx_t_::rtcp_services' data-ref="srtp_stream_ctx_t_::rtcp_services" data-ref-filename="srtp_stream_ctx_t_..rtcp_services">rtcp_services</dfn>;</td></tr>
+<tr><th id="148">148</th><td>    <a class="typedef" href="#direction_t" title='direction_t' data-type='enum direction_t' data-ref="direction_t" data-ref-filename="direction_t">direction_t</a> <dfn class="decl field" id="srtp_stream_ctx_t_::direction" title='srtp_stream_ctx_t_::direction' data-ref="srtp_stream_ctx_t_::direction" data-ref-filename="srtp_stream_ctx_t_..direction">direction</dfn>;</td></tr>
+<tr><th id="149">149</th><td>    <em>int</em> <dfn class="decl field" id="srtp_stream_ctx_t_::allow_repeat_tx" title='srtp_stream_ctx_t_::allow_repeat_tx' data-ref="srtp_stream_ctx_t_::allow_repeat_tx" data-ref-filename="srtp_stream_ctx_t_..allow_repeat_tx">allow_repeat_tx</dfn>;</td></tr>
+<tr><th id="150">150</th><td>    <a class="typedef" href="srtp.h.html#srtp_ekt_stream_t" title='srtp_ekt_stream_t' data-type='struct srtp_ekt_stream_ctx_t *' data-ref="srtp_ekt_stream_t" data-ref-filename="srtp_ekt_stream_t">srtp_ekt_stream_t</a> <dfn class="decl field" id="srtp_stream_ctx_t_::ekt" title='srtp_stream_ctx_t_::ekt' data-ref="srtp_stream_ctx_t_::ekt" data-ref-filename="srtp_stream_ctx_t_..ekt">ekt</dfn>;</td></tr>
+<tr><th id="151">151</th><td>    <em>int</em> *<dfn class="decl field" id="srtp_stream_ctx_t_::enc_xtn_hdr" title='srtp_stream_ctx_t_::enc_xtn_hdr' data-ref="srtp_stream_ctx_t_::enc_xtn_hdr" data-ref-filename="srtp_stream_ctx_t_..enc_xtn_hdr">enc_xtn_hdr</dfn>;</td></tr>
+<tr><th id="152">152</th><td>    <em>int</em> <dfn class="decl field" id="srtp_stream_ctx_t_::enc_xtn_hdr_count" title='srtp_stream_ctx_t_::enc_xtn_hdr_count' data-ref="srtp_stream_ctx_t_::enc_xtn_hdr_count" data-ref-filename="srtp_stream_ctx_t_..enc_xtn_hdr_count">enc_xtn_hdr_count</dfn>;</td></tr>
+<tr><th id="153">153</th><td>    <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="srtp_stream_ctx_t_::pending_roc" title='srtp_stream_ctx_t_::pending_roc' data-ref="srtp_stream_ctx_t_::pending_roc" data-ref-filename="srtp_stream_ctx_t_..pending_roc">pending_roc</dfn>;</td></tr>
+<tr><th id="154">154</th><td>    <b>struct</b> <a class="type" href="#srtp_stream_ctx_t_" title='srtp_stream_ctx_t_' data-ref="srtp_stream_ctx_t_" data-ref-filename="srtp_stream_ctx_t_">srtp_stream_ctx_t_</a> *<dfn class="decl field" id="srtp_stream_ctx_t_::next" title='srtp_stream_ctx_t_::next' data-ref="srtp_stream_ctx_t_::next" data-ref-filename="srtp_stream_ctx_t_..next">next</dfn>; <i>/* linked list of streams */</i></td></tr>
+<tr><th id="155">155</th><td>} <dfn class="typedef" id="strp_stream_ctx_t_" title='strp_stream_ctx_t_' data-type='struct srtp_stream_ctx_t_' data-ref="strp_stream_ctx_t_" data-ref-filename="strp_stream_ctx_t_">strp_stream_ctx_t_</dfn>;</td></tr>
+<tr><th id="156">156</th><td></td></tr>
+<tr><th id="157">157</th><td><i>/*</i></td></tr>
+<tr><th id="158">158</th><td><i> * an srtp_ctx_t holds a stream list and a service description</i></td></tr>
+<tr><th id="159">159</th><td><i> */</i></td></tr>
+<tr><th id="160">160</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="srtp_ctx_t_" title='srtp_ctx_t_' data-ref="srtp_ctx_t_" data-ref-filename="srtp_ctx_t_"><a class="type" href="#srtp_ctx_t_" title='srtp_ctx_t_' data-ref="srtp_ctx_t_" data-ref-filename="srtp_ctx_t_">srtp_ctx_t_</a></dfn> {</td></tr>
+<tr><th id="161">161</th><td>    <b>struct</b> <a class="type" href="#srtp_stream_ctx_t_" title='srtp_stream_ctx_t_' data-ref="srtp_stream_ctx_t_" data-ref-filename="srtp_stream_ctx_t_">srtp_stream_ctx_t_</a> *<dfn class="decl field" id="srtp_ctx_t_::stream_list" title='srtp_ctx_t_::stream_list' data-ref="srtp_ctx_t_::stream_list" data-ref-filename="srtp_ctx_t_..stream_list">stream_list</dfn>;     <i>/* linked list of streams     */</i></td></tr>
+<tr><th id="162">162</th><td>    <b>struct</b> <a class="type" href="#srtp_stream_ctx_t_" title='srtp_stream_ctx_t_' data-ref="srtp_stream_ctx_t_" data-ref-filename="srtp_stream_ctx_t_">srtp_stream_ctx_t_</a> *<dfn class="decl field" id="srtp_ctx_t_::stream_template" title='srtp_ctx_t_::stream_template' data-ref="srtp_ctx_t_::stream_template" data-ref-filename="srtp_ctx_t_..stream_template">stream_template</dfn>; <i>/* act as template for other  */</i></td></tr>
+<tr><th id="163">163</th><td>                                                <i>/* streams                    */</i></td></tr>
+<tr><th id="164">164</th><td>    <em>void</em> *<dfn class="decl field" id="srtp_ctx_t_::user_data" title='srtp_ctx_t_::user_data' data-ref="srtp_ctx_t_::user_data" data-ref-filename="srtp_ctx_t_..user_data">user_data</dfn>;                            <i>/* user custom data           */</i></td></tr>
+<tr><th id="165">165</th><td>} <dfn class="typedef" id="srtp_ctx_t_" title='srtp_ctx_t_' data-type='struct srtp_ctx_t_' data-ref="srtp_ctx_t_" data-ref-filename="srtp_ctx_t_">srtp_ctx_t_</dfn>;</td></tr>
+<tr><th id="166">166</th><td></td></tr>
+<tr><th id="167">167</th><td><i>/*</i></td></tr>
+<tr><th id="168">168</th><td><i> * srtp_hdr_t represents an RTP or SRTP header.  The bit-fields in</i></td></tr>
+<tr><th id="169">169</th><td><i> * this structure should be declared "unsigned int" instead of</i></td></tr>
+<tr><th id="170">170</th><td><i> * "unsigned char", but doing so causes the MS compiler to not</i></td></tr>
+<tr><th id="171">171</th><td><i> * fully pack the bit fields.</i></td></tr>
+<tr><th id="172">172</th><td><i> *</i></td></tr>
+<tr><th id="173">173</th><td><i> * In this implementation, an srtp_hdr_t is assumed to be 32-bit aligned</i></td></tr>
+<tr><th id="174">174</th><td><i> *</i></td></tr>
+<tr><th id="175">175</th><td><i> * (note that this definition follows that of RFC 1889 Appendix A, but</i></td></tr>
+<tr><th id="176">176</th><td><i> * is not identical)</i></td></tr>
+<tr><th id="177">177</th><td><i> */</i></td></tr>
+<tr><th id="178">178</th><td></td></tr>
+<tr><th id="179">179</th><td><u>#<span data-ppcond="179">ifndef</span> <span class="macro" data-ref="_M/WORDS_BIGENDIAN">WORDS_BIGENDIAN</span></u></td></tr>
+<tr><th id="180">180</th><td></td></tr>
+<tr><th id="181">181</th><td><b>typedef</b> <b>struct</b> {</td></tr>
+<tr><th id="182">182</th><td>    <em>unsigned</em> <em>char</em> <dfn class="decl field" id="(anonymous)::cc" title='(anonymous struct)::cc' data-ref="(anonymous)::cc" data-ref-filename="(anonymous)..cc">cc</dfn> : <var>4</var>;      <i>/* CSRC count             */</i></td></tr>
+<tr><th id="183">183</th><td>    <em>unsigned</em> <em>char</em> <dfn class="decl field" id="(anonymous)::x" title='(anonymous struct)::x' data-ref="(anonymous)::x" data-ref-filename="(anonymous)..x">x</dfn> : <var>1</var>;       <i>/* header extension flag  */</i></td></tr>
+<tr><th id="184">184</th><td>    <em>unsigned</em> <em>char</em> <dfn class="decl field" id="(anonymous)::p" title='(anonymous struct)::p' data-ref="(anonymous)::p" data-ref-filename="(anonymous)..p">p</dfn> : <var>1</var>;       <i>/* padding flag           */</i></td></tr>
+<tr><th id="185">185</th><td>    <em>unsigned</em> <em>char</em> <dfn class="decl field" id="(anonymous)::version" title='(anonymous struct)::version' data-ref="(anonymous)::version" data-ref-filename="(anonymous)..version">version</dfn> : <var>2</var>; <i>/* protocol version       */</i></td></tr>
+<tr><th id="186">186</th><td>    <em>unsigned</em> <em>char</em> <dfn class="decl field" id="(anonymous)::pt" title='(anonymous struct)::pt' data-ref="(anonymous)::pt" data-ref-filename="(anonymous)..pt">pt</dfn> : <var>7</var>;      <i>/* payload type           */</i></td></tr>
+<tr><th id="187">187</th><td>    <em>unsigned</em> <em>char</em> <dfn class="decl field" id="(anonymous)::m" title='(anonymous struct)::m' data-ref="(anonymous)::m" data-ref-filename="(anonymous)..m">m</dfn> : <var>1</var>;       <i>/* marker bit             */</i></td></tr>
+<tr><th id="188">188</th><td>    <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="decl field" id="(anonymous)::seq" title='(anonymous struct)::seq' data-ref="(anonymous)::seq" data-ref-filename="(anonymous)..seq">seq</dfn>;              <i>/* sequence number        */</i></td></tr>
+<tr><th id="189">189</th><td>    <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="(anonymous)::ts" title='(anonymous struct)::ts' data-ref="(anonymous)::ts" data-ref-filename="(anonymous)..ts">ts</dfn>;               <i>/* timestamp              */</i></td></tr>
+<tr><th id="190">190</th><td>    <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="(anonymous)::ssrc" title='(anonymous struct)::ssrc' data-ref="(anonymous)::ssrc" data-ref-filename="(anonymous)..ssrc">ssrc</dfn>;             <i>/* synchronization source */</i></td></tr>
+<tr><th id="191">191</th><td>} <dfn class="typedef" id="srtp_hdr_t" title='srtp_hdr_t' data-type='struct srtp_hdr_t' data-ref="srtp_hdr_t" data-ref-filename="srtp_hdr_t">srtp_hdr_t</dfn>;</td></tr>
+<tr><th id="192">192</th><td></td></tr>
+<tr><th id="193">193</th><td><u>#<span data-ppcond="179">else</span> /*  BIG_ENDIAN */</u></td></tr>
+<tr><th id="194">194</th><td></td></tr>
+<tr><th id="195">195</th><td><b>typedef</b> <b>struct</b> {</td></tr>
+<tr><th id="196">196</th><td>    <em>unsigned</em> <em>char</em> version : <var>2</var>; <i>/* protocol version       */</i></td></tr>
+<tr><th id="197">197</th><td>    <em>unsigned</em> <em>char</em> p : <var>1</var>;       <i>/* padding flag           */</i></td></tr>
+<tr><th id="198">198</th><td>    <em>unsigned</em> <em>char</em> x : <var>1</var>;       <i>/* header extension flag  */</i></td></tr>
+<tr><th id="199">199</th><td>    <em>unsigned</em> <em>char</em> cc : <var>4</var>;      <i>/* CSRC count             */</i></td></tr>
+<tr><th id="200">200</th><td>    <em>unsigned</em> <em>char</em> m : <var>1</var>;       <i>/* marker bit             */</i></td></tr>
+<tr><th id="201">201</th><td>    <em>unsigned</em> <em>char</em> pt : <var>7</var>;      <i>/* payload type           */</i></td></tr>
+<tr><th id="202">202</th><td>    uint16_t seq;              <i>/* sequence number        */</i></td></tr>
+<tr><th id="203">203</th><td>    uint32_t ts;               <i>/* timestamp              */</i></td></tr>
+<tr><th id="204">204</th><td>    uint32_t ssrc;             <i>/* synchronization source */</i></td></tr>
+<tr><th id="205">205</th><td>} srtp_hdr_t;</td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td><u>#<span data-ppcond="179">endif</span></u></td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td><b>typedef</b> <b>struct</b> {</td></tr>
+<tr><th id="210">210</th><td>    <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="decl field" id="(anonymous)::profile_specific" title='(anonymous struct)::profile_specific' data-ref="(anonymous)::profile_specific" data-ref-filename="(anonymous)..profile_specific">profile_specific</dfn>; <i>/* profile-specific info               */</i></td></tr>
+<tr><th id="211">211</th><td>    <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="decl field" id="(anonymous)::length" title='(anonymous struct)::length' data-ref="(anonymous)::length" data-ref-filename="(anonymous)..length">length</dfn>;           <i>/* number of 32-bit words in extension */</i></td></tr>
+<tr><th id="212">212</th><td>} <dfn class="typedef" id="srtp_hdr_xtnd_t" title='srtp_hdr_xtnd_t' data-type='struct srtp_hdr_xtnd_t' data-ref="srtp_hdr_xtnd_t" data-ref-filename="srtp_hdr_xtnd_t">srtp_hdr_xtnd_t</dfn>;</td></tr>
+<tr><th id="213">213</th><td></td></tr>
+<tr><th id="214">214</th><td><i>/*</i></td></tr>
+<tr><th id="215">215</th><td><i> * srtcp_hdr_t represents a secure rtcp header</i></td></tr>
+<tr><th id="216">216</th><td><i> *</i></td></tr>
+<tr><th id="217">217</th><td><i> * in this implementation, an srtcp header is assumed to be 32-bit</i></td></tr>
+<tr><th id="218">218</th><td><i> * aligned</i></td></tr>
+<tr><th id="219">219</th><td><i> */</i></td></tr>
+<tr><th id="220">220</th><td></td></tr>
+<tr><th id="221">221</th><td><u>#<span data-ppcond="221">ifndef</span> <span class="macro" data-ref="_M/WORDS_BIGENDIAN">WORDS_BIGENDIAN</span></u></td></tr>
+<tr><th id="222">222</th><td></td></tr>
+<tr><th id="223">223</th><td><b>typedef</b> <b>struct</b> {</td></tr>
+<tr><th id="224">224</th><td>    <em>unsigned</em> <em>char</em> <dfn class="decl field" id="(anonymous)::rc" title='(anonymous struct)::rc' data-ref="(anonymous)::rc" data-ref-filename="(anonymous)..rc">rc</dfn> : <var>5</var>;      <i>/* reception report count */</i></td></tr>
+<tr><th id="225">225</th><td>    <em>unsigned</em> <em>char</em> <dfn class="decl field" id="(anonymous)::p" title='(anonymous struct)::p' data-ref="(anonymous)::p" data-ref-filename="(anonymous)..p">p</dfn> : <var>1</var>;       <i>/* padding flag           */</i></td></tr>
+<tr><th id="226">226</th><td>    <em>unsigned</em> <em>char</em> <dfn class="decl field" id="(anonymous)::version" title='(anonymous struct)::version' data-ref="(anonymous)::version" data-ref-filename="(anonymous)..version">version</dfn> : <var>2</var>; <i>/* protocol version       */</i></td></tr>
+<tr><th id="227">227</th><td>    <em>unsigned</em> <em>char</em> <dfn class="decl field" id="(anonymous)::pt" title='(anonymous struct)::pt' data-ref="(anonymous)::pt" data-ref-filename="(anonymous)..pt">pt</dfn> : <var>8</var>;      <i>/* payload type           */</i></td></tr>
+<tr><th id="228">228</th><td>    <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="decl field" id="(anonymous)::len" title='(anonymous struct)::len' data-ref="(anonymous)::len" data-ref-filename="(anonymous)..len">len</dfn>;              <i>/* length                 */</i></td></tr>
+<tr><th id="229">229</th><td>    <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="(anonymous)::ssrc" title='(anonymous struct)::ssrc' data-ref="(anonymous)::ssrc" data-ref-filename="(anonymous)..ssrc">ssrc</dfn>;             <i>/* synchronization source */</i></td></tr>
+<tr><th id="230">230</th><td>} <dfn class="typedef" id="srtcp_hdr_t" title='srtcp_hdr_t' data-type='struct srtcp_hdr_t' data-ref="srtcp_hdr_t" data-ref-filename="srtcp_hdr_t">srtcp_hdr_t</dfn>;</td></tr>
+<tr><th id="231">231</th><td></td></tr>
+<tr><th id="232">232</th><td><b>typedef</b> <b>struct</b> {</td></tr>
+<tr><th id="233">233</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="(anonymous)::index" title='(anonymous struct)::index' data-ref="(anonymous)::index" data-ref-filename="(anonymous)..index">index</dfn> : <var>31</var>; <i>/* srtcp packet index in network order!  */</i></td></tr>
+<tr><th id="234">234</th><td>    <em>unsigned</em> <em>int</em> <dfn class="decl field" id="(anonymous)::e" title='(anonymous struct)::e' data-ref="(anonymous)::e" data-ref-filename="(anonymous)..e">e</dfn> : <var>1</var>;      <i>/* encrypted? 1=yes                      */</i></td></tr>
+<tr><th id="235">235</th><td>                             <i>/* optional mikey/etc go here            */</i></td></tr>
+<tr><th id="236">236</th><td>                             <i>/* and then the variable-length auth tag */</i></td></tr>
+<tr><th id="237">237</th><td>} <dfn class="typedef" id="srtcp_trailer_t" title='srtcp_trailer_t' data-type='struct srtcp_trailer_t' data-ref="srtcp_trailer_t" data-ref-filename="srtcp_trailer_t">srtcp_trailer_t</dfn>;</td></tr>
+<tr><th id="238">238</th><td></td></tr>
+<tr><th id="239">239</th><td><u>#<span data-ppcond="221">else</span> /*  BIG_ENDIAN */</u></td></tr>
+<tr><th id="240">240</th><td></td></tr>
+<tr><th id="241">241</th><td><b>typedef</b> <b>struct</b> {</td></tr>
+<tr><th id="242">242</th><td>    <em>unsigned</em> <em>char</em> version : <var>2</var>; <i>/* protocol version       */</i></td></tr>
+<tr><th id="243">243</th><td>    <em>unsigned</em> <em>char</em> p : <var>1</var>;       <i>/* padding flag           */</i></td></tr>
+<tr><th id="244">244</th><td>    <em>unsigned</em> <em>char</em> rc : <var>5</var>;      <i>/* reception report count */</i></td></tr>
+<tr><th id="245">245</th><td>    <em>unsigned</em> <em>char</em> pt : <var>8</var>;      <i>/* payload type           */</i></td></tr>
+<tr><th id="246">246</th><td>    uint16_t len;              <i>/* length                 */</i></td></tr>
+<tr><th id="247">247</th><td>    uint32_t ssrc;             <i>/* synchronization source */</i></td></tr>
+<tr><th id="248">248</th><td>} srtcp_hdr_t;</td></tr>
+<tr><th id="249">249</th><td></td></tr>
+<tr><th id="250">250</th><td><b>typedef</b> <b>struct</b> {</td></tr>
+<tr><th id="251">251</th><td>    <em>unsigned</em> <em>int</em> e : <var>1</var>;      <i>/* encrypted? 1=yes                      */</i></td></tr>
+<tr><th id="252">252</th><td>    <em>unsigned</em> <em>int</em> index : <var>31</var>; <i>/* srtcp packet index                    */</i></td></tr>
+<tr><th id="253">253</th><td>                             <i>/* optional mikey/etc go here            */</i></td></tr>
+<tr><th id="254">254</th><td>                             <i>/* and then the variable-length auth tag */</i></td></tr>
+<tr><th id="255">255</th><td>} srtcp_trailer_t;</td></tr>
+<tr><th id="256">256</th><td></td></tr>
+<tr><th id="257">257</th><td><u>#<span data-ppcond="221">endif</span></u></td></tr>
+<tr><th id="258">258</th><td></td></tr>
+<tr><th id="259">259</th><td><i>/*</i></td></tr>
+<tr><th id="260">260</th><td><i> * srtp_handle_event(srtp, srtm, evnt) calls the event handling</i></td></tr>
+<tr><th id="261">261</th><td><i> * function, if there is one.</i></td></tr>
+<tr><th id="262">262</th><td><i> *</i></td></tr>
+<tr><th id="263">263</th><td><i> * This macro is not included in the documentation as it is</i></td></tr>
+<tr><th id="264">264</th><td><i> * an internal-only function.</i></td></tr>
+<tr><th id="265">265</th><td><i> */</i></td></tr>
+<tr><th id="266">266</th><td></td></tr>
+<tr><th id="267">267</th><td><u>#define <dfn class="macro" id="_M/srtp_handle_event" data-ref="_M/srtp_handle_event">srtp_handle_event</dfn>(srtp, strm, evnt)                                    \</u></td></tr>
+<tr><th id="268">268</th><td><u>    if (srtp_event_handler) {                                                  \</u></td></tr>
+<tr><th id="269">269</th><td><u>        srtp_event_data_t data;                                                \</u></td></tr>
+<tr><th id="270">270</th><td><u>        data.session = srtp;                                                   \</u></td></tr>
+<tr><th id="271">271</th><td><u>        data.ssrc = ntohl(strm-&gt;ssrc);                                         \</u></td></tr>
+<tr><th id="272">272</th><td><u>        data.event = evnt;                                                     \</u></td></tr>
+<tr><th id="273">273</th><td><u>        srtp_event_handler(&amp;data);                                             \</u></td></tr>
+<tr><th id="274">274</th><td><u>    }</u></td></tr>
+<tr><th id="275">275</th><td></td></tr>
+<tr><th id="276">276</th><td><u>#<span data-ppcond="276">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="277">277</th><td>}</td></tr>
+<tr><th id="278">278</th><td><u>#<span data-ppcond="276">endif</span></u></td></tr>
+<tr><th id="279">279</th><td></td></tr>
+<tr><th id="280">280</th><td><u>#<span data-ppcond="45">endif</span> /* SRTP_PRIV_H */</u></td></tr>
+<tr><th id="281">281</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../srtp/ekt.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/srtp/ekt.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

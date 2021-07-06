@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Deallocator.h source code [webkit/WebKitBuild/Debug/usr/local/include/bmalloc/Deallocator.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="bmalloc::Deallocator "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/bmalloc/Deallocator.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>bmalloc</a>/<a href='Deallocator.h.html'>Deallocator.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2014-2018 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="26">ifndef</span> <span class="macro" data-ref="_M/Deallocator_h">Deallocator_h</span></u></td></tr>
+<tr><th id="27">27</th><td><u>#define <dfn class="macro" id="_M/Deallocator_h" data-ref="_M/Deallocator_h">Deallocator_h</dfn></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="BExport.h.html">"BExport.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="FixedVector.h.html">"FixedVector.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="SmallPage.h.html">"SmallPage.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#include &lt;mutex&gt;</u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><b>namespace</b> <span class="namespace">bmalloc</span> {</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><b>class</b> <a class="type" href="Heap.h.html#bmalloc::Heap" title='bmalloc::Heap' data-ref="bmalloc::Heap" data-ref-filename="bmalloc..Heap" id="bmalloc::Heap">Heap</a>;</td></tr>
+<tr><th id="37">37</th><td><b>class</b> <a class="type" href="Mutex.h.html#bmalloc::Mutex" title='bmalloc::Mutex' data-ref="bmalloc::Mutex" data-ref-filename="bmalloc..Mutex" id="bmalloc::Mutex">Mutex</a>;</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><i>// Per-cache object deallocator.</i></td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><b>class</b> <dfn class="type def" id="bmalloc::Deallocator" title='bmalloc::Deallocator' data-ref="bmalloc::Deallocator" data-ref-filename="bmalloc..Deallocator">Deallocator</dfn> {</td></tr>
+<tr><th id="42">42</th><td><b>public</b>:</td></tr>
+<tr><th id="43">43</th><td>    <dfn class="decl fn" id="_ZN7bmalloc11DeallocatorC1ERNS_4HeapE" title='bmalloc::Deallocator::Deallocator' data-ref="_ZN7bmalloc11DeallocatorC1ERNS_4HeapE" data-ref-filename="_ZN7bmalloc11DeallocatorC1ERNS_4HeapE">Deallocator</dfn>(<a class="type" href="Heap.h.html#bmalloc::Heap" title='bmalloc::Heap' data-ref="bmalloc::Heap" data-ref-filename="bmalloc..Heap">Heap</a>&amp;);</td></tr>
+<tr><th id="44">44</th><td>    <dfn class="decl fn" id="_ZN7bmalloc11DeallocatorD1Ev" title='bmalloc::Deallocator::~Deallocator' data-ref="_ZN7bmalloc11DeallocatorD1Ev" data-ref-filename="_ZN7bmalloc11DeallocatorD1Ev">~Deallocator</dfn>();</td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td>    <em>void</em> <a class="decl fn" href="#_ZN7bmalloc11Deallocator10deallocateEPv" title='bmalloc::Deallocator::deallocate' data-ref="_ZN7bmalloc11Deallocator10deallocateEPv" data-ref-filename="_ZN7bmalloc11Deallocator10deallocateEPv">deallocate</a>(<em>void</em>*);</td></tr>
+<tr><th id="47">47</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN7bmalloc11Deallocator8scavengeEv" title='bmalloc::Deallocator::scavenge' data-ref="_ZN7bmalloc11Deallocator8scavengeEv" data-ref-filename="_ZN7bmalloc11Deallocator8scavengeEv">scavenge</dfn>();</td></tr>
+<tr><th id="48">48</th><td>    </td></tr>
+<tr><th id="49">49</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN7bmalloc11Deallocator16processObjectLogERNSt3__111unique_lockINS_5MutexEEE" title='bmalloc::Deallocator::processObjectLog' data-ref="_ZN7bmalloc11Deallocator16processObjectLogERNSt3__111unique_lockINS_5MutexEEE" data-ref-filename="_ZN7bmalloc11Deallocator16processObjectLogERNSt3__111unique_lockINS_5MutexEEE">processObjectLog</dfn>(<a class="typedef" href="Mutex.h.html#bmalloc::UniqueLockHolder" title='bmalloc::UniqueLockHolder' data-type='std::unique_lock&lt;Mutex&gt;' data-ref="bmalloc::UniqueLockHolder" data-ref-filename="bmalloc..UniqueLockHolder">UniqueLockHolder</a>&amp;);</td></tr>
+<tr><th id="50">50</th><td>    </td></tr>
+<tr><th id="51">51</th><td>    <a class="typedef" href="SmallPage.h.html#bmalloc::LineCache" title='bmalloc::LineCache' data-type='std::array&lt;List&lt;SmallPage&gt;, sizeClassCount&gt;' data-ref="bmalloc::LineCache" data-ref-filename="bmalloc..LineCache">LineCache</a>&amp; <dfn class="decl def fn" id="_ZN7bmalloc11Deallocator9lineCacheERNSt3__111unique_lockINS_5MutexEEE" title='bmalloc::Deallocator::lineCache' data-ref="_ZN7bmalloc11Deallocator9lineCacheERNSt3__111unique_lockINS_5MutexEEE" data-ref-filename="_ZN7bmalloc11Deallocator9lineCacheERNSt3__111unique_lockINS_5MutexEEE">lineCache</dfn>(<a class="typedef" href="Mutex.h.html#bmalloc::UniqueLockHolder" title='bmalloc::UniqueLockHolder' data-type='std::unique_lock&lt;Mutex&gt;' data-ref="bmalloc::UniqueLockHolder" data-ref-filename="bmalloc..UniqueLockHolder">UniqueLockHolder</a>&amp;) { <b>return</b> <a class="member field" href="#bmalloc::Deallocator::m_lineCache" title='bmalloc::Deallocator::m_lineCache' data-ref="bmalloc::Deallocator::m_lineCache" data-ref-filename="bmalloc..Deallocator..m_lineCache">m_lineCache</a>; }</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td><b>private</b>:</td></tr>
+<tr><th id="54">54</th><td>    <em>bool</em> <a class="decl fn" href="#_ZN7bmalloc11Deallocator18deallocateFastCaseEPv" title='bmalloc::Deallocator::deallocateFastCase' data-ref="_ZN7bmalloc11Deallocator18deallocateFastCaseEPv" data-ref-filename="_ZN7bmalloc11Deallocator18deallocateFastCaseEPv">deallocateFastCase</a>(<em>void</em>*);</td></tr>
+<tr><th id="55">55</th><td>    <a class="macro" href="BExport.h.html#46" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/BEXPORT">BEXPORT</a> <em>void</em> <dfn class="decl fn" id="_ZN7bmalloc11Deallocator18deallocateSlowCaseEPv" title='bmalloc::Deallocator::deallocateSlowCase' data-ref="_ZN7bmalloc11Deallocator18deallocateSlowCaseEPv" data-ref-filename="_ZN7bmalloc11Deallocator18deallocateSlowCaseEPv">deallocateSlowCase</dfn>(<em>void</em>*);</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td>    <a class="type" href="Heap.h.html#bmalloc::Heap" title='bmalloc::Heap' data-ref="bmalloc::Heap" data-ref-filename="bmalloc..Heap">Heap</a>&amp; <dfn class="decl field" id="bmalloc::Deallocator::m_heap" title='bmalloc::Deallocator::m_heap' data-ref="bmalloc::Deallocator::m_heap" data-ref-filename="bmalloc..Deallocator..m_heap">m_heap</dfn>;</td></tr>
+<tr><th id="58">58</th><td>    <a class="type" href="FixedVector.h.html#bmalloc::FixedVector" title='bmalloc::FixedVector' data-ref="bmalloc::FixedVector" data-ref-filename="bmalloc..FixedVector">FixedVector</a>&lt;<em>void</em>*, <a class="ref" href="Sizes.h.html#bmalloc::Sizes::deallocatorLogCapacity" title='bmalloc::Sizes::deallocatorLogCapacity' data-ref="bmalloc::Sizes::deallocatorLogCapacity" data-ref-filename="bmalloc..Sizes..deallocatorLogCapacity">deallocatorLogCapacity</a>&gt; <dfn class="decl field" id="bmalloc::Deallocator::m_objectLog" title='bmalloc::Deallocator::m_objectLog' data-ref="bmalloc::Deallocator::m_objectLog" data-ref-filename="bmalloc..Deallocator..m_objectLog">m_objectLog</dfn>;</td></tr>
+<tr><th id="59">59</th><td>    <a class="typedef" href="SmallPage.h.html#bmalloc::LineCache" title='bmalloc::LineCache' data-type='std::array&lt;List&lt;SmallPage&gt;, sizeClassCount&gt;' data-ref="bmalloc::LineCache" data-ref-filename="bmalloc..LineCache">LineCache</a> <dfn class="decl field" id="bmalloc::Deallocator::m_lineCache" title='bmalloc::Deallocator::m_lineCache' data-ref="bmalloc::Deallocator::m_lineCache" data-ref-filename="bmalloc..Deallocator..m_lineCache">m_lineCache</dfn>; <i>// The Heap removes items from this cache.</i></td></tr>
+<tr><th id="60">60</th><td>};</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><b>inline</b> <em>bool</em> <a class="type" href="#bmalloc::Deallocator" title='bmalloc::Deallocator' data-ref="bmalloc::Deallocator" data-ref-filename="bmalloc..Deallocator">Deallocator</a>::<dfn class="decl def fn" id="_ZN7bmalloc11Deallocator18deallocateFastCaseEPv" title='bmalloc::Deallocator::deallocateFastCase' data-ref="_ZN7bmalloc11Deallocator18deallocateFastCaseEPv" data-ref-filename="_ZN7bmalloc11Deallocator18deallocateFastCaseEPv">deallocateFastCase</dfn>(<em>void</em>* <dfn class="local col1 decl" id="131object" title='object' data-type='void *' data-ref="131object" data-ref-filename="131object">object</dfn>)</td></tr>
+<tr><th id="63">63</th><td>{</td></tr>
+<tr><th id="64">64</th><td>    <a class="macro" href="BAssert.h.html#121" title="do { if (!(mightBeLarge(nullptr))) do { *(int*)0xbbadbeef = 0; __builtin_trap(); } while (0); } while (0)" data-ref="_M/BASSERT">BASSERT</a>(<a class="ref fn" href="ObjectType.h.html#_ZN7bmalloc12mightBeLargeEPv" title='bmalloc::mightBeLarge' data-ref="_ZN7bmalloc12mightBeLargeEPv" data-ref-filename="_ZN7bmalloc12mightBeLargeEPv">mightBeLarge</a>(<b>nullptr</b>));</td></tr>
+<tr><th id="65">65</th><td>    <b>if</b> (<a class="ref fn" href="ObjectType.h.html#_ZN7bmalloc12mightBeLargeEPv" title='bmalloc::mightBeLarge' data-ref="_ZN7bmalloc12mightBeLargeEPv" data-ref-filename="_ZN7bmalloc12mightBeLargeEPv">mightBeLarge</a>(<a class="local col1 ref" href="#131object" title='object' data-ref="131object" data-ref-filename="131object">object</a>))</td></tr>
+<tr><th id="66">66</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td>    <b>if</b> (<a class="member field" href="#bmalloc::Deallocator::m_objectLog" title='bmalloc::Deallocator::m_objectLog' data-ref="bmalloc::Deallocator::m_objectLog" data-ref-filename="bmalloc..Deallocator..m_objectLog">m_objectLog</a>.<a class="ref fn" href="FixedVector.h.html#_ZNK7bmalloc11FixedVector4sizeEv" title='bmalloc::FixedVector::size' data-ref="_ZNK7bmalloc11FixedVector4sizeEv" data-ref-filename="_ZNK7bmalloc11FixedVector4sizeEv">size</a>() == <a class="member field" href="#bmalloc::Deallocator::m_objectLog" title='bmalloc::Deallocator::m_objectLog' data-ref="bmalloc::Deallocator::m_objectLog" data-ref-filename="bmalloc..Deallocator..m_objectLog">m_objectLog</a>.<a class="ref fn" href="FixedVector.h.html#_ZNK7bmalloc11FixedVector8capacityEv" title='bmalloc::FixedVector::capacity' data-ref="_ZNK7bmalloc11FixedVector8capacityEv" data-ref-filename="_ZNK7bmalloc11FixedVector8capacityEv">capacity</a>())</td></tr>
+<tr><th id="69">69</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td>    <a class="member field" href="#bmalloc::Deallocator::m_objectLog" title='bmalloc::Deallocator::m_objectLog' data-ref="bmalloc::Deallocator::m_objectLog" data-ref-filename="bmalloc..Deallocator..m_objectLog">m_objectLog</a>.<a class="ref fn" href="FixedVector.h.html#_ZN7bmalloc11FixedVector4pushERKT_" title='bmalloc::FixedVector::push' data-ref="_ZN7bmalloc11FixedVector4pushERKT_" data-ref-filename="_ZN7bmalloc11FixedVector4pushERKT_">push</a>(<a class="local col1 ref" href="#131object" title='object' data-ref="131object" data-ref-filename="131object">object</a>);</td></tr>
+<tr><th id="72">72</th><td>    <b>return</b> <b>true</b>;</td></tr>
+<tr><th id="73">73</th><td>}</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td><b>inline</b> <em>void</em> <a class="type" href="#bmalloc::Deallocator" title='bmalloc::Deallocator' data-ref="bmalloc::Deallocator" data-ref-filename="bmalloc..Deallocator">Deallocator</a>::<dfn class="decl def fn" id="_ZN7bmalloc11Deallocator10deallocateEPv" title='bmalloc::Deallocator::deallocate' data-ref="_ZN7bmalloc11Deallocator10deallocateEPv" data-ref-filename="_ZN7bmalloc11Deallocator10deallocateEPv">deallocate</dfn>(<em>void</em>* <dfn class="local col2 decl" id="132object" title='object' data-type='void *' data-ref="132object" data-ref-filename="132object">object</dfn>)</td></tr>
+<tr><th id="76">76</th><td>{</td></tr>
+<tr><th id="77">77</th><td>    <b>if</b> (!<a class="member fn" href="#_ZN7bmalloc11Deallocator18deallocateFastCaseEPv" title='bmalloc::Deallocator::deallocateFastCase' data-ref="_ZN7bmalloc11Deallocator18deallocateFastCaseEPv" data-ref-filename="_ZN7bmalloc11Deallocator18deallocateFastCaseEPv">deallocateFastCase</a>(<a class="local col2 ref" href="#132object" title='object' data-ref="132object" data-ref-filename="132object">object</a>))</td></tr>
+<tr><th id="78">78</th><td>        <a class="member fn" href="#_ZN7bmalloc11Deallocator18deallocateSlowCaseEPv" title='bmalloc::Deallocator::deallocateSlowCase' data-ref="_ZN7bmalloc11Deallocator18deallocateSlowCaseEPv" data-ref-filename="_ZN7bmalloc11Deallocator18deallocateSlowCaseEPv">deallocateSlowCase</a>(<a class="local col2 ref" href="#132object" title='object' data-ref="132object" data-ref-filename="132object">object</a>);</td></tr>
+<tr><th id="79">79</th><td>}</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>} <i>// namespace bmalloc</i></td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td><u>#<span data-ppcond="26">endif</span> // Deallocator_h</u></td></tr>
+<tr><th id="84">84</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/WTF/wtf/FastMalloc.cpp.html'>webkit/Source/WTF/wtf/FastMalloc.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

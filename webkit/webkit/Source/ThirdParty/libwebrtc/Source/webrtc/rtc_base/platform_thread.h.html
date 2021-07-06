@@ -1,0 +1,132 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>platform_thread.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/platform_thread.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::PlatformThread,rtc::ThreadAttributes,rtc::ThreadPriority "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/platform_thread.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='platform_thread.h.html'>platform_thread.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_PLATFORM_THREAD_H_">RTC_BASE_PLATFORM_THREAD_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_PLATFORM_THREAD_H_" data-ref="_M/RTC_BASE_PLATFORM_THREAD_H_">RTC_BASE_PLATFORM_THREAD_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;functional&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;string&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../../third_party/abseil-cpp/absl/strings/string_view.h.html">"absl/strings/string_view.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../../third_party/abseil-cpp/absl/types/optional.h.html">"absl/types/optional.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="platform_thread_types.h.html">"rtc_base/platform_thread_types.h"</a></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><b>enum</b> <b>class</b> <dfn class="type def" id="rtc::ThreadPriority" title='rtc::ThreadPriority' data-ref="rtc::ThreadPriority" data-ref-filename="rtc..ThreadPriority">ThreadPriority</dfn> {</td></tr>
+<tr><th id="24">24</th><td>  <dfn class="enum" id="rtc::ThreadPriority::kLow" title='rtc::ThreadPriority::kLow' data-ref="rtc::ThreadPriority::kLow" data-ref-filename="rtc..ThreadPriority..kLow">kLow</dfn> = <var>1</var>,</td></tr>
+<tr><th id="25">25</th><td>  <dfn class="enum" id="rtc::ThreadPriority::kNormal" title='rtc::ThreadPriority::kNormal' data-ref="rtc::ThreadPriority::kNormal" data-ref-filename="rtc..ThreadPriority..kNormal">kNormal</dfn>,</td></tr>
+<tr><th id="26">26</th><td>  <dfn class="enum" id="rtc::ThreadPriority::kHigh" title='rtc::ThreadPriority::kHigh' data-ref="rtc::ThreadPriority::kHigh" data-ref-filename="rtc..ThreadPriority..kHigh">kHigh</dfn>,</td></tr>
+<tr><th id="27">27</th><td>  <dfn class="enum" id="rtc::ThreadPriority::kRealtime" title='rtc::ThreadPriority::kRealtime' data-ref="rtc::ThreadPriority::kRealtime" data-ref-filename="rtc..ThreadPriority..kRealtime">kRealtime</dfn>,</td></tr>
+<tr><th id="28">28</th><td>};</td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><b>struct</b> <dfn class="type def" id="rtc::ThreadAttributes" title='rtc::ThreadAttributes' data-ref="rtc::ThreadAttributes" data-ref-filename="rtc..ThreadAttributes">ThreadAttributes</dfn> {</td></tr>
+<tr><th id="31">31</th><td>  <a class="type" href="#rtc::ThreadPriority" title='rtc::ThreadPriority' data-ref="rtc::ThreadPriority" data-ref-filename="rtc..ThreadPriority">ThreadPriority</a> <dfn class="decl field" id="rtc::ThreadAttributes::priority" title='rtc::ThreadAttributes::priority' data-ref="rtc::ThreadAttributes::priority" data-ref-filename="rtc..ThreadAttributes..priority">priority</dfn> = <a class="type" href="#rtc::ThreadPriority" title='rtc::ThreadPriority' data-ref="rtc::ThreadPriority" data-ref-filename="rtc..ThreadPriority">ThreadPriority</a>::<a class="enum" href="#rtc::ThreadPriority::kNormal" title='rtc::ThreadPriority::kNormal' data-ref="rtc::ThreadPriority::kNormal" data-ref-filename="rtc..ThreadPriority..kNormal">kNormal</a>;</td></tr>
+<tr><th id="32">32</th><td>  <a class="type" href="#rtc::ThreadAttributes" title='rtc::ThreadAttributes' data-ref="rtc::ThreadAttributes" data-ref-filename="rtc..ThreadAttributes">ThreadAttributes</a>&amp; <dfn class="decl def fn" id="_ZN3rtc16ThreadAttributes11SetPriorityENS_14ThreadPriorityE" title='rtc::ThreadAttributes::SetPriority' data-ref="_ZN3rtc16ThreadAttributes11SetPriorityENS_14ThreadPriorityE" data-ref-filename="_ZN3rtc16ThreadAttributes11SetPriorityENS_14ThreadPriorityE">SetPriority</dfn>(<a class="type" href="#rtc::ThreadPriority" title='rtc::ThreadPriority' data-ref="rtc::ThreadPriority" data-ref-filename="rtc..ThreadPriority">ThreadPriority</a> <dfn class="local col0 decl" id="180priority_param" title='priority_param' data-type='rtc::ThreadPriority' data-ref="180priority_param" data-ref-filename="180priority_param">priority_param</dfn>) {</td></tr>
+<tr><th id="33">33</th><td>    <a class="member field" href="#rtc::ThreadAttributes::priority" title='rtc::ThreadAttributes::priority' data-ref="rtc::ThreadAttributes::priority" data-ref-filename="rtc..ThreadAttributes..priority">priority</a> = <a class="local col0 ref" href="#180priority_param" title='priority_param' data-ref="180priority_param" data-ref-filename="180priority_param">priority_param</a>;</td></tr>
+<tr><th id="34">34</th><td>    <b>return</b> *<b>this</b>;</td></tr>
+<tr><th id="35">35</th><td>  }</td></tr>
+<tr><th id="36">36</th><td>};</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><i>// Represents a simple worker thread.</i></td></tr>
+<tr><th id="39">39</th><td><b>class</b> <dfn class="type def" id="rtc::PlatformThread" title='rtc::PlatformThread' data-ref="rtc::PlatformThread" data-ref-filename="rtc..PlatformThread">PlatformThread</dfn> final {</td></tr>
+<tr><th id="40">40</th><td> <b>public</b>:</td></tr>
+<tr><th id="41">41</th><td>  <i>// Handle is the base platform thread handle.</i></td></tr>
+<tr><th id="42">42</th><td><u>#<span data-ppcond="42">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_WIN">WEBRTC_WIN</span>)</u></td></tr>
+<tr><th id="43">43</th><td>  <b>using</b> Handle = HANDLE;</td></tr>
+<tr><th id="44">44</th><td><u>#<span data-ppcond="42">else</span></u></td></tr>
+<tr><th id="45">45</th><td>  <b>using</b> <dfn class="typedef" id="rtc::PlatformThread::Handle" title='rtc::PlatformThread::Handle' data-type='pthread_t' data-ref="rtc::PlatformThread::Handle" data-ref-filename="rtc..PlatformThread..Handle">Handle</dfn> = <span class='typedef' title='pthread_t' data-type='__darwin_pthread_t' data-ref="pthread_t" data-ref-filename="pthread_t">pthread_t</span>;</td></tr>
+<tr><th id="46">46</th><td><u>#<span data-ppcond="42">endif</span>  // defined(WEBRTC_WIN)</u></td></tr>
+<tr><th id="47">47</th><td>  <i>// This ctor creates the PlatformThread with an unset handle (returning true</i></td></tr>
+<tr><th id="48">48</th><td><i>  // in empty()) and is provided for convenience.</i></td></tr>
+<tr><th id="49">49</th><td><i>  // TODO(bugs.webrtc.org/12727) Look into if default and move support can be</i></td></tr>
+<tr><th id="50">50</th><td><i>  // removed.</i></td></tr>
+<tr><th id="51">51</th><td>  <dfn class="decl def fn" id="_ZN3rtc14PlatformThreadC1Ev" title='rtc::PlatformThread::PlatformThread' data-ref="_ZN3rtc14PlatformThreadC1Ev" data-ref-filename="_ZN3rtc14PlatformThreadC1Ev">PlatformThread</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td>  <i>// Moves |rhs| into this, storing an empty state in |rhs|.</i></td></tr>
+<tr><th id="54">54</th><td><i>  // TODO(bugs.webrtc.org/12727) Look into if default and move support can be</i></td></tr>
+<tr><th id="55">55</th><td><i>  // removed.</i></td></tr>
+<tr><th id="56">56</th><td>  <dfn class="decl fn" id="_ZN3rtc14PlatformThreadC1EOS0_" title='rtc::PlatformThread::PlatformThread' data-ref="_ZN3rtc14PlatformThreadC1EOS0_" data-ref-filename="_ZN3rtc14PlatformThreadC1EOS0_">PlatformThread</dfn>(<a class="type" href="#rtc::PlatformThread" title='rtc::PlatformThread' data-ref="rtc::PlatformThread" data-ref-filename="rtc..PlatformThread">PlatformThread</a>&amp;&amp; <dfn class="local col1 decl" id="181rhs" title='rhs' data-type='rtc::PlatformThread &amp;&amp;' data-ref="181rhs" data-ref-filename="181rhs">rhs</dfn>);</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>  <i>// Moves |rhs| into this, storing an empty state in |rhs|.</i></td></tr>
+<tr><th id="59">59</th><td><i>  // TODO(bugs.webrtc.org/12727) Look into if default and move support can be</i></td></tr>
+<tr><th id="60">60</th><td><i>  // removed.</i></td></tr>
+<tr><th id="61">61</th><td>  <a class="type" href="#rtc::PlatformThread" title='rtc::PlatformThread' data-ref="rtc::PlatformThread" data-ref-filename="rtc..PlatformThread">PlatformThread</a>&amp; <dfn class="decl fn" id="_ZN3rtc14PlatformThreadaSEOS0_" title='rtc::PlatformThread::operator=' data-ref="_ZN3rtc14PlatformThreadaSEOS0_" data-ref-filename="_ZN3rtc14PlatformThreadaSEOS0_"><b>operator</b>=</dfn>(<a class="type" href="#rtc::PlatformThread" title='rtc::PlatformThread' data-ref="rtc::PlatformThread" data-ref-filename="rtc..PlatformThread">PlatformThread</a>&amp;&amp; <dfn class="local col2 decl" id="182rhs" title='rhs' data-type='rtc::PlatformThread &amp;&amp;' data-ref="182rhs" data-ref-filename="182rhs">rhs</dfn>);</td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td>  <i>// For a PlatformThread that's been spawned joinable, the destructor suspends</i></td></tr>
+<tr><th id="64">64</th><td><i>  // the calling thread until the created thread exits unless the thread has</i></td></tr>
+<tr><th id="65">65</th><td><i>  // already exited.</i></td></tr>
+<tr><th id="66">66</th><td>  <b>virtual</b> <dfn class="virtual decl fn" id="_ZN3rtc14PlatformThreadD1Ev" title='rtc::PlatformThread::~PlatformThread' data-ref="_ZN3rtc14PlatformThreadD1Ev" data-ref-filename="_ZN3rtc14PlatformThreadD1Ev">~PlatformThread</dfn>();</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td>  <i>// Finalizes any allocated resources.</i></td></tr>
+<tr><th id="69">69</th><td><i>  // For a PlatformThread that's been spawned joinable, Finalize() suspends</i></td></tr>
+<tr><th id="70">70</th><td><i>  // the calling thread until the created thread exits unless the thread has</i></td></tr>
+<tr><th id="71">71</th><td><i>  // already exited.</i></td></tr>
+<tr><th id="72">72</th><td><i>  // empty() returns true after completion.</i></td></tr>
+<tr><th id="73">73</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN3rtc14PlatformThread8FinalizeEv" title='rtc::PlatformThread::Finalize' data-ref="_ZN3rtc14PlatformThread8FinalizeEv" data-ref-filename="_ZN3rtc14PlatformThread8FinalizeEv">Finalize</dfn>();</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td>  <i>// Returns true if default constructed, moved from, or Finalize()ed.</i></td></tr>
+<tr><th id="76">76</th><td>  <em>bool</em> <dfn class="decl def fn" id="_ZNK3rtc14PlatformThread5emptyEv" title='rtc::PlatformThread::empty' data-ref="_ZNK3rtc14PlatformThread5emptyEv" data-ref-filename="_ZNK3rtc14PlatformThread5emptyEv">empty</dfn>() <em>const</em> { <b>return</b> !<a class="member field" href="#rtc::PlatformThread::handle_" title='rtc::PlatformThread::handle_' data-ref="rtc::PlatformThread::handle_" data-ref-filename="rtc..PlatformThread..handle_">handle_</a>.<span class='ref fn' title='std::__1::__optional_storage_base::has_value' data-ref="_ZNKSt3__123__optional_storage_base9has_valueEv" data-ref-filename="_ZNKSt3__123__optional_storage_base9has_valueEv">has_value</span>(); }</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td>  <i>// Creates a started joinable thread which will be joined when the returned</i></td></tr>
+<tr><th id="79">79</th><td><i>  // PlatformThread destructs or Finalize() is called.</i></td></tr>
+<tr><th id="80">80</th><td>  <em>static</em> <a class="type" href="#rtc::PlatformThread" title='rtc::PlatformThread' data-ref="rtc::PlatformThread" data-ref-filename="rtc..PlatformThread">PlatformThread</a> <dfn class="decl fn" id="_ZN3rtc14PlatformThread13SpawnJoinableENSt3__18functionIFvvEEENS1_17basic_string_viewIcNS1_11char_traitsIcEEEENS_16ThreadAttributesE" title='rtc::PlatformThread::SpawnJoinable' data-ref="_ZN3rtc14PlatformThread13SpawnJoinableENSt3__18functionIFvvEEENS1_17basic_string_viewIcNS1_11char_traitsIcEEEENS_16ThreadAttributesE" data-ref-filename="_ZN3rtc14PlatformThread13SpawnJoinableENSt3__18functionIFvvEEENS1_17basic_string_viewIcNS1_11char_traitsIcEEEENS_16ThreadAttributesE">SpawnJoinable</dfn>(</td></tr>
+<tr><th id="81">81</th><td>      <span class="namespace">std::</span><span class='type' title='std::__1::function' data-ref="std::__1::function" data-ref-filename="std..__1..function">function</span>&lt;<em>void</em>()&gt; <dfn class="local col3 decl" id="183thread_function" title='thread_function' data-type='std::function&lt;void ()&gt;' data-ref="183thread_function" data-ref-filename="183thread_function">thread_function</dfn>,</td></tr>
+<tr><th id="82">82</th><td>      <span class="namespace">absl::</span><a class="typedef" href="../../third_party/abseil-cpp/absl/strings/string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col4 decl" id="184name" title='name' data-type='absl::string_view' data-ref="184name" data-ref-filename="184name">name</dfn>,</td></tr>
+<tr><th id="83">83</th><td>      <a class="type" href="#rtc::ThreadAttributes" title='rtc::ThreadAttributes' data-ref="rtc::ThreadAttributes" data-ref-filename="rtc..ThreadAttributes">ThreadAttributes</a> <dfn class="local col5 decl" id="185attributes" title='attributes' data-type='rtc::ThreadAttributes' data-ref="185attributes" data-ref-filename="185attributes">attributes</dfn> = <a class="type" href="#rtc::ThreadAttributes" title='rtc::ThreadAttributes' data-ref="rtc::ThreadAttributes" data-ref-filename="rtc..ThreadAttributes">ThreadAttributes</a><a class="ref fn" href="#30" title='rtc::ThreadAttributes::ThreadAttributes' data-ref="_ZN3rtc16ThreadAttributesC1Ev" data-ref-filename="_ZN3rtc16ThreadAttributesC1Ev">(</a>));</td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td>  <i>// Creates a started detached thread. The caller has to use external</i></td></tr>
+<tr><th id="86">86</th><td><i>  // synchronization as nothing is provided by the PlatformThread construct.</i></td></tr>
+<tr><th id="87">87</th><td>  <em>static</em> <a class="type" href="#rtc::PlatformThread" title='rtc::PlatformThread' data-ref="rtc::PlatformThread" data-ref-filename="rtc..PlatformThread">PlatformThread</a> <dfn class="decl fn" id="_ZN3rtc14PlatformThread13SpawnDetachedENSt3__18functionIFvvEEENS1_17basic_string_viewIcNS1_11char_traitsIcEEEENS_16ThreadAttributesE" title='rtc::PlatformThread::SpawnDetached' data-ref="_ZN3rtc14PlatformThread13SpawnDetachedENSt3__18functionIFvvEEENS1_17basic_string_viewIcNS1_11char_traitsIcEEEENS_16ThreadAttributesE" data-ref-filename="_ZN3rtc14PlatformThread13SpawnDetachedENSt3__18functionIFvvEEENS1_17basic_string_viewIcNS1_11char_traitsIcEEEENS_16ThreadAttributesE">SpawnDetached</dfn>(</td></tr>
+<tr><th id="88">88</th><td>      <span class="namespace">std::</span><span class='type' title='std::__1::function' data-ref="std::__1::function" data-ref-filename="std..__1..function">function</span>&lt;<em>void</em>()&gt; <dfn class="local col6 decl" id="186thread_function" title='thread_function' data-type='std::function&lt;void ()&gt;' data-ref="186thread_function" data-ref-filename="186thread_function">thread_function</dfn>,</td></tr>
+<tr><th id="89">89</th><td>      <span class="namespace">absl::</span><a class="typedef" href="../../third_party/abseil-cpp/absl/strings/string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col7 decl" id="187name" title='name' data-type='absl::string_view' data-ref="187name" data-ref-filename="187name">name</dfn>,</td></tr>
+<tr><th id="90">90</th><td>      <a class="type" href="#rtc::ThreadAttributes" title='rtc::ThreadAttributes' data-ref="rtc::ThreadAttributes" data-ref-filename="rtc..ThreadAttributes">ThreadAttributes</a> <dfn class="local col8 decl" id="188attributes" title='attributes' data-type='rtc::ThreadAttributes' data-ref="188attributes" data-ref-filename="188attributes">attributes</dfn> = <a class="type" href="#rtc::ThreadAttributes" title='rtc::ThreadAttributes' data-ref="rtc::ThreadAttributes" data-ref-filename="rtc..ThreadAttributes">ThreadAttributes</a><a class="ref fn" href="#30" title='rtc::ThreadAttributes::ThreadAttributes' data-ref="_ZN3rtc16ThreadAttributesC1Ev" data-ref-filename="_ZN3rtc16ThreadAttributesC1Ev">(</a>));</td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td>  <i>// Returns the base platform thread handle of this thread.</i></td></tr>
+<tr><th id="93">93</th><td>  <span class="namespace">absl::</span><span class='type' title='std::__1::optional' data-ref="std::__1::optional" data-ref-filename="std..__1..optional">optional</span>&lt;<a class="typedef" href="#rtc::PlatformThread::Handle" title='rtc::PlatformThread::Handle' data-type='pthread_t' data-ref="rtc::PlatformThread::Handle" data-ref-filename="rtc..PlatformThread..Handle">Handle</a>&gt; <dfn class="decl fn" id="_ZNK3rtc14PlatformThread9GetHandleEv" title='rtc::PlatformThread::GetHandle' data-ref="_ZNK3rtc14PlatformThread9GetHandleEv" data-ref-filename="_ZNK3rtc14PlatformThread9GetHandleEv">GetHandle</dfn>() <em>const</em>;</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td><u>#<span data-ppcond="95">if</span> defined(<span class="macro" data-ref="_M/WEBRTC_WIN">WEBRTC_WIN</span>)</u></td></tr>
+<tr><th id="96">96</th><td>  <i>// Queue a Windows APC function that runs when the thread is alertable.</i></td></tr>
+<tr><th id="97">97</th><td>  <em>bool</em> QueueAPC(PAPCFUNC apc_function, ULONG_PTR data);</td></tr>
+<tr><th id="98">98</th><td><u>#<span data-ppcond="95">endif</span></u></td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td> <b>private</b>:</td></tr>
+<tr><th id="101">101</th><td>  <dfn class="decl fn" id="_ZN3rtc14PlatformThreadC1EP17_opaque_pthread_tb" title='rtc::PlatformThread::PlatformThread' data-ref="_ZN3rtc14PlatformThreadC1EP17_opaque_pthread_tb" data-ref-filename="_ZN3rtc14PlatformThreadC1EP17_opaque_pthread_tb">PlatformThread</dfn>(<a class="typedef" href="#rtc::PlatformThread::Handle" title='rtc::PlatformThread::Handle' data-type='pthread_t' data-ref="rtc::PlatformThread::Handle" data-ref-filename="rtc..PlatformThread..Handle">Handle</a> <dfn class="local col9 decl" id="189handle" title='handle' data-type='rtc::PlatformThread::Handle' data-ref="189handle" data-ref-filename="189handle">handle</dfn>, <em>bool</em> <dfn class="local col0 decl" id="190joinable" title='joinable' data-type='bool' data-ref="190joinable" data-ref-filename="190joinable">joinable</dfn>);</td></tr>
+<tr><th id="102">102</th><td>  <em>static</em> <a class="type" href="#rtc::PlatformThread" title='rtc::PlatformThread' data-ref="rtc::PlatformThread" data-ref-filename="rtc..PlatformThread">PlatformThread</a> <dfn class="decl fn" id="_ZN3rtc14PlatformThread11SpawnThreadENSt3__18functionIFvvEEENS1_17basic_string_viewIcNS1_11char_traitsIcEEEENS_16ThreadAttributesEb" title='rtc::PlatformThread::SpawnThread' data-ref="_ZN3rtc14PlatformThread11SpawnThreadENSt3__18functionIFvvEEENS1_17basic_string_viewIcNS1_11char_traitsIcEEEENS_16ThreadAttributesEb" data-ref-filename="_ZN3rtc14PlatformThread11SpawnThreadENSt3__18functionIFvvEEENS1_17basic_string_viewIcNS1_11char_traitsIcEEEENS_16ThreadAttributesEb">SpawnThread</dfn>(<span class="namespace">std::</span><span class='type' title='std::__1::function' data-ref="std::__1::function" data-ref-filename="std..__1..function">function</span>&lt;<em>void</em>()&gt; <dfn class="local col1 decl" id="191thread_function" title='thread_function' data-type='std::function&lt;void ()&gt;' data-ref="191thread_function" data-ref-filename="191thread_function">thread_function</dfn>,</td></tr>
+<tr><th id="103">103</th><td>                                    <span class="namespace">absl::</span><a class="typedef" href="../../third_party/abseil-cpp/absl/strings/string_view.h.html#absl::string_view" title='absl::string_view' data-type='std::string_view' data-ref="absl::string_view" data-ref-filename="absl..string_view">string_view</a> <dfn class="local col2 decl" id="192name" title='name' data-type='absl::string_view' data-ref="192name" data-ref-filename="192name">name</dfn>,</td></tr>
+<tr><th id="104">104</th><td>                                    <a class="type" href="#rtc::ThreadAttributes" title='rtc::ThreadAttributes' data-ref="rtc::ThreadAttributes" data-ref-filename="rtc..ThreadAttributes">ThreadAttributes</a> <dfn class="local col3 decl" id="193attributes" title='attributes' data-type='rtc::ThreadAttributes' data-ref="193attributes" data-ref-filename="193attributes">attributes</dfn>,</td></tr>
+<tr><th id="105">105</th><td>                                    <em>bool</em> <dfn class="local col4 decl" id="194joinable" title='joinable' data-type='bool' data-ref="194joinable" data-ref-filename="194joinable">joinable</dfn>);</td></tr>
+<tr><th id="106">106</th><td></td></tr>
+<tr><th id="107">107</th><td>  <span class="namespace">absl::</span><span class='type' title='std::__1::optional' data-ref="std::__1::optional" data-ref-filename="std..__1..optional">optional</span>&lt;<a class="typedef" href="#rtc::PlatformThread::Handle" title='rtc::PlatformThread::Handle' data-type='pthread_t' data-ref="rtc::PlatformThread::Handle" data-ref-filename="rtc..PlatformThread..Handle">Handle</a>&gt; <dfn class="decl field" id="rtc::PlatformThread::handle_" title='rtc::PlatformThread::handle_' data-ref="rtc::PlatformThread::handle_" data-ref-filename="rtc..PlatformThread..handle_">handle_</dfn>;</td></tr>
+<tr><th id="108">108</th><td>  <em>bool</em> <dfn class="decl field" id="rtc::PlatformThread::joinable_" title='rtc::PlatformThread::joinable_' data-ref="rtc::PlatformThread::joinable_" data-ref-filename="rtc..PlatformThread..joinable_">joinable_</dfn> = <b>false</b>;</td></tr>
+<tr><th id="109">109</th><td>};</td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_PLATFORM_THREAD_H_</u></td></tr>
+<tr><th id="114">114</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../api/video/video_stream_decoder_create.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/video/video_stream_decoder_create.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

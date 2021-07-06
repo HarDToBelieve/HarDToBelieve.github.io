@@ -1,0 +1,215 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>rtc_export_template.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/system/rtc_export_template.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/system/rtc_export_template.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>WebKitBuild</a>/<a href='../../../../../..'>Debug</a>/<a href='../../../../..'>usr</a>/<a href='../../../..'>local</a>/<a href='../../..'>include</a>/<a href='../..'>webrtc</a>/<a href='..'>rtc_base</a>/<a href='./'>system</a>/<a href='rtc_export_template.h.html'>rtc_export_template.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2019 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_SYSTEM_RTC_EXPORT_TEMPLATE_H_">RTC_BASE_SYSTEM_RTC_EXPORT_TEMPLATE_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_SYSTEM_RTC_EXPORT_TEMPLATE_H_" data-ref="_M/RTC_BASE_SYSTEM_RTC_EXPORT_TEMPLATE_H_">RTC_BASE_SYSTEM_RTC_EXPORT_TEMPLATE_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><i>// clang-format off</i></td></tr>
+<tr><th id="15">15</th><td><i>// clang formating would cause cpplint errors in the macros below.</i></td></tr>
+<tr><th id="16">16</th><td><i></i></td></tr>
+<tr><th id="17">17</th><td><i>// Most of this was borrowed (with minor modifications) from Chromium's</i></td></tr>
+<tr><th id="18">18</th><td><i>// base/export_template.h.</i></td></tr>
+<tr><th id="19">19</th><td><i></i></td></tr>
+<tr><th id="20">20</th><td><i>// Synopsis</i></td></tr>
+<tr><th id="21">21</th><td><i>//</i></td></tr>
+<tr><th id="22">22</th><td><i>// This header provides macros for using RTC_EXPORT macros with explicit</i></td></tr>
+<tr><th id="23">23</th><td><i>// template instantiation declarations and definitions.</i></td></tr>
+<tr><th id="24">24</th><td><i>// Generally, the RTC_EXPORT macros are used at declarations,</i></td></tr>
+<tr><th id="25">25</th><td><i>// and GCC requires them to be used at explicit instantiation declarations,</i></td></tr>
+<tr><th id="26">26</th><td><i>// but MSVC requires __declspec(dllexport) to be used at the explicit</i></td></tr>
+<tr><th id="27">27</th><td><i>// instantiation definitions instead.</i></td></tr>
+<tr><th id="28">28</th><td><i></i></td></tr>
+<tr><th id="29">29</th><td><i>// Usage</i></td></tr>
+<tr><th id="30">30</th><td><i>//</i></td></tr>
+<tr><th id="31">31</th><td><i>// In a header file, write:</i></td></tr>
+<tr><th id="32">32</th><td><i>//</i></td></tr>
+<tr><th id="33">33</th><td><i>//   extern template class RTC_EXPORT_TEMPLATE_DECLARE(RTC_EXPORT) foo&lt;bar&gt;;</i></td></tr>
+<tr><th id="34">34</th><td><i>//</i></td></tr>
+<tr><th id="35">35</th><td><i>// In a source file, write:</i></td></tr>
+<tr><th id="36">36</th><td><i>//</i></td></tr>
+<tr><th id="37">37</th><td><i>//   template class RTC_EXPORT_TEMPLATE_DEFINE(RTC_EXPORT) foo&lt;bar&gt;;</i></td></tr>
+<tr><th id="38">38</th><td><i></i></td></tr>
+<tr><th id="39">39</th><td><i>// Implementation notes</i></td></tr>
+<tr><th id="40">40</th><td><i>//</i></td></tr>
+<tr><th id="41">41</th><td><i>// On Windows, when building when RTC_EXPORT expands to __declspec(dllexport)),</i></td></tr>
+<tr><th id="42">42</th><td><i>// we want the two lines to expand to:</i></td></tr>
+<tr><th id="43">43</th><td><i>//</i></td></tr>
+<tr><th id="44">44</th><td><i>//     extern template class foo&lt;bar&gt;;</i></td></tr>
+<tr><th id="45">45</th><td><i>//     template class RTC_EXPORT foo&lt;bar&gt;;</i></td></tr>
+<tr><th id="46">46</th><td><i>//</i></td></tr>
+<tr><th id="47">47</th><td><i>// In all other cases (non-Windows, and Windows when RTC_EXPORT expands to</i></td></tr>
+<tr><th id="48">48</th><td><i>// __declspec(dllimport)), we want:</i></td></tr>
+<tr><th id="49">49</th><td><i>//</i></td></tr>
+<tr><th id="50">50</th><td><i>//     extern template class RTC_EXPORT foo&lt;bar&gt;;</i></td></tr>
+<tr><th id="51">51</th><td><i>//     template class foo&lt;bar&gt;;</i></td></tr>
+<tr><th id="52">52</th><td><i>//</i></td></tr>
+<tr><th id="53">53</th><td><i>// The implementation of this header uses some subtle macro semantics to</i></td></tr>
+<tr><th id="54">54</th><td><i>// detect what the provided RTC_EXPORT value was defined as and then</i></td></tr>
+<tr><th id="55">55</th><td><i>// to dispatch to appropriate macro definitions.  Unfortunately,</i></td></tr>
+<tr><th id="56">56</th><td><i>// MSVC's C preprocessor is rather non-compliant and requires special</i></td></tr>
+<tr><th id="57">57</th><td><i>// care to make it work.</i></td></tr>
+<tr><th id="58">58</th><td><i>//</i></td></tr>
+<tr><th id="59">59</th><td><i>// Issue 1.</i></td></tr>
+<tr><th id="60">60</th><td><i>//</i></td></tr>
+<tr><th id="61">61</th><td><i>//   #define F(x)</i></td></tr>
+<tr><th id="62">62</th><td><i>//   F()</i></td></tr>
+<tr><th id="63">63</th><td><i>//</i></td></tr>
+<tr><th id="64">64</th><td><i>// MSVC emits warning C4003 ("not enough actual parameters for macro</i></td></tr>
+<tr><th id="65">65</th><td><i>// 'F'), even though it's a valid macro invocation.  This affects the</i></td></tr>
+<tr><th id="66">66</th><td><i>// macros below that take just an "export" parameter, because export</i></td></tr>
+<tr><th id="67">67</th><td><i>// may be empty.</i></td></tr>
+<tr><th id="68">68</th><td><i>//</i></td></tr>
+<tr><th id="69">69</th><td><i>// As a workaround, we can add a dummy parameter and arguments:</i></td></tr>
+<tr><th id="70">70</th><td><i>//</i></td></tr>
+<tr><th id="71">71</th><td><i>//   #define F(x,_)</i></td></tr>
+<tr><th id="72">72</th><td><i>//   F(,)</i></td></tr>
+<tr><th id="73">73</th><td><i>//</i></td></tr>
+<tr><th id="74">74</th><td><i>// Issue 2.</i></td></tr>
+<tr><th id="75">75</th><td><i>//</i></td></tr>
+<tr><th id="76">76</th><td><i>//   #define F(x) G##x</i></td></tr>
+<tr><th id="77">77</th><td><i>//   #define Gj() ok</i></td></tr>
+<tr><th id="78">78</th><td><i>//   F(j())</i></td></tr>
+<tr><th id="79">79</th><td><i>//</i></td></tr>
+<tr><th id="80">80</th><td><i>// The correct replacement for "F(j())" is "ok", but MSVC replaces it</i></td></tr>
+<tr><th id="81">81</th><td><i>// with "Gj()".  As a workaround, we can pass the result to an</i></td></tr>
+<tr><th id="82">82</th><td><i>// identity macro to force MSVC to look for replacements again.  (This</i></td></tr>
+<tr><th id="83">83</th><td><i>// is why RTC_EXPORT_TEMPLATE_STYLE_3 exists.)</i></td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_DECLARE" data-ref="_M/RTC_EXPORT_TEMPLATE_DECLARE">RTC_EXPORT_TEMPLATE_DECLARE</dfn>(export)         \</u></td></tr>
+<tr><th id="86">86</th><td><u>  RTC_EXPORT_TEMPLATE_INVOKE(                       \</u></td></tr>
+<tr><th id="87">87</th><td><u>      DECLARE,                                      \</u></td></tr>
+<tr><th id="88">88</th><td><u>      RTC_EXPORT_TEMPLATE_STYLE(export, ), export)  // NOLINT</u></td></tr>
+<tr><th id="89">89</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_DEFINE" data-ref="_M/RTC_EXPORT_TEMPLATE_DEFINE">RTC_EXPORT_TEMPLATE_DEFINE</dfn>(export)          \</u></td></tr>
+<tr><th id="90">90</th><td><u>  RTC_EXPORT_TEMPLATE_INVOKE(                       \</u></td></tr>
+<tr><th id="91">91</th><td><u>      DEFINE,                                       \</u></td></tr>
+<tr><th id="92">92</th><td><u>      RTC_EXPORT_TEMPLATE_STYLE(export, ), export)  // NOLINT</u></td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td><i>// INVOKE is an internal helper macro to perform parameter replacements</i></td></tr>
+<tr><th id="95">95</th><td><i>// and token pasting to chain invoke another macro.  E.g.,</i></td></tr>
+<tr><th id="96">96</th><td><i>//     RTC_EXPORT_TEMPLATE_INVOKE(DECLARE, DEFAULT, RTC_EXPORT)</i></td></tr>
+<tr><th id="97">97</th><td><i>// will export to call</i></td></tr>
+<tr><th id="98">98</th><td><i>//     RTC_EXPORT_TEMPLATE_DECLARE_DEFAULT(RTC_EXPORT, )</i></td></tr>
+<tr><th id="99">99</th><td><i>// (but with RTC_EXPORT expanded too).</i></td></tr>
+<tr><th id="100">100</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_INVOKE" data-ref="_M/RTC_EXPORT_TEMPLATE_INVOKE">RTC_EXPORT_TEMPLATE_INVOKE</dfn>(which, style, export) \</u></td></tr>
+<tr><th id="101">101</th><td><u>  RTC_EXPORT_TEMPLATE_INVOKE_2(which, style, export)</u></td></tr>
+<tr><th id="102">102</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_INVOKE_2" data-ref="_M/RTC_EXPORT_TEMPLATE_INVOKE_2">RTC_EXPORT_TEMPLATE_INVOKE_2</dfn>(which, style, export) \</u></td></tr>
+<tr><th id="103">103</th><td><u>  RTC_EXPORT_TEMPLATE_##which##_##style(export, )</u></td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td><i>// Default style is to apply the RTC_EXPORT macro at declaration sites.</i></td></tr>
+<tr><th id="106">106</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_DECLARE_DEFAULT" data-ref="_M/RTC_EXPORT_TEMPLATE_DECLARE_DEFAULT">RTC_EXPORT_TEMPLATE_DECLARE_DEFAULT</dfn>(export, _) export</u></td></tr>
+<tr><th id="107">107</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_DEFINE_DEFAULT" data-ref="_M/RTC_EXPORT_TEMPLATE_DEFINE_DEFAULT">RTC_EXPORT_TEMPLATE_DEFINE_DEFAULT</dfn>(export, _)</u></td></tr>
+<tr><th id="108">108</th><td></td></tr>
+<tr><th id="109">109</th><td><i>// The "MSVC hack" style is used when RTC_EXPORT is defined</i></td></tr>
+<tr><th id="110">110</th><td><i>// as __declspec(dllexport), which MSVC requires to be used at</i></td></tr>
+<tr><th id="111">111</th><td><i>// definition sites instead.</i></td></tr>
+<tr><th id="112">112</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_DECLARE_MSVC_HACK" data-ref="_M/RTC_EXPORT_TEMPLATE_DECLARE_MSVC_HACK">RTC_EXPORT_TEMPLATE_DECLARE_MSVC_HACK</dfn>(export, _)</u></td></tr>
+<tr><th id="113">113</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_DEFINE_MSVC_HACK" data-ref="_M/RTC_EXPORT_TEMPLATE_DEFINE_MSVC_HACK">RTC_EXPORT_TEMPLATE_DEFINE_MSVC_HACK</dfn>(export, _) export</u></td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td><i>// RTC_EXPORT_TEMPLATE_STYLE is an internal helper macro that identifies which</i></td></tr>
+<tr><th id="116">116</th><td><i>// export style needs to be used for the provided RTC_EXPORT macro definition.</i></td></tr>
+<tr><th id="117">117</th><td><i>// "", "__attribute__(...)", and "__declspec(dllimport)" are mapped</i></td></tr>
+<tr><th id="118">118</th><td><i>// to "DEFAULT"; while "__declspec(dllexport)" is mapped to "MSVC_HACK".</i></td></tr>
+<tr><th id="119">119</th><td><i>//</i></td></tr>
+<tr><th id="120">120</th><td><i>// It's implemented with token pasting to transform the __attribute__ and</i></td></tr>
+<tr><th id="121">121</th><td><i>// __declspec annotations into macro invocations.  E.g., if RTC_EXPORT is</i></td></tr>
+<tr><th id="122">122</th><td><i>// defined as "__declspec(dllimport)", it undergoes the following sequence of</i></td></tr>
+<tr><th id="123">123</th><td><i>// macro substitutions:</i></td></tr>
+<tr><th id="124">124</th><td><i>//     RTC_EXPORT_TEMPLATE_STYLE(RTC_EXPORT,)</i></td></tr>
+<tr><th id="125">125</th><td><i>//     RTC_EXPORT_TEMPLATE_STYLE_2(__declspec(dllimport),)</i></td></tr>
+<tr><th id="126">126</th><td><i>//     RTC_EXPORT_TEMPLATE_STYLE_3(</i></td></tr>
+<tr><th id="127">127</th><td><i>//         RTC_EXPORT_TEMPLATE_STYLE_MATCH__declspec(dllimport))</i></td></tr>
+<tr><th id="128">128</th><td><i>//     RTC_EXPORT_TEMPLATE_STYLE_MATCH__declspec(dllimport)</i></td></tr>
+<tr><th id="129">129</th><td><i>//     RTC_EXPORT_TEMPLATE_STYLE_MATCH_DECLSPEC_dllimport</i></td></tr>
+<tr><th id="130">130</th><td><i>//     DEFAULT</i></td></tr>
+<tr><th id="131">131</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_STYLE" data-ref="_M/RTC_EXPORT_TEMPLATE_STYLE">RTC_EXPORT_TEMPLATE_STYLE</dfn>(export, _) \</u></td></tr>
+<tr><th id="132">132</th><td><u>  RTC_EXPORT_TEMPLATE_STYLE_2(export, )</u></td></tr>
+<tr><th id="133">133</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_STYLE_2" data-ref="_M/RTC_EXPORT_TEMPLATE_STYLE_2">RTC_EXPORT_TEMPLATE_STYLE_2</dfn>(export, _) \</u></td></tr>
+<tr><th id="134">134</th><td><u>  RTC_EXPORT_TEMPLATE_STYLE_3(                 \</u></td></tr>
+<tr><th id="135">135</th><td><u>      RTC_EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA##export)</u></td></tr>
+<tr><th id="136">136</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_STYLE_3" data-ref="_M/RTC_EXPORT_TEMPLATE_STYLE_3">RTC_EXPORT_TEMPLATE_STYLE_3</dfn>(style) style</u></td></tr>
+<tr><th id="137">137</th><td></td></tr>
+<tr><th id="138">138</th><td><i>// Internal helper macros for RTC_EXPORT_TEMPLATE_STYLE.</i></td></tr>
+<tr><th id="139">139</th><td><i>//</i></td></tr>
+<tr><th id="140">140</th><td><i>// XXX: C++ reserves all identifiers containing "__" for the implementation,</i></td></tr>
+<tr><th id="141">141</th><td><i>// but "__attribute__" and "__declspec" already contain "__" and the token-paste</i></td></tr>
+<tr><th id="142">142</th><td><i>// operator can only add characters; not remove them.  To minimize the risk of</i></td></tr>
+<tr><th id="143">143</th><td><i>// conflict with implementations, we include "foj3FJo5StF0OvIzl7oMxA" (a random</i></td></tr>
+<tr><th id="144">144</th><td><i>// 128-bit string, encoded in Base64) in the macro name.</i></td></tr>
+<tr><th id="145">145</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA" data-ref="_M/RTC_EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA">RTC_EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA</dfn> DEFAULT</u></td></tr>
+<tr><th id="146">146</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA__attribute__" data-ref="_M/RTC_EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA__attribute__">RTC_EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA__attribute__</dfn>( \</u></td></tr>
+<tr><th id="147">147</th><td><u>    ...)                                                                     \</u></td></tr>
+<tr><th id="148">148</th><td><u>  DEFAULT</u></td></tr>
+<tr><th id="149">149</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA__declspec" data-ref="_M/RTC_EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA__declspec">RTC_EXPORT_TEMPLATE_STYLE_MATCH_foj3FJo5StF0OvIzl7oMxA__declspec</dfn>(arg) \</u></td></tr>
+<tr><th id="150">150</th><td><u>  RTC_EXPORT_TEMPLATE_STYLE_MATCH_DECLSPEC_##arg</u></td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td><i>// Internal helper macros for RTC_EXPORT_TEMPLATE_STYLE.</i></td></tr>
+<tr><th id="153">153</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_STYLE_MATCH_DECLSPEC_dllexport" data-ref="_M/RTC_EXPORT_TEMPLATE_STYLE_MATCH_DECLSPEC_dllexport">RTC_EXPORT_TEMPLATE_STYLE_MATCH_DECLSPEC_dllexport</dfn> MSVC_HACK</u></td></tr>
+<tr><th id="154">154</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_STYLE_MATCH_DECLSPEC_dllimport" data-ref="_M/RTC_EXPORT_TEMPLATE_STYLE_MATCH_DECLSPEC_dllimport">RTC_EXPORT_TEMPLATE_STYLE_MATCH_DECLSPEC_dllimport</dfn> DEFAULT</u></td></tr>
+<tr><th id="155">155</th><td></td></tr>
+<tr><th id="156">156</th><td><i>// Sanity checks.</i></td></tr>
+<tr><th id="157">157</th><td><i>//</i></td></tr>
+<tr><th id="158">158</th><td><i>// RTC_EXPORT_TEMPLATE_TEST uses the same macro invocation pattern as</i></td></tr>
+<tr><th id="159">159</th><td><i>// RTC_EXPORT_TEMPLATE_DECLARE and RTC_EXPORT_TEMPLATE_DEFINE do to check that</i></td></tr>
+<tr><th id="160">160</th><td><i>// they're working correctly. When they're working correctly, the sequence of</i></td></tr>
+<tr><th id="161">161</th><td><i>// macro replacements should go something like:</i></td></tr>
+<tr><th id="162">162</th><td><i>//</i></td></tr>
+<tr><th id="163">163</th><td><i>//     RTC_EXPORT_TEMPLATE_TEST(DEFAULT, __declspec(dllimport));</i></td></tr>
+<tr><th id="164">164</th><td><i>//</i></td></tr>
+<tr><th id="165">165</th><td><i>//     static_assert(RTC_EXPORT_TEMPLATE_INVOKE(TEST_DEFAULT,</i></td></tr>
+<tr><th id="166">166</th><td><i>//         RTC_EXPORT_TEMPLATE_STYLE(__declspec(dllimport), ),</i></td></tr>
+<tr><th id="167">167</th><td><i>//         __declspec(dllimport)), "__declspec(dllimport)");</i></td></tr>
+<tr><th id="168">168</th><td><i>//</i></td></tr>
+<tr><th id="169">169</th><td><i>//     static_assert(RTC_EXPORT_TEMPLATE_INVOKE(TEST_DEFAULT,</i></td></tr>
+<tr><th id="170">170</th><td><i>//         DEFAULT, __declspec(dllimport)), "__declspec(dllimport)");</i></td></tr>
+<tr><th id="171">171</th><td><i>//</i></td></tr>
+<tr><th id="172">172</th><td><i>//     static_assert(RTC_EXPORT_TEMPLATE_TEST_DEFAULT_DEFAULT(</i></td></tr>
+<tr><th id="173">173</th><td><i>//         __declspec(dllimport)), "__declspec(dllimport)");</i></td></tr>
+<tr><th id="174">174</th><td><i>//</i></td></tr>
+<tr><th id="175">175</th><td><i>//     static_assert(true, "__declspec(dllimport)");</i></td></tr>
+<tr><th id="176">176</th><td><i>//</i></td></tr>
+<tr><th id="177">177</th><td><i>// When they're not working correctly, a syntax error should occur instead.</i></td></tr>
+<tr><th id="178">178</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_TEST" data-ref="_M/RTC_EXPORT_TEMPLATE_TEST">RTC_EXPORT_TEMPLATE_TEST</dfn>(want, export)                    \</u></td></tr>
+<tr><th id="179">179</th><td><u>  static_assert(                                                  \</u></td></tr>
+<tr><th id="180">180</th><td><u>      RTC_EXPORT_TEMPLATE_INVOKE(                                 \</u></td></tr>
+<tr><th id="181">181</th><td><u>          TEST_##want,                                            \</u></td></tr>
+<tr><th id="182">182</th><td><u>          RTC_EXPORT_TEMPLATE_STYLE(export, ), export), #export)  // NOLINT</u></td></tr>
+<tr><th id="183">183</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_TEST_DEFAULT_DEFAULT" data-ref="_M/RTC_EXPORT_TEMPLATE_TEST_DEFAULT_DEFAULT">RTC_EXPORT_TEMPLATE_TEST_DEFAULT_DEFAULT</dfn>(...) true</u></td></tr>
+<tr><th id="184">184</th><td><u>#define <dfn class="macro" id="_M/RTC_EXPORT_TEMPLATE_TEST_MSVC_HACK_MSVC_HACK" data-ref="_M/RTC_EXPORT_TEMPLATE_TEST_MSVC_HACK_MSVC_HACK">RTC_EXPORT_TEMPLATE_TEST_MSVC_HACK_MSVC_HACK</dfn>(...) true</u></td></tr>
+<tr><th id="185">185</th><td></td></tr>
+<tr><th id="186">186</th><td><a class="macro" href="#178" title="static_assert( true, &quot;&quot;)" data-ref="_M/RTC_EXPORT_TEMPLATE_TEST">RTC_EXPORT_TEMPLATE_TEST</a>(DEFAULT, );  <i>// NOLINT</i></td></tr>
+<tr><th id="187">187</th><td><a class="macro" href="#178" title="static_assert( true, &quot;__attribute__((visibility(\&quot;default\&quot;)))&quot;)" data-ref="_M/RTC_EXPORT_TEMPLATE_TEST">RTC_EXPORT_TEMPLATE_TEST</a>(DEFAULT, <b>__attribute__</b>((visibility(<q>"default"</q>))));</td></tr>
+<tr><th id="188">188</th><td><a class="macro" href="#178" title="static_assert( true, &quot;__declspec(dllexport)&quot;)" data-ref="_M/RTC_EXPORT_TEMPLATE_TEST">RTC_EXPORT_TEMPLATE_TEST</a>(MSVC_HACK, __declspec(dllexport));</td></tr>
+<tr><th id="189">189</th><td><a class="macro" href="#178" title="static_assert( true, &quot;__declspec(dllimport)&quot;)" data-ref="_M/RTC_EXPORT_TEMPLATE_TEST">RTC_EXPORT_TEMPLATE_TEST</a>(DEFAULT, __declspec(dllimport));</td></tr>
+<tr><th id="190">190</th><td></td></tr>
+<tr><th id="191">191</th><td><u>#undef <a class="macro" href="#178" data-ref="_M/RTC_EXPORT_TEMPLATE_TEST">RTC_EXPORT_TEMPLATE_TEST</a></u></td></tr>
+<tr><th id="192">192</th><td><u>#undef <a class="macro" href="#183" data-ref="_M/RTC_EXPORT_TEMPLATE_TEST_DEFAULT_DEFAULT">RTC_EXPORT_TEMPLATE_TEST_DEFAULT_DEFAULT</a></u></td></tr>
+<tr><th id="193">193</th><td><u>#undef <a class="macro" href="#184" data-ref="_M/RTC_EXPORT_TEMPLATE_TEST_MSVC_HACK_MSVC_HACK">RTC_EXPORT_TEMPLATE_TEST_MSVC_HACK_MSVC_HACK</a></u></td></tr>
+<tr><th id="194">194</th><td></td></tr>
+<tr><th id="195">195</th><td><i>// clang-format on</i></td></tr>
+<tr><th id="196">196</th><td></td></tr>
+<tr><th id="197">197</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_SYSTEM_RTC_EXPORT_TEMPLATE_H_</u></td></tr>
+<tr><th id="198">198</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

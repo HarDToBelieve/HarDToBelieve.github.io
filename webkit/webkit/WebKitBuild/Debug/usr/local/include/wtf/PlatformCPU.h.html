@@ -1,0 +1,391 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>PlatformCPU.h source code [webkit/WebKitBuild/Debug/usr/local/include/wtf/PlatformCPU.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/wtf/PlatformCPU.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>wtf</a>/<a href='PlatformCPU.h.html'>PlatformCPU.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2020 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="28">ifndef</span> <a class="macro" href="Platform.h.html#34" data-ref="_M/WTF_PLATFORM_GUARD_AGAINST_INDIRECT_INCLUSION">WTF_PLATFORM_GUARD_AGAINST_INDIRECT_INCLUSION</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#error "Please #include &lt;wtf/Platform.h&gt; instead of this file directly."</u></td></tr>
+<tr><th id="30">30</th><td><u>#<span data-ppcond="28">endif</span></u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><i>/* CPU() - the target CPU architecture */</i></td></tr>
+<tr><th id="33">33</th><td><u>#define <dfn class="macro" id="_M/CPU" data-ref="_M/CPU">CPU</dfn>(WTF_FEATURE) (defined WTF_CPU_##WTF_FEATURE  &amp;&amp; WTF_CPU_##WTF_FEATURE)</u></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><i>/* ==== CPU() - the target CPU architecture ==== */</i></td></tr>
+<tr><th id="36">36</th><td><i>/* CPU(KNOWN) becomes true if we explicitly support a target CPU. */</i></td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><i>/* CPU(MIPS) - MIPS 32-bit and 64-bit */</i></td></tr>
+<tr><th id="39">39</th><td><u>#<span data-ppcond="39">if</span> (defined(<span class="macro" data-ref="_M/mips">mips</span>) || defined(<span class="macro" data-ref="_M/__mips__">__mips__</span>) || defined(<span class="macro" data-ref="_M/MIPS">MIPS</span>) || defined(<span class="macro" data-ref="_M/_MIPS_">_MIPS_</span>) || defined(<span class="macro" data-ref="_M/__mips64">__mips64</span>))</u></td></tr>
+<tr><th id="40">40</th><td><u>#if defined(_ABI64) &amp;&amp; (_MIPS_SIM == _ABI64)</u></td></tr>
+<tr><th id="41">41</th><td><u>#define WTF_CPU_MIPS64 1</u></td></tr>
+<tr><th id="42">42</th><td><u>#define WTF_MIPS_ARCH __mips64</u></td></tr>
+<tr><th id="43">43</th><td><u>#else</u></td></tr>
+<tr><th id="44">44</th><td><u>#define WTF_CPU_MIPS 1</u></td></tr>
+<tr><th id="45">45</th><td><u>#define WTF_MIPS_ARCH __mips</u></td></tr>
+<tr><th id="46">46</th><td><u>#endif</u></td></tr>
+<tr><th id="47">47</th><td><u>#define WTF_CPU_KNOWN 1</u></td></tr>
+<tr><th id="48">48</th><td><u>#define WTF_MIPS_PIC (defined __PIC__)</u></td></tr>
+<tr><th id="49">49</th><td><u>#define WTF_MIPS_ISA(v) (defined WTF_MIPS_ARCH &amp;&amp; WTF_MIPS_ARCH == v)</u></td></tr>
+<tr><th id="50">50</th><td><u>#define WTF_MIPS_ISA_AT_LEAST(v) (defined WTF_MIPS_ARCH &amp;&amp; WTF_MIPS_ARCH &gt;= v)</u></td></tr>
+<tr><th id="51">51</th><td><u>#define WTF_MIPS_ARCH_REV __mips_isa_rev</u></td></tr>
+<tr><th id="52">52</th><td><u>#define WTF_MIPS_ISA_REV(v) (defined WTF_MIPS_ARCH_REV &amp;&amp; WTF_MIPS_ARCH_REV == v)</u></td></tr>
+<tr><th id="53">53</th><td><u>#define WTF_MIPS_ISA_REV_AT_LEAST(v) (defined WTF_MIPS_ARCH_REV &amp;&amp; WTF_MIPS_ARCH_REV &gt;= v)</u></td></tr>
+<tr><th id="54">54</th><td><u>#define WTF_MIPS_DOUBLE_FLOAT (defined __mips_hard_float &amp;&amp; !defined __mips_single_float)</u></td></tr>
+<tr><th id="55">55</th><td><u>#define WTF_MIPS_FP64 (defined __mips_fpr &amp;&amp; __mips_fpr == 64)</u></td></tr>
+<tr><th id="56">56</th><td><u>#<span data-ppcond="39">endif</span></u></td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><i>/* CPU(PPC64) - PowerPC 64-bit Big Endian */</i></td></tr>
+<tr><th id="59">59</th><td><u>#<span data-ppcond="59">if</span> (  defined(<span class="macro" data-ref="_M/__ppc64__">__ppc64__</span>)      \</u></td></tr>
+<tr><th id="60">60</th><td><u>    || defined(<span class="macro" data-ref="_M/__PPC64__">__PPC64__</span>))     \</u></td></tr>
+<tr><th id="61">61</th><td><u>    &amp;&amp; defined(<span class="macro" data-ref="_M/__BYTE_ORDER__">__BYTE_ORDER__</span>) \</u></td></tr>
+<tr><th id="62">62</th><td><u>    &amp;&amp; (<span class="macro" title="1234" data-ref="_M/__BYTE_ORDER__">__BYTE_ORDER__</span> == <span class="macro" title="4321" data-ref="_M/__ORDER_BIG_ENDIAN__">__ORDER_BIG_ENDIAN__</span>)</u></td></tr>
+<tr><th id="63">63</th><td><u>#define WTF_CPU_PPC64 1</u></td></tr>
+<tr><th id="64">64</th><td><u>#define WTF_CPU_KNOWN 1</u></td></tr>
+<tr><th id="65">65</th><td><u>#<span data-ppcond="59">endif</span></u></td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><i>/* CPU(PPC64LE) - PowerPC 64-bit Little Endian */</i></td></tr>
+<tr><th id="68">68</th><td><u>#<span data-ppcond="68">if</span> (   defined(<span class="macro" data-ref="_M/__ppc64__">__ppc64__</span>)     \</u></td></tr>
+<tr><th id="69">69</th><td><u>    || defined(<span class="macro" data-ref="_M/__PPC64__">__PPC64__</span>)      \</u></td></tr>
+<tr><th id="70">70</th><td><u>    || defined(<span class="macro" data-ref="_M/__ppc64le__">__ppc64le__</span>)    \</u></td></tr>
+<tr><th id="71">71</th><td><u>    || defined(<span class="macro" data-ref="_M/__PPC64LE__">__PPC64LE__</span>))   \</u></td></tr>
+<tr><th id="72">72</th><td><u>    &amp;&amp; defined(<span class="macro" data-ref="_M/__BYTE_ORDER__">__BYTE_ORDER__</span>) \</u></td></tr>
+<tr><th id="73">73</th><td><u>    &amp;&amp; (<span class="macro" title="1234" data-ref="_M/__BYTE_ORDER__">__BYTE_ORDER__</span> == <span class="macro" title="1234" data-ref="_M/__ORDER_LITTLE_ENDIAN__">__ORDER_LITTLE_ENDIAN__</span>)</u></td></tr>
+<tr><th id="74">74</th><td><u>#define WTF_CPU_PPC64LE 1</u></td></tr>
+<tr><th id="75">75</th><td><u>#define WTF_CPU_KNOWN 1</u></td></tr>
+<tr><th id="76">76</th><td><u>#<span data-ppcond="68">endif</span></u></td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td><i>/* CPU(PPC) - PowerPC 32-bit */</i></td></tr>
+<tr><th id="79">79</th><td><u>#<span data-ppcond="79">if</span> (  defined(<span class="macro" data-ref="_M/__ppc__">__ppc__</span>)        \</u></td></tr>
+<tr><th id="80">80</th><td><u>    || defined(<span class="macro" data-ref="_M/__PPC__">__PPC__</span>)        \</u></td></tr>
+<tr><th id="81">81</th><td><u>    || defined(<span class="macro" data-ref="_M/__powerpc__">__powerpc__</span>)    \</u></td></tr>
+<tr><th id="82">82</th><td><u>    || defined(<span class="macro" data-ref="_M/__powerpc">__powerpc</span>)      \</u></td></tr>
+<tr><th id="83">83</th><td><u>    || defined(<span class="macro" data-ref="_M/__POWERPC__">__POWERPC__</span>)    \</u></td></tr>
+<tr><th id="84">84</th><td><u>    || defined(<span class="macro" data-ref="_M/_M_PPC">_M_PPC</span>)         \</u></td></tr>
+<tr><th id="85">85</th><td><u>    || defined(<span class="macro" data-ref="_M/__PPC">__PPC</span>))         \</u></td></tr>
+<tr><th id="86">86</th><td><u>    &amp;&amp; !<a class="macro" href="#33" title="(defined WTF_CPU_PPC64 &amp;&amp; WTF_CPU_PPC64)" data-ref="_M/CPU">CPU</a>(PPC64)             \</u></td></tr>
+<tr><th id="87">87</th><td><u>    &amp;&amp; <a class="macro" href="#33" title="(defined WTF_CPU_BIG_ENDIAN &amp;&amp; WTF_CPU_BIG_ENDIAN)" data-ref="_M/CPU">CPU</a>(BIG_ENDIAN)</u></td></tr>
+<tr><th id="88">88</th><td><u>#define WTF_CPU_PPC 1</u></td></tr>
+<tr><th id="89">89</th><td><u>#define WTF_CPU_KNOWN 1</u></td></tr>
+<tr><th id="90">90</th><td><u>#<span data-ppcond="79">endif</span></u></td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td><i>/* CPU(X86) - i386 / x86 32-bit */</i></td></tr>
+<tr><th id="93">93</th><td><u>#<span data-ppcond="93">if</span>   defined(<span class="macro" data-ref="_M/__i386__">__i386__</span>) \</u></td></tr>
+<tr><th id="94">94</th><td><u>    || defined(<span class="macro" data-ref="_M/i386">i386</span>)     \</u></td></tr>
+<tr><th id="95">95</th><td><u>    || defined(<span class="macro" data-ref="_M/_M_IX86">_M_IX86</span>)  \</u></td></tr>
+<tr><th id="96">96</th><td><u>    || defined(<span class="macro" data-ref="_M/_X86_">_X86_</span>)    \</u></td></tr>
+<tr><th id="97">97</th><td><u>    || defined(<span class="macro" data-ref="_M/__THW_INTEL">__THW_INTEL</span>)</u></td></tr>
+<tr><th id="98">98</th><td><u>#define WTF_CPU_X86 1</u></td></tr>
+<tr><th id="99">99</th><td><u>#define WTF_CPU_KNOWN 1</u></td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td><u>#if defined(__SSE2__) || (defined(_M_IX86_FP) &amp;&amp; _M_IX86_FP &gt;= 2)</u></td></tr>
+<tr><th id="102">102</th><td><u>#define WTF_CPU_X86_SSE2 1</u></td></tr>
+<tr><th id="103">103</th><td><u>#endif</u></td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td><u>#<span data-ppcond="93">endif</span></u></td></tr>
+<tr><th id="106">106</th><td></td></tr>
+<tr><th id="107">107</th><td><i>/* CPU(X86_64) - AMD64 / Intel64 / x86_64 64-bit */</i></td></tr>
+<tr><th id="108">108</th><td><u>#<span data-ppcond="108">if</span>   defined(<span class="macro" data-ref="_M/__x86_64__">__x86_64__</span>) \</u></td></tr>
+<tr><th id="109">109</th><td><u>    || defined(<span class="macro" data-ref="_M/_M_X64">_M_X64</span>)</u></td></tr>
+<tr><th id="110">110</th><td><u>#define WTF_CPU_X86_64 1</u></td></tr>
+<tr><th id="111">111</th><td><u>#define WTF_CPU_X86_SSE2 1</u></td></tr>
+<tr><th id="112">112</th><td><u>#define WTF_CPU_KNOWN 1</u></td></tr>
+<tr><th id="113">113</th><td><u>#<span data-ppcond="108">endif</span></u></td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td><i>/* CPU(ARM64) */</i></td></tr>
+<tr><th id="116">116</th><td><u>#<span data-ppcond="116">if</span> defined(<span class="macro" data-ref="_M/__arm64__">__arm64__</span>) || defined(<span class="macro" data-ref="_M/__aarch64__">__aarch64__</span>)</u></td></tr>
+<tr><th id="117">117</th><td><u>#define <dfn class="macro" id="_M/WTF_CPU_ARM64" data-ref="_M/WTF_CPU_ARM64">WTF_CPU_ARM64</dfn> 1</u></td></tr>
+<tr><th id="118">118</th><td><u>#define <dfn class="macro" id="_M/WTF_CPU_KNOWN" data-ref="_M/WTF_CPU_KNOWN">WTF_CPU_KNOWN</dfn> 1</u></td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td><u>#<span data-ppcond="120">if</span> defined(<span class="macro" data-ref="_M/__arm64e__">__arm64e__</span>)</u></td></tr>
+<tr><th id="121">121</th><td><u>#define WTF_CPU_ARM64E 1</u></td></tr>
+<tr><th id="122">122</th><td><u>#<span data-ppcond="120">endif</span></u></td></tr>
+<tr><th id="123">123</th><td><u>#<span data-ppcond="116">endif</span></u></td></tr>
+<tr><th id="124">124</th><td></td></tr>
+<tr><th id="125">125</th><td><i>/* CPU(ARM) - ARM, any version*/</i></td></tr>
+<tr><th id="126">126</th><td><u>#define <dfn class="macro" id="_M/WTF_ARM_ARCH_AT_LEAST" data-ref="_M/WTF_ARM_ARCH_AT_LEAST">WTF_ARM_ARCH_AT_LEAST</dfn>(N) (CPU(ARM) &amp;&amp; WTF_ARM_ARCH_VERSION &gt;= N)</u></td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td><u>#<span data-ppcond="128">if</span>   defined(<span class="macro" data-ref="_M/arm">arm</span>) \</u></td></tr>
+<tr><th id="129">129</th><td><u>    || defined(<span class="macro" data-ref="_M/__arm__">__arm__</span>) \</u></td></tr>
+<tr><th id="130">130</th><td><u>    || defined(<span class="macro" data-ref="_M/ARM">ARM</span>) \</u></td></tr>
+<tr><th id="131">131</th><td><u>    || defined(<span class="macro" data-ref="_M/_ARM_">_ARM_</span>)</u></td></tr>
+<tr><th id="132">132</th><td><u>#define WTF_CPU_ARM 1</u></td></tr>
+<tr><th id="133">133</th><td><u>#define WTF_CPU_KNOWN 1</u></td></tr>
+<tr><th id="134">134</th><td></td></tr>
+<tr><th id="135">135</th><td><u>#if defined(__ARM_PCS_VFP)</u></td></tr>
+<tr><th id="136">136</th><td><u>#define WTF_CPU_ARM_HARDFP 1</u></td></tr>
+<tr><th id="137">137</th><td><u>#endif</u></td></tr>
+<tr><th id="138">138</th><td></td></tr>
+<tr><th id="139">139</th><td><i>/* Set WTF_ARM_ARCH_VERSION */</i></td></tr>
+<tr><th id="140">140</th><td><u>#if   defined(__ARM_ARCH_4__) \</u></td></tr>
+<tr><th id="141">141</th><td><u>    || defined(__ARM_ARCH_4T__) \</u></td></tr>
+<tr><th id="142">142</th><td><u>    || defined(__MARM_ARMV4__)</u></td></tr>
+<tr><th id="143">143</th><td><u>#define WTF_ARM_ARCH_VERSION 4</u></td></tr>
+<tr><th id="144">144</th><td></td></tr>
+<tr><th id="145">145</th><td><u>#elif defined(__ARM_ARCH_5__) \</u></td></tr>
+<tr><th id="146">146</th><td><u>    || defined(__ARM_ARCH_5T__) \</u></td></tr>
+<tr><th id="147">147</th><td><u>    || defined(__MARM_ARMV5__)</u></td></tr>
+<tr><th id="148">148</th><td><u>#define WTF_ARM_ARCH_VERSION 5</u></td></tr>
+<tr><th id="149">149</th><td></td></tr>
+<tr><th id="150">150</th><td><u>#elif defined(__ARM_ARCH_5E__) \</u></td></tr>
+<tr><th id="151">151</th><td><u>    || defined(__ARM_ARCH_5TE__) \</u></td></tr>
+<tr><th id="152">152</th><td><u>    || defined(__ARM_ARCH_5TEJ__)</u></td></tr>
+<tr><th id="153">153</th><td><u>#define WTF_ARM_ARCH_VERSION 5</u></td></tr>
+<tr><th id="154">154</th><td></td></tr>
+<tr><th id="155">155</th><td><u>#elif defined(__ARM_ARCH_6__) \</u></td></tr>
+<tr><th id="156">156</th><td><u>    || defined(__ARM_ARCH_6J__) \</u></td></tr>
+<tr><th id="157">157</th><td><u>    || defined(__ARM_ARCH_6K__) \</u></td></tr>
+<tr><th id="158">158</th><td><u>    || defined(__ARM_ARCH_6Z__) \</u></td></tr>
+<tr><th id="159">159</th><td><u>    || defined(__ARM_ARCH_6ZK__) \</u></td></tr>
+<tr><th id="160">160</th><td><u>    || defined(__ARM_ARCH_6T2__) \</u></td></tr>
+<tr><th id="161">161</th><td><u>    || defined(__ARMV6__)</u></td></tr>
+<tr><th id="162">162</th><td><u>#define WTF_ARM_ARCH_VERSION 6</u></td></tr>
+<tr><th id="163">163</th><td></td></tr>
+<tr><th id="164">164</th><td><u>#elif defined(__ARM_ARCH_7A__) \</u></td></tr>
+<tr><th id="165">165</th><td><u>    || defined(__ARM_ARCH_7K__) \</u></td></tr>
+<tr><th id="166">166</th><td><u>    || defined(__ARM_ARCH_7R__) \</u></td></tr>
+<tr><th id="167">167</th><td><u>    || defined(__ARM_ARCH_7S__)</u></td></tr>
+<tr><th id="168">168</th><td><u>#define WTF_ARM_ARCH_VERSION 7</u></td></tr>
+<tr><th id="169">169</th><td></td></tr>
+<tr><th id="170">170</th><td><u>#elif defined(__ARM_ARCH_8__) \</u></td></tr>
+<tr><th id="171">171</th><td><u>    || defined(__ARM_ARCH_8A__)</u></td></tr>
+<tr><th id="172">172</th><td><u>#define WTF_ARM_ARCH_VERSION 8</u></td></tr>
+<tr><th id="173">173</th><td></td></tr>
+<tr><th id="174">174</th><td><i>/* MSVC sets _M_ARM */</i></td></tr>
+<tr><th id="175">175</th><td><u>#elif defined(_M_ARM)</u></td></tr>
+<tr><th id="176">176</th><td><u>#define WTF_ARM_ARCH_VERSION _M_ARM</u></td></tr>
+<tr><th id="177">177</th><td></td></tr>
+<tr><th id="178">178</th><td><i>/* RVCT sets _TARGET_ARCH_ARM */</i></td></tr>
+<tr><th id="179">179</th><td><u>#elif defined(__TARGET_ARCH_ARM)</u></td></tr>
+<tr><th id="180">180</th><td><u>#define WTF_ARM_ARCH_VERSION __TARGET_ARCH_ARM</u></td></tr>
+<tr><th id="181">181</th><td></td></tr>
+<tr><th id="182">182</th><td><u>#else</u></td></tr>
+<tr><th id="183">183</th><td><u>#define WTF_ARM_ARCH_VERSION 0</u></td></tr>
+<tr><th id="184">184</th><td></td></tr>
+<tr><th id="185">185</th><td><u>#endif</u></td></tr>
+<tr><th id="186">186</th><td></td></tr>
+<tr><th id="187">187</th><td><i>/* FIXME: WTF_THUMB_ARCH_VERSION seems unused. Remove. */</i></td></tr>
+<tr><th id="188">188</th><td><i>/* Set WTF_THUMB_ARCH_VERSION */</i></td></tr>
+<tr><th id="189">189</th><td><u>#if   defined(__ARM_ARCH_4T__)</u></td></tr>
+<tr><th id="190">190</th><td><u>#define WTF_THUMB_ARCH_VERSION 1</u></td></tr>
+<tr><th id="191">191</th><td></td></tr>
+<tr><th id="192">192</th><td><u>#elif defined(__ARM_ARCH_5T__) \</u></td></tr>
+<tr><th id="193">193</th><td><u>    || defined(__ARM_ARCH_5TE__) \</u></td></tr>
+<tr><th id="194">194</th><td><u>    || defined(__ARM_ARCH_5TEJ__)</u></td></tr>
+<tr><th id="195">195</th><td><u>#define WTF_THUMB_ARCH_VERSION 2</u></td></tr>
+<tr><th id="196">196</th><td></td></tr>
+<tr><th id="197">197</th><td><u>#elif defined(__ARM_ARCH_6J__) \</u></td></tr>
+<tr><th id="198">198</th><td><u>    || defined(__ARM_ARCH_6K__) \</u></td></tr>
+<tr><th id="199">199</th><td><u>    || defined(__ARM_ARCH_6Z__) \</u></td></tr>
+<tr><th id="200">200</th><td><u>    || defined(__ARM_ARCH_6ZK__) \</u></td></tr>
+<tr><th id="201">201</th><td><u>    || defined(__ARM_ARCH_6M__)</u></td></tr>
+<tr><th id="202">202</th><td><u>#define WTF_THUMB_ARCH_VERSION 3</u></td></tr>
+<tr><th id="203">203</th><td></td></tr>
+<tr><th id="204">204</th><td><u>#elif defined(__ARM_ARCH_6T2__) \</u></td></tr>
+<tr><th id="205">205</th><td><u>    || defined(__ARM_ARCH_7__) \</u></td></tr>
+<tr><th id="206">206</th><td><u>    || defined(__ARM_ARCH_7A__) \</u></td></tr>
+<tr><th id="207">207</th><td><u>    || defined(__ARM_ARCH_7K__) \</u></td></tr>
+<tr><th id="208">208</th><td><u>    || defined(__ARM_ARCH_7M__) \</u></td></tr>
+<tr><th id="209">209</th><td><u>    || defined(__ARM_ARCH_7R__) \</u></td></tr>
+<tr><th id="210">210</th><td><u>    || defined(__ARM_ARCH_7S__)</u></td></tr>
+<tr><th id="211">211</th><td><u>#define WTF_THUMB_ARCH_VERSION 4</u></td></tr>
+<tr><th id="212">212</th><td></td></tr>
+<tr><th id="213">213</th><td><i>/* RVCT sets __TARGET_ARCH_THUMB */</i></td></tr>
+<tr><th id="214">214</th><td><u>#elif defined(__TARGET_ARCH_THUMB)</u></td></tr>
+<tr><th id="215">215</th><td><u>#define WTF_THUMB_ARCH_VERSION __TARGET_ARCH_THUMB</u></td></tr>
+<tr><th id="216">216</th><td></td></tr>
+<tr><th id="217">217</th><td><u>#else</u></td></tr>
+<tr><th id="218">218</th><td><u>#define WTF_THUMB_ARCH_VERSION 0</u></td></tr>
+<tr><th id="219">219</th><td><u>#endif</u></td></tr>
+<tr><th id="220">220</th><td></td></tr>
+<tr><th id="221">221</th><td></td></tr>
+<tr><th id="222">222</th><td><i>/* FIXME: CPU(ARMV5_OR_LOWER) seems unused. Remove. */</i></td></tr>
+<tr><th id="223">223</th><td><i>/* CPU(ARMV5_OR_LOWER) - ARM instruction set v5 or earlier */</i></td></tr>
+<tr><th id="224">224</th><td><i>/* On ARMv5 and below the natural alignment is required. </i></td></tr>
+<tr><th id="225">225</th><td><i>   And there are some other differences for v5 or earlier. */</i></td></tr>
+<tr><th id="226">226</th><td><u>#if !defined(ARMV5_OR_LOWER) &amp;&amp; !WTF_ARM_ARCH_AT_LEAST(6)</u></td></tr>
+<tr><th id="227">227</th><td><u>#define WTF_CPU_ARMV5_OR_LOWER 1</u></td></tr>
+<tr><th id="228">228</th><td><u>#endif</u></td></tr>
+<tr><th id="229">229</th><td></td></tr>
+<tr><th id="230">230</th><td></td></tr>
+<tr><th id="231">231</th><td><i>/* CPU(ARM_TRADITIONAL) - Thumb2 is not available, only traditional ARM (v4 or greater) */</i></td></tr>
+<tr><th id="232">232</th><td><i>/* CPU(ARM_THUMB2) - Thumb2 instruction set is available */</i></td></tr>
+<tr><th id="233">233</th><td><i>/* Only one of these will be defined. */</i></td></tr>
+<tr><th id="234">234</th><td><u>#if !defined(WTF_CPU_ARM_TRADITIONAL) &amp;&amp; !defined(WTF_CPU_ARM_THUMB2)</u></td></tr>
+<tr><th id="235">235</th><td><u>#  if defined(thumb2) || defined(__thumb2__) \</u></td></tr>
+<tr><th id="236">236</th><td><u>    || ((defined(__thumb) || defined(__thumb__)) &amp;&amp; WTF_THUMB_ARCH_VERSION == 4)</u></td></tr>
+<tr><th id="237">237</th><td><u>#    define WTF_CPU_ARM_TRADITIONAL 0</u></td></tr>
+<tr><th id="238">238</th><td><u>#    define WTF_CPU_ARM_THUMB2 1</u></td></tr>
+<tr><th id="239">239</th><td><u>#  elif WTF_ARM_ARCH_AT_LEAST(4)</u></td></tr>
+<tr><th id="240">240</th><td><u>#    define WTF_CPU_ARM_TRADITIONAL 1</u></td></tr>
+<tr><th id="241">241</th><td><u>#    define WTF_CPU_ARM_THUMB2 0</u></td></tr>
+<tr><th id="242">242</th><td><u>#  else</u></td></tr>
+<tr><th id="243">243</th><td><u>#    error "Not supported ARM architecture"</u></td></tr>
+<tr><th id="244">244</th><td><u>#  endif</u></td></tr>
+<tr><th id="245">245</th><td><u>#elif CPU(ARM_TRADITIONAL) &amp;&amp; CPU(ARM_THUMB2) /* Sanity Check */</u></td></tr>
+<tr><th id="246">246</th><td><u>#  error "Cannot use both of WTF_CPU_ARM_TRADITIONAL and WTF_CPU_ARM_THUMB2 platforms"</u></td></tr>
+<tr><th id="247">247</th><td><u>#endif /* !defined(WTF_CPU_ARM_TRADITIONAL) &amp;&amp; !defined(WTF_CPU_ARM_THUMB2) */</u></td></tr>
+<tr><th id="248">248</th><td></td></tr>
+<tr><th id="249">249</th><td><u>#if defined(__ARM_NEON__) &amp;&amp; !defined(WTF_CPU_ARM_NEON)</u></td></tr>
+<tr><th id="250">250</th><td><u>#define WTF_CPU_ARM_NEON 1</u></td></tr>
+<tr><th id="251">251</th><td><u>#endif</u></td></tr>
+<tr><th id="252">252</th><td></td></tr>
+<tr><th id="253">253</th><td><u>#if (defined(__VFP_FP__) &amp;&amp; !defined(__SOFTFP__))</u></td></tr>
+<tr><th id="254">254</th><td><u>#define WTF_CPU_ARM_VFP 1</u></td></tr>
+<tr><th id="255">255</th><td><u>#endif</u></td></tr>
+<tr><th id="256">256</th><td></td></tr>
+<tr><th id="257">257</th><td><i>/* If CPU(ARM_NEON) is not enabled, we'll conservatively assume only VFP2 or VFPv3D16</i></td></tr>
+<tr><th id="258">258</th><td><i>   support is available. Hence, only the first 16 64-bit floating point registers</i></td></tr>
+<tr><th id="259">259</th><td><i>   are available. See:</i></td></tr>
+<tr><th id="260">260</th><td><i>   NEON registers: <a href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0473c/CJACABEJ.html">http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0473c/CJACABEJ.html</a></i></td></tr>
+<tr><th id="261">261</th><td><i>   VFP2 and VFP3 registers: <a href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0473c/CIHDIBDG.html">http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0473c/CIHDIBDG.html</a></i></td></tr>
+<tr><th id="262">262</th><td><i>   NEON to VFP register mapping: <a href="http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0473c/CJAIJHFC.html">http://infocenter.arm.com/help/index.jsp?topic=/com.arm.doc.dui0473c/CJAIJHFC.html</a></i></td></tr>
+<tr><th id="263">263</th><td><i>*/</i></td></tr>
+<tr><th id="264">264</th><td><u>#if CPU(ARM_NEON)</u></td></tr>
+<tr><th id="265">265</th><td><u>#define WTF_CPU_ARM_VFP_V3_D32 1</u></td></tr>
+<tr><th id="266">266</th><td><u>#else</u></td></tr>
+<tr><th id="267">267</th><td><u>#define WTF_CPU_ARM_VFP_V2 1</u></td></tr>
+<tr><th id="268">268</th><td><u>#endif</u></td></tr>
+<tr><th id="269">269</th><td></td></tr>
+<tr><th id="270">270</th><td><u>#if defined(__ARM_ARCH_7K__)</u></td></tr>
+<tr><th id="271">271</th><td><u>#define WTF_CPU_APPLE_ARMV7K 1</u></td></tr>
+<tr><th id="272">272</th><td><u>#endif</u></td></tr>
+<tr><th id="273">273</th><td></td></tr>
+<tr><th id="274">274</th><td><u>#if defined(__ARM_ARCH_7S__)</u></td></tr>
+<tr><th id="275">275</th><td><u>#define WTF_CPU_APPLE_ARMV7S 1</u></td></tr>
+<tr><th id="276">276</th><td><u>#endif</u></td></tr>
+<tr><th id="277">277</th><td></td></tr>
+<tr><th id="278">278</th><td><u>#<span data-ppcond="128">endif</span> /* ARM */</u></td></tr>
+<tr><th id="279">279</th><td></td></tr>
+<tr><th id="280">280</th><td><u>#<span data-ppcond="280">if</span> !<a class="macro" href="#33" title="(defined 1 &amp;&amp; 1)" data-ref="_M/CPU">CPU</a>(KNOWN)</u></td></tr>
+<tr><th id="281">281</th><td><u>#define WTF_CPU_UNKNOWN 1</u></td></tr>
+<tr><th id="282">282</th><td><u>#<span data-ppcond="280">endif</span></u></td></tr>
+<tr><th id="283">283</th><td></td></tr>
+<tr><th id="284">284</th><td><u>#<span data-ppcond="284">if</span> <a class="macro" href="#33" title="(defined WTF_CPU_ARM &amp;&amp; WTF_CPU_ARM)" data-ref="_M/CPU">CPU</a>(ARM) || <a class="macro" href="#33" title="(defined WTF_CPU_MIPS &amp;&amp; WTF_CPU_MIPS)" data-ref="_M/CPU">CPU</a>(MIPS) || <a class="macro" href="#33" title="(defined WTF_CPU_UNKNOWN &amp;&amp; WTF_CPU_UNKNOWN)" data-ref="_M/CPU">CPU</a>(UNKNOWN)</u></td></tr>
+<tr><th id="285">285</th><td><u>#define WTF_CPU_NEEDS_ALIGNED_ACCESS 1</u></td></tr>
+<tr><th id="286">286</th><td><u>#<span data-ppcond="284">endif</span></u></td></tr>
+<tr><th id="287">287</th><td></td></tr>
+<tr><th id="288">288</th><td><u>#<span data-ppcond="288">if</span> <a class="macro" href="Compiler.h.html#29" title="(defined 1 &amp;&amp; 1)" data-ref="_M/COMPILER">COMPILER</a>(GCC_COMPATIBLE)</u></td></tr>
+<tr><th id="289">289</th><td><i>/* __LP64__ is not defined on 64bit Windows since it uses LLP64. Using __SIZEOF_POINTER__ is simpler. */</i></td></tr>
+<tr><th id="290">290</th><td><u>#<span data-ppcond="290">if</span> <span class="macro" title="8" data-ref="_M/__SIZEOF_POINTER__">__SIZEOF_POINTER__</span> == 8</u></td></tr>
+<tr><th id="291">291</th><td><u>#define <dfn class="macro" id="_M/WTF_CPU_ADDRESS64" data-ref="_M/WTF_CPU_ADDRESS64">WTF_CPU_ADDRESS64</dfn> 1</u></td></tr>
+<tr><th id="292">292</th><td><u>#<span data-ppcond="290">elif</span> __SIZEOF_POINTER__ == 4</u></td></tr>
+<tr><th id="293">293</th><td><u>#define WTF_CPU_ADDRESS32 1</u></td></tr>
+<tr><th id="294">294</th><td><u>#else</u></td></tr>
+<tr><th id="295">295</th><td><u>#error "Unsupported pointer width"</u></td></tr>
+<tr><th id="296">296</th><td><u>#<span data-ppcond="290">endif</span></u></td></tr>
+<tr><th id="297">297</th><td><u>#<span data-ppcond="288">elif</span> COMPILER(MSVC)</u></td></tr>
+<tr><th id="298">298</th><td><u>#if defined(_WIN64)</u></td></tr>
+<tr><th id="299">299</th><td><u>#define WTF_CPU_ADDRESS64 1</u></td></tr>
+<tr><th id="300">300</th><td><u>#else</u></td></tr>
+<tr><th id="301">301</th><td><u>#define WTF_CPU_ADDRESS32 1</u></td></tr>
+<tr><th id="302">302</th><td><u>#endif</u></td></tr>
+<tr><th id="303">303</th><td><u>#else</u></td></tr>
+<tr><th id="304">304</th><td><i>/* This is the most generic way. But in OS(DARWIN), Platform.h can be included by sandbox definition file (.sb).</i></td></tr>
+<tr><th id="305">305</th><td><i> * At that time, we cannot include "stdint.h" header. So in the case of known compilers, we use predefined constants instead. */</i></td></tr>
+<tr><th id="306">306</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="307">307</th><td><u>#if UINTPTR_MAX &gt; UINT32_MAX</u></td></tr>
+<tr><th id="308">308</th><td><u>#define WTF_CPU_ADDRESS64 1</u></td></tr>
+<tr><th id="309">309</th><td><u>#else</u></td></tr>
+<tr><th id="310">310</th><td><u>#define WTF_CPU_ADDRESS32 1</u></td></tr>
+<tr><th id="311">311</th><td><u>#endif</u></td></tr>
+<tr><th id="312">312</th><td><u>#<span data-ppcond="288">endif</span></u></td></tr>
+<tr><th id="313">313</th><td></td></tr>
+<tr><th id="314">314</th><td><i>/* CPU general purpose register width. */</i></td></tr>
+<tr><th id="315">315</th><td><u>#<span data-ppcond="315">if</span> !defined(<span class="macro" data-ref="_M/WTF_CPU_REGISTER64">WTF_CPU_REGISTER64</span>) &amp;&amp; !defined(<span class="macro" data-ref="_M/WTF_CPU_REGISTER32">WTF_CPU_REGISTER32</span>)</u></td></tr>
+<tr><th id="316">316</th><td><u>#<span data-ppcond="316">if</span> <a class="macro" href="#33" title="(defined 1 &amp;&amp; 1)" data-ref="_M/CPU">CPU</a>(ADDRESS64) || <a class="macro" href="#33" title="(defined 1 &amp;&amp; 1)" data-ref="_M/CPU">CPU</a>(ARM64)</u></td></tr>
+<tr><th id="317">317</th><td><u>#define <dfn class="macro" id="_M/WTF_CPU_REGISTER64" data-ref="_M/WTF_CPU_REGISTER64">WTF_CPU_REGISTER64</dfn> 1</u></td></tr>
+<tr><th id="318">318</th><td><u>#<span data-ppcond="316">else</span></u></td></tr>
+<tr><th id="319">319</th><td><u>#define WTF_CPU_REGISTER32 1</u></td></tr>
+<tr><th id="320">320</th><td><u>#<span data-ppcond="316">endif</span></u></td></tr>
+<tr><th id="321">321</th><td><u>#<span data-ppcond="315">endif</span></u></td></tr>
+<tr><th id="322">322</th><td></td></tr>
+<tr><th id="323">323</th><td><i>/* CPU(BIG_ENDIAN) or CPU(MIDDLE_ENDIAN) or neither, as appropriate. */</i></td></tr>
+<tr><th id="324">324</th><td></td></tr>
+<tr><th id="325">325</th><td><u>#<span data-ppcond="325">if</span> <a class="macro" href="Compiler.h.html#29" title="(defined 1 &amp;&amp; 1)" data-ref="_M/COMPILER">COMPILER</a>(GCC_COMPATIBLE)</u></td></tr>
+<tr><th id="326">326</th><td><u>#<span data-ppcond="326">if</span> <span class="macro" title="1234" data-ref="_M/__BYTE_ORDER__">__BYTE_ORDER__</span> == <span class="macro" title="4321" data-ref="_M/__ORDER_BIG_ENDIAN__">__ORDER_BIG_ENDIAN__</span></u></td></tr>
+<tr><th id="327">327</th><td><u>#define WTF_CPU_BIG_ENDIAN 1</u></td></tr>
+<tr><th id="328">328</th><td><u>#<span data-ppcond="326">elif</span> <span class="macro" title="1234" data-ref="_M/__BYTE_ORDER__">__BYTE_ORDER__</span> == <span class="macro" title="1234" data-ref="_M/__ORDER_LITTLE_ENDIAN__">__ORDER_LITTLE_ENDIAN__</span></u></td></tr>
+<tr><th id="329">329</th><td><u>#define <dfn class="macro" id="_M/WTF_CPU_LITTLE_ENDIAN" data-ref="_M/WTF_CPU_LITTLE_ENDIAN">WTF_CPU_LITTLE_ENDIAN</dfn> 1</u></td></tr>
+<tr><th id="330">330</th><td><u>#<span data-ppcond="326">elif</span> __BYTE_ORDER__ == __ORDER_PDP_ENDIAN__</u></td></tr>
+<tr><th id="331">331</th><td><u>#define WTF_CPU_MIDDLE_ENDIAN 1</u></td></tr>
+<tr><th id="332">332</th><td><u>#else</u></td></tr>
+<tr><th id="333">333</th><td><u>#error "Unknown endian"</u></td></tr>
+<tr><th id="334">334</th><td><u>#<span data-ppcond="326">endif</span></u></td></tr>
+<tr><th id="335">335</th><td><u>#<span data-ppcond="325">else</span></u></td></tr>
+<tr><th id="336">336</th><td><u>#if defined(WIN32) || defined(_WIN32)</u></td></tr>
+<tr><th id="337">337</th><td><i>/* Windows only have little endian architecture. */</i></td></tr>
+<tr><th id="338">338</th><td><u>#define WTF_CPU_LITTLE_ENDIAN 1</u></td></tr>
+<tr><th id="339">339</th><td><u>#else</u></td></tr>
+<tr><th id="340">340</th><td><u>#include &lt;sys/types.h&gt;</u></td></tr>
+<tr><th id="341">341</th><td><u>#if __has_include(&lt;endian.h&gt;)</u></td></tr>
+<tr><th id="342">342</th><td><u>#include &lt;endian.h&gt;</u></td></tr>
+<tr><th id="343">343</th><td><u>#if __BYTE_ORDER == __BIG_ENDIAN</u></td></tr>
+<tr><th id="344">344</th><td><u>#define WTF_CPU_BIG_ENDIAN 1</u></td></tr>
+<tr><th id="345">345</th><td><u>#elif __BYTE_ORDER == __LITTLE_ENDIAN</u></td></tr>
+<tr><th id="346">346</th><td><u>#define WTF_CPU_LITTLE_ENDIAN 1</u></td></tr>
+<tr><th id="347">347</th><td><u>#elif __BYTE_ORDER == __PDP_ENDIAN</u></td></tr>
+<tr><th id="348">348</th><td><u>#define WTF_CPU_MIDDLE_ENDIAN 1</u></td></tr>
+<tr><th id="349">349</th><td><u>#else</u></td></tr>
+<tr><th id="350">350</th><td><u>#error "Unknown endian"</u></td></tr>
+<tr><th id="351">351</th><td><u>#endif</u></td></tr>
+<tr><th id="352">352</th><td><u>#else</u></td></tr>
+<tr><th id="353">353</th><td><u>#if __has_include(&lt;machine/endian.h&gt;)</u></td></tr>
+<tr><th id="354">354</th><td><u>#include &lt;machine/endian.h&gt;</u></td></tr>
+<tr><th id="355">355</th><td><u>#else</u></td></tr>
+<tr><th id="356">356</th><td><u>#include &lt;sys/endian.h&gt;</u></td></tr>
+<tr><th id="357">357</th><td><u>#endif</u></td></tr>
+<tr><th id="358">358</th><td><u>#if BYTE_ORDER == BIG_ENDIAN</u></td></tr>
+<tr><th id="359">359</th><td><u>#define WTF_CPU_BIG_ENDIAN 1</u></td></tr>
+<tr><th id="360">360</th><td><u>#elif BYTE_ORDER == LITTLE_ENDIAN</u></td></tr>
+<tr><th id="361">361</th><td><u>#define WTF_CPU_LITTLE_ENDIAN 1</u></td></tr>
+<tr><th id="362">362</th><td><u>#elif BYTE_ORDER == PDP_ENDIAN</u></td></tr>
+<tr><th id="363">363</th><td><u>#define WTF_CPU_MIDDLE_ENDIAN 1</u></td></tr>
+<tr><th id="364">364</th><td><u>#else</u></td></tr>
+<tr><th id="365">365</th><td><u>#error "Unknown endian"</u></td></tr>
+<tr><th id="366">366</th><td><u>#endif</u></td></tr>
+<tr><th id="367">367</th><td><u>#endif</u></td></tr>
+<tr><th id="368">368</th><td><u>#endif</u></td></tr>
+<tr><th id="369">369</th><td><u>#<span data-ppcond="325">endif</span></u></td></tr>
+<tr><th id="370">370</th><td></td></tr>
+<tr><th id="371">371</th><td><u>#<span data-ppcond="371">if</span> !<a class="macro" href="#33" title="(defined 1 &amp;&amp; 1)" data-ref="_M/CPU">CPU</a>(LITTLE_ENDIAN) &amp;&amp; !<a class="macro" href="#33" title="(defined WTF_CPU_BIG_ENDIAN &amp;&amp; WTF_CPU_BIG_ENDIAN)" data-ref="_M/CPU">CPU</a>(BIG_ENDIAN)</u></td></tr>
+<tr><th id="372">372</th><td><u>#error "Unsupported endian"</u></td></tr>
+<tr><th id="373">373</th><td><u>#<span data-ppcond="371">endif</span></u></td></tr>
+<tr><th id="374">374</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/JavaScriptCore/API/tests/CompareAndSwapTest.cpp.html'>webkit/Source/JavaScriptCore/API/tests/CompareAndSwapTest.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

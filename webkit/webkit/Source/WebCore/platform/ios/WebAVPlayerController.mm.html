@@ -1,0 +1,754 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebAVPlayerController.mm source code [webkit/Source/WebCore/platform/ios/WebAVPlayerController.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebCore/platform/ios/WebAVPlayerController.mm'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebCore</a>/<a href='..'>platform</a>/<a href='./'>ios</a>/<a href='WebAVPlayerController.mm.html'>WebAVPlayerController.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2014-2018 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td><u>#import <a href="../../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="28">28</th><td><u>#import <a href="WebAVPlayerController.h.html">"WebAVPlayerController.h"</a></u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#<span data-ppcond="30">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined 1 &amp;&amp; 1)" data-ref="_M/PLATFORM">PLATFORM</a>(COCOA) &amp;&amp; <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformHave.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/HAVE">HAVE</a>(AVKIT)</u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><u>#import <a href="../Logging.h.html">"Logging.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#import <a href="PlaybackSessionInterfaceAVKit.h.html">"PlaybackSessionInterfaceAVKit.h"</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#import <a href="../cocoa/PlaybackSessionModel.h.html">"PlaybackSessionModel.h"</a></u></td></tr>
+<tr><th id="35">35</th><td><u>#import <a href="../../html/TimeRanges.h.html">"TimeRanges.h"</a></u></td></tr>
+<tr><th id="36">36</th><td><u>#import &lt;AVFoundation/AVTime.h&gt;</u></td></tr>
+<tr><th id="37">37</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cocoa/AVKitSPI.h.html">&lt;pal/spi/cocoa/AVKitSPI.h&gt;</a></u></td></tr>
+<tr><th id="38">38</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html">&lt;wtf/text/CString.h&gt;</a></u></td></tr>
+<tr><th id="39">39</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html">&lt;wtf/text/WTFString.h&gt;</a></u></td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html">&lt;pal/cf/CoreMediaSoftLink.h&gt;</a></u></td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#37" title="static void* AVKitLibrary() { static void* frameworkLibrary = dlopen(&quot;/System/Library/Frameworks/&quot; &quot;AVKit&quot; &quot;.framework/&quot; &quot;AVKit&quot;, 0x2); return frameworkLibrary; }" data-ref="_M/SOFTLINK_AVKIT_FRAMEWORK">SOFTLINK_AVKIT_FRAMEWORK</a>()</td></tr>
+<tr><th id="44">44</th><td><a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/cocoa/SoftLinking.h.html#227" title="@class AVPlayerController; static Class initAVPlayerController(); static Class (*getAVPlayerControllerClass)() = initAVPlayerController; static Class classAVPlayerController; static Class AVPlayerControllerFunction() { return classAVPlayerController; } static Class initAVPlayerController() { AVKitLibrary(); classAVPlayerController = objc_getClass(&quot;AVPlayerController&quot;); getAVPlayerControllerClass = AVPlayerControllerFunction; return classAVPlayerController; } static AVPlayerController *allocAVPlayerControllerInstance() { return [getAVPlayerControllerClass() alloc]; }" data-ref="_M/SOFT_LINK_CLASS_OPTIONAL">SOFT_LINK_CLASS_OPTIONAL</a>(AVKit, AVPlayerController)</td></tr>
+<tr><th id="45">45</th><td><a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/cocoa/SoftLinking.h.html#227" title="@class AVValueTiming; static Class initAVValueTiming(); static Class (*getAVValueTimingClass)() = initAVValueTiming; static Class classAVValueTiming; static Class AVValueTimingFunction() { return classAVValueTiming; } static Class initAVValueTiming() { AVKitLibrary(); classAVValueTiming = objc_getClass(&quot;AVValueTiming&quot;); getAVValueTimingClass = AVValueTimingFunction; return classAVValueTiming; } static AVValueTiming *allocAVValueTimingInstance() { return [getAVValueTimingClass() alloc]; }" data-ref="_M/SOFT_LINK_CLASS_OPTIONAL">SOFT_LINK_CLASS_OPTIONAL</a>(AVKit, AVValueTiming)</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td><b>using</b> <b>namespace</b> <span class="namespace">WebCore</span>;</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td><em>static</em> <em>void</em> * <dfn class="decl def" id="WebAVPlayerControllerSeekableTimeRangesObserverContext" title='WebAVPlayerControllerSeekableTimeRangesObserverContext' data-ref="WebAVPlayerControllerSeekableTimeRangesObserverContext" data-ref-filename="WebAVPlayerControllerSeekableTimeRangesObserverContext">WebAVPlayerControllerSeekableTimeRangesObserverContext</dfn> = &amp;<a class="ref" href="#WebAVPlayerControllerSeekableTimeRangesObserverContext" title='WebAVPlayerControllerSeekableTimeRangesObserverContext' data-ref="WebAVPlayerControllerSeekableTimeRangesObserverContext" data-ref-filename="WebAVPlayerControllerSeekableTimeRangesObserverContext">WebAVPlayerControllerSeekableTimeRangesObserverContext</a>;</td></tr>
+<tr><th id="50">50</th><td><em>static</em> <em>void</em> * <dfn class="decl def" id="WebAVPlayerControllerHasLiveStreamingContentObserverContext" title='WebAVPlayerControllerHasLiveStreamingContentObserverContext' data-ref="WebAVPlayerControllerHasLiveStreamingContentObserverContext" data-ref-filename="WebAVPlayerControllerHasLiveStreamingContentObserverContext">WebAVPlayerControllerHasLiveStreamingContentObserverContext</dfn> = &amp;<a class="ref" href="#WebAVPlayerControllerHasLiveStreamingContentObserverContext" title='WebAVPlayerControllerHasLiveStreamingContentObserverContext' data-ref="WebAVPlayerControllerHasLiveStreamingContentObserverContext" data-ref-filename="WebAVPlayerControllerHasLiveStreamingContentObserverContext">WebAVPlayerControllerHasLiveStreamingContentObserverContext</a>;</td></tr>
+<tr><th id="51">51</th><td><em>static</em> <em>void</em> * <dfn class="decl def" id="WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext" title='WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext' data-ref="WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext" data-ref-filename="WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext">WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext</dfn> = &amp;<a class="ref" href="#WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext" title='WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext' data-ref="WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext" data-ref-filename="WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext">WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext</a>;</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td><em>static</em> <em>double</em> <dfn class="decl def" id="WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta" title='WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta' data-ref="WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta" data-ref-filename="WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta">WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta</dfn> = <var>3.0</var>; <i>// Minimum delta of time required to change the duration of the seekable time range.</i></td></tr>
+<tr><th id="54">54</th><td><em>static</em> <em>double</em> <dfn class="decl def" id="WebAVPlayerControllerLiveStreamMinimumTargetDuration" title='WebAVPlayerControllerLiveStreamMinimumTargetDuration' data-ref="WebAVPlayerControllerLiveStreamMinimumTargetDuration" data-ref-filename="WebAVPlayerControllerLiveStreamMinimumTargetDuration">WebAVPlayerControllerLiveStreamMinimumTargetDuration</dfn> = <var>1.0</var>; <i>// Minimum segment duration to be considered valid.</i></td></tr>
+<tr><th id="55">55</th><td><em>static</em> <em>double</em> <dfn class="decl def" id="WebAVPlayerControllerLiveStreamSeekableTimeRangeMinimumDuration" title='WebAVPlayerControllerLiveStreamSeekableTimeRangeMinimumDuration' data-ref="WebAVPlayerControllerLiveStreamSeekableTimeRangeMinimumDuration" data-ref-filename="WebAVPlayerControllerLiveStreamSeekableTimeRangeMinimumDuration">WebAVPlayerControllerLiveStreamSeekableTimeRangeMinimumDuration</dfn> = <var>30.0</var>;</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td>@implementation WebAVPlayerController {</td></tr>
+<tr><th id="58">58</th><td>    <em>double</em> <dfn class="local col1 decl field" id="1_defaultPlaybackRate" title='_defaultPlaybackRate' data-type='double' data-ref="1_defaultPlaybackRate" data-ref-filename="1_defaultPlaybackRate">_defaultPlaybackRate</dfn>;</td></tr>
+<tr><th id="59">59</th><td>    <em>double</em> <dfn class="local col2 decl field" id="2_rate" title='_rate' data-type='double' data-ref="2_rate" data-ref-filename="2_rate">_rate</dfn>;</td></tr>
+<tr><th id="60">60</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col3 decl field" id="3_liveStreamEventModePossible" title='_liveStreamEventModePossible' data-type='BOOL' data-ref="3_liveStreamEventModePossible" data-ref-filename="3_liveStreamEventModePossible">_liveStreamEventModePossible</dfn>;</td></tr>
+<tr><th id="61">61</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col4 decl field" id="4_isScrubbing" title='_isScrubbing' data-type='BOOL' data-ref="4_isScrubbing" data-ref-filename="4_isScrubbing">_isScrubbing</dfn>;</td></tr>
+<tr><th id="62">62</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col5 decl field" id="5_allowsPictureInPicture" title='_allowsPictureInPicture' data-type='BOOL' data-ref="5_allowsPictureInPicture" data-ref-filename="5_allowsPictureInPicture">_allowsPictureInPicture</dfn>;</td></tr>
+<tr><th id="63">63</th><td>}</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td>- (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)init</td></tr>
+<tr><th id="66">66</th><td>{</td></tr>
+<tr><th id="67">67</th><td>    <b>if</b> (!<a class="ref" href="#44" title='getAVPlayerControllerClass' data-ref="getAVPlayerControllerClass" data-ref-filename="getAVPlayerControllerClass">getAVPlayerControllerClass</a>())</td></tr>
+<tr><th id="68">68</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td>    <b>if</b> (!(<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> = [super init]))</td></tr>
+<tr><th id="71">71</th><td>        <b>return</b> <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>;</td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td>    <a class="ref fn" href="#44" title='initAVPlayerController' data-ref="_ZL22initAVPlayerControllerv" data-ref-filename="_ZL22initAVPlayerControllerv">initAVPlayerController</a>();</td></tr>
+<tr><th id="74">74</th><td>    <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.playerControllerProxy = <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF7adoptNSET_" title='WTF::adoptNS' data-ref="_ZN3WTF7adoptNSET_" data-ref-filename="_ZN3WTF7adoptNSET_">adoptNS</a>([<a class="ref fn" href="#44" title='allocAVPlayerControllerInstance' data-ref="_ZL31allocAVPlayerControllerInstancev" data-ref-filename="_ZL31allocAVPlayerControllerInstancev">allocAVPlayerControllerInstance</a>() init]).<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZNK3WTF9RetainPtr3getEv" title='WTF::RetainPtr::get' data-ref="_ZNK3WTF9RetainPtr3getEv" data-ref-filename="_ZNK3WTF9RetainPtr3getEv">get</a>();</td></tr>
+<tr><th id="75">75</th><td>    _liveStreamEventModePossible = <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> addObserver:<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> forKeyPath:@<q>"seekableTimeRanges"</q> options:(<span class='enum' title='NSKeyValueObservingOptionOld' data-ref="NSKeyValueObservingOptionOld" data-ref-filename="NSKeyValueObservingOptionOld">NSKeyValueObservingOptionOld</span> | <span class='enum' title='NSKeyValueObservingOptionNew' data-ref="NSKeyValueObservingOptionNew" data-ref-filename="NSKeyValueObservingOptionNew">NSKeyValueObservingOptionNew</span> | <span class='enum' title='NSKeyValueObservingOptionInitial' data-ref="NSKeyValueObservingOptionInitial" data-ref-filename="NSKeyValueObservingOptionInitial">NSKeyValueObservingOptionInitial</span>) context:<a class="ref" href="#WebAVPlayerControllerSeekableTimeRangesObserverContext" title='WebAVPlayerControllerSeekableTimeRangesObserverContext' data-ref="WebAVPlayerControllerSeekableTimeRangesObserverContext" data-ref-filename="WebAVPlayerControllerSeekableTimeRangesObserverContext">WebAVPlayerControllerSeekableTimeRangesObserverContext</a>];</td></tr>
+<tr><th id="78">78</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> addObserver:<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> forKeyPath:@<q>"hasLiveStreamingContent"</q> options:<span class='enum' title='NSKeyValueObservingOptionInitial' data-ref="NSKeyValueObservingOptionInitial" data-ref-filename="NSKeyValueObservingOptionInitial">NSKeyValueObservingOptionInitial</span> context:<a class="ref" href="#WebAVPlayerControllerHasLiveStreamingContentObserverContext" title='WebAVPlayerControllerHasLiveStreamingContentObserverContext' data-ref="WebAVPlayerControllerHasLiveStreamingContentObserverContext" data-ref-filename="WebAVPlayerControllerHasLiveStreamingContentObserverContext">WebAVPlayerControllerHasLiveStreamingContentObserverContext</a>];</td></tr>
+<tr><th id="79">79</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> addObserver:<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> forKeyPath:@<q>"playingOnSecondScreen"</q> options:<span class='enum' title='NSKeyValueObservingOptionNew' data-ref="NSKeyValueObservingOptionNew" data-ref-filename="NSKeyValueObservingOptionNew">NSKeyValueObservingOptionNew</span> context:<a class="ref" href="#WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext" title='WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext' data-ref="WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext" data-ref-filename="WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext">WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext</a>];</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>    <b>return</b> <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>;</td></tr>
+<tr><th id="82">82</th><td>}</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td>- (<em>void</em>)dealloc</td></tr>
+<tr><th id="85">85</th><td>{</td></tr>
+<tr><th id="86">86</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> removeObserver:<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> forKeyPath:@<q>"seekableTimeRanges"</q> context:<a class="ref" href="#WebAVPlayerControllerSeekableTimeRangesObserverContext" title='WebAVPlayerControllerSeekableTimeRangesObserverContext' data-ref="WebAVPlayerControllerSeekableTimeRangesObserverContext" data-ref-filename="WebAVPlayerControllerSeekableTimeRangesObserverContext">WebAVPlayerControllerSeekableTimeRangesObserverContext</a>];</td></tr>
+<tr><th id="87">87</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> removeObserver:<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> forKeyPath:@<q>"hasLiveStreamingContent"</q> context:<a class="ref" href="#WebAVPlayerControllerHasLiveStreamingContentObserverContext" title='WebAVPlayerControllerHasLiveStreamingContentObserverContext' data-ref="WebAVPlayerControllerHasLiveStreamingContentObserverContext" data-ref-filename="WebAVPlayerControllerHasLiveStreamingContentObserverContext">WebAVPlayerControllerHasLiveStreamingContentObserverContext</a>];</td></tr>
+<tr><th id="88">88</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> removeObserver:<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> forKeyPath:@<q>"playingOnSecondScreen"</q> context:<a class="ref" href="#WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext" title='WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext' data-ref="WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext" data-ref-filename="WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext">WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext</a>];</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td>    [_playerControllerProxy release];</td></tr>
+<tr><th id="91">91</th><td>    [_loadedTimeRanges release];</td></tr>
+<tr><th id="92">92</th><td>    [_seekableTimeRanges release];</td></tr>
+<tr><th id="93">93</th><td>    [_timing release];</td></tr>
+<tr><th id="94">94</th><td>    [_audioMediaSelectionOptions release];</td></tr>
+<tr><th id="95">95</th><td>    [_legibleMediaSelectionOptions release];</td></tr>
+<tr><th id="96">96</th><td>    [_currentAudioMediaSelectionOption release];</td></tr>
+<tr><th id="97">97</th><td>    [_currentLegibleMediaSelectionOption release];</td></tr>
+<tr><th id="98">98</th><td>    [_externalPlaybackAirPlayDeviceLocalizedName release];</td></tr>
+<tr><th id="99">99</th><td>    [_minTiming release];</td></tr>
+<tr><th id="100">100</th><td>    [_maxTiming release];</td></tr>
+<tr><th id="101">101</th><td>    [super dealloc];</td></tr>
+<tr><th id="102">102</th><td>}</td></tr>
+<tr><th id="103">103</th><td></td></tr>
+<tr><th id="104">104</th><td>- (AVPlayer *)player</td></tr>
+<tr><th id="105">105</th><td>{</td></tr>
+<tr><th id="106">106</th><td>    <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="107">107</th><td>}</td></tr>
+<tr><th id="108">108</th><td></td></tr>
+<tr><th id="109">109</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)forwardingTargetForSelector:(<span class='typedef' title='SEL' data-type='SEL *' data-ref="SEL" data-ref-filename="SEL">SEL</span>)<dfn class="local col7 decl" id="7selector" title='selector' data-type='SEL' data-ref="7selector" data-ref-filename="7selector">selector</dfn></td></tr>
+<tr><th id="110">110</th><td>{</td></tr>
+<tr><th id="111">111</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)selector" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col7 ref" href="#7selector" title='selector' data-ref="7selector" data-ref-filename="7selector">selector</a>);</td></tr>
+<tr><th id="112">112</th><td>    <b>return</b> <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.playerControllerProxy;</td></tr>
+<tr><th id="113">113</th><td>}</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td>- (<em>void</em>)play:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col8 decl" id="8sender" title='sender' data-type='id' data-ref="8sender" data-ref-filename="8sender">sender</dfn></td></tr>
+<tr><th id="116">116</th><td>{</td></tr>
+<tr><th id="117">117</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col8 ref" href="#8sender" title='sender' data-ref="8sender" data-ref-filename="8sender">sender</a>);</td></tr>
+<tr><th id="118">118</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="119">119</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel4playEv" title='WebCore::PlaybackSessionModel::play' data-ref="_ZN7WebCore20PlaybackSessionModel4playEv" data-ref-filename="_ZN7WebCore20PlaybackSessionModel4playEv">play</a>();</td></tr>
+<tr><th id="120">120</th><td>}</td></tr>
+<tr><th id="121">121</th><td></td></tr>
+<tr><th id="122">122</th><td>- (<em>void</em>)pause:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col9 decl" id="9sender" title='sender' data-type='id' data-ref="9sender" data-ref-filename="9sender">sender</dfn></td></tr>
+<tr><th id="123">123</th><td>{</td></tr>
+<tr><th id="124">124</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col9 ref" href="#9sender" title='sender' data-ref="9sender" data-ref-filename="9sender">sender</a>);</td></tr>
+<tr><th id="125">125</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="126">126</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel5pauseEv" title='WebCore::PlaybackSessionModel::pause' data-ref="_ZN7WebCore20PlaybackSessionModel5pauseEv" data-ref-filename="_ZN7WebCore20PlaybackSessionModel5pauseEv">pause</a>();</td></tr>
+<tr><th id="127">127</th><td>}</td></tr>
+<tr><th id="128">128</th><td></td></tr>
+<tr><th id="129">129</th><td>- (<em>void</em>)togglePlayback:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col0 decl" id="10sender" title='sender' data-type='id' data-ref="10sender" data-ref-filename="10sender">sender</dfn></td></tr>
+<tr><th id="130">130</th><td>{</td></tr>
+<tr><th id="131">131</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col0 ref" href="#10sender" title='sender' data-ref="10sender" data-ref-filename="10sender">sender</a>);</td></tr>
+<tr><th id="132">132</th><td>    <b>if</b> (!<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="133">133</th><td>        <b>return</b>;</td></tr>
+<tr><th id="134">134</th><td></td></tr>
+<tr><th id="135">135</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZNK7WebCore20PlaybackSessionModel9isPlayingEv" title='WebCore::PlaybackSessionModel::isPlaying' data-ref="_ZNK7WebCore20PlaybackSessionModel9isPlayingEv" data-ref-filename="_ZNK7WebCore20PlaybackSessionModel9isPlayingEv">isPlaying</a>())</td></tr>
+<tr><th id="136">136</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel5pauseEv" title='WebCore::PlaybackSessionModel::pause' data-ref="_ZN7WebCore20PlaybackSessionModel5pauseEv" data-ref-filename="_ZN7WebCore20PlaybackSessionModel5pauseEv">pause</a>();</td></tr>
+<tr><th id="137">137</th><td>    <b>else</b></td></tr>
+<tr><th id="138">138</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel4playEv" title='WebCore::PlaybackSessionModel::play' data-ref="_ZN7WebCore20PlaybackSessionModel4playEv" data-ref-filename="_ZN7WebCore20PlaybackSessionModel4playEv">play</a>();</td></tr>
+<tr><th id="139">139</th><td>}</td></tr>
+<tr><th id="140">140</th><td></td></tr>
+<tr><th id="141">141</th><td>- (<em>void</em>)togglePlaybackEvenWhenInBackground:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col1 decl" id="11sender" title='sender' data-type='id' data-ref="11sender" data-ref-filename="11sender">sender</dfn></td></tr>
+<tr><th id="142">142</th><td>{</td></tr>
+<tr><th id="143">143</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> togglePlayback:<a class="local col1 ref" href="#11sender" title='sender' data-ref="11sender" data-ref-filename="11sender">sender</a>];</td></tr>
+<tr><th id="144">144</th><td>}</td></tr>
+<tr><th id="145">145</th><td></td></tr>
+<tr><th id="146">146</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isPlaying</td></tr>
+<tr><th id="147">147</th><td>{</td></tr>
+<tr><th id="148">148</th><td>    <b>return</b> [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> rate];</td></tr>
+<tr><th id="149">149</th><td>}</td></tr>
+<tr><th id="150">150</th><td></td></tr>
+<tr><th id="151">151</th><td>- (<em>void</em>)setPlaying:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col2 decl" id="12playing" title='playing' data-type='BOOL' data-ref="12playing" data-ref-filename="12playing">playing</dfn></td></tr>
+<tr><th id="152">152</th><td>{</td></tr>
+<tr><th id="153">153</th><td>    <b>if</b> (!<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="154">154</th><td>        <b>return</b>;</td></tr>
+<tr><th id="155">155</th><td>    <b>if</b> (<a class="local col2 ref" href="#12playing" title='playing' data-ref="12playing" data-ref-filename="12playing">playing</a>)</td></tr>
+<tr><th id="156">156</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel4playEv" title='WebCore::PlaybackSessionModel::play' data-ref="_ZN7WebCore20PlaybackSessionModel4playEv" data-ref-filename="_ZN7WebCore20PlaybackSessionModel4playEv">play</a>();</td></tr>
+<tr><th id="157">157</th><td>    <b>else</b></td></tr>
+<tr><th id="158">158</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel5pauseEv" title='WebCore::PlaybackSessionModel::pause' data-ref="_ZN7WebCore20PlaybackSessionModel5pauseEv" data-ref-filename="_ZN7WebCore20PlaybackSessionModel5pauseEv">pause</a>();</td></tr>
+<tr><th id="159">159</th><td>}</td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td>- (<em>double</em>)defaultPlaybackRate</td></tr>
+<tr><th id="162">162</th><td>{</td></tr>
+<tr><th id="163">163</th><td>    <b>return</b> _defaultPlaybackRate;</td></tr>
+<tr><th id="164">164</th><td>}</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td>- (<em>void</em>)setDefaultPlaybackRate:(<em>double</em>)<dfn class="local col3 decl" id="13defaultPlaybackRate" title='defaultPlaybackRate' data-type='double' data-ref="13defaultPlaybackRate" data-ref-filename="13defaultPlaybackRate">defaultPlaybackRate</dfn></td></tr>
+<tr><th id="167">167</th><td>{</td></tr>
+<tr><th id="168">168</th><td>    <b>if</b> (<a class="local col3 ref" href="#13defaultPlaybackRate" title='defaultPlaybackRate' data-ref="13defaultPlaybackRate" data-ref-filename="13defaultPlaybackRate">defaultPlaybackRate</a> == _defaultPlaybackRate)</td></tr>
+<tr><th id="169">169</th><td>        <b>return</b>;</td></tr>
+<tr><th id="170">170</th><td></td></tr>
+<tr><th id="171">171</th><td>    _defaultPlaybackRate = <a class="local col3 ref" href="#13defaultPlaybackRate" title='defaultPlaybackRate' data-ref="13defaultPlaybackRate" data-ref-filename="13defaultPlaybackRate">defaultPlaybackRate</a>;</td></tr>
+<tr><th id="172">172</th><td></td></tr>
+<tr><th id="173">173</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate &amp;&amp; <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZNK7WebCore20PlaybackSessionModel19defaultPlaybackRateEv" title='WebCore::PlaybackSessionModel::defaultPlaybackRate' data-ref="_ZNK7WebCore20PlaybackSessionModel19defaultPlaybackRateEv" data-ref-filename="_ZNK7WebCore20PlaybackSessionModel19defaultPlaybackRateEv">defaultPlaybackRate</a>() != _defaultPlaybackRate)</td></tr>
+<tr><th id="174">174</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel22setDefaultPlaybackRateEd" title='WebCore::PlaybackSessionModel::setDefaultPlaybackRate' data-ref="_ZN7WebCore20PlaybackSessionModel22setDefaultPlaybackRateEd" data-ref-filename="_ZN7WebCore20PlaybackSessionModel22setDefaultPlaybackRateEd">setDefaultPlaybackRate</a>(_defaultPlaybackRate);</td></tr>
+<tr><th id="175">175</th><td></td></tr>
+<tr><th id="176">176</th><td>    <b>if</b> ([<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> isPlaying])</td></tr>
+<tr><th id="177">177</th><td>        [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> setRate:_defaultPlaybackRate];</td></tr>
+<tr><th id="178">178</th><td>}</td></tr>
+<tr><th id="179">179</th><td></td></tr>
+<tr><th id="180">180</th><td>- (<em>double</em>)rate</td></tr>
+<tr><th id="181">181</th><td>{</td></tr>
+<tr><th id="182">182</th><td>    <b>return</b> _rate;</td></tr>
+<tr><th id="183">183</th><td>}</td></tr>
+<tr><th id="184">184</th><td></td></tr>
+<tr><th id="185">185</th><td>- (<em>void</em>)setRate:(<em>double</em>)<dfn class="local col4 decl" id="14rate" title='rate' data-type='double' data-ref="14rate" data-ref-filename="14rate">rate</dfn></td></tr>
+<tr><th id="186">186</th><td>{</td></tr>
+<tr><th id="187">187</th><td>    <b>if</b> (<a class="local col4 ref" href="#14rate" title='rate' data-ref="14rate" data-ref-filename="14rate">rate</a> == _rate)</td></tr>
+<tr><th id="188">188</th><td>        <b>return</b>;</td></tr>
+<tr><th id="189">189</th><td></td></tr>
+<tr><th id="190">190</th><td>    _rate = <a class="local col4 ref" href="#14rate" title='rate' data-ref="14rate" data-ref-filename="14rate">rate</a>;</td></tr>
+<tr><th id="191">191</th><td></td></tr>
+<tr><th id="192">192</th><td>    <i>// AVKit doesn't have a separate variable for "paused", instead representing it by a `rate` of</i></td></tr>
+<tr><th id="193">193</th><td><i>    // `0`. Unfortunately, `HTMLMediaElement::play` doesn't call `HTMLMediaElement::setPlaybackRate`</i></td></tr>
+<tr><th id="194">194</th><td><i>    // so if we propagate a `rate` of `0` along to the `HTMLMediaElement` then any attempt to</i></td></tr>
+<tr><th id="195">195</th><td><i>    // `HTMLMediaElement::play` will effectively be a no-op since the `playbackRate` will be `0`.</i></td></tr>
+<tr><th id="196">196</th><td>    <b>if</b> (!_rate)</td></tr>
+<tr><th id="197">197</th><td>        <b>return</b>;</td></tr>
+<tr><th id="198">198</th><td></td></tr>
+<tr><th id="199">199</th><td>    <i>// In AVKit, the `defaultPlaybackRate` is used when playback starts, such as resuming after</i></td></tr>
+<tr><th id="200">200</th><td><i>    // pausing. In WebKit, however, `defaultPlaybackRate` is only used when first loading and after</i></td></tr>
+<tr><th id="201">201</th><td><i>    // ending scanning, with the `playbackRate` being used in all other cases, including when</i></td></tr>
+<tr><th id="202">202</th><td><i>    // resuming after pausing. As such, WebKit should return the `playbackRate` instead of the</i></td></tr>
+<tr><th id="203">203</th><td><i>    // `defaultPlaybackRate` in these cases when communicating with AVKit.</i></td></tr>
+<tr><th id="204">204</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> setDefaultPlaybackRate:_rate];</td></tr>
+<tr><th id="205">205</th><td></td></tr>
+<tr><th id="206">206</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate &amp;&amp; <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZNK7WebCore20PlaybackSessionModel12playbackRateEv" title='WebCore::PlaybackSessionModel::playbackRate' data-ref="_ZNK7WebCore20PlaybackSessionModel12playbackRateEv" data-ref-filename="_ZNK7WebCore20PlaybackSessionModel12playbackRateEv">playbackRate</a>() != _rate)</td></tr>
+<tr><th id="207">207</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel15setPlaybackRateEd" title='WebCore::PlaybackSessionModel::setPlaybackRate' data-ref="_ZN7WebCore20PlaybackSessionModel15setPlaybackRateEd" data-ref-filename="_ZN7WebCore20PlaybackSessionModel15setPlaybackRateEd">setPlaybackRate</a>(_rate);</td></tr>
+<tr><th id="208">208</th><td>}</td></tr>
+<tr><th id="209">209</th><td></td></tr>
+<tr><th id="210">210</th><td>+ (NSSet *)keyPathsForValuesAffectingPlaying</td></tr>
+<tr><th id="211">211</th><td>{</td></tr>
+<tr><th id="212">212</th><td>    <b>return</b> [NSSet setWithObject:@<q>"rate"</q>];</td></tr>
+<tr><th id="213">213</th><td>}</td></tr>
+<tr><th id="214">214</th><td></td></tr>
+<tr><th id="215">215</th><td>- (<em>void</em>)beginScrubbing:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col5 decl" id="15sender" title='sender' data-type='id' data-ref="15sender" data-ref-filename="15sender">sender</dfn></td></tr>
+<tr><th id="216">216</th><td>{</td></tr>
+<tr><th id="217">217</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col5 ref" href="#15sender" title='sender' data-ref="15sender" data-ref-filename="15sender">sender</a>);</td></tr>
+<tr><th id="218">218</th><td>    _isScrubbing = <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="219">219</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="220">220</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel14beginScrubbingEv" title='WebCore::PlaybackSessionModel::beginScrubbing' data-ref="_ZN7WebCore20PlaybackSessionModel14beginScrubbingEv" data-ref-filename="_ZN7WebCore20PlaybackSessionModel14beginScrubbingEv">beginScrubbing</a>();</td></tr>
+<tr><th id="221">221</th><td>}</td></tr>
+<tr><th id="222">222</th><td></td></tr>
+<tr><th id="223">223</th><td>- (<em>void</em>)endScrubbing:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col6 decl" id="16sender" title='sender' data-type='id' data-ref="16sender" data-ref-filename="16sender">sender</dfn></td></tr>
+<tr><th id="224">224</th><td>{</td></tr>
+<tr><th id="225">225</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col6 ref" href="#16sender" title='sender' data-ref="16sender" data-ref-filename="16sender">sender</a>);</td></tr>
+<tr><th id="226">226</th><td>    _isScrubbing = <span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>;</td></tr>
+<tr><th id="227">227</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="228">228</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel12endScrubbingEv" title='WebCore::PlaybackSessionModel::endScrubbing' data-ref="_ZN7WebCore20PlaybackSessionModel12endScrubbingEv" data-ref-filename="_ZN7WebCore20PlaybackSessionModel12endScrubbingEv">endScrubbing</a>();</td></tr>
+<tr><th id="229">229</th><td>}</td></tr>
+<tr><th id="230">230</th><td></td></tr>
+<tr><th id="231">231</th><td>- (<em>void</em>)seekToTime:(<span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span>)<dfn class="local col7 decl" id="17time" title='time' data-type='NSTimeInterval' data-ref="17time" data-ref-filename="17time">time</dfn></td></tr>
+<tr><th id="232">232</th><td>{</td></tr>
+<tr><th id="233">233</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="234">234</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel10seekToTimeEddd" title='WebCore::PlaybackSessionModel::seekToTime' data-ref="_ZN7WebCore20PlaybackSessionModel10seekToTimeEddd" data-ref-filename="_ZN7WebCore20PlaybackSessionModel10seekToTimeEddd">seekToTime</a>(<a class="local col7 ref" href="#17time" title='time' data-ref="17time" data-ref-filename="17time">time</a>);</td></tr>
+<tr><th id="235">235</th><td>}</td></tr>
+<tr><th id="236">236</th><td></td></tr>
+<tr><th id="237">237</th><td>- (<em>void</em>)seekToTime:(<span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span>)<dfn class="local col8 decl" id="18time" title='time' data-type='NSTimeInterval' data-ref="18time" data-ref-filename="18time">time</dfn> toleranceBefore:(<span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span>)<dfn class="local col9 decl" id="19before" title='before' data-type='NSTimeInterval' data-ref="19before" data-ref-filename="19before">before</dfn> toleranceAfter:(<span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span>)<dfn class="local col0 decl" id="20after" title='after' data-type='NSTimeInterval' data-ref="20after" data-ref-filename="20after">after</dfn></td></tr>
+<tr><th id="238">238</th><td>{</td></tr>
+<tr><th id="239">239</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="240">240</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel10seekToTimeEddd" title='WebCore::PlaybackSessionModel::seekToTime' data-ref="_ZN7WebCore20PlaybackSessionModel10seekToTimeEddd" data-ref-filename="_ZN7WebCore20PlaybackSessionModel10seekToTimeEddd">seekToTime</a>(<a class="local col8 ref" href="#18time" title='time' data-ref="18time" data-ref-filename="18time">time</a>, <a class="local col9 ref" href="#19before" title='before' data-ref="19before" data-ref-filename="19before">before</a>, <a class="local col0 ref" href="#20after" title='after' data-ref="20after" data-ref-filename="20after">after</a>);</td></tr>
+<tr><th id="241">241</th><td>}</td></tr>
+<tr><th id="242">242</th><td></td></tr>
+<tr><th id="243">243</th><td>- (<em>void</em>)seekByTimeInterval:(<span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span>)<dfn class="local col1 decl" id="21interval" title='interval' data-type='NSTimeInterval' data-ref="21interval" data-ref-filename="21interval">interval</dfn></td></tr>
+<tr><th id="244">244</th><td>{</td></tr>
+<tr><th id="245">245</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekByTimeInterval:<a class="local col1 ref" href="#21interval" title='interval' data-ref="21interval" data-ref-filename="21interval">interval</a> toleranceBefore:<var>0.</var> toleranceAfter:<var>0.</var>];</td></tr>
+<tr><th id="246">246</th><td>}</td></tr>
+<tr><th id="247">247</th><td></td></tr>
+<tr><th id="248">248</th><td>- (<em>void</em>)seekByTimeInterval:(<span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span>)<dfn class="local col2 decl" id="22interval" title='interval' data-type='NSTimeInterval' data-ref="22interval" data-ref-filename="22interval">interval</dfn> toleranceBefore:(<span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span>)<dfn class="local col3 decl" id="23before" title='before' data-type='NSTimeInterval' data-ref="23before" data-ref-filename="23before">before</dfn> toleranceAfter:(<span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span>)<dfn class="local col4 decl" id="24after" title='after' data-type='NSTimeInterval' data-ref="24after" data-ref-filename="24after">after</dfn></td></tr>
+<tr><th id="249">249</th><td>{</td></tr>
+<tr><th id="250">250</th><td>    <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col5 decl" id="25targetTime" title='targetTime' data-type='NSTimeInterval' data-ref="25targetTime" data-ref-filename="25targetTime">targetTime</dfn> = [[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> timing] currentValue] + <a class="local col2 ref" href="#22interval" title='interval' data-ref="22interval" data-ref-filename="22interval">interval</a>;</td></tr>
+<tr><th id="251">251</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekToTime:<a class="local col5 ref" href="#25targetTime" title='targetTime' data-ref="25targetTime" data-ref-filename="25targetTime">targetTime</a> toleranceBefore:<a class="local col3 ref" href="#23before" title='before' data-ref="23before" data-ref-filename="23before">before</a> toleranceAfter:<a class="local col4 ref" href="#24after" title='after' data-ref="24after" data-ref-filename="24after">after</a>];</td></tr>
+<tr><th id="252">252</th><td>}</td></tr>
+<tr><th id="253">253</th><td></td></tr>
+<tr><th id="254">254</th><td>- (<span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span>)currentTimeWithinEndTimes</td></tr>
+<tr><th id="255">255</th><td>{</td></tr>
+<tr><th id="256">256</th><td>    <b>return</b> <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.timing.currentValue;</td></tr>
+<tr><th id="257">257</th><td>}</td></tr>
+<tr><th id="258">258</th><td></td></tr>
+<tr><th id="259">259</th><td>- (<em>void</em>)setCurrentTimeWithinEndTimes:(<span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span>)<dfn class="local col6 decl" id="26currentTimeWithinEndTimes" title='currentTimeWithinEndTimes' data-type='NSTimeInterval' data-ref="26currentTimeWithinEndTimes" data-ref-filename="26currentTimeWithinEndTimes">currentTimeWithinEndTimes</dfn></td></tr>
+<tr><th id="260">260</th><td>{</td></tr>
+<tr><th id="261">261</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekToTime:<a class="local col6 ref" href="#26currentTimeWithinEndTimes" title='currentTimeWithinEndTimes' data-ref="26currentTimeWithinEndTimes" data-ref-filename="26currentTimeWithinEndTimes">currentTimeWithinEndTimes</a>];</td></tr>
+<tr><th id="262">262</th><td>}</td></tr>
+<tr><th id="263">263</th><td></td></tr>
+<tr><th id="264">264</th><td>+ (NSSet *)keyPathsForValuesAffectingCurrentTimeWithinEndTimes</td></tr>
+<tr><th id="265">265</th><td>{</td></tr>
+<tr><th id="266">266</th><td>    <b>return</b> [NSSet setWithObject:@<q>"timing"</q>];</td></tr>
+<tr><th id="267">267</th><td>}</td></tr>
+<tr><th id="268">268</th><td></td></tr>
+<tr><th id="269">269</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)hasLiveStreamingContent</td></tr>
+<tr><th id="270">270</th><td>{</td></tr>
+<tr><th id="271">271</th><td>    <b>if</b> ([<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> status] == <a class="enum" href="../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cocoa/AVKitSPI.h.html#AVPlayerControllerStatusReadyToPlay" title='AVPlayerControllerStatusReadyToPlay' data-ref="AVPlayerControllerStatusReadyToPlay" data-ref-filename="AVPlayerControllerStatusReadyToPlay">AVPlayerControllerStatusReadyToPlay</a>)</td></tr>
+<tr><th id="272">272</th><td>        <b>return</b> [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> contentDuration] == <span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;<em>float</em>&gt;::<span class='ref fn' title='std::__1::numeric_limits::infinity' data-ref="_ZNSt3__114numeric_limits8infinityEv" data-ref-filename="_ZNSt3__114numeric_limits8infinityEv">infinity</span>();</td></tr>
+<tr><th id="273">273</th><td>    <b>return</b> <span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>;</td></tr>
+<tr><th id="274">274</th><td>}</td></tr>
+<tr><th id="275">275</th><td></td></tr>
+<tr><th id="276">276</th><td>+ (NSSet *)keyPathsForValuesAffectingHasLiveStreamingContent</td></tr>
+<tr><th id="277">277</th><td>{</td></tr>
+<tr><th id="278">278</th><td>    <b>return</b> [NSSet setWithObjects:@<q>"contentDuration"</q>, @<q>"status"</q>, <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="279">279</th><td>}</td></tr>
+<tr><th id="280">280</th><td></td></tr>
+<tr><th id="281">281</th><td>- (<span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span>)maxTime</td></tr>
+<tr><th id="282">282</th><td>{</td></tr>
+<tr><th id="283">283</th><td>    <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col7 decl" id="27maxTime" title='maxTime' data-type='NSTimeInterval' data-ref="27maxTime" data-ref-filename="27maxTime">maxTime</dfn> = <span class="macro" title="__builtin_nanf(&quot;0x7fc00000&quot;)" data-ref="_M/NAN">NAN</span>;</td></tr>
+<tr><th id="284">284</th><td></td></tr>
+<tr><th id="285">285</th><td>    <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col8 decl" id="28duration" title='duration' data-type='NSTimeInterval' data-ref="28duration" data-ref-filename="28duration">duration</dfn> = [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> contentDuration];</td></tr>
+<tr><th id="286">286</th><td>    <b>if</b> (!<span class='ref fn' title='isnan' data-ref="_ZL5isnanUa9enable_ifIXLb1EEEd" data-ref-filename="_ZL5isnanUa9enable_ifIXLb1EEEd">isnan</span>(<a class="local col8 ref" href="#28duration" title='duration' data-ref="28duration" data-ref-filename="28duration">duration</a>) &amp;&amp; !<span class='ref fn' title='isinf' data-ref="_ZL5isinfUa9enable_ifIXLb1EEEd" data-ref-filename="_ZL5isinfUa9enable_ifIXLb1EEEd">isinf</span>(<a class="local col8 ref" href="#28duration" title='duration' data-ref="28duration" data-ref-filename="28duration">duration</a>))</td></tr>
+<tr><th id="287">287</th><td>        <a class="local col7 ref" href="#27maxTime" title='maxTime' data-ref="27maxTime" data-ref-filename="27maxTime">maxTime</a> = <a class="local col8 ref" href="#28duration" title='duration' data-ref="28duration" data-ref-filename="28duration">duration</a>;</td></tr>
+<tr><th id="288">288</th><td>    <b>else</b> <b>if</b> ([<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> hasSeekableLiveStreamingContent] &amp;&amp; [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> maxTiming])</td></tr>
+<tr><th id="289">289</th><td>        <a class="local col7 ref" href="#27maxTime" title='maxTime' data-ref="27maxTime" data-ref-filename="27maxTime">maxTime</a> = [[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> maxTiming] currentValue];</td></tr>
+<tr><th id="290">290</th><td></td></tr>
+<tr><th id="291">291</th><td>    <b>return</b> <a class="local col7 ref" href="#27maxTime" title='maxTime' data-ref="27maxTime" data-ref-filename="27maxTime">maxTime</a>;</td></tr>
+<tr><th id="292">292</th><td>}</td></tr>
+<tr><th id="293">293</th><td></td></tr>
+<tr><th id="294">294</th><td>+ (NSSet *)keyPathsForValuesAffectingMaxTime</td></tr>
+<tr><th id="295">295</th><td>{</td></tr>
+<tr><th id="296">296</th><td>    <b>return</b> [NSSet setWithObjects:@<q>"contentDuration"</q>, @<q>"hasSeekableLiveStreamingContent"</q>, @<q>"maxTiming"</q>, <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="297">297</th><td>}</td></tr>
+<tr><th id="298">298</th><td></td></tr>
+<tr><th id="299">299</th><td>- (<span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span>)minTime</td></tr>
+<tr><th id="300">300</th><td>{</td></tr>
+<tr><th id="301">301</th><td>    <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col9 decl" id="29minTime" title='minTime' data-type='NSTimeInterval' data-ref="29minTime" data-ref-filename="29minTime">minTime</dfn> = <var>0.0</var>;</td></tr>
+<tr><th id="302">302</th><td></td></tr>
+<tr><th id="303">303</th><td>    <b>if</b> ([<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> hasSeekableLiveStreamingContent] &amp;&amp; [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> minTiming])</td></tr>
+<tr><th id="304">304</th><td>        <a class="local col9 ref" href="#29minTime" title='minTime' data-ref="29minTime" data-ref-filename="29minTime">minTime</a> = [[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> minTiming] currentValue];</td></tr>
+<tr><th id="305">305</th><td></td></tr>
+<tr><th id="306">306</th><td>    <b>return</b> <a class="local col9 ref" href="#29minTime" title='minTime' data-ref="29minTime" data-ref-filename="29minTime">minTime</a>;</td></tr>
+<tr><th id="307">307</th><td>}</td></tr>
+<tr><th id="308">308</th><td></td></tr>
+<tr><th id="309">309</th><td>+ (NSSet *)keyPathsForValuesAffectingMinTime</td></tr>
+<tr><th id="310">310</th><td>{</td></tr>
+<tr><th id="311">311</th><td>    <b>return</b> [NSSet setWithObjects:@<q>"hasSeekableLiveStreamingContent"</q>, @<q>"minTiming"</q>, <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="312">312</th><td>}</td></tr>
+<tr><th id="313">313</th><td></td></tr>
+<tr><th id="314">314</th><td>- (<em>void</em>)skipBackwardThirtySeconds:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col0 decl" id="30sender" title='sender' data-type='id' data-ref="30sender" data-ref-filename="30sender">sender</dfn></td></tr>
+<tr><th id="315">315</th><td>{</td></tr>
+<tr><th id="316">316</th><td>    <b>using</b> <b>namespace</b> <span class="namespace">PAL</span>;</td></tr>
+<tr><th id="317">317</th><td></td></tr>
+<tr><th id="318">318</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col0 ref" href="#30sender" title='sender' data-ref="30sender" data-ref-filename="30sender">sender</a>);</td></tr>
+<tr><th id="319">319</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col1 decl" id="31isTimeWithinSeekableTimeRanges" title='isTimeWithinSeekableTimeRanges' data-type='BOOL' data-ref="31isTimeWithinSeekableTimeRanges" data-ref-filename="31isTimeWithinSeekableTimeRanges">isTimeWithinSeekableTimeRanges</dfn> = <span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>;</td></tr>
+<tr><th id="320">320</th><td>    <span class='typedef' title='CMTime' data-type='struct CMTime' data-ref="CMTime" data-ref-filename="CMTime">CMTime</span> <dfn class="local col2 decl" id="32currentTime" title='currentTime' data-type='CMTime' data-ref="32currentTime" data-ref-filename="32currentTime">currentTime</dfn> = <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#80" title="softLink_CoreMedia_CMTimeMakeWithSeconds" data-ref="_M/CMTimeMakeWithSeconds">CMTimeMakeWithSeconds</a>([[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> timing] currentValue], <var>1000</var>);</td></tr>
+<tr><th id="321">321</th><td>    <span class='typedef' title='CMTime' data-type='struct CMTime' data-ref="CMTime" data-ref-filename="CMTime">CMTime</span> <dfn class="local col3 decl" id="33thirtySecondsBeforeCurrentTime" title='thirtySecondsBeforeCurrentTime' data-type='CMTime' data-ref="33thirtySecondsBeforeCurrentTime" data-ref-filename="33thirtySecondsBeforeCurrentTime">thirtySecondsBeforeCurrentTime</dfn> = <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#82" title="softLink_CoreMedia_CMTimeSubtract" data-ref="_M/CMTimeSubtract">CMTimeSubtract</a>(<span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN6CMTimeC1ERKS_" data-ref-filename="_ZN6CMTimeC1ERKS_"></span><a class="local col2 ref" href="#32currentTime" title='currentTime' data-ref="32currentTime" data-ref-filename="32currentTime">currentTime</a>, <span class="namespace">PAL::</span><a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#78" title="softLink_CoreMedia_CMTimeMake" data-ref="_M/CMTimeMake">CMTimeMake</a>(<var>30</var>, <var>1</var>));</td></tr>
+<tr><th id="322">322</th><td></td></tr>
+<tr><th id="323">323</th><td>    <b>for</b> (NSValue *<dfn class="local col4 decl" id="34seekableTimeRangeValue" title='seekableTimeRangeValue' data-type='NSValue *' data-ref="34seekableTimeRangeValue" data-ref-filename="34seekableTimeRangeValue">seekableTimeRangeValue</dfn> in [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekableTimeRanges]) {</td></tr>
+<tr><th id="324">324</th><td>        <b>if</b> (<a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#94" title="softLink_CoreMedia_CMTimeRangeContainsTime" data-ref="_M/CMTimeRangeContainsTime">CMTimeRangeContainsTime</a>([<a class="local col4 ref" href="#34seekableTimeRangeValue" title='seekableTimeRangeValue' data-ref="34seekableTimeRangeValue" data-ref-filename="34seekableTimeRangeValue">seekableTimeRangeValue</a> CMTimeRangeValue], <span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN6CMTimeC1ERKS_" data-ref-filename="_ZN6CMTimeC1ERKS_"></span><a class="local col3 ref" href="#33thirtySecondsBeforeCurrentTime" title='thirtySecondsBeforeCurrentTime' data-ref="33thirtySecondsBeforeCurrentTime" data-ref-filename="33thirtySecondsBeforeCurrentTime">thirtySecondsBeforeCurrentTime</a>)) {</td></tr>
+<tr><th id="325">325</th><td>            <a class="local col1 ref" href="#31isTimeWithinSeekableTimeRanges" title='isTimeWithinSeekableTimeRanges' data-ref="31isTimeWithinSeekableTimeRanges" data-ref-filename="31isTimeWithinSeekableTimeRanges">isTimeWithinSeekableTimeRanges</a> = <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="326">326</th><td>            <b>break</b>;</td></tr>
+<tr><th id="327">327</th><td>        }</td></tr>
+<tr><th id="328">328</th><td>    }</td></tr>
+<tr><th id="329">329</th><td></td></tr>
+<tr><th id="330">330</th><td>    <b>if</b> (<a class="local col1 ref" href="#31isTimeWithinSeekableTimeRanges" title='isTimeWithinSeekableTimeRanges' data-ref="31isTimeWithinSeekableTimeRanges" data-ref-filename="31isTimeWithinSeekableTimeRanges">isTimeWithinSeekableTimeRanges</a>)</td></tr>
+<tr><th id="331">331</th><td>        [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekToTime:<a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#76" title="softLink_CoreMedia_CMTimeGetSeconds" data-ref="_M/CMTimeGetSeconds">CMTimeGetSeconds</a>(<span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN6CMTimeC1ERKS_" data-ref-filename="_ZN6CMTimeC1ERKS_"></span><a class="local col3 ref" href="#33thirtySecondsBeforeCurrentTime" title='thirtySecondsBeforeCurrentTime' data-ref="33thirtySecondsBeforeCurrentTime" data-ref-filename="33thirtySecondsBeforeCurrentTime">thirtySecondsBeforeCurrentTime</a>)];</td></tr>
+<tr><th id="332">332</th><td>}</td></tr>
+<tr><th id="333">333</th><td></td></tr>
+<tr><th id="334">334</th><td>- (<em>void</em>)gotoEndOfSeekableRanges:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col5 decl" id="35sender" title='sender' data-type='id' data-ref="35sender" data-ref-filename="35sender">sender</dfn></td></tr>
+<tr><th id="335">335</th><td>{</td></tr>
+<tr><th id="336">336</th><td>    <b>using</b> <b>namespace</b> <span class="namespace">PAL</span>;</td></tr>
+<tr><th id="337">337</th><td></td></tr>
+<tr><th id="338">338</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col5 ref" href="#35sender" title='sender' data-ref="35sender" data-ref-filename="35sender">sender</a>);</td></tr>
+<tr><th id="339">339</th><td>    <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col6 decl" id="36timeAtEndOfSeekableTimeRanges" title='timeAtEndOfSeekableTimeRanges' data-type='NSTimeInterval' data-ref="36timeAtEndOfSeekableTimeRanges" data-ref-filename="36timeAtEndOfSeekableTimeRanges">timeAtEndOfSeekableTimeRanges</dfn> = <span class="macro" title="__builtin_nanf(&quot;0x7fc00000&quot;)" data-ref="_M/NAN">NAN</span>;</td></tr>
+<tr><th id="340">340</th><td></td></tr>
+<tr><th id="341">341</th><td>    <b>for</b> (NSValue *<dfn class="local col7 decl" id="37seekableTimeRangeValue" title='seekableTimeRangeValue' data-type='NSValue *' data-ref="37seekableTimeRangeValue" data-ref-filename="37seekableTimeRangeValue">seekableTimeRangeValue</dfn> in [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekableTimeRanges]) {</td></tr>
+<tr><th id="342">342</th><td>        <span class='typedef' title='CMTimeRange' data-type='struct CMTimeRange' data-ref="CMTimeRange" data-ref-filename="CMTimeRange">CMTimeRange</span> <dfn class="local col8 decl" id="38seekableTimeRange" title='seekableTimeRange' data-type='CMTimeRange' data-ref="38seekableTimeRange" data-ref-filename="38seekableTimeRange">seekableTimeRange</dfn> = [<a class="local col7 ref" href="#37seekableTimeRangeValue" title='seekableTimeRangeValue' data-ref="37seekableTimeRangeValue" data-ref-filename="37seekableTimeRangeValue">seekableTimeRangeValue</a> CMTimeRangeValue];</td></tr>
+<tr><th id="343">343</th><td>        <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col9 decl" id="39endOfSeekableTimeRange" title='endOfSeekableTimeRange' data-type='NSTimeInterval' data-ref="39endOfSeekableTimeRange" data-ref-filename="39endOfSeekableTimeRange">endOfSeekableTimeRange</dfn> = <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#76" title="softLink_CoreMedia_CMTimeGetSeconds" data-ref="_M/CMTimeGetSeconds">CMTimeGetSeconds</a>(<a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#84" title="softLink_CoreMedia_CMTimeRangeGetEnd" data-ref="_M/CMTimeRangeGetEnd">CMTimeRangeGetEnd</a>(<span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN11CMTimeRangeC1ERKS_" data-ref-filename="_ZN11CMTimeRangeC1ERKS_"></span><a class="local col8 ref" href="#38seekableTimeRange" title='seekableTimeRange' data-ref="38seekableTimeRange" data-ref-filename="38seekableTimeRange">seekableTimeRange</a>));</td></tr>
+<tr><th id="344">344</th><td>        <b>if</b> (<span class='ref fn' title='isnan' data-ref="_ZL5isnanUa9enable_ifIXLb1EEEd" data-ref-filename="_ZL5isnanUa9enable_ifIXLb1EEEd">isnan</span>(<a class="local col6 ref" href="#36timeAtEndOfSeekableTimeRanges" title='timeAtEndOfSeekableTimeRanges' data-ref="36timeAtEndOfSeekableTimeRanges" data-ref-filename="36timeAtEndOfSeekableTimeRanges">timeAtEndOfSeekableTimeRanges</a>) || <a class="local col9 ref" href="#39endOfSeekableTimeRange" title='endOfSeekableTimeRange' data-ref="39endOfSeekableTimeRange" data-ref-filename="39endOfSeekableTimeRange">endOfSeekableTimeRange</a> &gt; <a class="local col6 ref" href="#36timeAtEndOfSeekableTimeRanges" title='timeAtEndOfSeekableTimeRanges' data-ref="36timeAtEndOfSeekableTimeRanges" data-ref-filename="36timeAtEndOfSeekableTimeRanges">timeAtEndOfSeekableTimeRanges</a>)</td></tr>
+<tr><th id="345">345</th><td>            <a class="local col6 ref" href="#36timeAtEndOfSeekableTimeRanges" title='timeAtEndOfSeekableTimeRanges' data-ref="36timeAtEndOfSeekableTimeRanges" data-ref-filename="36timeAtEndOfSeekableTimeRanges">timeAtEndOfSeekableTimeRanges</a> = <a class="local col9 ref" href="#39endOfSeekableTimeRange" title='endOfSeekableTimeRange' data-ref="39endOfSeekableTimeRange" data-ref-filename="39endOfSeekableTimeRange">endOfSeekableTimeRange</a>;</td></tr>
+<tr><th id="346">346</th><td>    }</td></tr>
+<tr><th id="347">347</th><td></td></tr>
+<tr><th id="348">348</th><td>    <b>if</b> (!<span class='ref fn' title='isnan' data-ref="_ZL5isnanUa9enable_ifIXLb1EEEd" data-ref-filename="_ZL5isnanUa9enable_ifIXLb1EEEd">isnan</span>(<a class="local col6 ref" href="#36timeAtEndOfSeekableTimeRanges" title='timeAtEndOfSeekableTimeRanges' data-ref="36timeAtEndOfSeekableTimeRanges" data-ref-filename="36timeAtEndOfSeekableTimeRanges">timeAtEndOfSeekableTimeRanges</a>))</td></tr>
+<tr><th id="349">349</th><td>        [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekToTime:<a class="local col6 ref" href="#36timeAtEndOfSeekableTimeRanges" title='timeAtEndOfSeekableTimeRanges' data-ref="36timeAtEndOfSeekableTimeRanges" data-ref-filename="36timeAtEndOfSeekableTimeRanges">timeAtEndOfSeekableTimeRanges</a>];</td></tr>
+<tr><th id="350">350</th><td>}</td></tr>
+<tr><th id="351">351</th><td></td></tr>
+<tr><th id="352">352</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isScrubbing</td></tr>
+<tr><th id="353">353</th><td>{</td></tr>
+<tr><th id="354">354</th><td>    <b>return</b> _isScrubbing;</td></tr>
+<tr><th id="355">355</th><td>}</td></tr>
+<tr><th id="356">356</th><td></td></tr>
+<tr><th id="357">357</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)canScanForward</td></tr>
+<tr><th id="358">358</th><td>{</td></tr>
+<tr><th id="359">359</th><td>    <b>return</b> [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> canPlay];</td></tr>
+<tr><th id="360">360</th><td>}</td></tr>
+<tr><th id="361">361</th><td></td></tr>
+<tr><th id="362">362</th><td>+ (NSSet *)keyPathsForValuesAffectingCanScanForward</td></tr>
+<tr><th id="363">363</th><td>{</td></tr>
+<tr><th id="364">364</th><td>    <b>return</b> [NSSet setWithObject:@<q>"canPlay"</q>];</td></tr>
+<tr><th id="365">365</th><td>}</td></tr>
+<tr><th id="366">366</th><td></td></tr>
+<tr><th id="367">367</th><td>- (<em>void</em>)beginScanningForward:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col0 decl" id="40sender" title='sender' data-type='id' data-ref="40sender" data-ref-filename="40sender">sender</dfn></td></tr>
+<tr><th id="368">368</th><td>{</td></tr>
+<tr><th id="369">369</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col0 ref" href="#40sender" title='sender' data-ref="40sender" data-ref-filename="40sender">sender</a>);</td></tr>
+<tr><th id="370">370</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="371">371</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel20beginScanningForwardEv" title='WebCore::PlaybackSessionModel::beginScanningForward' data-ref="_ZN7WebCore20PlaybackSessionModel20beginScanningForwardEv" data-ref-filename="_ZN7WebCore20PlaybackSessionModel20beginScanningForwardEv">beginScanningForward</a>();</td></tr>
+<tr><th id="372">372</th><td>}</td></tr>
+<tr><th id="373">373</th><td></td></tr>
+<tr><th id="374">374</th><td>- (<em>void</em>)endScanningForward:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col1 decl" id="41sender" title='sender' data-type='id' data-ref="41sender" data-ref-filename="41sender">sender</dfn></td></tr>
+<tr><th id="375">375</th><td>{</td></tr>
+<tr><th id="376">376</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col1 ref" href="#41sender" title='sender' data-ref="41sender" data-ref-filename="41sender">sender</a>);</td></tr>
+<tr><th id="377">377</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="378">378</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel11endScanningEv" title='WebCore::PlaybackSessionModel::endScanning' data-ref="_ZN7WebCore20PlaybackSessionModel11endScanningEv" data-ref-filename="_ZN7WebCore20PlaybackSessionModel11endScanningEv">endScanning</a>();</td></tr>
+<tr><th id="379">379</th><td>}</td></tr>
+<tr><th id="380">380</th><td></td></tr>
+<tr><th id="381">381</th><td>- (<em>void</em>)beginScanningBackward:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col2 decl" id="42sender" title='sender' data-type='id' data-ref="42sender" data-ref-filename="42sender">sender</dfn></td></tr>
+<tr><th id="382">382</th><td>{</td></tr>
+<tr><th id="383">383</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col2 ref" href="#42sender" title='sender' data-ref="42sender" data-ref-filename="42sender">sender</a>);</td></tr>
+<tr><th id="384">384</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="385">385</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel21beginScanningBackwardEv" title='WebCore::PlaybackSessionModel::beginScanningBackward' data-ref="_ZN7WebCore20PlaybackSessionModel21beginScanningBackwardEv" data-ref-filename="_ZN7WebCore20PlaybackSessionModel21beginScanningBackwardEv">beginScanningBackward</a>();</td></tr>
+<tr><th id="386">386</th><td>}</td></tr>
+<tr><th id="387">387</th><td></td></tr>
+<tr><th id="388">388</th><td>- (<em>void</em>)endScanningBackward:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col3 decl" id="43sender" title='sender' data-type='id' data-ref="43sender" data-ref-filename="43sender">sender</dfn></td></tr>
+<tr><th id="389">389</th><td>{</td></tr>
+<tr><th id="390">390</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col3 ref" href="#43sender" title='sender' data-ref="43sender" data-ref-filename="43sender">sender</a>);</td></tr>
+<tr><th id="391">391</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="392">392</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel11endScanningEv" title='WebCore::PlaybackSessionModel::endScanning' data-ref="_ZN7WebCore20PlaybackSessionModel11endScanningEv" data-ref-filename="_ZN7WebCore20PlaybackSessionModel11endScanningEv">endScanning</a>();</td></tr>
+<tr><th id="393">393</th><td>}</td></tr>
+<tr><th id="394">394</th><td></td></tr>
+<tr><th id="395">395</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)canSeekToBeginning</td></tr>
+<tr><th id="396">396</th><td>{</td></tr>
+<tr><th id="397">397</th><td>    <b>using</b> <b>namespace</b> <span class="namespace">PAL</span>;</td></tr>
+<tr><th id="398">398</th><td></td></tr>
+<tr><th id="399">399</th><td>    <span class='typedef' title='CMTime' data-type='struct CMTime' data-ref="CMTime" data-ref-filename="CMTime">CMTime</span> <dfn class="local col4 decl" id="44minimumTime" title='minimumTime' data-type='CMTime' data-ref="44minimumTime" data-ref-filename="44minimumTime">minimumTime</dfn> = <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#105" title="get_CoreMedia_kCMTimeIndefinite()" data-ref="_M/kCMTimeIndefinite">kCMTimeIndefinite</a>;</td></tr>
+<tr><th id="400">400</th><td></td></tr>
+<tr><th id="401">401</th><td>    <b>for</b> (NSValue *<dfn class="local col5 decl" id="45value" title='value' data-type='NSValue *' data-ref="45value" data-ref-filename="45value">value</dfn> in [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekableTimeRanges])</td></tr>
+<tr><th id="402">402</th><td>        <a class="local col4 ref" href="#44minimumTime" title='minimumTime' data-ref="44minimumTime" data-ref-filename="44minimumTime">minimumTime</a> <span class='ref fn' title='(anonymous struct)::operator=' data-ref="_ZN6CMTimeaSEOS_" data-ref-filename="_ZN6CMTimeaSEOS_">=</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#92" title="softLink_CoreMedia_CMTimeMinimum" data-ref="_M/CMTimeMinimum">CMTimeMinimum</a>(<span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN6CMTimeC1EOS_" data-ref-filename="_ZN6CMTimeC1EOS_"></span>[<a class="local col5 ref" href="#45value" title='value' data-ref="45value" data-ref-filename="45value">value</a> CMTimeRangeValue].<span class='ref field' title='(anonymous struct)::start' data-ref="(anonymous)::start" data-ref-filename="(anonymous)..start">start</span>, <span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN6CMTimeC1ERKS_" data-ref-filename="_ZN6CMTimeC1ERKS_"></span><a class="local col4 ref" href="#44minimumTime" title='minimumTime' data-ref="44minimumTime" data-ref-filename="44minimumTime">minimumTime</a>);</td></tr>
+<tr><th id="403">403</th><td></td></tr>
+<tr><th id="404">404</th><td>    <b>return</b> <span class="macro" title="((Boolean)(((minimumTime).flags &amp; (kCMTimeFlags_Valid | kCMTimeFlags_ImpliedValueFlagsMask)) == kCMTimeFlags_Valid))" data-ref="_M/CMTIME_IS_NUMERIC">CMTIME_IS_NUMERIC</span>(<a class="local col4 ref" href="#44minimumTime" title='minimumTime' data-ref="44minimumTime" data-ref-filename="44minimumTime">minimumTime</a>);</td></tr>
+<tr><th id="405">405</th><td>}</td></tr>
+<tr><th id="406">406</th><td></td></tr>
+<tr><th id="407">407</th><td>+ (NSSet *)keyPathsForValuesAffectingCanSeekToBeginning</td></tr>
+<tr><th id="408">408</th><td>{</td></tr>
+<tr><th id="409">409</th><td>    <b>return</b> [NSSet setWithObject:@<q>"seekableTimeRanges"</q>];</td></tr>
+<tr><th id="410">410</th><td>}</td></tr>
+<tr><th id="411">411</th><td></td></tr>
+<tr><th id="412">412</th><td>- (<em>void</em>)seekToBeginning:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col6 decl" id="46sender" title='sender' data-type='id' data-ref="46sender" data-ref-filename="46sender">sender</dfn></td></tr>
+<tr><th id="413">413</th><td>{</td></tr>
+<tr><th id="414">414</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col6 ref" href="#46sender" title='sender' data-ref="46sender" data-ref-filename="46sender">sender</a>);</td></tr>
+<tr><th id="415">415</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="416">416</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel10seekToTimeEddd" title='WebCore::PlaybackSessionModel::seekToTime' data-ref="_ZN7WebCore20PlaybackSessionModel10seekToTimeEddd" data-ref-filename="_ZN7WebCore20PlaybackSessionModel10seekToTimeEddd">seekToTime</a>(-<span class="macro" title="__builtin_huge_valf()" data-ref="_M/INFINITY">INFINITY</span>);</td></tr>
+<tr><th id="417">417</th><td>}</td></tr>
+<tr><th id="418">418</th><td></td></tr>
+<tr><th id="419">419</th><td>- (<em>void</em>)seekChapterBackward:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col7 decl" id="47sender" title='sender' data-type='id' data-ref="47sender" data-ref-filename="47sender">sender</dfn></td></tr>
+<tr><th id="420">420</th><td>{</td></tr>
+<tr><th id="421">421</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekToBeginning:<a class="local col7 ref" href="#47sender" title='sender' data-ref="47sender" data-ref-filename="47sender">sender</a>];</td></tr>
+<tr><th id="422">422</th><td>}</td></tr>
+<tr><th id="423">423</th><td></td></tr>
+<tr><th id="424">424</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)canSeekToEnd</td></tr>
+<tr><th id="425">425</th><td>{</td></tr>
+<tr><th id="426">426</th><td>    <b>using</b> <b>namespace</b> <span class="namespace">PAL</span>;</td></tr>
+<tr><th id="427">427</th><td></td></tr>
+<tr><th id="428">428</th><td>    <span class='typedef' title='CMTime' data-type='struct CMTime' data-ref="CMTime" data-ref-filename="CMTime">CMTime</span> <dfn class="local col8 decl" id="48maximumTime" title='maximumTime' data-type='CMTime' data-ref="48maximumTime" data-ref-filename="48maximumTime">maximumTime</dfn> = <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#105" title="get_CoreMedia_kCMTimeIndefinite()" data-ref="_M/kCMTimeIndefinite">kCMTimeIndefinite</a>;</td></tr>
+<tr><th id="429">429</th><td></td></tr>
+<tr><th id="430">430</th><td>    <b>for</b> (NSValue *<dfn class="local col9 decl" id="49value" title='value' data-type='NSValue *' data-ref="49value" data-ref-filename="49value">value</dfn> in [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekableTimeRanges])</td></tr>
+<tr><th id="431">431</th><td>        <a class="local col8 ref" href="#48maximumTime" title='maximumTime' data-ref="48maximumTime" data-ref-filename="48maximumTime">maximumTime</a> <span class='ref fn' title='(anonymous struct)::operator=' data-ref="_ZN6CMTimeaSEOS_" data-ref-filename="_ZN6CMTimeaSEOS_">=</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#90" title="softLink_CoreMedia_CMTimeMaximum" data-ref="_M/CMTimeMaximum">CMTimeMaximum</a>(<a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#84" title="softLink_CoreMedia_CMTimeRangeGetEnd" data-ref="_M/CMTimeRangeGetEnd">CMTimeRangeGetEnd</a>([<a class="local col9 ref" href="#49value" title='value' data-ref="49value" data-ref-filename="49value">value</a> CMTimeRangeValue]), <span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN6CMTimeC1ERKS_" data-ref-filename="_ZN6CMTimeC1ERKS_"></span><a class="local col8 ref" href="#48maximumTime" title='maximumTime' data-ref="48maximumTime" data-ref-filename="48maximumTime">maximumTime</a>);</td></tr>
+<tr><th id="432">432</th><td></td></tr>
+<tr><th id="433">433</th><td>    <b>return</b> <span class="macro" title="((Boolean)(((maximumTime).flags &amp; (kCMTimeFlags_Valid | kCMTimeFlags_ImpliedValueFlagsMask)) == kCMTimeFlags_Valid))" data-ref="_M/CMTIME_IS_NUMERIC">CMTIME_IS_NUMERIC</span>(<a class="local col8 ref" href="#48maximumTime" title='maximumTime' data-ref="48maximumTime" data-ref-filename="48maximumTime">maximumTime</a>);</td></tr>
+<tr><th id="434">434</th><td>}</td></tr>
+<tr><th id="435">435</th><td></td></tr>
+<tr><th id="436">436</th><td>+ (NSSet *)keyPathsForValuesAffectingCanSeekToEnd</td></tr>
+<tr><th id="437">437</th><td>{</td></tr>
+<tr><th id="438">438</th><td>    <b>return</b> [NSSet setWithObject:@<q>"seekableTimeRanges"</q>];</td></tr>
+<tr><th id="439">439</th><td>}</td></tr>
+<tr><th id="440">440</th><td></td></tr>
+<tr><th id="441">441</th><td>- (<em>void</em>)seekToEnd:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col0 decl" id="50sender" title='sender' data-type='id' data-ref="50sender" data-ref-filename="50sender">sender</dfn></td></tr>
+<tr><th id="442">442</th><td>{</td></tr>
+<tr><th id="443">443</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col0 ref" href="#50sender" title='sender' data-ref="50sender" data-ref-filename="50sender">sender</a>);</td></tr>
+<tr><th id="444">444</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="445">445</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel10seekToTimeEddd" title='WebCore::PlaybackSessionModel::seekToTime' data-ref="_ZN7WebCore20PlaybackSessionModel10seekToTimeEddd" data-ref-filename="_ZN7WebCore20PlaybackSessionModel10seekToTimeEddd">seekToTime</a>(<span class="macro" title="__builtin_huge_valf()" data-ref="_M/INFINITY">INFINITY</span>);</td></tr>
+<tr><th id="446">446</th><td>}</td></tr>
+<tr><th id="447">447</th><td></td></tr>
+<tr><th id="448">448</th><td>- (<em>void</em>)seekChapterForward:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col1 decl" id="51sender" title='sender' data-type='id' data-ref="51sender" data-ref-filename="51sender">sender</dfn></td></tr>
+<tr><th id="449">449</th><td>{</td></tr>
+<tr><th id="450">450</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekToEnd:<a class="local col1 ref" href="#51sender" title='sender' data-ref="51sender" data-ref-filename="51sender">sender</a>];</td></tr>
+<tr><th id="451">451</th><td>}</td></tr>
+<tr><th id="452">452</th><td></td></tr>
+<tr><th id="453">453</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)canSeekFrameBackward</td></tr>
+<tr><th id="454">454</th><td>{</td></tr>
+<tr><th id="455">455</th><td>    <b>return</b> <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="456">456</th><td>}</td></tr>
+<tr><th id="457">457</th><td></td></tr>
+<tr><th id="458">458</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)canSeekFrameForward</td></tr>
+<tr><th id="459">459</th><td>{</td></tr>
+<tr><th id="460">460</th><td>    <b>return</b> <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="461">461</th><td>}</td></tr>
+<tr><th id="462">462</th><td></td></tr>
+<tr><th id="463">463</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)hasMediaSelectionOptions</td></tr>
+<tr><th id="464">464</th><td>{</td></tr>
+<tr><th id="465">465</th><td>    <b>return</b> [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> hasAudioMediaSelectionOptions] || [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> hasLegibleMediaSelectionOptions];</td></tr>
+<tr><th id="466">466</th><td>}</td></tr>
+<tr><th id="467">467</th><td></td></tr>
+<tr><th id="468">468</th><td>+ (NSSet *)keyPathsForValuesAffectingHasMediaSelectionOptions</td></tr>
+<tr><th id="469">469</th><td>{</td></tr>
+<tr><th id="470">470</th><td>    <b>return</b> [NSSet setWithObjects:@<q>"hasAudioMediaSelectionOptions"</q>, @<q>"hasLegibleMediaSelectionOptions"</q>, <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="471">471</th><td>}</td></tr>
+<tr><th id="472">472</th><td></td></tr>
+<tr><th id="473">473</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)hasAudioMediaSelectionOptions</td></tr>
+<tr><th id="474">474</th><td>{</td></tr>
+<tr><th id="475">475</th><td>    <b>return</b> [[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> audioMediaSelectionOptions] count] &gt; <var>1</var>;</td></tr>
+<tr><th id="476">476</th><td>}</td></tr>
+<tr><th id="477">477</th><td></td></tr>
+<tr><th id="478">478</th><td>+ (NSSet *)keyPathsForValuesAffectingHasAudioMediaSelectionOptions</td></tr>
+<tr><th id="479">479</th><td>{</td></tr>
+<tr><th id="480">480</th><td>    <b>return</b> [NSSet setWithObject:@<q>"audioMediaSelectionOptions"</q>];</td></tr>
+<tr><th id="481">481</th><td>}</td></tr>
+<tr><th id="482">482</th><td></td></tr>
+<tr><th id="483">483</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)hasLegibleMediaSelectionOptions</td></tr>
+<tr><th id="484">484</th><td>{</td></tr>
+<tr><th id="485">485</th><td>    <em>const</em> <span class='typedef' title='NSUInteger' data-type='unsigned long' data-ref="NSUInteger" data-ref-filename="NSUInteger">NSUInteger</span> <dfn class="local col2 decl" id="52numDefaultLegibleOptions" title='numDefaultLegibleOptions' data-type='const NSUInteger' data-ref="52numDefaultLegibleOptions" data-ref-filename="52numDefaultLegibleOptions">numDefaultLegibleOptions</dfn> = <var>2</var>;</td></tr>
+<tr><th id="486">486</th><td>    <b>return</b> [[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> legibleMediaSelectionOptions] count] &gt; <a class="local col2 ref" href="#52numDefaultLegibleOptions" title='numDefaultLegibleOptions' data-ref="52numDefaultLegibleOptions" data-ref-filename="52numDefaultLegibleOptions">numDefaultLegibleOptions</a>;</td></tr>
+<tr><th id="487">487</th><td>}</td></tr>
+<tr><th id="488">488</th><td></td></tr>
+<tr><th id="489">489</th><td>+ (NSSet *)keyPathsForValuesAffectingHasLegibleMediaSelectionOptions</td></tr>
+<tr><th id="490">490</th><td>{</td></tr>
+<tr><th id="491">491</th><td>    <b>return</b> [NSSet setWithObject:@<q>"legibleMediaSelectionOptions"</q>];</td></tr>
+<tr><th id="492">492</th><td>}</td></tr>
+<tr><th id="493">493</th><td></td></tr>
+<tr><th id="494">494</th><td>- (WebAVMediaSelectionOption *)currentAudioMediaSelectionOption</td></tr>
+<tr><th id="495">495</th><td>{</td></tr>
+<tr><th id="496">496</th><td>    <b>return</b> _currentAudioMediaSelectionOption;</td></tr>
+<tr><th id="497">497</th><td>}</td></tr>
+<tr><th id="498">498</th><td></td></tr>
+<tr><th id="499">499</th><td>- (<em>void</em>)setCurrentAudioMediaSelectionOption:(WebAVMediaSelectionOption *)<dfn class="local col3 decl" id="53option" title='option' data-type='WebAVMediaSelectionOption *' data-ref="53option" data-ref-filename="53option">option</dfn></td></tr>
+<tr><th id="500">500</th><td>{</td></tr>
+<tr><th id="501">501</th><td>    <b>if</b> (<a class="local col3 ref" href="#53option" title='option' data-ref="53option" data-ref-filename="53option">option</a> == _currentAudioMediaSelectionOption)</td></tr>
+<tr><th id="502">502</th><td>        <b>return</b>;</td></tr>
+<tr><th id="503">503</th><td></td></tr>
+<tr><th id="504">504</th><td>    [_currentAudioMediaSelectionOption release];</td></tr>
+<tr><th id="505">505</th><td>    _currentAudioMediaSelectionOption = [<a class="local col3 ref" href="#53option" title='option' data-ref="53option" data-ref-filename="53option">option</a> retain];</td></tr>
+<tr><th id="506">506</th><td></td></tr>
+<tr><th id="507">507</th><td>    <b>if</b> (!<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="508">508</th><td>        <b>return</b>;</td></tr>
+<tr><th id="509">509</th><td></td></tr>
+<tr><th id="510">510</th><td>    <span class='typedef' title='NSInteger' data-type='long' data-ref="NSInteger" data-ref-filename="NSInteger">NSInteger</span> <dfn class="local col4 decl" id="54index" title='index' data-type='NSInteger' data-ref="54index" data-ref-filename="54index">index</dfn> = <span class='ref' title='NSNotFound' data-ref="NSNotFound" data-ref-filename="NSNotFound">NSNotFound</span>;</td></tr>
+<tr><th id="511">511</th><td></td></tr>
+<tr><th id="512">512</th><td>    <b>if</b> (<a class="local col3 ref" href="#53option" title='option' data-ref="53option" data-ref-filename="53option">option</a> &amp;&amp; <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.audioMediaSelectionOptions)</td></tr>
+<tr><th id="513">513</th><td>        <a class="local col4 ref" href="#54index" title='index' data-ref="54index" data-ref-filename="54index">index</a> = [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.audioMediaSelectionOptions indexOfObject:<a class="local col3 ref" href="#53option" title='option' data-ref="53option" data-ref-filename="53option">option</a>];</td></tr>
+<tr><th id="514">514</th><td></td></tr>
+<tr><th id="515">515</th><td>    <b>if</b> (<a class="local col4 ref" href="#54index" title='index' data-ref="54index" data-ref-filename="54index">index</a> == <span class='ref' title='NSNotFound' data-ref="NSNotFound" data-ref-filename="NSNotFound">NSNotFound</span>)</td></tr>
+<tr><th id="516">516</th><td>        <b>return</b>;</td></tr>
+<tr><th id="517">517</th><td></td></tr>
+<tr><th id="518">518</th><td>    <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel22selectAudioMediaOptionEy" title='WebCore::PlaybackSessionModel::selectAudioMediaOption' data-ref="_ZN7WebCore20PlaybackSessionModel22selectAudioMediaOptionEy" data-ref-filename="_ZN7WebCore20PlaybackSessionModel22selectAudioMediaOptionEy">selectAudioMediaOption</a>(<a class="local col4 ref" href="#54index" title='index' data-ref="54index" data-ref-filename="54index">index</a>);</td></tr>
+<tr><th id="519">519</th><td>}</td></tr>
+<tr><th id="520">520</th><td></td></tr>
+<tr><th id="521">521</th><td>- (WebAVMediaSelectionOption *)currentLegibleMediaSelectionOption</td></tr>
+<tr><th id="522">522</th><td>{</td></tr>
+<tr><th id="523">523</th><td>    <b>return</b> _currentLegibleMediaSelectionOption;</td></tr>
+<tr><th id="524">524</th><td>}</td></tr>
+<tr><th id="525">525</th><td></td></tr>
+<tr><th id="526">526</th><td>- (<em>void</em>)setCurrentLegibleMediaSelectionOption:(WebAVMediaSelectionOption *)<dfn class="local col5 decl" id="55option" title='option' data-type='WebAVMediaSelectionOption *' data-ref="55option" data-ref-filename="55option">option</dfn></td></tr>
+<tr><th id="527">527</th><td>{</td></tr>
+<tr><th id="528">528</th><td>    <b>if</b> (<a class="local col5 ref" href="#55option" title='option' data-ref="55option" data-ref-filename="55option">option</a> == _currentLegibleMediaSelectionOption)</td></tr>
+<tr><th id="529">529</th><td>        <b>return</b>;</td></tr>
+<tr><th id="530">530</th><td></td></tr>
+<tr><th id="531">531</th><td>    [_currentLegibleMediaSelectionOption release];</td></tr>
+<tr><th id="532">532</th><td>    _currentLegibleMediaSelectionOption = [<a class="local col5 ref" href="#55option" title='option' data-ref="55option" data-ref-filename="55option">option</a> retain];</td></tr>
+<tr><th id="533">533</th><td></td></tr>
+<tr><th id="534">534</th><td>    <b>if</b> (!<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="535">535</th><td>        <b>return</b>;</td></tr>
+<tr><th id="536">536</th><td></td></tr>
+<tr><th id="537">537</th><td>    <span class='typedef' title='NSInteger' data-type='long' data-ref="NSInteger" data-ref-filename="NSInteger">NSInteger</span> <dfn class="local col6 decl" id="56index" title='index' data-type='NSInteger' data-ref="56index" data-ref-filename="56index">index</dfn> = <span class='ref' title='NSNotFound' data-ref="NSNotFound" data-ref-filename="NSNotFound">NSNotFound</span>;</td></tr>
+<tr><th id="538">538</th><td></td></tr>
+<tr><th id="539">539</th><td>    <b>if</b> (<a class="local col5 ref" href="#55option" title='option' data-ref="55option" data-ref-filename="55option">option</a> &amp;&amp; <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.legibleMediaSelectionOptions)</td></tr>
+<tr><th id="540">540</th><td>        <a class="local col6 ref" href="#56index" title='index' data-ref="56index" data-ref-filename="56index">index</a> = [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.legibleMediaSelectionOptions indexOfObject:<a class="local col5 ref" href="#55option" title='option' data-ref="55option" data-ref-filename="55option">option</a>];</td></tr>
+<tr><th id="541">541</th><td></td></tr>
+<tr><th id="542">542</th><td>    <b>if</b> (<a class="local col6 ref" href="#56index" title='index' data-ref="56index" data-ref-filename="56index">index</a> == <span class='ref' title='NSNotFound' data-ref="NSNotFound" data-ref-filename="NSNotFound">NSNotFound</span>)</td></tr>
+<tr><th id="543">543</th><td>        <b>return</b>;</td></tr>
+<tr><th id="544">544</th><td></td></tr>
+<tr><th id="545">545</th><td>    <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel24selectLegibleMediaOptionEy" title='WebCore::PlaybackSessionModel::selectLegibleMediaOption' data-ref="_ZN7WebCore20PlaybackSessionModel24selectLegibleMediaOptionEy" data-ref-filename="_ZN7WebCore20PlaybackSessionModel24selectLegibleMediaOptionEy">selectLegibleMediaOption</a>(<a class="local col6 ref" href="#56index" title='index' data-ref="56index" data-ref-filename="56index">index</a>);</td></tr>
+<tr><th id="546">546</th><td>}</td></tr>
+<tr><th id="547">547</th><td></td></tr>
+<tr><th id="548">548</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isPlayingOnExternalScreen</td></tr>
+<tr><th id="549">549</th><td>{</td></tr>
+<tr><th id="550">550</th><td>    <b>return</b> [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> isExternalPlaybackActive] || [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> isPlayingOnSecondScreen];</td></tr>
+<tr><th id="551">551</th><td>}</td></tr>
+<tr><th id="552">552</th><td></td></tr>
+<tr><th id="553">553</th><td>+ (NSSet *)keyPathsForValuesAffectingPlayingOnExternalScreen</td></tr>
+<tr><th id="554">554</th><td>{</td></tr>
+<tr><th id="555">555</th><td>    <b>return</b> [NSSet setWithObjects:@<q>"externalPlaybackActive"</q>, @<q>"playingOnSecondScreen"</q>, <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="556">556</th><td>}</td></tr>
+<tr><th id="557">557</th><td></td></tr>
+<tr><th id="558">558</th><td>- (<em>void</em>)setAllowsPictureInPicture:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col7 decl" id="57allowsPictureInPicture" title='allowsPictureInPicture' data-type='BOOL' data-ref="57allowsPictureInPicture" data-ref-filename="57allowsPictureInPicture">allowsPictureInPicture</dfn></td></tr>
+<tr><th id="559">559</th><td>{</td></tr>
+<tr><th id="560">560</th><td>    _allowsPictureInPicture = <a class="local col7 ref" href="#57allowsPictureInPicture" title='allowsPictureInPicture' data-ref="57allowsPictureInPicture" data-ref-filename="57allowsPictureInPicture">allowsPictureInPicture</a>;</td></tr>
+<tr><th id="561">561</th><td>}</td></tr>
+<tr><th id="562">562</th><td></td></tr>
+<tr><th id="563">563</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isPictureInPicturePossible</td></tr>
+<tr><th id="564">564</th><td>{</td></tr>
+<tr><th id="565">565</th><td>    <b>return</b> _allowsPictureInPicture &amp;&amp; ![<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> isExternalPlaybackActive];</td></tr>
+<tr><th id="566">566</th><td>}</td></tr>
+<tr><th id="567">567</th><td></td></tr>
+<tr><th id="568">568</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isPictureInPictureInterrupted</td></tr>
+<tr><th id="569">569</th><td>{</td></tr>
+<tr><th id="570">570</th><td>    <b>return</b> _pictureInPictureInterrupted;</td></tr>
+<tr><th id="571">571</th><td>}</td></tr>
+<tr><th id="572">572</th><td></td></tr>
+<tr><th id="573">573</th><td>- (<em>void</em>)setPictureInPictureInterrupted:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col8 decl" id="58pictureInPictureInterrupted" title='pictureInPictureInterrupted' data-type='BOOL' data-ref="58pictureInPictureInterrupted" data-ref-filename="58pictureInPictureInterrupted">pictureInPictureInterrupted</dfn></td></tr>
+<tr><th id="574">574</th><td>{</td></tr>
+<tr><th id="575">575</th><td>    <b>if</b> (_pictureInPictureInterrupted != <a class="local col8 ref" href="#58pictureInPictureInterrupted" title='pictureInPictureInterrupted' data-ref="58pictureInPictureInterrupted" data-ref-filename="58pictureInPictureInterrupted">pictureInPictureInterrupted</a>) {</td></tr>
+<tr><th id="576">576</th><td>        _pictureInPictureInterrupted = <a class="local col8 ref" href="#58pictureInPictureInterrupted" title='pictureInPictureInterrupted' data-ref="58pictureInPictureInterrupted" data-ref-filename="58pictureInPictureInterrupted">pictureInPictureInterrupted</a>;</td></tr>
+<tr><th id="577">577</th><td>        <b>if</b> (<a class="local col8 ref" href="#58pictureInPictureInterrupted" title='pictureInPictureInterrupted' data-ref="58pictureInPictureInterrupted" data-ref-filename="58pictureInPictureInterrupted">pictureInPictureInterrupted</a>)</td></tr>
+<tr><th id="578">578</th><td>            [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> setPlaying:<span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>];</td></tr>
+<tr><th id="579">579</th><td>    }</td></tr>
+<tr><th id="580">580</th><td>}</td></tr>
+<tr><th id="581">581</th><td></td></tr>
+<tr><th id="582">582</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isMuted</td></tr>
+<tr><th id="583">583</th><td>{</td></tr>
+<tr><th id="584">584</th><td>    <b>return</b> _muted;</td></tr>
+<tr><th id="585">585</th><td>}</td></tr>
+<tr><th id="586">586</th><td></td></tr>
+<tr><th id="587">587</th><td>- (<em>void</em>)setMuted:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col9 decl" id="59muted" title='muted' data-type='BOOL' data-ref="59muted" data-ref-filename="59muted">muted</dfn></td></tr>
+<tr><th id="588">588</th><td>{</td></tr>
+<tr><th id="589">589</th><td>    <b>if</b> (_muted == <a class="local col9 ref" href="#59muted" title='muted' data-ref="59muted" data-ref-filename="59muted">muted</a>)</td></tr>
+<tr><th id="590">590</th><td>        <b>return</b>;</td></tr>
+<tr><th id="591">591</th><td>    _muted = <a class="local col9 ref" href="#59muted" title='muted' data-ref="59muted" data-ref-filename="59muted">muted</a>;</td></tr>
+<tr><th id="592">592</th><td></td></tr>
+<tr><th id="593">593</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="594">594</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel8setMutedEb" title='WebCore::PlaybackSessionModel::setMuted' data-ref="_ZN7WebCore20PlaybackSessionModel8setMutedEb" data-ref-filename="_ZN7WebCore20PlaybackSessionModel8setMutedEb">setMuted</a>(<a class="local col9 ref" href="#59muted" title='muted' data-ref="59muted" data-ref-filename="59muted">muted</a>);</td></tr>
+<tr><th id="595">595</th><td>}</td></tr>
+<tr><th id="596">596</th><td></td></tr>
+<tr><th id="597">597</th><td>- (<em>void</em>)toggleMuted:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col0 decl" id="60sender" title='sender' data-type='id' data-ref="60sender" data-ref-filename="60sender">sender</dfn></td></tr>
+<tr><th id="598">598</th><td>{</td></tr>
+<tr><th id="599">599</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)sender" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col0 ref" href="#60sender" title='sender' data-ref="60sender" data-ref-filename="60sender">sender</a>);</td></tr>
+<tr><th id="600">600</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="601">601</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel11toggleMutedEv" title='WebCore::PlaybackSessionModel::toggleMuted' data-ref="_ZN7WebCore20PlaybackSessionModel11toggleMutedEv" data-ref-filename="_ZN7WebCore20PlaybackSessionModel11toggleMutedEv">toggleMuted</a>();</td></tr>
+<tr><th id="602">602</th><td>}</td></tr>
+<tr><th id="603">603</th><td></td></tr>
+<tr><th id="604">604</th><td>- (<em>double</em>)volume</td></tr>
+<tr><th id="605">605</th><td>{</td></tr>
+<tr><th id="606">606</th><td>    <b>return</b> <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate ? <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZNK7WebCore20PlaybackSessionModel6volumeEv" title='WebCore::PlaybackSessionModel::volume' data-ref="_ZNK7WebCore20PlaybackSessionModel6volumeEv" data-ref-filename="_ZNK7WebCore20PlaybackSessionModel6volumeEv">volume</a>() : <var>0</var>;</td></tr>
+<tr><th id="607">607</th><td>}</td></tr>
+<tr><th id="608">608</th><td></td></tr>
+<tr><th id="609">609</th><td>- (<em>void</em>)setVolume:(<em>double</em>)<dfn class="local col1 decl" id="61volume" title='volume' data-type='double' data-ref="61volume" data-ref-filename="61volume">volume</dfn></td></tr>
+<tr><th id="610">610</th><td>{</td></tr>
+<tr><th id="611">611</th><td>    <b>if</b> (<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="612">612</th><td>        <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel9setVolumeEd" title='WebCore::PlaybackSessionModel::setVolume' data-ref="_ZN7WebCore20PlaybackSessionModel9setVolumeEd" data-ref-filename="_ZN7WebCore20PlaybackSessionModel9setVolumeEd">setVolume</a>(<a class="local col1 ref" href="#61volume" title='volume' data-ref="61volume" data-ref-filename="61volume">volume</a>);</td></tr>
+<tr><th id="613">613</th><td>}</td></tr>
+<tr><th id="614">614</th><td></td></tr>
+<tr><th id="615">615</th><td>- (<em>void</em>)volumeChanged:(<em>double</em>)<dfn class="local col2 decl" id="62volume" title='volume' data-type='double' data-ref="62volume" data-ref-filename="62volume">volume</dfn></td></tr>
+<tr><th id="616">616</th><td>{</td></tr>
+<tr><th id="617">617</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)volume" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col2 ref" href="#62volume" title='volume' data-ref="62volume" data-ref-filename="62volume">volume</a>);</td></tr>
+<tr><th id="618">618</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> willChangeValueForKey:@<q>"volume"</q>];</td></tr>
+<tr><th id="619">619</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> didChangeValueForKey:@<q>"volume"</q>];</td></tr>
+<tr><th id="620">620</th><td>}</td></tr>
+<tr><th id="621">621</th><td></td></tr>
+<tr><th id="622">622</th><td>- (<em>void</em>)observeValueForKeyPath:(NSString *)<dfn class="local col3 decl" id="63keyPath" title='keyPath' data-type='NSString * _Nullable' data-ref="63keyPath" data-ref-filename="63keyPath">keyPath</dfn> ofObject:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col4 decl" id="64object" title='object' data-type='id _Nullable' data-ref="64object" data-ref-filename="64object">object</dfn> change:(NSDictionary *)<dfn class="local col5 decl" id="65change" title='change' data-type='NSDictionary * _Nullable' data-ref="65change" data-ref-filename="65change">change</dfn> context:(<em>void</em> *)<dfn class="local col6 decl" id="66context" title='context' data-type='void * _Nullable' data-ref="66context" data-ref-filename="66context">context</dfn></td></tr>
+<tr><th id="623">623</th><td>{</td></tr>
+<tr><th id="624">624</th><td>    <b>using</b> <b>namespace</b> <span class="namespace">PAL</span>;</td></tr>
+<tr><th id="625">625</th><td></td></tr>
+<tr><th id="626">626</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)object" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col4 ref" href="#64object" title='object' data-ref="64object" data-ref-filename="64object">object</a>);</td></tr>
+<tr><th id="627">627</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#401" title="(void)keyPath" data-ref="_M/UNUSED_PARAM">UNUSED_PARAM</a>(<a class="local col3 ref" href="#63keyPath" title='keyPath' data-ref="63keyPath" data-ref-filename="63keyPath">keyPath</a>);</td></tr>
+<tr><th id="628">628</th><td></td></tr>
+<tr><th id="629">629</th><td>    <b>if</b> (<a class="ref" href="#WebAVPlayerControllerSeekableTimeRangesObserverContext" title='WebAVPlayerControllerSeekableTimeRangesObserverContext' data-ref="WebAVPlayerControllerSeekableTimeRangesObserverContext" data-ref-filename="WebAVPlayerControllerSeekableTimeRangesObserverContext">WebAVPlayerControllerSeekableTimeRangesObserverContext</a> == <a class="local col6 ref" href="#66context" title='context' data-ref="66context" data-ref-filename="66context">context</a>) {</td></tr>
+<tr><th id="630">630</th><td>        NSArray *<dfn class="local col7 decl" id="67oldArray" title='oldArray' data-type='NSArray *' data-ref="67oldArray" data-ref-filename="67oldArray">oldArray</dfn> = <a class="local col5 ref" href="#65change" title='change' data-ref="65change" data-ref-filename="65change">change</a>[<span class='ref' title='NSKeyValueChangeOldKey' data-ref="NSKeyValueChangeOldKey" data-ref-filename="NSKeyValueChangeOldKey">NSKeyValueChangeOldKey</span>];</td></tr>
+<tr><th id="631">631</th><td>        NSArray *<dfn class="local col8 decl" id="68newArray" title='newArray' data-type='NSArray *' data-ref="68newArray" data-ref-filename="68newArray">newArray</dfn> = <a class="local col5 ref" href="#65change" title='change' data-ref="65change" data-ref-filename="65change">change</a>[<span class='ref' title='NSKeyValueChangeNewKey' data-ref="NSKeyValueChangeNewKey" data-ref-filename="NSKeyValueChangeNewKey">NSKeyValueChangeNewKey</span>];</td></tr>
+<tr><th id="632">632</th><td>        <b>if</b> ([<a class="local col7 ref" href="#67oldArray" title='oldArray' data-ref="67oldArray" data-ref-filename="67oldArray">oldArray</a> isKindOfClass:[NSArray <b>class</b>]] &amp;&amp; [<a class="local col8 ref" href="#68newArray" title='newArray' data-ref="68newArray" data-ref-filename="68newArray">newArray</a> isKindOfClass:[NSArray <b>class</b>]]) {</td></tr>
+<tr><th id="633">633</th><td>            <span class='typedef' title='CMTimeRange' data-type='struct CMTimeRange' data-ref="CMTimeRange" data-ref-filename="CMTimeRange">CMTimeRange</span> <dfn class="local col9 decl" id="69oldSeekableTimeRange" title='oldSeekableTimeRange' data-type='CMTimeRange' data-ref="69oldSeekableTimeRange" data-ref-filename="69oldSeekableTimeRange">oldSeekableTimeRange</dfn> = [<a class="local col7 ref" href="#67oldArray" title='oldArray' data-ref="67oldArray" data-ref-filename="67oldArray">oldArray</a> count] &gt; <var>0</var> ? [[<a class="local col7 ref" href="#67oldArray" title='oldArray' data-ref="67oldArray" data-ref-filename="67oldArray">oldArray</a> firstObject] CMTimeRangeValue] : <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#103" title="get_CoreMedia_kCMTimeRangeInvalid()" data-ref="_M/kCMTimeRangeInvalid">kCMTimeRangeInvalid</a>;</td></tr>
+<tr><th id="634">634</th><td>            <span class='typedef' title='CMTimeRange' data-type='struct CMTimeRange' data-ref="CMTimeRange" data-ref-filename="CMTimeRange">CMTimeRange</span> <dfn class="local col0 decl" id="70newSeekableTimeRange" title='newSeekableTimeRange' data-type='CMTimeRange' data-ref="70newSeekableTimeRange" data-ref-filename="70newSeekableTimeRange">newSeekableTimeRange</dfn> = [<a class="local col8 ref" href="#68newArray" title='newArray' data-ref="68newArray" data-ref-filename="68newArray">newArray</a> count] &gt; <var>0</var> ? [[<a class="local col8 ref" href="#68newArray" title='newArray' data-ref="68newArray" data-ref-filename="68newArray">newArray</a> firstObject] CMTimeRangeValue] : <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#103" title="get_CoreMedia_kCMTimeRangeInvalid()" data-ref="_M/kCMTimeRangeInvalid">kCMTimeRangeInvalid</a>;</td></tr>
+<tr><th id="635">635</th><td>            <b>if</b> (!<a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#88" title="softLink_CoreMedia_CMTimeRangeEqual" data-ref="_M/CMTimeRangeEqual">CMTimeRangeEqual</a>(<span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN11CMTimeRangeC1ERKS_" data-ref-filename="_ZN11CMTimeRangeC1ERKS_"></span><a class="local col9 ref" href="#69oldSeekableTimeRange" title='oldSeekableTimeRange' data-ref="69oldSeekableTimeRange" data-ref-filename="69oldSeekableTimeRange">oldSeekableTimeRange</a>, <span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN11CMTimeRangeC1ERKS_" data-ref-filename="_ZN11CMTimeRangeC1ERKS_"></span><a class="local col0 ref" href="#70newSeekableTimeRange" title='newSeekableTimeRange' data-ref="70newSeekableTimeRange" data-ref-filename="70newSeekableTimeRange">newSeekableTimeRange</a>)) {</td></tr>
+<tr><th id="636">636</th><td>                <b>if</b> (<span class="macro" title="((Boolean)(((Boolean)(((newSeekableTimeRange.start).flags &amp; kCMTimeFlags_Valid) != 0)) &amp;&amp; ((Boolean)(((newSeekableTimeRange.duration).flags &amp; kCMTimeFlags_Valid) != 0)) &amp;&amp; (newSeekableTimeRange.duration.epoch == 0) &amp;&amp; (newSeekableTimeRange.duration.value &gt;= 0)))" data-ref="_M/CMTIMERANGE_IS_VALID">CMTIMERANGE_IS_VALID</span>(<a class="local col0 ref" href="#70newSeekableTimeRange" title='newSeekableTimeRange' data-ref="70newSeekableTimeRange" data-ref-filename="70newSeekableTimeRange">newSeekableTimeRange</a>) &amp;&amp; <span class="macro" title="((Boolean)(((Boolean)(((oldSeekableTimeRange.start).flags &amp; kCMTimeFlags_Valid) != 0)) &amp;&amp; ((Boolean)(((oldSeekableTimeRange.duration).flags &amp; kCMTimeFlags_Valid) != 0)) &amp;&amp; (oldSeekableTimeRange.duration.epoch == 0) &amp;&amp; (oldSeekableTimeRange.duration.value &gt;= 0)))" data-ref="_M/CMTIMERANGE_IS_VALID">CMTIMERANGE_IS_VALID</span>(<a class="local col9 ref" href="#69oldSeekableTimeRange" title='oldSeekableTimeRange' data-ref="69oldSeekableTimeRange" data-ref-filename="69oldSeekableTimeRange">oldSeekableTimeRange</a>) &amp;&amp; _liveStreamEventModePossible &amp;&amp; !<a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#94" title="softLink_CoreMedia_CMTimeRangeContainsTime" data-ref="_M/CMTimeRangeContainsTime">CMTimeRangeContainsTime</a>(<span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN11CMTimeRangeC1ERKS_" data-ref-filename="_ZN11CMTimeRangeC1ERKS_"></span><a class="local col0 ref" href="#70newSeekableTimeRange" title='newSeekableTimeRange' data-ref="70newSeekableTimeRange" data-ref-filename="70newSeekableTimeRange">newSeekableTimeRange</a>, <span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN6CMTimeC1ERKS_" data-ref-filename="_ZN6CMTimeC1ERKS_"></span><a class="local col9 ref" href="#69oldSeekableTimeRange" title='oldSeekableTimeRange' data-ref="69oldSeekableTimeRange" data-ref-filename="69oldSeekableTimeRange">oldSeekableTimeRange</a>.<span class='ref field' title='(anonymous struct)::start' data-ref="(anonymous)::start" data-ref-filename="(anonymous)..start">start</span>))</td></tr>
+<tr><th id="637">637</th><td>                    _liveStreamEventModePossible = <span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>;</td></tr>
+<tr><th id="638">638</th><td></td></tr>
+<tr><th id="639">639</th><td>                [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> updateMinMaxTiming];</td></tr>
+<tr><th id="640">640</th><td>            }</td></tr>
+<tr><th id="641">641</th><td>        }</td></tr>
+<tr><th id="642">642</th><td>        <b>return</b>;</td></tr>
+<tr><th id="643">643</th><td>    }</td></tr>
+<tr><th id="644">644</th><td></td></tr>
+<tr><th id="645">645</th><td>    <b>if</b> (<a class="ref" href="#WebAVPlayerControllerHasLiveStreamingContentObserverContext" title='WebAVPlayerControllerHasLiveStreamingContentObserverContext' data-ref="WebAVPlayerControllerHasLiveStreamingContentObserverContext" data-ref-filename="WebAVPlayerControllerHasLiveStreamingContentObserverContext">WebAVPlayerControllerHasLiveStreamingContentObserverContext</a> == <a class="local col6 ref" href="#66context" title='context' data-ref="66context" data-ref-filename="66context">context</a>) {</td></tr>
+<tr><th id="646">646</th><td>        [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> updateMinMaxTiming];</td></tr>
+<tr><th id="647">647</th><td>        <b>return</b>;</td></tr>
+<tr><th id="648">648</th><td>    }</td></tr>
+<tr><th id="649">649</th><td></td></tr>
+<tr><th id="650">650</th><td>    <b>if</b> (<a class="ref" href="#WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext" title='WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext' data-ref="WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext" data-ref-filename="WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext">WebAVPlayerControllerIsPlayingOnSecondScreenObserverContext</a> == <a class="local col6 ref" href="#66context" title='context' data-ref="66context" data-ref-filename="66context">context</a>) {</td></tr>
+<tr><th id="651">651</th><td>        <b>if</b> (<em>auto</em>* <dfn class="local col1 decl" id="71delegate" title='delegate' data-type='WebCore::PlaybackSessionModel *' data-ref="71delegate" data-ref-filename="71delegate"><a class="local col1 ref" href="#71delegate" title='delegate' data-ref="71delegate" data-ref-filename="71delegate">delegate</a></dfn> = <span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span>.delegate)</td></tr>
+<tr><th id="652">652</th><td>            <a class="local col1 ref" href="#71delegate" title='delegate' data-ref="71delegate" data-ref-filename="71delegate">delegate</a>-&gt;<a class="virtual ref fn" href="../cocoa/PlaybackSessionModel.h.html#_ZN7WebCore20PlaybackSessionModel24setPlayingOnSecondScreenEb" title='WebCore::PlaybackSessionModel::setPlayingOnSecondScreen' data-ref="_ZN7WebCore20PlaybackSessionModel24setPlayingOnSecondScreenEb" data-ref-filename="_ZN7WebCore20PlaybackSessionModel24setPlayingOnSecondScreenEb">setPlayingOnSecondScreen</a>(_playingOnSecondScreen);</td></tr>
+<tr><th id="653">653</th><td>        <b>return</b>;</td></tr>
+<tr><th id="654">654</th><td>    }</td></tr>
+<tr><th id="655">655</th><td></td></tr>
+<tr><th id="656">656</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#368" title="do { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebCore/platform/ios/WebAVPlayerController.mm&quot;, 656, __PRETTY_FUNCTION__, 0); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(656, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebCore/platform/ios/WebAVPlayerController.mm&quot;, __PRETTY_FUNCTION__, 364); } while (false); } while (0)" data-ref="_M/ASSERT_NOT_REACHED">ASSERT_NOT_REACHED</a>();</td></tr>
+<tr><th id="657">657</th><td>}</td></tr>
+<tr><th id="658">658</th><td></td></tr>
+<tr><th id="659">659</th><td>- (<em>void</em>)updateMinMaxTiming</td></tr>
+<tr><th id="660">660</th><td>{</td></tr>
+<tr><th id="661">661</th><td>    <b>using</b> <b>namespace</b> <span class="namespace">PAL</span>;</td></tr>
+<tr><th id="662">662</th><td></td></tr>
+<tr><th id="663">663</th><td>    AVValueTiming *<dfn class="local col2 decl" id="72newMinTiming" title='newMinTiming' data-type='AVValueTiming *' data-ref="72newMinTiming" data-ref-filename="72newMinTiming">newMinTiming</dfn> = <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="664">664</th><td>    AVValueTiming *<dfn class="local col3 decl" id="73newMaxTiming" title='newMaxTiming' data-type='AVValueTiming *' data-ref="73newMaxTiming" data-ref-filename="73newMaxTiming">newMaxTiming</dfn> = <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="665">665</th><td></td></tr>
+<tr><th id="666">666</th><td>    <i>// For live streams value timings for the min and max times are needed.</i></td></tr>
+<tr><th id="667">667</th><td>    <b>if</b> ([<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> hasLiveStreamingContent] &amp;&amp; ([[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekableTimeRanges] count] &gt; <var>0</var>)) {</td></tr>
+<tr><th id="668">668</th><td>        <span class='typedef' title='CMTimeRange' data-type='struct CMTimeRange' data-ref="CMTimeRange" data-ref-filename="CMTimeRange">CMTimeRange</span> <dfn class="local col4 decl" id="74seekableTimeRange" title='seekableTimeRange' data-type='CMTimeRange' data-ref="74seekableTimeRange" data-ref-filename="74seekableTimeRange">seekableTimeRange</dfn> = [[[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekableTimeRanges] firstObject] CMTimeRangeValue];</td></tr>
+<tr><th id="669">669</th><td>        <b>if</b> (<span class="macro" title="((Boolean)(((Boolean)(((seekableTimeRange.start).flags &amp; kCMTimeFlags_Valid) != 0)) &amp;&amp; ((Boolean)(((seekableTimeRange.duration).flags &amp; kCMTimeFlags_Valid) != 0)) &amp;&amp; (seekableTimeRange.duration.epoch == 0) &amp;&amp; (seekableTimeRange.duration.value &gt;= 0)))" data-ref="_M/CMTIMERANGE_IS_VALID">CMTIMERANGE_IS_VALID</span>(<a class="local col4 ref" href="#74seekableTimeRange" title='seekableTimeRange' data-ref="74seekableTimeRange" data-ref-filename="74seekableTimeRange">seekableTimeRange</a>)) {</td></tr>
+<tr><th id="670">670</th><td>            <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col5 decl" id="75oldMinTime" title='oldMinTime' data-type='NSTimeInterval' data-ref="75oldMinTime" data-ref-filename="75oldMinTime">oldMinTime</dfn> = [[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> minTiming] currentValue];</td></tr>
+<tr><th id="671">671</th><td>            <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col6 decl" id="76oldMaxTime" title='oldMaxTime' data-type='NSTimeInterval' data-ref="76oldMaxTime" data-ref-filename="76oldMaxTime">oldMaxTime</dfn> = [[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> maxTiming] currentValue];</td></tr>
+<tr><th id="672">672</th><td>            <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col7 decl" id="77newMinTime" title='newMinTime' data-type='NSTimeInterval' data-ref="77newMinTime" data-ref-filename="77newMinTime">newMinTime</dfn> = <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#76" title="softLink_CoreMedia_CMTimeGetSeconds" data-ref="_M/CMTimeGetSeconds">CMTimeGetSeconds</a>(<span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN6CMTimeC1ERKS_" data-ref-filename="_ZN6CMTimeC1ERKS_"></span><a class="local col4 ref" href="#74seekableTimeRange" title='seekableTimeRange' data-ref="74seekableTimeRange" data-ref-filename="74seekableTimeRange">seekableTimeRange</a>.<span class='ref field' title='(anonymous struct)::start' data-ref="(anonymous)::start" data-ref-filename="(anonymous)..start">start</span>);</td></tr>
+<tr><th id="673">673</th><td>            <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col8 decl" id="78newMaxTime" title='newMaxTime' data-type='NSTimeInterval' data-ref="78newMaxTime" data-ref-filename="78newMaxTime">newMaxTime</dfn> = <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#76" title="softLink_CoreMedia_CMTimeGetSeconds" data-ref="_M/CMTimeGetSeconds">CMTimeGetSeconds</a>(<span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN6CMTimeC1ERKS_" data-ref-filename="_ZN6CMTimeC1ERKS_"></span><a class="local col4 ref" href="#74seekableTimeRange" title='seekableTimeRange' data-ref="74seekableTimeRange" data-ref-filename="74seekableTimeRange">seekableTimeRange</a>.<span class='ref field' title='(anonymous struct)::start' data-ref="(anonymous)::start" data-ref-filename="(anonymous)..start">start</span>) + <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/pal/cf/CoreMediaSoftLink.h.html#76" title="softLink_CoreMedia_CMTimeGetSeconds" data-ref="_M/CMTimeGetSeconds">CMTimeGetSeconds</a>(<span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN6CMTimeC1ERKS_" data-ref-filename="_ZN6CMTimeC1ERKS_"></span><a class="local col4 ref" href="#74seekableTimeRange" title='seekableTimeRange' data-ref="74seekableTimeRange" data-ref-filename="74seekableTimeRange">seekableTimeRange</a>.<span class='ref field' title='(anonymous struct)::duration' data-ref="(anonymous)::duration" data-ref-filename="(anonymous)..duration">duration</span>) + (<span class='ref fn' title='CACurrentMediaTime' data-ref="CACurrentMediaTime" data-ref-filename="CACurrentMediaTime">CACurrentMediaTime</span>() - [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekableTimeRangesLastModifiedTime]);</td></tr>
+<tr><th id="674">674</th><td>            <em>double</em> <dfn class="local col9 decl" id="79newMinTimingRate" title='newMinTimingRate' data-type='double' data-ref="79newMinTimingRate" data-ref-filename="79newMinTimingRate">newMinTimingRate</dfn> = _liveStreamEventModePossible ? <var>0.0</var> : <var>1.0</var>;</td></tr>
+<tr><th id="675">675</th><td>            <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col0 decl" id="80minTimingNeedsUpdate" title='minTimingNeedsUpdate' data-type='BOOL' data-ref="80minTimingNeedsUpdate" data-ref-filename="80minTimingNeedsUpdate">minTimingNeedsUpdate</dfn> = <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="676">676</th><td>            <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col1 decl" id="81maxTimingNeedsUpdate" title='maxTimingNeedsUpdate' data-type='BOOL' data-ref="81maxTimingNeedsUpdate" data-ref-filename="81maxTimingNeedsUpdate">maxTimingNeedsUpdate</dfn> = <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="677">677</th><td></td></tr>
+<tr><th id="678">678</th><td>            <b>if</b> (<span class='ref fn' title='isfinite' data-ref="_ZL8isfiniteT_" data-ref-filename="_ZL8isfiniteT_">isfinite</span>([<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> liveUpdateInterval]) &amp;&amp; [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> liveUpdateInterval] &gt; <a class="ref" href="#WebAVPlayerControllerLiveStreamMinimumTargetDuration" title='WebAVPlayerControllerLiveStreamMinimumTargetDuration' data-ref="WebAVPlayerControllerLiveStreamMinimumTargetDuration" data-ref-filename="WebAVPlayerControllerLiveStreamMinimumTargetDuration">WebAVPlayerControllerLiveStreamMinimumTargetDuration</a>) {</td></tr>
+<tr><th id="679">679</th><td>                <i>// Only update the timing if the new time differs by one segment duration plus the hysteresis delta.</i></td></tr>
+<tr><th id="680">680</th><td>                <a class="local col0 ref" href="#80minTimingNeedsUpdate" title='minTimingNeedsUpdate' data-ref="80minTimingNeedsUpdate" data-ref-filename="80minTimingNeedsUpdate">minTimingNeedsUpdate</a> = <span class='ref fn' title='isnan' data-ref="_ZL5isnanUa9enable_ifIXLb1EEEd" data-ref-filename="_ZL5isnanUa9enable_ifIXLb1EEEd">isnan</span>(<a class="local col5 ref" href="#75oldMinTime" title='oldMinTime' data-ref="75oldMinTime" data-ref-filename="75oldMinTime">oldMinTime</a>) || (<span class='ref fn' title='fabs' data-ref="fabs" data-ref-filename="fabs">fabs</span>(<a class="local col5 ref" href="#75oldMinTime" title='oldMinTime' data-ref="75oldMinTime" data-ref-filename="75oldMinTime">oldMinTime</a> - <a class="local col7 ref" href="#77newMinTime" title='newMinTime' data-ref="77newMinTime" data-ref-filename="77newMinTime">newMinTime</a>) &gt; [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> liveUpdateInterval] + <a class="ref" href="#WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta" title='WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta' data-ref="WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta" data-ref-filename="WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta">WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta</a>) || ([[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> minTiming] rate] != <a class="local col9 ref" href="#79newMinTimingRate" title='newMinTimingRate' data-ref="79newMinTimingRate" data-ref-filename="79newMinTimingRate">newMinTimingRate</a>);</td></tr>
+<tr><th id="681">681</th><td>                <a class="local col1 ref" href="#81maxTimingNeedsUpdate" title='maxTimingNeedsUpdate' data-ref="81maxTimingNeedsUpdate" data-ref-filename="81maxTimingNeedsUpdate">maxTimingNeedsUpdate</a> = <span class='ref fn' title='isnan' data-ref="_ZL5isnanUa9enable_ifIXLb1EEEd" data-ref-filename="_ZL5isnanUa9enable_ifIXLb1EEEd">isnan</span>(<a class="local col6 ref" href="#76oldMaxTime" title='oldMaxTime' data-ref="76oldMaxTime" data-ref-filename="76oldMaxTime">oldMaxTime</a>) || (<span class='ref fn' title='fabs' data-ref="fabs" data-ref-filename="fabs">fabs</span>(<a class="local col6 ref" href="#76oldMaxTime" title='oldMaxTime' data-ref="76oldMaxTime" data-ref-filename="76oldMaxTime">oldMaxTime</a> - <a class="local col8 ref" href="#78newMaxTime" title='newMaxTime' data-ref="78newMaxTime" data-ref-filename="78newMaxTime">newMaxTime</a>) &gt; [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> liveUpdateInterval] + <a class="ref" href="#WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta" title='WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta' data-ref="WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta" data-ref-filename="WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta">WebAVPlayerControllerLiveStreamSeekableTimeRangeDurationHysteresisDelta</a>);</td></tr>
+<tr><th id="682">682</th><td>            }</td></tr>
+<tr><th id="683">683</th><td></td></tr>
+<tr><th id="684">684</th><td>            <b>if</b> (<a class="local col0 ref" href="#80minTimingNeedsUpdate" title='minTimingNeedsUpdate' data-ref="80minTimingNeedsUpdate" data-ref-filename="80minTimingNeedsUpdate">minTimingNeedsUpdate</a> || <a class="local col1 ref" href="#81maxTimingNeedsUpdate" title='maxTimingNeedsUpdate' data-ref="81maxTimingNeedsUpdate" data-ref-filename="81maxTimingNeedsUpdate">maxTimingNeedsUpdate</a>) {</td></tr>
+<tr><th id="685">685</th><td>                <a class="local col2 ref" href="#72newMinTiming" title='newMinTiming' data-ref="72newMinTiming" data-ref-filename="72newMinTiming">newMinTiming</a> = [<a class="ref" href="#45" title='getAVValueTimingClass' data-ref="getAVValueTimingClass" data-ref-filename="getAVValueTimingClass">getAVValueTimingClass</a>() valueTimingWithAnchorValue:<a class="local col7 ref" href="#77newMinTime" title='newMinTime' data-ref="77newMinTime" data-ref-filename="77newMinTime">newMinTime</a> anchorTimeStamp:[<a class="ref" href="#45" title='getAVValueTimingClass' data-ref="getAVValueTimingClass" data-ref-filename="getAVValueTimingClass">getAVValueTimingClass</a>() currentTimeStamp] rate:<a class="local col9 ref" href="#79newMinTimingRate" title='newMinTimingRate' data-ref="79newMinTimingRate" data-ref-filename="79newMinTimingRate">newMinTimingRate</a>];</td></tr>
+<tr><th id="686">686</th><td>                <a class="local col3 ref" href="#73newMaxTiming" title='newMaxTiming' data-ref="73newMaxTiming" data-ref-filename="73newMaxTiming">newMaxTiming</a> = [<a class="ref" href="#45" title='getAVValueTimingClass' data-ref="getAVValueTimingClass" data-ref-filename="getAVValueTimingClass">getAVValueTimingClass</a>() valueTimingWithAnchorValue:<a class="local col8 ref" href="#78newMaxTime" title='newMaxTime' data-ref="78newMaxTime" data-ref-filename="78newMaxTime">newMaxTime</a> anchorTimeStamp:[<a class="ref" href="#45" title='getAVValueTimingClass' data-ref="getAVValueTimingClass" data-ref-filename="getAVValueTimingClass">getAVValueTimingClass</a>() currentTimeStamp] rate:<var>1.0</var>];</td></tr>
+<tr><th id="687">687</th><td>            } <b>else</b> {</td></tr>
+<tr><th id="688">688</th><td>                <a class="local col2 ref" href="#72newMinTiming" title='newMinTiming' data-ref="72newMinTiming" data-ref-filename="72newMinTiming">newMinTiming</a> = [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> minTiming];</td></tr>
+<tr><th id="689">689</th><td>                <a class="local col3 ref" href="#73newMaxTiming" title='newMaxTiming' data-ref="73newMaxTiming" data-ref-filename="73newMaxTiming">newMaxTiming</a> = [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> maxTiming];</td></tr>
+<tr><th id="690">690</th><td>            }</td></tr>
+<tr><th id="691">691</th><td>        }</td></tr>
+<tr><th id="692">692</th><td>    }</td></tr>
+<tr><th id="693">693</th><td></td></tr>
+<tr><th id="694">694</th><td>    <b>if</b> (!<a class="local col2 ref" href="#72newMinTiming" title='newMinTiming' data-ref="72newMinTiming" data-ref-filename="72newMinTiming">newMinTiming</a>)</td></tr>
+<tr><th id="695">695</th><td>        <a class="local col2 ref" href="#72newMinTiming" title='newMinTiming' data-ref="72newMinTiming" data-ref-filename="72newMinTiming">newMinTiming</a> = [<a class="ref" href="#45" title='getAVValueTimingClass' data-ref="getAVValueTimingClass" data-ref-filename="getAVValueTimingClass">getAVValueTimingClass</a>() valueTimingWithAnchorValue:[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> minTime] anchorTimeStamp:<span class="macro" title="__builtin_nanf(&quot;0x7fc00000&quot;)" data-ref="_M/NAN">NAN</span> rate:<var>0.0</var>];</td></tr>
+<tr><th id="696">696</th><td></td></tr>
+<tr><th id="697">697</th><td>    <b>if</b> (!<a class="local col3 ref" href="#73newMaxTiming" title='newMaxTiming' data-ref="73newMaxTiming" data-ref-filename="73newMaxTiming">newMaxTiming</a>)</td></tr>
+<tr><th id="698">698</th><td>        <a class="local col3 ref" href="#73newMaxTiming" title='newMaxTiming' data-ref="73newMaxTiming" data-ref-filename="73newMaxTiming">newMaxTiming</a> = [<a class="ref" href="#45" title='getAVValueTimingClass' data-ref="getAVValueTimingClass" data-ref-filename="getAVValueTimingClass">getAVValueTimingClass</a>() valueTimingWithAnchorValue:[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> maxTime] anchorTimeStamp:<span class="macro" title="__builtin_nanf(&quot;0x7fc00000&quot;)" data-ref="_M/NAN">NAN</span> rate:<var>0.0</var>];</td></tr>
+<tr><th id="699">699</th><td></td></tr>
+<tr><th id="700">700</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> setMinTiming:<a class="local col2 ref" href="#72newMinTiming" title='newMinTiming' data-ref="72newMinTiming" data-ref-filename="72newMinTiming">newMinTiming</a>];</td></tr>
+<tr><th id="701">701</th><td>    [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> setMaxTiming:<a class="local col3 ref" href="#73newMaxTiming" title='newMaxTiming' data-ref="73newMaxTiming" data-ref-filename="73newMaxTiming">newMaxTiming</a>];</td></tr>
+<tr><th id="702">702</th><td>}</td></tr>
+<tr><th id="703">703</th><td></td></tr>
+<tr><th id="704">704</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)hasSeekableLiveStreamingContent</td></tr>
+<tr><th id="705">705</th><td>{</td></tr>
+<tr><th id="706">706</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col2 decl" id="82hasSeekableLiveStreamingContent" title='hasSeekableLiveStreamingContent' data-type='BOOL' data-ref="82hasSeekableLiveStreamingContent" data-ref-filename="82hasSeekableLiveStreamingContent">hasSeekableLiveStreamingContent</dfn> = <span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>;</td></tr>
+<tr><th id="707">707</th><td></td></tr>
+<tr><th id="708">708</th><td>    <b>if</b> ([<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> hasLiveStreamingContent] &amp;&amp; [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> minTiming] &amp;&amp; [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> maxTiming] &amp;&amp; <span class='ref fn' title='isfinite' data-ref="_ZL8isfiniteT_" data-ref-filename="_ZL8isfiniteT_">isfinite</span>([<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> liveUpdateInterval]) &amp;&amp; [<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> liveUpdateInterval] &gt; <a class="ref" href="#WebAVPlayerControllerLiveStreamMinimumTargetDuration" title='WebAVPlayerControllerLiveStreamMinimumTargetDuration' data-ref="WebAVPlayerControllerLiveStreamMinimumTargetDuration" data-ref-filename="WebAVPlayerControllerLiveStreamMinimumTargetDuration">WebAVPlayerControllerLiveStreamMinimumTargetDuration</a> &amp;&amp; ([<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> seekableTimeRangesLastModifiedTime] != <var>0.0</var>)) {</td></tr>
+<tr><th id="709">709</th><td>        <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col3 decl" id="83timeStamp" title='timeStamp' data-type='NSTimeInterval' data-ref="83timeStamp" data-ref-filename="83timeStamp">timeStamp</dfn> = [<a class="ref" href="#45" title='getAVValueTimingClass' data-ref="getAVValueTimingClass" data-ref-filename="getAVValueTimingClass">getAVValueTimingClass</a>() currentTimeStamp];</td></tr>
+<tr><th id="710">710</th><td>        <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col4 decl" id="84minTime" title='minTime' data-type='NSTimeInterval' data-ref="84minTime" data-ref-filename="84minTime">minTime</dfn> = [[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> minTiming] valueForTimeStamp:<a class="local col3 ref" href="#83timeStamp" title='timeStamp' data-ref="83timeStamp" data-ref-filename="83timeStamp">timeStamp</a>];</td></tr>
+<tr><th id="711">711</th><td>        <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col5 decl" id="85maxTime" title='maxTime' data-type='NSTimeInterval' data-ref="85maxTime" data-ref-filename="85maxTime">maxTime</dfn> = [[<span class='local col6 ref' title='self' data-ref="6self" data-ref-filename="6self">self</span> maxTiming] valueForTimeStamp:<a class="local col3 ref" href="#83timeStamp" title='timeStamp' data-ref="83timeStamp" data-ref-filename="83timeStamp">timeStamp</a>];</td></tr>
+<tr><th id="712">712</th><td>        <a class="local col2 ref" href="#82hasSeekableLiveStreamingContent" title='hasSeekableLiveStreamingContent' data-ref="82hasSeekableLiveStreamingContent" data-ref-filename="82hasSeekableLiveStreamingContent">hasSeekableLiveStreamingContent</a> = ((<a class="local col5 ref" href="#85maxTime" title='maxTime' data-ref="85maxTime" data-ref-filename="85maxTime">maxTime</a> - <a class="local col4 ref" href="#84minTime" title='minTime' data-ref="84minTime" data-ref-filename="84minTime">minTime</a>) &gt; <a class="ref" href="#WebAVPlayerControllerLiveStreamSeekableTimeRangeMinimumDuration" title='WebAVPlayerControllerLiveStreamSeekableTimeRangeMinimumDuration' data-ref="WebAVPlayerControllerLiveStreamSeekableTimeRangeMinimumDuration" data-ref-filename="WebAVPlayerControllerLiveStreamSeekableTimeRangeMinimumDuration">WebAVPlayerControllerLiveStreamSeekableTimeRangeMinimumDuration</a>);</td></tr>
+<tr><th id="713">713</th><td>    }</td></tr>
+<tr><th id="714">714</th><td></td></tr>
+<tr><th id="715">715</th><td>    <b>return</b> <a class="local col2 ref" href="#82hasSeekableLiveStreamingContent" title='hasSeekableLiveStreamingContent' data-ref="82hasSeekableLiveStreamingContent" data-ref-filename="82hasSeekableLiveStreamingContent">hasSeekableLiveStreamingContent</a>;</td></tr>
+<tr><th id="716">716</th><td>}</td></tr>
+<tr><th id="717">717</th><td></td></tr>
+<tr><th id="718">718</th><td>+ (NSSet *)keyPathsForValuesAffectingHasSeekableLiveStreamingContent</td></tr>
+<tr><th id="719">719</th><td>{</td></tr>
+<tr><th id="720">720</th><td>    <b>return</b> [NSSet setWithObjects:@<q>"hasLiveStreamingContent"</q>, @<q>"minTiming"</q>, @<q>"maxTiming"</q>, @<q>"seekableTimeRangesLastModifiedTime"</q>, <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="721">721</th><td>}</td></tr>
+<tr><th id="722">722</th><td></td></tr>
+<tr><th id="723">723</th><td>@end</td></tr>
+<tr><th id="724">724</th><td></td></tr>
+<tr><th id="725">725</th><td>@implementation WebAVMediaSelectionOption</td></tr>
+<tr><th id="726">726</th><td></td></tr>
+<tr><th id="727">727</th><td>- (<em>void</em>)dealloc</td></tr>
+<tr><th id="728">728</th><td>{</td></tr>
+<tr><th id="729">729</th><td>    [_localizedDisplayName release];</td></tr>
+<tr><th id="730">730</th><td>    [super dealloc];</td></tr>
+<tr><th id="731">731</th><td>}</td></tr>
+<tr><th id="732">732</th><td></td></tr>
+<tr><th id="733">733</th><td>@end</td></tr>
+<tr><th id="734">734</th><td></td></tr>
+<tr><th id="735">735</th><td><u>#<span data-ppcond="30">endif</span> // PLATFORM(COCOA) &amp;&amp; HAVE(AVKIT)</u></td></tr>
+<tr><th id="736">736</th><td></td></tr>
+<tr><th id="737">737</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource33-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource33-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

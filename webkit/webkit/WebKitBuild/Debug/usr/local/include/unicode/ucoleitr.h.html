@@ -1,0 +1,286 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ucoleitr.h source code [webkit/WebKitBuild/Debug/usr/local/include/unicode/ucoleitr.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/unicode/ucoleitr.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>unicode</a>/<a href='ucoleitr.h.html'>ucoleitr.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>// © 2016 and later: Unicode, Inc. and others.</i></td></tr>
+<tr><th id="2">2</th><td><i>// License &amp; terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></i></td></tr>
+<tr><th id="3">3</th><td><i>/*</i></td></tr>
+<tr><th id="4">4</th><td><i>*******************************************************************************</i></td></tr>
+<tr><th id="5">5</th><td><i>*   Copyright (C) 2001-2014, International Business Machines</i></td></tr>
+<tr><th id="6">6</th><td><i>*   Corporation and others.  All Rights Reserved.</i></td></tr>
+<tr><th id="7">7</th><td><i>*******************************************************************************</i></td></tr>
+<tr><th id="8">8</th><td><i>*</i></td></tr>
+<tr><th id="9">9</th><td><i>* File ucoleitr.h</i></td></tr>
+<tr><th id="10">10</th><td><i>*</i></td></tr>
+<tr><th id="11">11</th><td><i>* Modification History:</i></td></tr>
+<tr><th id="12">12</th><td><i>*</i></td></tr>
+<tr><th id="13">13</th><td><i>* Date        Name        Description</i></td></tr>
+<tr><th id="14">14</th><td><i>* 02/15/2001  synwee      Modified all methods to process its own function </i></td></tr>
+<tr><th id="15">15</th><td><i>*                         instead of calling the equivalent c++ api (coleitr.h)</i></td></tr>
+<tr><th id="16">16</th><td><i>*******************************************************************************/</i></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><u>#<span data-ppcond="18">ifndef</span> <span class="macro" data-ref="_M/UCOLEITR_H">UCOLEITR_H</span></u></td></tr>
+<tr><th id="19">19</th><td><u>#define <dfn class="macro" id="_M/UCOLEITR_H" data-ref="_M/UCOLEITR_H">UCOLEITR_H</dfn></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="utypes.h.html">"unicode/utypes.h"</a></u></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><u>#<span data-ppcond="23">if</span> !<a class="macro" href="uconfig.h.html#381" title="0" data-ref="_M/UCONFIG_NO_COLLATION">UCONFIG_NO_COLLATION</a></u></td></tr>
+<tr><th id="24">24</th><td></td></tr>
+<tr><th id="25">25</th><td><i class="doc">/**  </i></td></tr>
+<tr><th id="26">26</th><td><i class="doc"> * This indicates an error has occured during processing or if no more CEs is </i></td></tr>
+<tr><th id="27">27</th><td><i class="doc"> * to be returned.</i></td></tr>
+<tr><th id="28">28</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="29">29</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="30">30</th><td><u>#define <dfn class="macro" id="_M/UCOL_NULLORDER" data-ref="_M/UCOL_NULLORDER">UCOL_NULLORDER</dfn>        ((int32_t)0xFFFFFFFF)</u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="ucol.h.html">"unicode/ucol.h"</a></u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><i class="doc">/** </i></td></tr>
+<tr><th id="35">35</th><td><i class="doc"> * The UCollationElements struct.</i></td></tr>
+<tr><th id="36">36</th><td><i class="doc"> * For usage in C programs.</i></td></tr>
+<tr><th id="37">37</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="38">38</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="39">39</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="UCollationElements" title='UCollationElements' data-ref="UCollationElements" data-ref-filename="UCollationElements"><a class="type" href="#UCollationElements" title='UCollationElements' data-ref="UCollationElements" data-ref-filename="UCollationElements">UCollationElements</a></dfn> <dfn class="typedef" id="UCollationElements" title='UCollationElements' data-type='struct UCollationElements' data-ref="UCollationElements" data-ref-filename="UCollationElements">UCollationElements</dfn>;</td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="42">42</th><td><i class="doc"> *<span class="command"> \file</span></i></td></tr>
+<tr><th id="43">43</th><td><i class="doc"> * <span class="command">\brief</span> C API: UCollationElements</i></td></tr>
+<tr><th id="44">44</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="45">45</th><td><i class="doc"> * The UCollationElements API is used as an iterator to walk through each </i></td></tr>
+<tr><th id="46">46</th><td><i class="doc"> * character of an international string. Use the iterator to return the</i></td></tr>
+<tr><th id="47">47</th><td><i class="doc"> * ordering priority of the positioned character. The ordering priority of a </i></td></tr>
+<tr><th id="48">48</th><td><i class="doc"> * character, which we refer to as a key, defines how a character is collated </i></td></tr>
+<tr><th id="49">49</th><td><i class="doc"> * in the given collation object.</i></td></tr>
+<tr><th id="50">50</th><td><i class="doc"> * For example, consider the following in Slovak and in traditional Spanish collation:</i></td></tr>
+<tr><th id="51">51</th><td><i class="doc"> * <span class="tag">&lt;pre&gt;</span></i></td></tr>
+<tr><th id="52">52</th><td><i class="doc"> * .       "ca" -&gt; the first key is key('c') and second key is key('a').</i></td></tr>
+<tr><th id="53">53</th><td><i class="doc"> * .       "cha" -&gt; the first key is key('ch') and second key is key('a').</i></td></tr>
+<tr><th id="54">54</th><td><i class="doc"> * <span class="tag">&lt;/pre&gt;</span></i></td></tr>
+<tr><th id="55">55</th><td><i class="doc"> * And in German phonebook collation,</i></td></tr>
+<tr><th id="56">56</th><td><i class="doc"> * <span class="tag">&lt;pre&gt;</span></i></td></tr>
+<tr><th id="57">57</th><td><i class="doc"> * .       "&lt;ae ligature&gt;b"-&gt; the first key is key('a'), the second key is key('e'), and</i></td></tr>
+<tr><th id="58">58</th><td><i class="doc"> * .       the third key is key('b').</i></td></tr>
+<tr><th id="59">59</th><td><i class="doc"> * <span class="tag">&lt;/pre&gt;</span></i></td></tr>
+<tr><th id="60">60</th><td><i class="doc"> * <span class="tag">&lt;p&gt;</span>Example of the iterator usage: (without error checking)</i></td></tr>
+<tr><th id="61">61</th><td><i class="doc"> * <span class="tag">&lt;pre&gt;</span></i></td></tr>
+<tr><th id="62">62</th><td><i class="doc"> * .  void CollationElementIterator_Example()</i></td></tr>
+<tr><th id="63">63</th><td><i class="doc"> * .  {</i></td></tr>
+<tr><th id="64">64</th><td><i class="doc"> * .      UChar *s;</i></td></tr>
+<tr><th id="65">65</th><td><i class="doc"> * .      t_int32 order, primaryOrder;</i></td></tr>
+<tr><th id="66">66</th><td><i class="doc"> * .      UCollationElements *c;</i></td></tr>
+<tr><th id="67">67</th><td><i class="doc"> * .      UCollatorOld *coll;</i></td></tr>
+<tr><th id="68">68</th><td><i class="doc"> * .      UErrorCode success = U_ZERO_ERROR;</i></td></tr>
+<tr><th id="69">69</th><td><i class="doc"> * .      s=(UChar*)malloc(sizeof(UChar) * (strlen("This is a test")+1) );</i></td></tr>
+<tr><th id="70">70</th><td><i class="doc"> * .      u_uastrcpy(s, "This is a test");</i></td></tr>
+<tr><th id="71">71</th><td><i class="doc"> * .      coll = ucol_open(NULL, &amp;success);</i></td></tr>
+<tr><th id="72">72</th><td><i class="doc"> * .      c = ucol_openElements(coll, str, u_strlen(str), &amp;status);</i></td></tr>
+<tr><th id="73">73</th><td><i class="doc"> * .      order = ucol_next(c, &amp;success);</i></td></tr>
+<tr><th id="74">74</th><td><i class="doc"> * .      ucol_reset(c);</i></td></tr>
+<tr><th id="75">75</th><td><i class="doc"> * .      order = ucol_prev(c, &amp;success);</i></td></tr>
+<tr><th id="76">76</th><td><i class="doc"> * .      free(s);</i></td></tr>
+<tr><th id="77">77</th><td><i class="doc"> * .      ucol_close(coll);</i></td></tr>
+<tr><th id="78">78</th><td><i class="doc"> * .      ucol_closeElements(c);</i></td></tr>
+<tr><th id="79">79</th><td><i class="doc"> * .  }</i></td></tr>
+<tr><th id="80">80</th><td><i class="doc"> * <span class="tag">&lt;/pre&gt;</span></i></td></tr>
+<tr><th id="81">81</th><td><i class="doc"> * <span class="tag">&lt;p&gt;</span></i></td></tr>
+<tr><th id="82">82</th><td><i class="doc"> * ucol_next() returns the collation order of the next.</i></td></tr>
+<tr><th id="83">83</th><td><i class="doc"> * ucol_prev() returns the collation order of the previous character.</i></td></tr>
+<tr><th id="84">84</th><td><i class="doc"> * The Collation Element Iterator moves only in one direction between calls to</i></td></tr>
+<tr><th id="85">85</th><td><i class="doc"> * ucol_reset. That is, ucol_next() and ucol_prev can not be inter-used. </i></td></tr>
+<tr><th id="86">86</th><td><i class="doc"> * Whenever ucol_prev is to be called after ucol_next() or vice versa, </i></td></tr>
+<tr><th id="87">87</th><td><i class="doc"> * ucol_reset has to be called first to reset the status, shifting pointers to </i></td></tr>
+<tr><th id="88">88</th><td><i class="doc"> * either the end or the start of the string. Hence at the next call of </i></td></tr>
+<tr><th id="89">89</th><td><i class="doc"> * ucol_prev or ucol_next, the first or last collation order will be returned. </i></td></tr>
+<tr><th id="90">90</th><td><i class="doc"> * If a change of direction is done without a ucol_reset, the result is </i></td></tr>
+<tr><th id="91">91</th><td><i class="doc"> * undefined.</i></td></tr>
+<tr><th id="92">92</th><td><i class="doc"> * The result of a forward iterate (ucol_next) and reversed result of the  </i></td></tr>
+<tr><th id="93">93</th><td><i class="doc"> * backward iterate (ucol_prev) on the same string are equivalent, if </i></td></tr>
+<tr><th id="94">94</th><td><i class="doc"> * collation orders with the value 0 are ignored.</i></td></tr>
+<tr><th id="95">95</th><td><i class="doc"> * Character based on the comparison level of the collator.  A collation order </i></td></tr>
+<tr><th id="96">96</th><td><i class="doc"> * consists of primary order, secondary order and tertiary order.  The data </i></td></tr>
+<tr><th id="97">97</th><td><i class="doc"> * type of the collation order is <span class="tag">&lt;strong&gt;</span>int32_t<span class="tag">&lt;/strong&gt;</span>. </i></td></tr>
+<tr><th id="98">98</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="99">99</th><td><i class="doc"> * <span class="command">@see</span> UCollator</i></td></tr>
+<tr><th id="100">100</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="103">103</th><td><i class="doc"> * Open the collation elements for a string.</i></td></tr>
+<tr><th id="104">104</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="105">105</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">coll</span> The collator containing the desired collation rules.</i></td></tr>
+<tr><th id="106">106</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">text</span> The text to iterate over.</i></td></tr>
+<tr><th id="107">107</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">textLength</span> The number of characters in text, or -1 if null-terminated</i></td></tr>
+<tr><th id="108">108</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">status</span> A pointer to a UErrorCode to receive any errors.</i></td></tr>
+<tr><th id="109">109</th><td><i class="doc"> * <span class="command">@return</span> a struct containing collation element information</i></td></tr>
+<tr><th id="110">110</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="111">111</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="112">112</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <a class="typedef" href="#UCollationElements" title='UCollationElements' data-type='struct UCollationElements' data-ref="UCollationElements" data-ref-filename="UCollationElements">UCollationElements</a>* <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> </td></tr>
+<tr><th id="113">113</th><td><dfn class="decl fn" id="ucol_openElements" title='ucol_openElements' data-ref="ucol_openElements" data-ref-filename="ucol_openElements">ucol_openElements</dfn>(<em>const</em> <a class="typedef" href="ucol.h.html#UCollator" title='UCollator' data-type='struct UCollator' data-ref="UCollator" data-ref-filename="UCollator">UCollator</a>  *<dfn class="local col3 decl" id="143coll" title='coll' data-type='const UCollator *' data-ref="143coll" data-ref-filename="143coll">coll</dfn>,</td></tr>
+<tr><th id="114">114</th><td>                  <em>const</em> <a class="typedef" href="umachine.h.html#UChar" title='UChar' data-type='char16_t' data-ref="UChar" data-ref-filename="UChar">UChar</a>      *<dfn class="local col4 decl" id="144text" title='text' data-type='const UChar *' data-ref="144text" data-ref-filename="144text">text</dfn>,</td></tr>
+<tr><th id="115">115</th><td>                        <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>    <dfn class="local col5 decl" id="145textLength" title='textLength' data-type='int32_t' data-ref="145textLength" data-ref-filename="145textLength">textLength</dfn>,</td></tr>
+<tr><th id="116">116</th><td>                        <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col6 decl" id="146status" title='status' data-type='UErrorCode *' data-ref="146status" data-ref-filename="146status">status</dfn>);</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="120">120</th><td><i class="doc"> * get a hash code for a key... Not very useful!</i></td></tr>
+<tr><th id="121">121</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">key</span>    the given key.</i></td></tr>
+<tr><th id="122">122</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">length</span> the size of the key array.</i></td></tr>
+<tr><th id="123">123</th><td><i class="doc"> * <span class="command">@return</span>       the hash code.</i></td></tr>
+<tr><th id="124">124</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="125">125</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="126">126</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> </td></tr>
+<tr><th id="127">127</th><td><dfn class="decl fn" id="ucol_keyHashCode" title='ucol_keyHashCode' data-ref="ucol_keyHashCode" data-ref-filename="ucol_keyHashCode">ucol_keyHashCode</dfn>(<em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col7 decl" id="147key" title='key' data-type='const uint8_t *' data-ref="147key" data-ref-filename="147key">key</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col8 decl" id="148length" title='length' data-type='int32_t' data-ref="148length" data-ref-filename="148length">length</dfn>);</td></tr>
+<tr><th id="128">128</th><td></td></tr>
+<tr><th id="129">129</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="130">130</th><td><i class="doc"> * Close a UCollationElements.</i></td></tr>
+<tr><th id="131">131</th><td><i class="doc"> * Once closed, a UCollationElements may no longer be used.</i></td></tr>
+<tr><th id="132">132</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">elems</span> The UCollationElements to close.</i></td></tr>
+<tr><th id="133">133</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="134">134</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="135">135</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>void</em> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> </td></tr>
+<tr><th id="136">136</th><td><dfn class="decl fn" id="ucol_closeElements" title='ucol_closeElements' data-ref="ucol_closeElements" data-ref-filename="ucol_closeElements">ucol_closeElements</dfn>(<a class="typedef" href="#UCollationElements" title='UCollationElements' data-type='struct UCollationElements' data-ref="UCollationElements" data-ref-filename="UCollationElements">UCollationElements</a> *<dfn class="local col9 decl" id="149elems" title='elems' data-type='UCollationElements *' data-ref="149elems" data-ref-filename="149elems">elems</dfn>);</td></tr>
+<tr><th id="137">137</th><td></td></tr>
+<tr><th id="138">138</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="139">139</th><td><i class="doc"> * Reset the collation elements to their initial state.</i></td></tr>
+<tr><th id="140">140</th><td><i class="doc"> * This will move the 'cursor' to the beginning of the text.</i></td></tr>
+<tr><th id="141">141</th><td><i class="doc"> * Property settings for collation will be reset to the current status.</i></td></tr>
+<tr><th id="142">142</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">elems</span> The UCollationElements to reset.</i></td></tr>
+<tr><th id="143">143</th><td><i class="doc"> * <span class="command">@see</span> ucol_next</i></td></tr>
+<tr><th id="144">144</th><td><i class="doc"> * <span class="command">@see</span> ucol_previous</i></td></tr>
+<tr><th id="145">145</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="146">146</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="147">147</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>void</em> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> </td></tr>
+<tr><th id="148">148</th><td><dfn class="decl fn" id="ucol_reset" title='ucol_reset' data-ref="ucol_reset" data-ref-filename="ucol_reset">ucol_reset</dfn>(<a class="typedef" href="#UCollationElements" title='UCollationElements' data-type='struct UCollationElements' data-ref="UCollationElements" data-ref-filename="UCollationElements">UCollationElements</a> *<dfn class="local col0 decl" id="150elems" title='elems' data-type='UCollationElements *' data-ref="150elems" data-ref-filename="150elems">elems</dfn>);</td></tr>
+<tr><th id="149">149</th><td></td></tr>
+<tr><th id="150">150</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="151">151</th><td><i class="doc"> * Get the ordering priority of the next collation element in the text.</i></td></tr>
+<tr><th id="152">152</th><td><i class="doc"> * A single character may contain more than one collation element.</i></td></tr>
+<tr><th id="153">153</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">elems</span> The UCollationElements containing the text.</i></td></tr>
+<tr><th id="154">154</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">status</span> A pointer to a UErrorCode to receive any errors.</i></td></tr>
+<tr><th id="155">155</th><td><i class="doc"> * <span class="command">@return</span> The next collation elements ordering, otherwise returns UCOL_NULLORDER </i></td></tr>
+<tr><th id="156">156</th><td><i class="doc"> *         if an error has occured or if the end of string has been reached</i></td></tr>
+<tr><th id="157">157</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="158">158</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="159">159</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> </td></tr>
+<tr><th id="160">160</th><td><dfn class="decl fn" id="ucol_next" title='ucol_next' data-ref="ucol_next" data-ref-filename="ucol_next">ucol_next</dfn>(<a class="typedef" href="#UCollationElements" title='UCollationElements' data-type='struct UCollationElements' data-ref="UCollationElements" data-ref-filename="UCollationElements">UCollationElements</a> *<dfn class="local col1 decl" id="151elems" title='elems' data-type='UCollationElements *' data-ref="151elems" data-ref-filename="151elems">elems</dfn>, <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col2 decl" id="152status" title='status' data-type='UErrorCode *' data-ref="152status" data-ref-filename="152status">status</dfn>);</td></tr>
+<tr><th id="161">161</th><td></td></tr>
+<tr><th id="162">162</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="163">163</th><td><i class="doc"> * Get the ordering priority of the previous collation element in the text.</i></td></tr>
+<tr><th id="164">164</th><td><i class="doc"> * A single character may contain more than one collation element.</i></td></tr>
+<tr><th id="165">165</th><td><i class="doc"> * Note that internally a stack is used to store buffered collation elements. </i></td></tr>
+<tr><th id="166">166</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">elems</span> The UCollationElements containing the text.</i></td></tr>
+<tr><th id="167">167</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">status</span> A pointer to a UErrorCode to receive any errors. Noteably </i></td></tr>
+<tr><th id="168">168</th><td><i class="doc"> *               a U_BUFFER_OVERFLOW_ERROR is returned if the internal stack</i></td></tr>
+<tr><th id="169">169</th><td><i class="doc"> *               buffer has been exhausted.</i></td></tr>
+<tr><th id="170">170</th><td><i class="doc"> * <span class="command">@return</span> The previous collation elements ordering, otherwise returns </i></td></tr>
+<tr><th id="171">171</th><td><i class="doc"> *         UCOL_NULLORDER if an error has occured or if the start of string has </i></td></tr>
+<tr><th id="172">172</th><td><i class="doc"> *         been reached.</i></td></tr>
+<tr><th id="173">173</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="174">174</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="175">175</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> </td></tr>
+<tr><th id="176">176</th><td><dfn class="decl fn" id="ucol_previous" title='ucol_previous' data-ref="ucol_previous" data-ref-filename="ucol_previous">ucol_previous</dfn>(<a class="typedef" href="#UCollationElements" title='UCollationElements' data-type='struct UCollationElements' data-ref="UCollationElements" data-ref-filename="UCollationElements">UCollationElements</a> *<dfn class="local col3 decl" id="153elems" title='elems' data-type='UCollationElements *' data-ref="153elems" data-ref-filename="153elems">elems</dfn>, <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col4 decl" id="154status" title='status' data-type='UErrorCode *' data-ref="154status" data-ref-filename="154status">status</dfn>);</td></tr>
+<tr><th id="177">177</th><td></td></tr>
+<tr><th id="178">178</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="179">179</th><td><i class="doc"> * Get the maximum length of any expansion sequences that end with the </i></td></tr>
+<tr><th id="180">180</th><td><i class="doc"> * specified comparison order.</i></td></tr>
+<tr><th id="181">181</th><td><i class="doc"> * This is useful for .... ?</i></td></tr>
+<tr><th id="182">182</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">elems</span> The UCollationElements containing the text.</i></td></tr>
+<tr><th id="183">183</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">order</span> A collation order returned by previous or next.</i></td></tr>
+<tr><th id="184">184</th><td><i class="doc"> * <span class="command">@return</span> maximum size of the expansion sequences ending with the collation </i></td></tr>
+<tr><th id="185">185</th><td><i class="doc"> *         element or 1 if collation element does not occur at the end of any </i></td></tr>
+<tr><th id="186">186</th><td><i class="doc"> *         expansion sequence</i></td></tr>
+<tr><th id="187">187</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="188">188</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="189">189</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> </td></tr>
+<tr><th id="190">190</th><td><dfn class="decl fn" id="ucol_getMaxExpansion" title='ucol_getMaxExpansion' data-ref="ucol_getMaxExpansion" data-ref-filename="ucol_getMaxExpansion">ucol_getMaxExpansion</dfn>(<em>const</em> <a class="typedef" href="#UCollationElements" title='UCollationElements' data-type='struct UCollationElements' data-ref="UCollationElements" data-ref-filename="UCollationElements">UCollationElements</a> *<dfn class="local col5 decl" id="155elems" title='elems' data-type='const UCollationElements *' data-ref="155elems" data-ref-filename="155elems">elems</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col6 decl" id="156order" title='order' data-type='int32_t' data-ref="156order" data-ref-filename="156order">order</dfn>);</td></tr>
+<tr><th id="191">191</th><td></td></tr>
+<tr><th id="192">192</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="193">193</th><td><i class="doc"> * Set the text containing the collation elements.</i></td></tr>
+<tr><th id="194">194</th><td><i class="doc"> * Property settings for collation will remain the same.</i></td></tr>
+<tr><th id="195">195</th><td><i class="doc"> * In order to reset the iterator to the current collation property settings,</i></td></tr>
+<tr><th id="196">196</th><td><i class="doc"> * the API reset() has to be called.</i></td></tr>
+<tr><th id="197">197</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">elems</span> The UCollationElements to set.</i></td></tr>
+<tr><th id="198">198</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">text</span> The source text containing the collation elements.</i></td></tr>
+<tr><th id="199">199</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">textLength</span> The length of text, or -1 if null-terminated.</i></td></tr>
+<tr><th id="200">200</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">status</span> A pointer to a UErrorCode to receive any errors.</i></td></tr>
+<tr><th id="201">201</th><td><i class="doc"> * <span class="command">@see</span> ucol_getText</i></td></tr>
+<tr><th id="202">202</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="203">203</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="204">204</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>void</em> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> </td></tr>
+<tr><th id="205">205</th><td><dfn class="decl fn" id="ucol_setText" title='ucol_setText' data-ref="ucol_setText" data-ref-filename="ucol_setText">ucol_setText</dfn>(      <a class="typedef" href="#UCollationElements" title='UCollationElements' data-type='struct UCollationElements' data-ref="UCollationElements" data-ref-filename="UCollationElements">UCollationElements</a> *<dfn class="local col7 decl" id="157elems" title='elems' data-type='UCollationElements *' data-ref="157elems" data-ref-filename="157elems">elems</dfn>, </td></tr>
+<tr><th id="206">206</th><td>             <em>const</em> <a class="typedef" href="umachine.h.html#UChar" title='UChar' data-type='char16_t' data-ref="UChar" data-ref-filename="UChar">UChar</a>              *<dfn class="local col8 decl" id="158text" title='text' data-type='const UChar *' data-ref="158text" data-ref-filename="158text">text</dfn>,</td></tr>
+<tr><th id="207">207</th><td>                   <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>            <dfn class="local col9 decl" id="159textLength" title='textLength' data-type='int32_t' data-ref="159textLength" data-ref-filename="159textLength">textLength</dfn>,</td></tr>
+<tr><th id="208">208</th><td>                   <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a>         *<dfn class="local col0 decl" id="160status" title='status' data-type='UErrorCode *' data-ref="160status" data-ref-filename="160status">status</dfn>);</td></tr>
+<tr><th id="209">209</th><td></td></tr>
+<tr><th id="210">210</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="211">211</th><td><i class="doc"> * Get the offset of the current source character.</i></td></tr>
+<tr><th id="212">212</th><td><i class="doc"> * This is an offset into the text of the character containing the current</i></td></tr>
+<tr><th id="213">213</th><td><i class="doc"> * collation elements.</i></td></tr>
+<tr><th id="214">214</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">elems</span> The UCollationElements to query.</i></td></tr>
+<tr><th id="215">215</th><td><i class="doc"> * <span class="command">@return</span> The offset of the current source character.</i></td></tr>
+<tr><th id="216">216</th><td><i class="doc"> * <span class="command">@see</span> ucol_setOffset</i></td></tr>
+<tr><th id="217">217</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="218">218</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="219">219</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> </td></tr>
+<tr><th id="220">220</th><td><dfn class="decl fn" id="ucol_getOffset" title='ucol_getOffset' data-ref="ucol_getOffset" data-ref-filename="ucol_getOffset">ucol_getOffset</dfn>(<em>const</em> <a class="typedef" href="#UCollationElements" title='UCollationElements' data-type='struct UCollationElements' data-ref="UCollationElements" data-ref-filename="UCollationElements">UCollationElements</a> *<dfn class="local col1 decl" id="161elems" title='elems' data-type='const UCollationElements *' data-ref="161elems" data-ref-filename="161elems">elems</dfn>);</td></tr>
+<tr><th id="221">221</th><td></td></tr>
+<tr><th id="222">222</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="223">223</th><td><i class="doc"> * Set the offset of the current source character.</i></td></tr>
+<tr><th id="224">224</th><td><i class="doc"> * This is an offset into the text of the character to be processed.</i></td></tr>
+<tr><th id="225">225</th><td><i class="doc"> * Property settings for collation will remain the same.</i></td></tr>
+<tr><th id="226">226</th><td><i class="doc"> * In order to reset the iterator to the current collation property settings,</i></td></tr>
+<tr><th id="227">227</th><td><i class="doc"> * the API reset() has to be called.</i></td></tr>
+<tr><th id="228">228</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">elems</span> The UCollationElements to set.</i></td></tr>
+<tr><th id="229">229</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">offset</span> The desired character offset.</i></td></tr>
+<tr><th id="230">230</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">status</span> A pointer to a UErrorCode to receive any errors.</i></td></tr>
+<tr><th id="231">231</th><td><i class="doc"> * <span class="command">@see</span> ucol_getOffset</i></td></tr>
+<tr><th id="232">232</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 2.0</i></td></tr>
+<tr><th id="233">233</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="234">234</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>void</em> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> </td></tr>
+<tr><th id="235">235</th><td><dfn class="decl fn" id="ucol_setOffset" title='ucol_setOffset' data-ref="ucol_setOffset" data-ref-filename="ucol_setOffset">ucol_setOffset</dfn>(<a class="typedef" href="#UCollationElements" title='UCollationElements' data-type='struct UCollationElements' data-ref="UCollationElements" data-ref-filename="UCollationElements">UCollationElements</a> *<dfn class="local col2 decl" id="162elems" title='elems' data-type='UCollationElements *' data-ref="162elems" data-ref-filename="162elems">elems</dfn>,</td></tr>
+<tr><th id="236">236</th><td>               <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>        <dfn class="local col3 decl" id="163offset" title='offset' data-type='int32_t' data-ref="163offset" data-ref-filename="163offset">offset</dfn>,</td></tr>
+<tr><th id="237">237</th><td>               <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a>         *<dfn class="local col4 decl" id="164status" title='status' data-type='UErrorCode *' data-ref="164status" data-ref-filename="164status">status</dfn>);</td></tr>
+<tr><th id="238">238</th><td></td></tr>
+<tr><th id="239">239</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="240">240</th><td><i class="doc">* Get the primary order of a collation order.</i></td></tr>
+<tr><th id="241">241</th><td><i class="doc">* <span class="command">@param</span> <span class="arg">order</span> the collation order</i></td></tr>
+<tr><th id="242">242</th><td><i class="doc">* <span class="command">@return</span> the primary order of a collation order.</i></td></tr>
+<tr><th id="243">243</th><td><i class="doc">*<span class="command"> @stable</span> ICU 2.6</i></td></tr>
+<tr><th id="244">244</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="245">245</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="246">246</th><td><dfn class="decl fn" id="ucol_primaryOrder" title='ucol_primaryOrder' data-ref="ucol_primaryOrder" data-ref-filename="ucol_primaryOrder">ucol_primaryOrder</dfn> (<span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col5 decl" id="165order" title='order' data-type='int32_t' data-ref="165order" data-ref-filename="165order">order</dfn>); </td></tr>
+<tr><th id="247">247</th><td></td></tr>
+<tr><th id="248">248</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="249">249</th><td><i class="doc">* Get the secondary order of a collation order.</i></td></tr>
+<tr><th id="250">250</th><td><i class="doc">* <span class="command">@param</span> <span class="arg">order</span> the collation order</i></td></tr>
+<tr><th id="251">251</th><td><i class="doc">* <span class="command">@return</span> the secondary order of a collation order.</i></td></tr>
+<tr><th id="252">252</th><td><i class="doc">*<span class="command"> @stable</span> ICU 2.6</i></td></tr>
+<tr><th id="253">253</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="254">254</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="255">255</th><td><dfn class="decl fn" id="ucol_secondaryOrder" title='ucol_secondaryOrder' data-ref="ucol_secondaryOrder" data-ref-filename="ucol_secondaryOrder">ucol_secondaryOrder</dfn> (<span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col6 decl" id="166order" title='order' data-type='int32_t' data-ref="166order" data-ref-filename="166order">order</dfn>); </td></tr>
+<tr><th id="256">256</th><td></td></tr>
+<tr><th id="257">257</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="258">258</th><td><i class="doc">* Get the tertiary order of a collation order.</i></td></tr>
+<tr><th id="259">259</th><td><i class="doc">* <span class="command">@param</span> <span class="arg">order</span> the collation order</i></td></tr>
+<tr><th id="260">260</th><td><i class="doc">* <span class="command">@return</span> the tertiary order of a collation order.</i></td></tr>
+<tr><th id="261">261</th><td><i class="doc">*<span class="command"> @stable</span> ICU 2.6</i></td></tr>
+<tr><th id="262">262</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="263">263</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="264">264</th><td><dfn class="decl fn" id="ucol_tertiaryOrder" title='ucol_tertiaryOrder' data-ref="ucol_tertiaryOrder" data-ref-filename="ucol_tertiaryOrder">ucol_tertiaryOrder</dfn> (<span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col7 decl" id="167order" title='order' data-type='int32_t' data-ref="167order" data-ref-filename="167order">order</dfn>); </td></tr>
+<tr><th id="265">265</th><td></td></tr>
+<tr><th id="266">266</th><td><u>#<span data-ppcond="23">endif</span> /* #if !UCONFIG_NO_COLLATION */</u></td></tr>
+<tr><th id="267">267</th><td></td></tr>
+<tr><th id="268">268</th><td><u>#<span data-ppcond="18">endif</span></u></td></tr>
+<tr><th id="269">269</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../DerivedSources/WebCore/unified-sources/UnifiedSource151.cpp.html'>webkit/WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource151.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

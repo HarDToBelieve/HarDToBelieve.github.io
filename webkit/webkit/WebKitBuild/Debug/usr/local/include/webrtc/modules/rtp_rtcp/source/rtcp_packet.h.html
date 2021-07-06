@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>rtcp_packet.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/modules/rtp_rtcp/source/rtcp_packet.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::rtcp::RtcpPacket "/>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/modules/rtp_rtcp/source/rtcp_packet.h'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>WebKitBuild</a>/<a href='../../../../../../..'>Debug</a>/<a href='../../../../../..'>usr</a>/<a href='../../../../..'>local</a>/<a href='../../../..'>include</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>rtp_rtcp</a>/<a href='./'>source</a>/<a href='rtcp_packet.h.html'>rtcp_packet.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2014 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> *</i></td></tr>
+<tr><th id="10">10</th><td><i> */</i></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/MODULES_RTP_RTCP_SOURCE_RTCP_PACKET_H_">MODULES_RTP_RTCP_SOURCE_RTCP_PACKET_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/MODULES_RTP_RTCP_SOURCE_RTCP_PACKET_H_" data-ref="_M/MODULES_RTP_RTCP_SOURCE_RTCP_PACKET_H_">MODULES_RTP_RTCP_SOURCE_RTCP_PACKET_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../../../api/array_view.h.html">"api/array_view.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../../../api/function_view.h.html">"api/function_view.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="../../../rtc_base/buffer.h.html">"rtc_base/buffer.h"</a></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="22">22</th><td><b>namespace</b> <span class="namespace">rtcp</span> {</td></tr>
+<tr><th id="23">23</th><td><i>// Class for building RTCP packets.</i></td></tr>
+<tr><th id="24">24</th><td><i>//</i></td></tr>
+<tr><th id="25">25</th><td><i>//  Example:</i></td></tr>
+<tr><th id="26">26</th><td><i>//  ReportBlock report_block;</i></td></tr>
+<tr><th id="27">27</th><td><i>//  report_block.SetMediaSsrc(234);</i></td></tr>
+<tr><th id="28">28</th><td><i>//  report_block.SetFractionLost(10);</i></td></tr>
+<tr><th id="29">29</th><td><i>//</i></td></tr>
+<tr><th id="30">30</th><td><i>//  ReceiverReport rr;</i></td></tr>
+<tr><th id="31">31</th><td><i>//  rr.SetSenderSsrc(123);</i></td></tr>
+<tr><th id="32">32</th><td><i>//  rr.AddReportBlock(report_block);</i></td></tr>
+<tr><th id="33">33</th><td><i>//</i></td></tr>
+<tr><th id="34">34</th><td><i>//  Fir fir;</i></td></tr>
+<tr><th id="35">35</th><td><i>//  fir.SetSenderSsrc(123);</i></td></tr>
+<tr><th id="36">36</th><td><i>//  fir.AddRequestTo(234, 56);</i></td></tr>
+<tr><th id="37">37</th><td><i>//</i></td></tr>
+<tr><th id="38">38</th><td><i>//  size_t length = 0;                     // Builds an intra frame request</i></td></tr>
+<tr><th id="39">39</th><td><i>//  uint8_t packet[kPacketSize];           // with sequence number 56.</i></td></tr>
+<tr><th id="40">40</th><td><i>//  fir.Build(packet, &amp;length, kPacketSize);</i></td></tr>
+<tr><th id="41">41</th><td><i>//</i></td></tr>
+<tr><th id="42">42</th><td><i>//  rtc::Buffer packet = fir.Build();      // Returns a RawPacket holding</i></td></tr>
+<tr><th id="43">43</th><td><i>//                                         // the built rtcp packet.</i></td></tr>
+<tr><th id="44">44</th><td><i>//</i></td></tr>
+<tr><th id="45">45</th><td><i>//  CompoundPacket compound;               // Builds a compound RTCP packet with</i></td></tr>
+<tr><th id="46">46</th><td><i>//  compound.Append(&amp;rr);                  // a receiver report, report block</i></td></tr>
+<tr><th id="47">47</th><td><i>//  compound.Append(&amp;fir);                 // and fir message.</i></td></tr>
+<tr><th id="48">48</th><td><i>//  rtc::Buffer packet = compound.Build();</i></td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><b>class</b> <dfn class="type def" id="webrtc::rtcp::RtcpPacket" title='webrtc::rtcp::RtcpPacket' data-ref="webrtc::rtcp::RtcpPacket" data-ref-filename="webrtc..rtcp..RtcpPacket">RtcpPacket</dfn> {</td></tr>
+<tr><th id="51">51</th><td> <b>public</b>:</td></tr>
+<tr><th id="52">52</th><td>  <i>// Callback used to signal that an RTCP packet is ready. Note that this may</i></td></tr>
+<tr><th id="53">53</th><td><i>  // not contain all data in this RtcpPacket; if a packet cannot fit in</i></td></tr>
+<tr><th id="54">54</th><td><i>  // max_length bytes, it will be fragmented and multiple calls to this</i></td></tr>
+<tr><th id="55">55</th><td><i>  // callback will be made.</i></td></tr>
+<tr><th id="56">56</th><td>  <b>using</b> <dfn class="typedef" id="webrtc::rtcp::RtcpPacket::PacketReadyCallback" title='webrtc::rtcp::RtcpPacket::PacketReadyCallback' data-type='rtc::FunctionView&lt;void (rtc::ArrayView&lt;const uint8_t&gt;)&gt;' data-ref="webrtc::rtcp::RtcpPacket::PacketReadyCallback" data-ref-filename="webrtc..rtcp..RtcpPacket..PacketReadyCallback">PacketReadyCallback</dfn> =</td></tr>
+<tr><th id="57">57</th><td>      <span class="namespace">rtc::</span><a class="type" href="../../../api/function_view.h.html#rtc::FunctionView" title='rtc::FunctionView' data-ref="rtc::FunctionView" data-ref-filename="rtc..FunctionView">FunctionView</a>&lt;<em>void</em>(<span class="namespace">rtc::</span><a class="type" href="../../../api/array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>&gt; <dfn class="local col3 decl" id="2713packet" title='packet' data-type='rtc::ArrayView&lt;const uint8_t&gt;' data-ref="2713packet" data-ref-filename="2713packet">packet</dfn>)&gt;;</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc4rtcp10RtcpPacketD1Ev" title='webrtc::rtcp::RtcpPacket::~RtcpPacket' data-ref="_ZN6webrtc4rtcp10RtcpPacketD1Ev" data-ref-filename="_ZN6webrtc4rtcp10RtcpPacketD1Ev">~RtcpPacket</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN6webrtc4rtcp10RtcpPacket13SetSenderSsrcEj" title='webrtc::rtcp::RtcpPacket::SetSenderSsrc' data-ref="_ZN6webrtc4rtcp10RtcpPacket13SetSenderSsrcEj" data-ref-filename="_ZN6webrtc4rtcp10RtcpPacket13SetSenderSsrcEj">SetSenderSsrc</dfn>(<span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col4 decl" id="2714ssrc" title='ssrc' data-type='uint32_t' data-ref="2714ssrc" data-ref-filename="2714ssrc">ssrc</dfn>) { <a class="member field" href="#webrtc::rtcp::RtcpPacket::sender_ssrc_" title='webrtc::rtcp::RtcpPacket::sender_ssrc_' data-ref="webrtc::rtcp::RtcpPacket::sender_ssrc_" data-ref-filename="webrtc..rtcp..RtcpPacket..sender_ssrc_">sender_ssrc_</a> = <a class="local col4 ref" href="#2714ssrc" title='ssrc' data-ref="2714ssrc" data-ref-filename="2714ssrc">ssrc</a>; }</td></tr>
+<tr><th id="62">62</th><td>  <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl def fn" id="_ZNK6webrtc4rtcp10RtcpPacket11sender_ssrcEv" title='webrtc::rtcp::RtcpPacket::sender_ssrc' data-ref="_ZNK6webrtc4rtcp10RtcpPacket11sender_ssrcEv" data-ref-filename="_ZNK6webrtc4rtcp10RtcpPacket11sender_ssrcEv">sender_ssrc</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#webrtc::rtcp::RtcpPacket::sender_ssrc_" title='webrtc::rtcp::RtcpPacket::sender_ssrc_' data-ref="webrtc::rtcp::RtcpPacket::sender_ssrc_" data-ref-filename="webrtc..rtcp..RtcpPacket..sender_ssrc_">sender_ssrc_</a>; }</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td>  <i>// Convenience method mostly used for test. Creates packet without</i></td></tr>
+<tr><th id="65">65</th><td><i>  // fragmentation using BlockLength() to allocate big enough buffer.</i></td></tr>
+<tr><th id="66">66</th><td>  <span class="namespace">rtc::</span><a class="typedef" href="../../../rtc_base/buffer.h.html#rtc::Buffer" title='rtc::Buffer' data-type='BufferT&lt;uint8_t&gt;' data-ref="rtc::Buffer" data-ref-filename="rtc..Buffer">Buffer</a> <dfn class="decl fn" id="_ZNK6webrtc4rtcp10RtcpPacket5BuildEv" title='webrtc::rtcp::RtcpPacket::Build' data-ref="_ZNK6webrtc4rtcp10RtcpPacket5BuildEv" data-ref-filename="_ZNK6webrtc4rtcp10RtcpPacket5BuildEv">Build</dfn>() <em>const</em>;</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td>  <i>// Returns true if call to Create succeeded.</i></td></tr>
+<tr><th id="69">69</th><td>  <em>bool</em> <dfn class="decl fn" id="_ZNK6webrtc4rtcp10RtcpPacket5BuildEmN3rtc12FunctionViewIFvNS2_9ArrayViewIKhLln4711EEEEEE" title='webrtc::rtcp::RtcpPacket::Build' data-ref="_ZNK6webrtc4rtcp10RtcpPacket5BuildEmN3rtc12FunctionViewIFvNS2_9ArrayViewIKhLln4711EEEEEE" data-ref-filename="_ZNK6webrtc4rtcp10RtcpPacket5BuildEmN3rtc12FunctionViewIFvNS2_9ArrayViewIKhLln4711EEEEEE">Build</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="2715max_length" title='max_length' data-type='size_t' data-ref="2715max_length" data-ref-filename="2715max_length">max_length</dfn>, <a class="typedef" href="#webrtc::rtcp::RtcpPacket::PacketReadyCallback" title='webrtc::rtcp::RtcpPacket::PacketReadyCallback' data-type='rtc::FunctionView&lt;void (rtc::ArrayView&lt;const uint8_t&gt;)&gt;' data-ref="webrtc::rtcp::RtcpPacket::PacketReadyCallback" data-ref-filename="webrtc..rtcp..RtcpPacket..PacketReadyCallback">PacketReadyCallback</a> <dfn class="local col6 decl" id="2716callback" title='callback' data-type='webrtc::rtcp::RtcpPacket::PacketReadyCallback' data-ref="2716callback" data-ref-filename="2716callback">callback</dfn>) <em>const</em>;</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td>  <i>// Size of this packet in bytes (including headers).</i></td></tr>
+<tr><th id="72">72</th><td>  <b>virtual</b> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="virtual decl fn" id="_ZNK6webrtc4rtcp10RtcpPacket11BlockLengthEv" title='webrtc::rtcp::RtcpPacket::BlockLength' data-ref="_ZNK6webrtc4rtcp10RtcpPacket11BlockLengthEv" data-ref-filename="_ZNK6webrtc4rtcp10RtcpPacket11BlockLengthEv">BlockLength</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td>  <i>// Creates packet in the given buffer at the given position.</i></td></tr>
+<tr><th id="75">75</th><td><i>  // Calls PacketReadyCallback::OnPacketReady if remaining buffer is too small</i></td></tr>
+<tr><th id="76">76</th><td><i>  // and assume buffer can be reused after OnPacketReady returns.</i></td></tr>
+<tr><th id="77">77</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZNK6webrtc4rtcp10RtcpPacket6CreateEPhPmmN3rtc12FunctionViewIFvNS4_9ArrayViewIKhLln4711EEEEEE" title='webrtc::rtcp::RtcpPacket::Create' data-ref="_ZNK6webrtc4rtcp10RtcpPacket6CreateEPhPmmN3rtc12FunctionViewIFvNS4_9ArrayViewIKhLln4711EEEEEE" data-ref-filename="_ZNK6webrtc4rtcp10RtcpPacket6CreateEPhPmmN3rtc12FunctionViewIFvNS4_9ArrayViewIKhLln4711EEEEEE">Create</dfn>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col7 decl" id="2717packet" title='packet' data-type='uint8_t *' data-ref="2717packet" data-ref-filename="2717packet">packet</dfn>,</td></tr>
+<tr><th id="78">78</th><td>                      <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span>* <dfn class="local col8 decl" id="2718index" title='index' data-type='size_t *' data-ref="2718index" data-ref-filename="2718index">index</dfn>,</td></tr>
+<tr><th id="79">79</th><td>                      <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="2719max_length" title='max_length' data-type='size_t' data-ref="2719max_length" data-ref-filename="2719max_length">max_length</dfn>,</td></tr>
+<tr><th id="80">80</th><td>                      <a class="typedef" href="#webrtc::rtcp::RtcpPacket::PacketReadyCallback" title='webrtc::rtcp::RtcpPacket::PacketReadyCallback' data-type='rtc::FunctionView&lt;void (rtc::ArrayView&lt;const uint8_t&gt;)&gt;' data-ref="webrtc::rtcp::RtcpPacket::PacketReadyCallback" data-ref-filename="webrtc..rtcp..RtcpPacket..PacketReadyCallback">PacketReadyCallback</a> <dfn class="local col0 decl" id="2720callback" title='callback' data-type='webrtc::rtcp::RtcpPacket::PacketReadyCallback' data-ref="2720callback" data-ref-filename="2720callback">callback</dfn>) <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td> <b>protected</b>:</td></tr>
+<tr><th id="83">83</th><td>  <i>// Size of the rtcp common header.</i></td></tr>
+<tr><th id="84">84</th><td>  <em>static</em> <b>constexpr</b> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl def" id="webrtc::rtcp::RtcpPacket::kHeaderLength" title='webrtc::rtcp::RtcpPacket::kHeaderLength' data-ref="webrtc::rtcp::RtcpPacket::kHeaderLength" data-ref-filename="webrtc..rtcp..RtcpPacket..kHeaderLength">kHeaderLength</dfn> = <var>4</var>;</td></tr>
+<tr><th id="85">85</th><td>  <dfn class="decl def fn" id="_ZN6webrtc4rtcp10RtcpPacketC1Ev" title='webrtc::rtcp::RtcpPacket::RtcpPacket' data-ref="_ZN6webrtc4rtcp10RtcpPacketC1Ev" data-ref-filename="_ZN6webrtc4rtcp10RtcpPacketC1Ev">RtcpPacket</dfn>() {}</td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td>  <em>static</em> <em>void</em> <dfn class="decl fn" id="_ZN6webrtc4rtcp10RtcpPacket12CreateHeaderEmhmPhPm" title='webrtc::rtcp::RtcpPacket::CreateHeader' data-ref="_ZN6webrtc4rtcp10RtcpPacket12CreateHeaderEmhmPhPm" data-ref-filename="_ZN6webrtc4rtcp10RtcpPacket12CreateHeaderEmhmPhPm">CreateHeader</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="2721count_or_format" title='count_or_format' data-type='size_t' data-ref="2721count_or_format" data-ref-filename="2721count_or_format">count_or_format</dfn>,</td></tr>
+<tr><th id="88">88</th><td>                           <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col2 decl" id="2722packet_type" title='packet_type' data-type='uint8_t' data-ref="2722packet_type" data-ref-filename="2722packet_type">packet_type</dfn>,</td></tr>
+<tr><th id="89">89</th><td>                           <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="2723block_length" title='block_length' data-type='size_t' data-ref="2723block_length" data-ref-filename="2723block_length">block_length</dfn>,  <i>// Payload size in 32bit words.</i></td></tr>
+<tr><th id="90">90</th><td>                           <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col4 decl" id="2724buffer" title='buffer' data-type='uint8_t *' data-ref="2724buffer" data-ref-filename="2724buffer">buffer</dfn>,</td></tr>
+<tr><th id="91">91</th><td>                           <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span>* <dfn class="local col5 decl" id="2725pos" title='pos' data-type='size_t *' data-ref="2725pos" data-ref-filename="2725pos">pos</dfn>);</td></tr>
+<tr><th id="92">92</th><td></td></tr>
+<tr><th id="93">93</th><td>  <em>static</em> <em>void</em> <dfn class="decl fn" id="_ZN6webrtc4rtcp10RtcpPacket12CreateHeaderEmhmbPhPm" title='webrtc::rtcp::RtcpPacket::CreateHeader' data-ref="_ZN6webrtc4rtcp10RtcpPacket12CreateHeaderEmhmbPhPm" data-ref-filename="_ZN6webrtc4rtcp10RtcpPacket12CreateHeaderEmhmbPhPm">CreateHeader</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="2726count_or_format" title='count_or_format' data-type='size_t' data-ref="2726count_or_format" data-ref-filename="2726count_or_format">count_or_format</dfn>,</td></tr>
+<tr><th id="94">94</th><td>                           <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col7 decl" id="2727packet_type" title='packet_type' data-type='uint8_t' data-ref="2727packet_type" data-ref-filename="2727packet_type">packet_type</dfn>,</td></tr>
+<tr><th id="95">95</th><td>                           <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="2728block_length" title='block_length' data-type='size_t' data-ref="2728block_length" data-ref-filename="2728block_length">block_length</dfn>,  <i>// Payload size in 32bit words.</i></td></tr>
+<tr><th id="96">96</th><td>                           <em>bool</em> <dfn class="local col9 decl" id="2729padding" title='padding' data-type='bool' data-ref="2729padding" data-ref-filename="2729padding">padding</dfn>,  <i>// True if there are padding bytes.</i></td></tr>
+<tr><th id="97">97</th><td>                           <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col0 decl" id="2730buffer" title='buffer' data-type='uint8_t *' data-ref="2730buffer" data-ref-filename="2730buffer">buffer</dfn>,</td></tr>
+<tr><th id="98">98</th><td>                           <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span>* <dfn class="local col1 decl" id="2731pos" title='pos' data-type='size_t *' data-ref="2731pos" data-ref-filename="2731pos">pos</dfn>);</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td>  <em>bool</em> <dfn class="decl fn" id="_ZNK6webrtc4rtcp10RtcpPacket12OnBufferFullEPhPmN3rtc12FunctionViewIFvNS4_9ArrayViewIKhLln4711EEEEEE" title='webrtc::rtcp::RtcpPacket::OnBufferFull' data-ref="_ZNK6webrtc4rtcp10RtcpPacket12OnBufferFullEPhPmN3rtc12FunctionViewIFvNS4_9ArrayViewIKhLln4711EEEEEE" data-ref-filename="_ZNK6webrtc4rtcp10RtcpPacket12OnBufferFullEPhPmN3rtc12FunctionViewIFvNS4_9ArrayViewIKhLln4711EEEEEE">OnBufferFull</dfn>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col2 decl" id="2732packet" title='packet' data-type='uint8_t *' data-ref="2732packet" data-ref-filename="2732packet">packet</dfn>,</td></tr>
+<tr><th id="101">101</th><td>                    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span>* <dfn class="local col3 decl" id="2733index" title='index' data-type='size_t *' data-ref="2733index" data-ref-filename="2733index">index</dfn>,</td></tr>
+<tr><th id="102">102</th><td>                    <a class="typedef" href="#webrtc::rtcp::RtcpPacket::PacketReadyCallback" title='webrtc::rtcp::RtcpPacket::PacketReadyCallback' data-type='rtc::FunctionView&lt;void (rtc::ArrayView&lt;const uint8_t&gt;)&gt;' data-ref="webrtc::rtcp::RtcpPacket::PacketReadyCallback" data-ref-filename="webrtc..rtcp..RtcpPacket..PacketReadyCallback">PacketReadyCallback</a> <dfn class="local col4 decl" id="2734callback" title='callback' data-type='webrtc::rtcp::RtcpPacket::PacketReadyCallback' data-ref="2734callback" data-ref-filename="2734callback">callback</dfn>) <em>const</em>;</td></tr>
+<tr><th id="103">103</th><td>  <i>// Size of the rtcp packet as written in header.</i></td></tr>
+<tr><th id="104">104</th><td>  <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl fn" id="_ZNK6webrtc4rtcp10RtcpPacket12HeaderLengthEv" title='webrtc::rtcp::RtcpPacket::HeaderLength' data-ref="_ZNK6webrtc4rtcp10RtcpPacket12HeaderLengthEv" data-ref-filename="_ZNK6webrtc4rtcp10RtcpPacket12HeaderLengthEv">HeaderLength</dfn>() <em>const</em>;</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td> <b>private</b>:</td></tr>
+<tr><th id="107">107</th><td>  <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="webrtc::rtcp::RtcpPacket::sender_ssrc_" title='webrtc::rtcp::RtcpPacket::sender_ssrc_' data-ref="webrtc::rtcp::RtcpPacket::sender_ssrc_" data-ref-filename="webrtc..rtcp..RtcpPacket..sender_ssrc_">sender_ssrc_</dfn> = <var>0</var>;</td></tr>
+<tr><th id="108">108</th><td>};</td></tr>
+<tr><th id="109">109</th><td>}  <i>// namespace rtcp</i></td></tr>
+<tr><th id="110">110</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="111">111</th><td><u>#<span data-ppcond="11">endif</span>  // MODULES_RTP_RTCP_SOURCE_RTCP_PACKET_H_</u></td></tr>
+<tr><th id="112">112</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

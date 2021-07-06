@@ -1,0 +1,1567 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>user_recv_thread.c source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/user_recv_thread.c] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/user_recv_thread.c'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>third_party</a>/<a href='../..'>usrsctp</a>/<a href='..'>usrsctplib</a>/<a href='./'>usrsctplib</a>/<a href='user_recv_thread.c.html'>user_recv_thread.c</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*-</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (c) 2009-2010 Brad Penoff</i></td></tr>
+<tr><th id="3">3</th><td><i> * Copyright (c) 2009-2010 Humaira Kamal</i></td></tr>
+<tr><th id="4">4</th><td><i> * Copyright (c) 2011-2012 Irene Ruengeler</i></td></tr>
+<tr><th id="5">5</th><td><i> * Copyright (c) 2011-2012 Michael Tuexen</i></td></tr>
+<tr><th id="6">6</th><td><i> * All rights reserved.</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="9">9</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="10">10</th><td><i> * are met:</i></td></tr>
+<tr><th id="11">11</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="12">12</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="13">13</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="14">14</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="15">15</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND</i></td></tr>
+<tr><th id="18">18</th><td><i> * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="19">19</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</i></td></tr>
+<tr><th id="20">20</th><td><i> * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE</i></td></tr>
+<tr><th id="21">21</th><td><i> * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL</i></td></tr>
+<tr><th id="22">22</th><td><i> * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS</i></td></tr>
+<tr><th id="23">23</th><td><i> * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)</i></td></tr>
+<tr><th id="24">24</th><td><i> * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT</i></td></tr>
+<tr><th id="25">25</th><td><i> * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY</i></td></tr>
+<tr><th id="26">26</th><td><i> * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF</i></td></tr>
+<tr><th id="27">27</th><td><i> * SUCH DAMAGE.</i></td></tr>
+<tr><th id="28">28</th><td><i> *</i></td></tr>
+<tr><th id="29">29</th><td><i> */</i></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#<span data-ppcond="31">if</span> defined(<span class="macro" data-ref="_M/INET">INET</span>) || defined(<span class="macro" data-ref="_M/INET6">INET6</span>)</u></td></tr>
+<tr><th id="32">32</th><td><u>#include &lt;sys/types.h&gt;</u></td></tr>
+<tr><th id="33">33</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="34">34</th><td><u>#include &lt;sys/socket.h&gt;</u></td></tr>
+<tr><th id="35">35</th><td><u>#include &lt;netinet/in.h&gt;</u></td></tr>
+<tr><th id="36">36</th><td><u>#include &lt;unistd.h&gt;</u></td></tr>
+<tr><th id="37">37</th><td><u>#include &lt;pthread.h&gt;</u></td></tr>
+<tr><th id="38">38</th><td><u>#if !defined(__DragonFly__) &amp;&amp; !defined(__FreeBSD__) &amp;&amp; !defined(__NetBSD__)</u></td></tr>
+<tr><th id="39">39</th><td><u>#include &lt;sys/uio.h&gt;</u></td></tr>
+<tr><th id="40">40</th><td><u>#else</u></td></tr>
+<tr><th id="41">41</th><td><u>#include &lt;user_ip6_var.h&gt;</u></td></tr>
+<tr><th id="42">42</th><td><u>#endif</u></td></tr>
+<tr><th id="43">43</th><td><u>#endif</u></td></tr>
+<tr><th id="44">44</th><td><u>#include &lt;netinet/sctp_os.h&gt;</u></td></tr>
+<tr><th id="45">45</th><td><u>#include &lt;netinet/sctp_var.h&gt;</u></td></tr>
+<tr><th id="46">46</th><td><u>#include &lt;netinet/sctp_pcb.h&gt;</u></td></tr>
+<tr><th id="47">47</th><td><u>#include &lt;netinet/sctp_input.h&gt;</u></td></tr>
+<tr><th id="48">48</th><td><u>#if 0</u></td></tr>
+<tr><th id="49">49</th><td><u>#if defined(__linux__)</u></td></tr>
+<tr><th id="50">50</th><td><u>#include &lt;linux/netlink.h&gt;</u></td></tr>
+<tr><th id="51">51</th><td><u>#ifdef HAVE_LINUX_IF_ADDR_H</u></td></tr>
+<tr><th id="52">52</th><td><u>#include &lt;linux/if_addr.h&gt;</u></td></tr>
+<tr><th id="53">53</th><td><u>#endif</u></td></tr>
+<tr><th id="54">54</th><td><u>#ifdef HAVE_LINUX_RTNETLINK_H</u></td></tr>
+<tr><th id="55">55</th><td><u>#include &lt;linux/rtnetlink.h&gt;</u></td></tr>
+<tr><th id="56">56</th><td><u>#endif</u></td></tr>
+<tr><th id="57">57</th><td><u>#endif</u></td></tr>
+<tr><th id="58">58</th><td><u>#endif</u></td></tr>
+<tr><th id="59">59</th><td><u>#if defined(__APPLE__) || defined(__DragonFly__) || defined(__FreeBSD__)</u></td></tr>
+<tr><th id="60">60</th><td><u>#include &lt;net/route.h&gt;</u></td></tr>
+<tr><th id="61">61</th><td><u>#endif</u></td></tr>
+<tr><th id="62">62</th><td><i>/* local macros and datatypes used to get IP addresses system independently */</i></td></tr>
+<tr><th id="63">63</th><td><u>#if !defined(IP_PKTINFO) &amp;&amp; !defined(IP_RECVDSTADDR)</u></td></tr>
+<tr><th id="64">64</th><td><u># error "Can't determine socket option to use to get UDP IP"</u></td></tr>
+<tr><th id="65">65</th><td><u>#endif</u></td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><em>void</em> recv_thread_destroy(<em>void</em>);</td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td><u>#define MAXLEN_MBUF_CHAIN 128</u></td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><u>#define ROUNDUP(a, size) (((a) &amp; ((size)-1)) ? (1 + ((a) | ((size)-1))) : (a))</u></td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td><u>#if defined(__APPLE__) || defined(__DragonFly__) || defined(__FreeBSD__)</u></td></tr>
+<tr><th id="74">74</th><td><u>#define NEXT_SA(ap) ap = (struct sockaddr *) \</u></td></tr>
+<tr><th id="75">75</th><td><u>	((caddr_t) ap + (ap-&gt;sa_len ? ROUNDUP(ap-&gt;sa_len, sizeof (uint32_t)) : sizeof(uint32_t)))</u></td></tr>
+<tr><th id="76">76</th><td><u>#endif</u></td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td><u>#if defined(__APPLE__) || defined(__DragonFly__) || defined(__FreeBSD__)</u></td></tr>
+<tr><th id="79">79</th><td><em>static</em> <em>void</em></td></tr>
+<tr><th id="80">80</th><td>sctp_get_rtaddrs(<em>int</em> addrs, <b>struct</b> sockaddr *sa, <b>struct</b> sockaddr **rti_info)</td></tr>
+<tr><th id="81">81</th><td>{</td></tr>
+<tr><th id="82">82</th><td>	<em>int</em> i;</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td>	<b>for</b> (i = <var>0</var>; i &lt; RTAX_MAX; i++) {</td></tr>
+<tr><th id="85">85</th><td>		<b>if</b> (addrs &amp; (<var>1</var> &lt;&lt; i)) {</td></tr>
+<tr><th id="86">86</th><td>			rti_info[i] = sa;</td></tr>
+<tr><th id="87">87</th><td>			NEXT_SA(sa);</td></tr>
+<tr><th id="88">88</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="89">89</th><td>			rti_info[i] = NULL;</td></tr>
+<tr><th id="90">90</th><td>		}</td></tr>
+<tr><th id="91">91</th><td>	}</td></tr>
+<tr><th id="92">92</th><td>}</td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td><em>static</em> <em>void</em></td></tr>
+<tr><th id="95">95</th><td>sctp_handle_ifamsg(<em>unsigned</em> <em>char</em> type, <em>unsigned</em> <em>short</em> index, <b>struct</b> sockaddr *sa)</td></tr>
+<tr><th id="96">96</th><td>{</td></tr>
+<tr><th id="97">97</th><td>	<em>int</em> rc;</td></tr>
+<tr><th id="98">98</th><td>	<b>struct</b> ifaddrs *ifa, *ifas;</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td>	<i>/* handle only the types we want */</i></td></tr>
+<tr><th id="101">101</th><td>	<b>if</b> ((type != RTM_NEWADDR) &amp;&amp; (type != RTM_DELADDR)) {</td></tr>
+<tr><th id="102">102</th><td>		<b>return</b>;</td></tr>
+<tr><th id="103">103</th><td>	}</td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td>	rc = getifaddrs(&amp;ifas);</td></tr>
+<tr><th id="106">106</th><td>	<b>if</b> (rc != <var>0</var>) {</td></tr>
+<tr><th id="107">107</th><td>		<b>return</b>;</td></tr>
+<tr><th id="108">108</th><td>	}</td></tr>
+<tr><th id="109">109</th><td>	<b>for</b> (ifa = ifas; ifa; ifa = ifa-&gt;ifa_next) {</td></tr>
+<tr><th id="110">110</th><td>		<b>if</b> (index == if_nametoindex(ifa-&gt;ifa_name)) {</td></tr>
+<tr><th id="111">111</th><td>			<b>break</b>;</td></tr>
+<tr><th id="112">112</th><td>		}</td></tr>
+<tr><th id="113">113</th><td>	}</td></tr>
+<tr><th id="114">114</th><td>	<b>if</b> (ifa == NULL) {</td></tr>
+<tr><th id="115">115</th><td>		freeifaddrs(ifas);</td></tr>
+<tr><th id="116">116</th><td>		<b>return</b>;</td></tr>
+<tr><th id="117">117</th><td>	}</td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td>	<i>/* relay the appropriate address change to the base code */</i></td></tr>
+<tr><th id="120">120</th><td>	<b>if</b> (type == RTM_NEWADDR) {</td></tr>
+<tr><th id="121">121</th><td>		(<em>void</em>)sctp_add_addr_to_vrf(SCTP_DEFAULT_VRFID,</td></tr>
+<tr><th id="122">122</th><td>		                           NULL,</td></tr>
+<tr><th id="123">123</th><td>		                           if_nametoindex(ifa-&gt;ifa_name),</td></tr>
+<tr><th id="124">124</th><td>		                           <var>0</var>,</td></tr>
+<tr><th id="125">125</th><td>		                           ifa-&gt;ifa_name,</td></tr>
+<tr><th id="126">126</th><td>		                           NULL,</td></tr>
+<tr><th id="127">127</th><td>		                           sa,</td></tr>
+<tr><th id="128">128</th><td>		                           <var>0</var>,</td></tr>
+<tr><th id="129">129</th><td>		                           <var>1</var>);</td></tr>
+<tr><th id="130">130</th><td>	} <b>else</b> {</td></tr>
+<tr><th id="131">131</th><td>		sctp_del_addr_from_vrf(SCTP_DEFAULT_VRFID, ifa-&gt;ifa_addr,</td></tr>
+<tr><th id="132">132</th><td>		                       if_nametoindex(ifa-&gt;ifa_name),</td></tr>
+<tr><th id="133">133</th><td>		                       ifa-&gt;ifa_name);</td></tr>
+<tr><th id="134">134</th><td>	}</td></tr>
+<tr><th id="135">135</th><td>	freeifaddrs(ifas);</td></tr>
+<tr><th id="136">136</th><td>}</td></tr>
+<tr><th id="137">137</th><td></td></tr>
+<tr><th id="138">138</th><td><em>static</em> <em>void</em> *</td></tr>
+<tr><th id="139">139</th><td>recv_function_route(<em>void</em> *arg)</td></tr>
+<tr><th id="140">140</th><td>{</td></tr>
+<tr><th id="141">141</th><td>	ssize_t ret;</td></tr>
+<tr><th id="142">142</th><td>	<b>struct</b> ifa_msghdr *ifa;</td></tr>
+<tr><th id="143">143</th><td>	<em>char</em> rt_buffer[<var>1024</var>];</td></tr>
+<tr><th id="144">144</th><td>	<b>struct</b> sockaddr *sa, *rti_info[RTAX_MAX];</td></tr>
+<tr><th id="145">145</th><td></td></tr>
+<tr><th id="146">146</th><td>	sctp_userspace_set_threadname(<q>"SCTP addr mon"</q>);</td></tr>
+<tr><th id="147">147</th><td></td></tr>
+<tr><th id="148">148</th><td>	<b>while</b> (<var>1</var>) {</td></tr>
+<tr><th id="149">149</th><td>		memset(rt_buffer, <var>0</var>, <b>sizeof</b>(rt_buffer));</td></tr>
+<tr><th id="150">150</th><td>		ret = recv(SCTP_BASE_VAR(userspace_route), rt_buffer, <b>sizeof</b>(rt_buffer), <var>0</var>);</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td>		<b>if</b> (ret &gt; <var>0</var>) {</td></tr>
+<tr><th id="153">153</th><td>			ifa = (<b>struct</b> ifa_msghdr *) rt_buffer;</td></tr>
+<tr><th id="154">154</th><td>			<b>if</b> (ifa-&gt;ifam_type != RTM_DELADDR &amp;&amp; ifa-&gt;ifam_type != RTM_NEWADDR) {</td></tr>
+<tr><th id="155">155</th><td>				<b>continue</b>;</td></tr>
+<tr><th id="156">156</th><td>			}</td></tr>
+<tr><th id="157">157</th><td>			sa = (<b>struct</b> sockaddr *) (ifa + <var>1</var>);</td></tr>
+<tr><th id="158">158</th><td>			sctp_get_rtaddrs(ifa-&gt;ifam_addrs, sa, rti_info);</td></tr>
+<tr><th id="159">159</th><td>			<b>switch</b> (ifa-&gt;ifam_type) {</td></tr>
+<tr><th id="160">160</th><td>			<b>case</b> RTM_DELADDR:</td></tr>
+<tr><th id="161">161</th><td>			<b>case</b> RTM_NEWADDR:</td></tr>
+<tr><th id="162">162</th><td>				sctp_handle_ifamsg(ifa-&gt;ifam_type, ifa-&gt;ifam_index, rti_info[RTAX_IFA]);</td></tr>
+<tr><th id="163">163</th><td>				<b>break</b>;</td></tr>
+<tr><th id="164">164</th><td>			<b>default</b>:</td></tr>
+<tr><th id="165">165</th><td>				<i>/* ignore this routing event */</i></td></tr>
+<tr><th id="166">166</th><td>				<b>break</b>;</td></tr>
+<tr><th id="167">167</th><td>			}</td></tr>
+<tr><th id="168">168</th><td>		}</td></tr>
+<tr><th id="169">169</th><td>		<b>if</b> (ret &lt; <var>0</var>) {</td></tr>
+<tr><th id="170">170</th><td>			<b>if</b> (errno == EAGAIN || errno == EINTR) {</td></tr>
+<tr><th id="171">171</th><td>				<b>continue</b>;</td></tr>
+<tr><th id="172">172</th><td>			} <b>else</b> {</td></tr>
+<tr><th id="173">173</th><td>				<b>break</b>;</td></tr>
+<tr><th id="174">174</th><td>			}</td></tr>
+<tr><th id="175">175</th><td>		}</td></tr>
+<tr><th id="176">176</th><td>	}</td></tr>
+<tr><th id="177">177</th><td>	<b>return</b> (NULL);</td></tr>
+<tr><th id="178">178</th><td>}</td></tr>
+<tr><th id="179">179</th><td><u>#endif</u></td></tr>
+<tr><th id="180">180</th><td></td></tr>
+<tr><th id="181">181</th><td><u>#if 0</u></td></tr>
+<tr><th id="182">182</th><td><i>/* This does not yet work on Linux */</i></td></tr>
+<tr><th id="183">183</th><td><em>static</em> <em>void</em> *</td></tr>
+<tr><th id="184">184</th><td>recv_function_route(<em>void</em> *arg)</td></tr>
+<tr><th id="185">185</th><td>{</td></tr>
+<tr><th id="186">186</th><td>	<em>int</em> len;</td></tr>
+<tr><th id="187">187</th><td>	<em>char</em> buf[<var>4096</var>];</td></tr>
+<tr><th id="188">188</th><td>	<b>struct</b> iovec iov = { buf, <b>sizeof</b>(buf) };</td></tr>
+<tr><th id="189">189</th><td>	<b>struct</b> msghdr msg;</td></tr>
+<tr><th id="190">190</th><td>	<b>struct</b> nlmsghdr *nh;</td></tr>
+<tr><th id="191">191</th><td>	<b>struct</b> ifaddrmsg *rtmsg;</td></tr>
+<tr><th id="192">192</th><td>	<b>struct</b> rtattr *rtatp;</td></tr>
+<tr><th id="193">193</th><td>	<b>struct</b> in_addr *inp;</td></tr>
+<tr><th id="194">194</th><td>	<b>struct</b> sockaddr_nl sanl;</td></tr>
+<tr><th id="195">195</th><td><u>#ifdef INET</u></td></tr>
+<tr><th id="196">196</th><td>	<b>struct</b> sockaddr_in *sa;</td></tr>
+<tr><th id="197">197</th><td><u>#endif</u></td></tr>
+<tr><th id="198">198</th><td><u>#ifdef INET6</u></td></tr>
+<tr><th id="199">199</th><td>	<b>struct</b> sockaddr_in6 *sa6;</td></tr>
+<tr><th id="200">200</th><td><u>#endif</u></td></tr>
+<tr><th id="201">201</th><td></td></tr>
+<tr><th id="202">202</th><td>	<b>for</b> (;;) {</td></tr>
+<tr><th id="203">203</th><td>		memset(&amp;sanl, <var>0</var>, <b>sizeof</b>(sanl));</td></tr>
+<tr><th id="204">204</th><td>		sanl.nl_family = AF_NETLINK;</td></tr>
+<tr><th id="205">205</th><td>		sanl.nl_groups = RTMGRP_IPV6_IFADDR | RTMGRP_IPV4_IFADDR;</td></tr>
+<tr><th id="206">206</th><td>		memset(&amp;msg, <var>0</var>, <b>sizeof</b>(<b>struct</b> msghdr));</td></tr>
+<tr><th id="207">207</th><td>		msg.msg_name = (<em>void</em> *)&amp;sanl;</td></tr>
+<tr><th id="208">208</th><td>		msg.msg_namelen = <b>sizeof</b>(sanl);</td></tr>
+<tr><th id="209">209</th><td>		msg.msg_iov = &amp;iov;</td></tr>
+<tr><th id="210">210</th><td>		msg.msg_iovlen = <var>1</var>;</td></tr>
+<tr><th id="211">211</th><td>		msg.msg_control = NULL;</td></tr>
+<tr><th id="212">212</th><td>		msg.msg_controllen = <var>0</var>;</td></tr>
+<tr><th id="213">213</th><td></td></tr>
+<tr><th id="214">214</th><td>		len = recvmsg(SCTP_BASE_VAR(userspace_route), &amp;msg, <var>0</var>);</td></tr>
+<tr><th id="215">215</th><td></td></tr>
+<tr><th id="216">216</th><td>		<b>if</b> (len &lt; <var>0</var>) {</td></tr>
+<tr><th id="217">217</th><td>			<b>if</b> (errno == EAGAIN || errno == EINTR) {</td></tr>
+<tr><th id="218">218</th><td>				<b>continue</b>;</td></tr>
+<tr><th id="219">219</th><td>			} <b>else</b> {</td></tr>
+<tr><th id="220">220</th><td>				<b>break</b>;</td></tr>
+<tr><th id="221">221</th><td>			}</td></tr>
+<tr><th id="222">222</th><td>		}</td></tr>
+<tr><th id="223">223</th><td>		<b>for</b> (nh = (<b>struct</b> nlmsghdr *) buf; NLMSG_OK (nh, len);</td></tr>
+<tr><th id="224">224</th><td>			nh = NLMSG_NEXT (nh, len)) {</td></tr>
+<tr><th id="225">225</th><td>			<b>if</b> (nh-&gt;nlmsg_type == NLMSG_DONE)</td></tr>
+<tr><th id="226">226</th><td>				<b>break</b>;</td></tr>
+<tr><th id="227">227</th><td></td></tr>
+<tr><th id="228">228</th><td>			<b>if</b> (nh-&gt;nlmsg_type == RTM_NEWADDR || nh-&gt;nlmsg_type == RTM_DELADDR) {</td></tr>
+<tr><th id="229">229</th><td>				rtmsg = (<b>struct</b> ifaddrmsg *)NLMSG_DATA(nh);</td></tr>
+<tr><th id="230">230</th><td>				rtatp = (<b>struct</b> rtattr *)IFA_RTA(rtmsg);</td></tr>
+<tr><th id="231">231</th><td>				<b>if</b> (rtatp-&gt;rta_type == IFA_ADDRESS) {</td></tr>
+<tr><th id="232">232</th><td>					inp = (<b>struct</b> in_addr *)RTA_DATA(rtatp);</td></tr>
+<tr><th id="233">233</th><td>					<b>switch</b> (rtmsg-&gt;ifa_family) {</td></tr>
+<tr><th id="234">234</th><td><u>#ifdef INET</u></td></tr>
+<tr><th id="235">235</th><td>					<b>case</b> AF_INET:</td></tr>
+<tr><th id="236">236</th><td>						sa = (<b>struct</b> sockaddr_in *)malloc(<b>sizeof</b>(<b>struct</b> sockaddr_in));</td></tr>
+<tr><th id="237">237</th><td>						sa-&gt;sin_family = rtmsg-&gt;ifa_family;</td></tr>
+<tr><th id="238">238</th><td>						sa-&gt;sin_port = <var>0</var>;</td></tr>
+<tr><th id="239">239</th><td>						memcpy(&amp;sa-&gt;sin_addr, inp, <b>sizeof</b>(<b>struct</b> in_addr));</td></tr>
+<tr><th id="240">240</th><td>						sctp_handle_ifamsg(nh-&gt;nlmsg_type, rtmsg-&gt;ifa_index, (<b>struct</b> sockaddr *)sa);</td></tr>
+<tr><th id="241">241</th><td>						<b>break</b>;</td></tr>
+<tr><th id="242">242</th><td><u>#endif</u></td></tr>
+<tr><th id="243">243</th><td><u>#ifdef INET6</u></td></tr>
+<tr><th id="244">244</th><td>					<b>case</b> AF_INET6:</td></tr>
+<tr><th id="245">245</th><td>						sa6 = (<b>struct</b> sockaddr_in6 *)malloc(<b>sizeof</b>(<b>struct</b> sockaddr_in6));</td></tr>
+<tr><th id="246">246</th><td>						sa6-&gt;sin6_family = rtmsg-&gt;ifa_family;</td></tr>
+<tr><th id="247">247</th><td>						sa6-&gt;sin6_port = <var>0</var>;</td></tr>
+<tr><th id="248">248</th><td>						memcpy(&amp;sa6-&gt;sin6_addr, inp, <b>sizeof</b>(<b>struct</b> in6_addr));</td></tr>
+<tr><th id="249">249</th><td>						sctp_handle_ifamsg(nh-&gt;nlmsg_type, rtmsg-&gt;ifa_index, (<b>struct</b> sockaddr *)sa6);</td></tr>
+<tr><th id="250">250</th><td>						<b>break</b>;</td></tr>
+<tr><th id="251">251</th><td><u>#endif</u></td></tr>
+<tr><th id="252">252</th><td>					<b>default</b>:</td></tr>
+<tr><th id="253">253</th><td>						SCTPDBG(SCTP_DEBUG_USR, <q>"Address family %d not supported.\n"</q>, rtmsg-&gt;ifa_family);</td></tr>
+<tr><th id="254">254</th><td>						<b>break</b>;</td></tr>
+<tr><th id="255">255</th><td>					}</td></tr>
+<tr><th id="256">256</th><td>				}</td></tr>
+<tr><th id="257">257</th><td>			}</td></tr>
+<tr><th id="258">258</th><td>		}</td></tr>
+<tr><th id="259">259</th><td>	}</td></tr>
+<tr><th id="260">260</th><td>	<b>return</b> (NULL);</td></tr>
+<tr><th id="261">261</th><td>}</td></tr>
+<tr><th id="262">262</th><td><u>#endif</u></td></tr>
+<tr><th id="263">263</th><td></td></tr>
+<tr><th id="264">264</th><td><u>#ifdef INET</u></td></tr>
+<tr><th id="265">265</th><td><em>static</em> <em>void</em> *</td></tr>
+<tr><th id="266">266</th><td>recv_function_raw(<em>void</em> *arg)</td></tr>
+<tr><th id="267">267</th><td>{</td></tr>
+<tr><th id="268">268</th><td>	<b>struct</b> mbuf **recvmbuf;</td></tr>
+<tr><th id="269">269</th><td>	<b>struct</b> ip *iphdr;</td></tr>
+<tr><th id="270">270</th><td>	<b>struct</b> sctphdr *sh;</td></tr>
+<tr><th id="271">271</th><td>	uint16_t port;</td></tr>
+<tr><th id="272">272</th><td>	<em>int</em> offset, ecn = <var>0</var>;</td></tr>
+<tr><th id="273">273</th><td>	<em>int</em> compute_crc = <var>1</var>;</td></tr>
+<tr><th id="274">274</th><td>	<b>struct</b> sctp_chunkhdr *ch;</td></tr>
+<tr><th id="275">275</th><td>	<b>struct</b> sockaddr_in src, dst;</td></tr>
+<tr><th id="276">276</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="277">277</th><td>	<em>unsigned</em> <em>int</em> ncounter;</td></tr>
+<tr><th id="278">278</th><td>	<b>struct</b> msghdr msg;</td></tr>
+<tr><th id="279">279</th><td>	<b>struct</b> iovec recv_iovec[MAXLEN_MBUF_CHAIN];</td></tr>
+<tr><th id="280">280</th><td><u>#else</u></td></tr>
+<tr><th id="281">281</th><td>	WSABUF recv_iovec[MAXLEN_MBUF_CHAIN];</td></tr>
+<tr><th id="282">282</th><td>	<em>int</em> nResult, m_ErrorCode;</td></tr>
+<tr><th id="283">283</th><td>	DWORD flags;</td></tr>
+<tr><th id="284">284</th><td>	DWORD ncounter;</td></tr>
+<tr><th id="285">285</th><td>	<b>struct</b> sockaddr_in from;</td></tr>
+<tr><th id="286">286</th><td>	<em>int</em> fromlen;</td></tr>
+<tr><th id="287">287</th><td><u>#endif</u></td></tr>
+<tr><th id="288">288</th><td>	<i>/*Initially the entire set of mbufs is to be allocated.</i></td></tr>
+<tr><th id="289">289</th><td><i>	  to_fill indicates this amount. */</i></td></tr>
+<tr><th id="290">290</th><td>	<em>int</em> to_fill = MAXLEN_MBUF_CHAIN;</td></tr>
+<tr><th id="291">291</th><td>	<i>/* iovlen is the size of each mbuf in the chain */</i></td></tr>
+<tr><th id="292">292</th><td>	<em>int</em> i, n;</td></tr>
+<tr><th id="293">293</th><td>	<em>unsigned</em> <em>int</em> iovlen = MCLBYTES;</td></tr>
+<tr><th id="294">294</th><td>	<em>int</em> want_ext = (iovlen &gt; MLEN)? <var>1</var> : <var>0</var>;</td></tr>
+<tr><th id="295">295</th><td>	<em>int</em> want_header = <var>0</var>;</td></tr>
+<tr><th id="296">296</th><td></td></tr>
+<tr><th id="297">297</th><td>	sctp_userspace_set_threadname(<q>"SCTP/IP4 rcv"</q>);</td></tr>
+<tr><th id="298">298</th><td></td></tr>
+<tr><th id="299">299</th><td>	memset(&amp;src, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in));</td></tr>
+<tr><th id="300">300</th><td>	memset(&amp;dst, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in));</td></tr>
+<tr><th id="301">301</th><td></td></tr>
+<tr><th id="302">302</th><td>	recvmbuf = malloc(<b>sizeof</b>(<b>struct</b> mbuf *) * MAXLEN_MBUF_CHAIN);</td></tr>
+<tr><th id="303">303</th><td></td></tr>
+<tr><th id="304">304</th><td>	<b>while</b> (<var>1</var>) {</td></tr>
+<tr><th id="305">305</th><td>		<b>for</b> (i = <var>0</var>; i &lt; to_fill; i++) {</td></tr>
+<tr><th id="306">306</th><td>			<i>/* Not getting the packet header. Tests with chain of one run</i></td></tr>
+<tr><th id="307">307</th><td><i>			   as usual without having the packet header.</i></td></tr>
+<tr><th id="308">308</th><td><i>			   Have tried both sending and receiving</i></td></tr>
+<tr><th id="309">309</th><td><i>			 */</i></td></tr>
+<tr><th id="310">310</th><td>			recvmbuf[i] = sctp_get_mbuf_for_msg(iovlen, want_header, M_NOWAIT, want_ext, MT_DATA);</td></tr>
+<tr><th id="311">311</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="312">312</th><td>			recv_iovec[i].iov_base = (caddr_t)recvmbuf[i]-&gt;m_data;</td></tr>
+<tr><th id="313">313</th><td>			recv_iovec[i].iov_len = iovlen;</td></tr>
+<tr><th id="314">314</th><td><u>#else</u></td></tr>
+<tr><th id="315">315</th><td>			recv_iovec[i].buf = (caddr_t)recvmbuf[i]-&gt;m_data;</td></tr>
+<tr><th id="316">316</th><td>			recv_iovec[i].len = iovlen;</td></tr>
+<tr><th id="317">317</th><td><u>#endif</u></td></tr>
+<tr><th id="318">318</th><td>		}</td></tr>
+<tr><th id="319">319</th><td>		to_fill = <var>0</var>;</td></tr>
+<tr><th id="320">320</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="321">321</th><td>		flags = <var>0</var>;</td></tr>
+<tr><th id="322">322</th><td>		ncounter = <var>0</var>;</td></tr>
+<tr><th id="323">323</th><td>		fromlen = <b>sizeof</b>(<b>struct</b> sockaddr_in);</td></tr>
+<tr><th id="324">324</th><td>		memset(&amp;from, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in));</td></tr>
+<tr><th id="325">325</th><td></td></tr>
+<tr><th id="326">326</th><td>		nResult = WSARecvFrom(SCTP_BASE_VAR(userspace_rawsctp), recv_iovec, MAXLEN_MBUF_CHAIN, &amp;ncounter, &amp;flags, (<b>struct</b> sockaddr *)&amp;from, &amp;fromlen, NULL, NULL);</td></tr>
+<tr><th id="327">327</th><td>		<b>if</b> (nResult != <var>0</var>) {</td></tr>
+<tr><th id="328">328</th><td>			m_ErrorCode = WSAGetLastError();</td></tr>
+<tr><th id="329">329</th><td>			<b>if</b> ((m_ErrorCode == WSAENOTSOCK) || (m_ErrorCode == WSAEINTR)) {</td></tr>
+<tr><th id="330">330</th><td>				<b>break</b>;</td></tr>
+<tr><th id="331">331</th><td>			}</td></tr>
+<tr><th id="332">332</th><td>			<b>continue</b>;</td></tr>
+<tr><th id="333">333</th><td>		}</td></tr>
+<tr><th id="334">334</th><td>		n = ncounter;</td></tr>
+<tr><th id="335">335</th><td><u>#else</u></td></tr>
+<tr><th id="336">336</th><td>		memset(&amp;msg, <var>0</var>, <b>sizeof</b>(<b>struct</b> msghdr));</td></tr>
+<tr><th id="337">337</th><td>		msg.msg_name = NULL;</td></tr>
+<tr><th id="338">338</th><td>		msg.msg_namelen = <var>0</var>;</td></tr>
+<tr><th id="339">339</th><td>		msg.msg_iov = recv_iovec;</td></tr>
+<tr><th id="340">340</th><td>		msg.msg_iovlen = MAXLEN_MBUF_CHAIN;</td></tr>
+<tr><th id="341">341</th><td>		msg.msg_control = NULL;</td></tr>
+<tr><th id="342">342</th><td>		msg.msg_controllen = <var>0</var>;</td></tr>
+<tr><th id="343">343</th><td>		ncounter = n = recvmsg(SCTP_BASE_VAR(userspace_rawsctp), &amp;msg, <var>0</var>);</td></tr>
+<tr><th id="344">344</th><td>		<b>if</b> (n &lt; <var>0</var>) {</td></tr>
+<tr><th id="345">345</th><td>			<b>if</b> (errno == EAGAIN || errno == EINTR) {</td></tr>
+<tr><th id="346">346</th><td>				<b>continue</b>;</td></tr>
+<tr><th id="347">347</th><td>			} <b>else</b> {</td></tr>
+<tr><th id="348">348</th><td>				<b>break</b>;</td></tr>
+<tr><th id="349">349</th><td>			}</td></tr>
+<tr><th id="350">350</th><td>		}</td></tr>
+<tr><th id="351">351</th><td><u>#endif</u></td></tr>
+<tr><th id="352">352</th><td>		SCTP_HEADER_LEN(recvmbuf[<var>0</var>]) = n; <i>/* length of total packet */</i></td></tr>
+<tr><th id="353">353</th><td>		SCTP_STAT_INCR(sctps_recvpackets);</td></tr>
+<tr><th id="354">354</th><td>		SCTP_STAT_INCR_COUNTER64(sctps_inpackets);</td></tr>
+<tr><th id="355">355</th><td></td></tr>
+<tr><th id="356">356</th><td>		<b>if</b> ((<em>unsigned</em> <em>int</em>)n &lt;= iovlen) {</td></tr>
+<tr><th id="357">357</th><td>			SCTP_BUF_LEN(recvmbuf[<var>0</var>]) = n;</td></tr>
+<tr><th id="358">358</th><td>			(to_fill)++;</td></tr>
+<tr><th id="359">359</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="360">360</th><td>			i = <var>0</var>;</td></tr>
+<tr><th id="361">361</th><td>			SCTP_BUF_LEN(recvmbuf[<var>0</var>]) = iovlen;</td></tr>
+<tr><th id="362">362</th><td></td></tr>
+<tr><th id="363">363</th><td>			ncounter -= min(ncounter, iovlen);</td></tr>
+<tr><th id="364">364</th><td>			(to_fill)++;</td></tr>
+<tr><th id="365">365</th><td>			<b>do</b> {</td></tr>
+<tr><th id="366">366</th><td>				recvmbuf[i]-&gt;m_next = recvmbuf[i+<var>1</var>];</td></tr>
+<tr><th id="367">367</th><td>				SCTP_BUF_LEN(recvmbuf[i]-&gt;m_next) = min(ncounter, iovlen);</td></tr>
+<tr><th id="368">368</th><td>				i++;</td></tr>
+<tr><th id="369">369</th><td>				ncounter -= min(ncounter, iovlen);</td></tr>
+<tr><th id="370">370</th><td>				(to_fill)++;</td></tr>
+<tr><th id="371">371</th><td>			} <b>while</b> (ncounter &gt; <var>0</var>);</td></tr>
+<tr><th id="372">372</th><td>		}</td></tr>
+<tr><th id="373">373</th><td></td></tr>
+<tr><th id="374">374</th><td>		offset = <b>sizeof</b>(<b>struct</b> ip) + <b>sizeof</b>(<b>struct</b> sctphdr) + <b>sizeof</b>(<b>struct</b> sctp_chunkhdr);</td></tr>
+<tr><th id="375">375</th><td>		<b>if</b> (SCTP_BUF_LEN(recvmbuf[<var>0</var>]) &lt; offset) {</td></tr>
+<tr><th id="376">376</th><td>				<b>if</b> ((recvmbuf[<var>0</var>] = m_pullup(recvmbuf[<var>0</var>], offset)) == NULL) {</td></tr>
+<tr><th id="377">377</th><td>				SCTP_STAT_INCR(sctps_hdrops);</td></tr>
+<tr><th id="378">378</th><td>				<b>continue</b>;</td></tr>
+<tr><th id="379">379</th><td>			}</td></tr>
+<tr><th id="380">380</th><td>		}</td></tr>
+<tr><th id="381">381</th><td>		iphdr = mtod(recvmbuf[<var>0</var>], <b>struct</b> ip *);</td></tr>
+<tr><th id="382">382</th><td>		sh = (<b>struct</b> sctphdr *)((caddr_t)iphdr + <b>sizeof</b>(<b>struct</b> ip));</td></tr>
+<tr><th id="383">383</th><td>		ch = (<b>struct</b> sctp_chunkhdr *)((caddr_t)sh + <b>sizeof</b>(<b>struct</b> sctphdr));</td></tr>
+<tr><th id="384">384</th><td>		offset -= <b>sizeof</b>(<b>struct</b> sctp_chunkhdr);</td></tr>
+<tr><th id="385">385</th><td></td></tr>
+<tr><th id="386">386</th><td>		<b>if</b> (iphdr-&gt;ip_tos != <var>0</var>) {</td></tr>
+<tr><th id="387">387</th><td>			ecn = iphdr-&gt;ip_tos &amp; <var>0x03</var>;</td></tr>
+<tr><th id="388">388</th><td>		}</td></tr>
+<tr><th id="389">389</th><td></td></tr>
+<tr><th id="390">390</th><td>		dst.sin_family = AF_INET;</td></tr>
+<tr><th id="391">391</th><td><u>#ifdef HAVE_SIN_LEN</u></td></tr>
+<tr><th id="392">392</th><td>		dst.sin_len = <b>sizeof</b>(<b>struct</b> sockaddr_in);</td></tr>
+<tr><th id="393">393</th><td><u>#endif</u></td></tr>
+<tr><th id="394">394</th><td>		dst.sin_addr = iphdr-&gt;ip_dst;</td></tr>
+<tr><th id="395">395</th><td>		dst.sin_port = sh-&gt;dest_port;</td></tr>
+<tr><th id="396">396</th><td></td></tr>
+<tr><th id="397">397</th><td>		src.sin_family = AF_INET;</td></tr>
+<tr><th id="398">398</th><td><u>#ifdef HAVE_SIN_LEN</u></td></tr>
+<tr><th id="399">399</th><td>		src.sin_len = <b>sizeof</b>(<b>struct</b> sockaddr_in);</td></tr>
+<tr><th id="400">400</th><td><u>#endif</u></td></tr>
+<tr><th id="401">401</th><td>		src.sin_addr = iphdr-&gt;ip_src;</td></tr>
+<tr><th id="402">402</th><td>		src.sin_port = sh-&gt;src_port;</td></tr>
+<tr><th id="403">403</th><td></td></tr>
+<tr><th id="404">404</th><td>		<i>/* SCTP does not allow broadcasts or multicasts */</i></td></tr>
+<tr><th id="405">405</th><td>		<b>if</b> (IN_MULTICAST(ntohl(dst.sin_addr.s_addr))) {</td></tr>
+<tr><th id="406">406</th><td>			m_freem(recvmbuf[<var>0</var>]);</td></tr>
+<tr><th id="407">407</th><td>			<b>continue</b>;</td></tr>
+<tr><th id="408">408</th><td>		}</td></tr>
+<tr><th id="409">409</th><td>		<b>if</b> (SCTP_IS_IT_BROADCAST(dst.sin_addr, recvmbuf[<var>0</var>])) {</td></tr>
+<tr><th id="410">410</th><td>			m_freem(recvmbuf[<var>0</var>]);</td></tr>
+<tr><th id="411">411</th><td>			<b>continue</b>;</td></tr>
+<tr><th id="412">412</th><td>		}</td></tr>
+<tr><th id="413">413</th><td></td></tr>
+<tr><th id="414">414</th><td>		port = <var>0</var>;</td></tr>
+<tr><th id="415">415</th><td></td></tr>
+<tr><th id="416">416</th><td>		<b>if</b> (SCTP_BASE_SYSCTL(sctp_no_csum_on_loopback) &amp;&amp;</td></tr>
+<tr><th id="417">417</th><td>		    ((IN4_ISLOOPBACK_ADDRESS(&amp;src.sin_addr) &amp;&amp;</td></tr>
+<tr><th id="418">418</th><td>		      IN4_ISLOOPBACK_ADDRESS(&amp;dst.sin_addr)) ||</td></tr>
+<tr><th id="419">419</th><td>		     (src.sin_addr.s_addr == dst.sin_addr.s_addr))) {</td></tr>
+<tr><th id="420">420</th><td>			compute_crc = <var>0</var>;</td></tr>
+<tr><th id="421">421</th><td>			SCTP_STAT_INCR(sctps_recvhwcrc);</td></tr>
+<tr><th id="422">422</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="423">423</th><td>			SCTP_STAT_INCR(sctps_recvswcrc);</td></tr>
+<tr><th id="424">424</th><td>		}</td></tr>
+<tr><th id="425">425</th><td>		SCTPDBG(SCTP_DEBUG_USR, <q>"%s: Received %d bytes."</q>, <b>__func__</b>, n);</td></tr>
+<tr><th id="426">426</th><td>		SCTPDBG(SCTP_DEBUG_USR, <q>" - calling sctp_common_input_processing with off=%d\n"</q>, offset);</td></tr>
+<tr><th id="427">427</th><td>		sctp_common_input_processing(&amp;recvmbuf[<var>0</var>], <b>sizeof</b>(<b>struct</b> ip), offset, n,</td></tr>
+<tr><th id="428">428</th><td>		                             (<b>struct</b> sockaddr *)&amp;src,</td></tr>
+<tr><th id="429">429</th><td>		                             (<b>struct</b> sockaddr *)&amp;dst,</td></tr>
+<tr><th id="430">430</th><td>		                             sh, ch,</td></tr>
+<tr><th id="431">431</th><td>		                             compute_crc,</td></tr>
+<tr><th id="432">432</th><td>		                             ecn,</td></tr>
+<tr><th id="433">433</th><td>		                             SCTP_DEFAULT_VRFID, port);</td></tr>
+<tr><th id="434">434</th><td>		<b>if</b> (recvmbuf[<var>0</var>]) {</td></tr>
+<tr><th id="435">435</th><td>			m_freem(recvmbuf[<var>0</var>]);</td></tr>
+<tr><th id="436">436</th><td>		}</td></tr>
+<tr><th id="437">437</th><td>	}</td></tr>
+<tr><th id="438">438</th><td>	<b>for</b> (i = <var>0</var>; i &lt; MAXLEN_MBUF_CHAIN; i++) {</td></tr>
+<tr><th id="439">439</th><td>		m_free(recvmbuf[i]);</td></tr>
+<tr><th id="440">440</th><td>	}</td></tr>
+<tr><th id="441">441</th><td>	<i>/* free the array itself */</i></td></tr>
+<tr><th id="442">442</th><td>	free(recvmbuf);</td></tr>
+<tr><th id="443">443</th><td>	SCTPDBG(SCTP_DEBUG_USR, <q>"%s: Exiting SCTP/IP4 rcv\n"</q>, <b>__func__</b>);</td></tr>
+<tr><th id="444">444</th><td>	<b>return</b> (NULL);</td></tr>
+<tr><th id="445">445</th><td>}</td></tr>
+<tr><th id="446">446</th><td><u>#endif</u></td></tr>
+<tr><th id="447">447</th><td></td></tr>
+<tr><th id="448">448</th><td><u>#if defined(INET6)</u></td></tr>
+<tr><th id="449">449</th><td><em>static</em> <em>void</em> *</td></tr>
+<tr><th id="450">450</th><td>recv_function_raw6(<em>void</em> *arg)</td></tr>
+<tr><th id="451">451</th><td>{</td></tr>
+<tr><th id="452">452</th><td>	<b>struct</b> mbuf **recvmbuf6;</td></tr>
+<tr><th id="453">453</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="454">454</th><td>	<em>unsigned</em> <em>int</em> ncounter = <var>0</var>;</td></tr>
+<tr><th id="455">455</th><td>	<b>struct</b> iovec recv_iovec[MAXLEN_MBUF_CHAIN];</td></tr>
+<tr><th id="456">456</th><td>	<b>struct</b> msghdr msg;</td></tr>
+<tr><th id="457">457</th><td>	<b>struct</b> cmsghdr *cmsgptr;</td></tr>
+<tr><th id="458">458</th><td>	<em>char</em> cmsgbuf[CMSG_SPACE(<b>sizeof</b> (<b>struct</b> in6_pktinfo))];</td></tr>
+<tr><th id="459">459</th><td><u>#else</u></td></tr>
+<tr><th id="460">460</th><td>	WSABUF recv_iovec[MAXLEN_MBUF_CHAIN];</td></tr>
+<tr><th id="461">461</th><td>	<em>int</em> nResult, m_ErrorCode;</td></tr>
+<tr><th id="462">462</th><td>	DWORD ncounter = <var>0</var>;</td></tr>
+<tr><th id="463">463</th><td>	<b>struct</b> sockaddr_in6 from;</td></tr>
+<tr><th id="464">464</th><td>	GUID WSARecvMsg_GUID = WSAID_WSARECVMSG;</td></tr>
+<tr><th id="465">465</th><td>	LPFN_WSARECVMSG WSARecvMsg;</td></tr>
+<tr><th id="466">466</th><td>	WSACMSGHDR *cmsgptr;</td></tr>
+<tr><th id="467">467</th><td>	WSAMSG msg;</td></tr>
+<tr><th id="468">468</th><td>	<em>char</em> ControlBuffer[<var>1024</var>];</td></tr>
+<tr><th id="469">469</th><td><u>#endif</u></td></tr>
+<tr><th id="470">470</th><td>	<b>struct</b> sockaddr_in6 src, dst;</td></tr>
+<tr><th id="471">471</th><td>	<b>struct</b> sctphdr *sh;</td></tr>
+<tr><th id="472">472</th><td>	<em>int</em> offset;</td></tr>
+<tr><th id="473">473</th><td>	<b>struct</b> sctp_chunkhdr *ch;</td></tr>
+<tr><th id="474">474</th><td>	<i>/*Initially the entire set of mbufs is to be allocated.</i></td></tr>
+<tr><th id="475">475</th><td><i>	  to_fill indicates this amount. */</i></td></tr>
+<tr><th id="476">476</th><td>	<em>int</em> to_fill = MAXLEN_MBUF_CHAIN;</td></tr>
+<tr><th id="477">477</th><td>	<i>/* iovlen is the size of each mbuf in the chain */</i></td></tr>
+<tr><th id="478">478</th><td>	<em>int</em> i, n;</td></tr>
+<tr><th id="479">479</th><td>	<em>int</em> compute_crc = <var>1</var>;</td></tr>
+<tr><th id="480">480</th><td>	<em>unsigned</em> <em>int</em> iovlen = MCLBYTES;</td></tr>
+<tr><th id="481">481</th><td>	<em>int</em> want_ext = (iovlen &gt; MLEN)? <var>1</var> : <var>0</var>;</td></tr>
+<tr><th id="482">482</th><td>	<em>int</em> want_header = <var>0</var>;</td></tr>
+<tr><th id="483">483</th><td></td></tr>
+<tr><th id="484">484</th><td>	sctp_userspace_set_threadname(<q>"SCTP/IP6 rcv"</q>);</td></tr>
+<tr><th id="485">485</th><td></td></tr>
+<tr><th id="486">486</th><td>	recvmbuf6 = malloc(<b>sizeof</b>(<b>struct</b> mbuf *) * MAXLEN_MBUF_CHAIN);</td></tr>
+<tr><th id="487">487</th><td></td></tr>
+<tr><th id="488">488</th><td>	<b>for</b> (;;) {</td></tr>
+<tr><th id="489">489</th><td>		<b>for</b> (i = <var>0</var>; i &lt; to_fill; i++) {</td></tr>
+<tr><th id="490">490</th><td>			<i>/* Not getting the packet header. Tests with chain of one run</i></td></tr>
+<tr><th id="491">491</th><td><i>			   as usual without having the packet header.</i></td></tr>
+<tr><th id="492">492</th><td><i>			   Have tried both sending and receiving</i></td></tr>
+<tr><th id="493">493</th><td><i>			 */</i></td></tr>
+<tr><th id="494">494</th><td>			recvmbuf6[i] = sctp_get_mbuf_for_msg(iovlen, want_header, M_NOWAIT, want_ext, MT_DATA);</td></tr>
+<tr><th id="495">495</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="496">496</th><td>			recv_iovec[i].iov_base = (caddr_t)recvmbuf6[i]-&gt;m_data;</td></tr>
+<tr><th id="497">497</th><td>			recv_iovec[i].iov_len = iovlen;</td></tr>
+<tr><th id="498">498</th><td><u>#else</u></td></tr>
+<tr><th id="499">499</th><td>			recv_iovec[i].buf = (caddr_t)recvmbuf6[i]-&gt;m_data;</td></tr>
+<tr><th id="500">500</th><td>			recv_iovec[i].len = iovlen;</td></tr>
+<tr><th id="501">501</th><td><u>#endif</u></td></tr>
+<tr><th id="502">502</th><td>		}</td></tr>
+<tr><th id="503">503</th><td>		to_fill = <var>0</var>;</td></tr>
+<tr><th id="504">504</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="505">505</th><td>		ncounter = <var>0</var>;</td></tr>
+<tr><th id="506">506</th><td>		memset(&amp;from, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in6));</td></tr>
+<tr><th id="507">507</th><td>		nResult = WSAIoctl(SCTP_BASE_VAR(userspace_rawsctp6), SIO_GET_EXTENSION_FUNCTION_POINTER,</td></tr>
+<tr><th id="508">508</th><td>		                   &amp;WSARecvMsg_GUID, <b>sizeof</b> WSARecvMsg_GUID,</td></tr>
+<tr><th id="509">509</th><td>		                   &amp;WSARecvMsg, <b>sizeof</b> WSARecvMsg,</td></tr>
+<tr><th id="510">510</th><td>		                   &amp;ncounter, NULL, NULL);</td></tr>
+<tr><th id="511">511</th><td>		<b>if</b> (nResult == <var>0</var>) {</td></tr>
+<tr><th id="512">512</th><td>			msg.name = (<em>void</em> *)&amp;src;</td></tr>
+<tr><th id="513">513</th><td>			msg.namelen = <b>sizeof</b>(<b>struct</b> sockaddr_in6);</td></tr>
+<tr><th id="514">514</th><td>			msg.lpBuffers = recv_iovec;</td></tr>
+<tr><th id="515">515</th><td>			msg.dwBufferCount = MAXLEN_MBUF_CHAIN;</td></tr>
+<tr><th id="516">516</th><td>			msg.Control.len = <b>sizeof</b> ControlBuffer;</td></tr>
+<tr><th id="517">517</th><td>			msg.Control.buf = ControlBuffer;</td></tr>
+<tr><th id="518">518</th><td>			msg.dwFlags = <var>0</var>;</td></tr>
+<tr><th id="519">519</th><td>			nResult = WSARecvMsg(SCTP_BASE_VAR(userspace_rawsctp6), &amp;msg, &amp;ncounter, NULL, NULL);</td></tr>
+<tr><th id="520">520</th><td>		}</td></tr>
+<tr><th id="521">521</th><td>		<b>if</b> (nResult != <var>0</var>) {</td></tr>
+<tr><th id="522">522</th><td>			m_ErrorCode = WSAGetLastError();</td></tr>
+<tr><th id="523">523</th><td>			<b>if</b> ((m_ErrorCode == WSAENOTSOCK) || (m_ErrorCode == WSAEINTR)) {</td></tr>
+<tr><th id="524">524</th><td>				<b>break</b>;</td></tr>
+<tr><th id="525">525</th><td>			}</td></tr>
+<tr><th id="526">526</th><td>			<b>continue</b>;</td></tr>
+<tr><th id="527">527</th><td>		}</td></tr>
+<tr><th id="528">528</th><td>		n = ncounter;</td></tr>
+<tr><th id="529">529</th><td><u>#else</u></td></tr>
+<tr><th id="530">530</th><td>		memset(&amp;msg, <var>0</var>, <b>sizeof</b>(<b>struct</b> msghdr));</td></tr>
+<tr><th id="531">531</th><td>		memset(&amp;src, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in6));</td></tr>
+<tr><th id="532">532</th><td>		memset(&amp;dst, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in6));</td></tr>
+<tr><th id="533">533</th><td>		memset(cmsgbuf, <var>0</var>, CMSG_SPACE(<b>sizeof</b> (<b>struct</b> in6_pktinfo)));</td></tr>
+<tr><th id="534">534</th><td>		msg.msg_name = (<em>void</em> *)&amp;src;</td></tr>
+<tr><th id="535">535</th><td>		msg.msg_namelen = <b>sizeof</b>(<b>struct</b> sockaddr_in6);</td></tr>
+<tr><th id="536">536</th><td>		msg.msg_iov = recv_iovec;</td></tr>
+<tr><th id="537">537</th><td>		msg.msg_iovlen = MAXLEN_MBUF_CHAIN;</td></tr>
+<tr><th id="538">538</th><td>		msg.msg_control = (<em>void</em> *)cmsgbuf;</td></tr>
+<tr><th id="539">539</th><td>		msg.msg_controllen = (socklen_t)CMSG_SPACE(<b>sizeof</b> (<b>struct</b> in6_pktinfo));</td></tr>
+<tr><th id="540">540</th><td>		msg.msg_flags = <var>0</var>;</td></tr>
+<tr><th id="541">541</th><td></td></tr>
+<tr><th id="542">542</th><td>		ncounter = n = recvmsg(SCTP_BASE_VAR(userspace_rawsctp6), &amp;msg, <var>0</var>);</td></tr>
+<tr><th id="543">543</th><td>		<b>if</b> (n &lt; <var>0</var>) {</td></tr>
+<tr><th id="544">544</th><td>			<b>if</b> (errno == EAGAIN || errno == EINTR) {</td></tr>
+<tr><th id="545">545</th><td>				<b>continue</b>;</td></tr>
+<tr><th id="546">546</th><td>			} <b>else</b> {</td></tr>
+<tr><th id="547">547</th><td>				<b>break</b>;</td></tr>
+<tr><th id="548">548</th><td>			}</td></tr>
+<tr><th id="549">549</th><td>		}</td></tr>
+<tr><th id="550">550</th><td><u>#endif</u></td></tr>
+<tr><th id="551">551</th><td>		SCTP_HEADER_LEN(recvmbuf6[<var>0</var>]) = n; <i>/* length of total packet */</i></td></tr>
+<tr><th id="552">552</th><td>		SCTP_STAT_INCR(sctps_recvpackets);</td></tr>
+<tr><th id="553">553</th><td>		SCTP_STAT_INCR_COUNTER64(sctps_inpackets);</td></tr>
+<tr><th id="554">554</th><td></td></tr>
+<tr><th id="555">555</th><td>		<b>if</b> ((<em>unsigned</em> <em>int</em>)n &lt;= iovlen) {</td></tr>
+<tr><th id="556">556</th><td>			SCTP_BUF_LEN(recvmbuf6[<var>0</var>]) = n;</td></tr>
+<tr><th id="557">557</th><td>			(to_fill)++;</td></tr>
+<tr><th id="558">558</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="559">559</th><td>			i = <var>0</var>;</td></tr>
+<tr><th id="560">560</th><td>			SCTP_BUF_LEN(recvmbuf6[<var>0</var>]) = iovlen;</td></tr>
+<tr><th id="561">561</th><td></td></tr>
+<tr><th id="562">562</th><td>			ncounter -= min(ncounter, iovlen);</td></tr>
+<tr><th id="563">563</th><td>			(to_fill)++;</td></tr>
+<tr><th id="564">564</th><td>			<b>do</b> {</td></tr>
+<tr><th id="565">565</th><td>				recvmbuf6[i]-&gt;m_next = recvmbuf6[i+<var>1</var>];</td></tr>
+<tr><th id="566">566</th><td>				SCTP_BUF_LEN(recvmbuf6[i]-&gt;m_next) = min(ncounter, iovlen);</td></tr>
+<tr><th id="567">567</th><td>				i++;</td></tr>
+<tr><th id="568">568</th><td>				ncounter -= min(ncounter, iovlen);</td></tr>
+<tr><th id="569">569</th><td>				(to_fill)++;</td></tr>
+<tr><th id="570">570</th><td>			} <b>while</b> (ncounter &gt; <var>0</var>);</td></tr>
+<tr><th id="571">571</th><td>		}</td></tr>
+<tr><th id="572">572</th><td></td></tr>
+<tr><th id="573">573</th><td>		<b>for</b> (cmsgptr = CMSG_FIRSTHDR(&amp;msg); cmsgptr != NULL; cmsgptr = CMSG_NXTHDR(&amp;msg, cmsgptr)) {</td></tr>
+<tr><th id="574">574</th><td>			<b>if</b> ((cmsgptr-&gt;cmsg_level == IPPROTO_IPV6) &amp;&amp; (cmsgptr-&gt;cmsg_type == IPV6_PKTINFO)) {</td></tr>
+<tr><th id="575">575</th><td>				<b>struct</b> in6_pktinfo * info;</td></tr>
+<tr><th id="576">576</th><td></td></tr>
+<tr><th id="577">577</th><td>				info = (<b>struct</b> in6_pktinfo *)CMSG_DATA(cmsgptr);</td></tr>
+<tr><th id="578">578</th><td>				memcpy((<em>void</em> *)&amp;dst.sin6_addr, (<em>const</em> <em>void</em> *) &amp;(info-&gt;ipi6_addr), <b>sizeof</b>(<b>struct</b> in6_addr));</td></tr>
+<tr><th id="579">579</th><td>				<b>break</b>;</td></tr>
+<tr><th id="580">580</th><td>			}</td></tr>
+<tr><th id="581">581</th><td>		}</td></tr>
+<tr><th id="582">582</th><td></td></tr>
+<tr><th id="583">583</th><td>		<i>/* SCTP does not allow broadcasts or multicasts */</i></td></tr>
+<tr><th id="584">584</th><td>		<b>if</b> (IN6_IS_ADDR_MULTICAST(&amp;dst.sin6_addr)) {</td></tr>
+<tr><th id="585">585</th><td>			m_freem(recvmbuf6[<var>0</var>]);</td></tr>
+<tr><th id="586">586</th><td>			<b>continue</b>;</td></tr>
+<tr><th id="587">587</th><td>		}</td></tr>
+<tr><th id="588">588</th><td></td></tr>
+<tr><th id="589">589</th><td>		offset = <b>sizeof</b>(<b>struct</b> sctphdr) + <b>sizeof</b>(<b>struct</b> sctp_chunkhdr);</td></tr>
+<tr><th id="590">590</th><td>		<b>if</b> (SCTP_BUF_LEN(recvmbuf6[<var>0</var>]) &lt; offset) {</td></tr>
+<tr><th id="591">591</th><td>			<b>if</b> ((recvmbuf6[<var>0</var>] = m_pullup(recvmbuf6[<var>0</var>], offset)) == NULL) {</td></tr>
+<tr><th id="592">592</th><td>				SCTP_STAT_INCR(sctps_hdrops);</td></tr>
+<tr><th id="593">593</th><td>				<b>continue</b>;</td></tr>
+<tr><th id="594">594</th><td>			}</td></tr>
+<tr><th id="595">595</th><td>		}</td></tr>
+<tr><th id="596">596</th><td>		sh = mtod(recvmbuf6[<var>0</var>], <b>struct</b> sctphdr *);</td></tr>
+<tr><th id="597">597</th><td>		ch = (<b>struct</b> sctp_chunkhdr *)((caddr_t)sh + <b>sizeof</b>(<b>struct</b> sctphdr));</td></tr>
+<tr><th id="598">598</th><td>		offset -= <b>sizeof</b>(<b>struct</b> sctp_chunkhdr);</td></tr>
+<tr><th id="599">599</th><td></td></tr>
+<tr><th id="600">600</th><td>		dst.sin6_family = AF_INET6;</td></tr>
+<tr><th id="601">601</th><td><u>#ifdef HAVE_SIN6_LEN</u></td></tr>
+<tr><th id="602">602</th><td>		dst.sin6_len = <b>sizeof</b>(<b>struct</b> sockaddr_in6);</td></tr>
+<tr><th id="603">603</th><td><u>#endif</u></td></tr>
+<tr><th id="604">604</th><td>		dst.sin6_port = sh-&gt;dest_port;</td></tr>
+<tr><th id="605">605</th><td></td></tr>
+<tr><th id="606">606</th><td>		src.sin6_family = AF_INET6;</td></tr>
+<tr><th id="607">607</th><td><u>#ifdef HAVE_SIN6_LEN</u></td></tr>
+<tr><th id="608">608</th><td>		src.sin6_len = <b>sizeof</b>(<b>struct</b> sockaddr_in6);</td></tr>
+<tr><th id="609">609</th><td><u>#endif</u></td></tr>
+<tr><th id="610">610</th><td>		src.sin6_port = sh-&gt;src_port;</td></tr>
+<tr><th id="611">611</th><td>		<b>if</b> (SCTP_BASE_SYSCTL(sctp_no_csum_on_loopback) &amp;&amp;</td></tr>
+<tr><th id="612">612</th><td>		    (memcmp(&amp;src.sin6_addr, &amp;dst.sin6_addr, <b>sizeof</b>(<b>struct</b> in6_addr)) == <var>0</var>)) {</td></tr>
+<tr><th id="613">613</th><td>			compute_crc = <var>0</var>;</td></tr>
+<tr><th id="614">614</th><td>			SCTP_STAT_INCR(sctps_recvhwcrc);</td></tr>
+<tr><th id="615">615</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="616">616</th><td>			SCTP_STAT_INCR(sctps_recvswcrc);</td></tr>
+<tr><th id="617">617</th><td>		}</td></tr>
+<tr><th id="618">618</th><td>		SCTPDBG(SCTP_DEBUG_USR, <q>"%s: Received %d bytes."</q>, <b>__func__</b>, n);</td></tr>
+<tr><th id="619">619</th><td>		SCTPDBG(SCTP_DEBUG_USR, <q>" - calling sctp_common_input_processing with off=%d\n"</q>, offset);</td></tr>
+<tr><th id="620">620</th><td>		sctp_common_input_processing(&amp;recvmbuf6[<var>0</var>], <var>0</var>, offset, n,</td></tr>
+<tr><th id="621">621</th><td>		                             (<b>struct</b> sockaddr *)&amp;src,</td></tr>
+<tr><th id="622">622</th><td>		                             (<b>struct</b> sockaddr *)&amp;dst,</td></tr>
+<tr><th id="623">623</th><td>		                             sh, ch,</td></tr>
+<tr><th id="624">624</th><td>		                             compute_crc,</td></tr>
+<tr><th id="625">625</th><td>		                             <var>0</var>,</td></tr>
+<tr><th id="626">626</th><td>		                             SCTP_DEFAULT_VRFID, <var>0</var>);</td></tr>
+<tr><th id="627">627</th><td>		<b>if</b> (recvmbuf6[<var>0</var>]) {</td></tr>
+<tr><th id="628">628</th><td>			m_freem(recvmbuf6[<var>0</var>]);</td></tr>
+<tr><th id="629">629</th><td>		}</td></tr>
+<tr><th id="630">630</th><td>	}</td></tr>
+<tr><th id="631">631</th><td>	<b>for</b> (i = <var>0</var>; i &lt; MAXLEN_MBUF_CHAIN; i++) {</td></tr>
+<tr><th id="632">632</th><td>		m_free(recvmbuf6[i]);</td></tr>
+<tr><th id="633">633</th><td>	}</td></tr>
+<tr><th id="634">634</th><td>	<i>/* free the array itself */</i></td></tr>
+<tr><th id="635">635</th><td>	free(recvmbuf6);</td></tr>
+<tr><th id="636">636</th><td>	SCTPDBG(SCTP_DEBUG_USR, <q>"%s: Exiting SCTP/IP6 rcv\n"</q>, <b>__func__</b>);</td></tr>
+<tr><th id="637">637</th><td>	<b>return</b> (NULL);</td></tr>
+<tr><th id="638">638</th><td>}</td></tr>
+<tr><th id="639">639</th><td><u>#endif</u></td></tr>
+<tr><th id="640">640</th><td></td></tr>
+<tr><th id="641">641</th><td><u>#ifdef INET</u></td></tr>
+<tr><th id="642">642</th><td><em>static</em> <em>void</em> *</td></tr>
+<tr><th id="643">643</th><td>recv_function_udp(<em>void</em> *arg)</td></tr>
+<tr><th id="644">644</th><td>{</td></tr>
+<tr><th id="645">645</th><td>	<b>struct</b> mbuf **udprecvmbuf;</td></tr>
+<tr><th id="646">646</th><td>	<i>/*Initially the entire set of mbufs is to be allocated.</i></td></tr>
+<tr><th id="647">647</th><td><i>	  to_fill indicates this amount. */</i></td></tr>
+<tr><th id="648">648</th><td>	<em>int</em> to_fill = MAXLEN_MBUF_CHAIN;</td></tr>
+<tr><th id="649">649</th><td>	<i>/* iovlen is the size of each mbuf in the chain */</i></td></tr>
+<tr><th id="650">650</th><td>	<em>int</em> i, n, offset;</td></tr>
+<tr><th id="651">651</th><td>	<em>unsigned</em> <em>int</em> iovlen = MCLBYTES;</td></tr>
+<tr><th id="652">652</th><td>	<em>int</em> want_ext = (iovlen &gt; MLEN)? <var>1</var> : <var>0</var>;</td></tr>
+<tr><th id="653">653</th><td>	<em>int</em> want_header = <var>0</var>;</td></tr>
+<tr><th id="654">654</th><td>	<b>struct</b> sctphdr *sh;</td></tr>
+<tr><th id="655">655</th><td>	uint16_t port;</td></tr>
+<tr><th id="656">656</th><td>	<b>struct</b> sctp_chunkhdr *ch;</td></tr>
+<tr><th id="657">657</th><td>	<b>struct</b> sockaddr_in src, dst;</td></tr>
+<tr><th id="658">658</th><td><u>#if defined(IP_PKTINFO)</u></td></tr>
+<tr><th id="659">659</th><td>	<em>char</em> cmsgbuf[CMSG_SPACE(<b>sizeof</b>(<b>struct</b> in_pktinfo))];</td></tr>
+<tr><th id="660">660</th><td><u>#else</u></td></tr>
+<tr><th id="661">661</th><td>	<em>char</em> cmsgbuf[CMSG_SPACE(<b>sizeof</b>(<b>struct</b> in_addr))];</td></tr>
+<tr><th id="662">662</th><td><u>#endif</u></td></tr>
+<tr><th id="663">663</th><td>	<em>int</em> compute_crc = <var>1</var>;</td></tr>
+<tr><th id="664">664</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="665">665</th><td>	<em>unsigned</em> <em>int</em> ncounter;</td></tr>
+<tr><th id="666">666</th><td>	<b>struct</b> iovec iov[MAXLEN_MBUF_CHAIN];</td></tr>
+<tr><th id="667">667</th><td>	<b>struct</b> msghdr msg;</td></tr>
+<tr><th id="668">668</th><td>	<b>struct</b> cmsghdr *cmsgptr;</td></tr>
+<tr><th id="669">669</th><td><u>#else</u></td></tr>
+<tr><th id="670">670</th><td>	GUID WSARecvMsg_GUID = WSAID_WSARECVMSG;</td></tr>
+<tr><th id="671">671</th><td>	LPFN_WSARECVMSG WSARecvMsg;</td></tr>
+<tr><th id="672">672</th><td>	<em>char</em> ControlBuffer[<var>1024</var>];</td></tr>
+<tr><th id="673">673</th><td>	WSABUF iov[MAXLEN_MBUF_CHAIN];</td></tr>
+<tr><th id="674">674</th><td>	WSAMSG msg;</td></tr>
+<tr><th id="675">675</th><td>	<em>int</em> nResult, m_ErrorCode;</td></tr>
+<tr><th id="676">676</th><td>	WSACMSGHDR *cmsgptr;</td></tr>
+<tr><th id="677">677</th><td>	DWORD ncounter;</td></tr>
+<tr><th id="678">678</th><td><u>#endif</u></td></tr>
+<tr><th id="679">679</th><td></td></tr>
+<tr><th id="680">680</th><td>	sctp_userspace_set_threadname(<q>"SCTP/UDP/IP4 rcv"</q>);</td></tr>
+<tr><th id="681">681</th><td></td></tr>
+<tr><th id="682">682</th><td>	udprecvmbuf = malloc(<b>sizeof</b>(<b>struct</b> mbuf *) * MAXLEN_MBUF_CHAIN);</td></tr>
+<tr><th id="683">683</th><td></td></tr>
+<tr><th id="684">684</th><td>	<b>while</b> (<var>1</var>) {</td></tr>
+<tr><th id="685">685</th><td>		<b>for</b> (i = <var>0</var>; i &lt; to_fill; i++) {</td></tr>
+<tr><th id="686">686</th><td>			<i>/* Not getting the packet header. Tests with chain of one run</i></td></tr>
+<tr><th id="687">687</th><td><i>			   as usual without having the packet header.</i></td></tr>
+<tr><th id="688">688</th><td><i>			   Have tried both sending and receiving</i></td></tr>
+<tr><th id="689">689</th><td><i>			 */</i></td></tr>
+<tr><th id="690">690</th><td>			udprecvmbuf[i] = sctp_get_mbuf_for_msg(iovlen, want_header, M_NOWAIT, want_ext, MT_DATA);</td></tr>
+<tr><th id="691">691</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="692">692</th><td>			iov[i].iov_base = (caddr_t)udprecvmbuf[i]-&gt;m_data;</td></tr>
+<tr><th id="693">693</th><td>			iov[i].iov_len = iovlen;</td></tr>
+<tr><th id="694">694</th><td><u>#else</u></td></tr>
+<tr><th id="695">695</th><td>			iov[i].buf = (caddr_t)udprecvmbuf[i]-&gt;m_data;</td></tr>
+<tr><th id="696">696</th><td>			iov[i].len = iovlen;</td></tr>
+<tr><th id="697">697</th><td><u>#endif</u></td></tr>
+<tr><th id="698">698</th><td>		}</td></tr>
+<tr><th id="699">699</th><td>		to_fill = <var>0</var>;</td></tr>
+<tr><th id="700">700</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="701">701</th><td>		memset(&amp;msg, <var>0</var>, <b>sizeof</b>(<b>struct</b> msghdr));</td></tr>
+<tr><th id="702">702</th><td><u>#else</u></td></tr>
+<tr><th id="703">703</th><td>		memset(&amp;msg, <var>0</var>, <b>sizeof</b>(WSAMSG));</td></tr>
+<tr><th id="704">704</th><td><u>#endif</u></td></tr>
+<tr><th id="705">705</th><td>		memset(&amp;src, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in));</td></tr>
+<tr><th id="706">706</th><td>		memset(&amp;dst, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in));</td></tr>
+<tr><th id="707">707</th><td>		memset(cmsgbuf, <var>0</var>, <b>sizeof</b>(cmsgbuf));</td></tr>
+<tr><th id="708">708</th><td></td></tr>
+<tr><th id="709">709</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="710">710</th><td>		msg.msg_name = (<em>void</em> *)&amp;src;</td></tr>
+<tr><th id="711">711</th><td>		msg.msg_namelen = <b>sizeof</b>(<b>struct</b> sockaddr_in);</td></tr>
+<tr><th id="712">712</th><td>		msg.msg_iov = iov;</td></tr>
+<tr><th id="713">713</th><td>		msg.msg_iovlen = MAXLEN_MBUF_CHAIN;</td></tr>
+<tr><th id="714">714</th><td>		msg.msg_control = (<em>void</em> *)cmsgbuf;</td></tr>
+<tr><th id="715">715</th><td>		msg.msg_controllen = <b>sizeof</b>(cmsgbuf);</td></tr>
+<tr><th id="716">716</th><td>		msg.msg_flags = <var>0</var>;</td></tr>
+<tr><th id="717">717</th><td></td></tr>
+<tr><th id="718">718</th><td>		ncounter = n = recvmsg(SCTP_BASE_VAR(userspace_udpsctp), &amp;msg, <var>0</var>);</td></tr>
+<tr><th id="719">719</th><td>		<b>if</b> (n &lt; <var>0</var>) {</td></tr>
+<tr><th id="720">720</th><td>			<b>if</b> (errno == EAGAIN || errno == EINTR) {</td></tr>
+<tr><th id="721">721</th><td>				<b>continue</b>;</td></tr>
+<tr><th id="722">722</th><td>			} <b>else</b> {</td></tr>
+<tr><th id="723">723</th><td>				<b>break</b>;</td></tr>
+<tr><th id="724">724</th><td>			}</td></tr>
+<tr><th id="725">725</th><td>		}</td></tr>
+<tr><th id="726">726</th><td><u>#else</u></td></tr>
+<tr><th id="727">727</th><td>		nResult = WSAIoctl(SCTP_BASE_VAR(userspace_udpsctp), SIO_GET_EXTENSION_FUNCTION_POINTER,</td></tr>
+<tr><th id="728">728</th><td>		 &amp;WSARecvMsg_GUID, <b>sizeof</b> WSARecvMsg_GUID,</td></tr>
+<tr><th id="729">729</th><td>		 &amp;WSARecvMsg, <b>sizeof</b> WSARecvMsg,</td></tr>
+<tr><th id="730">730</th><td>		 &amp;ncounter, NULL, NULL);</td></tr>
+<tr><th id="731">731</th><td>		<b>if</b> (nResult == <var>0</var>) {</td></tr>
+<tr><th id="732">732</th><td>			msg.name = (<em>void</em> *)&amp;src;</td></tr>
+<tr><th id="733">733</th><td>			msg.namelen = <b>sizeof</b>(<b>struct</b> sockaddr_in);</td></tr>
+<tr><th id="734">734</th><td>			msg.lpBuffers = iov;</td></tr>
+<tr><th id="735">735</th><td>			msg.dwBufferCount = MAXLEN_MBUF_CHAIN;</td></tr>
+<tr><th id="736">736</th><td>			msg.Control.len = <b>sizeof</b> ControlBuffer;</td></tr>
+<tr><th id="737">737</th><td>			msg.Control.buf = ControlBuffer;</td></tr>
+<tr><th id="738">738</th><td>			msg.dwFlags = <var>0</var>;</td></tr>
+<tr><th id="739">739</th><td>			nResult = WSARecvMsg(SCTP_BASE_VAR(userspace_udpsctp), &amp;msg, &amp;ncounter, NULL, NULL);</td></tr>
+<tr><th id="740">740</th><td>		}</td></tr>
+<tr><th id="741">741</th><td>		<b>if</b> (nResult != <var>0</var>) {</td></tr>
+<tr><th id="742">742</th><td>			m_ErrorCode = WSAGetLastError();</td></tr>
+<tr><th id="743">743</th><td>			<b>if</b> ((m_ErrorCode == WSAENOTSOCK) || (m_ErrorCode == WSAEINTR)) {</td></tr>
+<tr><th id="744">744</th><td>				<b>break</b>;</td></tr>
+<tr><th id="745">745</th><td>			}</td></tr>
+<tr><th id="746">746</th><td>			<b>continue</b>;</td></tr>
+<tr><th id="747">747</th><td>		}</td></tr>
+<tr><th id="748">748</th><td>		n = ncounter;</td></tr>
+<tr><th id="749">749</th><td><u>#endif</u></td></tr>
+<tr><th id="750">750</th><td>		SCTP_HEADER_LEN(udprecvmbuf[<var>0</var>]) = n; <i>/* length of total packet */</i></td></tr>
+<tr><th id="751">751</th><td>		SCTP_STAT_INCR(sctps_recvpackets);</td></tr>
+<tr><th id="752">752</th><td>		SCTP_STAT_INCR_COUNTER64(sctps_inpackets);</td></tr>
+<tr><th id="753">753</th><td></td></tr>
+<tr><th id="754">754</th><td>		<b>if</b> ((<em>unsigned</em> <em>int</em>)n &lt;= iovlen) {</td></tr>
+<tr><th id="755">755</th><td>			SCTP_BUF_LEN(udprecvmbuf[<var>0</var>]) = n;</td></tr>
+<tr><th id="756">756</th><td>			(to_fill)++;</td></tr>
+<tr><th id="757">757</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="758">758</th><td>			i = <var>0</var>;</td></tr>
+<tr><th id="759">759</th><td>			SCTP_BUF_LEN(udprecvmbuf[<var>0</var>]) = iovlen;</td></tr>
+<tr><th id="760">760</th><td></td></tr>
+<tr><th id="761">761</th><td>			ncounter -= min(ncounter, iovlen);</td></tr>
+<tr><th id="762">762</th><td>			(to_fill)++;</td></tr>
+<tr><th id="763">763</th><td>			<b>do</b> {</td></tr>
+<tr><th id="764">764</th><td>				udprecvmbuf[i]-&gt;m_next = udprecvmbuf[i+<var>1</var>];</td></tr>
+<tr><th id="765">765</th><td>				SCTP_BUF_LEN(udprecvmbuf[i]-&gt;m_next) = min(ncounter, iovlen);</td></tr>
+<tr><th id="766">766</th><td>				i++;</td></tr>
+<tr><th id="767">767</th><td>				ncounter -= min(ncounter, iovlen);</td></tr>
+<tr><th id="768">768</th><td>				(to_fill)++;</td></tr>
+<tr><th id="769">769</th><td>			} <b>while</b> (ncounter &gt; <var>0</var>);</td></tr>
+<tr><th id="770">770</th><td>		}</td></tr>
+<tr><th id="771">771</th><td></td></tr>
+<tr><th id="772">772</th><td>		<b>for</b> (cmsgptr = CMSG_FIRSTHDR(&amp;msg); cmsgptr != NULL; cmsgptr = CMSG_NXTHDR(&amp;msg, cmsgptr)) {</td></tr>
+<tr><th id="773">773</th><td><u>#if defined(IP_PKTINFO)</u></td></tr>
+<tr><th id="774">774</th><td>			<b>if</b> ((cmsgptr-&gt;cmsg_level == IPPROTO_IP) &amp;&amp; (cmsgptr-&gt;cmsg_type == IP_PKTINFO)) {</td></tr>
+<tr><th id="775">775</th><td>				<b>struct</b> in_pktinfo *info;</td></tr>
+<tr><th id="776">776</th><td></td></tr>
+<tr><th id="777">777</th><td>				dst.sin_family = AF_INET;</td></tr>
+<tr><th id="778">778</th><td><u>#ifdef HAVE_SIN_LEN</u></td></tr>
+<tr><th id="779">779</th><td>				dst.sin_len = <b>sizeof</b>(<b>struct</b> sockaddr_in);</td></tr>
+<tr><th id="780">780</th><td><u>#endif</u></td></tr>
+<tr><th id="781">781</th><td>				info = (<b>struct</b> in_pktinfo *)CMSG_DATA(cmsgptr);</td></tr>
+<tr><th id="782">782</th><td>				memcpy((<em>void</em> *)&amp;dst.sin_addr, (<em>const</em> <em>void</em> *)&amp;(info-&gt;ipi_addr), <b>sizeof</b>(<b>struct</b> in_addr));</td></tr>
+<tr><th id="783">783</th><td>				<b>break</b>;</td></tr>
+<tr><th id="784">784</th><td>			}</td></tr>
+<tr><th id="785">785</th><td><u>#else</u></td></tr>
+<tr><th id="786">786</th><td>			<b>if</b> ((cmsgptr-&gt;cmsg_level == IPPROTO_IP) &amp;&amp; (cmsgptr-&gt;cmsg_type == IP_RECVDSTADDR)) {</td></tr>
+<tr><th id="787">787</th><td>				<b>struct</b> in_addr *addr;</td></tr>
+<tr><th id="788">788</th><td></td></tr>
+<tr><th id="789">789</th><td>				dst.sin_family = AF_INET;</td></tr>
+<tr><th id="790">790</th><td><u>#ifdef HAVE_SIN_LEN</u></td></tr>
+<tr><th id="791">791</th><td>				dst.sin_len = <b>sizeof</b>(<b>struct</b> sockaddr_in);</td></tr>
+<tr><th id="792">792</th><td><u>#endif</u></td></tr>
+<tr><th id="793">793</th><td>				addr = (<b>struct</b> in_addr *)CMSG_DATA(cmsgptr);</td></tr>
+<tr><th id="794">794</th><td>				memcpy((<em>void</em> *)&amp;dst.sin_addr, (<em>const</em> <em>void</em> *)addr, <b>sizeof</b>(<b>struct</b> in_addr));</td></tr>
+<tr><th id="795">795</th><td>				<b>break</b>;</td></tr>
+<tr><th id="796">796</th><td>			}</td></tr>
+<tr><th id="797">797</th><td><u>#endif</u></td></tr>
+<tr><th id="798">798</th><td>		}</td></tr>
+<tr><th id="799">799</th><td></td></tr>
+<tr><th id="800">800</th><td>		<i>/* SCTP does not allow broadcasts or multicasts */</i></td></tr>
+<tr><th id="801">801</th><td>		<b>if</b> (IN_MULTICAST(ntohl(dst.sin_addr.s_addr))) {</td></tr>
+<tr><th id="802">802</th><td>			m_freem(udprecvmbuf[<var>0</var>]);</td></tr>
+<tr><th id="803">803</th><td>			<b>continue</b>;</td></tr>
+<tr><th id="804">804</th><td>		}</td></tr>
+<tr><th id="805">805</th><td>		<b>if</b> (SCTP_IS_IT_BROADCAST(dst.sin_addr, udprecvmbuf[<var>0</var>])) {</td></tr>
+<tr><th id="806">806</th><td>			m_freem(udprecvmbuf[<var>0</var>]);</td></tr>
+<tr><th id="807">807</th><td>			<b>continue</b>;</td></tr>
+<tr><th id="808">808</th><td>		}</td></tr>
+<tr><th id="809">809</th><td></td></tr>
+<tr><th id="810">810</th><td>		offset = <b>sizeof</b>(<b>struct</b> sctphdr) + <b>sizeof</b>(<b>struct</b> sctp_chunkhdr);</td></tr>
+<tr><th id="811">811</th><td>		<b>if</b> (SCTP_BUF_LEN(udprecvmbuf[<var>0</var>]) &lt; offset) {</td></tr>
+<tr><th id="812">812</th><td>			<b>if</b> ((udprecvmbuf[<var>0</var>] = m_pullup(udprecvmbuf[<var>0</var>], offset)) == NULL) {</td></tr>
+<tr><th id="813">813</th><td>				SCTP_STAT_INCR(sctps_hdrops);</td></tr>
+<tr><th id="814">814</th><td>				<b>continue</b>;</td></tr>
+<tr><th id="815">815</th><td>			}</td></tr>
+<tr><th id="816">816</th><td>		}</td></tr>
+<tr><th id="817">817</th><td>		sh = mtod(udprecvmbuf[<var>0</var>], <b>struct</b> sctphdr *);</td></tr>
+<tr><th id="818">818</th><td>		ch = (<b>struct</b> sctp_chunkhdr *)((caddr_t)sh + <b>sizeof</b>(<b>struct</b> sctphdr));</td></tr>
+<tr><th id="819">819</th><td>		offset -= <b>sizeof</b>(<b>struct</b> sctp_chunkhdr);</td></tr>
+<tr><th id="820">820</th><td></td></tr>
+<tr><th id="821">821</th><td>		port = src.sin_port;</td></tr>
+<tr><th id="822">822</th><td>		src.sin_port = sh-&gt;src_port;</td></tr>
+<tr><th id="823">823</th><td>		dst.sin_port = sh-&gt;dest_port;</td></tr>
+<tr><th id="824">824</th><td>		<b>if</b> (SCTP_BASE_SYSCTL(sctp_no_csum_on_loopback) &amp;&amp;</td></tr>
+<tr><th id="825">825</th><td>		    (src.sin_addr.s_addr == dst.sin_addr.s_addr)) {</td></tr>
+<tr><th id="826">826</th><td>			compute_crc = <var>0</var>;</td></tr>
+<tr><th id="827">827</th><td>			SCTP_STAT_INCR(sctps_recvhwcrc);</td></tr>
+<tr><th id="828">828</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="829">829</th><td>			SCTP_STAT_INCR(sctps_recvswcrc);</td></tr>
+<tr><th id="830">830</th><td>		}</td></tr>
+<tr><th id="831">831</th><td>		SCTPDBG(SCTP_DEBUG_USR, <q>"%s: Received %d bytes."</q>, <b>__func__</b>, n);</td></tr>
+<tr><th id="832">832</th><td>		SCTPDBG(SCTP_DEBUG_USR, <q>" - calling sctp_common_input_processing with off=%d\n"</q>, offset);</td></tr>
+<tr><th id="833">833</th><td>		sctp_common_input_processing(&amp;udprecvmbuf[<var>0</var>], <var>0</var>, offset, n,</td></tr>
+<tr><th id="834">834</th><td>		                             (<b>struct</b> sockaddr *)&amp;src,</td></tr>
+<tr><th id="835">835</th><td>		                             (<b>struct</b> sockaddr *)&amp;dst,</td></tr>
+<tr><th id="836">836</th><td>		                             sh, ch,</td></tr>
+<tr><th id="837">837</th><td>		                             compute_crc,</td></tr>
+<tr><th id="838">838</th><td>		                             <var>0</var>,</td></tr>
+<tr><th id="839">839</th><td>		                             SCTP_DEFAULT_VRFID, port);</td></tr>
+<tr><th id="840">840</th><td>		<b>if</b> (udprecvmbuf[<var>0</var>]) {</td></tr>
+<tr><th id="841">841</th><td>			m_freem(udprecvmbuf[<var>0</var>]);</td></tr>
+<tr><th id="842">842</th><td>		}</td></tr>
+<tr><th id="843">843</th><td>	}</td></tr>
+<tr><th id="844">844</th><td>	<b>for</b> (i = <var>0</var>; i &lt; MAXLEN_MBUF_CHAIN; i++) {</td></tr>
+<tr><th id="845">845</th><td>		m_free(udprecvmbuf[i]);</td></tr>
+<tr><th id="846">846</th><td>	}</td></tr>
+<tr><th id="847">847</th><td>	<i>/* free the array itself */</i></td></tr>
+<tr><th id="848">848</th><td>	free(udprecvmbuf);</td></tr>
+<tr><th id="849">849</th><td>	SCTPDBG(SCTP_DEBUG_USR, <q>"%s: Exiting SCTP/UDP/IP4 rcv\n"</q>, <b>__func__</b>);</td></tr>
+<tr><th id="850">850</th><td>	<b>return</b> (NULL);</td></tr>
+<tr><th id="851">851</th><td>}</td></tr>
+<tr><th id="852">852</th><td><u>#endif</u></td></tr>
+<tr><th id="853">853</th><td></td></tr>
+<tr><th id="854">854</th><td><u>#if defined(INET6)</u></td></tr>
+<tr><th id="855">855</th><td><em>static</em> <em>void</em> *</td></tr>
+<tr><th id="856">856</th><td>recv_function_udp6(<em>void</em> *arg)</td></tr>
+<tr><th id="857">857</th><td>{</td></tr>
+<tr><th id="858">858</th><td>	<b>struct</b> mbuf **udprecvmbuf6;</td></tr>
+<tr><th id="859">859</th><td>	<i>/*Initially the entire set of mbufs is to be allocated.</i></td></tr>
+<tr><th id="860">860</th><td><i>	  to_fill indicates this amount. */</i></td></tr>
+<tr><th id="861">861</th><td>	<em>int</em> to_fill = MAXLEN_MBUF_CHAIN;</td></tr>
+<tr><th id="862">862</th><td>	<i>/* iovlen is the size of each mbuf in the chain */</i></td></tr>
+<tr><th id="863">863</th><td>	<em>int</em> i, n, offset;</td></tr>
+<tr><th id="864">864</th><td>	<em>unsigned</em> <em>int</em> iovlen = MCLBYTES;</td></tr>
+<tr><th id="865">865</th><td>	<em>int</em> want_ext = (iovlen &gt; MLEN)? <var>1</var> : <var>0</var>;</td></tr>
+<tr><th id="866">866</th><td>	<em>int</em> want_header = <var>0</var>;</td></tr>
+<tr><th id="867">867</th><td>	<b>struct</b> sockaddr_in6 src, dst;</td></tr>
+<tr><th id="868">868</th><td>	<b>struct</b> sctphdr *sh;</td></tr>
+<tr><th id="869">869</th><td>	uint16_t port;</td></tr>
+<tr><th id="870">870</th><td>	<b>struct</b> sctp_chunkhdr *ch;</td></tr>
+<tr><th id="871">871</th><td>	<em>char</em> cmsgbuf[CMSG_SPACE(<b>sizeof</b> (<b>struct</b> in6_pktinfo))];</td></tr>
+<tr><th id="872">872</th><td>	<em>int</em> compute_crc = <var>1</var>;</td></tr>
+<tr><th id="873">873</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="874">874</th><td>	<b>struct</b> iovec iov[MAXLEN_MBUF_CHAIN];</td></tr>
+<tr><th id="875">875</th><td>	<b>struct</b> msghdr msg;</td></tr>
+<tr><th id="876">876</th><td>	<b>struct</b> cmsghdr *cmsgptr;</td></tr>
+<tr><th id="877">877</th><td>	<em>unsigned</em> <em>int</em> ncounter;</td></tr>
+<tr><th id="878">878</th><td><u>#else</u></td></tr>
+<tr><th id="879">879</th><td>	GUID WSARecvMsg_GUID = WSAID_WSARECVMSG;</td></tr>
+<tr><th id="880">880</th><td>	LPFN_WSARECVMSG WSARecvMsg;</td></tr>
+<tr><th id="881">881</th><td>	<em>char</em> ControlBuffer[<var>1024</var>];</td></tr>
+<tr><th id="882">882</th><td>	WSABUF iov[MAXLEN_MBUF_CHAIN];</td></tr>
+<tr><th id="883">883</th><td>	WSAMSG msg;</td></tr>
+<tr><th id="884">884</th><td>	<em>int</em> nResult, m_ErrorCode;</td></tr>
+<tr><th id="885">885</th><td>	WSACMSGHDR *cmsgptr;</td></tr>
+<tr><th id="886">886</th><td>	DWORD ncounter;</td></tr>
+<tr><th id="887">887</th><td><u>#endif</u></td></tr>
+<tr><th id="888">888</th><td></td></tr>
+<tr><th id="889">889</th><td>	sctp_userspace_set_threadname(<q>"SCTP/UDP/IP6 rcv"</q>);</td></tr>
+<tr><th id="890">890</th><td></td></tr>
+<tr><th id="891">891</th><td>	udprecvmbuf6 = malloc(<b>sizeof</b>(<b>struct</b> mbuf *) * MAXLEN_MBUF_CHAIN);</td></tr>
+<tr><th id="892">892</th><td>	<b>while</b> (<var>1</var>) {</td></tr>
+<tr><th id="893">893</th><td>		<b>for</b> (i = <var>0</var>; i &lt; to_fill; i++) {</td></tr>
+<tr><th id="894">894</th><td>			<i>/* Not getting the packet header. Tests with chain of one run</i></td></tr>
+<tr><th id="895">895</th><td><i>			   as usual without having the packet header.</i></td></tr>
+<tr><th id="896">896</th><td><i>			   Have tried both sending and receiving</i></td></tr>
+<tr><th id="897">897</th><td><i>			 */</i></td></tr>
+<tr><th id="898">898</th><td>			udprecvmbuf6[i] = sctp_get_mbuf_for_msg(iovlen, want_header, M_NOWAIT, want_ext, MT_DATA);</td></tr>
+<tr><th id="899">899</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="900">900</th><td>			iov[i].iov_base = (caddr_t)udprecvmbuf6[i]-&gt;m_data;</td></tr>
+<tr><th id="901">901</th><td>			iov[i].iov_len = iovlen;</td></tr>
+<tr><th id="902">902</th><td><u>#else</u></td></tr>
+<tr><th id="903">903</th><td>			iov[i].buf = (caddr_t)udprecvmbuf6[i]-&gt;m_data;</td></tr>
+<tr><th id="904">904</th><td>			iov[i].len = iovlen;</td></tr>
+<tr><th id="905">905</th><td><u>#endif</u></td></tr>
+<tr><th id="906">906</th><td>		}</td></tr>
+<tr><th id="907">907</th><td>		to_fill = <var>0</var>;</td></tr>
+<tr><th id="908">908</th><td></td></tr>
+<tr><th id="909">909</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="910">910</th><td>		memset(&amp;msg, <var>0</var>, <b>sizeof</b>(<b>struct</b> msghdr));</td></tr>
+<tr><th id="911">911</th><td><u>#else</u></td></tr>
+<tr><th id="912">912</th><td>		memset(&amp;msg, <var>0</var>, <b>sizeof</b>(WSAMSG));</td></tr>
+<tr><th id="913">913</th><td><u>#endif</u></td></tr>
+<tr><th id="914">914</th><td>		memset(&amp;src, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in6));</td></tr>
+<tr><th id="915">915</th><td>		memset(&amp;dst, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in6));</td></tr>
+<tr><th id="916">916</th><td>		memset(cmsgbuf, <var>0</var>, CMSG_SPACE(<b>sizeof</b> (<b>struct</b> in6_pktinfo)));</td></tr>
+<tr><th id="917">917</th><td></td></tr>
+<tr><th id="918">918</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="919">919</th><td>		msg.msg_name = (<em>void</em> *)&amp;src;</td></tr>
+<tr><th id="920">920</th><td>		msg.msg_namelen = <b>sizeof</b>(<b>struct</b> sockaddr_in6);</td></tr>
+<tr><th id="921">921</th><td>		msg.msg_iov = iov;</td></tr>
+<tr><th id="922">922</th><td>		msg.msg_iovlen = MAXLEN_MBUF_CHAIN;</td></tr>
+<tr><th id="923">923</th><td>		msg.msg_control = (<em>void</em> *)cmsgbuf;</td></tr>
+<tr><th id="924">924</th><td>		msg.msg_controllen = (socklen_t)CMSG_SPACE(<b>sizeof</b> (<b>struct</b> in6_pktinfo));</td></tr>
+<tr><th id="925">925</th><td>		msg.msg_flags = <var>0</var>;</td></tr>
+<tr><th id="926">926</th><td></td></tr>
+<tr><th id="927">927</th><td>		ncounter = n = recvmsg(SCTP_BASE_VAR(userspace_udpsctp6), &amp;msg, <var>0</var>);</td></tr>
+<tr><th id="928">928</th><td>		<b>if</b> (n &lt; <var>0</var>) {</td></tr>
+<tr><th id="929">929</th><td>			<b>if</b> (errno == EAGAIN || errno == EINTR) {</td></tr>
+<tr><th id="930">930</th><td>				<b>continue</b>;</td></tr>
+<tr><th id="931">931</th><td>			} <b>else</b> {</td></tr>
+<tr><th id="932">932</th><td>				<b>break</b>;</td></tr>
+<tr><th id="933">933</th><td>			}</td></tr>
+<tr><th id="934">934</th><td>		}</td></tr>
+<tr><th id="935">935</th><td><u>#else</u></td></tr>
+<tr><th id="936">936</th><td>		nResult = WSAIoctl(SCTP_BASE_VAR(userspace_udpsctp6), SIO_GET_EXTENSION_FUNCTION_POINTER,</td></tr>
+<tr><th id="937">937</th><td>		                   &amp;WSARecvMsg_GUID, <b>sizeof</b> WSARecvMsg_GUID,</td></tr>
+<tr><th id="938">938</th><td>		                   &amp;WSARecvMsg, <b>sizeof</b> WSARecvMsg,</td></tr>
+<tr><th id="939">939</th><td>		                   &amp;ncounter, NULL, NULL);</td></tr>
+<tr><th id="940">940</th><td>		<b>if</b> (nResult == SOCKET_ERROR) {</td></tr>
+<tr><th id="941">941</th><td>			m_ErrorCode = WSAGetLastError();</td></tr>
+<tr><th id="942">942</th><td>			WSARecvMsg = NULL;</td></tr>
+<tr><th id="943">943</th><td>		}</td></tr>
+<tr><th id="944">944</th><td>		<b>if</b> (nResult == <var>0</var>) {</td></tr>
+<tr><th id="945">945</th><td>			msg.name = (<em>void</em> *)&amp;src;</td></tr>
+<tr><th id="946">946</th><td>			msg.namelen = <b>sizeof</b>(<b>struct</b> sockaddr_in6);</td></tr>
+<tr><th id="947">947</th><td>			msg.lpBuffers = iov;</td></tr>
+<tr><th id="948">948</th><td>			msg.dwBufferCount = MAXLEN_MBUF_CHAIN;</td></tr>
+<tr><th id="949">949</th><td>			msg.Control.len = <b>sizeof</b> ControlBuffer;</td></tr>
+<tr><th id="950">950</th><td>			msg.Control.buf = ControlBuffer;</td></tr>
+<tr><th id="951">951</th><td>			msg.dwFlags = <var>0</var>;</td></tr>
+<tr><th id="952">952</th><td>			nResult = WSARecvMsg(SCTP_BASE_VAR(userspace_udpsctp6), &amp;msg, &amp;ncounter, NULL, NULL);</td></tr>
+<tr><th id="953">953</th><td>		}</td></tr>
+<tr><th id="954">954</th><td>		<b>if</b> (nResult != <var>0</var>) {</td></tr>
+<tr><th id="955">955</th><td>			m_ErrorCode = WSAGetLastError();</td></tr>
+<tr><th id="956">956</th><td>			<b>if</b> ((m_ErrorCode == WSAENOTSOCK) || (m_ErrorCode == WSAEINTR)) {</td></tr>
+<tr><th id="957">957</th><td>				<b>break</b>;</td></tr>
+<tr><th id="958">958</th><td>			}</td></tr>
+<tr><th id="959">959</th><td>			<b>continue</b>;</td></tr>
+<tr><th id="960">960</th><td>		}</td></tr>
+<tr><th id="961">961</th><td>		n = ncounter;</td></tr>
+<tr><th id="962">962</th><td><u>#endif</u></td></tr>
+<tr><th id="963">963</th><td>		SCTP_HEADER_LEN(udprecvmbuf6[<var>0</var>]) = n; <i>/* length of total packet */</i></td></tr>
+<tr><th id="964">964</th><td>		SCTP_STAT_INCR(sctps_recvpackets);</td></tr>
+<tr><th id="965">965</th><td>		SCTP_STAT_INCR_COUNTER64(sctps_inpackets);</td></tr>
+<tr><th id="966">966</th><td></td></tr>
+<tr><th id="967">967</th><td>		<b>if</b> ((<em>unsigned</em> <em>int</em>)n &lt;= iovlen) {</td></tr>
+<tr><th id="968">968</th><td>			SCTP_BUF_LEN(udprecvmbuf6[<var>0</var>]) = n;</td></tr>
+<tr><th id="969">969</th><td>			(to_fill)++;</td></tr>
+<tr><th id="970">970</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="971">971</th><td>			i = <var>0</var>;</td></tr>
+<tr><th id="972">972</th><td>			SCTP_BUF_LEN(udprecvmbuf6[<var>0</var>]) = iovlen;</td></tr>
+<tr><th id="973">973</th><td></td></tr>
+<tr><th id="974">974</th><td>			ncounter -= min(ncounter, iovlen);</td></tr>
+<tr><th id="975">975</th><td>			(to_fill)++;</td></tr>
+<tr><th id="976">976</th><td>			<b>do</b> {</td></tr>
+<tr><th id="977">977</th><td>				udprecvmbuf6[i]-&gt;m_next = udprecvmbuf6[i+<var>1</var>];</td></tr>
+<tr><th id="978">978</th><td>				SCTP_BUF_LEN(udprecvmbuf6[i]-&gt;m_next) = min(ncounter, iovlen);</td></tr>
+<tr><th id="979">979</th><td>				i++;</td></tr>
+<tr><th id="980">980</th><td>				ncounter -= min(ncounter, iovlen);</td></tr>
+<tr><th id="981">981</th><td>				(to_fill)++;</td></tr>
+<tr><th id="982">982</th><td>			} <b>while</b> (ncounter &gt; <var>0</var>);</td></tr>
+<tr><th id="983">983</th><td>		}</td></tr>
+<tr><th id="984">984</th><td></td></tr>
+<tr><th id="985">985</th><td>		<b>for</b> (cmsgptr = CMSG_FIRSTHDR(&amp;msg); cmsgptr != NULL; cmsgptr = CMSG_NXTHDR(&amp;msg, cmsgptr)) {</td></tr>
+<tr><th id="986">986</th><td>			<b>if</b> ((cmsgptr-&gt;cmsg_level == IPPROTO_IPV6) &amp;&amp; (cmsgptr-&gt;cmsg_type == IPV6_PKTINFO)) {</td></tr>
+<tr><th id="987">987</th><td>				<b>struct</b> in6_pktinfo *info;</td></tr>
+<tr><th id="988">988</th><td></td></tr>
+<tr><th id="989">989</th><td>				dst.sin6_family = AF_INET6;</td></tr>
+<tr><th id="990">990</th><td><u>#ifdef HAVE_SIN6_LEN</u></td></tr>
+<tr><th id="991">991</th><td>				dst.sin6_len = <b>sizeof</b>(<b>struct</b> sockaddr_in6);</td></tr>
+<tr><th id="992">992</th><td><u>#endif</u></td></tr>
+<tr><th id="993">993</th><td>				info = (<b>struct</b> in6_pktinfo *)CMSG_DATA(cmsgptr);</td></tr>
+<tr><th id="994">994</th><td>				<i>/*dst.sin6_port = htons(SCTP_BASE_SYSCTL(sctp_udp_tunneling_port));*/</i></td></tr>
+<tr><th id="995">995</th><td>				memcpy((<em>void</em> *)&amp;dst.sin6_addr, (<em>const</em> <em>void</em> *)&amp;(info-&gt;ipi6_addr), <b>sizeof</b>(<b>struct</b> in6_addr));</td></tr>
+<tr><th id="996">996</th><td>			}</td></tr>
+<tr><th id="997">997</th><td>		}</td></tr>
+<tr><th id="998">998</th><td></td></tr>
+<tr><th id="999">999</th><td>		<i>/* SCTP does not allow broadcasts or multicasts */</i></td></tr>
+<tr><th id="1000">1000</th><td>		<b>if</b> (IN6_IS_ADDR_MULTICAST(&amp;dst.sin6_addr)) {</td></tr>
+<tr><th id="1001">1001</th><td>			m_freem(udprecvmbuf6[<var>0</var>]);</td></tr>
+<tr><th id="1002">1002</th><td>			<b>continue</b>;</td></tr>
+<tr><th id="1003">1003</th><td>		}</td></tr>
+<tr><th id="1004">1004</th><td></td></tr>
+<tr><th id="1005">1005</th><td>		offset = <b>sizeof</b>(<b>struct</b> sctphdr) + <b>sizeof</b>(<b>struct</b> sctp_chunkhdr);</td></tr>
+<tr><th id="1006">1006</th><td>		<b>if</b> (SCTP_BUF_LEN(udprecvmbuf6[<var>0</var>]) &lt; offset) {</td></tr>
+<tr><th id="1007">1007</th><td>			<b>if</b> ((udprecvmbuf6[<var>0</var>] = m_pullup(udprecvmbuf6[<var>0</var>], offset)) == NULL) {</td></tr>
+<tr><th id="1008">1008</th><td>				SCTP_STAT_INCR(sctps_hdrops);</td></tr>
+<tr><th id="1009">1009</th><td>				<b>continue</b>;</td></tr>
+<tr><th id="1010">1010</th><td>			}</td></tr>
+<tr><th id="1011">1011</th><td>		}</td></tr>
+<tr><th id="1012">1012</th><td>		sh = mtod(udprecvmbuf6[<var>0</var>], <b>struct</b> sctphdr *);</td></tr>
+<tr><th id="1013">1013</th><td>		ch = (<b>struct</b> sctp_chunkhdr *)((caddr_t)sh + <b>sizeof</b>(<b>struct</b> sctphdr));</td></tr>
+<tr><th id="1014">1014</th><td>		offset -= <b>sizeof</b>(<b>struct</b> sctp_chunkhdr);</td></tr>
+<tr><th id="1015">1015</th><td></td></tr>
+<tr><th id="1016">1016</th><td>		port = src.sin6_port;</td></tr>
+<tr><th id="1017">1017</th><td>		src.sin6_port = sh-&gt;src_port;</td></tr>
+<tr><th id="1018">1018</th><td>		dst.sin6_port = sh-&gt;dest_port;</td></tr>
+<tr><th id="1019">1019</th><td>		<b>if</b> (SCTP_BASE_SYSCTL(sctp_no_csum_on_loopback) &amp;&amp;</td></tr>
+<tr><th id="1020">1020</th><td>		    (memcmp(&amp;src.sin6_addr, &amp;dst.sin6_addr, <b>sizeof</b>(<b>struct</b> in6_addr)) == <var>0</var>)) {</td></tr>
+<tr><th id="1021">1021</th><td>			compute_crc = <var>0</var>;</td></tr>
+<tr><th id="1022">1022</th><td>			SCTP_STAT_INCR(sctps_recvhwcrc);</td></tr>
+<tr><th id="1023">1023</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="1024">1024</th><td>			SCTP_STAT_INCR(sctps_recvswcrc);</td></tr>
+<tr><th id="1025">1025</th><td>		}</td></tr>
+<tr><th id="1026">1026</th><td>		SCTPDBG(SCTP_DEBUG_USR, <q>"%s: Received %d bytes."</q>, <b>__func__</b>, n);</td></tr>
+<tr><th id="1027">1027</th><td>		SCTPDBG(SCTP_DEBUG_USR, <q>" - calling sctp_common_input_processing with off=%d\n"</q>, (<em>int</em>)<b>sizeof</b>(<b>struct</b> sctphdr));</td></tr>
+<tr><th id="1028">1028</th><td>		sctp_common_input_processing(&amp;udprecvmbuf6[<var>0</var>], <var>0</var>, offset, n,</td></tr>
+<tr><th id="1029">1029</th><td>		                             (<b>struct</b> sockaddr *)&amp;src,</td></tr>
+<tr><th id="1030">1030</th><td>		                             (<b>struct</b> sockaddr *)&amp;dst,</td></tr>
+<tr><th id="1031">1031</th><td>		                             sh, ch,</td></tr>
+<tr><th id="1032">1032</th><td>		                             compute_crc,</td></tr>
+<tr><th id="1033">1033</th><td>		                             <var>0</var>,</td></tr>
+<tr><th id="1034">1034</th><td>		                             SCTP_DEFAULT_VRFID, port);</td></tr>
+<tr><th id="1035">1035</th><td>		<b>if</b> (udprecvmbuf6[<var>0</var>]) {</td></tr>
+<tr><th id="1036">1036</th><td>			m_freem(udprecvmbuf6[<var>0</var>]);</td></tr>
+<tr><th id="1037">1037</th><td>		}</td></tr>
+<tr><th id="1038">1038</th><td>	}</td></tr>
+<tr><th id="1039">1039</th><td>	<b>for</b> (i = <var>0</var>; i &lt; MAXLEN_MBUF_CHAIN; i++) {</td></tr>
+<tr><th id="1040">1040</th><td>		m_free(udprecvmbuf6[i]);</td></tr>
+<tr><th id="1041">1041</th><td>	}</td></tr>
+<tr><th id="1042">1042</th><td>	<i>/* free the array itself */</i></td></tr>
+<tr><th id="1043">1043</th><td>	free(udprecvmbuf6);</td></tr>
+<tr><th id="1044">1044</th><td>	SCTPDBG(SCTP_DEBUG_USR, <q>"%s: Exiting SCTP/UDP/IP6 rcv\n"</q>, <b>__func__</b>);</td></tr>
+<tr><th id="1045">1045</th><td>	<b>return</b> (NULL);</td></tr>
+<tr><th id="1046">1046</th><td>}</td></tr>
+<tr><th id="1047">1047</th><td><u>#endif</u></td></tr>
+<tr><th id="1048">1048</th><td></td></tr>
+<tr><th id="1049">1049</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1050">1050</th><td><em>static</em> <em>void</em></td></tr>
+<tr><th id="1051">1051</th><td>setReceiveBufferSize(SOCKET sfd, <em>int</em> new_size)</td></tr>
+<tr><th id="1052">1052</th><td><u>#else</u></td></tr>
+<tr><th id="1053">1053</th><td><em>static</em> <em>void</em></td></tr>
+<tr><th id="1054">1054</th><td>setReceiveBufferSize(<em>int</em> sfd, <em>int</em> new_size)</td></tr>
+<tr><th id="1055">1055</th><td><u>#endif</u></td></tr>
+<tr><th id="1056">1056</th><td>{</td></tr>
+<tr><th id="1057">1057</th><td>	<em>int</em> ch = new_size;</td></tr>
+<tr><th id="1058">1058</th><td></td></tr>
+<tr><th id="1059">1059</th><td>	<b>if</b> (setsockopt (sfd, SOL_SOCKET, SO_RCVBUF, (<em>void</em>*)&amp;ch, <b>sizeof</b>(ch)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1060">1060</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1061">1061</th><td>		SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set recv-buffers size (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1062">1062</th><td><u>#else</u></td></tr>
+<tr><th id="1063">1063</th><td>		SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set recv-buffers size (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1064">1064</th><td><u>#endif</u></td></tr>
+<tr><th id="1065">1065</th><td>	}</td></tr>
+<tr><th id="1066">1066</th><td>	<b>return</b>;</td></tr>
+<tr><th id="1067">1067</th><td>}</td></tr>
+<tr><th id="1068">1068</th><td></td></tr>
+<tr><th id="1069">1069</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1070">1070</th><td><em>static</em> <em>void</em></td></tr>
+<tr><th id="1071">1071</th><td>setSendBufferSize(SOCKET sfd, <em>int</em> new_size)</td></tr>
+<tr><th id="1072">1072</th><td><u>#else</u></td></tr>
+<tr><th id="1073">1073</th><td><em>static</em> <em>void</em></td></tr>
+<tr><th id="1074">1074</th><td>setSendBufferSize(<em>int</em> sfd, <em>int</em> new_size)</td></tr>
+<tr><th id="1075">1075</th><td><u>#endif</u></td></tr>
+<tr><th id="1076">1076</th><td>{</td></tr>
+<tr><th id="1077">1077</th><td>	<em>int</em> ch = new_size;</td></tr>
+<tr><th id="1078">1078</th><td></td></tr>
+<tr><th id="1079">1079</th><td>	<b>if</b> (setsockopt (sfd, SOL_SOCKET, SO_SNDBUF, (<em>void</em>*)&amp;ch, <b>sizeof</b>(ch)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1080">1080</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1081">1081</th><td>		SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set send-buffers size (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1082">1082</th><td><u>#else</u></td></tr>
+<tr><th id="1083">1083</th><td>		SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set send-buffers size (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1084">1084</th><td><u>#endif</u></td></tr>
+<tr><th id="1085">1085</th><td>	}</td></tr>
+<tr><th id="1086">1086</th><td>	<b>return</b>;</td></tr>
+<tr><th id="1087">1087</th><td>}</td></tr>
+<tr><th id="1088">1088</th><td></td></tr>
+<tr><th id="1089">1089</th><td><u>#define SOCKET_TIMEOUT 100 /* in ms */</u></td></tr>
+<tr><th id="1090">1090</th><td><em>void</em></td></tr>
+<tr><th id="1091">1091</th><td>recv_thread_init(<em>void</em>)</td></tr>
+<tr><th id="1092">1092</th><td>{</td></tr>
+<tr><th id="1093">1093</th><td><u>#if defined(INET)</u></td></tr>
+<tr><th id="1094">1094</th><td>	<b>struct</b> sockaddr_in addr_ipv4;</td></tr>
+<tr><th id="1095">1095</th><td>	<em>const</em> <em>int</em> hdrincl = <var>1</var>;</td></tr>
+<tr><th id="1096">1096</th><td><u>#endif</u></td></tr>
+<tr><th id="1097">1097</th><td><u>#if defined(INET6)</u></td></tr>
+<tr><th id="1098">1098</th><td>	<b>struct</b> sockaddr_in6 addr_ipv6;</td></tr>
+<tr><th id="1099">1099</th><td><u>#endif</u></td></tr>
+<tr><th id="1100">1100</th><td><u>#if defined(INET) || defined(INET6)</u></td></tr>
+<tr><th id="1101">1101</th><td>	<em>const</em> <em>int</em> on = <var>1</var>;</td></tr>
+<tr><th id="1102">1102</th><td><u>#endif</u></td></tr>
+<tr><th id="1103">1103</th><td><u>#if !defined(_WIN32)</u></td></tr>
+<tr><th id="1104">1104</th><td>	<b>struct</b> timeval timeout;</td></tr>
+<tr><th id="1105">1105</th><td></td></tr>
+<tr><th id="1106">1106</th><td>	memset(&amp;timeout, <var>0</var>, <b>sizeof</b>(<b>struct</b> timeval));</td></tr>
+<tr><th id="1107">1107</th><td>	timeout.tv_sec  = (SOCKET_TIMEOUT / <var>1000</var>);</td></tr>
+<tr><th id="1108">1108</th><td>	timeout.tv_usec = (SOCKET_TIMEOUT % <var>1000</var>) * <var>1000</var>;</td></tr>
+<tr><th id="1109">1109</th><td><u>#else</u></td></tr>
+<tr><th id="1110">1110</th><td>	<em>unsigned</em> <em>int</em> timeout = SOCKET_TIMEOUT; <i>/* Timeout in milliseconds */</i></td></tr>
+<tr><th id="1111">1111</th><td><u>#endif</u></td></tr>
+<tr><th id="1112">1112</th><td><u>#if defined(__APPLE__) || defined(__DragonFly__) || defined(__FreeBSD__)</u></td></tr>
+<tr><th id="1113">1113</th><td>	<b>if</b> (SCTP_BASE_VAR(userspace_route) == -<var>1</var>) {</td></tr>
+<tr><th id="1114">1114</th><td>		<b>if</b> ((SCTP_BASE_VAR(userspace_route) = socket(AF_ROUTE, SOCK_RAW, <var>0</var>)) == -<var>1</var>) {</td></tr>
+<tr><th id="1115">1115</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't create routing socket (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1116">1116</th><td>		}</td></tr>
+<tr><th id="1117">1117</th><td><u>#if 0</u></td></tr>
+<tr><th id="1118">1118</th><td>		<b>struct</b> sockaddr_nl sanl;</td></tr>
+<tr><th id="1119">1119</th><td></td></tr>
+<tr><th id="1120">1120</th><td>		<b>if</b> ((SCTP_BASE_VAR(userspace_route) = socket(AF_NETLINK, SOCK_RAW, NETLINK_ROUTE)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1121">1121</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't create routing socket (errno = %d.\n"</q>, errno);</td></tr>
+<tr><th id="1122">1122</th><td>		}</td></tr>
+<tr><th id="1123">1123</th><td>		memset(&amp;sanl, <var>0</var>, <b>sizeof</b>(sanl));</td></tr>
+<tr><th id="1124">1124</th><td>		sanl.nl_family = AF_NETLINK;</td></tr>
+<tr><th id="1125">1125</th><td>		sanl.nl_groups = <var>0</var>;</td></tr>
+<tr><th id="1126">1126</th><td><u>#ifdef INET</u></td></tr>
+<tr><th id="1127">1127</th><td>		sanl.nl_groups |= RTMGRP_IPV4_IFADDR;</td></tr>
+<tr><th id="1128">1128</th><td><u>#endif</u></td></tr>
+<tr><th id="1129">1129</th><td><u>#ifdef INET6</u></td></tr>
+<tr><th id="1130">1130</th><td>		sanl.nl_groups |= RTMGRP_IPV6_IFADDR;</td></tr>
+<tr><th id="1131">1131</th><td><u>#endif</u></td></tr>
+<tr><th id="1132">1132</th><td>		<b>if</b> (bind(SCTP_BASE_VAR(userspace_route), (<b>struct</b> sockaddr *) &amp;sanl, <b>sizeof</b>(sanl)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1133">1133</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't bind routing socket (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1134">1134</th><td>			close(SCTP_BASE_VAR(userspace_route));</td></tr>
+<tr><th id="1135">1135</th><td>			SCTP_BASE_VAR(userspace_route) = -<var>1</var>;</td></tr>
+<tr><th id="1136">1136</th><td>		}</td></tr>
+<tr><th id="1137">1137</th><td><u>#endif</u></td></tr>
+<tr><th id="1138">1138</th><td>		<b>if</b> (SCTP_BASE_VAR(userspace_route) != -<var>1</var>) {</td></tr>
+<tr><th id="1139">1139</th><td>			<b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_route), SOL_SOCKET, SO_RCVTIMEO,(<em>const</em> <em>void</em>*)&amp;timeout, <b>sizeof</b>(<b>struct</b> timeval)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1140">1140</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set timeout on routing socket (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1141">1141</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1142">1142</th><td>				closesocket(SCTP_BASE_VAR(userspace_route));</td></tr>
+<tr><th id="1143">1143</th><td><u>#else</u></td></tr>
+<tr><th id="1144">1144</th><td>				close(SCTP_BASE_VAR(userspace_route));</td></tr>
+<tr><th id="1145">1145</th><td><u>#endif</u></td></tr>
+<tr><th id="1146">1146</th><td>				SCTP_BASE_VAR(userspace_route) = -<var>1</var>;</td></tr>
+<tr><th id="1147">1147</th><td>			}</td></tr>
+<tr><th id="1148">1148</th><td>		}</td></tr>
+<tr><th id="1149">1149</th><td>	}</td></tr>
+<tr><th id="1150">1150</th><td><u>#endif</u></td></tr>
+<tr><th id="1151">1151</th><td><u>#if defined(INET)</u></td></tr>
+<tr><th id="1152">1152</th><td>	<b>if</b> (SCTP_BASE_VAR(userspace_rawsctp) == -<var>1</var>) {</td></tr>
+<tr><th id="1153">1153</th><td>		<b>if</b> ((SCTP_BASE_VAR(userspace_rawsctp) = socket(AF_INET, SOCK_RAW, IPPROTO_SCTP)) == -<var>1</var>) {</td></tr>
+<tr><th id="1154">1154</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1155">1155</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't create raw socket for IPv4 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1156">1156</th><td><u>#else</u></td></tr>
+<tr><th id="1157">1157</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't create raw socket for IPv4 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1158">1158</th><td><u>#endif</u></td></tr>
+<tr><th id="1159">1159</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="1160">1160</th><td>			<i>/* complete setting up the raw SCTP socket */</i></td></tr>
+<tr><th id="1161">1161</th><td>			<b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_rawsctp), IPPROTO_IP, IP_HDRINCL,(<em>const</em> <em>void</em>*)&amp;hdrincl, <b>sizeof</b>(<em>int</em>)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1162">1162</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1163">1163</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IP_HDRINCL (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1164">1164</th><td>				closesocket(SCTP_BASE_VAR(userspace_rawsctp));</td></tr>
+<tr><th id="1165">1165</th><td><u>#else</u></td></tr>
+<tr><th id="1166">1166</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IP_HDRINCL (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1167">1167</th><td>				close(SCTP_BASE_VAR(userspace_rawsctp));</td></tr>
+<tr><th id="1168">1168</th><td><u>#endif</u></td></tr>
+<tr><th id="1169">1169</th><td>				SCTP_BASE_VAR(userspace_rawsctp) = -<var>1</var>;</td></tr>
+<tr><th id="1170">1170</th><td>			} <b>else</b> <b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_rawsctp), SOL_SOCKET, SO_RCVTIMEO, (<em>const</em> <em>void</em> *)&amp;timeout, <b>sizeof</b>(timeout)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1171">1171</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1172">1172</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set timeout on socket for SCTP/IPv4 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1173">1173</th><td>				closesocket(SCTP_BASE_VAR(userspace_rawsctp));</td></tr>
+<tr><th id="1174">1174</th><td><u>#else</u></td></tr>
+<tr><th id="1175">1175</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set timeout on socket for SCTP/IPv4 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1176">1176</th><td>				close(SCTP_BASE_VAR(userspace_rawsctp));</td></tr>
+<tr><th id="1177">1177</th><td><u>#endif</u></td></tr>
+<tr><th id="1178">1178</th><td>				SCTP_BASE_VAR(userspace_rawsctp) = -<var>1</var>;</td></tr>
+<tr><th id="1179">1179</th><td>			} <b>else</b> {</td></tr>
+<tr><th id="1180">1180</th><td>				memset((<em>void</em> *)&amp;addr_ipv4, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in));</td></tr>
+<tr><th id="1181">1181</th><td><u>#ifdef HAVE_SIN_LEN</u></td></tr>
+<tr><th id="1182">1182</th><td>				addr_ipv4.sin_len         = <b>sizeof</b>(<b>struct</b> sockaddr_in);</td></tr>
+<tr><th id="1183">1183</th><td><u>#endif</u></td></tr>
+<tr><th id="1184">1184</th><td>				addr_ipv4.sin_family      = AF_INET;</td></tr>
+<tr><th id="1185">1185</th><td>				addr_ipv4.sin_port        = htons(<var>0</var>);</td></tr>
+<tr><th id="1186">1186</th><td>				addr_ipv4.sin_addr.s_addr = htonl(INADDR_ANY);</td></tr>
+<tr><th id="1187">1187</th><td>				<b>if</b> (bind(SCTP_BASE_VAR(userspace_rawsctp), (<em>const</em> <b>struct</b> sockaddr *)&amp;addr_ipv4, <b>sizeof</b>(<b>struct</b> sockaddr_in)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1188">1188</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1189">1189</th><td>					SCTPDBG(SCTP_DEBUG_USR, <q>"Can't bind socket for SCTP/IPv4 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1190">1190</th><td>					closesocket(SCTP_BASE_VAR(userspace_rawsctp));</td></tr>
+<tr><th id="1191">1191</th><td><u>#else</u></td></tr>
+<tr><th id="1192">1192</th><td>					SCTPDBG(SCTP_DEBUG_USR, <q>"Can't bind socket for SCTP/IPv4 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1193">1193</th><td>					close(SCTP_BASE_VAR(userspace_rawsctp));</td></tr>
+<tr><th id="1194">1194</th><td><u>#endif</u></td></tr>
+<tr><th id="1195">1195</th><td>					SCTP_BASE_VAR(userspace_rawsctp) = -<var>1</var>;</td></tr>
+<tr><th id="1196">1196</th><td>				} <b>else</b> {</td></tr>
+<tr><th id="1197">1197</th><td>					setReceiveBufferSize(SCTP_BASE_VAR(userspace_rawsctp), SB_RAW); <i>/* 128K */</i></td></tr>
+<tr><th id="1198">1198</th><td>					setSendBufferSize(SCTP_BASE_VAR(userspace_rawsctp), SB_RAW); <i>/* 128K Is this setting net.inet.raw.maxdgram value? Should it be set to 64K? */</i></td></tr>
+<tr><th id="1199">1199</th><td>				}</td></tr>
+<tr><th id="1200">1200</th><td>			}</td></tr>
+<tr><th id="1201">1201</th><td>		}</td></tr>
+<tr><th id="1202">1202</th><td>	}</td></tr>
+<tr><th id="1203">1203</th><td>	<b>if</b> ((SCTP_BASE_VAR(userspace_udpsctp) == -<var>1</var>) &amp;&amp; (SCTP_BASE_SYSCTL(sctp_udp_tunneling_port) != <var>0</var>)) {</td></tr>
+<tr><th id="1204">1204</th><td>		<b>if</b> ((SCTP_BASE_VAR(userspace_udpsctp) = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP)) == -<var>1</var>) {</td></tr>
+<tr><th id="1205">1205</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1206">1206</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't create socket for SCTP/UDP/IPv4 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1207">1207</th><td><u>#else</u></td></tr>
+<tr><th id="1208">1208</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't create socket for SCTP/UDP/IPv4 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1209">1209</th><td><u>#endif</u></td></tr>
+<tr><th id="1210">1210</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="1211">1211</th><td><u>#if defined(IP_PKTINFO)</u></td></tr>
+<tr><th id="1212">1212</th><td>			<b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_udpsctp), IPPROTO_IP, IP_PKTINFO, (<em>const</em> <em>void</em> *)&amp;on, (<em>int</em>)<b>sizeof</b>(<em>int</em>)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1213">1213</th><td><u>#else</u></td></tr>
+<tr><th id="1214">1214</th><td>			<b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_udpsctp), IPPROTO_IP, IP_RECVDSTADDR, (<em>const</em> <em>void</em> *)&amp;on, (<em>int</em>)<b>sizeof</b>(<em>int</em>)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1215">1215</th><td><u>#endif</u></td></tr>
+<tr><th id="1216">1216</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1217">1217</th><td><u>#if defined(IP_PKTINFO)</u></td></tr>
+<tr><th id="1218">1218</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IP_PKTINFO on socket for SCTP/UDP/IPv4 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1219">1219</th><td><u>#else</u></td></tr>
+<tr><th id="1220">1220</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IP_RECVDSTADDR on socket for SCTP/UDP/IPv4 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1221">1221</th><td><u>#endif</u></td></tr>
+<tr><th id="1222">1222</th><td>				closesocket(SCTP_BASE_VAR(userspace_udpsctp));</td></tr>
+<tr><th id="1223">1223</th><td><u>#else</u></td></tr>
+<tr><th id="1224">1224</th><td><u>#if defined(IP_PKTINFO)</u></td></tr>
+<tr><th id="1225">1225</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IP_PKTINFO on socket for SCTP/UDP/IPv4 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1226">1226</th><td><u>#else</u></td></tr>
+<tr><th id="1227">1227</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IP_RECVDSTADDR on socket for SCTP/UDP/IPv4 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1228">1228</th><td><u>#endif</u></td></tr>
+<tr><th id="1229">1229</th><td>				close(SCTP_BASE_VAR(userspace_udpsctp));</td></tr>
+<tr><th id="1230">1230</th><td><u>#endif</u></td></tr>
+<tr><th id="1231">1231</th><td>				SCTP_BASE_VAR(userspace_udpsctp) = -<var>1</var>;</td></tr>
+<tr><th id="1232">1232</th><td>			} <b>else</b> <b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_udpsctp), SOL_SOCKET, SO_RCVTIMEO, (<em>const</em> <em>void</em> *)&amp;timeout, <b>sizeof</b>(timeout)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1233">1233</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1234">1234</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set timeout on socket for SCTP/UDP/IPv4 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1235">1235</th><td>				closesocket(SCTP_BASE_VAR(userspace_udpsctp));</td></tr>
+<tr><th id="1236">1236</th><td><u>#else</u></td></tr>
+<tr><th id="1237">1237</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set timeout on socket for SCTP/UDP/IPv4 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1238">1238</th><td>				close(SCTP_BASE_VAR(userspace_udpsctp));</td></tr>
+<tr><th id="1239">1239</th><td><u>#endif</u></td></tr>
+<tr><th id="1240">1240</th><td>				SCTP_BASE_VAR(userspace_udpsctp) = -<var>1</var>;</td></tr>
+<tr><th id="1241">1241</th><td>			} <b>else</b> {</td></tr>
+<tr><th id="1242">1242</th><td>				memset((<em>void</em> *)&amp;addr_ipv4, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in));</td></tr>
+<tr><th id="1243">1243</th><td><u>#ifdef HAVE_SIN_LEN</u></td></tr>
+<tr><th id="1244">1244</th><td>				addr_ipv4.sin_len         = <b>sizeof</b>(<b>struct</b> sockaddr_in);</td></tr>
+<tr><th id="1245">1245</th><td><u>#endif</u></td></tr>
+<tr><th id="1246">1246</th><td>				addr_ipv4.sin_family      = AF_INET;</td></tr>
+<tr><th id="1247">1247</th><td>				addr_ipv4.sin_port        = htons(SCTP_BASE_SYSCTL(sctp_udp_tunneling_port));</td></tr>
+<tr><th id="1248">1248</th><td>				addr_ipv4.sin_addr.s_addr = htonl(INADDR_ANY);</td></tr>
+<tr><th id="1249">1249</th><td>				<b>if</b> (bind(SCTP_BASE_VAR(userspace_udpsctp), (<em>const</em> <b>struct</b> sockaddr *)&amp;addr_ipv4, <b>sizeof</b>(<b>struct</b> sockaddr_in)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1250">1250</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1251">1251</th><td>					SCTPDBG(SCTP_DEBUG_USR, <q>"Can't bind socket for SCTP/UDP/IPv4 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1252">1252</th><td>					closesocket(SCTP_BASE_VAR(userspace_udpsctp));</td></tr>
+<tr><th id="1253">1253</th><td><u>#else</u></td></tr>
+<tr><th id="1254">1254</th><td>					SCTPDBG(SCTP_DEBUG_USR, <q>"Can't bind socket for SCTP/UDP/IPv4 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1255">1255</th><td>					close(SCTP_BASE_VAR(userspace_udpsctp));</td></tr>
+<tr><th id="1256">1256</th><td><u>#endif</u></td></tr>
+<tr><th id="1257">1257</th><td>					SCTP_BASE_VAR(userspace_udpsctp) = -<var>1</var>;</td></tr>
+<tr><th id="1258">1258</th><td>				} <b>else</b> {</td></tr>
+<tr><th id="1259">1259</th><td>					setReceiveBufferSize(SCTP_BASE_VAR(userspace_udpsctp), SB_RAW); <i>/* 128K */</i></td></tr>
+<tr><th id="1260">1260</th><td>					setSendBufferSize(SCTP_BASE_VAR(userspace_udpsctp), SB_RAW); <i>/* 128K Is this setting net.inet.raw.maxdgram value? Should it be set to 64K? */</i></td></tr>
+<tr><th id="1261">1261</th><td>				}</td></tr>
+<tr><th id="1262">1262</th><td>			}</td></tr>
+<tr><th id="1263">1263</th><td>		}</td></tr>
+<tr><th id="1264">1264</th><td>	}</td></tr>
+<tr><th id="1265">1265</th><td><u>#endif</u></td></tr>
+<tr><th id="1266">1266</th><td><u>#if defined(INET6)</u></td></tr>
+<tr><th id="1267">1267</th><td>	<b>if</b> (SCTP_BASE_VAR(userspace_rawsctp6) == -<var>1</var>) {</td></tr>
+<tr><th id="1268">1268</th><td>		<b>if</b> ((SCTP_BASE_VAR(userspace_rawsctp6) = socket(AF_INET6, SOCK_RAW, IPPROTO_SCTP)) == -<var>1</var>) {</td></tr>
+<tr><th id="1269">1269</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1270">1270</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't create socket for SCTP/IPv6 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1271">1271</th><td><u>#else</u></td></tr>
+<tr><th id="1272">1272</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't create socket for SCTP/IPv6 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1273">1273</th><td><u>#endif</u></td></tr>
+<tr><th id="1274">1274</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="1275">1275</th><td>			<i>/* complete setting up the raw SCTP socket */</i></td></tr>
+<tr><th id="1276">1276</th><td><u>#if defined(IPV6_RECVPKTINFO)</u></td></tr>
+<tr><th id="1277">1277</th><td>			<b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_rawsctp6), IPPROTO_IPV6, IPV6_RECVPKTINFO, (<em>const</em> <em>void</em> *)&amp;on, <b>sizeof</b>(on)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1278">1278</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1279">1279</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IPV6_RECVPKTINFO on socket for SCTP/IPv6 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1280">1280</th><td>				closesocket(SCTP_BASE_VAR(userspace_rawsctp6));</td></tr>
+<tr><th id="1281">1281</th><td><u>#else</u></td></tr>
+<tr><th id="1282">1282</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IPV6_RECVPKTINFO on socket for SCTP/IPv6 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1283">1283</th><td>				close(SCTP_BASE_VAR(userspace_rawsctp6));</td></tr>
+<tr><th id="1284">1284</th><td><u>#endif</u></td></tr>
+<tr><th id="1285">1285</th><td>				SCTP_BASE_VAR(userspace_rawsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1286">1286</th><td>			} <b>else</b> {</td></tr>
+<tr><th id="1287">1287</th><td><u>#else</u></td></tr>
+<tr><th id="1288">1288</th><td>			<b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_rawsctp6), IPPROTO_IPV6, IPV6_PKTINFO,(<em>const</em> <em>void</em>*)&amp;on, <b>sizeof</b>(on)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1289">1289</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1290">1290</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IPV6_PKTINFO on socket for SCTP/IPv6 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1291">1291</th><td>				closesocket(SCTP_BASE_VAR(userspace_rawsctp6));</td></tr>
+<tr><th id="1292">1292</th><td><u>#else</u></td></tr>
+<tr><th id="1293">1293</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IPV6_PKTINFO on socket for SCTP/IPv6 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1294">1294</th><td>				close(SCTP_BASE_VAR(userspace_rawsctp6));</td></tr>
+<tr><th id="1295">1295</th><td><u>#endif</u></td></tr>
+<tr><th id="1296">1296</th><td>				SCTP_BASE_VAR(userspace_rawsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1297">1297</th><td>			} <b>else</b> {</td></tr>
+<tr><th id="1298">1298</th><td><u>#endif</u></td></tr>
+<tr><th id="1299">1299</th><td>				<b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_rawsctp6), IPPROTO_IPV6, IPV6_V6ONLY, (<em>const</em> <em>void</em>*)&amp;on, (socklen_t)<b>sizeof</b>(on)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1300">1300</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1301">1301</th><td>					SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IPV6_V6ONLY on socket for SCTP/IPv6 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1302">1302</th><td><u>#else</u></td></tr>
+<tr><th id="1303">1303</th><td>					SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IPV6_V6ONLY on socket for SCTP/IPv6 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1304">1304</th><td><u>#endif</u></td></tr>
+<tr><th id="1305">1305</th><td>				}</td></tr>
+<tr><th id="1306">1306</th><td>				<b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_rawsctp6), SOL_SOCKET, SO_RCVTIMEO, (<em>const</em> <em>void</em> *)&amp;timeout, <b>sizeof</b>(timeout)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1307">1307</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1308">1308</th><td>					SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set timeout on socket for SCTP/IPv6 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1309">1309</th><td>					closesocket(SCTP_BASE_VAR(userspace_rawsctp6));</td></tr>
+<tr><th id="1310">1310</th><td><u>#else</u></td></tr>
+<tr><th id="1311">1311</th><td>					SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set timeout on socket for SCTP/IPv6 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1312">1312</th><td>					close(SCTP_BASE_VAR(userspace_rawsctp6));</td></tr>
+<tr><th id="1313">1313</th><td><u>#endif</u></td></tr>
+<tr><th id="1314">1314</th><td>					SCTP_BASE_VAR(userspace_rawsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1315">1315</th><td>				} <b>else</b> {</td></tr>
+<tr><th id="1316">1316</th><td>					memset((<em>void</em> *)&amp;addr_ipv6, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in6));</td></tr>
+<tr><th id="1317">1317</th><td><u>#ifdef HAVE_SIN6_LEN</u></td></tr>
+<tr><th id="1318">1318</th><td>					addr_ipv6.sin6_len         = <b>sizeof</b>(<b>struct</b> sockaddr_in6);</td></tr>
+<tr><th id="1319">1319</th><td><u>#endif</u></td></tr>
+<tr><th id="1320">1320</th><td>					addr_ipv6.sin6_family      = AF_INET6;</td></tr>
+<tr><th id="1321">1321</th><td>					addr_ipv6.sin6_port        = htons(<var>0</var>);</td></tr>
+<tr><th id="1322">1322</th><td>					addr_ipv6.sin6_addr        = in6addr_any;</td></tr>
+<tr><th id="1323">1323</th><td>					<b>if</b> (bind(SCTP_BASE_VAR(userspace_rawsctp6), (<em>const</em> <b>struct</b> sockaddr *)&amp;addr_ipv6, <b>sizeof</b>(<b>struct</b> sockaddr_in6)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1324">1324</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1325">1325</th><td>						SCTPDBG(SCTP_DEBUG_USR, <q>"Can't bind socket for SCTP/IPv6 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1326">1326</th><td>						closesocket(SCTP_BASE_VAR(userspace_rawsctp6));</td></tr>
+<tr><th id="1327">1327</th><td><u>#else</u></td></tr>
+<tr><th id="1328">1328</th><td>						SCTPDBG(SCTP_DEBUG_USR, <q>"Can't bind socket for SCTP/IPv6 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1329">1329</th><td>						close(SCTP_BASE_VAR(userspace_rawsctp6));</td></tr>
+<tr><th id="1330">1330</th><td><u>#endif</u></td></tr>
+<tr><th id="1331">1331</th><td>						SCTP_BASE_VAR(userspace_rawsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1332">1332</th><td>					} <b>else</b> {</td></tr>
+<tr><th id="1333">1333</th><td>						setReceiveBufferSize(SCTP_BASE_VAR(userspace_rawsctp6), SB_RAW); <i>/* 128K */</i></td></tr>
+<tr><th id="1334">1334</th><td>						setSendBufferSize(SCTP_BASE_VAR(userspace_rawsctp6), SB_RAW); <i>/* 128K Is this setting net.inet.raw.maxdgram value? Should it be set to 64K? */</i></td></tr>
+<tr><th id="1335">1335</th><td>					}</td></tr>
+<tr><th id="1336">1336</th><td>				}</td></tr>
+<tr><th id="1337">1337</th><td>			}</td></tr>
+<tr><th id="1338">1338</th><td>		}</td></tr>
+<tr><th id="1339">1339</th><td>	}</td></tr>
+<tr><th id="1340">1340</th><td>	<b>if</b> ((SCTP_BASE_VAR(userspace_udpsctp6) == -<var>1</var>) &amp;&amp; (SCTP_BASE_SYSCTL(sctp_udp_tunneling_port) != <var>0</var>)) {</td></tr>
+<tr><th id="1341">1341</th><td>		<b>if</b> ((SCTP_BASE_VAR(userspace_udpsctp6) = socket(AF_INET6, SOCK_DGRAM, IPPROTO_UDP)) == -<var>1</var>) {</td></tr>
+<tr><th id="1342">1342</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1343">1343</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't create socket for SCTP/UDP/IPv6 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1344">1344</th><td><u>#else</u></td></tr>
+<tr><th id="1345">1345</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't create socket for SCTP/UDP/IPv6 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1346">1346</th><td><u>#endif</u></td></tr>
+<tr><th id="1347">1347</th><td>		}</td></tr>
+<tr><th id="1348">1348</th><td><u>#if defined(IPV6_RECVPKTINFO)</u></td></tr>
+<tr><th id="1349">1349</th><td>		<b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_udpsctp6), IPPROTO_IPV6, IPV6_RECVPKTINFO, (<em>const</em> <em>void</em> *)&amp;on, (<em>int</em>)<b>sizeof</b>(<em>int</em>)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1350">1350</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1351">1351</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IPV6_RECVPKTINFO on socket for SCTP/UDP/IPv6 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1352">1352</th><td>			closesocket(SCTP_BASE_VAR(userspace_udpsctp6));</td></tr>
+<tr><th id="1353">1353</th><td><u>#else</u></td></tr>
+<tr><th id="1354">1354</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IPV6_RECVPKTINFO on socket for SCTP/UDP/IPv6 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1355">1355</th><td>			close(SCTP_BASE_VAR(userspace_udpsctp6));</td></tr>
+<tr><th id="1356">1356</th><td><u>#endif</u></td></tr>
+<tr><th id="1357">1357</th><td>			SCTP_BASE_VAR(userspace_udpsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1358">1358</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="1359">1359</th><td><u>#else</u></td></tr>
+<tr><th id="1360">1360</th><td>		<b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_udpsctp6), IPPROTO_IPV6, IPV6_PKTINFO, (<em>const</em> <em>void</em> *)&amp;on, (<em>int</em>)<b>sizeof</b>(<em>int</em>)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1361">1361</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1362">1362</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IPV6_PKTINFO on socket for SCTP/UDP/IPv6 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1363">1363</th><td>			closesocket(SCTP_BASE_VAR(userspace_udpsctp6));</td></tr>
+<tr><th id="1364">1364</th><td><u>#else</u></td></tr>
+<tr><th id="1365">1365</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IPV6_PKTINFO on socket for SCTP/UDP/IPv6 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1366">1366</th><td>			close(SCTP_BASE_VAR(userspace_udpsctp6));</td></tr>
+<tr><th id="1367">1367</th><td><u>#endif</u></td></tr>
+<tr><th id="1368">1368</th><td>			SCTP_BASE_VAR(userspace_udpsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1369">1369</th><td>		} <b>else</b> {</td></tr>
+<tr><th id="1370">1370</th><td><u>#endif</u></td></tr>
+<tr><th id="1371">1371</th><td>			<b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_udpsctp6), IPPROTO_IPV6, IPV6_V6ONLY, (<em>const</em> <em>void</em> *)&amp;on, (socklen_t)<b>sizeof</b>(on)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1372">1372</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1373">1373</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IPV6_V6ONLY on socket for SCTP/UDP/IPv6 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1374">1374</th><td><u>#else</u></td></tr>
+<tr><th id="1375">1375</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set IPV6_V6ONLY on socket for SCTP/UDP/IPv6 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1376">1376</th><td><u>#endif</u></td></tr>
+<tr><th id="1377">1377</th><td>			}</td></tr>
+<tr><th id="1378">1378</th><td>			<b>if</b> (setsockopt(SCTP_BASE_VAR(userspace_udpsctp6), SOL_SOCKET, SO_RCVTIMEO, (<em>const</em> <em>void</em> *)&amp;timeout, <b>sizeof</b>(timeout)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1379">1379</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1380">1380</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set timeout on socket for SCTP/UDP/IPv6 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1381">1381</th><td>				closesocket(SCTP_BASE_VAR(userspace_udpsctp6));</td></tr>
+<tr><th id="1382">1382</th><td><u>#else</u></td></tr>
+<tr><th id="1383">1383</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"Can't set timeout on socket for SCTP/UDP/IPv6 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1384">1384</th><td>				close(SCTP_BASE_VAR(userspace_udpsctp6));</td></tr>
+<tr><th id="1385">1385</th><td><u>#endif</u></td></tr>
+<tr><th id="1386">1386</th><td>				SCTP_BASE_VAR(userspace_udpsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1387">1387</th><td>			} <b>else</b> {</td></tr>
+<tr><th id="1388">1388</th><td>				memset((<em>void</em> *)&amp;addr_ipv6, <var>0</var>, <b>sizeof</b>(<b>struct</b> sockaddr_in6));</td></tr>
+<tr><th id="1389">1389</th><td><u>#ifdef HAVE_SIN6_LEN</u></td></tr>
+<tr><th id="1390">1390</th><td>				addr_ipv6.sin6_len         = <b>sizeof</b>(<b>struct</b> sockaddr_in6);</td></tr>
+<tr><th id="1391">1391</th><td><u>#endif</u></td></tr>
+<tr><th id="1392">1392</th><td>				addr_ipv6.sin6_family      = AF_INET6;</td></tr>
+<tr><th id="1393">1393</th><td>				addr_ipv6.sin6_port        = htons(SCTP_BASE_SYSCTL(sctp_udp_tunneling_port));</td></tr>
+<tr><th id="1394">1394</th><td>				addr_ipv6.sin6_addr        = in6addr_any;</td></tr>
+<tr><th id="1395">1395</th><td>				<b>if</b> (bind(SCTP_BASE_VAR(userspace_udpsctp6), (<em>const</em> <b>struct</b> sockaddr *)&amp;addr_ipv6, <b>sizeof</b>(<b>struct</b> sockaddr_in6)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="1396">1396</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1397">1397</th><td>					SCTPDBG(SCTP_DEBUG_USR, <q>"Can't bind socket for SCTP/UDP/IPv6 (errno = %d).\n"</q>, WSAGetLastError());</td></tr>
+<tr><th id="1398">1398</th><td>					closesocket(SCTP_BASE_VAR(userspace_udpsctp6));</td></tr>
+<tr><th id="1399">1399</th><td><u>#else</u></td></tr>
+<tr><th id="1400">1400</th><td>					SCTPDBG(SCTP_DEBUG_USR, <q>"Can't bind socket for SCTP/UDP/IPv6 (errno = %d).\n"</q>, errno);</td></tr>
+<tr><th id="1401">1401</th><td>					close(SCTP_BASE_VAR(userspace_udpsctp6));</td></tr>
+<tr><th id="1402">1402</th><td><u>#endif</u></td></tr>
+<tr><th id="1403">1403</th><td>					SCTP_BASE_VAR(userspace_udpsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1404">1404</th><td>				} <b>else</b> {</td></tr>
+<tr><th id="1405">1405</th><td>					setReceiveBufferSize(SCTP_BASE_VAR(userspace_udpsctp6), SB_RAW); <i>/* 128K */</i></td></tr>
+<tr><th id="1406">1406</th><td>					setSendBufferSize(SCTP_BASE_VAR(userspace_udpsctp6), SB_RAW); <i>/* 128K Is this setting net.inet.raw.maxdgram value? Should it be set to 64K? */</i></td></tr>
+<tr><th id="1407">1407</th><td>				}</td></tr>
+<tr><th id="1408">1408</th><td>			}</td></tr>
+<tr><th id="1409">1409</th><td>		}</td></tr>
+<tr><th id="1410">1410</th><td>	}</td></tr>
+<tr><th id="1411">1411</th><td><u>#endif</u></td></tr>
+<tr><th id="1412">1412</th><td><u>#if defined(__APPLE__) || defined(__DragonFly__) || defined(__FreeBSD__)</u></td></tr>
+<tr><th id="1413">1413</th><td><u>#if defined(INET) || defined(INET6)</u></td></tr>
+<tr><th id="1414">1414</th><td>	<b>if</b> (SCTP_BASE_VAR(userspace_route) != -<var>1</var>) {</td></tr>
+<tr><th id="1415">1415</th><td>		<em>int</em> rc;</td></tr>
+<tr><th id="1416">1416</th><td></td></tr>
+<tr><th id="1417">1417</th><td>		<b>if</b> ((rc = sctp_userspace_thread_create(&amp;SCTP_BASE_VAR(recvthreadroute), &amp;recv_function_route))) {</td></tr>
+<tr><th id="1418">1418</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't start routing thread (%d).\n"</q>, rc);</td></tr>
+<tr><th id="1419">1419</th><td>			close(SCTP_BASE_VAR(userspace_route));</td></tr>
+<tr><th id="1420">1420</th><td>			SCTP_BASE_VAR(userspace_route) = -<var>1</var>;</td></tr>
+<tr><th id="1421">1421</th><td>		}</td></tr>
+<tr><th id="1422">1422</th><td>	}</td></tr>
+<tr><th id="1423">1423</th><td><u>#endif</u></td></tr>
+<tr><th id="1424">1424</th><td><u>#endif</u></td></tr>
+<tr><th id="1425">1425</th><td><u>#if defined(INET)</u></td></tr>
+<tr><th id="1426">1426</th><td>	<b>if</b> (SCTP_BASE_VAR(userspace_rawsctp) != -<var>1</var>) {</td></tr>
+<tr><th id="1427">1427</th><td>		<em>int</em> rc;</td></tr>
+<tr><th id="1428">1428</th><td></td></tr>
+<tr><th id="1429">1429</th><td>		<b>if</b> ((rc = sctp_userspace_thread_create(&amp;SCTP_BASE_VAR(recvthreadraw), &amp;recv_function_raw))) {</td></tr>
+<tr><th id="1430">1430</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't start SCTP/IPv4 recv thread (%d).\n"</q>, rc);</td></tr>
+<tr><th id="1431">1431</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1432">1432</th><td>			closesocket(SCTP_BASE_VAR(userspace_rawsctp));</td></tr>
+<tr><th id="1433">1433</th><td><u>#else</u></td></tr>
+<tr><th id="1434">1434</th><td>			close(SCTP_BASE_VAR(userspace_rawsctp));</td></tr>
+<tr><th id="1435">1435</th><td><u>#endif</u></td></tr>
+<tr><th id="1436">1436</th><td>			SCTP_BASE_VAR(userspace_rawsctp) = -<var>1</var>;</td></tr>
+<tr><th id="1437">1437</th><td>		}</td></tr>
+<tr><th id="1438">1438</th><td>	}</td></tr>
+<tr><th id="1439">1439</th><td>	<b>if</b> (SCTP_BASE_VAR(userspace_udpsctp) != -<var>1</var>) {</td></tr>
+<tr><th id="1440">1440</th><td>		<em>int</em> rc;</td></tr>
+<tr><th id="1441">1441</th><td></td></tr>
+<tr><th id="1442">1442</th><td>		<b>if</b> ((rc = sctp_userspace_thread_create(&amp;SCTP_BASE_VAR(recvthreadudp), &amp;recv_function_udp))) {</td></tr>
+<tr><th id="1443">1443</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't start SCTP/UDP/IPv4 recv thread (%d).\n"</q>, rc);</td></tr>
+<tr><th id="1444">1444</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1445">1445</th><td>			closesocket(SCTP_BASE_VAR(userspace_udpsctp));</td></tr>
+<tr><th id="1446">1446</th><td><u>#else</u></td></tr>
+<tr><th id="1447">1447</th><td>			close(SCTP_BASE_VAR(userspace_udpsctp));</td></tr>
+<tr><th id="1448">1448</th><td><u>#endif</u></td></tr>
+<tr><th id="1449">1449</th><td>			SCTP_BASE_VAR(userspace_udpsctp) = -<var>1</var>;</td></tr>
+<tr><th id="1450">1450</th><td>		}</td></tr>
+<tr><th id="1451">1451</th><td>	}</td></tr>
+<tr><th id="1452">1452</th><td><u>#endif</u></td></tr>
+<tr><th id="1453">1453</th><td><u>#if defined(INET6)</u></td></tr>
+<tr><th id="1454">1454</th><td>	<b>if</b> (SCTP_BASE_VAR(userspace_rawsctp6) != -<var>1</var>) {</td></tr>
+<tr><th id="1455">1455</th><td>		<em>int</em> rc;</td></tr>
+<tr><th id="1456">1456</th><td></td></tr>
+<tr><th id="1457">1457</th><td>		<b>if</b> ((rc = sctp_userspace_thread_create(&amp;SCTP_BASE_VAR(recvthreadraw6), &amp;recv_function_raw6))) {</td></tr>
+<tr><th id="1458">1458</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't start SCTP/IPv6 recv thread (%d).\n"</q>, rc);</td></tr>
+<tr><th id="1459">1459</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1460">1460</th><td>			closesocket(SCTP_BASE_VAR(userspace_rawsctp6));</td></tr>
+<tr><th id="1461">1461</th><td><u>#else</u></td></tr>
+<tr><th id="1462">1462</th><td>			close(SCTP_BASE_VAR(userspace_rawsctp6));</td></tr>
+<tr><th id="1463">1463</th><td><u>#endif</u></td></tr>
+<tr><th id="1464">1464</th><td>			SCTP_BASE_VAR(userspace_rawsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1465">1465</th><td>		}</td></tr>
+<tr><th id="1466">1466</th><td>	}</td></tr>
+<tr><th id="1467">1467</th><td>	<b>if</b> (SCTP_BASE_VAR(userspace_udpsctp6) != -<var>1</var>) {</td></tr>
+<tr><th id="1468">1468</th><td>		<em>int</em> rc;</td></tr>
+<tr><th id="1469">1469</th><td></td></tr>
+<tr><th id="1470">1470</th><td>		<b>if</b> ((rc = sctp_userspace_thread_create(&amp;SCTP_BASE_VAR(recvthreadudp6), &amp;recv_function_udp6))) {</td></tr>
+<tr><th id="1471">1471</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Can't start SCTP/UDP/IPv6 recv thread (%d).\n"</q>, rc);</td></tr>
+<tr><th id="1472">1472</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1473">1473</th><td>			closesocket(SCTP_BASE_VAR(userspace_udpsctp6));</td></tr>
+<tr><th id="1474">1474</th><td><u>#else</u></td></tr>
+<tr><th id="1475">1475</th><td>			close(SCTP_BASE_VAR(userspace_udpsctp6));</td></tr>
+<tr><th id="1476">1476</th><td><u>#endif</u></td></tr>
+<tr><th id="1477">1477</th><td>			SCTP_BASE_VAR(userspace_udpsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1478">1478</th><td>		}</td></tr>
+<tr><th id="1479">1479</th><td>	}</td></tr>
+<tr><th id="1480">1480</th><td><u>#endif</u></td></tr>
+<tr><th id="1481">1481</th><td>}</td></tr>
+<tr><th id="1482">1482</th><td></td></tr>
+<tr><th id="1483">1483</th><td><em>void</em></td></tr>
+<tr><th id="1484">1484</th><td>recv_thread_destroy(<em>void</em>)</td></tr>
+<tr><th id="1485">1485</th><td>{</td></tr>
+<tr><th id="1486">1486</th><td><u>#if defined(__APPLE__) || defined(__DragonFly__) || defined(__FreeBSD__)</u></td></tr>
+<tr><th id="1487">1487</th><td><u>#if defined(INET) || defined(INET6)</u></td></tr>
+<tr><th id="1488">1488</th><td>	<b>if</b> (SCTP_BASE_VAR(userspace_route) != -<var>1</var>) {</td></tr>
+<tr><th id="1489">1489</th><td>		close(SCTP_BASE_VAR(userspace_route));</td></tr>
+<tr><th id="1490">1490</th><td>		pthread_join(SCTP_BASE_VAR(recvthreadroute), NULL);</td></tr>
+<tr><th id="1491">1491</th><td>	}</td></tr>
+<tr><th id="1492">1492</th><td><u>#endif</u></td></tr>
+<tr><th id="1493">1493</th><td><u>#endif</u></td></tr>
+<tr><th id="1494">1494</th><td><u>#if defined(INET)</u></td></tr>
+<tr><th id="1495">1495</th><td>	<b>if</b> (SCTP_BASE_VAR(userspace_rawsctp) != -<var>1</var>) {</td></tr>
+<tr><th id="1496">1496</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1497">1497</th><td>		closesocket(SCTP_BASE_VAR(userspace_rawsctp));</td></tr>
+<tr><th id="1498">1498</th><td>		SCTP_BASE_VAR(userspace_rawsctp) = -<var>1</var>;</td></tr>
+<tr><th id="1499">1499</th><td>		WaitForSingleObject(SCTP_BASE_VAR(recvthreadraw), INFINITE);</td></tr>
+<tr><th id="1500">1500</th><td>		CloseHandle(SCTP_BASE_VAR(recvthreadraw));</td></tr>
+<tr><th id="1501">1501</th><td><u>#else</u></td></tr>
+<tr><th id="1502">1502</th><td>		close(SCTP_BASE_VAR(userspace_rawsctp));</td></tr>
+<tr><th id="1503">1503</th><td>		SCTP_BASE_VAR(userspace_rawsctp) = -<var>1</var>;</td></tr>
+<tr><th id="1504">1504</th><td>		pthread_join(SCTP_BASE_VAR(recvthreadraw), NULL);</td></tr>
+<tr><th id="1505">1505</th><td><u>#endif</u></td></tr>
+<tr><th id="1506">1506</th><td>	}</td></tr>
+<tr><th id="1507">1507</th><td>	<b>if</b> (SCTP_BASE_VAR(userspace_udpsctp) != -<var>1</var>) {</td></tr>
+<tr><th id="1508">1508</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1509">1509</th><td>		closesocket(SCTP_BASE_VAR(userspace_udpsctp));</td></tr>
+<tr><th id="1510">1510</th><td>		SCTP_BASE_VAR(userspace_udpsctp) = -<var>1</var>;</td></tr>
+<tr><th id="1511">1511</th><td>		WaitForSingleObject(SCTP_BASE_VAR(recvthreadudp), INFINITE);</td></tr>
+<tr><th id="1512">1512</th><td>		CloseHandle(SCTP_BASE_VAR(recvthreadudp));</td></tr>
+<tr><th id="1513">1513</th><td><u>#else</u></td></tr>
+<tr><th id="1514">1514</th><td>		close(SCTP_BASE_VAR(userspace_udpsctp));</td></tr>
+<tr><th id="1515">1515</th><td>		SCTP_BASE_VAR(userspace_udpsctp) = -<var>1</var>;</td></tr>
+<tr><th id="1516">1516</th><td>		pthread_join(SCTP_BASE_VAR(recvthreadudp), NULL);</td></tr>
+<tr><th id="1517">1517</th><td><u>#endif</u></td></tr>
+<tr><th id="1518">1518</th><td>	}</td></tr>
+<tr><th id="1519">1519</th><td><u>#endif</u></td></tr>
+<tr><th id="1520">1520</th><td><u>#if defined(INET6)</u></td></tr>
+<tr><th id="1521">1521</th><td>	<b>if</b> (SCTP_BASE_VAR(userspace_rawsctp6) != -<var>1</var>) {</td></tr>
+<tr><th id="1522">1522</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1523">1523</th><td>		closesocket(SCTP_BASE_VAR(userspace_rawsctp6));</td></tr>
+<tr><th id="1524">1524</th><td>		SCTP_BASE_VAR(userspace_rawsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1525">1525</th><td>		WaitForSingleObject(SCTP_BASE_VAR(recvthreadraw6), INFINITE);</td></tr>
+<tr><th id="1526">1526</th><td>		CloseHandle(SCTP_BASE_VAR(recvthreadraw6));</td></tr>
+<tr><th id="1527">1527</th><td><u>#else</u></td></tr>
+<tr><th id="1528">1528</th><td>		close(SCTP_BASE_VAR(userspace_rawsctp6));</td></tr>
+<tr><th id="1529">1529</th><td>		SCTP_BASE_VAR(userspace_rawsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1530">1530</th><td>		pthread_join(SCTP_BASE_VAR(recvthreadraw6), NULL);</td></tr>
+<tr><th id="1531">1531</th><td><u>#endif</u></td></tr>
+<tr><th id="1532">1532</th><td>	}</td></tr>
+<tr><th id="1533">1533</th><td>	<b>if</b> (SCTP_BASE_VAR(userspace_udpsctp6) != -<var>1</var>) {</td></tr>
+<tr><th id="1534">1534</th><td><u>#if defined(_WIN32)</u></td></tr>
+<tr><th id="1535">1535</th><td>		SCTP_BASE_VAR(userspace_udpsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1536">1536</th><td>		closesocket(SCTP_BASE_VAR(userspace_udpsctp6));</td></tr>
+<tr><th id="1537">1537</th><td>		WaitForSingleObject(SCTP_BASE_VAR(recvthreadudp6), INFINITE);</td></tr>
+<tr><th id="1538">1538</th><td>		CloseHandle(SCTP_BASE_VAR(recvthreadudp6));</td></tr>
+<tr><th id="1539">1539</th><td><u>#else</u></td></tr>
+<tr><th id="1540">1540</th><td>		close(SCTP_BASE_VAR(userspace_udpsctp6));</td></tr>
+<tr><th id="1541">1541</th><td>		SCTP_BASE_VAR(userspace_udpsctp6) = -<var>1</var>;</td></tr>
+<tr><th id="1542">1542</th><td>		pthread_join(SCTP_BASE_VAR(recvthreadudp6), NULL);</td></tr>
+<tr><th id="1543">1543</th><td><u>#endif</u></td></tr>
+<tr><th id="1544">1544</th><td>	}</td></tr>
+<tr><th id="1545">1545</th><td><u>#endif</u></td></tr>
+<tr><th id="1546">1546</th><td>}</td></tr>
+<tr><th id="1547">1547</th><td><u>#<span data-ppcond="31">else</span></u></td></tr>
+<tr><th id="1548">1548</th><td><em>int</em> <dfn class="decl def" id="foo" title='foo' data-ref="foo" data-ref-filename="foo">foo</dfn>;</td></tr>
+<tr><th id="1549">1549</th><td><u>#<span data-ppcond="31">endif</span></u></td></tr>
+<tr><th id="1550">1550</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

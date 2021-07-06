@@ -1,0 +1,76 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>openssl_utility.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/openssl_utility.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/openssl_utility.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='openssl_utility.h.html'>openssl_utility.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2018 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_OPENSSL_UTILITY_H_">RTC_BASE_OPENSSL_UTILITY_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_OPENSSL_UTILITY_H_" data-ref="_M/RTC_BASE_OPENSSL_UTILITY_H_">RTC_BASE_OPENSSL_UTILITY_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="../../third_party/boringssl/src/include/openssl/ossl_typ.h.html">&lt;openssl/ossl_typ.h&gt;</a></u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include &lt;string&gt;</u></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="19">19</th><td><i>// The openssl namespace holds static helper methods. All methods related</i></td></tr>
+<tr><th id="20">20</th><td><i>// to OpenSSL that are commonly used and don't require global state should be</i></td></tr>
+<tr><th id="21">21</th><td><i>// placed here.</i></td></tr>
+<tr><th id="22">22</th><td><b>namespace</b> <span class="namespace">openssl</span> {</td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><u>#<span data-ppcond="24">ifdef</span> <a class="macro" href="../../third_party/boringssl/src/include/openssl/base.h.html#186" data-ref="_M/OPENSSL_IS_BORINGSSL">OPENSSL_IS_BORINGSSL</a></u></td></tr>
+<tr><th id="25">25</th><td><i>// Does minimal parsing of a certificate (only verifying the presence of major</i></td></tr>
+<tr><th id="26">26</th><td><i>// fields), primarily for the purpose of extracting the relevant out</i></td></tr>
+<tr><th id="27">27</th><td><i>// parameters. Any that the caller is uninterested in can be null.</i></td></tr>
+<tr><th id="28">28</th><td><em>bool</em> <dfn class="decl fn" id="_ZN3rtc7openssl16ParseCertificateEP16crypto_buffer_stP6cbs_stPx" title='rtc::openssl::ParseCertificate' data-ref="_ZN3rtc7openssl16ParseCertificateEP16crypto_buffer_stP6cbs_stPx" data-ref-filename="_ZN3rtc7openssl16ParseCertificateEP16crypto_buffer_stP6cbs_stPx">ParseCertificate</dfn>(<a class="typedef" href="../../third_party/boringssl/src/include/openssl/base.h.html#CRYPTO_BUFFER" title='CRYPTO_BUFFER' data-type='struct crypto_buffer_st' data-ref="CRYPTO_BUFFER" data-ref-filename="CRYPTO_BUFFER">CRYPTO_BUFFER</a>* <dfn class="local col4 decl" id="34cert_buffer" title='cert_buffer' data-type='CRYPTO_BUFFER *' data-ref="34cert_buffer" data-ref-filename="34cert_buffer">cert_buffer</dfn>,</td></tr>
+<tr><th id="29">29</th><td>                      <a class="typedef" href="../../third_party/boringssl/src/include/openssl/base.h.html#CBS" title='CBS' data-type='struct cbs_st' data-ref="CBS" data-ref-filename="CBS">CBS</a>* <dfn class="local col5 decl" id="35signature_algorithm_oid" title='signature_algorithm_oid' data-type='CBS *' data-ref="35signature_algorithm_oid" data-ref-filename="35signature_algorithm_oid">signature_algorithm_oid</dfn>,</td></tr>
+<tr><th id="30">30</th><td>                      <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span>* <dfn class="local col6 decl" id="36expiration_time" title='expiration_time' data-type='int64_t *' data-ref="36expiration_time" data-ref-filename="36expiration_time">expiration_time</dfn>);</td></tr>
+<tr><th id="31">31</th><td><u>#<span data-ppcond="24">endif</span></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><i>// Verifies that the hostname provided matches that in the peer certificate</i></td></tr>
+<tr><th id="34">34</th><td><i>// attached to this SSL state.</i></td></tr>
+<tr><th id="35">35</th><td><i>// TODO(crbug.com/webrtc/11710): When OS certificate verification is available,</i></td></tr>
+<tr><th id="36">36</th><td><i>// skip compiling this as it adds a dependency on OpenSSL X509 objects, which we</i></td></tr>
+<tr><th id="37">37</th><td><i>// are trying to avoid in favor of CRYPTO_BUFFERs (see crbug.com/webrtc/11410).</i></td></tr>
+<tr><th id="38">38</th><td><em>bool</em> <dfn class="decl fn" id="_ZN3rtc7openssl25VerifyPeerCertMatchesHostEP6ssl_stRKNSt3__112basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEE" title='rtc::openssl::VerifyPeerCertMatchesHost' data-ref="_ZN3rtc7openssl25VerifyPeerCertMatchesHostEP6ssl_stRKNSt3__112basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEE" data-ref-filename="_ZN3rtc7openssl25VerifyPeerCertMatchesHostEP6ssl_stRKNSt3__112basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEE">VerifyPeerCertMatchesHost</dfn>(<a class="typedef" href="../../third_party/boringssl/src/include/openssl/base.h.html#SSL" title='SSL' data-type='struct ssl_st' data-ref="SSL" data-ref-filename="SSL">SSL</a>* <dfn class="local col7 decl" id="37ssl" title='ssl' data-type='SSL *' data-ref="37ssl" data-ref-filename="37ssl">ssl</dfn>, <em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col8 decl" id="38host" title='host' data-type='const std::string &amp;' data-ref="38host" data-ref-filename="38host">host</dfn>);</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><i>// Logs all the errors in the OpenSSL errror queue from the current thread. A</i></td></tr>
+<tr><th id="41">41</th><td><i>// prefix can be provided for context.</i></td></tr>
+<tr><th id="42">42</th><td><em>void</em> <dfn class="decl fn" id="_ZN3rtc7openssl12LogSSLErrorsERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEE" title='rtc::openssl::LogSSLErrors' data-ref="_ZN3rtc7openssl12LogSSLErrorsERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEE" data-ref-filename="_ZN3rtc7openssl12LogSSLErrorsERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEE">LogSSLErrors</dfn>(<em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col9 decl" id="39prefix" title='prefix' data-type='const std::string &amp;' data-ref="39prefix" data-ref-filename="39prefix">prefix</dfn>);</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><u>#<span data-ppcond="44">ifndef</span> <span class="macro" data-ref="_M/WEBRTC_EXCLUDE_BUILT_IN_SSL_ROOT_CERTS">WEBRTC_EXCLUDE_BUILT_IN_SSL_ROOT_CERTS</span></u></td></tr>
+<tr><th id="45">45</th><td><i>// Attempt to add the certificates from the loader into the SSL_CTX. False is</i></td></tr>
+<tr><th id="46">46</th><td><i>// returned only if there are no certificates returned from the loader or none</i></td></tr>
+<tr><th id="47">47</th><td><i>// of them can be added to the TrustStore for the provided context.</i></td></tr>
+<tr><th id="48">48</th><td><em>bool</em> <dfn class="decl fn" id="_ZN3rtc7openssl30LoadBuiltinSSLRootCertificatesEP10ssl_ctx_st" title='rtc::openssl::LoadBuiltinSSLRootCertificates' data-ref="_ZN3rtc7openssl30LoadBuiltinSSLRootCertificatesEP10ssl_ctx_st" data-ref-filename="_ZN3rtc7openssl30LoadBuiltinSSLRootCertificatesEP10ssl_ctx_st">LoadBuiltinSSLRootCertificates</dfn>(<a class="typedef" href="../../third_party/boringssl/src/include/openssl/base.h.html#SSL_CTX" title='SSL_CTX' data-type='struct ssl_ctx_st' data-ref="SSL_CTX" data-ref-filename="SSL_CTX">SSL_CTX</a>* <dfn class="local col0 decl" id="40ssl_ctx" title='ssl_ctx' data-type='SSL_CTX *' data-ref="40ssl_ctx" data-ref-filename="40ssl_ctx">ssl_ctx</dfn>);</td></tr>
+<tr><th id="49">49</th><td><u>#<span data-ppcond="44">endif</span>  // WEBRTC_EXCLUDE_BUILT_IN_SSL_ROOT_CERTS</u></td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><u>#<span data-ppcond="51">ifdef</span> <a class="macro" href="../../third_party/boringssl/src/include/openssl/base.h.html#186" data-ref="_M/OPENSSL_IS_BORINGSSL">OPENSSL_IS_BORINGSSL</a></u></td></tr>
+<tr><th id="52">52</th><td><a class="typedef" href="../../third_party/boringssl/src/include/openssl/base.h.html#CRYPTO_BUFFER_POOL" title='CRYPTO_BUFFER_POOL' data-type='struct crypto_buffer_pool_st' data-ref="CRYPTO_BUFFER_POOL" data-ref-filename="CRYPTO_BUFFER_POOL">CRYPTO_BUFFER_POOL</a>* <dfn class="decl fn" id="_ZN3rtc7openssl13GetBufferPoolEv" title='rtc::openssl::GetBufferPool' data-ref="_ZN3rtc7openssl13GetBufferPoolEv" data-ref-filename="_ZN3rtc7openssl13GetBufferPoolEv">GetBufferPool</dfn>();</td></tr>
+<tr><th id="53">53</th><td><u>#<span data-ppcond="51">endif</span></u></td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td>}  <i>// namespace openssl</i></td></tr>
+<tr><th id="56">56</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_OPENSSL_UTILITY_H_</u></td></tr>
+<tr><th id="59">59</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='boringssl_certificate.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/boringssl_certificate.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

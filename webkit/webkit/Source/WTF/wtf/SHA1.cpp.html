@@ -1,0 +1,242 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SHA1.cpp source code [webkit/Source/WTF/wtf/SHA1.cpp] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WTF/wtf/SHA1.cpp'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>WTF</a>/<a href='./'>wtf</a>/<a href='SHA1.cpp.html'>SHA1.cpp</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2011 Google Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> * Copyright (C) 2015 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="4">4</th><td><i> *</i></td></tr>
+<tr><th id="5">5</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="6">6</th><td><i> * modification, are permitted provided that the following conditions are</i></td></tr>
+<tr><th id="7">7</th><td><i> * met:</i></td></tr>
+<tr><th id="8">8</th><td><i> *</i></td></tr>
+<tr><th id="9">9</th><td><i> *     * Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> * notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="11">11</th><td><i> *     * Redistributions in binary form must reproduce the above</i></td></tr>
+<tr><th id="12">12</th><td><i> * copyright notice, this list of conditions and the following disclaimer</i></td></tr>
+<tr><th id="13">13</th><td><i> * in the documentation and/or other materials provided with the</i></td></tr>
+<tr><th id="14">14</th><td><i> * distribution.</i></td></tr>
+<tr><th id="15">15</th><td><i> *     * Neither the name of Google Inc. nor the names of its</i></td></tr>
+<tr><th id="16">16</th><td><i> * contributors may be used to endorse or promote products derived from</i></td></tr>
+<tr><th id="17">17</th><td><i> * this software without specific prior written permission.</i></td></tr>
+<tr><th id="18">18</th><td><i> *</i></td></tr>
+<tr><th id="19">19</th><td><i> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</i></td></tr>
+<tr><th id="20">20</th><td><i> * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</i></td></tr>
+<tr><th id="21">21</th><td><i> * LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR</i></td></tr>
+<tr><th id="22">22</th><td><i> * A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</i></td></tr>
+<tr><th id="23">23</th><td><i> * OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</i></td></tr>
+<tr><th id="24">24</th><td><i> * SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</i></td></tr>
+<tr><th id="25">25</th><td><i> * LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</i></td></tr>
+<tr><th id="26">26</th><td><i> * DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</i></td></tr>
+<tr><th id="27">27</th><td><i> * THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="28">28</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="29">29</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="30">30</th><td><i> */</i></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/wtf/SHA1.h.html">&lt;wtf/SHA1.h&gt;</a></u></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html">&lt;wtf/Assertions.h&gt;</a></u></td></tr>
+<tr><th id="36">36</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html">&lt;wtf/text/CString.h&gt;</a></u></td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><u>#<span data-ppcond="40">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined 1 &amp;&amp; 1)" data-ref="_M/PLATFORM">PLATFORM</a>(COCOA)</u></td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td><a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/SHA1.h.html#WTF::SHA1" title='WTF::SHA1' data-ref="WTF::SHA1" data-ref-filename="WTF..SHA1">SHA1</a>::<dfn class="decl def fn" id="_ZN3WTF4SHA1C1Ev" title='WTF::SHA1::SHA1' data-ref="_ZN3WTF4SHA1C1Ev" data-ref-filename="_ZN3WTF4SHA1C1Ev">SHA1</dfn>()</td></tr>
+<tr><th id="43">43</th><td>{</td></tr>
+<tr><th id="44">44</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#495" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_BEGIN">ALLOW_DEPRECATED_DECLARATIONS_BEGIN</a></td></tr>
+<tr><th id="45">45</th><td>    <span class='ref fn' title='CC_SHA1_Init' data-ref="CC_SHA1_Init" data-ref-filename="CC_SHA1_Init">CC_SHA1_Init</span>(&amp;<a class="member field" href="../../../WebKitBuild/Debug/usr/local/include/wtf/SHA1.h.html#WTF::SHA1::m_context" title='WTF::SHA1::m_context' data-ref="WTF::SHA1::m_context" data-ref-filename="WTF..SHA1..m_context">m_context</a>);</td></tr>
+<tr><th id="46">46</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#496" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_END">ALLOW_DEPRECATED_DECLARATIONS_END</a></td></tr>
+<tr><th id="47">47</th><td>}</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td><em>void</em> <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/SHA1.h.html#WTF::SHA1" title='WTF::SHA1' data-ref="WTF::SHA1" data-ref-filename="WTF..SHA1">SHA1</a>::<dfn class="decl def fn" id="_ZN3WTF4SHA18addBytesENS_4SpanIKSt4byteLm18446744073709551615EEE" title='WTF::SHA1::addBytes' data-ref="_ZN3WTF4SHA18addBytesENS_4SpanIKSt4byteLm18446744073709551615EEE" data-ref-filename="_ZN3WTF4SHA18addBytesENS_4SpanIKSt4byteLm18446744073709551615EEE">addBytes</dfn>(<a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Span.h.html#WTF::Span" title='WTF::Span' data-ref="WTF::Span" data-ref-filename="WTF..Span">Span</a>&lt;<em>const</em> <span class="namespace">std::</span><span class='type' title='std::byte' data-ref="std::byte" data-ref-filename="std..byte">byte</span>&gt; <dfn class="local col5 decl" id="5input" title='input' data-type='Span&lt;const std::byte&gt;' data-ref="5input" data-ref-filename="5input">input</dfn>)</td></tr>
+<tr><th id="50">50</th><td>{</td></tr>
+<tr><th id="51">51</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#495" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_BEGIN">ALLOW_DEPRECATED_DECLARATIONS_BEGIN</a></td></tr>
+<tr><th id="52">52</th><td>    <span class='ref fn' title='CC_SHA1_Update' data-ref="CC_SHA1_Update" data-ref-filename="CC_SHA1_Update">CC_SHA1_Update</span>(&amp;<a class="member field" href="../../../WebKitBuild/Debug/usr/local/include/wtf/SHA1.h.html#WTF::SHA1::m_context" title='WTF::SHA1::m_context' data-ref="WTF::SHA1::m_context" data-ref-filename="WTF..SHA1..m_context">m_context</a>, <a class="local col5 ref" href="#5input" title='input' data-ref="5input" data-ref-filename="5input">input</a>.<a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Span.h.html#_ZNK3WTF4SpanIT_Lm18446744073709551615EE4dataEv" title='WTF::Span&lt;type-parameter-0-0, 18446744073709551615&gt;::data' data-ref="_ZNK3WTF4SpanIT_Lm18446744073709551615EE4dataEv" data-ref-filename="_ZNK3WTF4SpanIT_Lm18446744073709551615EE4dataEv">data</a>(), <a class="local col5 ref" href="#5input" title='input' data-ref="5input" data-ref-filename="5input">input</a>.<a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Span.h.html#_ZNK3WTF4SpanIT_Lm18446744073709551615EE4sizeEv" title='WTF::Span&lt;type-parameter-0-0, 18446744073709551615&gt;::size' data-ref="_ZNK3WTF4SpanIT_Lm18446744073709551615EE4sizeEv" data-ref-filename="_ZNK3WTF4SpanIT_Lm18446744073709551615EE4sizeEv">size</a>());</td></tr>
+<tr><th id="53">53</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#496" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_END">ALLOW_DEPRECATED_DECLARATIONS_END</a></td></tr>
+<tr><th id="54">54</th><td>}</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td><em>void</em> <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/SHA1.h.html#WTF::SHA1" title='WTF::SHA1' data-ref="WTF::SHA1" data-ref-filename="WTF..SHA1">SHA1</a>::<dfn class="decl def fn" id="_ZN3WTF4SHA111computeHashERNSt3__15arrayIhLm20EEE" title='WTF::SHA1::computeHash' data-ref="_ZN3WTF4SHA111computeHashERNSt3__15arrayIhLm20EEE" data-ref-filename="_ZN3WTF4SHA111computeHashERNSt3__15arrayIhLm20EEE">computeHash</dfn>(<a class="typedef" href="../../../WebKitBuild/Debug/usr/local/include/wtf/SHA1.h.html#WTF::SHA1::Digest" title='WTF::SHA1::Digest' data-type='std::array&lt;uint8_t, hashSize&gt;' data-ref="WTF::SHA1::Digest" data-ref-filename="WTF..SHA1..Digest">Digest</a>&amp; <dfn class="local col6 decl" id="6hash" title='hash' data-type='WTF::SHA1::Digest &amp;' data-ref="6hash" data-ref-filename="6hash">hash</dfn>)</td></tr>
+<tr><th id="57">57</th><td>{</td></tr>
+<tr><th id="58">58</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#495" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_BEGIN">ALLOW_DEPRECATED_DECLARATIONS_BEGIN</a></td></tr>
+<tr><th id="59">59</th><td>    <span class='ref fn' title='CC_SHA1_Final' data-ref="CC_SHA1_Final" data-ref-filename="CC_SHA1_Final">CC_SHA1_Final</span>(<a class="local col6 ref" href="#6hash" title='hash' data-ref="6hash" data-ref-filename="6hash">hash</a>.<span class='ref fn' title='std::__1::array::data' data-ref="_ZNSt3__15array4dataEv" data-ref-filename="_ZNSt3__15array4dataEv">data</span>(), &amp;<a class="member field" href="../../../WebKitBuild/Debug/usr/local/include/wtf/SHA1.h.html#WTF::SHA1::m_context" title='WTF::SHA1::m_context' data-ref="WTF::SHA1::m_context" data-ref-filename="WTF..SHA1..m_context">m_context</a>);</td></tr>
+<tr><th id="60">60</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#496" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_END">ALLOW_DEPRECATED_DECLARATIONS_END</a></td></tr>
+<tr><th id="61">61</th><td>}</td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><u>#<span data-ppcond="40">else</span></u></td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td><i>// A straightforward SHA-1 implementation based on RFC 3174.</i></td></tr>
+<tr><th id="66">66</th><td><i>// <a href="http://www.ietf.org/rfc/rfc3174.txt">http://www.ietf.org/rfc/rfc3174.txt</a></i></td></tr>
+<tr><th id="67">67</th><td><i>// The names of functions and variables (such as "a", "b", and "f") follow notations in RFC 3174.</i></td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td><em>static</em> <b>inline</b> uint32_t f(<em>int</em> t, uint32_t b, uint32_t c, uint32_t d)</td></tr>
+<tr><th id="70">70</th><td>{</td></tr>
+<tr><th id="71">71</th><td>    ASSERT(t &gt;= <var>0</var> &amp;&amp; t &lt; <var>80</var>);</td></tr>
+<tr><th id="72">72</th><td>    <b>if</b> (t &lt; <var>20</var>)</td></tr>
+<tr><th id="73">73</th><td>        <b>return</b> (b &amp; c) | ((~b) &amp; d);</td></tr>
+<tr><th id="74">74</th><td>    <b>if</b> (t &lt; <var>40</var>)</td></tr>
+<tr><th id="75">75</th><td>        <b>return</b> b ^ c ^ d;</td></tr>
+<tr><th id="76">76</th><td>    <b>if</b> (t &lt; <var>60</var>)</td></tr>
+<tr><th id="77">77</th><td>        <b>return</b> (b &amp; c) | (b &amp; d) | (c &amp; d);</td></tr>
+<tr><th id="78">78</th><td>    <b>return</b> b ^ c ^ d;</td></tr>
+<tr><th id="79">79</th><td>}</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td><em>static</em> <b>inline</b> uint32_t k(<em>int</em> t)</td></tr>
+<tr><th id="82">82</th><td>{</td></tr>
+<tr><th id="83">83</th><td>    ASSERT(t &gt;= <var>0</var> &amp;&amp; t &lt; <var>80</var>);</td></tr>
+<tr><th id="84">84</th><td>    <b>if</b> (t &lt; <var>20</var>)</td></tr>
+<tr><th id="85">85</th><td>        <b>return</b> <var>0x5a827999</var>;</td></tr>
+<tr><th id="86">86</th><td>    <b>if</b> (t &lt; <var>40</var>)</td></tr>
+<tr><th id="87">87</th><td>        <b>return</b> <var>0x6ed9eba1</var>;</td></tr>
+<tr><th id="88">88</th><td>    <b>if</b> (t &lt; <var>60</var>)</td></tr>
+<tr><th id="89">89</th><td>        <b>return</b> <var>0x8f1bbcdc</var>;</td></tr>
+<tr><th id="90">90</th><td>    <b>return</b> <var>0xca62c1d6</var>;</td></tr>
+<tr><th id="91">91</th><td>}</td></tr>
+<tr><th id="92">92</th><td></td></tr>
+<tr><th id="93">93</th><td><em>static</em> <b>inline</b> uint32_t rotateLeft(<em>int</em> n, uint32_t x)</td></tr>
+<tr><th id="94">94</th><td>{</td></tr>
+<tr><th id="95">95</th><td>    ASSERT(n &gt;= <var>0</var> &amp;&amp; n &lt; <var>32</var>);</td></tr>
+<tr><th id="96">96</th><td>    <b>return</b> (x &lt;&lt; n) | (x &gt;&gt; (<var>32</var> - n));</td></tr>
+<tr><th id="97">97</th><td>}</td></tr>
+<tr><th id="98">98</th><td></td></tr>
+<tr><th id="99">99</th><td>SHA1::SHA1()</td></tr>
+<tr><th id="100">100</th><td>{</td></tr>
+<tr><th id="101">101</th><td>    reset();</td></tr>
+<tr><th id="102">102</th><td>}</td></tr>
+<tr><th id="103">103</th><td></td></tr>
+<tr><th id="104">104</th><td><em>void</em> SHA1::addBytes(Span&lt;<em>const</em> std::byte&gt; input)</td></tr>
+<tr><th id="105">105</th><td>{</td></tr>
+<tr><th id="106">106</th><td>    <b>for</b> (<em>auto</em> byte : input) {</td></tr>
+<tr><th id="107">107</th><td>        ASSERT(m_cursor &lt; <var>64</var>);</td></tr>
+<tr><th id="108">108</th><td>        m_buffer[m_cursor++] = std::to_integer&lt;uint8_t&gt;(byte);</td></tr>
+<tr><th id="109">109</th><td>        ++m_totalBytes;</td></tr>
+<tr><th id="110">110</th><td>        <b>if</b> (m_cursor == <var>64</var>)</td></tr>
+<tr><th id="111">111</th><td>            processBlock();</td></tr>
+<tr><th id="112">112</th><td>    }</td></tr>
+<tr><th id="113">113</th><td>}</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td><em>void</em> SHA1::computeHash(Digest&amp; digest)</td></tr>
+<tr><th id="116">116</th><td>{</td></tr>
+<tr><th id="117">117</th><td>    finalize();</td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td>    <b>for</b> (size_t i = <var>0</var>; i &lt; <var>5</var>; ++i) {</td></tr>
+<tr><th id="120">120</th><td>        <i>// Treat hashValue as a big-endian value.</i></td></tr>
+<tr><th id="121">121</th><td>        uint32_t hashValue = m_hash[i];</td></tr>
+<tr><th id="122">122</th><td>        <b>for</b> (<em>int</em> j = <var>0</var>; j &lt; <var>4</var>; ++j) {</td></tr>
+<tr><th id="123">123</th><td>            digest[<var>4</var> * i + (<var>3</var> - j)] = hashValue &amp; <var>0xFF</var>;</td></tr>
+<tr><th id="124">124</th><td>            hashValue &gt;&gt;= <var>8</var>;</td></tr>
+<tr><th id="125">125</th><td>        }</td></tr>
+<tr><th id="126">126</th><td>    }</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td>    reset();</td></tr>
+<tr><th id="129">129</th><td>}</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td><em>void</em> SHA1::finalize()</td></tr>
+<tr><th id="132">132</th><td>{</td></tr>
+<tr><th id="133">133</th><td>    ASSERT(m_cursor &lt; <var>64</var>);</td></tr>
+<tr><th id="134">134</th><td>    m_buffer[m_cursor++] = <var>0x80</var>;</td></tr>
+<tr><th id="135">135</th><td>    <b>if</b> (m_cursor &gt; <var>56</var>) {</td></tr>
+<tr><th id="136">136</th><td>        <i>// Pad out to next block.</i></td></tr>
+<tr><th id="137">137</th><td>        <b>while</b> (m_cursor &lt; <var>64</var>)</td></tr>
+<tr><th id="138">138</th><td>            m_buffer[m_cursor++] = <var>0x00</var>;</td></tr>
+<tr><th id="139">139</th><td>        processBlock();</td></tr>
+<tr><th id="140">140</th><td>    }</td></tr>
+<tr><th id="141">141</th><td></td></tr>
+<tr><th id="142">142</th><td>    <b>for</b> (size_t i = m_cursor; i &lt; <var>56</var>; ++i)</td></tr>
+<tr><th id="143">143</th><td>        m_buffer[i] = <var>0x00</var>;</td></tr>
+<tr><th id="144">144</th><td></td></tr>
+<tr><th id="145">145</th><td>    <i>// Write the length as a big-endian 64-bit value.</i></td></tr>
+<tr><th id="146">146</th><td>    uint64_t bits = m_totalBytes * <var>8</var>;</td></tr>
+<tr><th id="147">147</th><td>    <b>for</b> (<em>int</em> i = <var>0</var>; i &lt; <var>8</var>; ++i) {</td></tr>
+<tr><th id="148">148</th><td>        m_buffer[<var>56</var> + (<var>7</var> - i)] = bits &amp; <var>0xFF</var>;</td></tr>
+<tr><th id="149">149</th><td>        bits &gt;&gt;= <var>8</var>;</td></tr>
+<tr><th id="150">150</th><td>    }</td></tr>
+<tr><th id="151">151</th><td>    m_cursor = <var>64</var>;</td></tr>
+<tr><th id="152">152</th><td>    processBlock();</td></tr>
+<tr><th id="153">153</th><td>}</td></tr>
+<tr><th id="154">154</th><td></td></tr>
+<tr><th id="155">155</th><td><em>void</em> SHA1::processBlock()</td></tr>
+<tr><th id="156">156</th><td>{</td></tr>
+<tr><th id="157">157</th><td>    ASSERT(m_cursor == <var>64</var>);</td></tr>
+<tr><th id="158">158</th><td></td></tr>
+<tr><th id="159">159</th><td>    uint32_t w[<var>80</var>] = { <var>0</var> };</td></tr>
+<tr><th id="160">160</th><td>    <b>for</b> (<em>int</em> t = <var>0</var>; t &lt; <var>16</var>; ++t)</td></tr>
+<tr><th id="161">161</th><td>        w[t] = (m_buffer[t * <var>4</var>] &lt;&lt; <var>24</var>) | (m_buffer[t * <var>4</var> + <var>1</var>] &lt;&lt; <var>16</var>) | (m_buffer[t * <var>4</var> + <var>2</var>] &lt;&lt; <var>8</var>) | m_buffer[t * <var>4</var> + <var>3</var>];</td></tr>
+<tr><th id="162">162</th><td>    <b>for</b> (<em>int</em> t = <var>16</var>; t &lt; <var>80</var>; ++t)</td></tr>
+<tr><th id="163">163</th><td>        w[t] = rotateLeft(<var>1</var>, w[t - <var>3</var>] ^ w[t - <var>8</var>] ^ w[t - <var>14</var>] ^ w[t - <var>16</var>]);</td></tr>
+<tr><th id="164">164</th><td></td></tr>
+<tr><th id="165">165</th><td>    uint32_t a = m_hash[<var>0</var>];</td></tr>
+<tr><th id="166">166</th><td>    uint32_t b = m_hash[<var>1</var>];</td></tr>
+<tr><th id="167">167</th><td>    uint32_t c = m_hash[<var>2</var>];</td></tr>
+<tr><th id="168">168</th><td>    uint32_t d = m_hash[<var>3</var>];</td></tr>
+<tr><th id="169">169</th><td>    uint32_t e = m_hash[<var>4</var>];</td></tr>
+<tr><th id="170">170</th><td></td></tr>
+<tr><th id="171">171</th><td>    <b>for</b> (<em>int</em> t = <var>0</var>; t &lt; <var>80</var>; ++t) {</td></tr>
+<tr><th id="172">172</th><td>        uint32_t temp = rotateLeft(<var>5</var>, a) + f(t, b, c, d) + e + w[t] + k(t);</td></tr>
+<tr><th id="173">173</th><td>        e = d;</td></tr>
+<tr><th id="174">174</th><td>        d = c;</td></tr>
+<tr><th id="175">175</th><td>        c = rotateLeft(<var>30</var>, b);</td></tr>
+<tr><th id="176">176</th><td>        b = a;</td></tr>
+<tr><th id="177">177</th><td>        a = temp;</td></tr>
+<tr><th id="178">178</th><td>    }</td></tr>
+<tr><th id="179">179</th><td></td></tr>
+<tr><th id="180">180</th><td>    m_hash[<var>0</var>] += a;</td></tr>
+<tr><th id="181">181</th><td>    m_hash[<var>1</var>] += b;</td></tr>
+<tr><th id="182">182</th><td>    m_hash[<var>2</var>] += c;</td></tr>
+<tr><th id="183">183</th><td>    m_hash[<var>3</var>] += d;</td></tr>
+<tr><th id="184">184</th><td>    m_hash[<var>4</var>] += e;</td></tr>
+<tr><th id="185">185</th><td></td></tr>
+<tr><th id="186">186</th><td>    m_cursor = <var>0</var>;</td></tr>
+<tr><th id="187">187</th><td>}</td></tr>
+<tr><th id="188">188</th><td></td></tr>
+<tr><th id="189">189</th><td><em>void</em> SHA1::reset()</td></tr>
+<tr><th id="190">190</th><td>{</td></tr>
+<tr><th id="191">191</th><td>    m_cursor = <var>0</var>;</td></tr>
+<tr><th id="192">192</th><td>    m_totalBytes = <var>0</var>;</td></tr>
+<tr><th id="193">193</th><td>    m_hash[<var>0</var>] = <var>0x67452301</var>;</td></tr>
+<tr><th id="194">194</th><td>    m_hash[<var>1</var>] = <var>0xefcdab89</var>;</td></tr>
+<tr><th id="195">195</th><td>    m_hash[<var>2</var>] = <var>0x98badcfe</var>;</td></tr>
+<tr><th id="196">196</th><td>    m_hash[<var>3</var>] = <var>0x10325476</var>;</td></tr>
+<tr><th id="197">197</th><td>    m_hash[<var>4</var>] = <var>0xc3d2e1f0</var>;</td></tr>
+<tr><th id="198">198</th><td></td></tr>
+<tr><th id="199">199</th><td>    <i>// Clear the buffer after use in case it's sensitive.</i></td></tr>
+<tr><th id="200">200</th><td>    memset(m_buffer, <var>0</var>, <b>sizeof</b>(m_buffer));</td></tr>
+<tr><th id="201">201</th><td>}</td></tr>
+<tr><th id="202">202</th><td></td></tr>
+<tr><th id="203">203</th><td><u>#<span data-ppcond="40">endif</span></u></td></tr>
+<tr><th id="204">204</th><td></td></tr>
+<tr><th id="205">205</th><td><a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html#WTF::CString" title='WTF::CString' data-ref="WTF::CString" data-ref-filename="WTF..CString">CString</a> <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/SHA1.h.html#WTF::SHA1" title='WTF::SHA1' data-ref="WTF::SHA1" data-ref-filename="WTF..SHA1">SHA1</a>::<dfn class="decl def fn" id="_ZN3WTF4SHA19hexDigestERKNSt3__15arrayIhLm20EEE" title='WTF::SHA1::hexDigest' data-ref="_ZN3WTF4SHA19hexDigestERKNSt3__15arrayIhLm20EEE" data-ref-filename="_ZN3WTF4SHA19hexDigestERKNSt3__15arrayIhLm20EEE">hexDigest</dfn>(<em>const</em> <a class="typedef" href="../../../WebKitBuild/Debug/usr/local/include/wtf/SHA1.h.html#WTF::SHA1::Digest" title='WTF::SHA1::Digest' data-type='std::array&lt;uint8_t, hashSize&gt;' data-ref="WTF::SHA1::Digest" data-ref-filename="WTF..SHA1..Digest">Digest</a>&amp; <dfn class="local col7 decl" id="7digest" title='digest' data-type='const WTF::SHA1::Digest &amp;' data-ref="7digest" data-ref-filename="7digest">digest</dfn>)</td></tr>
+<tr><th id="206">206</th><td>{</td></tr>
+<tr><th id="207">207</th><td>    <em>char</em>* <dfn class="local col8 decl" id="8start" title='start' data-type='char *' data-ref="8start" data-ref-filename="8start">start</dfn> = <b>nullptr</b>;</td></tr>
+<tr><th id="208">208</th><td>    <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html#WTF::CString" title='WTF::CString' data-ref="WTF::CString" data-ref-filename="WTF..CString">CString</a> <dfn class="local col9 decl" id="9result" title='result' data-type='WTF::CString' data-ref="9result" data-ref-filename="9result">result</dfn> = <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html#WTF::CString" title='WTF::CString' data-ref="WTF::CString" data-ref-filename="WTF..CString">CString</a>::<a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html#_ZN3WTF7CString16newUninitializedEmRPc" title='WTF::CString::newUninitialized' data-ref="_ZN3WTF7CString16newUninitializedEmRPc" data-ref-filename="_ZN3WTF7CString16newUninitializedEmRPc">newUninitialized</a>(<var>40</var>, <span class='refarg'><a class="local col8 ref" href="#8start" title='start' data-ref="8start" data-ref-filename="8start">start</a></span>);</td></tr>
+<tr><th id="209">209</th><td>    <em>char</em>* <dfn class="local col0 decl" id="10buffer" title='buffer' data-type='char *' data-ref="10buffer" data-ref-filename="10buffer">buffer</dfn> = <a class="local col8 ref" href="#8start" title='start' data-ref="8start" data-ref-filename="8start">start</a>;</td></tr>
+<tr><th id="210">210</th><td>    <b>for</b> (<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="11i" title='i' data-type='size_t' data-ref="11i" data-ref-filename="11i">i</dfn> = <var>0</var>; <a class="local col1 ref" href="#11i" title='i' data-ref="11i" data-ref-filename="11i">i</a> &lt; <a class="member" href="../../../WebKitBuild/Debug/usr/local/include/wtf/SHA1.h.html#WTF::SHA1::hashSize" title='WTF::SHA1::hashSize' data-ref="WTF::SHA1::hashSize" data-ref-filename="WTF..SHA1..hashSize">hashSize</a>; ++<a class="local col1 ref" href="#11i" title='i' data-ref="11i" data-ref-filename="11i">i</a>) {</td></tr>
+<tr><th id="211">211</th><td>        <span class='ref fn' title='snprintf' data-ref="snprintf" data-ref-filename="snprintf">snprintf</span>(<a class="local col0 ref" href="#10buffer" title='buffer' data-ref="10buffer" data-ref-filename="10buffer">buffer</a>, <var>3</var>, <q>"%02X"</q>, <a class="local col7 ref" href="#7digest" title='digest' data-ref="7digest" data-ref-filename="7digest">digest</a>.<span class='ref fn' title='std::__1::array::at' data-ref="_ZNKSt3__15array2atEm" data-ref-filename="_ZNKSt3__15array2atEm">at</span>(<a class="local col1 ref" href="#11i" title='i' data-ref="11i" data-ref-filename="11i">i</a>));</td></tr>
+<tr><th id="212">212</th><td>        <a class="local col0 ref" href="#10buffer" title='buffer' data-ref="10buffer" data-ref-filename="10buffer">buffer</a> += <var>2</var>;</td></tr>
+<tr><th id="213">213</th><td>    }</td></tr>
+<tr><th id="214">214</th><td>    <b>return</b> <a class="local col9 ref" href="#9result" title='result' data-ref="9result" data-ref-filename="9result">result</a>;</td></tr>
+<tr><th id="215">215</th><td>}</td></tr>
+<tr><th id="216">216</th><td></td></tr>
+<tr><th id="217">217</th><td><a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html#WTF::CString" title='WTF::CString' data-ref="WTF::CString" data-ref-filename="WTF..CString">CString</a> <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/SHA1.h.html#WTF::SHA1" title='WTF::SHA1' data-ref="WTF::SHA1" data-ref-filename="WTF..SHA1">SHA1</a>::<dfn class="decl def fn" id="_ZN3WTF4SHA116computeHexDigestEv" title='WTF::SHA1::computeHexDigest' data-ref="_ZN3WTF4SHA116computeHexDigestEv" data-ref-filename="_ZN3WTF4SHA116computeHexDigestEv">computeHexDigest</dfn>()</td></tr>
+<tr><th id="218">218</th><td>{</td></tr>
+<tr><th id="219">219</th><td>    <a class="typedef" href="../../../WebKitBuild/Debug/usr/local/include/wtf/SHA1.h.html#WTF::SHA1::Digest" title='WTF::SHA1::Digest' data-type='std::array&lt;uint8_t, hashSize&gt;' data-ref="WTF::SHA1::Digest" data-ref-filename="WTF..SHA1..Digest">Digest</a> <span class='ref fn fake' title='std::__1::array&lt;unsigned char, 20&gt;::array' data-ref="_ZNSt3__15arrayIhLm20EEC1Ev" data-ref-filename="_ZNSt3__15arrayIhLm20EEC1Ev"></span><dfn class="local col2 decl" id="12digest" title='digest' data-type='WTF::SHA1::Digest' data-ref="12digest" data-ref-filename="12digest">digest</dfn>;</td></tr>
+<tr><th id="220">220</th><td>    <a class="member fn" href="#_ZN3WTF4SHA111computeHashERNSt3__15arrayIhLm20EEE" title='WTF::SHA1::computeHash' data-ref="_ZN3WTF4SHA111computeHashERNSt3__15arrayIhLm20EEE" data-ref-filename="_ZN3WTF4SHA111computeHashERNSt3__15arrayIhLm20EEE">computeHash</a>(<span class='refarg'><a class="local col2 ref" href="#12digest" title='digest' data-ref="12digest" data-ref-filename="12digest">digest</a></span>);</td></tr>
+<tr><th id="221">221</th><td>    <b>return</b> <a class="member fn" href="#_ZN3WTF4SHA19hexDigestERKNSt3__15arrayIhLm20EEE" title='WTF::SHA1::hexDigest' data-ref="_ZN3WTF4SHA19hexDigestERKNSt3__15arrayIhLm20EEE" data-ref-filename="_ZN3WTF4SHA19hexDigestERKNSt3__15arrayIhLm20EEE">hexDigest</a>(<a class="local col2 ref" href="#12digest" title='digest' data-ref="12digest" data-ref-filename="12digest">digest</a>);</td></tr>
+<tr><th id="222">222</th><td>}</td></tr>
+<tr><th id="223">223</th><td></td></tr>
+<tr><th id="224">224</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="225">225</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

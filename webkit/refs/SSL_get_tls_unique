@@ -1,0 +1,19 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='1610' type='int SSL_get_tls_unique(const SSL * ssl, uint8_t * out, size_t * out_len, size_t max_out)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='1593'>// SSL_get_tls_unique writes at most |max_out| bytes of the tls-unique value
+// for |ssl| to |out| and sets |*out_len| to the number of bytes written. It
+// returns one on success or zero on error. In general |max_out| should be at
+// least 12.
+//
+// This function will always fail if the initial handshake has not completed.
+// The tls-unique value will change after a renegotiation but, since
+// renegotiations can be initiated by the server at any point, the higher-level
+// protocol must either leave them disabled or define states in which the
+// tls-unique value can be read.
+//
+// The tls-unique value is defined by
+// https://tools.ietf.org/html/rfc5929#section-3.1. Due to a weakness in the
+// TLS protocol, tls-unique is broken for resumed connections unless the
+// Extended Master Secret extension is negotiated. Thus this function will
+// return zero if |ssl| performed session resumption unless EMS was used when
+// negotiating the original session.</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_lib.cc' l='1532' ll='1564' type='int SSL_get_tls_unique(const SSL * ssl, uint8_t * out, size_t * out_len, size_t max_out)'/>

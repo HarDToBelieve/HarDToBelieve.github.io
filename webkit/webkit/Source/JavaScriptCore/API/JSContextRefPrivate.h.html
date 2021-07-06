@@ -1,0 +1,163 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>JSContextRefPrivate.h source code [webkit/Source/JavaScriptCore/API/JSContextRefPrivate.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/JavaScriptCore/API/JSContextRefPrivate.h'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>JavaScriptCore</a>/<a href='./'>API</a>/<a href='JSContextRefPrivate.h.html'>JSContextRefPrivate.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2009 Apple Inc.  All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="26">ifndef</span> <span class="macro" data-ref="_M/JSContextRefPrivate_h">JSContextRefPrivate_h</span></u></td></tr>
+<tr><th id="27">27</th><td><u>#define <dfn class="macro" id="_M/JSContextRefPrivate_h" data-ref="_M/JSContextRefPrivate_h">JSContextRefPrivate_h</dfn></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="JSObjectRef.h.html">&lt;JavaScriptCore/JSObjectRef.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="JSValueRef.h.html">&lt;JavaScriptCore/JSValueRef.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="WebKitAvailability.h.html">&lt;JavaScriptCore/WebKitAvailability.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><u>#<span data-ppcond="33">ifndef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="34">34</th><td><u>#include &lt;stdbool.h&gt;</u></td></tr>
+<tr><th id="35">35</th><td><u>#<span data-ppcond="33">endif</span></u></td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><u>#<span data-ppcond="37">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="38">38</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="39">39</th><td><u>#<span data-ppcond="37">endif</span></u></td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="42">42</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="43">43</th><td><i class="doc"><span class="command">@abstract</span> Gets a Backtrace for the existing context</i></td></tr>
+<tr><th id="44">44</th><td><i class="doc"><span class="command">@param</span> <span class="arg">ctx</span> The JSContext whose backtrace you want to get</i></td></tr>
+<tr><th id="45">45</th><td><i class="doc"><span class="command">@result</span> A string containing the backtrace</i></td></tr>
+<tr><th id="46">46</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="47">47</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <a class="typedef" href="JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="decl fn" id="JSContextCreateBacktrace" title='JSContextCreateBacktrace' data-ref="JSContextCreateBacktrace" data-ref-filename="JSContextCreateBacktrace">JSContextCreateBacktrace</dfn>(<a class="typedef" href="JSBase.h.html#JSContextRef" title='JSContextRef' data-type='const struct OpaqueJSContext *' data-ref="JSContextRef" data-ref-filename="JSContextRef">JSContextRef</a> <dfn class="local col1 decl" id="1ctx" title='ctx' data-type='JSContextRef' data-ref="1ctx" data-ref-filename="1ctx">ctx</dfn>, <em>unsigned</em> <dfn class="local col2 decl" id="2maxStackSize" title='maxStackSize' data-type='unsigned int' data-ref="2maxStackSize" data-ref-filename="2maxStackSize">maxStackSize</dfn>) <a class="macro" href="../config.h.html#26" title="" data-ref="_M/JSC_API_AVAILABLE">JSC_API_AVAILABLE</a>(macos(<var>10.6</var>), ios(<var>7.0</var>));</td></tr>
+<tr><th id="48">48</th><td>    </td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><i class="doc">/*! </i></td></tr>
+<tr><th id="51">51</th><td><i class="doc"><span class="command">@typedef</span> <span class="verb" data-ref="JSShouldTerminateCallback">JSShouldTerminateCallback</span></i></td></tr>
+<tr><th id="52">52</th><td><i class="doc"><span class="command">@abstract</span> The callback invoked when script execution has exceeded the allowed</i></td></tr>
+<tr><th id="53">53</th><td><i class="doc"> time limit previously specified via JSContextGroupSetExecutionTimeLimit.</i></td></tr>
+<tr><th id="54">54</th><td><i class="doc"><span class="command">@param</span> <span class="arg">ctx</span> The execution context to use.</i></td></tr>
+<tr><th id="55">55</th><td><i class="doc"><span class="command">@param</span> <span class="arg">context</span> User specified context data previously passed to</i></td></tr>
+<tr><th id="56">56</th><td><i class="doc"> JSContextGroupSetExecutionTimeLimit.</i></td></tr>
+<tr><th id="57">57</th><td><i class="doc"><span class="command">@discussion</span> If you named your function Callback, you would declare it like this:</i></td></tr>
+<tr><th id="58">58</th><td><i class="doc"></i></td></tr>
+<tr><th id="59">59</th><td><i class="doc"> bool Callback(JSContextRef ctx, void* context);</i></td></tr>
+<tr><th id="60">60</th><td><i class="doc"></i></td></tr>
+<tr><th id="61">61</th><td><i class="doc"> If you return true, the timed out script will terminate.</i></td></tr>
+<tr><th id="62">62</th><td><i class="doc"> If you return false, the script will run for another period of the allowed</i></td></tr>
+<tr><th id="63">63</th><td><i class="doc"> time limit specified via JSContextGroupSetExecutionTimeLimit.</i></td></tr>
+<tr><th id="64">64</th><td><i class="doc"></i></td></tr>
+<tr><th id="65">65</th><td><i class="doc"> Within this callback function, you may call JSContextGroupSetExecutionTimeLimit</i></td></tr>
+<tr><th id="66">66</th><td><i class="doc"> to set a new time limit, or JSContextGroupClearExecutionTimeLimit to cancel the</i></td></tr>
+<tr><th id="67">67</th><td><i class="doc"> timeout.</i></td></tr>
+<tr><th id="68">68</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="69">69</th><td><b>typedef</b> <em>bool</em></td></tr>
+<tr><th id="70">70</th><td>(*<dfn class="typedef" id="JSShouldTerminateCallback" title='JSShouldTerminateCallback' data-type='bool (*)(JSContextRef, void *)' data-ref="JSShouldTerminateCallback" data-ref-filename="JSShouldTerminateCallback">JSShouldTerminateCallback</dfn>) (<a class="typedef" href="JSBase.h.html#JSContextRef" title='JSContextRef' data-type='const struct OpaqueJSContext *' data-ref="JSContextRef" data-ref-filename="JSContextRef">JSContextRef</a> <dfn class="local col3 decl" id="3ctx" title='ctx' data-type='JSContextRef' data-ref="3ctx" data-ref-filename="3ctx">ctx</dfn>, <em>void</em>* <dfn class="local col4 decl" id="4context" title='context' data-type='void *' data-ref="4context" data-ref-filename="4context">context</dfn>);</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="73">73</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="74">74</th><td><i class="doc"><span class="command">@abstract</span> Sets the script execution time limit.</i></td></tr>
+<tr><th id="75">75</th><td><i class="doc"><span class="command">@param</span> <span class="arg">group</span> The JavaScript context group that this time limit applies to.</i></td></tr>
+<tr><th id="76">76</th><td><i class="doc"><span class="command">@param</span> <span class="arg">limit</span> The time limit of allowed script execution time in seconds.</i></td></tr>
+<tr><th id="77">77</th><td><i class="doc"><span class="command">@param</span> <span class="arg">callback</span> The callback function that will be invoked when the time limit</i></td></tr>
+<tr><th id="78">78</th><td><i class="doc"> has been reached. This will give you a chance to decide if you want to</i></td></tr>
+<tr><th id="79">79</th><td><i class="doc"> terminate the script or not. If you pass a NULL callback, the script will be</i></td></tr>
+<tr><th id="80">80</th><td><i class="doc"> terminated unconditionally when the time limit has been reached.</i></td></tr>
+<tr><th id="81">81</th><td><i class="doc"><span class="command">@param</span> <span class="arg">context</span> User data that you can provide to be passed back to you</i></td></tr>
+<tr><th id="82">82</th><td><i class="doc"> in your callback.</i></td></tr>
+<tr><th id="83">83</th><td><i class="doc"></i></td></tr>
+<tr><th id="84">84</th><td><i class="doc"> In order to guarantee that the execution time limit will take effect, you will</i></td></tr>
+<tr><th id="85">85</th><td><i class="doc"> need to call JSContextGroupSetExecutionTimeLimit before you start executing</i></td></tr>
+<tr><th id="86">86</th><td><i class="doc"> any scripts.</i></td></tr>
+<tr><th id="87">87</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="88">88</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <em>void</em> <dfn class="decl fn" id="JSContextGroupSetExecutionTimeLimit" title='JSContextGroupSetExecutionTimeLimit' data-ref="JSContextGroupSetExecutionTimeLimit" data-ref-filename="JSContextGroupSetExecutionTimeLimit">JSContextGroupSetExecutionTimeLimit</dfn>(<a class="typedef" href="JSBase.h.html#JSContextGroupRef" title='JSContextGroupRef' data-type='const struct OpaqueJSContextGroup *' data-ref="JSContextGroupRef" data-ref-filename="JSContextGroupRef">JSContextGroupRef</a> <dfn class="local col5 decl" id="5group" title='group' data-type='JSContextGroupRef' data-ref="5group" data-ref-filename="5group">group</dfn>, <em>double</em> <dfn class="local col6 decl" id="6limit" title='limit' data-type='double' data-ref="6limit" data-ref-filename="6limit">limit</dfn>, <a class="typedef" href="#JSShouldTerminateCallback" title='JSShouldTerminateCallback' data-type='bool (*)(JSContextRef, void *)' data-ref="JSShouldTerminateCallback" data-ref-filename="JSShouldTerminateCallback">JSShouldTerminateCallback</a> <dfn class="local col7 decl" id="7callback" title='callback' data-type='JSShouldTerminateCallback' data-ref="7callback" data-ref-filename="7callback">callback</dfn>, <em>void</em>* <dfn class="local col8 decl" id="8context" title='context' data-type='void *' data-ref="8context" data-ref-filename="8context">context</dfn>) <a class="macro" href="../config.h.html#26" title="" data-ref="_M/JSC_API_AVAILABLE">JSC_API_AVAILABLE</a>(macos(<var>10.6</var>), ios(<var>7.0</var>));</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="91">91</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="92">92</th><td><i class="doc"><span class="command">@abstract</span> Clears the script execution time limit.</i></td></tr>
+<tr><th id="93">93</th><td><i class="doc"><span class="command">@param</span> <span class="arg">group</span> The JavaScript context group that the time limit is cleared on.</i></td></tr>
+<tr><th id="94">94</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="95">95</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <em>void</em> <dfn class="decl fn" id="JSContextGroupClearExecutionTimeLimit" title='JSContextGroupClearExecutionTimeLimit' data-ref="JSContextGroupClearExecutionTimeLimit" data-ref-filename="JSContextGroupClearExecutionTimeLimit">JSContextGroupClearExecutionTimeLimit</dfn>(<a class="typedef" href="JSBase.h.html#JSContextGroupRef" title='JSContextGroupRef' data-type='const struct OpaqueJSContextGroup *' data-ref="JSContextGroupRef" data-ref-filename="JSContextGroupRef">JSContextGroupRef</a> <dfn class="local col9 decl" id="9group" title='group' data-type='JSContextGroupRef' data-ref="9group" data-ref-filename="9group">group</dfn>) <a class="macro" href="../config.h.html#26" title="" data-ref="_M/JSC_API_AVAILABLE">JSC_API_AVAILABLE</a>(macos(<var>10.6</var>), ios(<var>7.0</var>));</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="98">98</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="99">99</th><td><i class="doc"><span class="command">@abstract</span> Gets a whether or not remote inspection is enabled on the context.</i></td></tr>
+<tr><th id="100">100</th><td><i class="doc"><span class="command">@param</span> <span class="arg">ctx</span> The JSGlobalContext whose setting you want to get.</i></td></tr>
+<tr><th id="101">101</th><td><i class="doc"><span class="command">@result</span> The value of the setting, true if remote inspection is enabled, otherwise false.</i></td></tr>
+<tr><th id="102">102</th><td><i class="doc"><span class="command">@discussion</span> Remote inspection is true by default.</i></td></tr>
+<tr><th id="103">103</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="104">104</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <em>bool</em> <dfn class="decl fn" id="JSGlobalContextGetRemoteInspectionEnabled" title='JSGlobalContextGetRemoteInspectionEnabled' data-ref="JSGlobalContextGetRemoteInspectionEnabled" data-ref-filename="JSGlobalContextGetRemoteInspectionEnabled">JSGlobalContextGetRemoteInspectionEnabled</dfn>(<a class="typedef" href="JSBase.h.html#JSGlobalContextRef" title='JSGlobalContextRef' data-type='struct OpaqueJSContext *' data-ref="JSGlobalContextRef" data-ref-filename="JSGlobalContextRef">JSGlobalContextRef</a> <dfn class="local col0 decl" id="10ctx" title='ctx' data-type='JSGlobalContextRef' data-ref="10ctx" data-ref-filename="10ctx">ctx</dfn>) <a class="macro" href="../config.h.html#26" title="" data-ref="_M/JSC_API_AVAILABLE">JSC_API_AVAILABLE</a>(macos(<var>10.10</var>), ios(<var>8.0</var>));</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="107">107</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="108">108</th><td><i class="doc"><span class="command">@abstract</span> Sets the remote inspection setting for a context.</i></td></tr>
+<tr><th id="109">109</th><td><i class="doc"><span class="command">@param</span> <span class="arg">ctx</span> The JSGlobalContext that you want to change.</i></td></tr>
+<tr><th id="110">110</th><td><i class="doc"><span class="command">@param</span> <span class="arg">enabled</span> The new remote inspection enabled setting for the context.</i></td></tr>
+<tr><th id="111">111</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="112">112</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <em>void</em> <dfn class="decl fn" id="JSGlobalContextSetRemoteInspectionEnabled" title='JSGlobalContextSetRemoteInspectionEnabled' data-ref="JSGlobalContextSetRemoteInspectionEnabled" data-ref-filename="JSGlobalContextSetRemoteInspectionEnabled">JSGlobalContextSetRemoteInspectionEnabled</dfn>(<a class="typedef" href="JSBase.h.html#JSGlobalContextRef" title='JSGlobalContextRef' data-type='struct OpaqueJSContext *' data-ref="JSGlobalContextRef" data-ref-filename="JSGlobalContextRef">JSGlobalContextRef</a> <dfn class="local col1 decl" id="11ctx" title='ctx' data-type='JSGlobalContextRef' data-ref="11ctx" data-ref-filename="11ctx">ctx</dfn>, <em>bool</em> <dfn class="local col2 decl" id="12enabled" title='enabled' data-type='bool' data-ref="12enabled" data-ref-filename="12enabled">enabled</dfn>) <a class="macro" href="../config.h.html#26" title="" data-ref="_M/JSC_API_AVAILABLE">JSC_API_AVAILABLE</a>(macos(<var>10.10</var>), ios(<var>8.0</var>));    </td></tr>
+<tr><th id="113">113</th><td></td></tr>
+<tr><th id="114">114</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="115">115</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="116">116</th><td><i class="doc"><span class="command">@abstract</span> Gets the include native call stack when reporting exceptions setting for a context.</i></td></tr>
+<tr><th id="117">117</th><td><i class="doc"><span class="command">@param</span> <span class="arg">ctx</span> The JSGlobalContext whose setting you want to get.</i></td></tr>
+<tr><th id="118">118</th><td><i class="doc"><span class="command">@result</span> The value of the setting, true if remote inspection is enabled, otherwise false.</i></td></tr>
+<tr><th id="119">119</th><td><i class="doc"><span class="command">@discussion</span> This setting is true by default.</i></td></tr>
+<tr><th id="120">120</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="121">121</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <em>bool</em> <dfn class="decl fn" id="JSGlobalContextGetIncludesNativeCallStackWhenReportingExceptions" title='JSGlobalContextGetIncludesNativeCallStackWhenReportingExceptions' data-ref="JSGlobalContextGetIncludesNativeCallStackWhenReportingExceptions" data-ref-filename="JSGlobalContextGetIncludesNativeCallStackWhenReportingExceptions">JSGlobalContextGetIncludesNativeCallStackWhenReportingExceptions</dfn>(<a class="typedef" href="JSBase.h.html#JSGlobalContextRef" title='JSGlobalContextRef' data-type='struct OpaqueJSContext *' data-ref="JSGlobalContextRef" data-ref-filename="JSGlobalContextRef">JSGlobalContextRef</a> <dfn class="local col3 decl" id="13ctx" title='ctx' data-type='JSGlobalContextRef' data-ref="13ctx" data-ref-filename="13ctx">ctx</dfn>) <a class="macro" href="../config.h.html#26" title="" data-ref="_M/JSC_API_AVAILABLE">JSC_API_AVAILABLE</a>(macos(<var>10.10</var>), ios(<var>8.0</var>));</td></tr>
+<tr><th id="122">122</th><td></td></tr>
+<tr><th id="123">123</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="124">124</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="125">125</th><td><i class="doc"><span class="command">@abstract</span> Sets the include native call stack when reporting exceptions setting for a context.</i></td></tr>
+<tr><th id="126">126</th><td><i class="doc"><span class="command">@param</span> <span class="arg">ctx</span> The JSGlobalContext that you want to change.</i></td></tr>
+<tr><th id="127">127</th><td><i class="doc"><span class="command">@param</span> <span class="arg">includesNativeCallStack</span> The new value of the setting for the context.</i></td></tr>
+<tr><th id="128">128</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="129">129</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <em>void</em> <dfn class="decl fn" id="JSGlobalContextSetIncludesNativeCallStackWhenReportingExceptions" title='JSGlobalContextSetIncludesNativeCallStackWhenReportingExceptions' data-ref="JSGlobalContextSetIncludesNativeCallStackWhenReportingExceptions" data-ref-filename="JSGlobalContextSetIncludesNativeCallStackWhenReportingExceptions">JSGlobalContextSetIncludesNativeCallStackWhenReportingExceptions</dfn>(<a class="typedef" href="JSBase.h.html#JSGlobalContextRef" title='JSGlobalContextRef' data-type='struct OpaqueJSContext *' data-ref="JSGlobalContextRef" data-ref-filename="JSGlobalContextRef">JSGlobalContextRef</a> <dfn class="local col4 decl" id="14ctx" title='ctx' data-type='JSGlobalContextRef' data-ref="14ctx" data-ref-filename="14ctx">ctx</dfn>, <em>bool</em> <dfn class="local col5 decl" id="15includesNativeCallStack" title='includesNativeCallStack' data-type='bool' data-ref="15includesNativeCallStack" data-ref-filename="15includesNativeCallStack">includesNativeCallStack</dfn>) <a class="macro" href="../config.h.html#26" title="" data-ref="_M/JSC_API_AVAILABLE">JSC_API_AVAILABLE</a>(macos(<var>10.10</var>), ios(<var>8.0</var>));</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="132">132</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="133">133</th><td><i class="doc"><span class="command">@abstract</span> Sets the unhandled promise rejection callback for a context.</i></td></tr>
+<tr><th id="134">134</th><td><i class="doc"><span class="command">@discussion</span> Similar to window.addEventListener('unhandledrejection'), but for contexts not associated with a web view.</i></td></tr>
+<tr><th id="135">135</th><td><i class="doc"><span class="command">@param</span> <span class="arg">ctx</span> The JSGlobalContext to set the callback on.</i></td></tr>
+<tr><th id="136">136</th><td><i class="doc"><span class="command">@param</span> <span class="arg">function</span> The callback function to set, which receives the promise and rejection reason as arguments.</i></td></tr>
+<tr><th id="137">137</th><td><i class="doc"><span class="command">@param</span> <span class="arg">exception</span> A pointer to a JSValueRef in which to store an exception, if any. Pass NULL if you do not care to store an exception.</i></td></tr>
+<tr><th id="138">138</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="139">139</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <em>void</em> <dfn class="decl fn" id="JSGlobalContextSetUnhandledRejectionCallback" title='JSGlobalContextSetUnhandledRejectionCallback' data-ref="JSGlobalContextSetUnhandledRejectionCallback" data-ref-filename="JSGlobalContextSetUnhandledRejectionCallback">JSGlobalContextSetUnhandledRejectionCallback</dfn>(<a class="typedef" href="JSBase.h.html#JSGlobalContextRef" title='JSGlobalContextRef' data-type='struct OpaqueJSContext *' data-ref="JSGlobalContextRef" data-ref-filename="JSGlobalContextRef">JSGlobalContextRef</a> <dfn class="local col6 decl" id="16ctx" title='ctx' data-type='JSGlobalContextRef' data-ref="16ctx" data-ref-filename="16ctx">ctx</dfn>, <a class="typedef" href="JSBase.h.html#JSObjectRef" title='JSObjectRef' data-type='struct OpaqueJSValue *' data-ref="JSObjectRef" data-ref-filename="JSObjectRef">JSObjectRef</a> <dfn class="local col7 decl" id="17function" title='function' data-type='JSObjectRef' data-ref="17function" data-ref-filename="17function">function</dfn>, <a class="typedef" href="JSBase.h.html#JSValueRef" title='JSValueRef' data-type='const struct OpaqueJSValue *' data-ref="JSValueRef" data-ref-filename="JSValueRef">JSValueRef</a>* <dfn class="local col8 decl" id="18exception" title='exception' data-type='JSValueRef *' data-ref="18exception" data-ref-filename="18exception">exception</dfn>) <a class="macro" href="../config.h.html#26" title="" data-ref="_M/JSC_API_AVAILABLE">JSC_API_AVAILABLE</a>(macos(<var>10.15.4</var>), ios(<var>13.4</var>));</td></tr>
+<tr><th id="140">140</th><td></td></tr>
+<tr><th id="141">141</th><td><u>#<span data-ppcond="141">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="142">142</th><td>}</td></tr>
+<tr><th id="143">143</th><td><u>#<span data-ppcond="141">endif</span></u></td></tr>
+<tr><th id="144">144</th><td></td></tr>
+<tr><th id="145">145</th><td><u>#<span data-ppcond="26">endif</span> /* JSContextRefPrivate_h */</u></td></tr>
+<tr><th id="146">146</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='tests/ExecutionTimeLimitTest.cpp.html'>webkit/Source/JavaScriptCore/API/tests/ExecutionTimeLimitTest.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

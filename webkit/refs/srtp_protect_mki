@@ -1,0 +1,51 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/include/srtp.h' l='468' type='srtp_err_status_t srtp_protect_mki(srtp_ctx_t * ctx, void * rtp_hdr, int * pkt_octet_len, unsigned int use_mki, unsigned int mki_index)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/include/srtp.h' l='420'>/**
+ * @brief srtp_protect_mki() is the Secure RTP sender-side packet processing
+ * function that can utilize MKI.
+ *
+ * The function call srtp_protect(ctx, rtp_hdr, len_ptr) applies SRTP
+ * protection to the RTP packet rtp_hdr (which has length *len_ptr) using
+ * the SRTP context ctx.  If srtp_err_status_ok is returned, then rtp_hdr
+ * points to the resulting SRTP packet and *len_ptr is the number of
+ * octets in that packet; otherwise, no assumptions should be made
+ * about the value of either data elements.
+ *
+ * The sequence numbers of the RTP packets presented to this function
+ * need not be consecutive, but they @b must be out of order by less
+ * than 2^15 = 32,768 packets.
+ *
+ * @warning This function assumes that it can write the authentication
+ * tag into the location in memory immediately following the RTP
+ * packet, and assumes that the RTP packet is aligned on a 32-bit
+ * boundary.
+ *
+ * @warning This function assumes that it can write SRTP_MAX_TRAILER_LEN
+ * into the location in memory immediately following the RTP packet.
+ * Callers MUST ensure that this much writable memory is available in
+ * the buffer that holds the RTP packet.
+ *
+ * @param ctx is the SRTP context to use in processing the packet.
+ *
+ * @param rtp_hdr is a pointer to the RTP packet (before the call); after
+ * the function returns, it points to the srtp packet.
+ *
+ * @param pkt_octet_len is a pointer to the length in octets of the complete
+ * RTP packet (header and body) before the function call, and of the
+ * complete SRTP packet after the call, if srtp_err_status_ok was returned.
+ * Otherwise, the value of the data to which it points is undefined.
+ *
+ * @param use_mki is a boolean to tell the system if mki is being used.  If
+ * set to false then will use the first set of session keys.  If set to true
+ * will
+ * use the session keys identified by the mki_index
+ *
+ * @param mki_index integer value specifying which set of session keys should be
+ * used if use_mki is set to true.
+ *
+ * @return
+ *    - srtp_err_status_ok            no problems
+ *    - srtp_err_status_replay_fail   rtp sequence number was non-increasing
+ *    - @e other                 failure in cryptographic mechanisms
+ */</doc>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/srtp/srtp.c' l='2038' u='c' c='srtp_protect'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/srtp/srtp.c' l='2041' ll='2361' type='srtp_err_status_t srtp_protect_mki(srtp_ctx_t * ctx, void * rtp_hdr, int * pkt_octet_len, unsigned int use_mki, unsigned int mki_index)'/>

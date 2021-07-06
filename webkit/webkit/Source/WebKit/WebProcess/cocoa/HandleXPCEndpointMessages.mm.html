@@ -1,0 +1,71 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>HandleXPCEndpointMessages.mm source code [webkit/Source/WebKit/WebProcess/cocoa/HandleXPCEndpointMessages.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKit/WebProcess/cocoa/HandleXPCEndpointMessages.mm'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKit</a>/<a href='..'>WebProcess</a>/<a href='./'>cocoa</a>/<a href='HandleXPCEndpointMessages.mm.html'>HandleXPCEndpointMessages.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2020 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import <a href="../../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#import <a href="HandleXPCEndpointMessages.h.html">"HandleXPCEndpointMessages.h"</a></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="LaunchServicesDatabaseManager.h.html">"LaunchServicesDatabaseManager.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="../../Shared/Cocoa/LaunchServicesDatabaseXPCConstants.h.html">"LaunchServicesDatabaseXPCConstants.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="../../Shared/Cocoa/XPCEndpoint.h.html">"XPCEndpoint.h"</a></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html">&lt;wtf/text/WTFString.h&gt;</a></u></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><b>namespace</b> <span class="namespace">WebKit</span> {</td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><em>void</em> <dfn class="decl def fn" id="_ZN6WebKit25handleXPCEndpointMessagesEPU24objcproto13OS_xpc_object8NSObjectPKc" title='WebKit::handleXPCEndpointMessages' data-ref="_ZN6WebKit25handleXPCEndpointMessagesEPU24objcproto13OS_xpc_object8NSObjectPKc" data-ref-filename="_ZN6WebKit25handleXPCEndpointMessagesEPU24objcproto13OS_xpc_object8NSObjectPKc">handleXPCEndpointMessages</dfn>(<span class='typedef' title='xpc_object_t' data-type='NSObject&lt;OS_xpc_object&gt; *' data-ref="xpc_object_t" data-ref-filename="xpc_object_t">xpc_object_t</span> <dfn class="local col1 decl" id="1event" title='event' data-type='xpc_object_t' data-ref="1event" data-ref-filename="1event">event</dfn>, <em>const</em> <em>char</em>* <dfn class="local col2 decl" id="2messageName" title='messageName' data-type='const char *' data-ref="2messageName" data-ref-filename="2messageName">messageName</dfn>)</td></tr>
+<tr><th id="38">38</th><td>{</td></tr>
+<tr><th id="39">39</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#385" title="do { if (!(xpc_get_type(event) == (&amp;_xpc_type_dictionary))) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKit/WebProcess/cocoa/HandleXPCEndpointMessages.mm&quot;, 39, __PRETTY_FUNCTION__, &quot;xpc_get_type(event) == (&amp;_xpc_type_dictionary)&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(39, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKit/WebProcess/cocoa/HandleXPCEndpointMessages.mm&quot;, __PRETTY_FUNCTION__, 229); } while (false); } } while (0)" data-ref="_M/ASSERT_UNUSED">ASSERT_UNUSED</a>(event, <span class='ref fn' title='xpc_get_type' data-ref="xpc_get_type" data-ref-filename="xpc_get_type">xpc_get_type</span>(<a class="local col1 ref" href="#1event" title='event' data-ref="1event" data-ref-filename="1event">event</a>) == <span class="macro" title="(&amp;_xpc_type_dictionary)" data-ref="_M/XPC_TYPE_DICTIONARY">XPC_TYPE_DICTIONARY</span>);</td></tr>
+<tr><th id="40">40</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#385" title="do { if (!(messageName)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKit/WebProcess/cocoa/HandleXPCEndpointMessages.mm&quot;, 40, __PRETTY_FUNCTION__, &quot;messageName&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(40, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKit/WebProcess/cocoa/HandleXPCEndpointMessages.mm&quot;, __PRETTY_FUNCTION__, 231); } while (false); } } while (0)" data-ref="_M/ASSERT_UNUSED">ASSERT_UNUSED</a>(messageName, <a class="local col2 ref" href="#2messageName" title='messageName' data-ref="2messageName" data-ref-filename="2messageName">messageName</a>);</td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td><u>#<span data-ppcond="42">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformHave.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/HAVE">HAVE</a>(LSDATABASECONTEXT)</u></td></tr>
+<tr><th id="43">43</th><td>    <b>if</b> (!<span class='ref fn' title='strcmp' data-ref="strcmp" data-ref-filename="strcmp">strcmp</span>(<a class="local col2 ref" href="#2messageName" title='messageName' data-ref="2messageName" data-ref-filename="2messageName">messageName</a>, <span class="namespace">LaunchServicesDatabaseXPCConstants::</span><a class="ref" href="../../Shared/Cocoa/LaunchServicesDatabaseXPCConstants.h.html#WebKit::LaunchServicesDatabaseXPCConstants::xpcLaunchServicesDatabaseXPCEndpointMessageName" title='WebKit::LaunchServicesDatabaseXPCConstants::xpcLaunchServicesDatabaseXPCEndpointMessageName' data-ref="WebKit::LaunchServicesDatabaseXPCConstants::xpcLaunchServicesDatabaseXPCEndpointMessageName" data-ref-filename="WebKit..LaunchServicesDatabaseXPCConstants..xpcLaunchServicesDatabaseXPCEndpointMessageName">xpcLaunchServicesDatabaseXPCEndpointMessageName</a>)) {</td></tr>
+<tr><th id="44">44</th><td>        <em>auto</em> <dfn class="local col3 decl" id="3xpcEndPoint" title='xpcEndPoint' data-type='NSObject&lt;OS_xpc_object&gt; *' data-ref="3xpcEndPoint" data-ref-filename="3xpcEndPoint">xpcEndPoint</dfn> = <span class='ref fn' title='xpc_dictionary_get_value' data-ref="xpc_dictionary_get_value" data-ref-filename="xpc_dictionary_get_value">xpc_dictionary_get_value</span>(<a class="local col1 ref" href="#1event" title='event' data-ref="1event" data-ref-filename="1event">event</a>, <span class="namespace">LaunchServicesDatabaseXPCConstants::</span><a class="ref" href="../../Shared/Cocoa/LaunchServicesDatabaseXPCConstants.h.html#WebKit::LaunchServicesDatabaseXPCConstants::xpcLaunchServicesDatabaseXPCEndpointNameKey" title='WebKit::LaunchServicesDatabaseXPCConstants::xpcLaunchServicesDatabaseXPCEndpointNameKey' data-ref="WebKit::LaunchServicesDatabaseXPCConstants::xpcLaunchServicesDatabaseXPCEndpointNameKey" data-ref-filename="WebKit..LaunchServicesDatabaseXPCConstants..xpcLaunchServicesDatabaseXPCEndpointNameKey">xpcLaunchServicesDatabaseXPCEndpointNameKey</a>);</td></tr>
+<tr><th id="45">45</th><td>        <b>if</b> (!<a class="local col3 ref" href="#3xpcEndPoint" title='xpcEndPoint' data-ref="3xpcEndPoint" data-ref-filename="3xpcEndPoint">xpcEndPoint</a> || <span class='ref fn' title='xpc_get_type' data-ref="xpc_get_type" data-ref-filename="xpc_get_type">xpc_get_type</span>(<a class="local col3 ref" href="#3xpcEndPoint" title='xpcEndPoint' data-ref="3xpcEndPoint" data-ref-filename="3xpcEndPoint">xpcEndPoint</a>) != <span class="macro" title="(&amp;_xpc_type_endpoint)" data-ref="_M/XPC_TYPE_ENDPOINT">XPC_TYPE_ENDPOINT</span>)</td></tr>
+<tr><th id="46">46</th><td>            <b>return</b>;</td></tr>
+<tr><th id="47">47</th><td>        <a class="type" href="LaunchServicesDatabaseManager.h.html#WebKit::LaunchServicesDatabaseManager" title='WebKit::LaunchServicesDatabaseManager' data-ref="WebKit::LaunchServicesDatabaseManager" data-ref-filename="WebKit..LaunchServicesDatabaseManager">LaunchServicesDatabaseManager</a>::<a class="ref fn" href="LaunchServicesDatabaseManager.h.html#_ZN6WebKit29LaunchServicesDatabaseManager9singletonEv" title='WebKit::LaunchServicesDatabaseManager::singleton' data-ref="_ZN6WebKit29LaunchServicesDatabaseManager9singletonEv" data-ref-filename="_ZN6WebKit29LaunchServicesDatabaseManager9singletonEv">singleton</a>().<a class="ref fn" href="../../Shared/Cocoa/XPCEndpointClient.h.html#_ZN6WebKit17XPCEndpointClient11setEndpointEPU24objcproto13OS_xpc_object8NSObject" title='WebKit::XPCEndpointClient::setEndpoint' data-ref="_ZN6WebKit17XPCEndpointClient11setEndpointEPU24objcproto13OS_xpc_object8NSObject" data-ref-filename="_ZN6WebKit17XPCEndpointClient11setEndpointEPU24objcproto13OS_xpc_object8NSObject">setEndpoint</a>(<a class="local col3 ref" href="#3xpcEndPoint" title='xpcEndPoint' data-ref="3xpcEndPoint" data-ref-filename="3xpcEndPoint">xpcEndPoint</a>);</td></tr>
+<tr><th id="48">48</th><td>        <b>return</b>;</td></tr>
+<tr><th id="49">49</th><td>    }</td></tr>
+<tr><th id="50">50</th><td><u>#<span data-ppcond="42">endif</span></u></td></tr>
+<tr><th id="51">51</th><td>}</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td>}</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

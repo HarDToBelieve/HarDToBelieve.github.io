@@ -1,0 +1,41 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/include/srtp.h' l='1418' type='srtp_err_status_t srtp_unprotect_rtcp(srtp_t ctx, void * srtcp_hdr, int * pkt_octet_len)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/include/srtp.h' l='1380'>/**
+ * @brief srtp_unprotect_rtcp() is the Secure RTCP receiver-side packet
+ * processing function.
+ *
+ * The function call srtp_unprotect_rtcp(ctx, srtp_hdr, len_ptr)
+ * verifies the Secure RTCP protection of the SRTCP packet pointed to
+ * by srtcp_hdr (which has length *len_ptr), using the SRTP session
+ * context ctx.  If srtp_err_status_ok is returned, then srtcp_hdr points
+ * to the resulting RTCP packet and *len_ptr is the number of octets
+ * in that packet; otherwise, no assumptions should be made about the
+ * value of either data elements.
+ *
+ * @warning This function assumes that the SRTCP packet is aligned on a
+ * 32-bit boundary.
+ *
+ * @param ctx is a pointer to the srtp_t which applies to the
+ * particular packet.
+ *
+ * @param srtcp_hdr is a pointer to the header of the SRTCP packet
+ * (before the call).  After the function returns, it points to the
+ * rtp packet if srtp_err_status_ok was returned; otherwise, the value of
+ * the data to which it points is undefined.
+ *
+ * @param pkt_octet_len is a pointer to the length in octets of the
+ * complete SRTCP packet (header and body) before the function call,
+ * and of the complete rtp packet after the call, if srtp_err_status_ok was
+ * returned.  Otherwise, the value of the data to which it points is
+ * undefined.
+ *
+ * @return
+ *    - srtp_err_status_ok          if the RTCP packet is valid.
+ *    - srtp_err_status_auth_fail   if the SRTCP packet failed the message
+ *                             authentication check.
+ *    - srtp_err_status_replay_fail if the SRTCP packet is a replay (e.g. has
+ *                             already been processed and accepted).
+ *    - [other]  if there has been an error in the cryptographic mechanisms.
+ *
+ */</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/srtp/srtp.c' l='4086' ll='4091' type='srtp_err_status_t srtp_unprotect_rtcp(srtp_t ctx, void * srtcp_hdr, int * pkt_octet_len)'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/srtp_session.cc' l='189' u='c' c='_ZN7cricket11SrtpSession13UnprotectRtcpEPviPi'/>

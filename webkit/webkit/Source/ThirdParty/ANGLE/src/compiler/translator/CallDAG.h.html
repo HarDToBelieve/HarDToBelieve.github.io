@@ -1,0 +1,96 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CallDAG.h source code [webkit/Source/ThirdParty/ANGLE/src/compiler/translator/CallDAG.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="sh::CallDAG "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/ANGLE/src/compiler/translator/CallDAG.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>ANGLE</a>/<a href='../..'>src</a>/<a href='..'>compiler</a>/<a href='./'>translator</a>/<a href='CallDAG.h.html'>CallDAG.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>//</i></td></tr>
+<tr><th id="2">2</th><td><i>// Copyright 2002 The ANGLE Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i>// Use of this source code is governed by a BSD-style license that can be</i></td></tr>
+<tr><th id="4">4</th><td><i>// found in the LICENSE file.</i></td></tr>
+<tr><th id="5">5</th><td><i>//</i></td></tr>
+<tr><th id="6">6</th><td><i></i></td></tr>
+<tr><th id="7">7</th><td><i>// CallDAG.h: Defines a call graph DAG of functions to be re-used accross</i></td></tr>
+<tr><th id="8">8</th><td><i>// analyses, allows to efficiently traverse the functions in topological</i></td></tr>
+<tr><th id="9">9</th><td><i>// order.</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/COMPILER_TRANSLATOR_CALLDAG_H_">COMPILER_TRANSLATOR_CALLDAG_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/COMPILER_TRANSLATOR_CALLDAG_H_" data-ref="_M/COMPILER_TRANSLATOR_CALLDAG_H_">COMPILER_TRANSLATOR_CALLDAG_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;map&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="IntermNode.h.html">"compiler/translator/IntermNode.h"</a></u></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><b>namespace</b> <span class="namespace">sh</span></td></tr>
+<tr><th id="19">19</th><td>{</td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><i>// The translator needs to analyze the the graph of the function calls</i></td></tr>
+<tr><th id="22">22</th><td><i>// to run checks and analyses; since in GLSL recursion is not allowed</i></td></tr>
+<tr><th id="23">23</th><td><i>// that graph is a DAG.</i></td></tr>
+<tr><th id="24">24</th><td><i>// This class is used to precompute that function call DAG so that it</i></td></tr>
+<tr><th id="25">25</th><td><i>// can be reused by multiple analyses.</i></td></tr>
+<tr><th id="26">26</th><td><i>//</i></td></tr>
+<tr><th id="27">27</th><td><i>// It stores a vector of function records, with one record per defined function.</i></td></tr>
+<tr><th id="28">28</th><td><i>// Records are accessed by index but a function symbol id can be converted</i></td></tr>
+<tr><th id="29">29</th><td><i>// to the index of the corresponding record. The records contain the AST node</i></td></tr>
+<tr><th id="30">30</th><td><i>// of the function definition and the indices of the function's callees.</i></td></tr>
+<tr><th id="31">31</th><td><i>//</i></td></tr>
+<tr><th id="32">32</th><td><i>// In addition, records are in reverse topological order: a function F being</i></td></tr>
+<tr><th id="33">33</th><td><i>// called by a function G will have index index(F) &lt; index(G), that way</i></td></tr>
+<tr><th id="34">34</th><td><i>// depth-first analysis becomes analysis in the order of indices.</i></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><b>class</b> <dfn class="type def" id="sh::CallDAG" title='sh::CallDAG' data-ref="sh::CallDAG" data-ref-filename="sh..CallDAG">CallDAG</dfn> : <span class="namespace">angle::</span><a class="type" href="../../common/angleutils.h.html#angle::NonCopyable" title='angle::NonCopyable' data-ref="angle::NonCopyable" data-ref-filename="angle..NonCopyable">NonCopyable</a></td></tr>
+<tr><th id="37">37</th><td>{</td></tr>
+<tr><th id="38">38</th><td>  <b>public</b>:</td></tr>
+<tr><th id="39">39</th><td>    <dfn class="decl fn" id="_ZN2sh7CallDAGC1Ev" title='sh::CallDAG::CallDAG' data-ref="_ZN2sh7CallDAGC1Ev" data-ref-filename="_ZN2sh7CallDAGC1Ev">CallDAG</dfn>();</td></tr>
+<tr><th id="40">40</th><td>    <dfn class="decl fn" id="_ZN2sh7CallDAGD1Ev" title='sh::CallDAG::~CallDAG' data-ref="_ZN2sh7CallDAGD1Ev" data-ref-filename="_ZN2sh7CallDAGD1Ev">~CallDAG</dfn>();</td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td>    <b>struct</b> <dfn class="type def" id="sh::CallDAG::Record" title='sh::CallDAG::Record' data-ref="sh::CallDAG::Record" data-ref-filename="sh..CallDAG..Record">Record</dfn></td></tr>
+<tr><th id="43">43</th><td>    {</td></tr>
+<tr><th id="44">44</th><td>        <a class="type" href="IntermNode.h.html#sh::TIntermFunctionDefinition" title='sh::TIntermFunctionDefinition' data-ref="sh::TIntermFunctionDefinition" data-ref-filename="sh..TIntermFunctionDefinition">TIntermFunctionDefinition</a> *<dfn class="decl field" id="sh::CallDAG::Record::node" title='sh::CallDAG::Record::node' data-ref="sh::CallDAG::Record::node" data-ref-filename="sh..CallDAG..Record..node">node</dfn>;  <i>// Guaranteed to be non-null.</i></td></tr>
+<tr><th id="45">45</th><td>        <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<em>int</em>&gt; <dfn class="decl field" id="sh::CallDAG::Record::callees" title='sh::CallDAG::Record::callees' data-ref="sh::CallDAG::Record::callees" data-ref-filename="sh..CallDAG..Record..callees">callees</dfn>;</td></tr>
+<tr><th id="46">46</th><td>    };</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td>    <b>enum</b> <dfn class="type def" id="sh::CallDAG::InitResult" title='sh::CallDAG::InitResult' data-ref="sh::CallDAG::InitResult" data-ref-filename="sh..CallDAG..InitResult">InitResult</dfn></td></tr>
+<tr><th id="49">49</th><td>    {</td></tr>
+<tr><th id="50">50</th><td>        <dfn class="enum" id="sh::CallDAG::INITDAG_SUCCESS" title='sh::CallDAG::INITDAG_SUCCESS' data-ref="sh::CallDAG::INITDAG_SUCCESS" data-ref-filename="sh..CallDAG..INITDAG_SUCCESS">INITDAG_SUCCESS</dfn>,</td></tr>
+<tr><th id="51">51</th><td>        <dfn class="enum" id="sh::CallDAG::INITDAG_RECURSION" title='sh::CallDAG::INITDAG_RECURSION' data-ref="sh::CallDAG::INITDAG_RECURSION" data-ref-filename="sh..CallDAG..INITDAG_RECURSION">INITDAG_RECURSION</dfn>,</td></tr>
+<tr><th id="52">52</th><td>        <dfn class="enum" id="sh::CallDAG::INITDAG_UNDEFINED" title='sh::CallDAG::INITDAG_UNDEFINED' data-ref="sh::CallDAG::INITDAG_UNDEFINED" data-ref-filename="sh..CallDAG..INITDAG_UNDEFINED">INITDAG_UNDEFINED</dfn>,</td></tr>
+<tr><th id="53">53</th><td>    };</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td>    <i>// Returns INITDAG_SUCCESS if it was able to create the DAG, otherwise prints</i></td></tr>
+<tr><th id="56">56</th><td><i>    // the initialization error in diagnostics, if present.</i></td></tr>
+<tr><th id="57">57</th><td>    <a class="type" href="#sh::CallDAG::InitResult" title='sh::CallDAG::InitResult' data-ref="sh::CallDAG::InitResult" data-ref-filename="sh..CallDAG..InitResult">InitResult</a> <dfn class="decl fn" id="_ZN2sh7CallDAG4initEPNS_11TIntermNodeEPNS_12TDiagnosticsE" title='sh::CallDAG::init' data-ref="_ZN2sh7CallDAG4initEPNS_11TIntermNodeEPNS_12TDiagnosticsE" data-ref-filename="_ZN2sh7CallDAG4initEPNS_11TIntermNodeEPNS_12TDiagnosticsE">init</dfn>(<a class="type" href="IntermNode.h.html#sh::TIntermNode" title='sh::TIntermNode' data-ref="sh::TIntermNode" data-ref-filename="sh..TIntermNode">TIntermNode</a> *<dfn class="local col3 decl" id="493root" title='root' data-type='sh::TIntermNode *' data-ref="493root" data-ref-filename="493root">root</dfn>, <a class="type" href="ConstantUnion.h.html#sh::TDiagnostics" title='sh::TDiagnostics' data-ref="sh::TDiagnostics" data-ref-filename="sh..TDiagnostics">TDiagnostics</a> *<dfn class="local col4 decl" id="494diagnostics" title='diagnostics' data-type='sh::TDiagnostics *' data-ref="494diagnostics" data-ref-filename="494diagnostics">diagnostics</dfn>);</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td>    <i>// Returns InvalidIndex if the function wasn't found</i></td></tr>
+<tr><th id="60">60</th><td>    <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl fn" id="_ZNK2sh7CallDAG9findIndexERKNS_15TSymbolUniqueIdE" title='sh::CallDAG::findIndex' data-ref="_ZNK2sh7CallDAG9findIndexERKNS_15TSymbolUniqueIdE" data-ref-filename="_ZNK2sh7CallDAG9findIndexERKNS_15TSymbolUniqueIdE">findIndex</dfn>(<em>const</em> <a class="type" href="SymbolUniqueId.h.html#sh::TSymbolUniqueId" title='sh::TSymbolUniqueId' data-ref="sh::TSymbolUniqueId" data-ref-filename="sh..TSymbolUniqueId">TSymbolUniqueId</a> &amp;<dfn class="local col5 decl" id="495id" title='id' data-type='const sh::TSymbolUniqueId &amp;' data-ref="495id" data-ref-filename="495id">id</dfn>) <em>const</em>;</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td>    <em>const</em> <a class="type" href="#sh::CallDAG::Record" title='sh::CallDAG::Record' data-ref="sh::CallDAG::Record" data-ref-filename="sh..CallDAG..Record">Record</a> &amp;<dfn class="decl fn" id="_ZNK2sh7CallDAG18getRecordFromIndexEm" title='sh::CallDAG::getRecordFromIndex' data-ref="_ZNK2sh7CallDAG18getRecordFromIndexEm" data-ref-filename="_ZNK2sh7CallDAG18getRecordFromIndexEm">getRecordFromIndex</dfn>(<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="496index" title='index' data-type='size_t' data-ref="496index" data-ref-filename="496index">index</dfn>) <em>const</em>;</td></tr>
+<tr><th id="63">63</th><td>    <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl fn" id="_ZNK2sh7CallDAG4sizeEv" title='sh::CallDAG::size' data-ref="_ZNK2sh7CallDAG4sizeEv" data-ref-filename="_ZNK2sh7CallDAG4sizeEv">size</dfn>() <em>const</em>;</td></tr>
+<tr><th id="64">64</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN2sh7CallDAG5clearEv" title='sh::CallDAG::clear' data-ref="_ZN2sh7CallDAG5clearEv" data-ref-filename="_ZN2sh7CallDAG5clearEv">clear</dfn>();</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td>    <em>const</em> <em>static</em> <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl" id="sh::CallDAG::InvalidIndex" title='sh::CallDAG::InvalidIndex' data-ref="sh::CallDAG::InvalidIndex" data-ref-filename="sh..CallDAG..InvalidIndex">InvalidIndex</dfn>;</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td>  <b>private</b>:</td></tr>
+<tr><th id="69">69</th><td>    <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<a class="type" href="#sh::CallDAG::Record" title='sh::CallDAG::Record' data-ref="sh::CallDAG::Record" data-ref-filename="sh..CallDAG..Record">Record</a>&gt; <dfn class="decl field" id="sh::CallDAG::mRecords" title='sh::CallDAG::mRecords' data-ref="sh::CallDAG::mRecords" data-ref-filename="sh..CallDAG..mRecords">mRecords</dfn>;</td></tr>
+<tr><th id="70">70</th><td>    <span class="namespace">std::</span><span class='type' title='std::__1::map' data-ref="std::__1::map" data-ref-filename="std..__1..map">map</span>&lt;<em>int</em>, <em>int</em>&gt; <dfn class="decl field" id="sh::CallDAG::mFunctionIdToIndex" title='sh::CallDAG::mFunctionIdToIndex' data-ref="sh::CallDAG::mFunctionIdToIndex" data-ref-filename="sh..CallDAG..mFunctionIdToIndex">mFunctionIdToIndex</dfn>;</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td>    <b>class</b> <dfn class="type" id="sh::CallDAG::CallDAGCreator" title='sh::CallDAG::CallDAGCreator' data-ref="sh::CallDAG::CallDAGCreator" data-ref-filename="sh..CallDAG..CallDAGCreator">CallDAGCreator</dfn>;</td></tr>
+<tr><th id="73">73</th><td>};</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td>}  <i>// namespace sh</i></td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td><u>#<span data-ppcond="11">endif</span>  // COMPILER_TRANSLATOR_CALLDAG_H_</u></td></tr>
+<tr><th id="78">78</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='ASTMetadataHLSL.cpp.html'>webkit/Source/ThirdParty/ANGLE/src/compiler/translator/ASTMetadataHLSL.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

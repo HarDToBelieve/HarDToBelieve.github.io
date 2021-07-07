@@ -1,7 +1,0 @@
-<dec f='webkit/Source/ThirdParty/ANGLE/src/libANGLE/GLES1State.h' l='36' type='GLfloat'/>
-<offset>96</offset>
-<use f='webkit/Source/ThirdParty/ANGLE/src/libANGLE/GLES1Renderer.cpp' l='184' u='r' c='_ZN2gl13GLES1Renderer14prepareForDrawENS_13PrimitiveModeEPNS_7ContextEPNS_5StateE'/>
-<use f='webkit/Source/ThirdParty/ANGLE/src/libANGLE/GLES1State.cpp' l='20' u='w' c='_ZN2gl13TextureCoordFC1Effff'/>
-<use f='webkit/Source/ThirdParty/ANGLE/src/libANGLE/GLES1State.cpp' l='24' u='r' c='_ZNK2gl13TextureCoordFeqERKS0_'/>
-<use f='webkit/Source/ThirdParty/ANGLE/src/libANGLE/GLES1State.cpp' l='24' u='r' c='_ZNK2gl13TextureCoordFeqERKS0_'/>
-<use f='webkit/Source/ThirdParty/ANGLE/src/libANGLE/State.cpp' l='2380' u='r' c='_ZNK2gl5State9getFloatvEjPf'/>

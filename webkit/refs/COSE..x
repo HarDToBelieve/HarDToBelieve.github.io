@@ -1,5 +1,0 @@
-<def f='webkit/Source/WebCore/Modules/webauthn/WebAuthenticationConstants.h' l='35' type='const int64_t'/>
-<use f='webkit/Source/WebCore/Modules/webauthn/WebAuthenticationUtils.cpp' l='57' u='r' c='_ZN7WebCore26encodeES256PublicKeyAsCBOREON3WTF6VectorIhLm0ENS0_15CrashOnOverflowELm16ENS0_10FastMallocEEES5_'/>
-<use f='webkit/Source/WebCore/Modules/webauthn/fido/Pin.cpp' l='167' u='r' c='_ZN4fido3pin20KeyAgreementResponse13parseFromCOSEERKNSt3__13mapIN4cbor9CBORValueES5_NS5_8CTAPLessEN3WTF13FastAllocatorINS2_4pairIKS5_S5_EEEEEE'/>
-<use f='webkit/Source/WebCore/Modules/webauthn/fido/Pin.cpp' l='191' u='r' c='_ZN4fido3pin19encodeCOSEPublicKeyERKN3WTF6VectorIhLm0ENS1_15CrashOnOverflowELm16ENS1_10FastMallocEEE'/>
-<def f='webkit/WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/WebAuthenticationConstants.h' l='35' type='const int64_t'/>

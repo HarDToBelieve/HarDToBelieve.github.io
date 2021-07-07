@@ -1,4 +1,0 @@
-<def f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/type_traits.h' l='120'/>
-<size>1</size>
-<def f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/type_traits.h' l='120'/>
-<size>1</size>

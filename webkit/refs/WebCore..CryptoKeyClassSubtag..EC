@@ -1,3 +1,0 @@
-<dec f='webkit/Source/WebCore/bindings/js/SerializedScriptValue.cpp' l='253' type='3'/>
-<use f='webkit/Source/WebCore/bindings/js/SerializedScriptValue.cpp' l='1723' u='r' c='_ZN7WebCore15CloneSerializer5writeEPKNS_9CryptoKeyE'/>
-<use f='webkit/Source/WebCore/bindings/js/SerializedScriptValue.cpp' l='2894' c='_ZN7WebCore17CloneDeserializer13readCryptoKeyERN3JSC7JSValueE'/>

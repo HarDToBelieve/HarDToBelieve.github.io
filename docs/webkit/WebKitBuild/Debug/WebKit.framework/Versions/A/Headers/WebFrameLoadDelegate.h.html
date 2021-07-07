@@ -1,0 +1,240 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebFrameLoadDelegate.h source code [webkit/WebKitBuild/Debug/WebKit.framework/Versions/A/Headers/WebFrameLoadDelegate.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/WebKit.framework/Versions/A/Headers/WebFrameLoadDelegate.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>WebKit.framework</a>/<a href='../..'>Versions</a>/<a href='..'>A</a>/<a href='./'>Headers</a>/<a href='WebFrameLoadDelegate.h.html'>WebFrameLoadDelegate.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2003, 2004, 2005 Apple Inc.  All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * 1.  Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="9">9</th><td><i> *     notice, this list of conditions and the following disclaimer. </i></td></tr>
+<tr><th id="10">10</th><td><i> * 2.  Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="11">11</th><td><i> *     notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="12">12</th><td><i> *     documentation and/or other materials provided with the distribution. </i></td></tr>
+<tr><th id="13">13</th><td><i> * 3.  Neither the name of Apple Inc. ("Apple") nor the names of</i></td></tr>
+<tr><th id="14">14</th><td><i> *     its contributors may be used to endorse or promote products derived</i></td></tr>
+<tr><th id="15">15</th><td><i> *     from this software without specific prior written permission. </i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</i></td></tr>
+<tr><th id="19">19</th><td><i> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</i></td></tr>
+<tr><th id="20">20</th><td><i> * DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="21">21</th><td><i> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</i></td></tr>
+<tr><th id="23">23</th><td><i> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</i></td></tr>
+<tr><th id="24">24</th><td><i> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="25">25</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF</i></td></tr>
+<tr><th id="26">26</th><td><i> * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="27">27</th><td><i> */</i></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import &lt;Foundation/Foundation.h&gt;</u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="../../../../JavaScriptCore.framework/Versions/A/Headers/JSBase.h.html">&lt;JavaScriptCore/JSBase.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="WebKitAvailability.h.html">&lt;WebKit/WebKitAvailability.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><u>#import &lt;AppKit/AppKit.h&gt;</u></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td>@class NSError;</td></tr>
+<tr><th id="36">36</th><td>@class WebFrame;</td></tr>
+<tr><th id="37">37</th><td>@class WebScriptObject;</td></tr>
+<tr><th id="38">38</th><td>@class WebView;</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><u>#<span data-ppcond="40">if</span> <a class="macro" href="../../../../JavaScriptCore.framework/Versions/A/Headers/JSBase.h.html#149" title="1" data-ref="_M/JSC_OBJC_API_ENABLED">JSC_OBJC_API_ENABLED</a></u></td></tr>
+<tr><th id="41">41</th><td>@class JSContext;</td></tr>
+<tr><th id="42">42</th><td><u>#<span data-ppcond="40">endif</span></u></td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="45">45</th><td><i class="doc">    <span class="command">@category</span> <span class="verb">WebFrameLoadDelegate</span></i></td></tr>
+<tr><th id="46">46</th><td><i class="doc">    <span class="command">@discussion</span> A WebView's WebFrameLoadDelegate tracks the loading progress of its frames.</i></td></tr>
+<tr><th id="47">47</th><td><i class="doc">    When a data source of a frame starts to load, the data source is considered "provisional".</i></td></tr>
+<tr><th id="48">48</th><td><i class="doc">    Once at least one byte is received, the data source is considered "committed". This is done</i></td></tr>
+<tr><th id="49">49</th><td><i class="doc">    so the contents of the frame will not be lost if the new data source fails to successfully load.</i></td></tr>
+<tr><th id="50">50</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="51">51</th><td><a class="macro" href="WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>)</td></tr>
+<tr><th id="52">52</th><td>@protocol WebFrameLoadDelegate &lt;NSObject&gt;</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td>@optional</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="57">57</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:didStartProvisionalLoadForFrame:</span></i></td></tr>
+<tr><th id="58">58</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that the provisional load of a frame has started</i></td></tr>
+<tr><th id="59">59</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message</i></td></tr>
+<tr><th id="60">60</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame for which the provisional load has started</i></td></tr>
+<tr><th id="61">61</th><td><i class="doc">    <span class="command">@discussion</span> This method is called after the provisional data source of a frame</i></td></tr>
+<tr><th id="62">62</th><td><i class="doc">    has started to load.</i></td></tr>
+<tr><th id="63">63</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="64">64</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col2 decl" id="932sender" title='sender' data-type='WebView *' data-ref="932sender" data-ref-filename="932sender">sender</dfn> didStartProvisionalLoadForFrame:(WebFrame *)<dfn class="local col3 decl" id="933frame" title='frame' data-type='WebFrame *' data-ref="933frame" data-ref-filename="933frame">frame</dfn>;</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="67">67</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:didReceiveServerRedirectForProvisionalLoadForFrame:</span></i></td></tr>
+<tr><th id="68">68</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that a server redirect occurred during the provisional load</i></td></tr>
+<tr><th id="69">69</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message</i></td></tr>
+<tr><th id="70">70</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame for which the redirect occurred</i></td></tr>
+<tr><th id="71">71</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="72">72</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col4 decl" id="934sender" title='sender' data-type='WebView *' data-ref="934sender" data-ref-filename="934sender">sender</dfn> didReceiveServerRedirectForProvisionalLoadForFrame:(WebFrame *)<dfn class="local col5 decl" id="935frame" title='frame' data-type='WebFrame *' data-ref="935frame" data-ref-filename="935frame">frame</dfn>;</td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="75">75</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:didFailProvisionalLoadWithError:forFrame:</span></i></td></tr>
+<tr><th id="76">76</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that the provisional load has failed</i></td></tr>
+<tr><th id="77">77</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message</i></td></tr>
+<tr><th id="78">78</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">error</span> The error that occurred</i></td></tr>
+<tr><th id="79">79</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame for which the error occurred</i></td></tr>
+<tr><th id="80">80</th><td><i class="doc">    <span class="command">@discussion</span> This method is called after the provisional data source has failed to load.</i></td></tr>
+<tr><th id="81">81</th><td><i class="doc">    The frame will continue to display the contents of the committed data source if there is one.</i></td></tr>
+<tr><th id="82">82</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="83">83</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col6 decl" id="936sender" title='sender' data-type='WebView *' data-ref="936sender" data-ref-filename="936sender">sender</dfn> didFailProvisionalLoadWithError:(NSError *)<dfn class="local col7 decl" id="937error" title='error' data-type='NSError *' data-ref="937error" data-ref-filename="937error">error</dfn> forFrame:(WebFrame *)<dfn class="local col8 decl" id="938frame" title='frame' data-type='WebFrame *' data-ref="938frame" data-ref-filename="938frame">frame</dfn>;</td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="86">86</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:didCommitLoadForFrame:</span></i></td></tr>
+<tr><th id="87">87</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that the load has changed from provisional to committed</i></td></tr>
+<tr><th id="88">88</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message</i></td></tr>
+<tr><th id="89">89</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame for which the load has committed</i></td></tr>
+<tr><th id="90">90</th><td><i class="doc">    <span class="command">@discussion</span> This method is called after the provisional data source has become the</i></td></tr>
+<tr><th id="91">91</th><td><i class="doc">    committed data source.</i></td></tr>
+<tr><th id="92">92</th><td><i class="doc"></i></td></tr>
+<tr><th id="93">93</th><td><i class="doc">    In some cases, a single load may be committed more than once. This happens</i></td></tr>
+<tr><th id="94">94</th><td><i class="doc">    in the case of multipart/x-mixed-replace, also known as "server push". In this case,</i></td></tr>
+<tr><th id="95">95</th><td><i class="doc">    a single location change leads to multiple documents that are loaded in sequence. When</i></td></tr>
+<tr><th id="96">96</th><td><i class="doc">    this happens, a new commit will be sent for each document.</i></td></tr>
+<tr><th id="97">97</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="98">98</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col9 decl" id="939sender" title='sender' data-type='WebView *' data-ref="939sender" data-ref-filename="939sender">sender</dfn> didCommitLoadForFrame:(WebFrame *)<dfn class="local col0 decl" id="940frame" title='frame' data-type='WebFrame *' data-ref="940frame" data-ref-filename="940frame">frame</dfn>;</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="101">101</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:didReceiveTitle:forFrame:</span></i></td></tr>
+<tr><th id="102">102</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that the page title for a frame has been received</i></td></tr>
+<tr><th id="103">103</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message</i></td></tr>
+<tr><th id="104">104</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">title</span> The new page title</i></td></tr>
+<tr><th id="105">105</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame for which the title has been received</i></td></tr>
+<tr><th id="106">106</th><td><i class="doc">    <span class="command">@discussion</span> The title may update during loading; clients should be prepared for this.</i></td></tr>
+<tr><th id="107">107</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="108">108</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col1 decl" id="941sender" title='sender' data-type='WebView *' data-ref="941sender" data-ref-filename="941sender">sender</dfn> didReceiveTitle:(NSString *)<dfn class="local col2 decl" id="942title" title='title' data-type='NSString *' data-ref="942title" data-ref-filename="942title">title</dfn> forFrame:(WebFrame *)<dfn class="local col3 decl" id="943frame" title='frame' data-type='WebFrame *' data-ref="943frame" data-ref-filename="943frame">frame</dfn>;</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="111">111</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:didReceiveIcon:forFrame:</span></i></td></tr>
+<tr><th id="112">112</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that a page icon image for a frame has been received</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">webView</span> The WebView sending the message</i></td></tr>
+<tr><th id="114">114</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">image</span> The icon image. Also known as a "favicon".</i></td></tr>
+<tr><th id="115">115</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame for which a page icon has been received</i></td></tr>
+<tr><th id="116">116</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="117">117</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col4 decl" id="944sender" title='sender' data-type='WebView *' data-ref="944sender" data-ref-filename="944sender">sender</dfn> didReceiveIcon:(NSImage *)<dfn class="local col5 decl" id="945image" title='image' data-type='NSImage *' data-ref="945image" data-ref-filename="945image">image</dfn> forFrame:(WebFrame *)<dfn class="local col6 decl" id="946frame" title='frame' data-type='WebFrame *' data-ref="946frame" data-ref-filename="946frame">frame</dfn>;</td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="120">120</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:didFinishLoadForFrame:</span></i></td></tr>
+<tr><th id="121">121</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that the committed load of a frame has completed</i></td></tr>
+<tr><th id="122">122</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message</i></td></tr>
+<tr><th id="123">123</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame that finished loading</i></td></tr>
+<tr><th id="124">124</th><td><i class="doc">    <span class="command">@discussion</span> This method is called after the committed data source of a frame has successfully loaded</i></td></tr>
+<tr><th id="125">125</th><td><i class="doc">    and will only be called when all subresources such as images and stylesheets are done loading.</i></td></tr>
+<tr><th id="126">126</th><td><i class="doc">    Plug-In content and JavaScript-requested loads may occur after this method is called.</i></td></tr>
+<tr><th id="127">127</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="128">128</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col7 decl" id="947sender" title='sender' data-type='WebView *' data-ref="947sender" data-ref-filename="947sender">sender</dfn> didFinishLoadForFrame:(WebFrame *)<dfn class="local col8 decl" id="948frame" title='frame' data-type='WebFrame *' data-ref="948frame" data-ref-filename="948frame">frame</dfn>;</td></tr>
+<tr><th id="129">129</th><td></td></tr>
+<tr><th id="130">130</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="131">131</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:didFailLoadWithError:forFrame:</span></i></td></tr>
+<tr><th id="132">132</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that the committed load of a frame has failed</i></td></tr>
+<tr><th id="133">133</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message</i></td></tr>
+<tr><th id="134">134</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">error</span> The error that occurred</i></td></tr>
+<tr><th id="135">135</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame that failed to load</i></td></tr>
+<tr><th id="136">136</th><td><i class="doc">    <span class="command">@discussion</span> This method is called after a data source has committed but failed to completely load.</i></td></tr>
+<tr><th id="137">137</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="138">138</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col9 decl" id="949sender" title='sender' data-type='WebView *' data-ref="949sender" data-ref-filename="949sender">sender</dfn> didFailLoadWithError:(NSError *)<dfn class="local col0 decl" id="950error" title='error' data-type='NSError *' data-ref="950error" data-ref-filename="950error">error</dfn> forFrame:(WebFrame *)<dfn class="local col1 decl" id="951frame" title='frame' data-type='WebFrame *' data-ref="951frame" data-ref-filename="951frame">frame</dfn>;</td></tr>
+<tr><th id="139">139</th><td></td></tr>
+<tr><th id="140">140</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="141">141</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:didChangeLocationWithinPageForFrame:</span></i></td></tr>
+<tr><th id="142">142</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that the scroll position in a frame has changed</i></td></tr>
+<tr><th id="143">143</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message</i></td></tr>
+<tr><th id="144">144</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame that scrolled</i></td></tr>
+<tr><th id="145">145</th><td><i class="doc">    <span class="command">@discussion</span> This method is called when anchors within a page have been clicked.</i></td></tr>
+<tr><th id="146">146</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="147">147</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col2 decl" id="952sender" title='sender' data-type='WebView *' data-ref="952sender" data-ref-filename="952sender">sender</dfn> didChangeLocationWithinPageForFrame:(WebFrame *)<dfn class="local col3 decl" id="953frame" title='frame' data-type='WebFrame *' data-ref="953frame" data-ref-filename="953frame">frame</dfn>;</td></tr>
+<tr><th id="148">148</th><td></td></tr>
+<tr><th id="149">149</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="150">150</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:willPerformClientRedirectToURL:delay:fireDate:forFrame:</span></i></td></tr>
+<tr><th id="151">151</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that a frame will perform a client-side redirect</i></td></tr>
+<tr><th id="152">152</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message</i></td></tr>
+<tr><th id="153">153</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">URL</span> The URL to be redirected to</i></td></tr>
+<tr><th id="154">154</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">seconds</span> Seconds in which the redirect will happen</i></td></tr>
+<tr><th id="155">155</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">date</span> The fire date</i></td></tr>
+<tr><th id="156">156</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame on which the redirect will occur</i></td></tr>
+<tr><th id="157">157</th><td><i class="doc">    <span class="command">@discussion</span> This method can be used to continue progress feedback while a client-side</i></td></tr>
+<tr><th id="158">158</th><td><i class="doc">    redirect is pending.</i></td></tr>
+<tr><th id="159">159</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="160">160</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col4 decl" id="954sender" title='sender' data-type='WebView *' data-ref="954sender" data-ref-filename="954sender">sender</dfn> willPerformClientRedirectToURL:(NSURL *)<dfn class="local col5 decl" id="955URL" title='URL' data-type='NSURL *' data-ref="955URL" data-ref-filename="955URL">URL</dfn> delay:(<span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span>)<dfn class="local col6 decl" id="956seconds" title='seconds' data-type='NSTimeInterval' data-ref="956seconds" data-ref-filename="956seconds">seconds</dfn> fireDate:(NSDate *)<dfn class="local col7 decl" id="957date" title='date' data-type='NSDate *' data-ref="957date" data-ref-filename="957date">date</dfn> forFrame:(WebFrame *)<dfn class="local col8 decl" id="958frame" title='frame' data-type='WebFrame *' data-ref="958frame" data-ref-filename="958frame">frame</dfn>;</td></tr>
+<tr><th id="161">161</th><td></td></tr>
+<tr><th id="162">162</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="163">163</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:didCancelClientRedirectForFrame:</span></i></td></tr>
+<tr><th id="164">164</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that a pending client-side redirect has been cancelled</i></td></tr>
+<tr><th id="165">165</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message</i></td></tr>
+<tr><th id="166">166</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame for which the pending redirect was cancelled</i></td></tr>
+<tr><th id="167">167</th><td><i class="doc">    <span class="command">@discussion</span> A client-side redirect can be cancelled if a frame changes location before the timeout.</i></td></tr>
+<tr><th id="168">168</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="169">169</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col9 decl" id="959sender" title='sender' data-type='WebView *' data-ref="959sender" data-ref-filename="959sender">sender</dfn> didCancelClientRedirectForFrame:(WebFrame *)<dfn class="local col0 decl" id="960frame" title='frame' data-type='WebFrame *' data-ref="960frame" data-ref-filename="960frame">frame</dfn>;</td></tr>
+<tr><th id="170">170</th><td></td></tr>
+<tr><th id="171">171</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="172">172</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:willCloseFrame:</span></i></td></tr>
+<tr><th id="173">173</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that a frame will be closed</i></td></tr>
+<tr><th id="174">174</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message</i></td></tr>
+<tr><th id="175">175</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame that will be closed</i></td></tr>
+<tr><th id="176">176</th><td><i class="doc">    <span class="command">@discussion</span> This method is called right before WebKit is done with the frame</i></td></tr>
+<tr><th id="177">177</th><td><i class="doc">    and the objects that it contains.</i></td></tr>
+<tr><th id="178">178</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="179">179</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col1 decl" id="961sender" title='sender' data-type='WebView *' data-ref="961sender" data-ref-filename="961sender">sender</dfn> willCloseFrame:(WebFrame *)<dfn class="local col2 decl" id="962frame" title='frame' data-type='WebFrame *' data-ref="962frame" data-ref-filename="962frame">frame</dfn>;</td></tr>
+<tr><th id="180">180</th><td></td></tr>
+<tr><th id="181">181</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="182">182</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:didClearWindowObject:forFrame:</span></i></td></tr>
+<tr><th id="183">183</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that the JavaScript window object in a frame has </i></td></tr>
+<tr><th id="184">184</th><td><i class="doc">    been cleared in preparation for a new load. This is the preferred place to set custom </i></td></tr>
+<tr><th id="185">185</th><td><i class="doc">    properties on the window object using the WebScriptObject and JavaScriptCore APIs.</i></td></tr>
+<tr><th id="186">186</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">webView</span> The webView sending the message.</i></td></tr>
+<tr><th id="187">187</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">windowObject</span> The WebScriptObject representing the frame's JavaScript window object.</i></td></tr>
+<tr><th id="188">188</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The WebFrame to which windowObject belongs.</i></td></tr>
+<tr><th id="189">189</th><td><i class="doc">    <span class="command">@discussion</span> If a delegate implements both webView:didClearWindowObject:forFrame:</i></td></tr>
+<tr><th id="190">190</th><td><i class="doc">    and webView:windowScriptObjectAvailable:, only webView:didClearWindowObject:forFrame: </i></td></tr>
+<tr><th id="191">191</th><td><i class="doc">    will be invoked. This enables a delegate to implement both methods for backwards </i></td></tr>
+<tr><th id="192">192</th><td><i class="doc">    compatibility with older versions of WebKit.</i></td></tr>
+<tr><th id="193">193</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="194">194</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col3 decl" id="963webView" title='webView' data-type='WebView *' data-ref="963webView" data-ref-filename="963webView">webView</dfn> didClearWindowObject:(WebScriptObject *)<dfn class="local col4 decl" id="964windowObject" title='windowObject' data-type='WebScriptObject *' data-ref="964windowObject" data-ref-filename="964windowObject">windowObject</dfn> forFrame:(WebFrame *)<dfn class="local col5 decl" id="965frame" title='frame' data-type='WebFrame *' data-ref="965frame" data-ref-filename="965frame">frame</dfn>;</td></tr>
+<tr><th id="195">195</th><td></td></tr>
+<tr><th id="196">196</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="197">197</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:windowScriptObjectAvailable:</span></i></td></tr>
+<tr><th id="198">198</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that the scripting object for a page is available.  This is called</i></td></tr>
+<tr><th id="199">199</th><td><i class="doc">    before the page is loaded.  It may be useful to allow delegates to bind native objects to the window.</i></td></tr>
+<tr><th id="200">200</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">webView</span> The webView sending the message.</i></td></tr>
+<tr><th id="201">201</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">windowScriptObject</span> The WebScriptObject for the window in the scripting environment.</i></td></tr>
+<tr><th id="202">202</th><td><i class="doc">    <span class="command">@discussion</span> This method is deprecated. Consider using webView:didClearWindowObject:forFrame:</i></td></tr>
+<tr><th id="203">203</th><td><i class="doc">    instead.</i></td></tr>
+<tr><th id="204">204</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="205">205</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col6 decl" id="966webView" title='webView' data-type='WebView *' data-ref="966webView" data-ref-filename="966webView">webView</dfn> windowScriptObjectAvailable:(WebScriptObject *)<dfn class="local col7 decl" id="967windowScriptObject" title='windowScriptObject' data-type='WebScriptObject *' data-ref="967windowScriptObject" data-ref-filename="967windowScriptObject">windowScriptObject</dfn> <a class="macro" href="WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_4)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_4</var>, <var>10_5</var>);</td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td><u>#<span data-ppcond="207">if</span> <a class="macro" href="../../../../JavaScriptCore.framework/Versions/A/Headers/JSBase.h.html#149" title="1" data-ref="_M/JSC_OBJC_API_ENABLED">JSC_OBJC_API_ENABLED</a></u></td></tr>
+<tr><th id="208">208</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="209">209</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:didCreateJavaScriptContext:contextForFrame:</span></i></td></tr>
+<tr><th id="210">210</th><td><i class="doc">    <span class="command">@abstract</span> Notifies the delegate that a new JavaScript context has been created created.</i></td></tr>
+<tr><th id="211">211</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">webView</span> The WebView sending the message.</i></td></tr>
+<tr><th id="212">212</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">context</span> The JSContext representing the frame's JavaScript window object.</i></td></tr>
+<tr><th id="213">213</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The WebFrame to which the context belongs.</i></td></tr>
+<tr><th id="214">214</th><td><i class="doc">    <span class="command">@discussion</span> If a delegate implements webView:didCreateJavaScriptContext:forFrame: along with either </i></td></tr>
+<tr><th id="215">215</th><td><i class="doc">    webView:didClearWindowObject:forFrame: or webView:windowScriptObjectAvailable:, only </i></td></tr>
+<tr><th id="216">216</th><td><i class="doc">    webView:didCreateJavaScriptContext:forFrame will be invoked. This enables a delegate to implement </i></td></tr>
+<tr><th id="217">217</th><td><i class="doc">    multiple versions to maintain backwards compatibility with older versions of WebKit.</i></td></tr>
+<tr><th id="218">218</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="219">219</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col8 decl" id="968webView" title='webView' data-type='WebView *' data-ref="968webView" data-ref-filename="968webView">webView</dfn> didCreateJavaScriptContext:(JSContext *)<dfn class="local col9 decl" id="969context" title='context' data-type='JSContext *' data-ref="969context" data-ref-filename="969context">context</dfn> forFrame:(WebFrame *)<dfn class="local col0 decl" id="970frame" title='frame' data-type='WebFrame *' data-ref="970frame" data-ref-filename="970frame">frame</dfn>;</td></tr>
+<tr><th id="220">220</th><td><u>#<span data-ppcond="207">endif</span></u></td></tr>
+<tr><th id="221">221</th><td></td></tr>
+<tr><th id="222">222</th><td>@end</td></tr>
+<tr><th id="223">223</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Tools/MiniBrowser/mac/AppDelegate.m.html'>webkit/Tools/MiniBrowser/mac/AppDelegate.m</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

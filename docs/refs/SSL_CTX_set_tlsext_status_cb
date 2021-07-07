@@ -1,0 +1,21 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='4948' type='int SSL_CTX_set_tlsext_status_cb(SSL_CTX * ctx, int (*)(SSL *, void *) callback)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='4929'>// SSL_CTX_set_tlsext_status_cb configures the legacy OpenSSL OCSP callback and
+// returns one. Though the type signature is the same, this callback has
+// different behavior for client and server connections:
+//
+// For clients, the callback is called after certificate verification. It should
+// return one for success, zero for a bad OCSP response, and a negative number
+// for internal error. Instead, handle this as part of certificate verification.
+// (Historically, OpenSSL verified certificates just before parsing stapled OCSP
+// responses, but BoringSSL fixes this ordering. All server credentials are
+// available during verification.)
+//
+// Do not use this callback as a server. It is provided for compatibility
+// purposes only. For servers, it is called to configure server credentials. It
+// should return |SSL_TLSEXT_ERR_OK| on success, |SSL_TLSEXT_ERR_NOACK| to
+// ignore OCSP requests, or |SSL_TLSEXT_ERR_ALERT_FATAL| on error. It is usually
+// used to fetch OCSP responses on demand, which is not ideal. Instead, treat
+// OCSP responses like other server credentials, such as certificates or SCT
+// lists. Configure, store, and refresh them eagerly. This avoids downtime if
+// the CA&apos;s OCSP responder is briefly offline.</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_lib.cc' l='3192' ll='3196' type='int SSL_CTX_set_tlsext_status_cb(SSL_CTX * ctx, int (*)(SSL *, void *) callback)'/>

@@ -1,0 +1,339 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebUIDelegatePrivate.h source code [webkit/Source/WebKitLegacy/mac/WebView/WebUIDelegatePrivate.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/WebView/WebUIDelegatePrivate.h'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>WebView</a>/<a href='WebUIDelegatePrivate.h.html'>WebUIDelegatePrivate.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2005, 2006, 2007, 2008, 2009, 2010, 2012 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * 1.  Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="9">9</th><td><i> *     notice, this list of conditions and the following disclaimer. </i></td></tr>
+<tr><th id="10">10</th><td><i> * 2.  Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="11">11</th><td><i> *     notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="12">12</th><td><i> *     documentation and/or other materials provided with the distribution. </i></td></tr>
+<tr><th id="13">13</th><td><i> * 3.  Neither the name of Apple Inc. ("Apple") nor the names of</i></td></tr>
+<tr><th id="14">14</th><td><i> *     its contributors may be used to endorse or promote products derived</i></td></tr>
+<tr><th id="15">15</th><td><i> *     from this software without specific prior written permission. </i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</i></td></tr>
+<tr><th id="19">19</th><td><i> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</i></td></tr>
+<tr><th id="20">20</th><td><i> * DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="21">21</th><td><i> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</i></td></tr>
+<tr><th id="23">23</th><td><i> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</i></td></tr>
+<tr><th id="24">24</th><td><i> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="25">25</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF</i></td></tr>
+<tr><th id="26">26</th><td><i> * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="27">27</th><td><i> */</i></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="WebAllowDenyPolicyListener.h.html">&lt;WebKitLegacy/WebAllowDenyPolicyListener.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="WebUIDelegate.h.html">&lt;WebKitLegacy/WebUIDelegate.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><u>#<span data-ppcond="32">if</span> !defined(<span class="macro" data-ref="_M/ENABLE_DASHBOARD_SUPPORT">ENABLE_DASHBOARD_SUPPORT</span>)</u></td></tr>
+<tr><th id="33">33</th><td><u>#<span data-ppcond="33">if</span> !<span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="34">34</th><td><u>#define <dfn class="macro" id="_M/ENABLE_DASHBOARD_SUPPORT" data-ref="_M/ENABLE_DASHBOARD_SUPPORT">ENABLE_DASHBOARD_SUPPORT</dfn> 1</u></td></tr>
+<tr><th id="35">35</th><td><u>#<span data-ppcond="33">else</span></u></td></tr>
+<tr><th id="36">36</th><td><u>#define ENABLE_DASHBOARD_SUPPORT 0</u></td></tr>
+<tr><th id="37">37</th><td><u>#<span data-ppcond="33">endif</span></u></td></tr>
+<tr><th id="38">38</th><td><u>#<span data-ppcond="32">endif</span></u></td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><u>#<span data-ppcond="40">if</span> !defined(<a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnableCocoa.h.html#236" data-ref="_M/ENABLE_FULLSCREEN_API">ENABLE_FULLSCREEN_API</a>)</u></td></tr>
+<tr><th id="41">41</th><td><u>#if !TARGET_OS_IPHONE</u></td></tr>
+<tr><th id="42">42</th><td><u>#define ENABLE_FULLSCREEN_API 1</u></td></tr>
+<tr><th id="43">43</th><td><u>#else</u></td></tr>
+<tr><th id="44">44</th><td><u>#define ENABLE_FULLSCREEN_API 0</u></td></tr>
+<tr><th id="45">45</th><td><u>#endif</u></td></tr>
+<tr><th id="46">46</th><td><u>#<span data-ppcond="40">endif</span></u></td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td><u>#<span data-ppcond="48">if</span> <span class="macro" title="0" data-ref="_M/TARGET_OS_IOS">TARGET_OS_IOS</span></u></td></tr>
+<tr><th id="49">49</th><td>@protocol UIDropSession;</td></tr>
+<tr><th id="50">50</th><td><u>#<span data-ppcond="48">endif</span></u></td></tr>
+<tr><th id="51">51</th><td></td></tr>
+<tr><th id="52">52</th><td><u>#define <dfn class="macro" id="_M/WEBMENUITEMTAG_WEBKIT_3_0_SPI_START" data-ref="_M/WEBMENUITEMTAG_WEBKIT_3_0_SPI_START">WEBMENUITEMTAG_WEBKIT_3_0_SPI_START</dfn> 2000</u></td></tr>
+<tr><th id="53">53</th><td><b>enum</b> { </td></tr>
+<tr><th id="54">54</th><td>    <i>// FIXME: These should move to WebUIDelegate.h as part of the WebMenuItemTag enum there, when we're not in API freeze</i></td></tr>
+<tr><th id="55">55</th><td><i>    // Note that these values must be kept aligned with values in WebCore/ContextMenuItem.h</i></td></tr>
+<tr><th id="56">56</th><td>    <dfn class="enum" id="WebMenuItemTagOpenLink" title='WebMenuItemTagOpenLink' data-ref="WebMenuItemTagOpenLink" data-ref-filename="WebMenuItemTagOpenLink">WebMenuItemTagOpenLink</dfn> = <a class="macro" href="#52" title="2000" data-ref="_M/WEBMENUITEMTAG_WEBKIT_3_0_SPI_START">WEBMENUITEMTAG_WEBKIT_3_0_SPI_START</a>,</td></tr>
+<tr><th id="57">57</th><td>    <dfn class="enum" id="WebMenuItemTagIgnoreGrammar" title='WebMenuItemTagIgnoreGrammar' data-ref="WebMenuItemTagIgnoreGrammar" data-ref-filename="WebMenuItemTagIgnoreGrammar">WebMenuItemTagIgnoreGrammar</dfn>,</td></tr>
+<tr><th id="58">58</th><td>    <dfn class="enum" id="WebMenuItemTagSpellingMenu" title='WebMenuItemTagSpellingMenu' data-ref="WebMenuItemTagSpellingMenu" data-ref-filename="WebMenuItemTagSpellingMenu">WebMenuItemTagSpellingMenu</dfn>,</td></tr>
+<tr><th id="59">59</th><td>    <dfn class="enum" id="WebMenuItemTagShowSpellingPanel" title='WebMenuItemTagShowSpellingPanel' data-ref="WebMenuItemTagShowSpellingPanel" data-ref-filename="WebMenuItemTagShowSpellingPanel">WebMenuItemTagShowSpellingPanel</dfn>,</td></tr>
+<tr><th id="60">60</th><td>    <dfn class="enum" id="WebMenuItemTagCheckSpelling" title='WebMenuItemTagCheckSpelling' data-ref="WebMenuItemTagCheckSpelling" data-ref-filename="WebMenuItemTagCheckSpelling">WebMenuItemTagCheckSpelling</dfn>,</td></tr>
+<tr><th id="61">61</th><td>    <dfn class="enum" id="WebMenuItemTagCheckSpellingWhileTyping" title='WebMenuItemTagCheckSpellingWhileTyping' data-ref="WebMenuItemTagCheckSpellingWhileTyping" data-ref-filename="WebMenuItemTagCheckSpellingWhileTyping">WebMenuItemTagCheckSpellingWhileTyping</dfn>,</td></tr>
+<tr><th id="62">62</th><td>    <dfn class="enum" id="WebMenuItemTagCheckGrammarWithSpelling" title='WebMenuItemTagCheckGrammarWithSpelling' data-ref="WebMenuItemTagCheckGrammarWithSpelling" data-ref-filename="WebMenuItemTagCheckGrammarWithSpelling">WebMenuItemTagCheckGrammarWithSpelling</dfn>,</td></tr>
+<tr><th id="63">63</th><td>    <dfn class="enum" id="WebMenuItemTagFontMenu" title='WebMenuItemTagFontMenu' data-ref="WebMenuItemTagFontMenu" data-ref-filename="WebMenuItemTagFontMenu">WebMenuItemTagFontMenu</dfn>,</td></tr>
+<tr><th id="64">64</th><td>    <dfn class="enum" id="WebMenuItemTagShowFonts" title='WebMenuItemTagShowFonts' data-ref="WebMenuItemTagShowFonts" data-ref-filename="WebMenuItemTagShowFonts">WebMenuItemTagShowFonts</dfn>,</td></tr>
+<tr><th id="65">65</th><td>    <dfn class="enum" id="WebMenuItemTagBold" title='WebMenuItemTagBold' data-ref="WebMenuItemTagBold" data-ref-filename="WebMenuItemTagBold">WebMenuItemTagBold</dfn>,</td></tr>
+<tr><th id="66">66</th><td>    <dfn class="enum" id="WebMenuItemTagItalic" title='WebMenuItemTagItalic' data-ref="WebMenuItemTagItalic" data-ref-filename="WebMenuItemTagItalic">WebMenuItemTagItalic</dfn>,</td></tr>
+<tr><th id="67">67</th><td>    <dfn class="enum" id="WebMenuItemTagUnderline" title='WebMenuItemTagUnderline' data-ref="WebMenuItemTagUnderline" data-ref-filename="WebMenuItemTagUnderline">WebMenuItemTagUnderline</dfn>,</td></tr>
+<tr><th id="68">68</th><td>    <dfn class="enum" id="WebMenuItemTagOutline" title='WebMenuItemTagOutline' data-ref="WebMenuItemTagOutline" data-ref-filename="WebMenuItemTagOutline">WebMenuItemTagOutline</dfn>,</td></tr>
+<tr><th id="69">69</th><td>    <dfn class="enum" id="WebMenuItemTagStyles" title='WebMenuItemTagStyles' data-ref="WebMenuItemTagStyles" data-ref-filename="WebMenuItemTagStyles">WebMenuItemTagStyles</dfn>,</td></tr>
+<tr><th id="70">70</th><td>    <dfn class="enum" id="WebMenuItemTagShowColors" title='WebMenuItemTagShowColors' data-ref="WebMenuItemTagShowColors" data-ref-filename="WebMenuItemTagShowColors">WebMenuItemTagShowColors</dfn>,</td></tr>
+<tr><th id="71">71</th><td>    <dfn class="enum" id="WebMenuItemTagSpeechMenu" title='WebMenuItemTagSpeechMenu' data-ref="WebMenuItemTagSpeechMenu" data-ref-filename="WebMenuItemTagSpeechMenu">WebMenuItemTagSpeechMenu</dfn>,</td></tr>
+<tr><th id="72">72</th><td>    <dfn class="enum" id="WebMenuItemTagStartSpeaking" title='WebMenuItemTagStartSpeaking' data-ref="WebMenuItemTagStartSpeaking" data-ref-filename="WebMenuItemTagStartSpeaking">WebMenuItemTagStartSpeaking</dfn>,</td></tr>
+<tr><th id="73">73</th><td>    <dfn class="enum" id="WebMenuItemTagStopSpeaking" title='WebMenuItemTagStopSpeaking' data-ref="WebMenuItemTagStopSpeaking" data-ref-filename="WebMenuItemTagStopSpeaking">WebMenuItemTagStopSpeaking</dfn>,</td></tr>
+<tr><th id="74">74</th><td>    <dfn class="enum" id="WebMenuItemTagWritingDirectionMenu" title='WebMenuItemTagWritingDirectionMenu' data-ref="WebMenuItemTagWritingDirectionMenu" data-ref-filename="WebMenuItemTagWritingDirectionMenu">WebMenuItemTagWritingDirectionMenu</dfn>,</td></tr>
+<tr><th id="75">75</th><td>    <dfn class="enum" id="WebMenuItemTagDefaultDirection" title='WebMenuItemTagDefaultDirection' data-ref="WebMenuItemTagDefaultDirection" data-ref-filename="WebMenuItemTagDefaultDirection">WebMenuItemTagDefaultDirection</dfn>,</td></tr>
+<tr><th id="76">76</th><td>    <dfn class="enum" id="WebMenuItemTagLeftToRight" title='WebMenuItemTagLeftToRight' data-ref="WebMenuItemTagLeftToRight" data-ref-filename="WebMenuItemTagLeftToRight">WebMenuItemTagLeftToRight</dfn>,</td></tr>
+<tr><th id="77">77</th><td>    <dfn class="enum" id="WebMenuItemTagRightToLeft" title='WebMenuItemTagRightToLeft' data-ref="WebMenuItemTagRightToLeft" data-ref-filename="WebMenuItemTagRightToLeft">WebMenuItemTagRightToLeft</dfn>,</td></tr>
+<tr><th id="78">78</th><td>    <dfn class="enum" id="WebMenuItemPDFSinglePageScrolling" title='WebMenuItemPDFSinglePageScrolling' data-ref="WebMenuItemPDFSinglePageScrolling" data-ref-filename="WebMenuItemPDFSinglePageScrolling">WebMenuItemPDFSinglePageScrolling</dfn>,</td></tr>
+<tr><th id="79">79</th><td>    <dfn class="enum" id="WebMenuItemPDFFacingPagesScrolling" title='WebMenuItemPDFFacingPagesScrolling' data-ref="WebMenuItemPDFFacingPagesScrolling" data-ref-filename="WebMenuItemPDFFacingPagesScrolling">WebMenuItemPDFFacingPagesScrolling</dfn>,</td></tr>
+<tr><th id="80">80</th><td>    <dfn class="enum" id="WebMenuItemTagInspectElement" title='WebMenuItemTagInspectElement' data-ref="WebMenuItemTagInspectElement" data-ref-filename="WebMenuItemTagInspectElement">WebMenuItemTagInspectElement</dfn>,</td></tr>
+<tr><th id="81">81</th><td>    <dfn class="enum" id="WebMenuItemTagTextDirectionMenu" title='WebMenuItemTagTextDirectionMenu' data-ref="WebMenuItemTagTextDirectionMenu" data-ref-filename="WebMenuItemTagTextDirectionMenu">WebMenuItemTagTextDirectionMenu</dfn>,</td></tr>
+<tr><th id="82">82</th><td>    <dfn class="enum" id="WebMenuItemTagTextDirectionDefault" title='WebMenuItemTagTextDirectionDefault' data-ref="WebMenuItemTagTextDirectionDefault" data-ref-filename="WebMenuItemTagTextDirectionDefault">WebMenuItemTagTextDirectionDefault</dfn>,</td></tr>
+<tr><th id="83">83</th><td>    <dfn class="enum" id="WebMenuItemTagTextDirectionLeftToRight" title='WebMenuItemTagTextDirectionLeftToRight' data-ref="WebMenuItemTagTextDirectionLeftToRight" data-ref-filename="WebMenuItemTagTextDirectionLeftToRight">WebMenuItemTagTextDirectionLeftToRight</dfn>,</td></tr>
+<tr><th id="84">84</th><td>    <dfn class="enum" id="WebMenuItemTagTextDirectionRightToLeft" title='WebMenuItemTagTextDirectionRightToLeft' data-ref="WebMenuItemTagTextDirectionRightToLeft" data-ref-filename="WebMenuItemTagTextDirectionRightToLeft">WebMenuItemTagTextDirectionRightToLeft</dfn>,</td></tr>
+<tr><th id="85">85</th><td>    <dfn class="enum" id="WebMenuItemTagCorrectSpellingAutomatically" title='WebMenuItemTagCorrectSpellingAutomatically' data-ref="WebMenuItemTagCorrectSpellingAutomatically" data-ref-filename="WebMenuItemTagCorrectSpellingAutomatically">WebMenuItemTagCorrectSpellingAutomatically</dfn>,</td></tr>
+<tr><th id="86">86</th><td>    <dfn class="enum" id="WebMenuItemTagSubstitutionsMenu" title='WebMenuItemTagSubstitutionsMenu' data-ref="WebMenuItemTagSubstitutionsMenu" data-ref-filename="WebMenuItemTagSubstitutionsMenu">WebMenuItemTagSubstitutionsMenu</dfn>,</td></tr>
+<tr><th id="87">87</th><td>    <dfn class="enum" id="WebMenuItemTagShowSubstitutions" title='WebMenuItemTagShowSubstitutions' data-ref="WebMenuItemTagShowSubstitutions" data-ref-filename="WebMenuItemTagShowSubstitutions">WebMenuItemTagShowSubstitutions</dfn>,</td></tr>
+<tr><th id="88">88</th><td>    <dfn class="enum" id="WebMenuItemTagSmartCopyPaste" title='WebMenuItemTagSmartCopyPaste' data-ref="WebMenuItemTagSmartCopyPaste" data-ref-filename="WebMenuItemTagSmartCopyPaste">WebMenuItemTagSmartCopyPaste</dfn>,</td></tr>
+<tr><th id="89">89</th><td>    <dfn class="enum" id="WebMenuItemTagSmartQuotes" title='WebMenuItemTagSmartQuotes' data-ref="WebMenuItemTagSmartQuotes" data-ref-filename="WebMenuItemTagSmartQuotes">WebMenuItemTagSmartQuotes</dfn>,</td></tr>
+<tr><th id="90">90</th><td>    <dfn class="enum" id="WebMenuItemTagSmartDashes" title='WebMenuItemTagSmartDashes' data-ref="WebMenuItemTagSmartDashes" data-ref-filename="WebMenuItemTagSmartDashes">WebMenuItemTagSmartDashes</dfn>,</td></tr>
+<tr><th id="91">91</th><td>    <dfn class="enum" id="WebMenuItemTagSmartLinks" title='WebMenuItemTagSmartLinks' data-ref="WebMenuItemTagSmartLinks" data-ref-filename="WebMenuItemTagSmartLinks">WebMenuItemTagSmartLinks</dfn>,</td></tr>
+<tr><th id="92">92</th><td>    <dfn class="enum" id="WebMenuItemTagTextReplacement" title='WebMenuItemTagTextReplacement' data-ref="WebMenuItemTagTextReplacement" data-ref-filename="WebMenuItemTagTextReplacement">WebMenuItemTagTextReplacement</dfn>,</td></tr>
+<tr><th id="93">93</th><td>    <dfn class="enum" id="WebMenuItemTagTransformationsMenu" title='WebMenuItemTagTransformationsMenu' data-ref="WebMenuItemTagTransformationsMenu" data-ref-filename="WebMenuItemTagTransformationsMenu">WebMenuItemTagTransformationsMenu</dfn>,</td></tr>
+<tr><th id="94">94</th><td>    <dfn class="enum" id="WebMenuItemTagMakeUpperCase" title='WebMenuItemTagMakeUpperCase' data-ref="WebMenuItemTagMakeUpperCase" data-ref-filename="WebMenuItemTagMakeUpperCase">WebMenuItemTagMakeUpperCase</dfn>,</td></tr>
+<tr><th id="95">95</th><td>    <dfn class="enum" id="WebMenuItemTagMakeLowerCase" title='WebMenuItemTagMakeLowerCase' data-ref="WebMenuItemTagMakeLowerCase" data-ref-filename="WebMenuItemTagMakeLowerCase">WebMenuItemTagMakeLowerCase</dfn>,</td></tr>
+<tr><th id="96">96</th><td>    <dfn class="enum" id="WebMenuItemTagCapitalize" title='WebMenuItemTagCapitalize' data-ref="WebMenuItemTagCapitalize" data-ref-filename="WebMenuItemTagCapitalize">WebMenuItemTagCapitalize</dfn>,</td></tr>
+<tr><th id="97">97</th><td>    <dfn class="enum" id="WebMenuItemTagChangeBack" title='WebMenuItemTagChangeBack' data-ref="WebMenuItemTagChangeBack" data-ref-filename="WebMenuItemTagChangeBack">WebMenuItemTagChangeBack</dfn>,</td></tr>
+<tr><th id="98">98</th><td>    <dfn class="enum" id="WebMenuItemTagOpenMediaInNewWindow" title='WebMenuItemTagOpenMediaInNewWindow' data-ref="WebMenuItemTagOpenMediaInNewWindow" data-ref-filename="WebMenuItemTagOpenMediaInNewWindow">WebMenuItemTagOpenMediaInNewWindow</dfn>,</td></tr>
+<tr><th id="99">99</th><td>    <dfn class="enum" id="WebMenuItemTagDownloadMediaToDisk" title='WebMenuItemTagDownloadMediaToDisk' data-ref="WebMenuItemTagDownloadMediaToDisk" data-ref-filename="WebMenuItemTagDownloadMediaToDisk">WebMenuItemTagDownloadMediaToDisk</dfn>,</td></tr>
+<tr><th id="100">100</th><td>    <dfn class="enum" id="WebMenuItemTagCopyMediaLinkToClipboard" title='WebMenuItemTagCopyMediaLinkToClipboard' data-ref="WebMenuItemTagCopyMediaLinkToClipboard" data-ref-filename="WebMenuItemTagCopyMediaLinkToClipboard">WebMenuItemTagCopyMediaLinkToClipboard</dfn>,</td></tr>
+<tr><th id="101">101</th><td>    <dfn class="enum" id="WebMenuItemTagToggleMediaControls" title='WebMenuItemTagToggleMediaControls' data-ref="WebMenuItemTagToggleMediaControls" data-ref-filename="WebMenuItemTagToggleMediaControls">WebMenuItemTagToggleMediaControls</dfn>,</td></tr>
+<tr><th id="102">102</th><td>    <dfn class="enum" id="WebMenuItemTagToggleMediaLoop" title='WebMenuItemTagToggleMediaLoop' data-ref="WebMenuItemTagToggleMediaLoop" data-ref-filename="WebMenuItemTagToggleMediaLoop">WebMenuItemTagToggleMediaLoop</dfn>,</td></tr>
+<tr><th id="103">103</th><td>    <dfn class="enum" id="WebMenuItemTagEnterVideoFullscreen" title='WebMenuItemTagEnterVideoFullscreen' data-ref="WebMenuItemTagEnterVideoFullscreen" data-ref-filename="WebMenuItemTagEnterVideoFullscreen">WebMenuItemTagEnterVideoFullscreen</dfn>,</td></tr>
+<tr><th id="104">104</th><td>    <dfn class="enum" id="WebMenuItemTagMediaPlayPause" title='WebMenuItemTagMediaPlayPause' data-ref="WebMenuItemTagMediaPlayPause" data-ref-filename="WebMenuItemTagMediaPlayPause">WebMenuItemTagMediaPlayPause</dfn>,</td></tr>
+<tr><th id="105">105</th><td>    <dfn class="enum" id="WebMenuItemTagMediaMute" title='WebMenuItemTagMediaMute' data-ref="WebMenuItemTagMediaMute" data-ref-filename="WebMenuItemTagMediaMute">WebMenuItemTagMediaMute</dfn>,</td></tr>
+<tr><th id="106">106</th><td>    <dfn class="enum" id="WebMenuItemTagDictationAlternative" title='WebMenuItemTagDictationAlternative' data-ref="WebMenuItemTagDictationAlternative" data-ref-filename="WebMenuItemTagDictationAlternative">WebMenuItemTagDictationAlternative</dfn>,</td></tr>
+<tr><th id="107">107</th><td>    <dfn class="enum" id="WebMenuItemTagToggleVideoFullscreen" title='WebMenuItemTagToggleVideoFullscreen' data-ref="WebMenuItemTagToggleVideoFullscreen" data-ref-filename="WebMenuItemTagToggleVideoFullscreen">WebMenuItemTagToggleVideoFullscreen</dfn>,</td></tr>
+<tr><th id="108">108</th><td>    <dfn class="enum" id="WebMenuItemTagShareMenu" title='WebMenuItemTagShareMenu' data-ref="WebMenuItemTagShareMenu" data-ref-filename="WebMenuItemTagShareMenu">WebMenuItemTagShareMenu</dfn>,</td></tr>
+<tr><th id="109">109</th><td>    <dfn class="enum" id="WebMenuItemTagToggleVideoEnhancedFullscreen" title='WebMenuItemTagToggleVideoEnhancedFullscreen' data-ref="WebMenuItemTagToggleVideoEnhancedFullscreen" data-ref-filename="WebMenuItemTagToggleVideoEnhancedFullscreen">WebMenuItemTagToggleVideoEnhancedFullscreen</dfn>,</td></tr>
+<tr><th id="110">110</th><td>    <dfn class="enum" id="WebMenuItemTagAddHighlightToCurrentQuickNote" title='WebMenuItemTagAddHighlightToCurrentQuickNote' data-ref="WebMenuItemTagAddHighlightToCurrentQuickNote" data-ref-filename="WebMenuItemTagAddHighlightToCurrentQuickNote">WebMenuItemTagAddHighlightToCurrentQuickNote</dfn>,</td></tr>
+<tr><th id="111">111</th><td>    <dfn class="enum" id="WebMenuItemTagAddHighlightToNewQuickNote" title='WebMenuItemTagAddHighlightToNewQuickNote' data-ref="WebMenuItemTagAddHighlightToNewQuickNote" data-ref-filename="WebMenuItemTagAddHighlightToNewQuickNote">WebMenuItemTagAddHighlightToNewQuickNote</dfn>,</td></tr>
+<tr><th id="112">112</th><td>    <dfn class="enum" id="WebMenuItemTagRevealImage" title='WebMenuItemTagRevealImage' data-ref="WebMenuItemTagRevealImage" data-ref-filename="WebMenuItemTagRevealImage">WebMenuItemTagRevealImage</dfn>,</td></tr>
+<tr><th id="113">113</th><td>    <dfn class="enum" id="WebMenuItemTagTranslate" title='WebMenuItemTagTranslate' data-ref="WebMenuItemTagTranslate" data-ref-filename="WebMenuItemTagTranslate">WebMenuItemTagTranslate</dfn>,</td></tr>
+<tr><th id="114">114</th><td>};</td></tr>
+<tr><th id="115">115</th><td></td></tr>
+<tr><th id="116">116</th><td><i>// Deprecated; remove when there are no more clients.</i></td></tr>
+<tr><th id="117">117</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="118">118</th><td>    <dfn class="enum" id="WebActionMenuNone" title='WebActionMenuNone' data-ref="WebActionMenuNone" data-ref-filename="WebActionMenuNone">WebActionMenuNone</dfn> = <var>0</var>,</td></tr>
+<tr><th id="119">119</th><td>    <dfn class="enum" id="WebActionMenuLink" title='WebActionMenuLink' data-ref="WebActionMenuLink" data-ref-filename="WebActionMenuLink">WebActionMenuLink</dfn>,</td></tr>
+<tr><th id="120">120</th><td>    <dfn class="enum" id="WebActionMenuReadOnlyText" title='WebActionMenuReadOnlyText' data-ref="WebActionMenuReadOnlyText" data-ref-filename="WebActionMenuReadOnlyText">WebActionMenuReadOnlyText</dfn>,</td></tr>
+<tr><th id="121">121</th><td>    <dfn class="enum" id="WebActionMenuEditableText" title='WebActionMenuEditableText' data-ref="WebActionMenuEditableText" data-ref-filename="WebActionMenuEditableText">WebActionMenuEditableText</dfn>,</td></tr>
+<tr><th id="122">122</th><td>    <dfn class="enum" id="WebActionMenuWhitespaceInEditableArea" title='WebActionMenuWhitespaceInEditableArea' data-ref="WebActionMenuWhitespaceInEditableArea" data-ref-filename="WebActionMenuWhitespaceInEditableArea">WebActionMenuWhitespaceInEditableArea</dfn>,</td></tr>
+<tr><th id="123">123</th><td>    <dfn class="enum" id="WebActionMenuEditableTextWithSuggestions" title='WebActionMenuEditableTextWithSuggestions' data-ref="WebActionMenuEditableTextWithSuggestions" data-ref-filename="WebActionMenuEditableTextWithSuggestions">WebActionMenuEditableTextWithSuggestions</dfn>,</td></tr>
+<tr><th id="124">124</th><td>    <dfn class="enum" id="WebActionMenuImage" title='WebActionMenuImage' data-ref="WebActionMenuImage" data-ref-filename="WebActionMenuImage">WebActionMenuImage</dfn>,</td></tr>
+<tr><th id="125">125</th><td>    <dfn class="enum" id="WebActionMenuVideo" title='WebActionMenuVideo' data-ref="WebActionMenuVideo" data-ref-filename="WebActionMenuVideo">WebActionMenuVideo</dfn>,</td></tr>
+<tr><th id="126">126</th><td>    <dfn class="enum" id="WebActionMenuDataDetectedItem" title='WebActionMenuDataDetectedItem' data-ref="WebActionMenuDataDetectedItem" data-ref-filename="WebActionMenuDataDetectedItem">WebActionMenuDataDetectedItem</dfn>,</td></tr>
+<tr><th id="127">127</th><td>    <dfn class="enum" id="WebActionMenuMailtoLink" title='WebActionMenuMailtoLink' data-ref="WebActionMenuMailtoLink" data-ref-filename="WebActionMenuMailtoLink">WebActionMenuMailtoLink</dfn>,</td></tr>
+<tr><th id="128">128</th><td>    <dfn class="enum" id="WebActionMenuTelLink" title='WebActionMenuTelLink' data-ref="WebActionMenuTelLink" data-ref-filename="WebActionMenuTelLink">WebActionMenuTelLink</dfn></td></tr>
+<tr><th id="129">129</th><td>} <dfn class="typedef" id="WebActionMenuType" title='WebActionMenuType' data-type='enum WebActionMenuType' data-ref="WebActionMenuType" data-ref-filename="WebActionMenuType">WebActionMenuType</dfn>;</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="132">132</th><td>    <dfn class="enum" id="WebImmediateActionNone" title='WebImmediateActionNone' data-ref="WebImmediateActionNone" data-ref-filename="WebImmediateActionNone">WebImmediateActionNone</dfn> = <var>0</var>,</td></tr>
+<tr><th id="133">133</th><td>    <dfn class="enum" id="WebImmediateActionLinkPreview" title='WebImmediateActionLinkPreview' data-ref="WebImmediateActionLinkPreview" data-ref-filename="WebImmediateActionLinkPreview">WebImmediateActionLinkPreview</dfn>,</td></tr>
+<tr><th id="134">134</th><td>    <dfn class="enum" id="WebImmediateActionDataDetectedItem" title='WebImmediateActionDataDetectedItem' data-ref="WebImmediateActionDataDetectedItem" data-ref-filename="WebImmediateActionDataDetectedItem">WebImmediateActionDataDetectedItem</dfn>,</td></tr>
+<tr><th id="135">135</th><td>    <dfn class="enum" id="WebImmediateActionText" title='WebImmediateActionText' data-ref="WebImmediateActionText" data-ref-filename="WebImmediateActionText">WebImmediateActionText</dfn>,</td></tr>
+<tr><th id="136">136</th><td>    <dfn class="enum" id="WebImmediateActionMailtoLink" title='WebImmediateActionMailtoLink' data-ref="WebImmediateActionMailtoLink" data-ref-filename="WebImmediateActionMailtoLink">WebImmediateActionMailtoLink</dfn>,</td></tr>
+<tr><th id="137">137</th><td>    <dfn class="enum" id="WebImmediateActionTelLink" title='WebImmediateActionTelLink' data-ref="WebImmediateActionTelLink" data-ref-filename="WebImmediateActionTelLink">WebImmediateActionTelLink</dfn></td></tr>
+<tr><th id="138">138</th><td>} <dfn class="typedef" id="WebImmediateActionType" title='WebImmediateActionType' data-type='enum WebImmediateActionType' data-ref="WebImmediateActionType" data-ref-filename="WebImmediateActionType">WebImmediateActionType</dfn>;</td></tr>
+<tr><th id="139">139</th><td></td></tr>
+<tr><th id="140">140</th><td><i>// Message Sources.</i></td></tr>
+<tr><th id="141">141</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageXMLMessageSource" title='WebConsoleMessageXMLMessageSource' data-ref="WebConsoleMessageXMLMessageSource" data-ref-filename="WebConsoleMessageXMLMessageSource">WebConsoleMessageXMLMessageSource</dfn>;</td></tr>
+<tr><th id="142">142</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageJSMessageSource" title='WebConsoleMessageJSMessageSource' data-ref="WebConsoleMessageJSMessageSource" data-ref-filename="WebConsoleMessageJSMessageSource">WebConsoleMessageJSMessageSource</dfn>;</td></tr>
+<tr><th id="143">143</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageNetworkMessageSource" title='WebConsoleMessageNetworkMessageSource' data-ref="WebConsoleMessageNetworkMessageSource" data-ref-filename="WebConsoleMessageNetworkMessageSource">WebConsoleMessageNetworkMessageSource</dfn>;</td></tr>
+<tr><th id="144">144</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageConsoleAPIMessageSource" title='WebConsoleMessageConsoleAPIMessageSource' data-ref="WebConsoleMessageConsoleAPIMessageSource" data-ref-filename="WebConsoleMessageConsoleAPIMessageSource">WebConsoleMessageConsoleAPIMessageSource</dfn>;</td></tr>
+<tr><th id="145">145</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageStorageMessageSource" title='WebConsoleMessageStorageMessageSource' data-ref="WebConsoleMessageStorageMessageSource" data-ref-filename="WebConsoleMessageStorageMessageSource">WebConsoleMessageStorageMessageSource</dfn>;</td></tr>
+<tr><th id="146">146</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageAppCacheMessageSource" title='WebConsoleMessageAppCacheMessageSource' data-ref="WebConsoleMessageAppCacheMessageSource" data-ref-filename="WebConsoleMessageAppCacheMessageSource">WebConsoleMessageAppCacheMessageSource</dfn>;</td></tr>
+<tr><th id="147">147</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageRenderingMessageSource" title='WebConsoleMessageRenderingMessageSource' data-ref="WebConsoleMessageRenderingMessageSource" data-ref-filename="WebConsoleMessageRenderingMessageSource">WebConsoleMessageRenderingMessageSource</dfn>;</td></tr>
+<tr><th id="148">148</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageCSSMessageSource" title='WebConsoleMessageCSSMessageSource' data-ref="WebConsoleMessageCSSMessageSource" data-ref-filename="WebConsoleMessageCSSMessageSource">WebConsoleMessageCSSMessageSource</dfn>;</td></tr>
+<tr><th id="149">149</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageSecurityMessageSource" title='WebConsoleMessageSecurityMessageSource' data-ref="WebConsoleMessageSecurityMessageSource" data-ref-filename="WebConsoleMessageSecurityMessageSource">WebConsoleMessageSecurityMessageSource</dfn>;</td></tr>
+<tr><th id="150">150</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageContentBlockerMessageSource" title='WebConsoleMessageContentBlockerMessageSource' data-ref="WebConsoleMessageContentBlockerMessageSource" data-ref-filename="WebConsoleMessageContentBlockerMessageSource">WebConsoleMessageContentBlockerMessageSource</dfn>;</td></tr>
+<tr><th id="151">151</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageOtherMessageSource" title='WebConsoleMessageOtherMessageSource' data-ref="WebConsoleMessageOtherMessageSource" data-ref-filename="WebConsoleMessageOtherMessageSource">WebConsoleMessageOtherMessageSource</dfn>;</td></tr>
+<tr><th id="152">152</th><td></td></tr>
+<tr><th id="153">153</th><td><i>// Message Levels.</i></td></tr>
+<tr><th id="154">154</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageDebugMessageLevel" title='WebConsoleMessageDebugMessageLevel' data-ref="WebConsoleMessageDebugMessageLevel" data-ref-filename="WebConsoleMessageDebugMessageLevel">WebConsoleMessageDebugMessageLevel</dfn>;</td></tr>
+<tr><th id="155">155</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageLogMessageLevel" title='WebConsoleMessageLogMessageLevel' data-ref="WebConsoleMessageLogMessageLevel" data-ref-filename="WebConsoleMessageLogMessageLevel">WebConsoleMessageLogMessageLevel</dfn>;</td></tr>
+<tr><th id="156">156</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageInfoMessageLevel" title='WebConsoleMessageInfoMessageLevel' data-ref="WebConsoleMessageInfoMessageLevel" data-ref-filename="WebConsoleMessageInfoMessageLevel">WebConsoleMessageInfoMessageLevel</dfn>;</td></tr>
+<tr><th id="157">157</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageWarningMessageLevel" title='WebConsoleMessageWarningMessageLevel' data-ref="WebConsoleMessageWarningMessageLevel" data-ref-filename="WebConsoleMessageWarningMessageLevel">WebConsoleMessageWarningMessageLevel</dfn>;</td></tr>
+<tr><th id="158">158</th><td><b>extern</b> NSString *<dfn class="decl" id="WebConsoleMessageErrorMessageLevel" title='WebConsoleMessageErrorMessageLevel' data-ref="WebConsoleMessageErrorMessageLevel" data-ref-filename="WebConsoleMessageErrorMessageLevel">WebConsoleMessageErrorMessageLevel</dfn>;</td></tr>
+<tr><th id="159">159</th><td></td></tr>
+<tr><th id="160">160</th><td>@<b>class</b> DDActionContext;</td></tr>
+<tr><th id="161">161</th><td>@<b>class</b> DOMElement;</td></tr>
+<tr><th id="162">162</th><td>@<b>class</b> DOMNode;</td></tr>
+<tr><th id="163">163</th><td>@<b>class</b> DOMRange;</td></tr>
+<tr><th id="164">164</th><td>@<b>class</b> WebSecurityOrigin;</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td><u>#<span data-ppcond="166">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnableCocoa.h.html#236" title="1" data-ref="_M/ENABLE_FULLSCREEN_API">ENABLE_FULLSCREEN_API</a></u></td></tr>
+<tr><th id="167">167</th><td>@protocol WebKitFullScreenListener&lt;NSObject&gt;</td></tr>
+<tr><th id="168">168</th><td>- (<em>void</em>)webkitWillEnterFullScreen;</td></tr>
+<tr><th id="169">169</th><td>- (<em>void</em>)webkitDidEnterFullScreen;</td></tr>
+<tr><th id="170">170</th><td>- (<em>void</em>)webkitWillExitFullScreen;</td></tr>
+<tr><th id="171">171</th><td>- (<em>void</em>)webkitDidExitFullScreen;</td></tr>
+<tr><th id="172">172</th><td>@end</td></tr>
+<tr><th id="173">173</th><td><u>#<span data-ppcond="166">endif</span></u></td></tr>
+<tr><th id="174">174</th><td></td></tr>
+<tr><th id="175">175</th><td>@interface NSObject (WebUIDelegatePrivate)</td></tr>
+<tr><th id="176">176</th><td></td></tr>
+<tr><th id="177">177</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col2 decl" id="2webView" title='webView' data-type='WebView *' data-ref="2webView" data-ref-filename="2webView">webView</dfn> addMessageToConsole:(NSDictionary *)<dfn class="local col3 decl" id="3message" title='message' data-type='NSDictionary *' data-ref="3message" data-ref-filename="3message">message</dfn>;</td></tr>
+<tr><th id="178">178</th><td></td></tr>
+<tr><th id="179">179</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="180">180</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:addMessageToConsole:withSource:</span></i></td></tr>
+<tr><th id="181">181</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">webView</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="182">182</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">message</span> A dictionary representation of the console message.</i></td></tr>
+<tr><th id="183">183</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">source</span> Where the message came from. See WebConsoleMessageXMLMessageSource and other source types.</i></td></tr>
+<tr><th id="184">184</th><td><i class="doc">    <span class="command">@discussion</span> The dictionary contains the following keys:</i></td></tr>
+<tr><th id="185">185</th><td><i class="doc"></i></td></tr>
+<tr><th id="186">186</th><td><i class="doc">    <span class="tag">&lt;dl&gt;</span></i></td></tr>
+<tr><th id="187">187</th><td><i class="doc">        <span class="tag">&lt;dt&gt;</span>message<span class="tag">&lt;/dt&gt;</span></i></td></tr>
+<tr><th id="188">188</th><td><i class="doc">        <span class="tag">&lt;dd&gt;</span>The message itself.<span class="tag">&lt;/dd&gt;</span></i></td></tr>
+<tr><th id="189">189</th><td><i class="doc">        <span class="tag">&lt;dt&gt;</span>lineNumber<span class="tag">&lt;/dt&gt;</span></i></td></tr>
+<tr><th id="190">190</th><td><i class="doc">        <span class="tag">&lt;dd&gt;</span>If this came from a file, this is the line number in the file this message originates from.<span class="tag">&lt;/dd&gt;</span></i></td></tr>
+<tr><th id="191">191</th><td><i class="doc">        <span class="tag">&lt;dt&gt;</span>sourceURL<span class="tag">&lt;/dt&gt;</span></i></td></tr>
+<tr><th id="192">192</th><td><i class="doc">        <span class="tag">&lt;dd&gt;</span>If this came from a file, this is the URL to the file this message originates from.<span class="tag">&lt;/dd&gt;</span></i></td></tr>
+<tr><th id="193">193</th><td><i class="doc">        <span class="tag">&lt;dt&gt;</span>MessageSource<span class="tag">&lt;/dt&gt;</span></i></td></tr>
+<tr><th id="194">194</th><td><i class="doc">        <span class="tag">&lt;dd&gt;</span></i></td></tr>
+<tr><th id="195">195</th><td><i class="doc">            Where the message came from. XML, JavaScript, CSS, etc.</i></td></tr>
+<tr><th id="196">196</th><td><i class="doc">            See WebConsoleMessageXMLMessageSource and similar constants.</i></td></tr>
+<tr><th id="197">197</th><td><i class="doc">        <span class="tag">&lt;/dd&gt;</span></i></td></tr>
+<tr><th id="198">198</th><td><i class="doc">        <span class="tag">&lt;dt&gt;</span>MessageLevel<span class="tag">&lt;/dt&gt;</span></i></td></tr>
+<tr><th id="199">199</th><td><i class="doc">        <span class="tag">&lt;dd&gt;</span></i></td></tr>
+<tr><th id="200">200</th><td><i class="doc">            Severity level of the message. Debug, Log, Warning, etc.</i></td></tr>
+<tr><th id="201">201</th><td><i class="doc">            See WebConsoleMessageDebugMessageLevel and similar constants.</i></td></tr>
+<tr><th id="202">202</th><td><i class="doc">        <span class="tag">&lt;/dd&gt;</span></i></td></tr>
+<tr><th id="203">203</th><td><i class="doc">    <span class="tag">&lt;/dl&gt;</span></i></td></tr>
+<tr><th id="204">204</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="205">205</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col4 decl" id="4webView" title='webView' data-type='WebView *' data-ref="4webView" data-ref-filename="4webView">webView</dfn> addMessageToConsole:(NSDictionary *)<dfn class="local col5 decl" id="5message" title='message' data-type='NSDictionary *' data-ref="5message" data-ref-filename="5message">message</dfn> withSource:(NSString *)<dfn class="local col6 decl" id="6source" title='source' data-type='NSString *' data-ref="6source" data-ref-filename="6source">source</dfn>;</td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td>- (NSView *)webView:(WebView *)<dfn class="local col7 decl" id="7webView" title='webView' data-type='WebView *' data-ref="7webView" data-ref-filename="7webView">webView</dfn> plugInViewWithArguments:(NSDictionary *)<dfn class="local col8 decl" id="8arguments" title='arguments' data-type='NSDictionary *' data-ref="8arguments" data-ref-filename="8arguments">arguments</dfn>;</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td><u>#<span data-ppcond="209">if</span> <a class="macro" href="#34" title="1" data-ref="_M/ENABLE_DASHBOARD_SUPPORT">ENABLE_DASHBOARD_SUPPORT</a></u></td></tr>
+<tr><th id="210">210</th><td><i>// FIXME: Remove this method once it is verified no one is dependent on it.</i></td></tr>
+<tr><th id="211">211</th><td><i>// regions is an dictionary whose keys are regions label and values are arrays of WebDashboardRegions.</i></td></tr>
+<tr><th id="212">212</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col9 decl" id="9webView" title='webView' data-type='WebView *' data-ref="9webView" data-ref-filename="9webView">webView</dfn> dashboardRegionsChanged:(NSDictionary *)<dfn class="local col0 decl" id="10regions" title='regions' data-type='NSDictionary *' data-ref="10regions" data-ref-filename="10regions">regions</dfn>;</td></tr>
+<tr><th id="213">213</th><td><u>#<span data-ppcond="209">endif</span></u></td></tr>
+<tr><th id="214">214</th><td></td></tr>
+<tr><th id="215">215</th><td><u>#<span data-ppcond="215">if</span> !<span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="216">216</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col1 decl" id="11sender" title='sender' data-type='WebView *' data-ref="11sender" data-ref-filename="11sender">sender</dfn> dragImage:(NSImage *)<dfn class="local col2 decl" id="12anImage" title='anImage' data-type='NSImage *' data-ref="12anImage" data-ref-filename="12anImage">anImage</dfn> at:(<span class='typedef' title='NSPoint' data-type='CGPoint' data-ref="NSPoint" data-ref-filename="NSPoint">NSPoint</span>)<dfn class="local col3 decl" id="13viewLocation" title='viewLocation' data-type='NSPoint' data-ref="13viewLocation" data-ref-filename="13viewLocation">viewLocation</dfn> offset:(<span class='typedef' title='NSSize' data-type='CGSize' data-ref="NSSize" data-ref-filename="NSSize">NSSize</span>)<dfn class="local col4 decl" id="14initialOffset" title='initialOffset' data-type='NSSize' data-ref="14initialOffset" data-ref-filename="14initialOffset">initialOffset</dfn> event:(NSEvent *)<dfn class="local col5 decl" id="15event" title='event' data-type='NSEvent *' data-ref="15event" data-ref-filename="15event">event</dfn> pasteboard:(NSPasteboard *)<dfn class="local col6 decl" id="16pboard" title='pboard' data-type='NSPasteboard *' data-ref="16pboard" data-ref-filename="16pboard">pboard</dfn> source:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col7 decl" id="17sourceObj" title='sourceObj' data-type='id' data-ref="17sourceObj" data-ref-filename="17sourceObj">sourceObj</dfn> slideBack:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col8 decl" id="18slideFlag" title='slideFlag' data-type='BOOL' data-ref="18slideFlag" data-ref-filename="18slideFlag">slideFlag</dfn> forView:(NSView *)<dfn class="local col9 decl" id="19view" title='view' data-type='NSView *' data-ref="19view" data-ref-filename="19view">view</dfn>;</td></tr>
+<tr><th id="217">217</th><td><u>#<span data-ppcond="215">endif</span></u></td></tr>
+<tr><th id="218">218</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col0 decl" id="20sender" title='sender' data-type='WebView *' data-ref="20sender" data-ref-filename="20sender">sender</dfn> didDrawRect:(<span class='typedef' title='NSRect' data-type='CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)<dfn class="local col1 decl" id="21rect" title='rect' data-type='NSRect' data-ref="21rect" data-ref-filename="21rect">rect</dfn>;</td></tr>
+<tr><th id="219">219</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col2 decl" id="22sender" title='sender' data-type='WebView *' data-ref="22sender" data-ref-filename="22sender">sender</dfn> didScrollDocumentInFrameView:(WebFrameView *)<dfn class="local col3 decl" id="23frameView" title='frameView' data-type='WebFrameView *' data-ref="23frameView" data-ref-filename="23frameView">frameView</dfn>;</td></tr>
+<tr><th id="220">220</th><td><u>#<span data-ppcond="220">if</span> !<span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="221">221</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col4 decl" id="24sender" title='sender' data-type='WebView *' data-ref="24sender" data-ref-filename="24sender">sender</dfn> willPopupMenu:(NSMenu *)<dfn class="local col5 decl" id="25menu" title='menu' data-type='NSMenu *' data-ref="25menu" data-ref-filename="25menu">menu</dfn>;</td></tr>
+<tr><th id="222">222</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col6 decl" id="26sender" title='sender' data-type='WebView *' data-ref="26sender" data-ref-filename="26sender">sender</dfn> saveFrameView:(WebFrameView *)<dfn class="local col7 decl" id="27frameView" title='frameView' data-type='WebFrameView *' data-ref="27frameView" data-ref-filename="27frameView">frameView</dfn> showingPanel:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col8 decl" id="28showingPanel" title='showingPanel' data-type='BOOL' data-ref="28showingPanel" data-ref-filename="28showingPanel">showingPanel</dfn>;</td></tr>
+<tr><th id="223">223</th><td></td></tr>
+<tr><th id="224">224</th><td><i>// FIXME: Rename this because it's only used by immediate action code.</i></td></tr>
+<tr><th id="225">225</th><td>- (DDActionContext *)_webView:(WebView *)<dfn class="local col9 decl" id="29sender" title='sender' data-type='WebView *' data-ref="29sender" data-ref-filename="29sender">sender</dfn> actionContextForHitTestResult:(NSDictionary *)<dfn class="local col0 decl" id="30hitTestResult" title='hitTestResult' data-type='NSDictionary *' data-ref="30hitTestResult" data-ref-filename="30hitTestResult">hitTestResult</dfn> range:(DOMRange **)<dfn class="local col1 decl" id="31range" title='range' data-type='DOMRange **' data-ref="31range" data-ref-filename="31range">range</dfn>;</td></tr>
+<tr><th id="226">226</th><td></td></tr>
+<tr><th id="227">227</th><td><i>// Clients that want to maintain default behavior can return nil. To disable the immediate action entirely, return NSNull. And to</i></td></tr>
+<tr><th id="228">228</th><td><i>// do something custom, return an object that conforms to the NSImmediateActionAnimationController protocol.</i></td></tr>
+<tr><th id="229">229</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)_webView:(WebView *)<dfn class="local col2 decl" id="32sender" title='sender' data-type='WebView *' data-ref="32sender" data-ref-filename="32sender">sender</dfn> immediateActionAnimationControllerForHitTestResult:(NSDictionary *)<dfn class="local col3 decl" id="33hitTestResult" title='hitTestResult' data-type='NSDictionary *' data-ref="33hitTestResult" data-ref-filename="33hitTestResult">hitTestResult</dfn> withType:(<a class="typedef" href="#WebImmediateActionType" title='WebImmediateActionType' data-type='enum WebImmediateActionType' data-ref="WebImmediateActionType" data-ref-filename="WebImmediateActionType">WebImmediateActionType</a>)<dfn class="local col4 decl" id="34type" title='type' data-type='WebImmediateActionType' data-ref="34type" data-ref-filename="34type">type</dfn>;</td></tr>
+<tr><th id="230">230</th><td><u>#<span data-ppcond="220">endif</span></u></td></tr>
+<tr><th id="231">231</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)webView:(WebView *)<dfn class="local col5 decl" id="35sender" title='sender' data-type='WebView *' data-ref="35sender" data-ref-filename="35sender">sender</dfn> didPressMissingPluginButton:(DOMElement *)<dfn class="local col6 decl" id="36element" title='element' data-type='DOMElement *' data-ref="36element" data-ref-filename="36element">element</dfn>;</td></tr>
+<tr><th id="232">232</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="233">233</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:frame:exceededDatabaseQuotaForSecurityOrigin:database:</span></i></td></tr>
+<tr><th id="234">234</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="235">235</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The WebFrame whose JavaScript initiated this call.</i></td></tr>
+<tr><th id="236">236</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">origin</span> The security origin that needs a larger quota.</i></td></tr>
+<tr><th id="237">237</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">databaseIdentifier</span> The identifier of the database involved.</i></td></tr>
+<tr><th id="238">238</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="239">239</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col7 decl" id="37sender" title='sender' data-type='WebView *' data-ref="37sender" data-ref-filename="37sender">sender</dfn> frame:(WebFrame *)<dfn class="local col8 decl" id="38frame" title='frame' data-type='WebFrame *' data-ref="38frame" data-ref-filename="38frame">frame</dfn> exceededDatabaseQuotaForSecurityOrigin:(WebSecurityOrigin *)<dfn class="local col9 decl" id="39origin" title='origin' data-type='WebSecurityOrigin *' data-ref="39origin" data-ref-filename="39origin">origin</dfn> database:(NSString *)<dfn class="local col0 decl" id="40databaseIdentifier" title='databaseIdentifier' data-type='NSString *' data-ref="40databaseIdentifier" data-ref-filename="40databaseIdentifier">databaseIdentifier</dfn>;</td></tr>
+<tr><th id="240">240</th><td></td></tr>
+<tr><th id="241">241</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="242">242</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:exceededApplicationCacheOriginQuotaForSecurityOrigin:totalSpaceNeeded:</span></i></td></tr>
+<tr><th id="243">243</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="244">244</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">origin</span> The security origin that needs a larger quota.</i></td></tr>
+<tr><th id="245">245</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">totalSpaceNeeded</span> The amount of space needed to store the new manifest and keep all other</i></td></tr>
+<tr><th id="246">246</th><td><i class="doc">    previously stored caches for this origin.</i></td></tr>
+<tr><th id="247">247</th><td><i class="doc">    <span class="command">@discussion</span> This method is called when a page attempts to store more in the Application Cache</i></td></tr>
+<tr><th id="248">248</th><td><i class="doc">    for an origin than was allowed by the quota (or default) set for the origin. This allows the</i></td></tr>
+<tr><th id="249">249</th><td><i class="doc">    quota to be increased for the security origin.</i></td></tr>
+<tr><th id="250">250</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="251">251</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col1 decl" id="41sender" title='sender' data-type='WebView *' data-ref="41sender" data-ref-filename="41sender">sender</dfn> exceededApplicationCacheOriginQuotaForSecurityOrigin:(WebSecurityOrigin *)<dfn class="local col2 decl" id="42origin" title='origin' data-type='WebSecurityOrigin *' data-ref="42origin" data-ref-filename="42origin">origin</dfn> totalSpaceNeeded:(<span class='typedef' title='NSUInteger' data-type='unsigned long' data-ref="NSUInteger" data-ref-filename="NSUInteger">NSUInteger</span>)<dfn class="local col3 decl" id="43totalSpaceNeeded" title='totalSpaceNeeded' data-type='NSUInteger' data-ref="43totalSpaceNeeded" data-ref-filename="43totalSpaceNeeded">totalSpaceNeeded</dfn>;</td></tr>
+<tr><th id="252">252</th><td></td></tr>
+<tr><th id="253">253</th><td>- (WebView *)webView:(WebView *)<dfn class="local col4 decl" id="44sender" title='sender' data-type='WebView *' data-ref="44sender" data-ref-filename="44sender">sender</dfn> createWebViewWithRequest:(NSURLRequest *)<dfn class="local col5 decl" id="45request" title='request' data-type='NSURLRequest *' data-ref="45request" data-ref-filename="45request">request</dfn> windowFeatures:(NSDictionary *)<dfn class="local col6 decl" id="46features" title='features' data-type='NSDictionary *' data-ref="46features" data-ref-filename="46features">features</dfn>;</td></tr>
+<tr><th id="254">254</th><td></td></tr>
+<tr><th id="255">255</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="256">256</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:decidePolicyForGeolocationRequestFromOrigin:frame:listener:</span></i></td></tr>
+<tr><th id="257">257</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">webView</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="258">258</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">origin</span> The security origin that would like to use Geolocation.</i></td></tr>
+<tr><th id="259">259</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The WebFrame whose JavaScript initiated this call.</i></td></tr>
+<tr><th id="260">260</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">listener</span> The object to call when the decision is made</i></td></tr>
+<tr><th id="261">261</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="262">262</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col7 decl" id="47webView" title='webView' data-type='WebView *' data-ref="47webView" data-ref-filename="47webView">webView</dfn> decidePolicyForGeolocationRequestFromOrigin:(WebSecurityOrigin *)<dfn class="local col8 decl" id="48origin" title='origin' data-type='WebSecurityOrigin *' data-ref="48origin" data-ref-filename="48origin">origin</dfn></td></tr>
+<tr><th id="263">263</th><td>                                                                         frame:(WebFrame *)<dfn class="local col9 decl" id="49frame" title='frame' data-type='WebFrame *' data-ref="49frame" data-ref-filename="49frame">frame</dfn></td></tr>
+<tr><th id="264">264</th><td>                                                                      listener:(id&lt;WebAllowDenyPolicyListener&gt;)<dfn class="local col0 decl" id="50listener" title='listener' data-type='id&lt;WebAllowDenyPolicyListener&gt;' data-ref="50listener" data-ref-filename="50listener">listener</dfn>;</td></tr>
+<tr><th id="265">265</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col1 decl" id="51webView" title='webView' data-type='WebView *' data-ref="51webView" data-ref-filename="51webView">webView</dfn> decidePolicyForNotificationRequestFromOrigin:(WebSecurityOrigin *)<dfn class="local col2 decl" id="52origin" title='origin' data-type='WebSecurityOrigin *' data-ref="52origin" data-ref-filename="52origin">origin</dfn> listener:(id&lt;WebAllowDenyPolicyListener&gt;)<dfn class="local col3 decl" id="53listener" title='listener' data-type='id&lt;WebAllowDenyPolicyListener&gt;' data-ref="53listener" data-ref-filename="53listener">listener</dfn>;</td></tr>
+<tr><th id="266">266</th><td></td></tr>
+<tr><th id="267">267</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col4 decl" id="54webView" title='webView' data-type='WebView *' data-ref="54webView" data-ref-filename="54webView">webView</dfn> decidePolicyForUserMediaRequestFromOrigin:(WebSecurityOrigin *)<dfn class="local col5 decl" id="55origin" title='origin' data-type='WebSecurityOrigin *' data-ref="55origin" data-ref-filename="55origin">origin</dfn> listener:(id&lt;WebAllowDenyPolicyListener&gt;)<dfn class="local col6 decl" id="56listener" title='listener' data-type='id&lt;WebAllowDenyPolicyListener&gt;' data-ref="56listener" data-ref-filename="56listener">listener</dfn>;</td></tr>
+<tr><th id="268">268</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col7 decl" id="57webView" title='webView' data-type='WebView *' data-ref="57webView" data-ref-filename="57webView">webView</dfn> checkPolicyForUserMediaRequestFromOrigin:(WebSecurityOrigin *)<dfn class="local col8 decl" id="58origin" title='origin' data-type='WebSecurityOrigin *' data-ref="58origin" data-ref-filename="58origin">origin</dfn> listener:(id&lt;WebAllowDenyPolicyListener&gt;)<dfn class="local col9 decl" id="59listener" title='listener' data-type='id&lt;WebAllowDenyPolicyListener&gt;' data-ref="59listener" data-ref-filename="59listener">listener</dfn>;</td></tr>
+<tr><th id="269">269</th><td></td></tr>
+<tr><th id="270">270</th><td><u>#<span data-ppcond="270">if</span> !<span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="271">271</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col0 decl" id="60sender" title='sender' data-type='WebView *' data-ref="60sender" data-ref-filename="60sender">sender</dfn> formDidFocusNode:(DOMNode *)<dfn class="local col1 decl" id="61node" title='node' data-type='DOMNode *' data-ref="61node" data-ref-filename="61node">node</dfn>;</td></tr>
+<tr><th id="272">272</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col2 decl" id="62sender" title='sender' data-type='WebView *' data-ref="62sender" data-ref-filename="62sender">sender</dfn> formDidBlurNode:(DOMNode *)<dfn class="local col3 decl" id="63node" title='node' data-type='DOMNode *' data-ref="63node" data-ref-filename="63node">node</dfn>;</td></tr>
+<tr><th id="273">273</th><td><u>#<span data-ppcond="270">else</span></u></td></tr>
+<tr><th id="274">274</th><td>- (<em>void</em>)webView:(WebView *)sender elementDidFocusNode:(DOMNode *)node;</td></tr>
+<tr><th id="275">275</th><td>- (<em>void</em>)webView:(WebView *)sender elementDidBlurNode:(DOMNode *)node;</td></tr>
+<tr><th id="276">276</th><td><u>#<span data-ppcond="270">endif</span></u></td></tr>
+<tr><th id="277">277</th><td></td></tr>
+<tr><th id="278">278</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="279">279</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:printFrame:</span></i></td></tr>
+<tr><th id="280">280</th><td><i class="doc">    <span class="command">@abstract</span> Informs that a WebFrame needs to be printed</i></td></tr>
+<tr><th id="281">281</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="282">282</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The WebFrame needing to be printed</i></td></tr>
+<tr><th id="283">283</th><td><i class="doc">    <span class="command">@discussion</span> This method is called when a script or user requests the page to be printed.</i></td></tr>
+<tr><th id="284">284</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="285">285</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col4 decl" id="64sender" title='sender' data-type='WebView *' data-ref="64sender" data-ref-filename="64sender">sender</dfn> printFrame:(WebFrame *)<dfn class="local col5 decl" id="65frame" title='frame' data-type='WebFrame *' data-ref="65frame" data-ref-filename="65frame">frame</dfn>;</td></tr>
+<tr><th id="286">286</th><td></td></tr>
+<tr><th id="287">287</th><td><u>#<span data-ppcond="287">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnableCocoa.h.html#236" title="1" data-ref="_M/ENABLE_FULLSCREEN_API">ENABLE_FULLSCREEN_API</a></u></td></tr>
+<tr><th id="288">288</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)webView:(WebView *)<dfn class="local col6 decl" id="66sender" title='sender' data-type='WebView *' data-ref="66sender" data-ref-filename="66sender">sender</dfn> supportsFullScreenForElement:(DOMElement *)<dfn class="local col7 decl" id="67element" title='element' data-type='DOMElement *' data-ref="67element" data-ref-filename="67element">element</dfn> withKeyboard:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col8 decl" id="68withKeyboard" title='withKeyboard' data-type='BOOL' data-ref="68withKeyboard" data-ref-filename="68withKeyboard">withKeyboard</dfn>;</td></tr>
+<tr><th id="289">289</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col9 decl" id="69sender" title='sender' data-type='WebView *' data-ref="69sender" data-ref-filename="69sender">sender</dfn> enterFullScreenForElement:(DOMElement *)<dfn class="local col0 decl" id="70element" title='element' data-type='DOMElement *' data-ref="70element" data-ref-filename="70element">element</dfn> listener:(id &lt;WebKitFullScreenListener&gt;)<dfn class="local col1 decl" id="71listener" title='listener' data-type='id&lt;WebKitFullScreenListener&gt;' data-ref="71listener" data-ref-filename="71listener">listener</dfn>;</td></tr>
+<tr><th id="290">290</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col2 decl" id="72sender" title='sender' data-type='WebView *' data-ref="72sender" data-ref-filename="72sender">sender</dfn> exitFullScreenForElement:(DOMElement *)<dfn class="local col3 decl" id="73element" title='element' data-type='DOMElement *' data-ref="73element" data-ref-filename="73element">element</dfn> listener:(id &lt;WebKitFullScreenListener&gt;)<dfn class="local col4 decl" id="74listener" title='listener' data-type='id&lt;WebKitFullScreenListener&gt;' data-ref="74listener" data-ref-filename="74listener">listener</dfn>;</td></tr>
+<tr><th id="291">291</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col5 decl" id="75sender" title='sender' data-type='WebView *' data-ref="75sender" data-ref-filename="75sender">sender</dfn> closeFullScreenWithListener:(id &lt;WebKitFullScreenListener&gt;)<dfn class="local col6 decl" id="76listener" title='listener' data-type='id&lt;WebKitFullScreenListener&gt;' data-ref="76listener" data-ref-filename="76listener">listener</dfn>;</td></tr>
+<tr><th id="292">292</th><td><u>#<span data-ppcond="287">endif</span></u></td></tr>
+<tr><th id="293">293</th><td></td></tr>
+<tr><th id="294">294</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col7 decl" id="77sender" title='sender' data-type='WebView *' data-ref="77sender" data-ref-filename="77sender">sender</dfn> didDrawFrame:(WebFrame *)<dfn class="local col8 decl" id="78frame" title='frame' data-type='WebFrame *' data-ref="78frame" data-ref-filename="78frame">frame</dfn>;</td></tr>
+<tr><th id="295">295</th><td></td></tr>
+<tr><th id="296">296</th><td><u>#<span data-ppcond="296">if</span> <span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="297">297</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="298">298</th><td><i class="doc"> <span class="command">@method</span> <span class="verb">webViewSupportedOrientationsUpdated:</span></i></td></tr>
+<tr><th id="299">299</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="300">300</th><td><i class="doc"> <span class="command">@abstract</span> Notify the client that the content has updated the orientations it claims to support.</i></td></tr>
+<tr><th id="301">301</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="302">302</th><td>- (<em>void</em>)webViewSupportedOrientationsUpdated:(WebView *)sender;</td></tr>
+<tr><th id="303">303</th><td></td></tr>
+<tr><th id="304">304</th><td>- (BOOL)webViewCanCheckGeolocationAuthorizationStatus:(WebView *)sender;</td></tr>
+<tr><th id="305">305</th><td><u>#<span data-ppcond="296">endif</span></u></td></tr>
+<tr><th id="306">306</th><td></td></tr>
+<tr><th id="307">307</th><td><u>#<span data-ppcond="307">if</span> <span class="macro" title="0" data-ref="_M/TARGET_OS_IOS">TARGET_OS_IOS</span></u></td></tr>
+<tr><th id="308">308</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="309">309</th><td><i class="doc"> <span class="command">@method</span> <span class="verb">webView:dragDestinationActionMaskForSession:</span></i></td></tr>
+<tr><th id="310">310</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="311">311</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">session</span> The drop session which this destination action mask will affect</i></td></tr>
+<tr><th id="312">312</th><td><i class="doc"> <span class="command">@abstract</span> May be implemented to adjust which destination actions are allowed upon dropping the given session.</i></td></tr>
+<tr><th id="313">313</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="314">314</th><td>- (WebDragDestinationAction)webView:(WebView *)sender dragDestinationActionMaskForSession:(id &lt;UIDropSession&gt;)session;</td></tr>
+<tr><th id="315">315</th><td><u>#<span data-ppcond="307">endif</span></u></td></tr>
+<tr><th id="316">316</th><td></td></tr>
+<tr><th id="317">317</th><td>- (NSData *)webCryptoMasterKeyForWebView:(WebView *)<dfn class="local col9 decl" id="79sender" title='sender' data-type='WebView *' data-ref="79sender" data-ref-filename="79sender">sender</dfn>;</td></tr>
+<tr><th id="318">318</th><td></td></tr>
+<tr><th id="319">319</th><td>- (NSString *)signedPublicKeyAndChallengeStringForWebView:(WebView *)<dfn class="local col0 decl" id="80sender" title='sender' data-type='WebView *' data-ref="80sender" data-ref-filename="80sender">sender</dfn>;</td></tr>
+<tr><th id="320">320</th><td></td></tr>
+<tr><th id="321">321</th><td>@end</td></tr>
+<tr><th id="322">322</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../DefaultDelegates/WebDefaultUIDelegate.mm.html'>webkit/Source/WebKitLegacy/mac/DefaultDelegates/WebDefaultUIDelegate.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

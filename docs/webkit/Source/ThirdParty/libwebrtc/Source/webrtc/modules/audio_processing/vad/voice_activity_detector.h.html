@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>voice_activity_detector.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/vad/voice_activity_detector.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::VoiceActivityDetector "/>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/vad/voice_activity_detector.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>audio_processing</a>/<a href='./'>vad</a>/<a href='voice_activity_detector.h.html'>voice_activity_detector.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/MODULES_AUDIO_PROCESSING_VAD_VOICE_ACTIVITY_DETECTOR_H_">MODULES_AUDIO_PROCESSING_VAD_VOICE_ACTIVITY_DETECTOR_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/MODULES_AUDIO_PROCESSING_VAD_VOICE_ACTIVITY_DETECTOR_H_" data-ref="_M/MODULES_AUDIO_PROCESSING_VAD_VOICE_ACTIVITY_DETECTOR_H_">MODULES_AUDIO_PROCESSING_VAD_VOICE_ACTIVITY_DETECTOR_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="18">18</th><td><u>#include &lt;vector&gt;</u></td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="../../../common_audio/resampler/include/resampler.h.html">"common_audio/resampler/include/resampler.h"</a></u></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="common.h.html">"modules/audio_processing/vad/common.h"</a></u></td></tr>
+<tr><th id="22">22</th><td><u>#include <a href="pitch_based_vad.h.html">"modules/audio_processing/vad/pitch_based_vad.h"</a></u></td></tr>
+<tr><th id="23">23</th><td><u>#include <a href="standalone_vad.h.html">"modules/audio_processing/vad/standalone_vad.h"</a></u></td></tr>
+<tr><th id="24">24</th><td><u>#include <a href="vad_audio_proc.h.html">"modules/audio_processing/vad/vad_audio_proc.h"</a></u></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><i>// A Voice Activity Detector (VAD) that combines the voice probability from the</i></td></tr>
+<tr><th id="29">29</th><td><i>// StandaloneVad and PitchBasedVad to get a more robust estimation.</i></td></tr>
+<tr><th id="30">30</th><td><b>class</b> <dfn class="type def" id="webrtc::VoiceActivityDetector" title='webrtc::VoiceActivityDetector' data-ref="webrtc::VoiceActivityDetector" data-ref-filename="webrtc..VoiceActivityDetector">VoiceActivityDetector</dfn> {</td></tr>
+<tr><th id="31">31</th><td> <b>public</b>:</td></tr>
+<tr><th id="32">32</th><td>  <dfn class="decl fn" id="_ZN6webrtc21VoiceActivityDetectorC1Ev" title='webrtc::VoiceActivityDetector::VoiceActivityDetector' data-ref="_ZN6webrtc21VoiceActivityDetectorC1Ev" data-ref-filename="_ZN6webrtc21VoiceActivityDetectorC1Ev">VoiceActivityDetector</dfn>();</td></tr>
+<tr><th id="33">33</th><td>  <dfn class="decl fn" id="_ZN6webrtc21VoiceActivityDetectorD1Ev" title='webrtc::VoiceActivityDetector::~VoiceActivityDetector' data-ref="_ZN6webrtc21VoiceActivityDetectorD1Ev" data-ref-filename="_ZN6webrtc21VoiceActivityDetectorD1Ev">~VoiceActivityDetector</dfn>();</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td>  <i>// Processes each audio chunk and estimates the voice probability.</i></td></tr>
+<tr><th id="36">36</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN6webrtc21VoiceActivityDetector12ProcessChunkEPKsmi" title='webrtc::VoiceActivityDetector::ProcessChunk' data-ref="_ZN6webrtc21VoiceActivityDetector12ProcessChunkEPKsmi" data-ref-filename="_ZN6webrtc21VoiceActivityDetector12ProcessChunkEPKsmi">ProcessChunk</dfn>(<em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col7 decl" id="27audio" title='audio' data-type='const int16_t *' data-ref="27audio" data-ref-filename="27audio">audio</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="28length" title='length' data-type='size_t' data-ref="28length" data-ref-filename="28length">length</dfn>, <em>int</em> <dfn class="local col9 decl" id="29sample_rate_hz" title='sample_rate_hz' data-type='int' data-ref="29sample_rate_hz" data-ref-filename="29sample_rate_hz">sample_rate_hz</dfn>);</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td>  <i>// Returns a vector of voice probabilities for each chunk. It can be empty for</i></td></tr>
+<tr><th id="39">39</th><td><i>  // some chunks, but it catches up afterwards returning multiple values at</i></td></tr>
+<tr><th id="40">40</th><td><i>  // once.</i></td></tr>
+<tr><th id="41">41</th><td>  <em>const</em> <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<em>double</em>&gt;&amp; <dfn class="decl def fn" id="_ZNK6webrtc21VoiceActivityDetector29chunkwise_voice_probabilitiesEv" title='webrtc::VoiceActivityDetector::chunkwise_voice_probabilities' data-ref="_ZNK6webrtc21VoiceActivityDetector29chunkwise_voice_probabilitiesEv" data-ref-filename="_ZNK6webrtc21VoiceActivityDetector29chunkwise_voice_probabilitiesEv">chunkwise_voice_probabilities</dfn>() <em>const</em> {</td></tr>
+<tr><th id="42">42</th><td>    <b>return</b> <a class="member field" href="#webrtc::VoiceActivityDetector::chunkwise_voice_probabilities_" title='webrtc::VoiceActivityDetector::chunkwise_voice_probabilities_' data-ref="webrtc::VoiceActivityDetector::chunkwise_voice_probabilities_" data-ref-filename="webrtc..VoiceActivityDetector..chunkwise_voice_probabilities_">chunkwise_voice_probabilities_</a>;</td></tr>
+<tr><th id="43">43</th><td>  }</td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td>  <i>// Returns a vector of RMS values for each chunk. It has the same length as</i></td></tr>
+<tr><th id="46">46</th><td><i>  // chunkwise_voice_probabilities().</i></td></tr>
+<tr><th id="47">47</th><td>  <em>const</em> <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<em>double</em>&gt;&amp; <dfn class="decl def fn" id="_ZNK6webrtc21VoiceActivityDetector13chunkwise_rmsEv" title='webrtc::VoiceActivityDetector::chunkwise_rms' data-ref="_ZNK6webrtc21VoiceActivityDetector13chunkwise_rmsEv" data-ref-filename="_ZNK6webrtc21VoiceActivityDetector13chunkwise_rmsEv">chunkwise_rms</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#webrtc::VoiceActivityDetector::chunkwise_rms_" title='webrtc::VoiceActivityDetector::chunkwise_rms_' data-ref="webrtc::VoiceActivityDetector::chunkwise_rms_" data-ref-filename="webrtc..VoiceActivityDetector..chunkwise_rms_">chunkwise_rms_</a>; }</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td>  <i>// Returns the last voice probability, regardless of the internal</i></td></tr>
+<tr><th id="50">50</th><td><i>  // implementation, although it has a few chunks of delay.</i></td></tr>
+<tr><th id="51">51</th><td>  <em>float</em> <dfn class="decl def fn" id="_ZNK6webrtc21VoiceActivityDetector22last_voice_probabilityEv" title='webrtc::VoiceActivityDetector::last_voice_probability' data-ref="_ZNK6webrtc21VoiceActivityDetector22last_voice_probabilityEv" data-ref-filename="_ZNK6webrtc21VoiceActivityDetector22last_voice_probabilityEv">last_voice_probability</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#webrtc::VoiceActivityDetector::last_voice_probability_" title='webrtc::VoiceActivityDetector::last_voice_probability_' data-ref="webrtc::VoiceActivityDetector::last_voice_probability_" data-ref-filename="webrtc..VoiceActivityDetector..last_voice_probability_">last_voice_probability_</a>; }</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td> <b>private</b>:</td></tr>
+<tr><th id="54">54</th><td>  <i>// TODO(aluebs): Change these to float.</i></td></tr>
+<tr><th id="55">55</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<em>double</em>&gt; <dfn class="decl field" id="webrtc::VoiceActivityDetector::chunkwise_voice_probabilities_" title='webrtc::VoiceActivityDetector::chunkwise_voice_probabilities_' data-ref="webrtc::VoiceActivityDetector::chunkwise_voice_probabilities_" data-ref-filename="webrtc..VoiceActivityDetector..chunkwise_voice_probabilities_">chunkwise_voice_probabilities_</dfn>;</td></tr>
+<tr><th id="56">56</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<em>double</em>&gt; <dfn class="decl field" id="webrtc::VoiceActivityDetector::chunkwise_rms_" title='webrtc::VoiceActivityDetector::chunkwise_rms_' data-ref="webrtc::VoiceActivityDetector::chunkwise_rms_" data-ref-filename="webrtc..VoiceActivityDetector..chunkwise_rms_">chunkwise_rms_</dfn>;</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>  <em>float</em> <dfn class="decl field" id="webrtc::VoiceActivityDetector::last_voice_probability_" title='webrtc::VoiceActivityDetector::last_voice_probability_' data-ref="webrtc::VoiceActivityDetector::last_voice_probability_" data-ref-filename="webrtc..VoiceActivityDetector..last_voice_probability_">last_voice_probability_</dfn>;</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td>  <a class="type" href="../../../common_audio/resampler/include/resampler.h.html#webrtc::Resampler" title='webrtc::Resampler' data-ref="webrtc::Resampler" data-ref-filename="webrtc..Resampler">Resampler</a> <dfn class="decl field" id="webrtc::VoiceActivityDetector::resampler_" title='webrtc::VoiceActivityDetector::resampler_' data-ref="webrtc::VoiceActivityDetector::resampler_" data-ref-filename="webrtc..VoiceActivityDetector..resampler_">resampler_</dfn>;</td></tr>
+<tr><th id="61">61</th><td>  <a class="type" href="vad_audio_proc.h.html#webrtc::VadAudioProc" title='webrtc::VadAudioProc' data-ref="webrtc::VadAudioProc" data-ref-filename="webrtc..VadAudioProc">VadAudioProc</a> <dfn class="decl field" id="webrtc::VoiceActivityDetector::audio_processing_" title='webrtc::VoiceActivityDetector::audio_processing_' data-ref="webrtc::VoiceActivityDetector::audio_processing_" data-ref-filename="webrtc..VoiceActivityDetector..audio_processing_">audio_processing_</dfn>;</td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="standalone_vad.h.html#webrtc::StandaloneVad" title='webrtc::StandaloneVad' data-ref="webrtc::StandaloneVad" data-ref-filename="webrtc..StandaloneVad">StandaloneVad</a>&gt; <dfn class="decl field" id="webrtc::VoiceActivityDetector::standalone_vad_" title='webrtc::VoiceActivityDetector::standalone_vad_' data-ref="webrtc::VoiceActivityDetector::standalone_vad_" data-ref-filename="webrtc..VoiceActivityDetector..standalone_vad_">standalone_vad_</dfn>;</td></tr>
+<tr><th id="64">64</th><td>  <a class="type" href="pitch_based_vad.h.html#webrtc::PitchBasedVad" title='webrtc::PitchBasedVad' data-ref="webrtc::PitchBasedVad" data-ref-filename="webrtc..PitchBasedVad">PitchBasedVad</a> <dfn class="decl field" id="webrtc::VoiceActivityDetector::pitch_based_vad_" title='webrtc::VoiceActivityDetector::pitch_based_vad_' data-ref="webrtc::VoiceActivityDetector::pitch_based_vad_" data-ref-filename="webrtc..VoiceActivityDetector..pitch_based_vad_">pitch_based_vad_</dfn>;</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td>  <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="decl field" id="webrtc::VoiceActivityDetector::resampled_" title='webrtc::VoiceActivityDetector::resampled_' data-ref="webrtc::VoiceActivityDetector::resampled_" data-ref-filename="webrtc..VoiceActivityDetector..resampled_">resampled_</dfn>[<a class="ref" href="common.h.html#kLength10Ms" title='kLength10Ms' data-ref="kLength10Ms" data-ref-filename="kLength10Ms">kLength10Ms</a>];</td></tr>
+<tr><th id="67">67</th><td>  <a class="type" href="common.h.html#AudioFeatures" title='AudioFeatures' data-ref="AudioFeatures" data-ref-filename="AudioFeatures">AudioFeatures</a> <dfn class="decl field" id="webrtc::VoiceActivityDetector::features_" title='webrtc::VoiceActivityDetector::features_' data-ref="webrtc::VoiceActivityDetector::features_" data-ref-filename="webrtc..VoiceActivityDetector..features_">features_</dfn>;</td></tr>
+<tr><th id="68">68</th><td>};</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td><u>#<span data-ppcond="11">endif</span>  // MODULES_AUDIO_PROCESSING_VAD_VOICE_ACTIVITY_DETECTOR_H_</u></td></tr>
+<tr><th id="73">73</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../agc/agc.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/agc/agc.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

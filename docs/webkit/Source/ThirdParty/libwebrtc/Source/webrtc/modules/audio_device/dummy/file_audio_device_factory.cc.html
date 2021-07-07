@@ -1,0 +1,78 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>file_audio_device_factory.cc source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_device/dummy/file_audio_device_factory.cc] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_device/dummy/file_audio_device_factory.cc'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>audio_device</a>/<a href='./'>dummy</a>/<a href='file_audio_device_factory.cc.html'>file_audio_device_factory.cc</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2014 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#include <a href="file_audio_device_factory.h.html">"modules/audio_device/dummy/file_audio_device_factory.h"</a></u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include &lt;stdio.h&gt;</u></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;cstdlib&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="file_audio_device.h.html">"modules/audio_device/dummy/file_audio_device.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../../../rtc_base/logging.h.html">"rtc_base/logging.h"</a></u></td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><em>bool</em> <a class="type" href="file_audio_device_factory.h.html#webrtc::FileAudioDeviceFactory" title='webrtc::FileAudioDeviceFactory' data-ref="webrtc::FileAudioDeviceFactory" data-ref-filename="webrtc..FileAudioDeviceFactory">FileAudioDeviceFactory</a>::<dfn class="decl def" id="webrtc::FileAudioDeviceFactory::_isConfigured" title='webrtc::FileAudioDeviceFactory::_isConfigured' data-ref="webrtc::FileAudioDeviceFactory::_isConfigured" data-ref-filename="webrtc..FileAudioDeviceFactory.._isConfigured">_isConfigured</dfn> = <b>false</b>;</td></tr>
+<tr><th id="23">23</th><td><em>char</em> <a class="type" href="file_audio_device_factory.h.html#webrtc::FileAudioDeviceFactory" title='webrtc::FileAudioDeviceFactory' data-ref="webrtc::FileAudioDeviceFactory" data-ref-filename="webrtc..FileAudioDeviceFactory">FileAudioDeviceFactory</a>::<dfn class="decl def" id="webrtc::FileAudioDeviceFactory::_inputAudioFilename" title='webrtc::FileAudioDeviceFactory::_inputAudioFilename' data-ref="webrtc::FileAudioDeviceFactory::_inputAudioFilename" data-ref-filename="webrtc..FileAudioDeviceFactory.._inputAudioFilename">_inputAudioFilename</dfn>[<a class="enum" href="file_audio_device_factory.h.html#webrtc::FileAudioDeviceFactory::MAX_FILENAME_LEN" title='webrtc::FileAudioDeviceFactory::MAX_FILENAME_LEN' data-ref="webrtc::FileAudioDeviceFactory::MAX_FILENAME_LEN" data-ref-filename="webrtc..FileAudioDeviceFactory..MAX_FILENAME_LEN">MAX_FILENAME_LEN</a>] = <q>""</q>;</td></tr>
+<tr><th id="24">24</th><td><em>char</em> <a class="type" href="file_audio_device_factory.h.html#webrtc::FileAudioDeviceFactory" title='webrtc::FileAudioDeviceFactory' data-ref="webrtc::FileAudioDeviceFactory" data-ref-filename="webrtc..FileAudioDeviceFactory">FileAudioDeviceFactory</a>::<dfn class="decl def" id="webrtc::FileAudioDeviceFactory::_outputAudioFilename" title='webrtc::FileAudioDeviceFactory::_outputAudioFilename' data-ref="webrtc::FileAudioDeviceFactory::_outputAudioFilename" data-ref-filename="webrtc..FileAudioDeviceFactory.._outputAudioFilename">_outputAudioFilename</dfn>[<a class="enum" href="file_audio_device_factory.h.html#webrtc::FileAudioDeviceFactory::MAX_FILENAME_LEN" title='webrtc::FileAudioDeviceFactory::MAX_FILENAME_LEN' data-ref="webrtc::FileAudioDeviceFactory::MAX_FILENAME_LEN" data-ref-filename="webrtc..FileAudioDeviceFactory..MAX_FILENAME_LEN">MAX_FILENAME_LEN</a>] = <q>""</q>;</td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><a class="type" href="file_audio_device.h.html#webrtc::FileAudioDevice" title='webrtc::FileAudioDevice' data-ref="webrtc::FileAudioDevice" data-ref-filename="webrtc..FileAudioDevice">FileAudioDevice</a>* <a class="type" href="file_audio_device_factory.h.html#webrtc::FileAudioDeviceFactory" title='webrtc::FileAudioDeviceFactory' data-ref="webrtc::FileAudioDeviceFactory" data-ref-filename="webrtc..FileAudioDeviceFactory">FileAudioDeviceFactory</a>::<dfn class="decl def fn" id="_ZN6webrtc22FileAudioDeviceFactory21CreateFileAudioDeviceEv" title='webrtc::FileAudioDeviceFactory::CreateFileAudioDevice' data-ref="_ZN6webrtc22FileAudioDeviceFactory21CreateFileAudioDeviceEv" data-ref-filename="_ZN6webrtc22FileAudioDeviceFactory21CreateFileAudioDeviceEv">CreateFileAudioDevice</dfn>() {</td></tr>
+<tr><th id="27">27</th><td>  <i>// Bail out here if the files haven't been set explicitly.</i></td></tr>
+<tr><th id="28">28</th><td><i>  // audio_device_impl.cc should then fall back to dummy audio.</i></td></tr>
+<tr><th id="29">29</th><td>  <b>if</b> (!<a class="member" href="file_audio_device_factory.h.html#webrtc::FileAudioDeviceFactory::_isConfigured" title='webrtc::FileAudioDeviceFactory::_isConfigured' data-ref="webrtc::FileAudioDeviceFactory::_isConfigured" data-ref-filename="webrtc..FileAudioDeviceFactory.._isConfigured">_isConfigured</a>) {</td></tr>
+<tr><th id="30">30</th><td>    <a class="macro" href="../../../rtc_base/logging.h.html#622" title="!rtc::LogMessage::IsNoop&lt;::rtc::LS_WARNING&gt;() &amp;&amp; ::rtc::webrtc_logging_impl::LogCall() &amp; ::rtc::webrtc_logging_impl::LogStreamer&lt;&gt;() &lt;&lt; ::rtc::webrtc_logging_impl::LogMetadata(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_device/dummy/file_audio_device_factory.cc&quot;, 30, ::rtc::LS_WARNING)" data-ref="_M/RTC_LOG">RTC_LOG</a>(<a class="enum" href="../../../rtc_base/logging.h.html#rtc::LS_WARNING" title='rtc::LS_WARNING' data-ref="rtc::LS_WARNING" data-ref-filename="rtc..LS_WARNING">LS_WARNING</a>)</td></tr>
+<tr><th id="31">31</th><td>        <a class="ref fn" href="../../../rtc_base/logging.h.html#_ZNK3rtc19webrtc_logging_impl11LogStreamerIJT_DpT0_EElsERKTL0__" title='rtc::webrtc_logging_impl::LogStreamer&lt;type-parameter-0-0, type-parameter-0-1...&gt;::operator&lt;&lt;' data-ref="_ZNK3rtc19webrtc_logging_impl11LogStreamerIJT_DpT0_EElsERKTL0__" data-ref-filename="_ZNK3rtc19webrtc_logging_impl11LogStreamerIJT_DpT0_EElsERKTL0__">&lt;&lt;</a> <q>"WebRTC configured with WEBRTC_DUMMY_FILE_DEVICES but "</q></td></tr>
+<tr><th id="32">32</th><td>           <q>"no device files supplied. Will fall back to dummy "</q></td></tr>
+<tr><th id="33">33</th><td>           <q>"audio."</q>;</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td>    <b>return</b> <b>nullptr</b>;</td></tr>
+<tr><th id="36">36</th><td>  }</td></tr>
+<tr><th id="37">37</th><td>  <b>return</b> <b>new</b> <a class="type" href="file_audio_device.h.html#webrtc::FileAudioDevice" title='webrtc::FileAudioDevice' data-ref="webrtc::FileAudioDevice" data-ref-filename="webrtc..FileAudioDevice">FileAudioDevice</a><a class="ref fn" href="file_audio_device.h.html#_ZN6webrtc15FileAudioDeviceC1EPKcS2_" title='webrtc::FileAudioDevice::FileAudioDevice' data-ref="_ZN6webrtc15FileAudioDeviceC1EPKcS2_" data-ref-filename="_ZN6webrtc15FileAudioDeviceC1EPKcS2_">(</a><a class="member" href="file_audio_device_factory.h.html#webrtc::FileAudioDeviceFactory::_inputAudioFilename" title='webrtc::FileAudioDeviceFactory::_inputAudioFilename' data-ref="webrtc::FileAudioDeviceFactory::_inputAudioFilename" data-ref-filename="webrtc..FileAudioDeviceFactory.._inputAudioFilename">_inputAudioFilename</a>, <a class="member" href="file_audio_device_factory.h.html#webrtc::FileAudioDeviceFactory::_outputAudioFilename" title='webrtc::FileAudioDeviceFactory::_outputAudioFilename' data-ref="webrtc::FileAudioDeviceFactory::_outputAudioFilename" data-ref-filename="webrtc..FileAudioDeviceFactory.._outputAudioFilename">_outputAudioFilename</a>);</td></tr>
+<tr><th id="38">38</th><td>}</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><em>void</em> <a class="type" href="file_audio_device_factory.h.html#webrtc::FileAudioDeviceFactory" title='webrtc::FileAudioDeviceFactory' data-ref="webrtc::FileAudioDeviceFactory" data-ref-filename="webrtc..FileAudioDeviceFactory">FileAudioDeviceFactory</a>::<dfn class="decl def fn" id="_ZN6webrtc22FileAudioDeviceFactory17SetFilenamesToUseEPKcS2_" title='webrtc::FileAudioDeviceFactory::SetFilenamesToUse' data-ref="_ZN6webrtc22FileAudioDeviceFactory17SetFilenamesToUseEPKcS2_" data-ref-filename="_ZN6webrtc22FileAudioDeviceFactory17SetFilenamesToUseEPKcS2_">SetFilenamesToUse</dfn>(</td></tr>
+<tr><th id="41">41</th><td>    <em>const</em> <em>char</em>* <dfn class="local col3 decl" id="3inputAudioFilename" title='inputAudioFilename' data-type='const char *' data-ref="3inputAudioFilename" data-ref-filename="3inputAudioFilename">inputAudioFilename</dfn>,</td></tr>
+<tr><th id="42">42</th><td>    <em>const</em> <em>char</em>* <dfn class="local col4 decl" id="4outputAudioFilename" title='outputAudioFilename' data-type='const char *' data-ref="4outputAudioFilename" data-ref-filename="4outputAudioFilename">outputAudioFilename</dfn>) {</td></tr>
+<tr><th id="43">43</th><td><u>#<span data-ppcond="43">ifdef</span> <span class="macro" data-ref="_M/WEBRTC_DUMMY_FILE_DEVICES">WEBRTC_DUMMY_FILE_DEVICES</span></u></td></tr>
+<tr><th id="44">44</th><td>  RTC_DCHECK_LT(strlen(inputAudioFilename), MAX_FILENAME_LEN);</td></tr>
+<tr><th id="45">45</th><td>  RTC_DCHECK_LT(strlen(outputAudioFilename), MAX_FILENAME_LEN);</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td>  <i>// Copy the strings since we don't know the lifetime of the input pointers.</i></td></tr>
+<tr><th id="48">48</th><td>  strncpy(_inputAudioFilename, inputAudioFilename, MAX_FILENAME_LEN);</td></tr>
+<tr><th id="49">49</th><td>  strncpy(_outputAudioFilename, outputAudioFilename, MAX_FILENAME_LEN);</td></tr>
+<tr><th id="50">50</th><td>  _isConfigured = <b>true</b>;</td></tr>
+<tr><th id="51">51</th><td><u>#<span data-ppcond="43">else</span></u></td></tr>
+<tr><th id="52">52</th><td>  <i>// Sanity: must be compiled with the right define to run this.</i></td></tr>
+<tr><th id="53">53</th><td>  <span class='ref fn' title='printf' data-ref="printf" data-ref-filename="printf">printf</span>(</td></tr>
+<tr><th id="54">54</th><td>      <q>"Trying to use dummy file devices, but is not compiled "</q></td></tr>
+<tr><th id="55">55</th><td>      <q>"with WEBRTC_DUMMY_FILE_DEVICES. Bailing out.\n"</q>);</td></tr>
+<tr><th id="56">56</th><td>  <span class="namespace">std::</span><span class='ref fn' title='exit' data-ref="exit" data-ref-filename="exit">exit</span>(<var>1</var>);</td></tr>
+<tr><th id="57">57</th><td><u>#<span data-ppcond="43">endif</span></u></td></tr>
+<tr><th id="58">58</th><td>}</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="61">61</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

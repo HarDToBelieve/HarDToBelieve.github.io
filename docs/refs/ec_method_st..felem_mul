@@ -1,0 +1,20 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/ec/internal.h' l='529' type='void (*)(const EC_GROUP *, EC_FELEM *, const EC_FELEM *, const EC_FELEM *)'/>
+<offset>896</offset>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/ec/internal.h' l='518'>// felem_mul and felem_sqr implement multiplication and squaring,
+  // respectively, so that the generic |EC_POINT_add| and |EC_POINT_dbl|
+  // implementations can work both with |EC_GFp_mont_method| and the tuned
+  // operations.
+  //
+  // TODO(davidben): This constrains |EC_FELEM|&apos;s internal representation, adds
+  // many indirect calls in the middle of the generic code, and a bunch of
+  // conversions. If p224-64.c were easily convertable to Montgomery form, we
+  // could say |EC_FELEM| is always in Montgomery form. If we routed the rest of
+  // simple.c to |EC_METHOD|, we could give |EC_POINT| an |EC_METHOD|-specific
+  // representation and say |EC_FELEM| is purely a |EC_GFp_mont_method| type.</doc>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/ec/ec.c' l='830' u='r' c='ec_point_set_affine_coordinates'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/ec/ec_montgomery.c' l='514' u='w' c='EC_GFp_mont_method_do_init'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/ec/p224-64.c' l='1170' u='w' c='EC_GFp_nistp224_method_do_init'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/ec/p256.c' l='730' u='w' c='EC_GFp_nistp256_method_do_init'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/ec/simple.c' l='198' u='r' c='ec_GFp_simple_is_on_curve'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/ec/simple.c' l='258' u='r' c='ec_GFp_simple_points_equal'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/ec/simple.c' l='295' u='r' c='ec_affine_jacobian_equal'/>

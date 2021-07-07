@@ -1,0 +1,135 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>webrtc_sdp.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/webrtc_sdp.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/webrtc_sdp.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>pc</a>/<a href='webrtc_sdp.h.html'>webrtc_sdp.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2011 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td><i></i></td></tr>
+<tr><th id="11">11</th><td><i>// This file contain functions for parsing and serializing SDP messages.</i></td></tr>
+<tr><th id="12">12</th><td><i>// Related RFC/draft including:</i></td></tr>
+<tr><th id="13">13</th><td><i>// * RFC 4566 - SDP</i></td></tr>
+<tr><th id="14">14</th><td><i>// * RFC 5245 - ICE</i></td></tr>
+<tr><th id="15">15</th><td><i>// * RFC 3388 - Grouping of Media Lines in SDP</i></td></tr>
+<tr><th id="16">16</th><td><i>// * RFC 4568 - SDP Security Descriptions for Media Streams</i></td></tr>
+<tr><th id="17">17</th><td><i>// * draft-lennox-mmusic-sdp-source-selection-02 -</i></td></tr>
+<tr><th id="18">18</th><td><i>//   Mechanisms for Media Source Selection in SDP</i></td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><u>#<span data-ppcond="20">ifndef</span> <span class="macro" data-ref="_M/PC_WEBRTC_SDP_H_">PC_WEBRTC_SDP_H_</span></u></td></tr>
+<tr><th id="21">21</th><td><u>#define <dfn class="macro" id="_M/PC_WEBRTC_SDP_H_" data-ref="_M/PC_WEBRTC_SDP_H_">PC_WEBRTC_SDP_H_</dfn></u></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><u>#include &lt;string&gt;</u></td></tr>
+<tr><th id="24">24</th><td></td></tr>
+<tr><th id="25">25</th><td><u>#include <a href="../api/candidate.h.html">"api/candidate.h"</a></u></td></tr>
+<tr><th id="26">26</th><td><u>#include <a href="../api/jsep.h.html">"api/jsep.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#include <a href="../api/jsep_ice_candidate.h.html">"api/jsep_ice_candidate.h"</a></u></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="../api/jsep_session_description.h.html">"api/jsep_session_description.h"</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="../media/base/codec.h.html">"media/base/codec.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="../rtc_base/strings/string_builder.h.html">"rtc_base/strings/string_builder.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="../rtc_base/system/rtc_export.h.html">"rtc_base/system/rtc_export.h"</a></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><b>namespace</b> <span class="namespace">cricket</span> {</td></tr>
+<tr><th id="34">34</th><td><b>class</b> <a class="type" href="../api/candidate.h.html#cricket::Candidate" title='cricket::Candidate' data-ref="cricket::Candidate" data-ref-filename="cricket..Candidate" id="cricket::Candidate">Candidate</a>;</td></tr>
+<tr><th id="35">35</th><td>}  <i>// namespace cricket</i></td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="38">38</th><td><b>class</b> <a class="type" href="../rtc_base/strings/string_builder.h.html#rtc::StringBuilder" title='rtc::StringBuilder' data-ref="rtc::StringBuilder" data-ref-filename="rtc..StringBuilder" id="rtc::StringBuilder">StringBuilder</a>;</td></tr>
+<tr><th id="39">39</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="42">42</th><td><b>class</b> <a class="type" href="../api/jsep.h.html#webrtc::IceCandidateInterface" title='webrtc::IceCandidateInterface' data-ref="webrtc::IceCandidateInterface" data-ref-filename="webrtc..IceCandidateInterface" id="webrtc::IceCandidateInterface">IceCandidateInterface</a>;</td></tr>
+<tr><th id="43">43</th><td><b>class</b> <a class="type" href="../api/jsep_ice_candidate.h.html#webrtc::JsepIceCandidate" title='webrtc::JsepIceCandidate' data-ref="webrtc::JsepIceCandidate" data-ref-filename="webrtc..JsepIceCandidate" id="webrtc::JsepIceCandidate">JsepIceCandidate</a>;</td></tr>
+<tr><th id="44">44</th><td><b>class</b> <a class="type" href="../api/jsep_session_description.h.html#webrtc::JsepSessionDescription" title='webrtc::JsepSessionDescription' data-ref="webrtc::JsepSessionDescription" data-ref-filename="webrtc..JsepSessionDescription" id="webrtc::JsepSessionDescription">JsepSessionDescription</a>;</td></tr>
+<tr><th id="45">45</th><td><b>struct</b> <a class="type" href="../api/jsep.h.html#webrtc::SdpParseError" title='webrtc::SdpParseError' data-ref="webrtc::SdpParseError" data-ref-filename="webrtc..SdpParseError" id="webrtc::SdpParseError">SdpParseError</a>;</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td><i>// Serializes the passed in JsepSessionDescription.</i></td></tr>
+<tr><th id="48">48</th><td><i>// Serialize SessionDescription including candidates if</i></td></tr>
+<tr><th id="49">49</th><td><i>// JsepSessionDescription has candidates.</i></td></tr>
+<tr><th id="50">50</th><td><i>// jdesc - The JsepSessionDescription object to be serialized.</i></td></tr>
+<tr><th id="51">51</th><td><i>// unified_plan_sdp - If set to true, include "a=msid" lines where appropriate.</i></td></tr>
+<tr><th id="52">52</th><td><i>// return - SDP string serialized from the arguments.</i></td></tr>
+<tr><th id="53">53</th><td><span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span> <dfn class="decl fn" id="_ZN6webrtc12SdpSerializeERKNS_22JsepSessionDescriptionE" title='webrtc::SdpSerialize' data-ref="_ZN6webrtc12SdpSerializeERKNS_22JsepSessionDescriptionE" data-ref-filename="_ZN6webrtc12SdpSerializeERKNS_22JsepSessionDescriptionE">SdpSerialize</dfn>(<em>const</em> <a class="type" href="../api/jsep_session_description.h.html#webrtc::JsepSessionDescription" title='webrtc::JsepSessionDescription' data-ref="webrtc::JsepSessionDescription" data-ref-filename="webrtc..JsepSessionDescription">JsepSessionDescription</a>&amp; <dfn class="local col7 decl" id="17jdesc" title='jdesc' data-type='const webrtc::JsepSessionDescription &amp;' data-ref="17jdesc" data-ref-filename="17jdesc">jdesc</dfn>);</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><i>// Serializes the passed in IceCandidateInterface to a SDP string.</i></td></tr>
+<tr><th id="56">56</th><td><i>// candidate - The candidate to be serialized.</i></td></tr>
+<tr><th id="57">57</th><td><span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span> <dfn class="decl fn" id="_ZN6webrtc21SdpSerializeCandidateERKNS_21IceCandidateInterfaceE" title='webrtc::SdpSerializeCandidate' data-ref="_ZN6webrtc21SdpSerializeCandidateERKNS_21IceCandidateInterfaceE" data-ref-filename="_ZN6webrtc21SdpSerializeCandidateERKNS_21IceCandidateInterfaceE">SdpSerializeCandidate</dfn>(<em>const</em> <a class="type" href="../api/jsep.h.html#webrtc::IceCandidateInterface" title='webrtc::IceCandidateInterface' data-ref="webrtc::IceCandidateInterface" data-ref-filename="webrtc..IceCandidateInterface">IceCandidateInterface</a>&amp; <dfn class="local col8 decl" id="18candidate" title='candidate' data-type='const webrtc::IceCandidateInterface &amp;' data-ref="18candidate" data-ref-filename="18candidate">candidate</dfn>);</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><i>// Serializes a cricket Candidate.</i></td></tr>
+<tr><th id="60">60</th><td><i>// candidate - The candidate to be serialized.</i></td></tr>
+<tr><th id="61">61</th><td><a class="macro" href="../rtc_base/system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span> <dfn class="decl fn" id="_ZN6webrtc21SdpSerializeCandidateERKN7cricket9CandidateE" title='webrtc::SdpSerializeCandidate' data-ref="_ZN6webrtc21SdpSerializeCandidateERKN7cricket9CandidateE" data-ref-filename="_ZN6webrtc21SdpSerializeCandidateERKN7cricket9CandidateE">SdpSerializeCandidate</dfn>(</td></tr>
+<tr><th id="62">62</th><td>    <em>const</em> <span class="namespace">cricket::</span><a class="type" href="../api/candidate.h.html#cricket::Candidate" title='cricket::Candidate' data-ref="cricket::Candidate" data-ref-filename="cricket..Candidate">Candidate</a>&amp; <dfn class="local col9 decl" id="19candidate" title='candidate' data-type='const cricket::Candidate &amp;' data-ref="19candidate" data-ref-filename="19candidate">candidate</dfn>);</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td><i>// Deserializes the passed in SDP string to a JsepSessionDescription.</i></td></tr>
+<tr><th id="65">65</th><td><i>// message - SDP string to be Deserialized.</i></td></tr>
+<tr><th id="66">66</th><td><i>// jdesc - The JsepSessionDescription deserialized from the SDP string.</i></td></tr>
+<tr><th id="67">67</th><td><i>// error - The detail error information when parsing fails.</i></td></tr>
+<tr><th id="68">68</th><td><i>// return - true on success, false on failure.</i></td></tr>
+<tr><th id="69">69</th><td><em>bool</em> <dfn class="decl fn" id="_ZN6webrtc14SdpDeserializeERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEEPNS_22JsepSessionDescriptionEPNS_13SdpParseErrorE" title='webrtc::SdpDeserialize' data-ref="_ZN6webrtc14SdpDeserializeERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEEPNS_22JsepSessionDescriptionEPNS_13SdpParseErrorE" data-ref-filename="_ZN6webrtc14SdpDeserializeERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEEPNS_22JsepSessionDescriptionEPNS_13SdpParseErrorE">SdpDeserialize</dfn>(<em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col0 decl" id="20message" title='message' data-type='const std::string &amp;' data-ref="20message" data-ref-filename="20message">message</dfn>,</td></tr>
+<tr><th id="70">70</th><td>                    <a class="type" href="../api/jsep_session_description.h.html#webrtc::JsepSessionDescription" title='webrtc::JsepSessionDescription' data-ref="webrtc::JsepSessionDescription" data-ref-filename="webrtc..JsepSessionDescription">JsepSessionDescription</a>* <dfn class="local col1 decl" id="21jdesc" title='jdesc' data-type='webrtc::JsepSessionDescription *' data-ref="21jdesc" data-ref-filename="21jdesc">jdesc</dfn>,</td></tr>
+<tr><th id="71">71</th><td>                    <a class="type" href="../api/jsep.h.html#webrtc::SdpParseError" title='webrtc::SdpParseError' data-ref="webrtc::SdpParseError" data-ref-filename="webrtc..SdpParseError">SdpParseError</a>* <dfn class="local col2 decl" id="22error" title='error' data-type='webrtc::SdpParseError *' data-ref="22error" data-ref-filename="22error">error</dfn>);</td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td><i>// Deserializes the passed in SDP string to one JsepIceCandidate.</i></td></tr>
+<tr><th id="74">74</th><td><i>// The first line must be a=candidate line and only the first line will be</i></td></tr>
+<tr><th id="75">75</th><td><i>// parsed.</i></td></tr>
+<tr><th id="76">76</th><td><i>// message - The SDP string to be Deserialized.</i></td></tr>
+<tr><th id="77">77</th><td><i>// candidates - The JsepIceCandidate from the SDP string.</i></td></tr>
+<tr><th id="78">78</th><td><i>// error - The detail error information when parsing fails.</i></td></tr>
+<tr><th id="79">79</th><td><i>// return - true on success, false on failure.</i></td></tr>
+<tr><th id="80">80</th><td><a class="macro" href="../rtc_base/system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <em>bool</em> <dfn class="decl fn" id="_ZN6webrtc23SdpDeserializeCandidateERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEEPNS_16JsepIceCandidateEPNS_13SdpParseErrorE" title='webrtc::SdpDeserializeCandidate' data-ref="_ZN6webrtc23SdpDeserializeCandidateERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEEPNS_16JsepIceCandidateEPNS_13SdpParseErrorE" data-ref-filename="_ZN6webrtc23SdpDeserializeCandidateERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEEPNS_16JsepIceCandidateEPNS_13SdpParseErrorE">SdpDeserializeCandidate</dfn>(<em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col3 decl" id="23message" title='message' data-type='const std::string &amp;' data-ref="23message" data-ref-filename="23message">message</dfn>,</td></tr>
+<tr><th id="81">81</th><td>                                        <a class="type" href="../api/jsep_ice_candidate.h.html#webrtc::JsepIceCandidate" title='webrtc::JsepIceCandidate' data-ref="webrtc::JsepIceCandidate" data-ref-filename="webrtc..JsepIceCandidate">JsepIceCandidate</a>* <dfn class="local col4 decl" id="24candidate" title='candidate' data-type='webrtc::JsepIceCandidate *' data-ref="24candidate" data-ref-filename="24candidate">candidate</dfn>,</td></tr>
+<tr><th id="82">82</th><td>                                        <a class="type" href="../api/jsep.h.html#webrtc::SdpParseError" title='webrtc::SdpParseError' data-ref="webrtc::SdpParseError" data-ref-filename="webrtc..SdpParseError">SdpParseError</a>* <dfn class="local col5 decl" id="25error" title='error' data-type='webrtc::SdpParseError *' data-ref="25error" data-ref-filename="25error">error</dfn>);</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td><i>// Deserializes the passed in SDP string to a cricket Candidate.</i></td></tr>
+<tr><th id="85">85</th><td><i>// The first line must be a=candidate line and only the first line will be</i></td></tr>
+<tr><th id="86">86</th><td><i>// parsed.</i></td></tr>
+<tr><th id="87">87</th><td><i>// transport_name - The transport name (MID) of the candidate.</i></td></tr>
+<tr><th id="88">88</th><td><i>// message - The SDP string to be deserialized.</i></td></tr>
+<tr><th id="89">89</th><td><i>// candidate - The cricket Candidate from the SDP string.</i></td></tr>
+<tr><th id="90">90</th><td><i>// error - The detail error information when parsing fails.</i></td></tr>
+<tr><th id="91">91</th><td><i>// return - true on success, false on failure.</i></td></tr>
+<tr><th id="92">92</th><td><a class="macro" href="../rtc_base/system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <em>bool</em> <dfn class="decl fn" id="_ZN6webrtc23SdpDeserializeCandidateERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEES8_PN7cricket9CandidateEPNS_13SdpParseErrorE" title='webrtc::SdpDeserializeCandidate' data-ref="_ZN6webrtc23SdpDeserializeCandidateERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEES8_PN7cricket9CandidateEPNS_13SdpParseErrorE" data-ref-filename="_ZN6webrtc23SdpDeserializeCandidateERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEES8_PN7cricket9CandidateEPNS_13SdpParseErrorE">SdpDeserializeCandidate</dfn>(<em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col6 decl" id="26transport_name" title='transport_name' data-type='const std::string &amp;' data-ref="26transport_name" data-ref-filename="26transport_name">transport_name</dfn>,</td></tr>
+<tr><th id="93">93</th><td>                                        <em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col7 decl" id="27message" title='message' data-type='const std::string &amp;' data-ref="27message" data-ref-filename="27message">message</dfn>,</td></tr>
+<tr><th id="94">94</th><td>                                        <span class="namespace">cricket::</span><a class="type" href="../api/candidate.h.html#cricket::Candidate" title='cricket::Candidate' data-ref="cricket::Candidate" data-ref-filename="cricket..Candidate">Candidate</a>* <dfn class="local col8 decl" id="28candidate" title='candidate' data-type='cricket::Candidate *' data-ref="28candidate" data-ref-filename="28candidate">candidate</dfn>,</td></tr>
+<tr><th id="95">95</th><td>                                        <a class="type" href="../api/jsep.h.html#webrtc::SdpParseError" title='webrtc::SdpParseError' data-ref="webrtc::SdpParseError" data-ref-filename="webrtc..SdpParseError">SdpParseError</a>* <dfn class="local col9 decl" id="29error" title='error' data-type='webrtc::SdpParseError *' data-ref="29error" data-ref-filename="29error">error</dfn>);</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td><i>// Parses |message| according to the grammar defined in RFC 5245, Section 15.1</i></td></tr>
+<tr><th id="98">98</th><td><i>// and, if successful, stores the result in |candidate| and returns true.</i></td></tr>
+<tr><th id="99">99</th><td><i>// If unsuccessful, returns false and stores error information in |error| if</i></td></tr>
+<tr><th id="100">100</th><td><i>// |error| is not null.</i></td></tr>
+<tr><th id="101">101</th><td><i>// If |is_raw| is false, |message| is expected to be prefixed with "a=".</i></td></tr>
+<tr><th id="102">102</th><td><i>// If |is_raw| is true, no prefix is expected in |messaage|.</i></td></tr>
+<tr><th id="103">103</th><td><a class="macro" href="../rtc_base/system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <em>bool</em> <dfn class="decl fn" id="_ZN6webrtc14ParseCandidateERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEEPN7cricket9CandidateEPNS_13SdpParseErrorEb" title='webrtc::ParseCandidate' data-ref="_ZN6webrtc14ParseCandidateERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEEPN7cricket9CandidateEPNS_13SdpParseErrorEb" data-ref-filename="_ZN6webrtc14ParseCandidateERKNSt3__112basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEEPN7cricket9CandidateEPNS_13SdpParseErrorEb">ParseCandidate</dfn>(<em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col0 decl" id="30message" title='message' data-type='const std::string &amp;' data-ref="30message" data-ref-filename="30message">message</dfn>,</td></tr>
+<tr><th id="104">104</th><td>                               <span class="namespace">cricket::</span><a class="type" href="../api/candidate.h.html#cricket::Candidate" title='cricket::Candidate' data-ref="cricket::Candidate" data-ref-filename="cricket..Candidate">Candidate</a>* <dfn class="local col1 decl" id="31candidate" title='candidate' data-type='cricket::Candidate *' data-ref="31candidate" data-ref-filename="31candidate">candidate</dfn>,</td></tr>
+<tr><th id="105">105</th><td>                               <a class="type" href="../api/jsep.h.html#webrtc::SdpParseError" title='webrtc::SdpParseError' data-ref="webrtc::SdpParseError" data-ref-filename="webrtc..SdpParseError">SdpParseError</a>* <dfn class="local col2 decl" id="32error" title='error' data-type='webrtc::SdpParseError *' data-ref="32error" data-ref-filename="32error">error</dfn>,</td></tr>
+<tr><th id="106">106</th><td>                               <em>bool</em> <dfn class="local col3 decl" id="33is_raw" title='is_raw' data-type='bool' data-ref="33is_raw" data-ref-filename="33is_raw">is_raw</dfn>);</td></tr>
+<tr><th id="107">107</th><td></td></tr>
+<tr><th id="108">108</th><td><i>// Generates an FMTP line based on |parameters|. Please note that some</i></td></tr>
+<tr><th id="109">109</th><td><i>// parameters are not considered to be part of the FMTP line, see the function</i></td></tr>
+<tr><th id="110">110</th><td><i>// IsFmtpParam(). Returns true if the set of FMTP parameters is nonempty, false</i></td></tr>
+<tr><th id="111">111</th><td><i>// otherwise.</i></td></tr>
+<tr><th id="112">112</th><td><em>bool</em> <dfn class="decl fn" id="_ZN6webrtc19WriteFmtpParametersERKNSt3__13mapINS0_12basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEES7_NS0_4lessIS7_EENS5_INS0_4pairIKS7_S7_EEE16749874" title='webrtc::WriteFmtpParameters' data-ref="_ZN6webrtc19WriteFmtpParametersERKNSt3__13mapINS0_12basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEES7_NS0_4lessIS7_EENS5_INS0_4pairIKS7_S7_EEE16749874" data-ref-filename="_ZN6webrtc19WriteFmtpParametersERKNSt3__13mapINS0_12basic_stringIcNS0_11char_traitsIcEENS0_9allocatorIcEEEES7_NS0_4lessIS7_EENS5_INS0_4pairIKS7_S7_EEE16749874">WriteFmtpParameters</dfn>(<em>const</em> <span class="namespace">cricket::</span><a class="typedef" href="../media/base/codec.h.html#cricket::CodecParameterMap" title='cricket::CodecParameterMap' data-type='std::map&lt;std::string, std::string&gt;' data-ref="cricket::CodecParameterMap" data-ref-filename="cricket..CodecParameterMap">CodecParameterMap</a>&amp; <dfn class="local col4 decl" id="34parameters" title='parameters' data-type='const cricket::CodecParameterMap &amp;' data-ref="34parameters" data-ref-filename="34parameters">parameters</dfn>,</td></tr>
+<tr><th id="113">113</th><td>                         <span class="namespace">rtc::</span><a class="type" href="../rtc_base/strings/string_builder.h.html#rtc::StringBuilder" title='rtc::StringBuilder' data-ref="rtc::StringBuilder" data-ref-filename="rtc..StringBuilder">StringBuilder</a>* <dfn class="local col5 decl" id="35os" title='os' data-type='rtc::StringBuilder *' data-ref="35os" data-ref-filename="35os">os</dfn>);</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="116">116</th><td></td></tr>
+<tr><th id="117">117</th><td><u>#<span data-ppcond="20">endif</span>  // PC_WEBRTC_SDP_H_</u></td></tr>
+<tr><th id="118">118</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='jsep_ice_candidate.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/jsep_ice_candidate.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

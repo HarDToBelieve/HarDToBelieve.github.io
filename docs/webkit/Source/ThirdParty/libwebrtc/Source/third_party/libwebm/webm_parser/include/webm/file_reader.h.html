@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>file_reader.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libwebm/webm_parser/include/webm/file_reader.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webm::FileReader "/>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libwebm/webm_parser/include/webm/file_reader.h'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>third_party</a>/<a href='../../..'>libwebm</a>/<a href='../..'>webm_parser</a>/<a href='..'>include</a>/<a href='./'>webm</a>/<a href='file_reader.h.html'>file_reader.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>// Copyright (c) 2016 The WebM project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="2">2</th><td><i>//</i></td></tr>
+<tr><th id="3">3</th><td><i>// Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="4">4</th><td><i>// that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="5">5</th><td><i>// tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="6">6</th><td><i>// in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="7">7</th><td><i>// be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="8">8</th><td><u>#<span data-ppcond="8">ifndef</span> <span class="macro" data-ref="_M/INCLUDE_WEBM_FILE_READER_H_">INCLUDE_WEBM_FILE_READER_H_</span></u></td></tr>
+<tr><th id="9">9</th><td><u>#define <dfn class="macro" id="_M/INCLUDE_WEBM_FILE_READER_H_" data-ref="_M/INCLUDE_WEBM_FILE_READER_H_">INCLUDE_WEBM_FILE_READER_H_</dfn></u></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#include &lt;cstdint&gt;</u></td></tr>
+<tr><th id="12">12</th><td><u>#include &lt;cstdio&gt;</u></td></tr>
+<tr><th id="13">13</th><td><u>#include &lt;cstdlib&gt;</u></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="reader.h.html">"./reader.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="status.h.html">"./status.h"</a></u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="20">20</th><td><i class="doc"><span class="command"> \file</span></i></td></tr>
+<tr><th id="21">21</th><td><i class="doc"> A `Reader` implementation that reads from a `FILE*`.</i></td></tr>
+<tr><th id="22">22</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><b>namespace</b> <span class="namespace">webm</span> {</td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="27">27</th><td><i class="doc"> A `Reader` implementation that can read from `FILE*` resources.</i></td></tr>
+<tr><th id="28">28</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="29">29</th><td><b>class</b> <dfn class="type def" id="webm::FileReader" title='webm::FileReader' data-ref="webm::FileReader" data-ref-filename="webm..FileReader">FileReader</dfn> : <b>public</b> <a class="type" href="reader.h.html#webm::Reader" title='webm::Reader' data-ref="webm::Reader" data-ref-filename="webm..Reader">Reader</a> {</td></tr>
+<tr><th id="30">30</th><td> <b>public</b>:</td></tr>
+<tr><th id="31">31</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="32">32</th><td><i class="doc">   Constructs a new, empty reader.</i></td></tr>
+<tr><th id="33">33</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="34">34</th><td>  <dfn class="decl def fn" id="_ZN4webm10FileReaderC1Ev" title='webm::FileReader::FileReader' data-ref="_ZN4webm10FileReaderC1Ev" data-ref-filename="_ZN4webm10FileReaderC1Ev">FileReader</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="37">37</th><td><i class="doc">   Constructs a new reader, using the provided file as the data source.</i></td></tr>
+<tr><th id="38">38</th><td><i class="doc"></i></td></tr>
+<tr><th id="39">39</th><td><i class="doc">   Ownership of the file is taken, and `std::fclose()` will be called when the</i></td></tr>
+<tr><th id="40">40</th><td><i class="doc">   object is destroyed.</i></td></tr>
+<tr><th id="41">41</th><td><i class="doc"></i></td></tr>
+<tr><th id="42">42</th><td><i class="doc">   <span class="command">\param</span> <span class="arg">file</span> The file to use as a data source. Must not be null. The file will</i></td></tr>
+<tr><th id="43">43</th><td><i class="doc">   be closed (via `std::fclose()`) when the `FileReader`'s destructor runs.</i></td></tr>
+<tr><th id="44">44</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="45">45</th><td>  <b>explicit</b> <a class="decl fn" href="../../src/file_reader.cc.html#_ZN4webm10FileReaderC1EP7__sFILE" title='webm::FileReader::FileReader' data-ref="_ZN4webm10FileReaderC1EP7__sFILE" data-ref-filename="_ZN4webm10FileReaderC1EP7__sFILE" id="_ZN4webm10FileReaderC1EP7__sFILE">FileReader</a>(<span class='typedef' title='FILE' data-type='struct __sFILE' data-ref="FILE" data-ref-filename="FILE">FILE</span>* <dfn class="local col1 decl" id="1file" title='file' data-type='FILE *' data-ref="1file" data-ref-filename="1file">file</dfn>);</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="48">48</th><td><i class="doc">   Constructs a new reader by moving the provided reader into the new reader.</i></td></tr>
+<tr><th id="49">49</th><td><i class="doc"></i></td></tr>
+<tr><th id="50">50</th><td><i class="doc">   <span class="command">\param</span> <span class="arg">other</span> The source reader to move. After moving, it will be reset to an</i></td></tr>
+<tr><th id="51">51</th><td><i class="doc">   empty stream.</i></td></tr>
+<tr><th id="52">52</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="53">53</th><td>  <a class="decl fn" href="../../src/file_reader.cc.html#_ZN4webm10FileReaderC1EOS0_" title='webm::FileReader::FileReader' data-ref="_ZN4webm10FileReaderC1EOS0_" data-ref-filename="_ZN4webm10FileReaderC1EOS0_" id="_ZN4webm10FileReaderC1EOS0_">FileReader</a>(<a class="type" href="#webm::FileReader" title='webm::FileReader' data-ref="webm::FileReader" data-ref-filename="webm..FileReader">FileReader</a>&amp;&amp; <dfn class="local col2 decl" id="2other" title='other' data-type='webm::FileReader &amp;&amp;' data-ref="2other" data-ref-filename="2other">other</dfn>);</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="56">56</th><td><i class="doc">   Moves the provided reader into this reader.</i></td></tr>
+<tr><th id="57">57</th><td><i class="doc"></i></td></tr>
+<tr><th id="58">58</th><td><i class="doc">   <span class="command">\param</span> <span class="arg">other</span> The source reader to move. After moving, it will be reset to an</i></td></tr>
+<tr><th id="59">59</th><td><i class="doc">   empty stream. May be equal to `*this`, in which case this is a no-op.</i></td></tr>
+<tr><th id="60">60</th><td><i class="doc">   <span class="command">\return</span> `*this`.</i></td></tr>
+<tr><th id="61">61</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="62">62</th><td>  <a class="type" href="#webm::FileReader" title='webm::FileReader' data-ref="webm::FileReader" data-ref-filename="webm..FileReader">FileReader</a>&amp; <a class="decl fn" href="../../src/file_reader.cc.html#_ZN4webm10FileReaderaSEOS0_" title='webm::FileReader::operator=' data-ref="_ZN4webm10FileReaderaSEOS0_" data-ref-filename="_ZN4webm10FileReaderaSEOS0_" id="_ZN4webm10FileReaderaSEOS0_"><b>operator</b>=</a>(<a class="type" href="#webm::FileReader" title='webm::FileReader' data-ref="webm::FileReader" data-ref-filename="webm..FileReader">FileReader</a>&amp;&amp; <dfn class="local col3 decl" id="3other" title='other' data-type='webm::FileReader &amp;&amp;' data-ref="3other" data-ref-filename="3other">other</dfn>);</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td>  <a class="type" href="status.h.html#webm::Status" title='webm::Status' data-ref="webm::Status" data-ref-filename="webm..Status">Status</a> <a class="virtual decl fn" href="../../src/file_reader.cc.html#_ZN4webm10FileReader4ReadEmPhPy" title='webm::FileReader::Read' data-ref="_ZN4webm10FileReader4ReadEmPhPy" data-ref-filename="_ZN4webm10FileReader4ReadEmPhPy" id="_ZN4webm10FileReader4ReadEmPhPy">Read</a>(<span class="namespace">std::</span><span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="4num_to_read" title='num_to_read' data-type='std::size_t' data-ref="4num_to_read" data-ref-filename="4num_to_read">num_to_read</dfn>, <span class="namespace">std::</span><span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col5 decl" id="5buffer" title='buffer' data-type='std::uint8_t *' data-ref="5buffer" data-ref-filename="5buffer">buffer</dfn>,</td></tr>
+<tr><th id="65">65</th><td>              <span class="namespace">std::</span><span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span>* <dfn class="local col6 decl" id="6num_actually_read" title='num_actually_read' data-type='std::uint64_t *' data-ref="6num_actually_read" data-ref-filename="6num_actually_read">num_actually_read</dfn>) override;</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td>  <a class="type" href="status.h.html#webm::Status" title='webm::Status' data-ref="webm::Status" data-ref-filename="webm..Status">Status</a> <a class="virtual decl fn" href="../../src/file_reader.cc.html#_ZN4webm10FileReader4SkipEyPy" title='webm::FileReader::Skip' data-ref="_ZN4webm10FileReader4SkipEyPy" data-ref-filename="_ZN4webm10FileReader4SkipEyPy" id="_ZN4webm10FileReader4SkipEyPy">Skip</a>(<span class="namespace">std::</span><span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col7 decl" id="7num_to_skip" title='num_to_skip' data-type='std::uint64_t' data-ref="7num_to_skip" data-ref-filename="7num_to_skip">num_to_skip</dfn>,</td></tr>
+<tr><th id="68">68</th><td>              <span class="namespace">std::</span><span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span>* <dfn class="local col8 decl" id="8num_actually_skipped" title='num_actually_skipped' data-type='std::uint64_t *' data-ref="8num_actually_skipped" data-ref-filename="8num_actually_skipped">num_actually_skipped</dfn>) override;</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td>  <span class="namespace">std::</span><span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <a class="virtual decl fn" href="../../src/file_reader.cc.html#_ZNK4webm10FileReader8PositionEv" title='webm::FileReader::Position' data-ref="_ZNK4webm10FileReader8PositionEv" data-ref-filename="_ZNK4webm10FileReader8PositionEv" id="_ZNK4webm10FileReader8PositionEv">Position</a>() <em>const</em> override;</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td> <b>private</b>:</td></tr>
+<tr><th id="73">73</th><td>  <b>struct</b> <dfn class="type def" id="webm::FileReader::FileCloseFunctor" title='webm::FileReader::FileCloseFunctor' data-ref="webm::FileReader::FileCloseFunctor" data-ref-filename="webm..FileReader..FileCloseFunctor">FileCloseFunctor</dfn> {</td></tr>
+<tr><th id="74">74</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZNK4webm10FileReader16FileCloseFunctorclEP7__sFILE" title='webm::FileReader::FileCloseFunctor::operator()' data-ref="_ZNK4webm10FileReader16FileCloseFunctorclEP7__sFILE" data-ref-filename="_ZNK4webm10FileReader16FileCloseFunctorclEP7__sFILE"><b>operator</b>()</dfn>(<span class='typedef' title='FILE' data-type='struct __sFILE' data-ref="FILE" data-ref-filename="FILE">FILE</span>* <dfn class="local col9 decl" id="9file" title='file' data-type='FILE *' data-ref="9file" data-ref-filename="9file">file</dfn>) <em>const</em> {</td></tr>
+<tr><th id="75">75</th><td>      <b>if</b> (<a class="local col9 ref" href="#9file" title='file' data-ref="9file" data-ref-filename="9file">file</a>)</td></tr>
+<tr><th id="76">76</th><td>        <span class="namespace">std::</span><span class='ref fn' title='fclose' data-ref="fclose" data-ref-filename="fclose">fclose</span>(<a class="local col9 ref" href="#9file" title='file' data-ref="9file" data-ref-filename="9file">file</a>);</td></tr>
+<tr><th id="77">77</th><td>    }</td></tr>
+<tr><th id="78">78</th><td>  };</td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<span class='typedef' title='FILE' data-type='struct __sFILE' data-ref="FILE" data-ref-filename="FILE">FILE</span>, <a class="type" href="#webm::FileReader::FileCloseFunctor" title='webm::FileReader::FileCloseFunctor' data-ref="webm::FileReader::FileCloseFunctor" data-ref-filename="webm..FileReader..FileCloseFunctor">FileCloseFunctor</a>&gt; <dfn class="decl field" id="webm::FileReader::file_" title='webm::FileReader::file_' data-ref="webm::FileReader::file_" data-ref-filename="webm..FileReader..file_">file_</dfn>;</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td>  <i>// We can't rely on ftell() for the position (since it only returns long, and</i></td></tr>
+<tr><th id="83">83</th><td><i>  // doesn't work on things like pipes); we need to manually track the reading</i></td></tr>
+<tr><th id="84">84</th><td><i>  // position.</i></td></tr>
+<tr><th id="85">85</th><td>  <span class="namespace">std::</span><span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="decl field" id="webm::FileReader::position_" title='webm::FileReader::position_' data-ref="webm::FileReader::position_" data-ref-filename="webm..FileReader..position_">position_</dfn> = <var>0</var>;</td></tr>
+<tr><th id="86">86</th><td>};</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td>}  <i>// namespace webm</i></td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td><u>#<span data-ppcond="8">endif</span>  // INCLUDE_WEBM_FILE_READER_H_</u></td></tr>
+<tr><th id="91">91</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../src/file_reader.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/libwebm/webm_parser/src/file_reader.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

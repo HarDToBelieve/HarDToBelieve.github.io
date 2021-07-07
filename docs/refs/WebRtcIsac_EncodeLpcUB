@@ -1,0 +1,37 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/entropy_coding.h' l='139' type='int16_t WebRtcIsac_EncodeLpcUB(double * lpcCoeff, Bitstr * streamdata, double * interpolLPCCoeff, int16_t bandwidth, ISACUBSaveEncDataStruct * encData)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/entropy_coding.h' l='106'>/******************************************************************************
+ * WebRtcIsac_EncodeLpcUB()
+ * Encode LPC parameters, given as A-polynomial, of upper-band. The encoding
+ * is performed in LAR domain.
+ * For the upper-band, we compute and encode LPC of some sub-frames, LPC of
+ * other sub-frames are computed by linear interpolation, in LAR domain. This
+ * function performs the interpolation and returns the LPC of all sub-frames.
+ *
+ * Inputs:
+ *  - lpcCoef               : a buffer containing A-polynomials of sub-frames
+ *                            (excluding first coefficient that is 1).
+ *  - bandwidth             : specifies if the codec is operating at 0-12 kHz
+ *                            or 0-16 kHz mode.
+ *
+ * Input/output:
+ *  - streamdata            : pointer to a structure containing the encoded
+ *                            data and the parameters needed for entropy
+ *                            coding.
+ *
+ * Output:
+ *  - interpolLPCCoeff      : Decoded and interpolated LPC (A-polynomial)
+ *                            of all sub-frames.
+ *                            If LP analysis is of order K, and there are N
+ *                            sub-frames then this is a buffer of size
+ *                            (k + 1) * N, each vector starts with the LPC gain
+ *                            of the corresponding sub-frame. The LPC gains
+ *                            are encoded and inserted after this function is
+ *                            called. The first A-coefficient which is 1 is not
+ *                            included.
+ *
+ * Return value             : 0 if encoding is successful,
+ *                           &lt;0 if failed to encode.
+ */</doc>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/encode.c' l='722' u='c' c='WebRtcIsac_EncodeUb16'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/encode.c' l='913' u='c' c='WebRtcIsac_EncodeUb12'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/entropy_coding.c' l='1179' ll='1232' type='int16_t WebRtcIsac_EncodeLpcUB(double * lpcVecs, Bitstr * streamdata, double * interpolLPCCoeff, int16_t bandwidth, ISACUBSaveEncDataStruct * encData)'/>

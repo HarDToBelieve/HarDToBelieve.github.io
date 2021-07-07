@@ -1,0 +1,48 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/include/srtp.h' l='1467' type='srtp_err_status_t srtp_unprotect_rtcp_mki(srtp_t ctx, void * srtcp_hdr, int * pkt_octet_len, unsigned int use_mki)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/include/srtp.h' l='1422'>/**
+ * @brief srtp_unprotect_rtcp() is the Secure RTCP receiver-side packet
+ * processing function.
+ *
+ * The function call srtp_unprotect_rtcp(ctx, srtp_hdr, len_ptr)
+ * verifies the Secure RTCP protection of the SRTCP packet pointed to
+ * by srtcp_hdr (which has length *len_ptr), using the SRTP session
+ * context ctx.  If srtp_err_status_ok is returned, then srtcp_hdr points
+ * to the resulting RTCP packet and *len_ptr is the number of octets
+ * in that packet; otherwise, no assumptions should be made about the
+ * value of either data elements.
+ *
+ * @warning This function assumes that the SRTCP packet is aligned on a
+ * 32-bit boundary.
+ *
+ * @param ctx is a pointer to the srtp_t which applies to the
+ * particular packet.
+ *
+ * @param srtcp_hdr is a pointer to the header of the SRTCP packet
+ * (before the call).  After the function returns, it points to the
+ * rtp packet if srtp_err_status_ok was returned; otherwise, the value of
+ * the data to which it points is undefined.
+ *
+ * @param pkt_octet_len is a pointer to the length in octets of the
+ * complete SRTCP packet (header and body) before the function call,
+ * and of the complete rtp packet after the call, if srtp_err_status_ok was
+ * returned.  Otherwise, the value of the data to which it points is
+ * undefined.
+ *
+ * @param use_mki is a boolean to tell the system if mki is being used.  If
+ * set to false then will use the first set of session keys.  If set to true
+ * will use the session keys identified by the mki_index
+ *
+ * @return
+ *    - srtp_err_status_ok          if the RTCP packet is valid.
+ *    - srtp_err_status_auth_fail   if the SRTCP packet failed the message
+ *                                  authentication check.
+ *    - srtp_err_status_replay_fail if the SRTCP packet is a replay (e.g. has
+ *                                  already been processed and accepted).
+ *    - srtp_err_status_bad_mki     if the MKI in the packet is not a known MKI
+ *                                  id
+ *    - [other]                     if there has been an error in the
+ *                                  cryptographic mechanisms.
+ *
+ */</doc>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/srtp/srtp.c' l='4090' u='c' c='srtp_unprotect_rtcp'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libsrtp/srtp/srtp.c' l='4093' ll='4407' type='srtp_err_status_t srtp_unprotect_rtcp_mki(srtp_t ctx, void * srtcp_hdr, int * pkt_octet_len, unsigned int use_mki)'/>

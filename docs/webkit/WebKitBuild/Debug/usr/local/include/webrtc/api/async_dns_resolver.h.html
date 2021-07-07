@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>async_dns_resolver.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/async_dns_resolver.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::AsyncDnsResolverFactoryInterface,webrtc::AsyncDnsResolverInterface,webrtc::AsyncDnsResolverResult "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/async_dns_resolver.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>WebKitBuild</a>/<a href='../../../../..'>Debug</a>/<a href='../../../..'>usr</a>/<a href='../../..'>local</a>/<a href='../..'>include</a>/<a href='..'>webrtc</a>/<a href='./'>api</a>/<a href='async_dns_resolver.h.html'>async_dns_resolver.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2021 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/API_ASYNC_DNS_RESOLVER_H_">API_ASYNC_DNS_RESOLVER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/API_ASYNC_DNS_RESOLVER_H_" data-ref="_M/API_ASYNC_DNS_RESOLVER_H_">API_ASYNC_DNS_RESOLVER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;functional&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../rtc_base/socket_address.h.html">"rtc_base/socket_address.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../rtc_base/system/rtc_export.h.html">"rtc_base/system/rtc_export.h"</a></u></td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><i>// This interface defines the methods to resolve a hostname asynchronously.</i></td></tr>
+<tr><th id="23">23</th><td><i>// The AsyncDnsResolverInterface class encapsulates a single name query.</i></td></tr>
+<tr><th id="24">24</th><td><i>//</i></td></tr>
+<tr><th id="25">25</th><td><i>// Usage:</i></td></tr>
+<tr><th id="26">26</th><td><i>//   std::unique_ptr&lt;AsyncDnsResolverInterface&gt; resolver =</i></td></tr>
+<tr><th id="27">27</th><td><i>//        factory-&gt;Create(address-to-be-resolved, [r = resolver.get()]() {</i></td></tr>
+<tr><th id="28">28</th><td><i>//     if (r-&gt;result.GetResolvedAddress(AF_INET, &amp;addr) {</i></td></tr>
+<tr><th id="29">29</th><td><i>//       // success</i></td></tr>
+<tr><th id="30">30</th><td><i>//     } else {</i></td></tr>
+<tr><th id="31">31</th><td><i>//       // failure</i></td></tr>
+<tr><th id="32">32</th><td><i>//       error = r-&gt;result().GetError();</i></td></tr>
+<tr><th id="33">33</th><td><i>//     }</i></td></tr>
+<tr><th id="34">34</th><td><i>//     // Release resolver.</i></td></tr>
+<tr><th id="35">35</th><td><i>//     resolver_list.erase(std::remove_if(resolver_list.begin(),</i></td></tr>
+<tr><th id="36">36</th><td><i>//     resolver_list.end(),</i></td></tr>
+<tr><th id="37">37</th><td><i>//                         [](refptr) { refptr.get() == r; });</i></td></tr>
+<tr><th id="38">38</th><td><i>//   });</i></td></tr>
+<tr><th id="39">39</th><td><i>//   resolver_list.push_back(std::move(resolver));</i></td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><b>class</b> <dfn class="type def" id="webrtc::AsyncDnsResolverResult" title='webrtc::AsyncDnsResolverResult' data-ref="webrtc::AsyncDnsResolverResult" data-ref-filename="webrtc..AsyncDnsResolverResult">AsyncDnsResolverResult</dfn> {</td></tr>
+<tr><th id="42">42</th><td> <b>public</b>:</td></tr>
+<tr><th id="43">43</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc22AsyncDnsResolverResultD1Ev" title='webrtc::AsyncDnsResolverResult::~AsyncDnsResolverResult' data-ref="_ZN6webrtc22AsyncDnsResolverResultD1Ev" data-ref-filename="_ZN6webrtc22AsyncDnsResolverResultD1Ev">~AsyncDnsResolverResult</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="44">44</th><td>  <i>// Returns true iff the address from |Start| was successfully resolved.</i></td></tr>
+<tr><th id="45">45</th><td><i>  // If the address was successfully resolved, sets |addr| to a copy of the</i></td></tr>
+<tr><th id="46">46</th><td><i>  // address from |Start| with the IP address set to the top most resolved</i></td></tr>
+<tr><th id="47">47</th><td><i>  // address of |family| (|addr| will have both hostname and the resolved ip).</i></td></tr>
+<tr><th id="48">48</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZNK6webrtc22AsyncDnsResolverResult18GetResolvedAddressEiPN3rtc13SocketAddressE" title='webrtc::AsyncDnsResolverResult::GetResolvedAddress' data-ref="_ZNK6webrtc22AsyncDnsResolverResult18GetResolvedAddressEiPN3rtc13SocketAddressE" data-ref-filename="_ZNK6webrtc22AsyncDnsResolverResult18GetResolvedAddressEiPN3rtc13SocketAddressE">GetResolvedAddress</dfn>(<em>int</em> <dfn class="local col9 decl" id="109family" title='family' data-type='int' data-ref="109family" data-ref-filename="109family">family</dfn>,</td></tr>
+<tr><th id="49">49</th><td>                                  <span class="namespace">rtc::</span><a class="type" href="../rtc_base/socket_address.h.html#rtc::SocketAddress" title='rtc::SocketAddress' data-ref="rtc::SocketAddress" data-ref-filename="rtc..SocketAddress">SocketAddress</a>* <dfn class="local col0 decl" id="110addr" title='addr' data-type='rtc::SocketAddress *' data-ref="110addr" data-ref-filename="110addr">addr</dfn>) <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="50">50</th><td>  <i>// Returns error from resolver.</i></td></tr>
+<tr><th id="51">51</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc22AsyncDnsResolverResult8GetErrorEv" title='webrtc::AsyncDnsResolverResult::GetError' data-ref="_ZNK6webrtc22AsyncDnsResolverResult8GetErrorEv" data-ref-filename="_ZNK6webrtc22AsyncDnsResolverResult8GetErrorEv">GetError</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="52">52</th><td>};</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td><b>class</b> <a class="macro" href="../rtc_base/system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <dfn class="type def" id="webrtc::AsyncDnsResolverInterface" title='webrtc::AsyncDnsResolverInterface' data-ref="webrtc::AsyncDnsResolverInterface" data-ref-filename="webrtc..AsyncDnsResolverInterface">AsyncDnsResolverInterface</dfn> {</td></tr>
+<tr><th id="55">55</th><td> <b>public</b>:</td></tr>
+<tr><th id="56">56</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc25AsyncDnsResolverInterfaceD1Ev" title='webrtc::AsyncDnsResolverInterface::~AsyncDnsResolverInterface' data-ref="_ZN6webrtc25AsyncDnsResolverInterfaceD1Ev" data-ref-filename="_ZN6webrtc25AsyncDnsResolverInterfaceD1Ev">~AsyncDnsResolverInterface</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>  <i>// Start address resolution of the hostname in |addr|.</i></td></tr>
+<tr><th id="59">59</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc25AsyncDnsResolverInterface5StartERKN3rtc13SocketAddressENSt3__18functionIFvvEEE" title='webrtc::AsyncDnsResolverInterface::Start' data-ref="_ZN6webrtc25AsyncDnsResolverInterface5StartERKN3rtc13SocketAddressENSt3__18functionIFvvEEE" data-ref-filename="_ZN6webrtc25AsyncDnsResolverInterface5StartERKN3rtc13SocketAddressENSt3__18functionIFvvEEE">Start</dfn>(<em>const</em> <span class="namespace">rtc::</span><a class="type" href="../rtc_base/socket_address.h.html#rtc::SocketAddress" title='rtc::SocketAddress' data-ref="rtc::SocketAddress" data-ref-filename="rtc..SocketAddress">SocketAddress</a>&amp; <dfn class="local col1 decl" id="111addr" title='addr' data-type='const rtc::SocketAddress &amp;' data-ref="111addr" data-ref-filename="111addr">addr</dfn>,</td></tr>
+<tr><th id="60">60</th><td>                     <span class="namespace">std::</span><span class='type' title='std::__1::function' data-ref="std::__1::function" data-ref-filename="std..__1..function">function</span>&lt;<em>void</em>()&gt; <dfn class="local col2 decl" id="112callback" title='callback' data-type='std::function&lt;void ()&gt;' data-ref="112callback" data-ref-filename="112callback">callback</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="61">61</th><td>  <b>virtual</b> <em>const</em> <a class="type" href="#webrtc::AsyncDnsResolverResult" title='webrtc::AsyncDnsResolverResult' data-ref="webrtc::AsyncDnsResolverResult" data-ref-filename="webrtc..AsyncDnsResolverResult">AsyncDnsResolverResult</a>&amp; <dfn class="virtual decl fn" id="_ZNK6webrtc25AsyncDnsResolverInterface6resultEv" title='webrtc::AsyncDnsResolverInterface::result' data-ref="_ZNK6webrtc25AsyncDnsResolverInterface6resultEv" data-ref-filename="_ZNK6webrtc25AsyncDnsResolverInterface6resultEv">result</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="62">62</th><td>};</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td><i>// An abstract factory for creating AsyncDnsResolverInterfaces. This allows</i></td></tr>
+<tr><th id="65">65</th><td><i>// client applications to provide WebRTC with their own mechanism for</i></td></tr>
+<tr><th id="66">66</th><td><i>// performing DNS resolution.</i></td></tr>
+<tr><th id="67">67</th><td><b>class</b> <dfn class="type def" id="webrtc::AsyncDnsResolverFactoryInterface" title='webrtc::AsyncDnsResolverFactoryInterface' data-ref="webrtc::AsyncDnsResolverFactoryInterface" data-ref-filename="webrtc..AsyncDnsResolverFactoryInterface">AsyncDnsResolverFactoryInterface</dfn> {</td></tr>
+<tr><th id="68">68</th><td> <b>public</b>:</td></tr>
+<tr><th id="69">69</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc32AsyncDnsResolverFactoryInterfaceD1Ev" title='webrtc::AsyncDnsResolverFactoryInterface::~AsyncDnsResolverFactoryInterface' data-ref="_ZN6webrtc32AsyncDnsResolverFactoryInterfaceD1Ev" data-ref-filename="_ZN6webrtc32AsyncDnsResolverFactoryInterfaceD1Ev">~AsyncDnsResolverFactoryInterface</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td>  <i>// Creates an AsyncDnsResolver and starts resolving the name. The callback</i></td></tr>
+<tr><th id="72">72</th><td><i>  // will be called when resolution is finished.</i></td></tr>
+<tr><th id="73">73</th><td><i>  // The callback will be called on the thread that the caller runs on.</i></td></tr>
+<tr><th id="74">74</th><td>  <b>virtual</b> <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<span class="namespace">webrtc::</span><a class="type" href="#webrtc::AsyncDnsResolverInterface" title='webrtc::AsyncDnsResolverInterface' data-ref="webrtc::AsyncDnsResolverInterface" data-ref-filename="webrtc..AsyncDnsResolverInterface">AsyncDnsResolverInterface</a>&gt; <dfn class="virtual decl fn" id="_ZN6webrtc32AsyncDnsResolverFactoryInterface16CreateAndResolveERKN3rtc13SocketAddressENSt3__18functionIFvvEEE" title='webrtc::AsyncDnsResolverFactoryInterface::CreateAndResolve' data-ref="_ZN6webrtc32AsyncDnsResolverFactoryInterface16CreateAndResolveERKN3rtc13SocketAddressENSt3__18functionIFvvEEE" data-ref-filename="_ZN6webrtc32AsyncDnsResolverFactoryInterface16CreateAndResolveERKN3rtc13SocketAddressENSt3__18functionIFvvEEE">CreateAndResolve</dfn>(</td></tr>
+<tr><th id="75">75</th><td>      <em>const</em> <span class="namespace">rtc::</span><a class="type" href="../rtc_base/socket_address.h.html#rtc::SocketAddress" title='rtc::SocketAddress' data-ref="rtc::SocketAddress" data-ref-filename="rtc..SocketAddress">SocketAddress</a>&amp; <dfn class="local col3 decl" id="113addr" title='addr' data-type='const rtc::SocketAddress &amp;' data-ref="113addr" data-ref-filename="113addr">addr</dfn>,</td></tr>
+<tr><th id="76">76</th><td>      <span class="namespace">std::</span><span class='type' title='std::__1::function' data-ref="std::__1::function" data-ref-filename="std..__1..function">function</span>&lt;<em>void</em>()&gt; <dfn class="local col4 decl" id="114callback" title='callback' data-type='std::function&lt;void ()&gt;' data-ref="114callback" data-ref-filename="114callback">callback</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="77">77</th><td>  <i>// Creates an AsyncDnsResolver and does not start it.</i></td></tr>
+<tr><th id="78">78</th><td><i>  // For backwards compatibility, will be deprecated and removed.</i></td></tr>
+<tr><th id="79">79</th><td><i>  // One has to do a separate Start() call on the</i></td></tr>
+<tr><th id="80">80</th><td><i>  // resolver to start name resolution.</i></td></tr>
+<tr><th id="81">81</th><td>  <b>virtual</b> <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<span class="namespace">webrtc::</span><a class="type" href="#webrtc::AsyncDnsResolverInterface" title='webrtc::AsyncDnsResolverInterface' data-ref="webrtc::AsyncDnsResolverInterface" data-ref-filename="webrtc..AsyncDnsResolverInterface">AsyncDnsResolverInterface</a>&gt; <dfn class="virtual decl fn" id="_ZN6webrtc32AsyncDnsResolverFactoryInterface6CreateEv" title='webrtc::AsyncDnsResolverFactoryInterface::Create' data-ref="_ZN6webrtc32AsyncDnsResolverFactoryInterface6CreateEv" data-ref-filename="_ZN6webrtc32AsyncDnsResolverFactoryInterface6CreateEv">Create</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="82">82</th><td>};</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td><u>#<span data-ppcond="11">endif</span>  // API_ASYNC_DNS_RESOLVER_H_</u></td></tr>
+<tr><th id="87">87</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

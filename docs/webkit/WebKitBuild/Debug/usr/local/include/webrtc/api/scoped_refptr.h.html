@@ -1,0 +1,184 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>scoped_refptr.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/scoped_refptr.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::scoped_refptr "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/scoped_refptr.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>WebKitBuild</a>/<a href='../../../../..'>Debug</a>/<a href='../../../..'>usr</a>/<a href='../../..'>local</a>/<a href='../..'>include</a>/<a href='..'>webrtc</a>/<a href='./'>api</a>/<a href='scoped_refptr.h.html'>scoped_refptr.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2011 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td><i></i></td></tr>
+<tr><th id="11">11</th><td><i>// Originally these classes are from Chromium.</i></td></tr>
+<tr><th id="12">12</th><td><i>// <a href="http://src.chromium.org/viewvc/chrome/trunk/src/base/memory/ref_counted.h?view=markup">http://src.chromium.org/viewvc/chrome/trunk/src/base/memory/ref_counted.h?view=markup</a></i></td></tr>
+<tr><th id="13">13</th><td><i></i></td></tr>
+<tr><th id="14">14</th><td><i>//</i></td></tr>
+<tr><th id="15">15</th><td><i>// A smart pointer class for reference counted objects.  Use this class instead</i></td></tr>
+<tr><th id="16">16</th><td><i>// of calling AddRef and Release manually on a reference counted object to</i></td></tr>
+<tr><th id="17">17</th><td><i>// avoid common memory leaks caused by forgetting to Release an object</i></td></tr>
+<tr><th id="18">18</th><td><i>// reference.  Sample usage:</i></td></tr>
+<tr><th id="19">19</th><td><i>//</i></td></tr>
+<tr><th id="20">20</th><td><i>//   class MyFoo : public RefCounted&lt;MyFoo&gt; {</i></td></tr>
+<tr><th id="21">21</th><td><i>//    ...</i></td></tr>
+<tr><th id="22">22</th><td><i>//   };</i></td></tr>
+<tr><th id="23">23</th><td><i>//</i></td></tr>
+<tr><th id="24">24</th><td><i>//   void some_function() {</i></td></tr>
+<tr><th id="25">25</th><td><i>//     scoped_refptr&lt;MyFoo&gt; foo = new MyFoo();</i></td></tr>
+<tr><th id="26">26</th><td><i>//     foo-&gt;Method(param);</i></td></tr>
+<tr><th id="27">27</th><td><i>//     // |foo| is released when this function returns</i></td></tr>
+<tr><th id="28">28</th><td><i>//   }</i></td></tr>
+<tr><th id="29">29</th><td><i>//</i></td></tr>
+<tr><th id="30">30</th><td><i>//   void some_other_function() {</i></td></tr>
+<tr><th id="31">31</th><td><i>//     scoped_refptr&lt;MyFoo&gt; foo = new MyFoo();</i></td></tr>
+<tr><th id="32">32</th><td><i>//     ...</i></td></tr>
+<tr><th id="33">33</th><td><i>//     foo = nullptr;  // explicitly releases |foo|</i></td></tr>
+<tr><th id="34">34</th><td><i>//     ...</i></td></tr>
+<tr><th id="35">35</th><td><i>//     if (foo)</i></td></tr>
+<tr><th id="36">36</th><td><i>//       foo-&gt;Method(param);</i></td></tr>
+<tr><th id="37">37</th><td><i>//   }</i></td></tr>
+<tr><th id="38">38</th><td><i>//</i></td></tr>
+<tr><th id="39">39</th><td><i>// The above examples show how scoped_refptr&lt;T&gt; acts like a pointer to T.</i></td></tr>
+<tr><th id="40">40</th><td><i>// Given two scoped_refptr&lt;T&gt; classes, it is also possible to exchange</i></td></tr>
+<tr><th id="41">41</th><td><i>// references between the two objects, like so:</i></td></tr>
+<tr><th id="42">42</th><td><i>//</i></td></tr>
+<tr><th id="43">43</th><td><i>//   {</i></td></tr>
+<tr><th id="44">44</th><td><i>//     scoped_refptr&lt;MyFoo&gt; a = new MyFoo();</i></td></tr>
+<tr><th id="45">45</th><td><i>//     scoped_refptr&lt;MyFoo&gt; b;</i></td></tr>
+<tr><th id="46">46</th><td><i>//</i></td></tr>
+<tr><th id="47">47</th><td><i>//     b.swap(a);</i></td></tr>
+<tr><th id="48">48</th><td><i>//     // now, |b| references the MyFoo object, and |a| references null.</i></td></tr>
+<tr><th id="49">49</th><td><i>//   }</i></td></tr>
+<tr><th id="50">50</th><td><i>//</i></td></tr>
+<tr><th id="51">51</th><td><i>// To make both |a| and |b| in the above example reference the same MyFoo</i></td></tr>
+<tr><th id="52">52</th><td><i>// object, simply use the assignment operator:</i></td></tr>
+<tr><th id="53">53</th><td><i>//</i></td></tr>
+<tr><th id="54">54</th><td><i>//   {</i></td></tr>
+<tr><th id="55">55</th><td><i>//     scoped_refptr&lt;MyFoo&gt; a = new MyFoo();</i></td></tr>
+<tr><th id="56">56</th><td><i>//     scoped_refptr&lt;MyFoo&gt; b;</i></td></tr>
+<tr><th id="57">57</th><td><i>//</i></td></tr>
+<tr><th id="58">58</th><td><i>//     b = a;</i></td></tr>
+<tr><th id="59">59</th><td><i>//     // now, |a| and |b| each own a reference to the same MyFoo object.</i></td></tr>
+<tr><th id="60">60</th><td><i>//   }</i></td></tr>
+<tr><th id="61">61</th><td><i>//</i></td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><u>#<span data-ppcond="63">ifndef</span> <span class="macro" data-ref="_M/API_SCOPED_REFPTR_H_">API_SCOPED_REFPTR_H_</span></u></td></tr>
+<tr><th id="64">64</th><td><u>#define <dfn class="macro" id="_M/API_SCOPED_REFPTR_H_" data-ref="_M/API_SCOPED_REFPTR_H_">API_SCOPED_REFPTR_H_</dfn></u></td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="67">67</th><td><u>#include &lt;utility&gt;</u></td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><b>template</b> &lt;<b>class</b> T&gt;</td></tr>
+<tr><th id="72">72</th><td><b>class</b> <dfn class="type def" id="rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</dfn> {</td></tr>
+<tr><th id="73">73</th><td> <b>public</b>:</td></tr>
+<tr><th id="74">74</th><td>  <b>typedef</b> T <dfn class="typedef" id="rtc::scoped_refptr::element_type" title='rtc::scoped_refptr::element_type' data-type='T' data-ref="rtc::scoped_refptr::element_type" data-ref-filename="rtc..scoped_refptr..element_type">element_type</dfn>;</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td>  <dfn class="decl def fn" id="_ZN3rtc13scoped_refptrC1Ev" title='rtc::scoped_refptr::scoped_refptr&lt;T&gt;' data-ref="_ZN3rtc13scoped_refptrC1Ev" data-ref-filename="_ZN3rtc13scoped_refptrC1Ev">scoped_refptr</dfn>() : <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>(<b>nullptr</b>) {}</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td>  <dfn class="decl def fn" id="_ZN3rtc13scoped_refptrC1EPT_" title='rtc::scoped_refptr::scoped_refptr&lt;T&gt;' data-ref="_ZN3rtc13scoped_refptrC1EPT_" data-ref-filename="_ZN3rtc13scoped_refptrC1EPT_">scoped_refptr</dfn>(T* <dfn class="local col0 decl" id="390p" title='p' data-type='T *' data-ref="390p" data-ref-filename="390p">p</dfn>) : <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>(<a class="local col0 ref" href="#390p" title='p' data-ref="390p" data-ref-filename="390p">p</a>) {  <i>// NOLINT(runtime/explicit)</i></td></tr>
+<tr><th id="79">79</th><td>    <b>if</b> (<a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>)</td></tr>
+<tr><th id="80">80</th><td>      <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>-&gt;AddRef();</td></tr>
+<tr><th id="81">81</th><td>  }</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td>  <dfn class="decl def fn" id="_ZN3rtc13scoped_refptrC1ERKNS_13scoped_refptrIT_EE" title='rtc::scoped_refptr::scoped_refptr&lt;T&gt;' data-ref="_ZN3rtc13scoped_refptrC1ERKNS_13scoped_refptrIT_EE" data-ref-filename="_ZN3rtc13scoped_refptrC1ERKNS_13scoped_refptrIT_EE">scoped_refptr</dfn>(<em>const</em> <a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;T&gt;&amp; <dfn class="local col1 decl" id="391r" title='r' data-type='const scoped_refptr&lt;T&gt; &amp;' data-ref="391r" data-ref-filename="391r">r</dfn>) : <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>(<a class="local col1 ref" href="#391r" title='r' data-ref="391r" data-ref-filename="391r">r</a>.ptr_) {</td></tr>
+<tr><th id="84">84</th><td>    <b>if</b> (<a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>)</td></tr>
+<tr><th id="85">85</th><td>      <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>-&gt;AddRef();</td></tr>
+<tr><th id="86">86</th><td>  }</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td>  <b>template</b> &lt;<b>typename</b> U&gt;</td></tr>
+<tr><th id="89">89</th><td>  <dfn class="decl def fn" id="_ZN3rtc13scoped_refptrC1ERKNS_13scoped_refptrITL0__EE" title='rtc::scoped_refptr::scoped_refptr&lt;T&gt;' data-ref="_ZN3rtc13scoped_refptrC1ERKNS_13scoped_refptrITL0__EE" data-ref-filename="_ZN3rtc13scoped_refptrC1ERKNS_13scoped_refptrITL0__EE">scoped_refptr</dfn>(<em>const</em> <a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;U&gt;&amp; <dfn class="local col2 decl" id="392r" title='r' data-type='const scoped_refptr&lt;U&gt; &amp;' data-ref="392r" data-ref-filename="392r">r</dfn>) : <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>(<a class="local col2 ref" href="#392r" title='r' data-ref="392r" data-ref-filename="392r">r</a>.get()) {</td></tr>
+<tr><th id="90">90</th><td>    <b>if</b> (<a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>)</td></tr>
+<tr><th id="91">91</th><td>      <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>-&gt;AddRef();</td></tr>
+<tr><th id="92">92</th><td>  }</td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td>  <i>// Move constructors.</i></td></tr>
+<tr><th id="95">95</th><td>  <dfn class="decl def fn" id="_ZN3rtc13scoped_refptrC1EONS_13scoped_refptrIT_EE" title='rtc::scoped_refptr::scoped_refptr&lt;T&gt;' data-ref="_ZN3rtc13scoped_refptrC1EONS_13scoped_refptrIT_EE" data-ref-filename="_ZN3rtc13scoped_refptrC1EONS_13scoped_refptrIT_EE">scoped_refptr</dfn>(<a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;T&gt;&amp;&amp; <dfn class="local col3 decl" id="393r" title='r' data-type='scoped_refptr&lt;T&gt; &amp;&amp;' data-ref="393r" data-ref-filename="393r">r</dfn>) <b>noexcept</b> : <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>(<a class="local col3 ref" href="#393r" title='r' data-ref="393r" data-ref-filename="393r">r</a>.release()) {}</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td>  <b>template</b> &lt;<b>typename</b> U&gt;</td></tr>
+<tr><th id="98">98</th><td>  <dfn class="decl def fn" id="_ZN3rtc13scoped_refptrC1EONS_13scoped_refptrITL0__EE" title='rtc::scoped_refptr::scoped_refptr&lt;T&gt;' data-ref="_ZN3rtc13scoped_refptrC1EONS_13scoped_refptrITL0__EE" data-ref-filename="_ZN3rtc13scoped_refptrC1EONS_13scoped_refptrITL0__EE">scoped_refptr</dfn>(<a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;U&gt;&amp;&amp; <dfn class="local col4 decl" id="394r" title='r' data-type='scoped_refptr&lt;U&gt; &amp;&amp;' data-ref="394r" data-ref-filename="394r">r</dfn>) <b>noexcept</b> : <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>(<a class="local col4 ref" href="#394r" title='r' data-ref="394r" data-ref-filename="394r">r</a>.release()) {}</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td>  <dfn class="decl def fn" id="_ZN3rtc13scoped_refptrD1Ev" title='rtc::scoped_refptr::~scoped_refptr&lt;T&gt;' data-ref="_ZN3rtc13scoped_refptrD1Ev" data-ref-filename="_ZN3rtc13scoped_refptrD1Ev">~scoped_refptr</dfn>() {</td></tr>
+<tr><th id="101">101</th><td>    <b>if</b> (<a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>)</td></tr>
+<tr><th id="102">102</th><td>      <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>-&gt;Release();</td></tr>
+<tr><th id="103">103</th><td>  }</td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td>  T* <dfn class="decl def fn" id="_ZNK3rtc13scoped_refptr3getEv" title='rtc::scoped_refptr::get' data-ref="_ZNK3rtc13scoped_refptr3getEv" data-ref-filename="_ZNK3rtc13scoped_refptr3getEv">get</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>; }</td></tr>
+<tr><th id="106">106</th><td>  <dfn class="decl def fn" id="_ZNK3rtc13scoped_refptrcvPT_Ev" title='rtc::scoped_refptr::operator type-parameter-0-0 *' data-ref="_ZNK3rtc13scoped_refptrcvPT_Ev" data-ref-filename="_ZNK3rtc13scoped_refptrcvPT_Ev"><b>operator</b> T*</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>; }</td></tr>
+<tr><th id="107">107</th><td>  T&amp; <dfn class="decl def fn" id="_ZNK3rtc13scoped_refptrdeEv" title='rtc::scoped_refptr::operator*' data-ref="_ZNK3rtc13scoped_refptrdeEv" data-ref-filename="_ZNK3rtc13scoped_refptrdeEv"><b>operator</b>*</dfn>() <em>const</em> { <b>return</b> *<a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>; }</td></tr>
+<tr><th id="108">108</th><td>  T* <dfn class="decl def fn" id="_ZNK3rtc13scoped_refptrptEv" title='rtc::scoped_refptr::operator-&gt;' data-ref="_ZNK3rtc13scoped_refptrptEv" data-ref-filename="_ZNK3rtc13scoped_refptrptEv"><b>operator</b>-&gt;</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>; }</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td>  <i>// Returns the (possibly null) raw pointer, and makes the scoped_refptr hold a</i></td></tr>
+<tr><th id="111">111</th><td><i>  // null pointer, all without touching the reference count of the underlying</i></td></tr>
+<tr><th id="112">112</th><td><i>  // pointed-to object. The object is still reference counted, and the caller of</i></td></tr>
+<tr><th id="113">113</th><td><i>  // release() is now the proud owner of one reference, so it is responsible for</i></td></tr>
+<tr><th id="114">114</th><td><i>  // calling Release() once on the object when no longer using it.</i></td></tr>
+<tr><th id="115">115</th><td>  T* <dfn class="decl def fn" id="_ZN3rtc13scoped_refptr7releaseEv" title='rtc::scoped_refptr::release' data-ref="_ZN3rtc13scoped_refptr7releaseEv" data-ref-filename="_ZN3rtc13scoped_refptr7releaseEv">release</dfn>() {</td></tr>
+<tr><th id="116">116</th><td>    T* <dfn class="local col5 decl" id="395retVal" title='retVal' data-type='T *' data-ref="395retVal" data-ref-filename="395retVal">retVal</dfn> = <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>;</td></tr>
+<tr><th id="117">117</th><td>    <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a> = <b>nullptr</b>;</td></tr>
+<tr><th id="118">118</th><td>    <b>return</b> <a class="local col5 ref" href="#395retVal" title='retVal' data-ref="395retVal" data-ref-filename="395retVal">retVal</a>;</td></tr>
+<tr><th id="119">119</th><td>  }</td></tr>
+<tr><th id="120">120</th><td></td></tr>
+<tr><th id="121">121</th><td>  <a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;T&gt;&amp; <dfn class="decl def fn" id="_ZN3rtc13scoped_refptraSEPT_" title='rtc::scoped_refptr::operator=' data-ref="_ZN3rtc13scoped_refptraSEPT_" data-ref-filename="_ZN3rtc13scoped_refptraSEPT_"><b>operator</b>=</dfn>(T* <dfn class="local col6 decl" id="396p" title='p' data-type='T *' data-ref="396p" data-ref-filename="396p">p</dfn>) {</td></tr>
+<tr><th id="122">122</th><td>    <i>// AddRef first so that self assignment should work</i></td></tr>
+<tr><th id="123">123</th><td>    <b>if</b> (<a class="local col6 ref" href="#396p" title='p' data-ref="396p" data-ref-filename="396p">p</a>)</td></tr>
+<tr><th id="124">124</th><td>      <a class="local col6 ref" href="#396p" title='p' data-ref="396p" data-ref-filename="396p">p</a>-&gt;AddRef();</td></tr>
+<tr><th id="125">125</th><td>    <b>if</b> (<a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>)</td></tr>
+<tr><th id="126">126</th><td>      <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>-&gt;Release();</td></tr>
+<tr><th id="127">127</th><td>    <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a> = <a class="local col6 ref" href="#396p" title='p' data-ref="396p" data-ref-filename="396p">p</a>;</td></tr>
+<tr><th id="128">128</th><td>    <b>return</b> *<b>this</b>;</td></tr>
+<tr><th id="129">129</th><td>  }</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td>  <a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;T&gt;&amp; <dfn class="decl def fn" id="_ZN3rtc13scoped_refptraSERKNS_13scoped_refptrIT_EE" title='rtc::scoped_refptr::operator=' data-ref="_ZN3rtc13scoped_refptraSERKNS_13scoped_refptrIT_EE" data-ref-filename="_ZN3rtc13scoped_refptraSERKNS_13scoped_refptrIT_EE"><b>operator</b>=</dfn>(<em>const</em> <a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;T&gt;&amp; <dfn class="local col7 decl" id="397r" title='r' data-type='const scoped_refptr&lt;T&gt; &amp;' data-ref="397r" data-ref-filename="397r">r</dfn>) {</td></tr>
+<tr><th id="132">132</th><td>    <b>return</b> *<b>this</b> = <a class="local col7 ref" href="#397r" title='r' data-ref="397r" data-ref-filename="397r">r</a>.ptr_;</td></tr>
+<tr><th id="133">133</th><td>  }</td></tr>
+<tr><th id="134">134</th><td></td></tr>
+<tr><th id="135">135</th><td>  <b>template</b> &lt;<b>typename</b> U&gt;</td></tr>
+<tr><th id="136">136</th><td>  <a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;T&gt;&amp; <dfn class="decl def fn" id="_ZN3rtc13scoped_refptraSERKNS_13scoped_refptrITL0__EE" title='rtc::scoped_refptr::operator=' data-ref="_ZN3rtc13scoped_refptraSERKNS_13scoped_refptrITL0__EE" data-ref-filename="_ZN3rtc13scoped_refptraSERKNS_13scoped_refptrITL0__EE"><b>operator</b>=</dfn>(<em>const</em> <a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;U&gt;&amp; <dfn class="local col8 decl" id="398r" title='r' data-type='const scoped_refptr&lt;U&gt; &amp;' data-ref="398r" data-ref-filename="398r">r</dfn>) {</td></tr>
+<tr><th id="137">137</th><td>    <b>return</b> *<b>this</b> = <a class="local col8 ref" href="#398r" title='r' data-ref="398r" data-ref-filename="398r">r</a>.get();</td></tr>
+<tr><th id="138">138</th><td>  }</td></tr>
+<tr><th id="139">139</th><td></td></tr>
+<tr><th id="140">140</th><td>  <a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;T&gt;&amp; <dfn class="decl def fn" id="_ZN3rtc13scoped_refptraSEONS_13scoped_refptrIT_EE" title='rtc::scoped_refptr::operator=' data-ref="_ZN3rtc13scoped_refptraSEONS_13scoped_refptrIT_EE" data-ref-filename="_ZN3rtc13scoped_refptraSEONS_13scoped_refptrIT_EE"><b>operator</b>=</dfn>(<a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;T&gt;&amp;&amp; <dfn class="local col9 decl" id="399r" title='r' data-type='scoped_refptr&lt;T&gt; &amp;&amp;' data-ref="399r" data-ref-filename="399r">r</dfn>) <b>noexcept</b> {</td></tr>
+<tr><th id="141">141</th><td>    <a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;T&gt;(<span class="namespace">std::</span>move(<a class="local col9 ref" href="#399r" title='r' data-ref="399r" data-ref-filename="399r">r</a>)).swap(*<b>this</b>);</td></tr>
+<tr><th id="142">142</th><td>    <b>return</b> *<b>this</b>;</td></tr>
+<tr><th id="143">143</th><td>  }</td></tr>
+<tr><th id="144">144</th><td></td></tr>
+<tr><th id="145">145</th><td>  <b>template</b> &lt;<b>typename</b> U&gt;</td></tr>
+<tr><th id="146">146</th><td>  <a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;T&gt;&amp; <dfn class="decl def fn" id="_ZN3rtc13scoped_refptraSEONS_13scoped_refptrITL0__EE" title='rtc::scoped_refptr::operator=' data-ref="_ZN3rtc13scoped_refptraSEONS_13scoped_refptrITL0__EE" data-ref-filename="_ZN3rtc13scoped_refptraSEONS_13scoped_refptrITL0__EE"><b>operator</b>=</dfn>(<a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;U&gt;&amp;&amp; <dfn class="local col0 decl" id="400r" title='r' data-type='scoped_refptr&lt;U&gt; &amp;&amp;' data-ref="400r" data-ref-filename="400r">r</dfn>) <b>noexcept</b> {</td></tr>
+<tr><th id="147">147</th><td>    <a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;T&gt;(<span class="namespace">std::</span>move(<a class="local col0 ref" href="#400r" title='r' data-ref="400r" data-ref-filename="400r">r</a>)).swap(*<b>this</b>);</td></tr>
+<tr><th id="148">148</th><td>    <b>return</b> *<b>this</b>;</td></tr>
+<tr><th id="149">149</th><td>  }</td></tr>
+<tr><th id="150">150</th><td></td></tr>
+<tr><th id="151">151</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN3rtc13scoped_refptr4swapEPPT_" title='rtc::scoped_refptr::swap' data-ref="_ZN3rtc13scoped_refptr4swapEPPT_" data-ref-filename="_ZN3rtc13scoped_refptr4swapEPPT_">swap</dfn>(T** <dfn class="local col1 decl" id="401pp" title='pp' data-type='T **' data-ref="401pp" data-ref-filename="401pp">pp</dfn>) <b>noexcept</b> {</td></tr>
+<tr><th id="152">152</th><td>    T* <dfn class="local col2 decl" id="402p" title='p' data-type='T *' data-ref="402p" data-ref-filename="402p">p</dfn> = <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a>;</td></tr>
+<tr><th id="153">153</th><td>    <a class="member field" href="#rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</a> = *<a class="local col1 ref" href="#401pp" title='pp' data-ref="401pp" data-ref-filename="401pp">pp</a>;</td></tr>
+<tr><th id="154">154</th><td>    *<a class="local col1 ref" href="#401pp" title='pp' data-ref="401pp" data-ref-filename="401pp">pp</a> = <a class="local col2 ref" href="#402p" title='p' data-ref="402p" data-ref-filename="402p">p</a>;</td></tr>
+<tr><th id="155">155</th><td>  }</td></tr>
+<tr><th id="156">156</th><td></td></tr>
+<tr><th id="157">157</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN3rtc13scoped_refptr4swapERNS_13scoped_refptrIT_EE" title='rtc::scoped_refptr::swap' data-ref="_ZN3rtc13scoped_refptr4swapERNS_13scoped_refptrIT_EE" data-ref-filename="_ZN3rtc13scoped_refptr4swapERNS_13scoped_refptrIT_EE">swap</dfn>(<a class="type" href="#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;T&gt;&amp; <dfn class="local col3 decl" id="403r" title='r' data-type='scoped_refptr&lt;T&gt; &amp;' data-ref="403r" data-ref-filename="403r">r</dfn>) <b>noexcept</b> { swap(&amp;<a class="local col3 ref" href="#403r" title='r' data-ref="403r" data-ref-filename="403r">r</a>.ptr_); }</td></tr>
+<tr><th id="158">158</th><td></td></tr>
+<tr><th id="159">159</th><td> <b>protected</b>:</td></tr>
+<tr><th id="160">160</th><td>  T* <dfn class="decl field" id="rtc::scoped_refptr::ptr_" title='rtc::scoped_refptr::ptr_' data-ref="rtc::scoped_refptr::ptr_" data-ref-filename="rtc..scoped_refptr..ptr_">ptr_</dfn>;</td></tr>
+<tr><th id="161">161</th><td>};</td></tr>
+<tr><th id="162">162</th><td></td></tr>
+<tr><th id="163">163</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="164">164</th><td></td></tr>
+<tr><th id="165">165</th><td><u>#<span data-ppcond="63">endif</span>  // API_SCOPED_REFPTR_H_</u></td></tr>
+<tr><th id="166">166</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCDataChannelHandler.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCDataChannelHandler.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,93 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>vp9_aq_360.c source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp9/encoder/vp9_aq_360.c] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp9/encoder/vp9_aq_360.c'; var root_path = '../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../..'>Source</a>/<a href='../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../..'>libwebrtc</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>third_party</a>/<a href='../../../..'>libvpx</a>/<a href='../../..'>source</a>/<a href='../..'>libvpx</a>/<a href='..'>vp9</a>/<a href='./'>encoder</a>/<a href='vp9_aq_360.c.html'>vp9_aq_360.c</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2013 The WebM project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#include &lt;math.h&gt;</u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="../../vpx_ports/mem.h.html">"vpx_ports/mem.h"</a></u></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="../../vpx_ports/system_state.h.html">"vpx_ports/system_state.h"</a></u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="vp9_aq_360.h.html">"vp9/encoder/vp9_aq_360.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="vp9_aq_variance.h.html">"vp9/encoder/vp9_aq_variance.h"</a></u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="../common/vp9_seg_common.h.html">"vp9/common/vp9_seg_common.h"</a></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="vp9_ratectrl.h.html">"vp9/encoder/vp9_ratectrl.h"</a></u></td></tr>
+<tr><th id="22">22</th><td><u>#include <a href="vp9_rd.h.html">"vp9/encoder/vp9_rd.h"</a></u></td></tr>
+<tr><th id="23">23</th><td><u>#include <a href="vp9_segmentation.h.html">"vp9/encoder/vp9_segmentation.h"</a></u></td></tr>
+<tr><th id="24">24</th><td></td></tr>
+<tr><th id="25">25</th><td><em>static</em> <em>const</em> <em>double</em> <dfn class="tu decl def" id="rate_ratio" title='rate_ratio' data-type='const double [8]' data-ref="rate_ratio" data-ref-filename="rate_ratio">rate_ratio</dfn>[<a class="macro" href="../common/vp9_seg_common.h.html#23" title="8" data-ref="_M/MAX_SEGMENTS">MAX_SEGMENTS</a>] = { <var>1.0</var>, <var>0.75</var>, <var>0.6</var>, <var>0.5</var>,</td></tr>
+<tr><th id="26">26</th><td>                                                 <var>0.4</var>, <var>0.3</var>,  <var>0.25</var> };</td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><i>// Sets segment id 0 for the equatorial region, 1 for temperate region</i></td></tr>
+<tr><th id="29">29</th><td><i>// and 2 for the polar regions</i></td></tr>
+<tr><th id="30">30</th><td><em>unsigned</em> <em>int</em> <dfn class="decl def fn" id="vp9_360aq_segment_id" title='vp9_360aq_segment_id' data-ref="vp9_360aq_segment_id" data-ref-filename="vp9_360aq_segment_id">vp9_360aq_segment_id</dfn>(<em>int</em> <dfn class="local col6 decl" id="36mi_row" title='mi_row' data-type='int' data-ref="36mi_row" data-ref-filename="36mi_row">mi_row</dfn>, <em>int</em> <dfn class="local col7 decl" id="37mi_rows" title='mi_rows' data-type='int' data-ref="37mi_rows" data-ref-filename="37mi_rows">mi_rows</dfn>) {</td></tr>
+<tr><th id="31">31</th><td>  <b>if</b> (<a class="local col6 ref" href="#36mi_row" title='mi_row' data-ref="36mi_row" data-ref-filename="36mi_row">mi_row</a> &lt; <a class="local col7 ref" href="#37mi_rows" title='mi_rows' data-ref="37mi_rows" data-ref-filename="37mi_rows">mi_rows</a> / <var>8</var> || <a class="local col6 ref" href="#36mi_row" title='mi_row' data-ref="36mi_row" data-ref-filename="36mi_row">mi_row</a> &gt; <a class="local col7 ref" href="#37mi_rows" title='mi_rows' data-ref="37mi_rows" data-ref-filename="37mi_rows">mi_rows</a> - <a class="local col7 ref" href="#37mi_rows" title='mi_rows' data-ref="37mi_rows" data-ref-filename="37mi_rows">mi_rows</a> / <var>8</var>)</td></tr>
+<tr><th id="32">32</th><td>    <b>return</b> <var>2</var>;</td></tr>
+<tr><th id="33">33</th><td>  <b>else</b> <b>if</b> (<a class="local col6 ref" href="#36mi_row" title='mi_row' data-ref="36mi_row" data-ref-filename="36mi_row">mi_row</a> &lt; <a class="local col7 ref" href="#37mi_rows" title='mi_rows' data-ref="37mi_rows" data-ref-filename="37mi_rows">mi_rows</a> / <var>4</var> || <a class="local col6 ref" href="#36mi_row" title='mi_row' data-ref="36mi_row" data-ref-filename="36mi_row">mi_row</a> &gt; <a class="local col7 ref" href="#37mi_rows" title='mi_rows' data-ref="37mi_rows" data-ref-filename="37mi_rows">mi_rows</a> - <a class="local col7 ref" href="#37mi_rows" title='mi_rows' data-ref="37mi_rows" data-ref-filename="37mi_rows">mi_rows</a> / <var>4</var>)</td></tr>
+<tr><th id="34">34</th><td>    <b>return</b> <var>1</var>;</td></tr>
+<tr><th id="35">35</th><td>  <b>else</b></td></tr>
+<tr><th id="36">36</th><td>    <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="37">37</th><td>}</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><em>void</em> <dfn class="decl def fn" id="vp9_360aq_frame_setup" title='vp9_360aq_frame_setup' data-ref="vp9_360aq_frame_setup" data-ref-filename="vp9_360aq_frame_setup">vp9_360aq_frame_setup</dfn>(<a class="typedef" href="vp9_encoder.h.html#VP9_COMP" title='VP9_COMP' data-type='struct VP9_COMP' data-ref="VP9_COMP" data-ref-filename="VP9_COMP">VP9_COMP</a> *<dfn class="local col8 decl" id="38cpi" title='cpi' data-type='VP9_COMP *' data-ref="38cpi" data-ref-filename="38cpi">cpi</dfn>) {</td></tr>
+<tr><th id="40">40</th><td>  <a class="typedef" href="../common/vp9_onyxc_int.h.html#VP9_COMMON" title='VP9_COMMON' data-type='struct VP9Common' data-ref="VP9_COMMON" data-ref-filename="VP9_COMMON">VP9_COMMON</a> *<dfn class="local col9 decl" id="39cm" title='cm' data-type='VP9_COMMON *' data-ref="39cm" data-ref-filename="39cm">cm</dfn> = &amp;<a class="local col8 ref" href="#38cpi" title='cpi' data-ref="38cpi" data-ref-filename="38cpi">cpi</a>-&gt;<a class="ref field" href="vp9_encoder.h.html#VP9_COMP::common" title='VP9_COMP::common' data-ref="VP9_COMP::common" data-ref-filename="VP9_COMP..common">common</a>;</td></tr>
+<tr><th id="41">41</th><td>  <b>struct</b> <a class="type" href="../common/vp9_seg_common.h.html#segmentation" title='segmentation' data-ref="segmentation" data-ref-filename="segmentation">segmentation</a> *<dfn class="local col0 decl" id="40seg" title='seg' data-type='struct segmentation *' data-ref="40seg" data-ref-filename="40seg">seg</dfn> = &amp;<a class="local col9 ref" href="#39cm" title='cm' data-ref="39cm" data-ref-filename="39cm">cm</a>-&gt;<a class="ref field" href="../common/vp9_onyxc_int.h.html#VP9Common::seg" title='VP9Common::seg' data-ref="VP9Common::seg" data-ref-filename="VP9Common..seg">seg</a>;</td></tr>
+<tr><th id="42">42</th><td>  <em>int</em> <dfn class="local col1 decl" id="41i" title='i' data-type='int' data-ref="41i" data-ref-filename="41i">i</dfn>;</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td>  <b>if</b> (<a class="ref fn" href="../common/vp9_onyxc_int.h.html#frame_is_intra_only" title='frame_is_intra_only' data-ref="frame_is_intra_only" data-ref-filename="frame_is_intra_only">frame_is_intra_only</a>(<a class="local col9 ref" href="#39cm" title='cm' data-ref="39cm" data-ref-filename="39cm">cm</a>) || <a class="local col8 ref" href="#38cpi" title='cpi' data-ref="38cpi" data-ref-filename="38cpi">cpi</a>-&gt;<a class="ref field" href="vp9_encoder.h.html#VP9_COMP::force_update_segmentation" title='VP9_COMP::force_update_segmentation' data-ref="VP9_COMP::force_update_segmentation" data-ref-filename="VP9_COMP..force_update_segmentation">force_update_segmentation</a> ||</td></tr>
+<tr><th id="45">45</th><td>      <a class="local col9 ref" href="#39cm" title='cm' data-ref="39cm" data-ref-filename="39cm">cm</a>-&gt;<a class="ref field" href="../common/vp9_onyxc_int.h.html#VP9Common::error_resilient_mode" title='VP9Common::error_resilient_mode' data-ref="VP9Common::error_resilient_mode" data-ref-filename="VP9Common..error_resilient_mode">error_resilient_mode</a>) {</td></tr>
+<tr><th id="46">46</th><td>    <a class="ref fn" href="vp9_segmentation.h.html#vp9_enable_segmentation" title='vp9_enable_segmentation' data-ref="vp9_enable_segmentation" data-ref-filename="vp9_enable_segmentation">vp9_enable_segmentation</a>(<a class="local col0 ref" href="#40seg" title='seg' data-ref="40seg" data-ref-filename="40seg">seg</a>);</td></tr>
+<tr><th id="47">47</th><td>    <a class="ref fn" href="../common/vp9_seg_common.h.html#vp9_clearall_segfeatures" title='vp9_clearall_segfeatures' data-ref="vp9_clearall_segfeatures" data-ref-filename="vp9_clearall_segfeatures">vp9_clearall_segfeatures</a>(<a class="local col0 ref" href="#40seg" title='seg' data-ref="40seg" data-ref-filename="40seg">seg</a>);</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td>    <a class="local col0 ref" href="#40seg" title='seg' data-ref="40seg" data-ref-filename="40seg">seg</a>-&gt;<a class="ref field" href="../common/vp9_seg_common.h.html#segmentation::abs_delta" title='segmentation::abs_delta' data-ref="segmentation::abs_delta" data-ref-filename="segmentation..abs_delta">abs_delta</a> = <a class="macro" href="../common/vp9_seg_common.h.html#20" title="0" data-ref="_M/SEGMENT_DELTADATA">SEGMENT_DELTADATA</a>;</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td>    <a class="macro" href="../../vpx_ports/system_state.h.html#23" title="" data-ref="_M/vpx_clear_system_state">vpx_clear_system_state</a>();</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td>    <b>for</b> (<a class="local col1 ref" href="#41i" title='i' data-ref="41i" data-ref-filename="41i">i</a> = <var>0</var>; <a class="local col1 ref" href="#41i" title='i' data-ref="41i" data-ref-filename="41i">i</a> &lt; <a class="macro" href="../common/vp9_seg_common.h.html#23" title="8" data-ref="_M/MAX_SEGMENTS">MAX_SEGMENTS</a>; ++<a class="local col1 ref" href="#41i" title='i' data-ref="41i" data-ref-filename="41i">i</a>) {</td></tr>
+<tr><th id="54">54</th><td>      <em>int</em> <dfn class="local col2 decl" id="42qindex_delta" title='qindex_delta' data-type='int' data-ref="42qindex_delta" data-ref-filename="42qindex_delta">qindex_delta</dfn> =</td></tr>
+<tr><th id="55">55</th><td>          <a class="ref fn" href="vp9_ratectrl.h.html#vp9_compute_qdelta_by_rate" title='vp9_compute_qdelta_by_rate' data-ref="vp9_compute_qdelta_by_rate" data-ref-filename="vp9_compute_qdelta_by_rate">vp9_compute_qdelta_by_rate</a>(&amp;<a class="local col8 ref" href="#38cpi" title='cpi' data-ref="38cpi" data-ref-filename="38cpi">cpi</a>-&gt;<a class="ref field" href="vp9_encoder.h.html#VP9_COMP::rc" title='VP9_COMP::rc' data-ref="VP9_COMP::rc" data-ref-filename="VP9_COMP..rc">rc</a>, <a class="local col9 ref" href="#39cm" title='cm' data-ref="39cm" data-ref-filename="39cm">cm</a>-&gt;<a class="ref field" href="../common/vp9_onyxc_int.h.html#VP9Common::frame_type" title='VP9Common::frame_type' data-ref="VP9Common::frame_type" data-ref-filename="VP9Common..frame_type">frame_type</a>, <a class="local col9 ref" href="#39cm" title='cm' data-ref="39cm" data-ref-filename="39cm">cm</a>-&gt;<a class="ref field" href="../common/vp9_onyxc_int.h.html#VP9Common::base_qindex" title='VP9Common::base_qindex' data-ref="VP9Common::base_qindex" data-ref-filename="VP9Common..base_qindex">base_qindex</a>,</td></tr>
+<tr><th id="56">56</th><td>                                     <a class="tu ref" href="#rate_ratio" title='rate_ratio' data-use='r' data-ref="rate_ratio" data-ref-filename="rate_ratio">rate_ratio</a>[<a class="local col1 ref" href="#41i" title='i' data-ref="41i" data-ref-filename="41i">i</a>], <a class="local col9 ref" href="#39cm" title='cm' data-ref="39cm" data-ref-filename="39cm">cm</a>-&gt;<a class="ref field" href="../common/vp9_onyxc_int.h.html#VP9Common::bit_depth" title='VP9Common::bit_depth' data-ref="VP9Common::bit_depth" data-ref-filename="VP9Common..bit_depth">bit_depth</a>);</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>      <i>// We don't allow qindex 0 in a segment if the base value is not 0.</i></td></tr>
+<tr><th id="59">59</th><td><i>      // Q index 0 (lossless) implies 4x4 encoding only and in AQ mode a segment</i></td></tr>
+<tr><th id="60">60</th><td><i>      // Q delta is sometimes applied without going back around the rd loop.</i></td></tr>
+<tr><th id="61">61</th><td><i>      // This could lead to an illegal combination of partition size and q.</i></td></tr>
+<tr><th id="62">62</th><td>      <b>if</b> ((<a class="local col9 ref" href="#39cm" title='cm' data-ref="39cm" data-ref-filename="39cm">cm</a>-&gt;<a class="ref field" href="../common/vp9_onyxc_int.h.html#VP9Common::base_qindex" title='VP9Common::base_qindex' data-ref="VP9Common::base_qindex" data-ref-filename="VP9Common..base_qindex">base_qindex</a> != <var>0</var>) &amp;&amp; ((<a class="local col9 ref" href="#39cm" title='cm' data-ref="39cm" data-ref-filename="39cm">cm</a>-&gt;<a class="ref field" href="../common/vp9_onyxc_int.h.html#VP9Common::base_qindex" title='VP9Common::base_qindex' data-ref="VP9Common::base_qindex" data-ref-filename="VP9Common..base_qindex">base_qindex</a> + <a class="local col2 ref" href="#42qindex_delta" title='qindex_delta' data-ref="42qindex_delta" data-ref-filename="42qindex_delta">qindex_delta</a>) == <var>0</var>)) {</td></tr>
+<tr><th id="63">63</th><td>        <a class="local col2 ref" href="#42qindex_delta" title='qindex_delta' data-ref="42qindex_delta" data-ref-filename="42qindex_delta">qindex_delta</a> = -<a class="local col9 ref" href="#39cm" title='cm' data-ref="39cm" data-ref-filename="39cm">cm</a>-&gt;<a class="ref field" href="../common/vp9_onyxc_int.h.html#VP9Common::base_qindex" title='VP9Common::base_qindex' data-ref="VP9Common::base_qindex" data-ref-filename="VP9Common..base_qindex">base_qindex</a> + <var>1</var>;</td></tr>
+<tr><th id="64">64</th><td>      }</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td>      <i>// No need to enable SEG_LVL_ALT_Q for this segment.</i></td></tr>
+<tr><th id="67">67</th><td>      <b>if</b> (<a class="tu ref" href="#rate_ratio" title='rate_ratio' data-use='r' data-ref="rate_ratio" data-ref-filename="rate_ratio">rate_ratio</a>[<a class="local col1 ref" href="#41i" title='i' data-ref="41i" data-ref-filename="41i">i</a>] == <var>1.0</var>) {</td></tr>
+<tr><th id="68">68</th><td>        <b>continue</b>;</td></tr>
+<tr><th id="69">69</th><td>      }</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td>      <a class="ref fn" href="../common/vp9_seg_common.h.html#vp9_set_segdata" title='vp9_set_segdata' data-ref="vp9_set_segdata" data-ref-filename="vp9_set_segdata">vp9_set_segdata</a>(<a class="local col0 ref" href="#40seg" title='seg' data-ref="40seg" data-ref-filename="40seg">seg</a>, <a class="local col1 ref" href="#41i" title='i' data-ref="41i" data-ref-filename="41i">i</a>, <a class="enum" href="../common/vp9_seg_common.h.html#SEG_LVL_ALT_Q" title='SEG_LVL_ALT_Q' data-ref="SEG_LVL_ALT_Q" data-ref-filename="SEG_LVL_ALT_Q">SEG_LVL_ALT_Q</a>, <a class="local col2 ref" href="#42qindex_delta" title='qindex_delta' data-ref="42qindex_delta" data-ref-filename="42qindex_delta">qindex_delta</a>);</td></tr>
+<tr><th id="72">72</th><td>      <a class="ref fn" href="../common/vp9_seg_common.h.html#vp9_enable_segfeature" title='vp9_enable_segfeature' data-ref="vp9_enable_segfeature" data-ref-filename="vp9_enable_segfeature">vp9_enable_segfeature</a>(<a class="local col0 ref" href="#40seg" title='seg' data-ref="40seg" data-ref-filename="40seg">seg</a>, <a class="local col1 ref" href="#41i" title='i' data-ref="41i" data-ref-filename="41i">i</a>, <a class="enum" href="../common/vp9_seg_common.h.html#SEG_LVL_ALT_Q" title='SEG_LVL_ALT_Q' data-ref="SEG_LVL_ALT_Q" data-ref-filename="SEG_LVL_ALT_Q">SEG_LVL_ALT_Q</a>);</td></tr>
+<tr><th id="73">73</th><td>    }</td></tr>
+<tr><th id="74">74</th><td>  }</td></tr>
+<tr><th id="75">75</th><td>}</td></tr>
+<tr><th id="76">76</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,322 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Algorithm.h source code [webkit/WebKitBuild/Debug/usr/local/include/bmalloc/Algorithm.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/bmalloc/Algorithm.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>bmalloc</a>/<a href='Algorithm.h.html'>Algorithm.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2014-2021 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="26">ifndef</span> <span class="macro" data-ref="_M/Algorithm_h">Algorithm_h</span></u></td></tr>
+<tr><th id="27">27</th><td><u>#define <dfn class="macro" id="_M/Algorithm_h" data-ref="_M/Algorithm_h">Algorithm_h</dfn></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="BAssert.h.html">"BAssert.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#include &lt;algorithm&gt;</u></td></tr>
+<tr><th id="31">31</th><td><u>#include &lt;climits&gt;</u></td></tr>
+<tr><th id="32">32</th><td><u>#include &lt;cstdint&gt;</u></td></tr>
+<tr><th id="33">33</th><td><u>#include &lt;cstddef&gt;</u></td></tr>
+<tr><th id="34">34</th><td><u>#include &lt;limits&gt;</u></td></tr>
+<tr><th id="35">35</th><td><u>#include &lt;string.h&gt;</u></td></tr>
+<tr><th id="36">36</th><td><u>#include &lt;type_traits&gt;</u></td></tr>
+<tr><th id="37">37</th><td><u>#include &lt;chrono&gt;</u></td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><b>namespace</b> <span class="namespace">bmalloc</span> {</td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><i>// Versions of min and max that are compatible with compile-time constants.</i></td></tr>
+<tr><th id="42">42</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>constexpr</b> T <dfn class="decl def fn" id="_ZN7bmalloc3maxET_S0_" title='bmalloc::max' data-ref="_ZN7bmalloc3maxET_S0_" data-ref-filename="_ZN7bmalloc3maxET_S0_">max</dfn>(T <dfn class="local col9 decl" id="169a" title='a' data-type='T' data-ref="169a" data-ref-filename="169a">a</dfn>, T <dfn class="local col0 decl" id="170b" title='b' data-type='T' data-ref="170b" data-ref-filename="170b">b</dfn>)</td></tr>
+<tr><th id="43">43</th><td>{</td></tr>
+<tr><th id="44">44</th><td>    <b>return</b> <a class="local col9 ref" href="#169a" title='a' data-ref="169a" data-ref-filename="169a">a</a> &gt; <a class="local col0 ref" href="#170b" title='b' data-ref="170b" data-ref-filename="170b">b</a> ? <a class="local col9 ref" href="#169a" title='a' data-ref="169a" data-ref-filename="169a">a</a> : <a class="local col0 ref" href="#170b" title='b' data-ref="170b" data-ref-filename="170b">b</a>;</td></tr>
+<tr><th id="45">45</th><td>}</td></tr>
+<tr><th id="46">46</th><td>    </td></tr>
+<tr><th id="47">47</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>constexpr</b> T <dfn class="decl def fn" id="_ZN7bmalloc3minET_S0_" title='bmalloc::min' data-ref="_ZN7bmalloc3minET_S0_" data-ref-filename="_ZN7bmalloc3minET_S0_">min</dfn>(T <dfn class="local col1 decl" id="171a" title='a' data-type='T' data-ref="171a" data-ref-filename="171a">a</dfn>, T <dfn class="local col2 decl" id="172b" title='b' data-type='T' data-ref="172b" data-ref-filename="172b">b</dfn>)</td></tr>
+<tr><th id="48">48</th><td>{</td></tr>
+<tr><th id="49">49</th><td>    <b>return</b> <a class="local col1 ref" href="#171a" title='a' data-ref="171a" data-ref-filename="171a">a</a> &lt; <a class="local col2 ref" href="#172b" title='b' data-ref="172b" data-ref-filename="172b">b</a> ? <a class="local col1 ref" href="#171a" title='a' data-ref="171a" data-ref-filename="171a">a</a> : <a class="local col2 ref" href="#172b" title='b' data-ref="172b" data-ref-filename="172b">b</a>;</td></tr>
+<tr><th id="50">50</th><td>}</td></tr>
+<tr><th id="51">51</th><td></td></tr>
+<tr><th id="52">52</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>constexpr</b> T <dfn class="decl def fn" id="_ZN7bmalloc4maskET_m" title='bmalloc::mask' data-ref="_ZN7bmalloc4maskET_m" data-ref-filename="_ZN7bmalloc4maskET_m">mask</dfn>(T <dfn class="local col3 decl" id="173value" title='value' data-type='T' data-ref="173value" data-ref-filename="173value">value</dfn>, <span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span> <dfn class="local col4 decl" id="174mask" title='mask' data-type='uintptr_t' data-ref="174mask" data-ref-filename="174mask">mask</dfn>)</td></tr>
+<tr><th id="53">53</th><td>{</td></tr>
+<tr><th id="54">54</th><td>    <b>static_assert</b>(<b>sizeof</b>(T) == <b>sizeof</b>(<span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span>), <q>"sizeof(T) must be equal to sizeof(uintptr_t)."</q>);</td></tr>
+<tr><th id="55">55</th><td>    <b>return</b> <b>static_cast</b>&lt;T&gt;(<b>static_cast</b>&lt;<span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span>&gt;(<a class="local col3 ref" href="#173value" title='value' data-ref="173value" data-ref-filename="173value">value</a>) &amp; <a class="local col4 ref" href="#174mask" title='mask' data-ref="174mask" data-ref-filename="174mask">mask</a>);</td></tr>
+<tr><th id="56">56</th><td>}</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>inline</b> T* <dfn class="decl def fn" id="_ZN7bmalloc4maskEPT_m" title='bmalloc::mask' data-ref="_ZN7bmalloc4maskEPT_m" data-ref-filename="_ZN7bmalloc4maskEPT_m">mask</dfn>(T* <dfn class="local col5 decl" id="175value" title='value' data-type='T *' data-ref="175value" data-ref-filename="175value">value</dfn>, <span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span> <dfn class="local col6 decl" id="176mask" title='mask' data-type='uintptr_t' data-ref="176mask" data-ref-filename="176mask">mask</dfn>)</td></tr>
+<tr><th id="59">59</th><td>{</td></tr>
+<tr><th id="60">60</th><td>    <b>return</b> <b>reinterpret_cast</b>&lt;T*&gt;(<b>reinterpret_cast</b>&lt;<span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span>&gt;(<a class="local col5 ref" href="#175value" title='value' data-ref="175value" data-ref-filename="175value">value</a>) &amp; <a class="local col6 ref" href="#176mask" title='mask' data-ref="176mask" data-ref-filename="176mask">mask</a>);</td></tr>
+<tr><th id="61">61</th><td>}</td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>constexpr</b> <em>bool</em> <dfn class="decl def fn" id="_ZN7bmalloc4testET_m" title='bmalloc::test' data-ref="_ZN7bmalloc4testET_m" data-ref-filename="_ZN7bmalloc4testET_m">test</dfn>(T <dfn class="local col7 decl" id="177value" title='value' data-type='T' data-ref="177value" data-ref-filename="177value">value</dfn>, <span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span> <dfn class="local col8 decl" id="178mask" title='mask' data-type='uintptr_t' data-ref="178mask" data-ref-filename="178mask">mask</dfn>)</td></tr>
+<tr><th id="64">64</th><td>{</td></tr>
+<tr><th id="65">65</th><td>    <b>return</b> !!(<b>reinterpret_cast</b>&lt;<span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span>&gt;(<a class="local col7 ref" href="#177value" title='value' data-ref="177value" data-ref-filename="177value">value</a>) &amp; <a class="local col8 ref" href="#178mask" title='mask' data-ref="178mask" data-ref-filename="178mask">mask</a>);</td></tr>
+<tr><th id="66">66</th><td>}</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td><b>template</b> &lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="69">69</th><td><b>constexpr</b> <em>bool</em> <dfn class="decl def fn" id="_ZN7bmalloc12isPowerOfTwoET_" title='bmalloc::isPowerOfTwo' data-ref="_ZN7bmalloc12isPowerOfTwoET_" data-ref-filename="_ZN7bmalloc12isPowerOfTwoET_">isPowerOfTwo</dfn>(T <dfn class="local col9 decl" id="179size" title='size' data-type='T' data-ref="179size" data-ref-filename="179size">size</dfn>)</td></tr>
+<tr><th id="70">70</th><td>{</td></tr>
+<tr><th id="71">71</th><td>    <b>static_assert</b>(<span class="namespace">std::</span><span class='type' title='std::__1::is_integral' data-ref="std::__1::is_integral" data-ref-filename="std..__1..is_integral">is_integral</span>&lt;T&gt;::value, <q>""</q>);</td></tr>
+<tr><th id="72">72</th><td>    <b>return</b> <a class="local col9 ref" href="#179size" title='size' data-ref="179size" data-ref-filename="179size">size</a> &amp;&amp; !(<a class="local col9 ref" href="#179size" title='size' data-ref="179size" data-ref-filename="179size">size</a> &amp; (<a class="local col9 ref" href="#179size" title='size' data-ref="179size" data-ref-filename="179size">size</a> - <var>1</var>));</td></tr>
+<tr><th id="73">73</th><td>}</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>constexpr</b> T <dfn class="decl def fn" id="_ZN7bmalloc23roundUpToMultipleOfImplEmT_" title='bmalloc::roundUpToMultipleOfImpl' data-ref="_ZN7bmalloc23roundUpToMultipleOfImplEmT_" data-ref-filename="_ZN7bmalloc23roundUpToMultipleOfImplEmT_">roundUpToMultipleOfImpl</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="180divisor" title='divisor' data-type='size_t' data-ref="180divisor" data-ref-filename="180divisor">divisor</dfn>, T <dfn class="local col1 decl" id="181x" title='x' data-type='T' data-ref="181x" data-ref-filename="181x">x</dfn>)</td></tr>
+<tr><th id="76">76</th><td>{</td></tr>
+<tr><th id="77">77</th><td>    <b>static_assert</b>(<b>sizeof</b>(T) == <b>sizeof</b>(<span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span>), <q>"sizeof(T) must be equal to sizeof(uintptr_t)."</q>);</td></tr>
+<tr><th id="78">78</th><td>    <b>return</b> <b>static_cast</b>&lt;T&gt;((<b>static_cast</b>&lt;<span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span>&gt;(<a class="local col1 ref" href="#181x" title='x' data-ref="181x" data-ref-filename="181x">x</a>) + (<a class="local col0 ref" href="#180divisor" title='divisor' data-ref="180divisor" data-ref-filename="180divisor">divisor</a> - <var>1</var>)) &amp; ~(<a class="local col0 ref" href="#180divisor" title='divisor' data-ref="180divisor" data-ref-filename="180divisor">divisor</a> - <var>1</var>));</td></tr>
+<tr><th id="79">79</th><td>}</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>inline</b> T <dfn class="decl def fn" id="_ZN7bmalloc19roundUpToMultipleOfEmT_" title='bmalloc::roundUpToMultipleOf' data-ref="_ZN7bmalloc19roundUpToMultipleOfEmT_" data-ref-filename="_ZN7bmalloc19roundUpToMultipleOfEmT_">roundUpToMultipleOf</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="182divisor" title='divisor' data-type='size_t' data-ref="182divisor" data-ref-filename="182divisor">divisor</dfn>, T <dfn class="local col3 decl" id="183x" title='x' data-type='T' data-ref="183x" data-ref-filename="183x">x</dfn>)</td></tr>
+<tr><th id="82">82</th><td>{</td></tr>
+<tr><th id="83">83</th><td>    <a class="macro" href="BAssert.h.html#121" title="do { if (!(isPowerOfTwo(divisor))) do { *(int*)0xbbadbeef = 0; __builtin_trap(); } while (0); } while (0)" data-ref="_M/BASSERT">BASSERT</a>(<a class="ref fn" href="#_ZN7bmalloc12isPowerOfTwoET_" title='bmalloc::isPowerOfTwo' data-ref="_ZN7bmalloc12isPowerOfTwoET_" data-ref-filename="_ZN7bmalloc12isPowerOfTwoET_">isPowerOfTwo</a>(<a class="local col2 ref" href="#182divisor" title='divisor' data-ref="182divisor" data-ref-filename="182divisor">divisor</a>));</td></tr>
+<tr><th id="84">84</th><td>    <b>return</b> roundUpToMultipleOfImpl(<a class="local col2 ref" href="#182divisor" title='divisor' data-ref="182divisor" data-ref-filename="182divisor">divisor</a>, <a class="local col3 ref" href="#183x" title='x' data-ref="183x" data-ref-filename="183x">x</a>);</td></tr>
+<tr><th id="85">85</th><td>}</td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td><b>template</b>&lt;<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> divisor, <b>typename</b> T&gt; <b>constexpr</b> T <dfn class="decl def fn" id="_ZN7bmalloc19roundUpToMultipleOfET0_" title='bmalloc::roundUpToMultipleOf' data-ref="_ZN7bmalloc19roundUpToMultipleOfET0_" data-ref-filename="_ZN7bmalloc19roundUpToMultipleOfET0_">roundUpToMultipleOf</dfn>(T <dfn class="local col4 decl" id="184x" title='x' data-type='T' data-ref="184x" data-ref-filename="184x">x</dfn>)</td></tr>
+<tr><th id="88">88</th><td>{</td></tr>
+<tr><th id="89">89</th><td>    <b>static_assert</b>(<a class="ref fn" href="#_ZN7bmalloc12isPowerOfTwoET_" title='bmalloc::isPowerOfTwo' data-ref="_ZN7bmalloc12isPowerOfTwoET_" data-ref-filename="_ZN7bmalloc12isPowerOfTwoET_">isPowerOfTwo</a>(<a class="tu ref" href="#divisor" title='divisor' data-use='r' data-ref="divisor" data-ref-filename="divisor">divisor</a>), <q>"'divisor' must be a power of two."</q>);</td></tr>
+<tr><th id="90">90</th><td>    <b>return</b> roundUpToMultipleOfImpl(<a class="tu ref" href="#divisor" title='divisor' data-ref="divisor" data-ref-filename="divisor">divisor</a>, <a class="local col4 ref" href="#184x" title='x' data-ref="184x" data-ref-filename="184x">x</a>);</td></tr>
+<tr><th id="91">91</th><td>}</td></tr>
+<tr><th id="92">92</th><td></td></tr>
+<tr><th id="93">93</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>inline</b> T* <dfn class="decl def fn" id="_ZN7bmalloc19roundUpToMultipleOfEmPT_" title='bmalloc::roundUpToMultipleOf' data-ref="_ZN7bmalloc19roundUpToMultipleOfEmPT_" data-ref-filename="_ZN7bmalloc19roundUpToMultipleOfEmPT_">roundUpToMultipleOf</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="185divisor" title='divisor' data-type='size_t' data-ref="185divisor" data-ref-filename="185divisor">divisor</dfn>, T* <dfn class="local col6 decl" id="186x" title='x' data-type='T *' data-ref="186x" data-ref-filename="186x">x</dfn>)</td></tr>
+<tr><th id="94">94</th><td>{</td></tr>
+<tr><th id="95">95</th><td>    <a class="macro" href="BAssert.h.html#121" title="do { if (!(isPowerOfTwo(divisor))) do { *(int*)0xbbadbeef = 0; __builtin_trap(); } while (0); } while (0)" data-ref="_M/BASSERT">BASSERT</a>(<a class="ref fn" href="#_ZN7bmalloc12isPowerOfTwoET_" title='bmalloc::isPowerOfTwo' data-ref="_ZN7bmalloc12isPowerOfTwoET_" data-ref-filename="_ZN7bmalloc12isPowerOfTwoET_">isPowerOfTwo</a>(<a class="local col5 ref" href="#185divisor" title='divisor' data-ref="185divisor" data-ref-filename="185divisor">divisor</a>));</td></tr>
+<tr><th id="96">96</th><td>    <b>return</b> <b>reinterpret_cast</b>&lt;T*&gt;((<b>reinterpret_cast</b>&lt;<span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span>&gt;(<a class="local col6 ref" href="#186x" title='x' data-ref="186x" data-ref-filename="186x">x</a>) + (<a class="local col5 ref" href="#185divisor" title='divisor' data-ref="185divisor" data-ref-filename="185divisor">divisor</a> - <var>1</var>)) &amp; ~(<a class="local col5 ref" href="#185divisor" title='divisor' data-ref="185divisor" data-ref-filename="185divisor">divisor</a> - <var>1</var>));</td></tr>
+<tr><th id="97">97</th><td>}</td></tr>
+<tr><th id="98">98</th><td></td></tr>
+<tr><th id="99">99</th><td><b>template</b>&lt;<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> divisor, <b>typename</b> T&gt; <b>inline</b> T* <dfn class="decl def fn" id="_ZN7bmalloc19roundUpToMultipleOfEPT0_" title='bmalloc::roundUpToMultipleOf' data-ref="_ZN7bmalloc19roundUpToMultipleOfEPT0_" data-ref-filename="_ZN7bmalloc19roundUpToMultipleOfEPT0_">roundUpToMultipleOf</dfn>(T* <dfn class="local col7 decl" id="187x" title='x' data-type='T *' data-ref="187x" data-ref-filename="187x">x</dfn>)</td></tr>
+<tr><th id="100">100</th><td>{</td></tr>
+<tr><th id="101">101</th><td>    <b>static_assert</b>(<a class="ref fn" href="#_ZN7bmalloc12isPowerOfTwoET_" title='bmalloc::isPowerOfTwo' data-ref="_ZN7bmalloc12isPowerOfTwoET_" data-ref-filename="_ZN7bmalloc12isPowerOfTwoET_">isPowerOfTwo</a>(<a class="tu ref" href="#divisor" title='divisor' data-use='r' data-ref="divisor" data-ref-filename="divisor">divisor</a>), <q>"'divisor' must be a power of two."</q>);</td></tr>
+<tr><th id="102">102</th><td>    <b>return</b> roundUpToMultipleOf(<a class="tu ref" href="#divisor" title='divisor' data-ref="divisor" data-ref-filename="divisor">divisor</a>, <a class="local col7 ref" href="#187x" title='x' data-ref="187x" data-ref-filename="187x">x</a>);</td></tr>
+<tr><th id="103">103</th><td>}</td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>inline</b> T <dfn class="decl def fn" id="_ZN7bmalloc21roundDownToMultipleOfEmT_" title='bmalloc::roundDownToMultipleOf' data-ref="_ZN7bmalloc21roundDownToMultipleOfEmT_" data-ref-filename="_ZN7bmalloc21roundDownToMultipleOfEmT_">roundDownToMultipleOf</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="188divisor" title='divisor' data-type='size_t' data-ref="188divisor" data-ref-filename="188divisor">divisor</dfn>, T <dfn class="local col9 decl" id="189x" title='x' data-type='T' data-ref="189x" data-ref-filename="189x">x</dfn>)</td></tr>
+<tr><th id="106">106</th><td>{</td></tr>
+<tr><th id="107">107</th><td>    <a class="macro" href="BAssert.h.html#121" title="do { if (!(isPowerOfTwo(divisor))) do { *(int*)0xbbadbeef = 0; __builtin_trap(); } while (0); } while (0)" data-ref="_M/BASSERT">BASSERT</a>(<a class="ref fn" href="#_ZN7bmalloc12isPowerOfTwoET_" title='bmalloc::isPowerOfTwo' data-ref="_ZN7bmalloc12isPowerOfTwoET_" data-ref-filename="_ZN7bmalloc12isPowerOfTwoET_">isPowerOfTwo</a>(<a class="local col8 ref" href="#188divisor" title='divisor' data-ref="188divisor" data-ref-filename="188divisor">divisor</a>));</td></tr>
+<tr><th id="108">108</th><td>    <b>static_assert</b>(<b>sizeof</b>(T) == <b>sizeof</b>(<span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span>), <q>"sizeof(T) must be equal to sizeof(uintptr_t)."</q>);</td></tr>
+<tr><th id="109">109</th><td>    <b>return</b> <b>static_cast</b>&lt;T&gt;(<a class="ref fn" href="#_ZN7bmalloc4maskET_m" title='bmalloc::mask' data-ref="_ZN7bmalloc4maskET_m" data-ref-filename="_ZN7bmalloc4maskET_m">mask</a>(<b>static_cast</b>&lt;<span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span>&gt;(<a class="local col9 ref" href="#189x" title='x' data-ref="189x" data-ref-filename="189x">x</a>), ~(<a class="local col8 ref" href="#188divisor" title='divisor' data-ref="188divisor" data-ref-filename="188divisor">divisor</a> - <var>1ul</var>)));</td></tr>
+<tr><th id="110">110</th><td>}</td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>inline</b> T* <dfn class="decl def fn" id="_ZN7bmalloc21roundDownToMultipleOfEmPT_" title='bmalloc::roundDownToMultipleOf' data-ref="_ZN7bmalloc21roundDownToMultipleOfEmPT_" data-ref-filename="_ZN7bmalloc21roundDownToMultipleOfEmPT_">roundDownToMultipleOf</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="190divisor" title='divisor' data-type='size_t' data-ref="190divisor" data-ref-filename="190divisor">divisor</dfn>, T* <dfn class="local col1 decl" id="191x" title='x' data-type='T *' data-ref="191x" data-ref-filename="191x">x</dfn>)</td></tr>
+<tr><th id="113">113</th><td>{</td></tr>
+<tr><th id="114">114</th><td>    <a class="macro" href="BAssert.h.html#121" title="do { if (!(isPowerOfTwo(divisor))) do { *(int*)0xbbadbeef = 0; __builtin_trap(); } while (0); } while (0)" data-ref="_M/BASSERT">BASSERT</a>(<a class="ref fn" href="#_ZN7bmalloc12isPowerOfTwoET_" title='bmalloc::isPowerOfTwo' data-ref="_ZN7bmalloc12isPowerOfTwoET_" data-ref-filename="_ZN7bmalloc12isPowerOfTwoET_">isPowerOfTwo</a>(<a class="local col0 ref" href="#190divisor" title='divisor' data-ref="190divisor" data-ref-filename="190divisor">divisor</a>));</td></tr>
+<tr><th id="115">115</th><td>    <b>return</b> <b>reinterpret_cast</b>&lt;T*&gt;(<a class="ref fn" href="#_ZN7bmalloc4maskET_m" title='bmalloc::mask' data-ref="_ZN7bmalloc4maskET_m" data-ref-filename="_ZN7bmalloc4maskET_m">mask</a>(<b>reinterpret_cast</b>&lt;<span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span>&gt;(<a class="local col1 ref" href="#191x" title='x' data-ref="191x" data-ref-filename="191x">x</a>), ~(<a class="local col0 ref" href="#190divisor" title='divisor' data-ref="190divisor" data-ref-filename="190divisor">divisor</a> - <var>1ul</var>)));</td></tr>
+<tr><th id="116">116</th><td>}</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td><b>template</b>&lt;<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> divisor, <b>typename</b> T&gt; <b>constexpr</b> T <dfn class="decl def fn" id="_ZN7bmalloc21roundDownToMultipleOfET0_" title='bmalloc::roundDownToMultipleOf' data-ref="_ZN7bmalloc21roundDownToMultipleOfET0_" data-ref-filename="_ZN7bmalloc21roundDownToMultipleOfET0_">roundDownToMultipleOf</dfn>(T <dfn class="local col2 decl" id="192x" title='x' data-type='T' data-ref="192x" data-ref-filename="192x">x</dfn>)</td></tr>
+<tr><th id="119">119</th><td>{</td></tr>
+<tr><th id="120">120</th><td>    <b>static_assert</b>(<a class="ref fn" href="#_ZN7bmalloc12isPowerOfTwoET_" title='bmalloc::isPowerOfTwo' data-ref="_ZN7bmalloc12isPowerOfTwoET_" data-ref-filename="_ZN7bmalloc12isPowerOfTwoET_">isPowerOfTwo</a>(<a class="tu ref" href="#divisor" title='divisor' data-use='r' data-ref="divisor" data-ref-filename="divisor">divisor</a>), <q>"'divisor' must be a power of two."</q>);</td></tr>
+<tr><th id="121">121</th><td>    <b>return</b> roundDownToMultipleOf(<a class="tu ref" href="#divisor" title='divisor' data-ref="divisor" data-ref-filename="divisor">divisor</a>, <a class="local col2 ref" href="#192x" title='x' data-ref="192x" data-ref-filename="192x">x</a>);</td></tr>
+<tr><th id="122">122</th><td>}</td></tr>
+<tr><th id="123">123</th><td></td></tr>
+<tr><th id="124">124</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>inline</b> <em>void</em> <dfn class="decl def fn" id="_ZN7bmalloc16divideRoundingUpET_S0_RS0_S1_" title='bmalloc::divideRoundingUp' data-ref="_ZN7bmalloc16divideRoundingUpET_S0_RS0_S1_" data-ref-filename="_ZN7bmalloc16divideRoundingUpET_S0_RS0_S1_">divideRoundingUp</dfn>(T <dfn class="local col3 decl" id="193numerator" title='numerator' data-type='T' data-ref="193numerator" data-ref-filename="193numerator">numerator</dfn>, T <dfn class="local col4 decl" id="194denominator" title='denominator' data-type='T' data-ref="194denominator" data-ref-filename="194denominator">denominator</dfn>, T&amp; <dfn class="local col5 decl" id="195quotient" title='quotient' data-type='T &amp;' data-ref="195quotient" data-ref-filename="195quotient">quotient</dfn>, T&amp; <dfn class="local col6 decl" id="196remainder" title='remainder' data-type='T &amp;' data-ref="196remainder" data-ref-filename="196remainder">remainder</dfn>)</td></tr>
+<tr><th id="125">125</th><td>{</td></tr>
+<tr><th id="126">126</th><td>    <i>// We expect the compiler to emit a single divide instruction to extract both the quotient and the remainder.</i></td></tr>
+<tr><th id="127">127</th><td>    <a class="local col5 ref" href="#195quotient" title='quotient' data-ref="195quotient" data-ref-filename="195quotient">quotient</a> = <a class="local col3 ref" href="#193numerator" title='numerator' data-ref="193numerator" data-ref-filename="193numerator">numerator</a> / <a class="local col4 ref" href="#194denominator" title='denominator' data-ref="194denominator" data-ref-filename="194denominator">denominator</a>;</td></tr>
+<tr><th id="128">128</th><td>    <a class="local col6 ref" href="#196remainder" title='remainder' data-ref="196remainder" data-ref-filename="196remainder">remainder</a> = <a class="local col3 ref" href="#193numerator" title='numerator' data-ref="193numerator" data-ref-filename="193numerator">numerator</a> % <a class="local col4 ref" href="#194denominator" title='denominator' data-ref="194denominator" data-ref-filename="194denominator">denominator</a>;</td></tr>
+<tr><th id="129">129</th><td>    <b>if</b> (<a class="local col6 ref" href="#196remainder" title='remainder' data-ref="196remainder" data-ref-filename="196remainder">remainder</a>)</td></tr>
+<tr><th id="130">130</th><td>        <a class="local col5 ref" href="#195quotient" title='quotient' data-ref="195quotient" data-ref-filename="195quotient">quotient</a> += <var>1</var>;</td></tr>
+<tr><th id="131">131</th><td>}</td></tr>
+<tr><th id="132">132</th><td></td></tr>
+<tr><th id="133">133</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>constexpr</b> T <dfn class="decl def fn" id="_ZN7bmalloc16divideRoundingUpET_S0_" title='bmalloc::divideRoundingUp' data-ref="_ZN7bmalloc16divideRoundingUpET_S0_" data-ref-filename="_ZN7bmalloc16divideRoundingUpET_S0_">divideRoundingUp</dfn>(T <dfn class="local col7 decl" id="197numerator" title='numerator' data-type='T' data-ref="197numerator" data-ref-filename="197numerator">numerator</dfn>, T <dfn class="local col8 decl" id="198denominator" title='denominator' data-type='T' data-ref="198denominator" data-ref-filename="198denominator">denominator</dfn>)</td></tr>
+<tr><th id="134">134</th><td>{</td></tr>
+<tr><th id="135">135</th><td>    <b>return</b> (<a class="local col7 ref" href="#197numerator" title='numerator' data-ref="197numerator" data-ref-filename="197numerator">numerator</a> + <a class="local col8 ref" href="#198denominator" title='denominator' data-ref="198denominator" data-ref-filename="198denominator">denominator</a> - <var>1</var>) / <a class="local col8 ref" href="#198denominator" title='denominator' data-ref="198denominator" data-ref-filename="198denominator">denominator</a>;</td></tr>
+<tr><th id="136">136</th><td>}</td></tr>
+<tr><th id="137">137</th><td></td></tr>
+<tr><th id="138">138</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>inline</b> T <dfn class="decl def fn" id="_ZN7bmalloc32roundUpToMultipleOfNonPowerOfTwoEmT_" title='bmalloc::roundUpToMultipleOfNonPowerOfTwo' data-ref="_ZN7bmalloc32roundUpToMultipleOfNonPowerOfTwoEmT_" data-ref-filename="_ZN7bmalloc32roundUpToMultipleOfNonPowerOfTwoEmT_">roundUpToMultipleOfNonPowerOfTwo</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="199divisor" title='divisor' data-type='size_t' data-ref="199divisor" data-ref-filename="199divisor">divisor</dfn>, T <dfn class="local col0 decl" id="200x" title='x' data-type='T' data-ref="200x" data-ref-filename="200x">x</dfn>)</td></tr>
+<tr><th id="139">139</th><td>{</td></tr>
+<tr><th id="140">140</th><td>    <b>return</b> divideRoundingUp(<a class="local col0 ref" href="#200x" title='x' data-ref="200x" data-ref-filename="200x">x</a>, <a class="local col9 ref" href="#199divisor" title='divisor' data-ref="199divisor" data-ref-filename="199divisor">divisor</a>) * <a class="local col9 ref" href="#199divisor" title='divisor' data-ref="199divisor" data-ref-filename="199divisor">divisor</a>;</td></tr>
+<tr><th id="141">141</th><td>}</td></tr>
+<tr><th id="142">142</th><td></td></tr>
+<tr><th id="143">143</th><td><i>// Version of sizeof that returns 0 for empty classes.</i></td></tr>
+<tr><th id="144">144</th><td></td></tr>
+<tr><th id="145">145</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>constexpr</b> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl def fn" id="_ZN7bmalloc6sizeOfEv" title='bmalloc::sizeOf' data-ref="_ZN7bmalloc6sizeOfEv" data-ref-filename="_ZN7bmalloc6sizeOfEv">sizeOf</dfn>()</td></tr>
+<tr><th id="146">146</th><td>{</td></tr>
+<tr><th id="147">147</th><td>    <b>return</b> <span class="namespace">std::</span><span class='type' title='std::__1::is_empty' data-ref="std::__1::is_empty" data-ref-filename="std..__1..is_empty">is_empty</span>&lt;T&gt;::value ? <var>0</var> : <b>sizeof</b>(T);</td></tr>
+<tr><th id="148">148</th><td>}</td></tr>
+<tr><th id="149">149</th><td></td></tr>
+<tr><th id="150">150</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>constexpr</b> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl def fn" id="_ZN7bmalloc8bitCountEv" title='bmalloc::bitCount' data-ref="_ZN7bmalloc8bitCountEv" data-ref-filename="_ZN7bmalloc8bitCountEv">bitCount</dfn>()</td></tr>
+<tr><th id="151">151</th><td>{</td></tr>
+<tr><th id="152">152</th><td>    <b>return</b> <b>sizeof</b>(T) * <var>8</var>;</td></tr>
+<tr><th id="153">153</th><td>}</td></tr>
+<tr><th id="154">154</th><td></td></tr>
+<tr><th id="155">155</th><td><u>#<span data-ppcond="155">if</span> <a class="macro" href="BPlatform.h.html#37" title="(defined BOS_WINDOWS &amp;&amp; BOS_WINDOWS)" data-ref="_M/BOS">BOS</a>(WINDOWS)</u></td></tr>
+<tr><th id="156">156</th><td><b>template</b>&lt;<em>int</em> depth&gt; __forceinline <b>constexpr</b> <em>unsigned</em> <em>long</em> clzl(<em>unsigned</em> <em>long</em> value)</td></tr>
+<tr><th id="157">157</th><td>{</td></tr>
+<tr><th id="158">158</th><td>    <b>return</b> value &amp; (<var>1UL</var> &lt;&lt; (bitCount&lt;<em>unsigned</em> <em>long</em>&gt;() - <var>1</var>)) ? <var>0</var> : <var>1</var> + clzl&lt;depth - <var>1</var>&gt;(value &lt;&lt; <var>1</var>);</td></tr>
+<tr><th id="159">159</th><td>}</td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td><b>template</b>&lt;&gt; __forceinline <b>constexpr</b> <em>unsigned</em> <em>long</em> clzl&lt;<var>1</var>&gt;(<em>unsigned</em> <em>long</em> value)</td></tr>
+<tr><th id="162">162</th><td>{</td></tr>
+<tr><th id="163">163</th><td>    <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="164">164</th><td>}</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td>__forceinline <b>constexpr</b> <em>unsigned</em> <em>long</em> __builtin_clzl(<em>unsigned</em> <em>long</em> value)</td></tr>
+<tr><th id="167">167</th><td>{</td></tr>
+<tr><th id="168">168</th><td>    <b>return</b> value == <var>0</var> ? <var>32</var> : clzl&lt;bitCount&lt;<em>unsigned</em> <em>long</em>&gt;()&gt;(value);</td></tr>
+<tr><th id="169">169</th><td>}</td></tr>
+<tr><th id="170">170</th><td><u>#<span data-ppcond="155">endif</span></u></td></tr>
+<tr><th id="171">171</th><td></td></tr>
+<tr><th id="172">172</th><td><b>template</b> &lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="173">173</th><td><b>constexpr</b> <em>unsigned</em> <dfn class="decl def fn" id="_ZN7bmalloc12clzConstexprET_" title='bmalloc::clzConstexpr' data-ref="_ZN7bmalloc12clzConstexprET_" data-ref-filename="_ZN7bmalloc12clzConstexprET_">clzConstexpr</dfn>(T <dfn class="local col1 decl" id="201value" title='value' data-type='T' data-ref="201value" data-ref-filename="201value">value</dfn>)</td></tr>
+<tr><th id="174">174</th><td>{</td></tr>
+<tr><th id="175">175</th><td>    <b>constexpr</b> <em>unsigned</em> <dfn class="local col2 decl" id="202bitSize" title='bitSize' data-type='const unsigned int' data-ref="202bitSize" data-ref-filename="202bitSize">bitSize</dfn> = <b>sizeof</b>(T) * <span class="macro" title="8" data-ref="_M/CHAR_BIT">CHAR_BIT</span>;</td></tr>
+<tr><th id="176">176</th><td></td></tr>
+<tr><th id="177">177</th><td>    <b>using</b> <dfn class="local col3 typedef" id="203UT" title='UT' data-type='typename std::make_unsigned&lt;T&gt;::type' data-ref="203UT" data-ref-filename="203UT">UT</dfn> = <b>typename</b> <span class="namespace">std::</span><span class='type' title='std::__1::make_unsigned' data-ref="std::__1::make_unsigned" data-ref-filename="std..__1..make_unsigned">make_unsigned</span>&lt;T&gt;::type;</td></tr>
+<tr><th id="178">178</th><td>    <a class="local col3 typedef" href="#203UT" title='UT' data-type='typename std::make_unsigned&lt;T&gt;::type' data-ref="203UT" data-ref-filename="203UT">UT</a> <dfn class="local col4 decl" id="204uValue" title='uValue' data-type='UT' data-ref="204uValue" data-ref-filename="204uValue">uValue</dfn> = <a class="local col1 ref" href="#201value" title='value' data-ref="201value" data-ref-filename="201value">value</a>;</td></tr>
+<tr><th id="179">179</th><td></td></tr>
+<tr><th id="180">180</th><td>    <em>unsigned</em> <dfn class="local col5 decl" id="205zeroCount" title='zeroCount' data-type='unsigned int' data-ref="205zeroCount" data-ref-filename="205zeroCount">zeroCount</dfn> = <var>0</var>;</td></tr>
+<tr><th id="181">181</th><td>    <b>for</b> (<em>int</em> <dfn class="local col6 decl" id="206i" title='i' data-type='int' data-ref="206i" data-ref-filename="206i">i</dfn> = <a class="local col2 ref" href="#202bitSize" title='bitSize' data-ref="202bitSize" data-ref-filename="202bitSize">bitSize</a> - <var>1</var>; <a class="local col6 ref" href="#206i" title='i' data-ref="206i" data-ref-filename="206i">i</a> &gt;= <var>0</var>; <a class="local col6 ref" href="#206i" title='i' data-ref="206i" data-ref-filename="206i">i</a>--) {</td></tr>
+<tr><th id="182">182</th><td>        <b>if</b> (<a class="local col4 ref" href="#204uValue" title='uValue' data-ref="204uValue" data-ref-filename="204uValue">uValue</a> &gt;&gt; <a class="local col6 ref" href="#206i" title='i' data-ref="206i" data-ref-filename="206i">i</a>)</td></tr>
+<tr><th id="183">183</th><td>            <b>break</b>;</td></tr>
+<tr><th id="184">184</th><td>        <a class="local col5 ref" href="#205zeroCount" title='zeroCount' data-ref="205zeroCount" data-ref-filename="205zeroCount">zeroCount</a>++;</td></tr>
+<tr><th id="185">185</th><td>    }</td></tr>
+<tr><th id="186">186</th><td>    <b>return</b> <a class="local col5 ref" href="#205zeroCount" title='zeroCount' data-ref="205zeroCount" data-ref-filename="205zeroCount">zeroCount</a>;</td></tr>
+<tr><th id="187">187</th><td>}</td></tr>
+<tr><th id="188">188</th><td></td></tr>
+<tr><th id="189">189</th><td><b>constexpr</b> <em>unsigned</em> <em>long</em> <dfn class="decl def fn" id="_ZN7bmalloc4log2Em" title='bmalloc::log2' data-ref="_ZN7bmalloc4log2Em" data-ref-filename="_ZN7bmalloc4log2Em">log2</dfn>(<em>unsigned</em> <em>long</em> <dfn class="local col7 decl" id="207value" title='value' data-type='unsigned long' data-ref="207value" data-ref-filename="207value">value</dfn>)</td></tr>
+<tr><th id="190">190</th><td>{</td></tr>
+<tr><th id="191">191</th><td>    <b>return</b> <a class="ref fn" href="#_ZN7bmalloc8bitCountEv" title='bmalloc::bitCount' data-ref="_ZN7bmalloc8bitCountEv" data-ref-filename="_ZN7bmalloc8bitCountEv">bitCount</a>&lt;<em>unsigned</em> <em>long</em>&gt;() - <var>1</var> - <span class='ref fn' title='__builtin_clzl' data-ref="__builtin_clzl" data-ref-filename="__builtin_clzl">__builtin_clzl</span>(<a class="local col7 ref" href="#207value" title='value' data-ref="207value" data-ref-filename="207value">value</a>);</td></tr>
+<tr><th id="192">192</th><td>}</td></tr>
+<tr><th id="193">193</th><td></td></tr>
+<tr><th id="194">194</th><td><u>#define <dfn class="macro" id="_M/BOFFSETOF" data-ref="_M/BOFFSETOF">BOFFSETOF</dfn>(class, field) (reinterpret_cast&lt;ptrdiff_t&gt;(&amp;(reinterpret_cast&lt;class*&gt;(0x4000)-&gt;field)) - 0x4000)</u></td></tr>
+<tr><th id="195">195</th><td></td></tr>
+<tr><th id="196">196</th><td><b>template</b> &lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="197">197</th><td><b>constexpr</b> <em>unsigned</em> <dfn class="decl def fn" id="_ZN7bmalloc12ctzConstexprET_" title='bmalloc::ctzConstexpr' data-ref="_ZN7bmalloc12ctzConstexprET_" data-ref-filename="_ZN7bmalloc12ctzConstexprET_">ctzConstexpr</dfn>(T <dfn class="local col8 decl" id="208value" title='value' data-type='T' data-ref="208value" data-ref-filename="208value">value</dfn>)</td></tr>
+<tr><th id="198">198</th><td>{</td></tr>
+<tr><th id="199">199</th><td>    <b>constexpr</b> <em>unsigned</em> <dfn class="local col9 decl" id="209bitSize" title='bitSize' data-type='const unsigned int' data-ref="209bitSize" data-ref-filename="209bitSize">bitSize</dfn> = <b>sizeof</b>(T) * <span class="macro" title="8" data-ref="_M/CHAR_BIT">CHAR_BIT</span>;</td></tr>
+<tr><th id="200">200</th><td></td></tr>
+<tr><th id="201">201</th><td>    <b>using</b> <dfn class="local col0 typedef" id="210UT" title='UT' data-type='typename std::make_unsigned&lt;T&gt;::type' data-ref="210UT" data-ref-filename="210UT">UT</dfn> = <b>typename</b> <span class="namespace">std::</span><span class='type' title='std::__1::make_unsigned' data-ref="std::__1::make_unsigned" data-ref-filename="std..__1..make_unsigned">make_unsigned</span>&lt;T&gt;::type;</td></tr>
+<tr><th id="202">202</th><td>    <a class="local col0 typedef" href="#210UT" title='UT' data-type='typename std::make_unsigned&lt;T&gt;::type' data-ref="210UT" data-ref-filename="210UT">UT</a> <dfn class="local col1 decl" id="211uValue" title='uValue' data-type='UT' data-ref="211uValue" data-ref-filename="211uValue">uValue</dfn> = <a class="local col8 ref" href="#208value" title='value' data-ref="208value" data-ref-filename="208value">value</a>;</td></tr>
+<tr><th id="203">203</th><td></td></tr>
+<tr><th id="204">204</th><td>    <em>unsigned</em> <dfn class="local col2 decl" id="212zeroCount" title='zeroCount' data-type='unsigned int' data-ref="212zeroCount" data-ref-filename="212zeroCount">zeroCount</dfn> = <var>0</var>;</td></tr>
+<tr><th id="205">205</th><td>    <b>for</b> (<em>unsigned</em> <dfn class="local col3 decl" id="213i" title='i' data-type='unsigned int' data-ref="213i" data-ref-filename="213i">i</dfn> = <var>0</var>; <a class="local col3 ref" href="#213i" title='i' data-ref="213i" data-ref-filename="213i">i</a> &lt; <a class="local col9 ref" href="#209bitSize" title='bitSize' data-ref="209bitSize" data-ref-filename="209bitSize">bitSize</a>; <a class="local col3 ref" href="#213i" title='i' data-ref="213i" data-ref-filename="213i">i</a>++) {</td></tr>
+<tr><th id="206">206</th><td>        <b>if</b> (<a class="local col1 ref" href="#211uValue" title='uValue' data-ref="211uValue" data-ref-filename="211uValue">uValue</a> &amp; <var>1</var>)</td></tr>
+<tr><th id="207">207</th><td>            <b>break</b>;</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td>        <a class="local col2 ref" href="#212zeroCount" title='zeroCount' data-ref="212zeroCount" data-ref-filename="212zeroCount">zeroCount</a>++;</td></tr>
+<tr><th id="210">210</th><td>        <a class="local col1 ref" href="#211uValue" title='uValue' data-ref="211uValue" data-ref-filename="211uValue">uValue</a> &gt;&gt;= <var>1</var>;</td></tr>
+<tr><th id="211">211</th><td>    }</td></tr>
+<tr><th id="212">212</th><td>    <b>return</b> <a class="local col2 ref" href="#212zeroCount" title='zeroCount' data-ref="212zeroCount" data-ref-filename="212zeroCount">zeroCount</a>;</td></tr>
+<tr><th id="213">213</th><td>}</td></tr>
+<tr><th id="214">214</th><td></td></tr>
+<tr><th id="215">215</th><td><b>template</b>&lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="216">216</th><td><b>inline</b> <em>unsigned</em> <dfn class="decl def fn" id="_ZN7bmalloc3ctzET_" title='bmalloc::ctz' data-ref="_ZN7bmalloc3ctzET_" data-ref-filename="_ZN7bmalloc3ctzET_">ctz</dfn>(T <dfn class="local col4 decl" id="214value" title='value' data-type='T' data-ref="214value" data-ref-filename="214value">value</dfn>)</td></tr>
+<tr><th id="217">217</th><td>{</td></tr>
+<tr><th id="218">218</th><td>    <b>constexpr</b> <em>unsigned</em> <dfn class="local col5 decl" id="215bitSize" title='bitSize' data-type='const unsigned int' data-ref="215bitSize" data-ref-filename="215bitSize">bitSize</dfn> = <b>sizeof</b>(T) * <span class="macro" title="8" data-ref="_M/CHAR_BIT">CHAR_BIT</span>;</td></tr>
+<tr><th id="219">219</th><td></td></tr>
+<tr><th id="220">220</th><td>    <b>using</b> <dfn class="local col6 typedef" id="216UT" title='UT' data-type='typename std::make_unsigned&lt;T&gt;::type' data-ref="216UT" data-ref-filename="216UT">UT</dfn> = <b>typename</b> <span class="namespace">std::</span><span class='type' title='std::__1::make_unsigned' data-ref="std::__1::make_unsigned" data-ref-filename="std..__1..make_unsigned">make_unsigned</span>&lt;T&gt;::type;</td></tr>
+<tr><th id="221">221</th><td>    <a class="local col6 typedef" href="#216UT" title='UT' data-type='typename std::make_unsigned&lt;T&gt;::type' data-ref="216UT" data-ref-filename="216UT">UT</a> <dfn class="local col7 decl" id="217uValue" title='uValue' data-type='UT' data-ref="217uValue" data-ref-filename="217uValue">uValue</dfn> = <a class="local col4 ref" href="#214value" title='value' data-ref="214value" data-ref-filename="214value">value</a>;</td></tr>
+<tr><th id="222">222</th><td></td></tr>
+<tr><th id="223">223</th><td><u>#<span data-ppcond="223">if</span> <a class="macro" href="BCompiler.h.html#29" title="(defined 1 &amp;&amp; 1)" data-ref="_M/BCOMPILER">BCOMPILER</a>(GCC_COMPATIBLE)</u></td></tr>
+<tr><th id="224">224</th><td>    <b>if</b> (<a class="local col7 ref" href="#217uValue" title='uValue' data-ref="217uValue" data-ref-filename="217uValue">uValue</a>)</td></tr>
+<tr><th id="225">225</th><td>        <b>return</b> <span class='ref fn' title='__builtin_ctzll' data-ref="__builtin_ctzll" data-ref-filename="__builtin_ctzll">__builtin_ctzll</span>(<a class="local col7 ref" href="#217uValue" title='uValue' data-ref="217uValue" data-ref-filename="217uValue">uValue</a>);</td></tr>
+<tr><th id="226">226</th><td>    <b>return</b> <a class="local col5 ref" href="#215bitSize" title='bitSize' data-ref="215bitSize" data-ref-filename="215bitSize">bitSize</a>;</td></tr>
+<tr><th id="227">227</th><td><u>#<span data-ppcond="223">elif</span> BCOMPILER(MSVC) &amp;&amp; !BCPU(X86)</u></td></tr>
+<tr><th id="228">228</th><td>    <em>unsigned</em> <em>long</em> ret = <var>0</var>;</td></tr>
+<tr><th id="229">229</th><td>    <b>if</b> (_BitScanForward64(&amp;ret, uValue))</td></tr>
+<tr><th id="230">230</th><td>        <b>return</b> ret;</td></tr>
+<tr><th id="231">231</th><td>    <b>return</b> bitSize;</td></tr>
+<tr><th id="232">232</th><td><u>#else</u></td></tr>
+<tr><th id="233">233</th><td>    UNUSED_PARAM(bitSize);</td></tr>
+<tr><th id="234">234</th><td>    UNUSED_PARAM(uValue);</td></tr>
+<tr><th id="235">235</th><td>    <b>return</b> ctzConstexpr(value);</td></tr>
+<tr><th id="236">236</th><td><u>#<span data-ppcond="223">endif</span></u></td></tr>
+<tr><th id="237">237</th><td>}</td></tr>
+<tr><th id="238">238</th><td></td></tr>
+<tr><th id="239">239</th><td><b>template</b>&lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="240">240</th><td><em>bool</em> <dfn class="decl def fn" id="_ZN7bmalloc13findBitInWordET_Rmmb" title='bmalloc::findBitInWord' data-ref="_ZN7bmalloc13findBitInWordET_Rmmb" data-ref-filename="_ZN7bmalloc13findBitInWordET_Rmmb">findBitInWord</dfn>(T <dfn class="local col8 decl" id="218word" title='word' data-type='T' data-ref="218word" data-ref-filename="218word">word</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span>&amp; <dfn class="local col9 decl" id="219startOrResultIndex" title='startOrResultIndex' data-type='size_t &amp;' data-ref="219startOrResultIndex" data-ref-filename="219startOrResultIndex">startOrResultIndex</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="220endIndex" title='endIndex' data-type='size_t' data-ref="220endIndex" data-ref-filename="220endIndex">endIndex</dfn>, <em>bool</em> <dfn class="local col1 decl" id="221value" title='value' data-type='bool' data-ref="221value" data-ref-filename="221value">value</dfn>)</td></tr>
+<tr><th id="241">241</th><td>{</td></tr>
+<tr><th id="242">242</th><td>    <b>static_assert</b>(<span class="namespace">std::</span><span class='type' title='std::__1::is_unsigned' data-ref="std::__1::is_unsigned" data-ref-filename="std..__1..is_unsigned">is_unsigned</span>&lt;T&gt;::value, <q>"Type used in findBitInWord must be unsigned"</q>);</td></tr>
+<tr><th id="243">243</th><td>    <b>constexpr</b> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="222bitsInWord" title='bitsInWord' data-type='const size_t' data-ref="222bitsInWord" data-ref-filename="222bitsInWord">bitsInWord</dfn> = <b>sizeof</b>(<a class="local col8 ref" href="#218word" title='word' data-ref="218word" data-ref-filename="218word">word</a>) * <var>8</var>;</td></tr>
+<tr><th id="244">244</th><td>    <a class="macro" href="BAssert.h.html#121" title="do { if (!(startOrResultIndex &lt;= bitsInWord &amp;&amp; endIndex &lt;= bitsInWord)) do { *(int*)0xbbadbeef = 0; __builtin_trap(); } while (0); } while (0)" data-ref="_M/BASSERT">BASSERT</a>(<a class="local col9 ref" href="#219startOrResultIndex" title='startOrResultIndex' data-ref="219startOrResultIndex" data-ref-filename="219startOrResultIndex">startOrResultIndex</a> &lt;= <a class="local col2 ref" href="#222bitsInWord" title='bitsInWord' data-ref="222bitsInWord" data-ref-filename="222bitsInWord">bitsInWord</a> &amp;&amp; <a class="local col0 ref" href="#220endIndex" title='endIndex' data-ref="220endIndex" data-ref-filename="220endIndex">endIndex</a> &lt;= <a class="local col2 ref" href="#222bitsInWord" title='bitsInWord' data-ref="222bitsInWord" data-ref-filename="222bitsInWord">bitsInWord</a>);</td></tr>
+<tr><th id="245">245</th><td>    <a class="macro" href="BAssert.h.html#104" title="((void)bitsInWord)" data-ref="_M/BUNUSED">BUNUSED</a>(<a class="local col2 ref" href="#222bitsInWord" title='bitsInWord' data-ref="222bitsInWord" data-ref-filename="222bitsInWord">bitsInWord</a>);</td></tr>
+<tr><th id="246">246</th><td>    </td></tr>
+<tr><th id="247">247</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="223index" title='index' data-type='size_t' data-ref="223index" data-ref-filename="223index">index</dfn> = <a class="local col9 ref" href="#219startOrResultIndex" title='startOrResultIndex' data-ref="219startOrResultIndex" data-ref-filename="219startOrResultIndex">startOrResultIndex</a>;</td></tr>
+<tr><th id="248">248</th><td>    <a class="local col8 ref" href="#218word" title='word' data-ref="218word" data-ref-filename="218word">word</a> &gt;&gt;= <a class="local col3 ref" href="#223index" title='index' data-ref="223index" data-ref-filename="223index">index</a>;</td></tr>
+<tr><th id="249">249</th><td></td></tr>
+<tr><th id="250">250</th><td><u>#<span data-ppcond="250">if</span> <a class="macro" href="BCompiler.h.html#29" title="(defined 1 &amp;&amp; 1)" data-ref="_M/BCOMPILER">BCOMPILER</a>(GCC_COMPATIBLE) &amp;&amp; (<a class="macro" href="BPlatform.h.html#116" title="(defined BCPU_X86_64 &amp;&amp; BCPU_X86_64)" data-ref="_M/BCPU">BCPU</a>(X86_64) || <a class="macro" href="BPlatform.h.html#116" title="(defined 1 &amp;&amp; 1)" data-ref="_M/BCPU">BCPU</a>(ARM64))</u></td></tr>
+<tr><th id="251">251</th><td>    <i>// We should only use ctz() when we know that ctz() is implementated using</i></td></tr>
+<tr><th id="252">252</th><td><i>    // a fast hardware instruction. Otherwise, this will actually result in</i></td></tr>
+<tr><th id="253">253</th><td><i>    // worse performance.</i></td></tr>
+<tr><th id="254">254</th><td></td></tr>
+<tr><th id="255">255</th><td>    <a class="local col8 ref" href="#218word" title='word' data-ref="218word" data-ref-filename="218word">word</a> ^= (<b>static_cast</b>&lt;T&gt;(<a class="local col1 ref" href="#221value" title='value' data-ref="221value" data-ref-filename="221value">value</a>) - <var>1</var>);</td></tr>
+<tr><th id="256">256</th><td>    <a class="local col3 ref" href="#223index" title='index' data-ref="223index" data-ref-filename="223index">index</a> += ctz(<a class="local col8 ref" href="#218word" title='word' data-ref="218word" data-ref-filename="218word">word</a>);</td></tr>
+<tr><th id="257">257</th><td>    <b>if</b> (<a class="local col3 ref" href="#223index" title='index' data-ref="223index" data-ref-filename="223index">index</a> &lt; <a class="local col0 ref" href="#220endIndex" title='endIndex' data-ref="220endIndex" data-ref-filename="220endIndex">endIndex</a>) {</td></tr>
+<tr><th id="258">258</th><td>        <a class="local col9 ref" href="#219startOrResultIndex" title='startOrResultIndex' data-ref="219startOrResultIndex" data-ref-filename="219startOrResultIndex">startOrResultIndex</a> = <a class="local col3 ref" href="#223index" title='index' data-ref="223index" data-ref-filename="223index">index</a>;</td></tr>
+<tr><th id="259">259</th><td>        <b>return</b> <b>true</b>;</td></tr>
+<tr><th id="260">260</th><td>    }</td></tr>
+<tr><th id="261">261</th><td><u>#<span data-ppcond="250">else</span></u></td></tr>
+<tr><th id="262">262</th><td>    <b>while</b> (index &lt; endIndex) {</td></tr>
+<tr><th id="263">263</th><td>        <b>if</b> ((word &amp; <var>1</var>) == <b>static_cast</b>&lt;T&gt;(value)) {</td></tr>
+<tr><th id="264">264</th><td>            startOrResultIndex = index;</td></tr>
+<tr><th id="265">265</th><td>            <b>return</b> <b>true</b>;</td></tr>
+<tr><th id="266">266</th><td>        }</td></tr>
+<tr><th id="267">267</th><td>        index++;</td></tr>
+<tr><th id="268">268</th><td>        word &gt;&gt;= <var>1</var>;</td></tr>
+<tr><th id="269">269</th><td>    }</td></tr>
+<tr><th id="270">270</th><td><u>#<span data-ppcond="250">endif</span></u></td></tr>
+<tr><th id="271">271</th><td></td></tr>
+<tr><th id="272">272</th><td>    <a class="local col9 ref" href="#219startOrResultIndex" title='startOrResultIndex' data-ref="219startOrResultIndex" data-ref-filename="219startOrResultIndex">startOrResultIndex</a> = <a class="local col0 ref" href="#220endIndex" title='endIndex' data-ref="220endIndex" data-ref-filename="220endIndex">endIndex</a>;</td></tr>
+<tr><th id="273">273</th><td>    <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="274">274</th><td>}</td></tr>
+<tr><th id="275">275</th><td></td></tr>
+<tr><th id="276">276</th><td><b>template</b>&lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="277">277</th><td><b>constexpr</b> <em>unsigned</em> <dfn class="decl def fn" id="_ZN7bmalloc25getLSBSetNonZeroConstexprET_" title='bmalloc::getLSBSetNonZeroConstexpr' data-ref="_ZN7bmalloc25getLSBSetNonZeroConstexprET_" data-ref-filename="_ZN7bmalloc25getLSBSetNonZeroConstexprET_">getLSBSetNonZeroConstexpr</dfn>(T <dfn class="local col4 decl" id="224t" title='t' data-type='T' data-ref="224t" data-ref-filename="224t">t</dfn>)</td></tr>
+<tr><th id="278">278</th><td>{</td></tr>
+<tr><th id="279">279</th><td>    <b>return</b> ctzConstexpr(<a class="local col4 ref" href="#224t" title='t' data-ref="224t" data-ref-filename="224t">t</a>);</td></tr>
+<tr><th id="280">280</th><td>}</td></tr>
+<tr><th id="281">281</th><td></td></tr>
+<tr><th id="282">282</th><td><b>template</b>&lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="283">283</th><td><b>constexpr</b> <em>unsigned</em> <dfn class="decl def fn" id="_ZN7bmalloc18getMSBSetConstexprET_" title='bmalloc::getMSBSetConstexpr' data-ref="_ZN7bmalloc18getMSBSetConstexprET_" data-ref-filename="_ZN7bmalloc18getMSBSetConstexprET_">getMSBSetConstexpr</dfn>(T <dfn class="local col5 decl" id="225t" title='t' data-type='T' data-ref="225t" data-ref-filename="225t">t</dfn>)</td></tr>
+<tr><th id="284">284</th><td>{</td></tr>
+<tr><th id="285">285</th><td>    <b>constexpr</b> <em>unsigned</em> <dfn class="local col6 decl" id="226bitSize" title='bitSize' data-type='const unsigned int' data-ref="226bitSize" data-ref-filename="226bitSize">bitSize</dfn> = <b>sizeof</b>(T) * <span class="macro" title="8" data-ref="_M/CHAR_BIT">CHAR_BIT</span>;</td></tr>
+<tr><th id="286">286</th><td>    <b>return</b> <a class="local col6 ref" href="#226bitSize" title='bitSize' data-ref="226bitSize" data-ref-filename="226bitSize">bitSize</a> - <var>1</var> - clzConstexpr(<a class="local col5 ref" href="#225t" title='t' data-ref="225t" data-ref-filename="225t">t</a>);</td></tr>
+<tr><th id="287">287</th><td>}</td></tr>
+<tr><th id="288">288</th><td></td></tr>
+<tr><th id="289">289</th><td><i>// From <a href="http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2">http://graphics.stanford.edu/~seander/bithacks.html#RoundUpPowerOf2</a></i></td></tr>
+<tr><th id="290">290</th><td><b>constexpr</b> <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl def fn" id="_ZN7bmalloc19roundUpToPowerOfTwoEj" title='bmalloc::roundUpToPowerOfTwo' data-ref="_ZN7bmalloc19roundUpToPowerOfTwoEj" data-ref-filename="_ZN7bmalloc19roundUpToPowerOfTwoEj">roundUpToPowerOfTwo</dfn>(<span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col7 decl" id="227v" title='v' data-type='uint32_t' data-ref="227v" data-ref-filename="227v">v</dfn>)</td></tr>
+<tr><th id="291">291</th><td>{</td></tr>
+<tr><th id="292">292</th><td>    <a class="local col7 ref" href="#227v" title='v' data-ref="227v" data-ref-filename="227v">v</a>--;</td></tr>
+<tr><th id="293">293</th><td>    <a class="local col7 ref" href="#227v" title='v' data-ref="227v" data-ref-filename="227v">v</a> |= <a class="local col7 ref" href="#227v" title='v' data-ref="227v" data-ref-filename="227v">v</a> &gt;&gt; <var>1</var>;</td></tr>
+<tr><th id="294">294</th><td>    <a class="local col7 ref" href="#227v" title='v' data-ref="227v" data-ref-filename="227v">v</a> |= <a class="local col7 ref" href="#227v" title='v' data-ref="227v" data-ref-filename="227v">v</a> &gt;&gt; <var>2</var>;</td></tr>
+<tr><th id="295">295</th><td>    <a class="local col7 ref" href="#227v" title='v' data-ref="227v" data-ref-filename="227v">v</a> |= <a class="local col7 ref" href="#227v" title='v' data-ref="227v" data-ref-filename="227v">v</a> &gt;&gt; <var>4</var>;</td></tr>
+<tr><th id="296">296</th><td>    <a class="local col7 ref" href="#227v" title='v' data-ref="227v" data-ref-filename="227v">v</a> |= <a class="local col7 ref" href="#227v" title='v' data-ref="227v" data-ref-filename="227v">v</a> &gt;&gt; <var>8</var>;</td></tr>
+<tr><th id="297">297</th><td>    <a class="local col7 ref" href="#227v" title='v' data-ref="227v" data-ref-filename="227v">v</a> |= <a class="local col7 ref" href="#227v" title='v' data-ref="227v" data-ref-filename="227v">v</a> &gt;&gt; <var>16</var>;</td></tr>
+<tr><th id="298">298</th><td>    <a class="local col7 ref" href="#227v" title='v' data-ref="227v" data-ref-filename="227v">v</a>++;</td></tr>
+<tr><th id="299">299</th><td>    <b>return</b> <a class="local col7 ref" href="#227v" title='v' data-ref="227v" data-ref-filename="227v">v</a>;</td></tr>
+<tr><th id="300">300</th><td>}</td></tr>
+<tr><th id="301">301</th><td></td></tr>
+<tr><th id="302">302</th><td>} <i>// namespace bmalloc</i></td></tr>
+<tr><th id="303">303</th><td></td></tr>
+<tr><th id="304">304</th><td><u>#<span data-ppcond="26">endif</span> // Algorithm_h</u></td></tr>
+<tr><th id="305">305</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/JavaScriptCore/API/tests/ExecutionTimeLimitTest.cpp.html'>webkit/Source/JavaScriptCore/API/tests/ExecutionTimeLimitTest.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

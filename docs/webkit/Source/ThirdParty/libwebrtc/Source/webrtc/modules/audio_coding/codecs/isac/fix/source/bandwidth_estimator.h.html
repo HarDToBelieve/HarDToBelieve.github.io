@@ -1,0 +1,146 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>bandwidth_estimator.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/fix/source/bandwidth_estimator.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/fix/source/bandwidth_estimator.h'; var root_path = '../../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../../..'>Source</a>/<a href='../../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../../..'>libwebrtc</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>webrtc</a>/<a href='../../../../..'>modules</a>/<a href='../../../..'>audio_coding</a>/<a href='../../..'>codecs</a>/<a href='../..'>isac</a>/<a href='..'>fix</a>/<a href='./'>source</a>/<a href='bandwidth_estimator.h.html'>bandwidth_estimator.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2011 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><i>/*</i></td></tr>
+<tr><th id="12">12</th><td><i> * bandwidth_estimator.h</i></td></tr>
+<tr><th id="13">13</th><td><i> *</i></td></tr>
+<tr><th id="14">14</th><td><i> * This header file contains the API for the Bandwidth Estimator</i></td></tr>
+<tr><th id="15">15</th><td><i> * designed for iSAC.</i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> */</i></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#<span data-ppcond="19">ifndef</span> <span class="macro" data-ref="_M/MODULES_AUDIO_CODING_CODECS_ISAC_FIX_SOURCE_BANDWIDTH_ESTIMATOR_H_">MODULES_AUDIO_CODING_CODECS_ISAC_FIX_SOURCE_BANDWIDTH_ESTIMATOR_H_</span></u></td></tr>
+<tr><th id="20">20</th><td><u>#define <dfn class="macro" id="_M/MODULES_AUDIO_CODING_CODECS_ISAC_FIX_SOURCE_BANDWIDTH_ESTIMATOR_H_" data-ref="_M/MODULES_AUDIO_CODING_CODECS_ISAC_FIX_SOURCE_BANDWIDTH_ESTIMATOR_H_">MODULES_AUDIO_CODING_CODECS_ISAC_FIX_SOURCE_BANDWIDTH_ESTIMATOR_H_</dfn></u></td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><u>#include <a href="structs.h.html">"modules/audio_coding/codecs/isac/fix/source/structs.h"</a></u></td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><i>/****************************************************************************</i></td></tr>
+<tr><th id="25">25</th><td><i> * WebRtcIsacfix_InitBandwidthEstimator(...)</i></td></tr>
+<tr><th id="26">26</th><td><i> *</i></td></tr>
+<tr><th id="27">27</th><td><i> * This function initializes the struct for the bandwidth estimator</i></td></tr>
+<tr><th id="28">28</th><td><i> *</i></td></tr>
+<tr><th id="29">29</th><td><i> * Input/Output:</i></td></tr>
+<tr><th id="30">30</th><td><i> *      - bwest_str        : Struct containing bandwidth information.</i></td></tr>
+<tr><th id="31">31</th><td><i> *</i></td></tr>
+<tr><th id="32">32</th><td><i> * Return value            : 0</i></td></tr>
+<tr><th id="33">33</th><td><i> */</i></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="decl fn" href="bandwidth_estimator.c.html#WebRtcIsacfix_InitBandwidthEstimator" title='WebRtcIsacfix_InitBandwidthEstimator' data-ref="WebRtcIsacfix_InitBandwidthEstimator" data-ref-filename="WebRtcIsacfix_InitBandwidthEstimator" id="WebRtcIsacfix_InitBandwidthEstimator">WebRtcIsacfix_InitBandwidthEstimator</a>(<a class="typedef" href="structs.h.html#BwEstimatorstr" title='BwEstimatorstr' data-type='struct BwEstimatorstr' data-ref="BwEstimatorstr" data-ref-filename="BwEstimatorstr">BwEstimatorstr</a>* <dfn class="local col1 decl" id="1bwest_str" title='bwest_str' data-type='BwEstimatorstr *' data-ref="1bwest_str" data-ref-filename="1bwest_str">bwest_str</dfn>);</td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><i>/****************************************************************************</i></td></tr>
+<tr><th id="38">38</th><td><i> * WebRtcIsacfix_UpdateUplinkBwImpl(...)</i></td></tr>
+<tr><th id="39">39</th><td><i> *</i></td></tr>
+<tr><th id="40">40</th><td><i> * This function updates bottle neck rate received from other side in payload</i></td></tr>
+<tr><th id="41">41</th><td><i> * and calculates a new bottle neck to send to the other side.</i></td></tr>
+<tr><th id="42">42</th><td><i> *</i></td></tr>
+<tr><th id="43">43</th><td><i> * Input/Output:</i></td></tr>
+<tr><th id="44">44</th><td><i> *      - bweStr           : struct containing bandwidth information.</i></td></tr>
+<tr><th id="45">45</th><td><i> *      - rtpNumber        : value from RTP packet, from NetEq</i></td></tr>
+<tr><th id="46">46</th><td><i> *      - frameSize        : length of signal frame in ms, from iSAC decoder</i></td></tr>
+<tr><th id="47">47</th><td><i> *      - sendTime         : value in RTP header giving send time in samples</i></td></tr>
+<tr><th id="48">48</th><td><i> *      - arrivalTime      : value given by timeGetTime() time of arrival in</i></td></tr>
+<tr><th id="49">49</th><td><i> *                           samples of packet from NetEq</i></td></tr>
+<tr><th id="50">50</th><td><i> *      - pksize           : size of packet in bytes, from NetEq</i></td></tr>
+<tr><th id="51">51</th><td><i> *      - Index            : integer (range 0...23) indicating bottle neck &amp;</i></td></tr>
+<tr><th id="52">52</th><td><i> *                           jitter as estimated by other side</i></td></tr>
+<tr><th id="53">53</th><td><i> *</i></td></tr>
+<tr><th id="54">54</th><td><i> * Return value            : 0 if everything went fine,</i></td></tr>
+<tr><th id="55">55</th><td><i> *                           -1 otherwise</i></td></tr>
+<tr><th id="56">56</th><td><i> */</i></td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="decl fn" href="bandwidth_estimator.c.html#WebRtcIsacfix_UpdateUplinkBwImpl" title='WebRtcIsacfix_UpdateUplinkBwImpl' data-ref="WebRtcIsacfix_UpdateUplinkBwImpl" data-ref-filename="WebRtcIsacfix_UpdateUplinkBwImpl" id="WebRtcIsacfix_UpdateUplinkBwImpl">WebRtcIsacfix_UpdateUplinkBwImpl</a>(<a class="typedef" href="structs.h.html#BwEstimatorstr" title='BwEstimatorstr' data-type='struct BwEstimatorstr' data-ref="BwEstimatorstr" data-ref-filename="BwEstimatorstr">BwEstimatorstr</a>* <dfn class="local col2 decl" id="2bwest_str" title='bwest_str' data-type='BwEstimatorstr *' data-ref="2bwest_str" data-ref-filename="2bwest_str">bwest_str</dfn>,</td></tr>
+<tr><th id="59">59</th><td>                                         <em>const</em> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="local col3 decl" id="3rtp_number" title='rtp_number' data-type='const uint16_t' data-ref="3rtp_number" data-ref-filename="3rtp_number">rtp_number</dfn>,</td></tr>
+<tr><th id="60">60</th><td>                                         <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col4 decl" id="4frameSize" title='frameSize' data-type='const int16_t' data-ref="4frameSize" data-ref-filename="4frameSize">frameSize</dfn>,</td></tr>
+<tr><th id="61">61</th><td>                                         <em>const</em> <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col5 decl" id="5send_ts" title='send_ts' data-type='const uint32_t' data-ref="5send_ts" data-ref-filename="5send_ts">send_ts</dfn>,</td></tr>
+<tr><th id="62">62</th><td>                                         <em>const</em> <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col6 decl" id="6arr_ts" title='arr_ts' data-type='const uint32_t' data-ref="6arr_ts" data-ref-filename="6arr_ts">arr_ts</dfn>,</td></tr>
+<tr><th id="63">63</th><td>                                         <em>const</em> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="7pksize" title='pksize' data-type='const size_t' data-ref="7pksize" data-ref-filename="7pksize">pksize</dfn>,</td></tr>
+<tr><th id="64">64</th><td>                                         <em>const</em> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="local col8 decl" id="8Index" title='Index' data-type='const uint16_t' data-ref="8Index" data-ref-filename="8Index">Index</dfn>);</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td><i>/* Update receiving estimates. Used when we only receive BWE index, no iSAC data</i></td></tr>
+<tr><th id="67">67</th><td><i> * packet. */</i></td></tr>
+<tr><th id="68">68</th><td><span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <a class="decl fn" href="bandwidth_estimator.c.html#WebRtcIsacfix_UpdateUplinkBwRec" title='WebRtcIsacfix_UpdateUplinkBwRec' data-ref="WebRtcIsacfix_UpdateUplinkBwRec" data-ref-filename="WebRtcIsacfix_UpdateUplinkBwRec" id="WebRtcIsacfix_UpdateUplinkBwRec">WebRtcIsacfix_UpdateUplinkBwRec</a>(<a class="typedef" href="structs.h.html#BwEstimatorstr" title='BwEstimatorstr' data-type='struct BwEstimatorstr' data-ref="BwEstimatorstr" data-ref-filename="BwEstimatorstr">BwEstimatorstr</a>* <dfn class="local col9 decl" id="9bwest_str" title='bwest_str' data-type='BwEstimatorstr *' data-ref="9bwest_str" data-ref-filename="9bwest_str">bwest_str</dfn>,</td></tr>
+<tr><th id="69">69</th><td>                                        <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col0 decl" id="10Index" title='Index' data-type='const int16_t' data-ref="10Index" data-ref-filename="10Index">Index</dfn>);</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><i>/****************************************************************************</i></td></tr>
+<tr><th id="72">72</th><td><i> * WebRtcIsacfix_GetDownlinkBwIndexImpl(...)</i></td></tr>
+<tr><th id="73">73</th><td><i> *</i></td></tr>
+<tr><th id="74">74</th><td><i> * This function calculates and returns the bandwidth/jitter estimation code</i></td></tr>
+<tr><th id="75">75</th><td><i> * (integer 0...23) to put in the sending iSAC payload.</i></td></tr>
+<tr><th id="76">76</th><td><i> *</i></td></tr>
+<tr><th id="77">77</th><td><i> * Input:</i></td></tr>
+<tr><th id="78">78</th><td><i> *      - bweStr       : BWE struct</i></td></tr>
+<tr><th id="79">79</th><td><i> *</i></td></tr>
+<tr><th id="80">80</th><td><i> * Return:</i></td></tr>
+<tr><th id="81">81</th><td><i> *      bandwith and jitter index (0..23)</i></td></tr>
+<tr><th id="82">82</th><td><i> */</i></td></tr>
+<tr><th id="83">83</th><td><span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <a class="decl fn" href="bandwidth_estimator.c.html#WebRtcIsacfix_GetDownlinkBwIndexImpl" title='WebRtcIsacfix_GetDownlinkBwIndexImpl' data-ref="WebRtcIsacfix_GetDownlinkBwIndexImpl" data-ref-filename="WebRtcIsacfix_GetDownlinkBwIndexImpl" id="WebRtcIsacfix_GetDownlinkBwIndexImpl">WebRtcIsacfix_GetDownlinkBwIndexImpl</a>(<a class="typedef" href="structs.h.html#BwEstimatorstr" title='BwEstimatorstr' data-type='struct BwEstimatorstr' data-ref="BwEstimatorstr" data-ref-filename="BwEstimatorstr">BwEstimatorstr</a>* <dfn class="local col1 decl" id="11bwest_str" title='bwest_str' data-type='BwEstimatorstr *' data-ref="11bwest_str" data-ref-filename="11bwest_str">bwest_str</dfn>);</td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td><i>/* Returns the bandwidth estimation (in bps) */</i></td></tr>
+<tr><th id="86">86</th><td><span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <a class="decl fn" href="bandwidth_estimator.c.html#WebRtcIsacfix_GetDownlinkBandwidth" title='WebRtcIsacfix_GetDownlinkBandwidth' data-ref="WebRtcIsacfix_GetDownlinkBandwidth" data-ref-filename="WebRtcIsacfix_GetDownlinkBandwidth" id="WebRtcIsacfix_GetDownlinkBandwidth">WebRtcIsacfix_GetDownlinkBandwidth</a>(<em>const</em> <a class="typedef" href="structs.h.html#BwEstimatorstr" title='BwEstimatorstr' data-type='struct BwEstimatorstr' data-ref="BwEstimatorstr" data-ref-filename="BwEstimatorstr">BwEstimatorstr</a>* <dfn class="local col2 decl" id="12bwest_str" title='bwest_str' data-type='const BwEstimatorstr *' data-ref="12bwest_str" data-ref-filename="12bwest_str">bwest_str</dfn>);</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td><i>/* Returns the bandwidth that iSAC should send with in bps */</i></td></tr>
+<tr><th id="89">89</th><td><span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <a class="decl fn" href="bandwidth_estimator.c.html#WebRtcIsacfix_GetUplinkBandwidth" title='WebRtcIsacfix_GetUplinkBandwidth' data-ref="WebRtcIsacfix_GetUplinkBandwidth" data-ref-filename="WebRtcIsacfix_GetUplinkBandwidth" id="WebRtcIsacfix_GetUplinkBandwidth">WebRtcIsacfix_GetUplinkBandwidth</a>(<em>const</em> <a class="typedef" href="structs.h.html#BwEstimatorstr" title='BwEstimatorstr' data-type='struct BwEstimatorstr' data-ref="BwEstimatorstr" data-ref-filename="BwEstimatorstr">BwEstimatorstr</a>* <dfn class="local col3 decl" id="13bwest_str" title='bwest_str' data-type='const BwEstimatorstr *' data-ref="13bwest_str" data-ref-filename="13bwest_str">bwest_str</dfn>);</td></tr>
+<tr><th id="90">90</th><td></td></tr>
+<tr><th id="91">91</th><td><i>/* Returns the max delay (in ms) */</i></td></tr>
+<tr><th id="92">92</th><td><span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <a class="decl fn" href="bandwidth_estimator.c.html#WebRtcIsacfix_GetDownlinkMaxDelay" title='WebRtcIsacfix_GetDownlinkMaxDelay' data-ref="WebRtcIsacfix_GetDownlinkMaxDelay" data-ref-filename="WebRtcIsacfix_GetDownlinkMaxDelay" id="WebRtcIsacfix_GetDownlinkMaxDelay">WebRtcIsacfix_GetDownlinkMaxDelay</a>(<em>const</em> <a class="typedef" href="structs.h.html#BwEstimatorstr" title='BwEstimatorstr' data-type='struct BwEstimatorstr' data-ref="BwEstimatorstr" data-ref-filename="BwEstimatorstr">BwEstimatorstr</a>* <dfn class="local col4 decl" id="14bwest_str" title='bwest_str' data-type='const BwEstimatorstr *' data-ref="14bwest_str" data-ref-filename="14bwest_str">bwest_str</dfn>);</td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td><i>/* Returns the max delay value from the other side in ms */</i></td></tr>
+<tr><th id="95">95</th><td><span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <a class="decl fn" href="bandwidth_estimator.c.html#WebRtcIsacfix_GetUplinkMaxDelay" title='WebRtcIsacfix_GetUplinkMaxDelay' data-ref="WebRtcIsacfix_GetUplinkMaxDelay" data-ref-filename="WebRtcIsacfix_GetUplinkMaxDelay" id="WebRtcIsacfix_GetUplinkMaxDelay">WebRtcIsacfix_GetUplinkMaxDelay</a>(<em>const</em> <a class="typedef" href="structs.h.html#BwEstimatorstr" title='BwEstimatorstr' data-type='struct BwEstimatorstr' data-ref="BwEstimatorstr" data-ref-filename="BwEstimatorstr">BwEstimatorstr</a>* <dfn class="local col5 decl" id="15bwest_str" title='bwest_str' data-type='const BwEstimatorstr *' data-ref="15bwest_str" data-ref-filename="15bwest_str">bwest_str</dfn>);</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td><i>/*</i></td></tr>
+<tr><th id="98">98</th><td><i> * update amount of data in bottle neck buffer and burst handling</i></td></tr>
+<tr><th id="99">99</th><td><i> * returns minimum payload size (bytes)</i></td></tr>
+<tr><th id="100">100</th><td><i> */</i></td></tr>
+<tr><th id="101">101</th><td><span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <a class="decl fn" href="bandwidth_estimator.c.html#WebRtcIsacfix_GetMinBytes" title='WebRtcIsacfix_GetMinBytes' data-ref="WebRtcIsacfix_GetMinBytes" data-ref-filename="WebRtcIsacfix_GetMinBytes" id="WebRtcIsacfix_GetMinBytes">WebRtcIsacfix_GetMinBytes</a>(</td></tr>
+<tr><th id="102">102</th><td>    <a class="typedef" href="structs.h.html#RateModel" title='RateModel' data-type='struct RateModel' data-ref="RateModel" data-ref-filename="RateModel">RateModel</a>* <dfn class="local col6 decl" id="16State" title='State' data-type='RateModel *' data-ref="16State" data-ref-filename="16State">State</dfn>,</td></tr>
+<tr><th id="103">103</th><td>    <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col7 decl" id="17StreamSize" title='StreamSize' data-type='int16_t' data-ref="17StreamSize" data-ref-filename="17StreamSize">StreamSize</dfn>,          <i>/* bytes in bitstream */</i></td></tr>
+<tr><th id="104">104</th><td>    <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col8 decl" id="18FrameLen" title='FrameLen' data-type='const int16_t' data-ref="18FrameLen" data-ref-filename="18FrameLen">FrameLen</dfn>,      <i>/* ms per frame */</i></td></tr>
+<tr><th id="105">105</th><td>    <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col9 decl" id="19BottleNeck" title='BottleNeck' data-type='const int16_t' data-ref="19BottleNeck" data-ref-filename="19BottleNeck">BottleNeck</dfn>,    <i>/* bottle neck rate; excl headers (bps) */</i></td></tr>
+<tr><th id="106">106</th><td>    <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col0 decl" id="20DelayBuildUp" title='DelayBuildUp' data-type='const int16_t' data-ref="20DelayBuildUp" data-ref-filename="20DelayBuildUp">DelayBuildUp</dfn>); <i>/* max delay from bottle neck buffering (ms) */</i></td></tr>
+<tr><th id="107">107</th><td></td></tr>
+<tr><th id="108">108</th><td><i>/*</i></td></tr>
+<tr><th id="109">109</th><td><i> * update long-term average bitrate and amount of data in buffer</i></td></tr>
+<tr><th id="110">110</th><td><i> */</i></td></tr>
+<tr><th id="111">111</th><td><em>void</em> <a class="decl fn" href="bandwidth_estimator.c.html#WebRtcIsacfix_UpdateRateModel" title='WebRtcIsacfix_UpdateRateModel' data-ref="WebRtcIsacfix_UpdateRateModel" data-ref-filename="WebRtcIsacfix_UpdateRateModel" id="WebRtcIsacfix_UpdateRateModel">WebRtcIsacfix_UpdateRateModel</a>(</td></tr>
+<tr><th id="112">112</th><td>    <a class="typedef" href="structs.h.html#RateModel" title='RateModel' data-type='struct RateModel' data-ref="RateModel" data-ref-filename="RateModel">RateModel</a>* <dfn class="local col1 decl" id="21State" title='State' data-type='RateModel *' data-ref="21State" data-ref-filename="21State">State</dfn>,</td></tr>
+<tr><th id="113">113</th><td>    <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col2 decl" id="22StreamSize" title='StreamSize' data-type='int16_t' data-ref="22StreamSize" data-ref-filename="22StreamSize">StreamSize</dfn>,         <i>/* bytes in bitstream */</i></td></tr>
+<tr><th id="114">114</th><td>    <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col3 decl" id="23FrameSamples" title='FrameSamples' data-type='const int16_t' data-ref="23FrameSamples" data-ref-filename="23FrameSamples">FrameSamples</dfn>, <i>/* samples per frame */</i></td></tr>
+<tr><th id="115">115</th><td>    <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col4 decl" id="24BottleNeck" title='BottleNeck' data-type='const int16_t' data-ref="24BottleNeck" data-ref-filename="24BottleNeck">BottleNeck</dfn>);  <i>/* bottle neck rate; excl headers (bps) */</i></td></tr>
+<tr><th id="116">116</th><td></td></tr>
+<tr><th id="117">117</th><td><em>void</em> <a class="decl fn" href="bandwidth_estimator.c.html#WebRtcIsacfix_InitRateModel" title='WebRtcIsacfix_InitRateModel' data-ref="WebRtcIsacfix_InitRateModel" data-ref-filename="WebRtcIsacfix_InitRateModel" id="WebRtcIsacfix_InitRateModel">WebRtcIsacfix_InitRateModel</a>(<a class="typedef" href="structs.h.html#RateModel" title='RateModel' data-type='struct RateModel' data-ref="RateModel" data-ref-filename="RateModel">RateModel</a>* <dfn class="local col5 decl" id="25State" title='State' data-type='RateModel *' data-ref="25State" data-ref-filename="25State">State</dfn>);</td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td><i>/* Returns the new framelength value (input argument: bottle_neck) */</i></td></tr>
+<tr><th id="120">120</th><td><span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <a class="decl fn" href="bandwidth_estimator.c.html#WebRtcIsacfix_GetNewFrameLength" title='WebRtcIsacfix_GetNewFrameLength' data-ref="WebRtcIsacfix_GetNewFrameLength" data-ref-filename="WebRtcIsacfix_GetNewFrameLength" id="WebRtcIsacfix_GetNewFrameLength">WebRtcIsacfix_GetNewFrameLength</a>(<span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col6 decl" id="26bottle_neck" title='bottle_neck' data-type='int16_t' data-ref="26bottle_neck" data-ref-filename="26bottle_neck">bottle_neck</dfn>,</td></tr>
+<tr><th id="121">121</th><td>                                        <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col7 decl" id="27current_framelength" title='current_framelength' data-type='int16_t' data-ref="27current_framelength" data-ref-filename="27current_framelength">current_framelength</dfn>);</td></tr>
+<tr><th id="122">122</th><td></td></tr>
+<tr><th id="123">123</th><td><i>/* Returns the new SNR value (input argument: bottle_neck) */</i></td></tr>
+<tr><th id="124">124</th><td><i>// returns snr in Q10</i></td></tr>
+<tr><th id="125">125</th><td><span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <a class="decl fn" href="bandwidth_estimator.c.html#WebRtcIsacfix_GetSnr" title='WebRtcIsacfix_GetSnr' data-ref="WebRtcIsacfix_GetSnr" data-ref-filename="WebRtcIsacfix_GetSnr" id="WebRtcIsacfix_GetSnr">WebRtcIsacfix_GetSnr</a>(<span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col8 decl" id="28bottle_neck" title='bottle_neck' data-type='int16_t' data-ref="28bottle_neck" data-ref-filename="28bottle_neck">bottle_neck</dfn>, <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col9 decl" id="29framesamples" title='framesamples' data-type='int16_t' data-ref="29framesamples" data-ref-filename="29framesamples">framesamples</dfn>);</td></tr>
+<tr><th id="126">126</th><td></td></tr>
+<tr><th id="127">127</th><td><u>#<span data-ppcond="19">endif</span> /*  MODULES_AUDIO_CODING_CODECS_ISAC_FIX_SOURCE_BANDWIDTH_ESTIMATOR_H_ \</u></td></tr>
+<tr><th id="128">128</th><td><u>        */</u></td></tr>
+<tr><th id="129">129</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='bandwidth_estimator.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/fix/source/bandwidth_estimator.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

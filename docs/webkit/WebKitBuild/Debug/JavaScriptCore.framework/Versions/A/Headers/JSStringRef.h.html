@@ -1,0 +1,166 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>JSStringRef.h source code [webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/Headers/JSStringRef.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/Headers/JSStringRef.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>JavaScriptCore.framework</a>/<a href='../..'>Versions</a>/<a href='..'>A</a>/<a href='./'>Headers</a>/<a href='JSStringRef.h.html'>JSStringRef.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2006 Apple Inc.  All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="26">ifndef</span> <span class="macro" data-ref="_M/JSStringRef_h">JSStringRef_h</span></u></td></tr>
+<tr><th id="27">27</th><td><u>#define <dfn class="macro" id="_M/JSStringRef_h" data-ref="_M/JSStringRef_h">JSStringRef_h</dfn></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="JSValueRef.h.html">&lt;JavaScriptCore/JSValueRef.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#<span data-ppcond="31">ifndef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="32">32</th><td><u>#include &lt;stdbool.h&gt;</u></td></tr>
+<tr><th id="33">33</th><td><u>#<span data-ppcond="31">endif</span></u></td></tr>
+<tr><th id="34">34</th><td><u>#include &lt;stddef.h&gt; /* for size_t */</u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><u>#<span data-ppcond="36">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="37">37</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="38">38</th><td><u>#<span data-ppcond="36">endif</span></u></td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><u>#<span data-ppcond="40">if</span> !defined(<span class="macro" data-ref="_M/_NATIVE_WCHAR_T_DEFINED">_NATIVE_WCHAR_T_DEFINED</span>) /* MSVC */ \</u></td></tr>
+<tr><th id="41">41</th><td><u>    &amp;&amp; (!defined(<span class="macro" data-ref="_M/__WCHAR_MAX__">__WCHAR_MAX__</span>) || (<span class="macro" title="2147483647" data-ref="_M/__WCHAR_MAX__">__WCHAR_MAX__</span> &gt; 0xffffU)) /* ISO C/C++ */ \</u></td></tr>
+<tr><th id="42">42</th><td><u>    &amp;&amp; (!defined(<span class="macro" data-ref="_M/WCHAR_MAX">WCHAR_MAX</span>) || (<span class="macro" title="2147483647" data-ref="_M/WCHAR_MAX">WCHAR_MAX</span> &gt; 0xffffU)) /* RVCT */</u></td></tr>
+<tr><th id="43">43</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="44">44</th><td><i class="doc"><span class="command">@typedef</span> <span class="verb" data-ref="JSChar">JSChar</span></i></td></tr>
+<tr><th id="45">45</th><td><i class="doc"><span class="command">@abstract</span> A UTF-16 code unit. One, or a sequence of two, can encode any Unicode</i></td></tr>
+<tr><th id="46">46</th><td><i class="doc"> character. As with all scalar types, endianness depends on the underlying</i></td></tr>
+<tr><th id="47">47</th><td><i class="doc"> architecture.</i></td></tr>
+<tr><th id="48">48</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="49">49</th><td>    <b>typedef</b> <em>unsigned</em> <em>short</em> <dfn class="typedef" id="JSChar" title='JSChar' data-type='unsigned short' data-ref="JSChar" data-ref-filename="JSChar">JSChar</dfn>;</td></tr>
+<tr><th id="50">50</th><td><u>#<span data-ppcond="40">else</span></u></td></tr>
+<tr><th id="51">51</th><td>    <b>typedef</b> <em>wchar_t</em> JSChar;</td></tr>
+<tr><th id="52">52</th><td><u>#<span data-ppcond="40">endif</span></u></td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="55">55</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="56">56</th><td><i class="doc"><span class="command">@abstract</span>         Creates a JavaScript string from a buffer of Unicode characters.</i></td></tr>
+<tr><th id="57">57</th><td><i class="doc"><span class="command">@param</span> <span class="arg">chars</span>      The buffer of Unicode characters to copy into the new JSString.</i></td></tr>
+<tr><th id="58">58</th><td><i class="doc"><span class="command">@param</span> <span class="arg">numChars</span>   The number of characters to copy from the buffer pointed to by chars.</i></td></tr>
+<tr><th id="59">59</th><td><i class="doc"><span class="command">@result</span>           A JSString containing chars. Ownership follows the Create Rule.</i></td></tr>
+<tr><th id="60">60</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="61">61</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <a class="typedef" href="JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="decl fn" id="JSStringCreateWithCharacters" title='JSStringCreateWithCharacters' data-ref="JSStringCreateWithCharacters" data-ref-filename="JSStringCreateWithCharacters">JSStringCreateWithCharacters</dfn>(<em>const</em> <a class="typedef" href="#JSChar" title='JSChar' data-type='unsigned short' data-ref="JSChar" data-ref-filename="JSChar">JSChar</a>* <dfn class="local col7 decl" id="187chars" title='chars' data-type='const JSChar *' data-ref="187chars" data-ref-filename="187chars">chars</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="188numChars" title='numChars' data-type='size_t' data-ref="188numChars" data-ref-filename="188numChars">numChars</dfn>);</td></tr>
+<tr><th id="62">62</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="63">63</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="64">64</th><td><i class="doc"><span class="command">@abstract</span>         Creates a JavaScript string from a null-terminated UTF8 string.</i></td></tr>
+<tr><th id="65">65</th><td><i class="doc"><span class="command">@param</span> <span class="arg">string</span>     The null-terminated UTF8 string to copy into the new JSString.</i></td></tr>
+<tr><th id="66">66</th><td><i class="doc"><span class="command">@result</span>           A JSString containing string. Ownership follows the Create Rule.</i></td></tr>
+<tr><th id="67">67</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="68">68</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <a class="typedef" href="JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="decl fn" id="JSStringCreateWithUTF8CString" title='JSStringCreateWithUTF8CString' data-ref="JSStringCreateWithUTF8CString" data-ref-filename="JSStringCreateWithUTF8CString">JSStringCreateWithUTF8CString</dfn>(<em>const</em> <em>char</em>* <dfn class="local col9 decl" id="189string" title='string' data-type='const char *' data-ref="189string" data-ref-filename="189string">string</dfn>);</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="71">71</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="72">72</th><td><i class="doc"><span class="command">@abstract</span>         Retains a JavaScript string.</i></td></tr>
+<tr><th id="73">73</th><td><i class="doc"><span class="command">@param</span> <span class="arg">string</span>     The JSString to retain.</i></td></tr>
+<tr><th id="74">74</th><td><i class="doc"><span class="command">@result</span>           A JSString that is the same as string.</i></td></tr>
+<tr><th id="75">75</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="76">76</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <a class="typedef" href="JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="decl fn" id="JSStringRetain" title='JSStringRetain' data-ref="JSStringRetain" data-ref-filename="JSStringRetain">JSStringRetain</dfn>(<a class="typedef" href="JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="local col0 decl" id="190string" title='string' data-type='JSStringRef' data-ref="190string" data-ref-filename="190string">string</dfn>);</td></tr>
+<tr><th id="77">77</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="78">78</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="79">79</th><td><i class="doc"><span class="command">@abstract</span>         Releases a JavaScript string.</i></td></tr>
+<tr><th id="80">80</th><td><i class="doc"><span class="command">@param</span> <span class="arg">string</span>     The JSString to release.</i></td></tr>
+<tr><th id="81">81</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="82">82</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <em>void</em> <dfn class="decl fn" id="JSStringRelease" title='JSStringRelease' data-ref="JSStringRelease" data-ref-filename="JSStringRelease">JSStringRelease</dfn>(<a class="typedef" href="JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="local col1 decl" id="191string" title='string' data-type='JSStringRef' data-ref="191string" data-ref-filename="191string">string</dfn>);</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="85">85</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="86">86</th><td><i class="doc"><span class="command">@abstract</span>         Returns the number of Unicode characters in a JavaScript string.</i></td></tr>
+<tr><th id="87">87</th><td><i class="doc"><span class="command">@param</span> <span class="arg">string</span>     The JSString whose length (in Unicode characters) you want to know.</i></td></tr>
+<tr><th id="88">88</th><td><i class="doc"><span class="command">@result</span>           The number of Unicode characters stored in string.</i></td></tr>
+<tr><th id="89">89</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="90">90</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl fn" id="JSStringGetLength" title='JSStringGetLength' data-ref="JSStringGetLength" data-ref-filename="JSStringGetLength">JSStringGetLength</dfn>(<a class="typedef" href="JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="local col2 decl" id="192string" title='string' data-type='JSStringRef' data-ref="192string" data-ref-filename="192string">string</dfn>);</td></tr>
+<tr><th id="91">91</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="92">92</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="93">93</th><td><i class="doc"><span class="command">@abstract</span>         Returns a pointer to the Unicode character buffer that </i></td></tr>
+<tr><th id="94">94</th><td><i class="doc"> serves as the backing store for a JavaScript string.</i></td></tr>
+<tr><th id="95">95</th><td><i class="doc"><span class="command">@param</span> <span class="arg">string</span>     The JSString whose backing store you want to access.</i></td></tr>
+<tr><th id="96">96</th><td><i class="doc"><span class="command">@result</span>           A pointer to the Unicode character buffer that serves as string's </i></td></tr>
+<tr><th id="97">97</th><td><i class="doc"> backing store, which will be deallocated when string is deallocated.</i></td></tr>
+<tr><th id="98">98</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="99">99</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <em>const</em> <a class="typedef" href="#JSChar" title='JSChar' data-type='unsigned short' data-ref="JSChar" data-ref-filename="JSChar">JSChar</a>* <dfn class="decl fn" id="JSStringGetCharactersPtr" title='JSStringGetCharactersPtr' data-ref="JSStringGetCharactersPtr" data-ref-filename="JSStringGetCharactersPtr">JSStringGetCharactersPtr</dfn>(<a class="typedef" href="JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="local col3 decl" id="193string" title='string' data-type='JSStringRef' data-ref="193string" data-ref-filename="193string">string</dfn>);</td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="102">102</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="103">103</th><td><i class="doc"><span class="command">@abstract</span> Returns the maximum number of bytes a JavaScript string will </i></td></tr>
+<tr><th id="104">104</th><td><i class="doc"> take up if converted into a null-terminated UTF8 string.</i></td></tr>
+<tr><th id="105">105</th><td><i class="doc"><span class="command">@param</span> <span class="arg">string</span> The JSString whose maximum converted size (in bytes) you </i></td></tr>
+<tr><th id="106">106</th><td><i class="doc"> want to know.</i></td></tr>
+<tr><th id="107">107</th><td><i class="doc"><span class="command">@result</span> The maximum number of bytes that could be required to convert string into a </i></td></tr>
+<tr><th id="108">108</th><td><i class="doc"> null-terminated UTF8 string. The number of bytes that the conversion actually ends </i></td></tr>
+<tr><th id="109">109</th><td><i class="doc"> up requiring could be less than this, but never more.</i></td></tr>
+<tr><th id="110">110</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="111">111</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl fn" id="JSStringGetMaximumUTF8CStringSize" title='JSStringGetMaximumUTF8CStringSize' data-ref="JSStringGetMaximumUTF8CStringSize" data-ref-filename="JSStringGetMaximumUTF8CStringSize">JSStringGetMaximumUTF8CStringSize</dfn>(<a class="typedef" href="JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="local col4 decl" id="194string" title='string' data-type='JSStringRef' data-ref="194string" data-ref-filename="194string">string</dfn>);</td></tr>
+<tr><th id="112">112</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="114">114</th><td><i class="doc"><span class="command">@abstract</span> Converts a JavaScript string into a null-terminated UTF8 string, </i></td></tr>
+<tr><th id="115">115</th><td><i class="doc"> and copies the result into an external byte buffer.</i></td></tr>
+<tr><th id="116">116</th><td><i class="doc"><span class="command">@param</span> <span class="arg">string</span> The source JSString.</i></td></tr>
+<tr><th id="117">117</th><td><i class="doc"><span class="command">@param</span> <span class="arg">buffer</span> The destination byte buffer into which to copy a null-terminated </i></td></tr>
+<tr><th id="118">118</th><td><i class="doc"> UTF8 representation of string. On return, buffer contains a UTF8 string </i></td></tr>
+<tr><th id="119">119</th><td><i class="doc"> representation of string. If bufferSize is too small, buffer will contain only </i></td></tr>
+<tr><th id="120">120</th><td><i class="doc"> partial results. If buffer is not at least bufferSize bytes in size, </i></td></tr>
+<tr><th id="121">121</th><td><i class="doc"> behavior is undefined. </i></td></tr>
+<tr><th id="122">122</th><td><i class="doc"><span class="command">@param</span> <span class="arg">bufferSize</span> The size of the external buffer in bytes.</i></td></tr>
+<tr><th id="123">123</th><td><i class="doc"><span class="command">@result</span> The number of bytes written into buffer (including the null-terminator byte).</i></td></tr>
+<tr><th id="124">124</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="125">125</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl fn" id="JSStringGetUTF8CString" title='JSStringGetUTF8CString' data-ref="JSStringGetUTF8CString" data-ref-filename="JSStringGetUTF8CString">JSStringGetUTF8CString</dfn>(<a class="typedef" href="JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="local col5 decl" id="195string" title='string' data-type='JSStringRef' data-ref="195string" data-ref-filename="195string">string</dfn>, <em>char</em>* <dfn class="local col6 decl" id="196buffer" title='buffer' data-type='char *' data-ref="196buffer" data-ref-filename="196buffer">buffer</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="197bufferSize" title='bufferSize' data-type='size_t' data-ref="197bufferSize" data-ref-filename="197bufferSize">bufferSize</dfn>);</td></tr>
+<tr><th id="126">126</th><td></td></tr>
+<tr><th id="127">127</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="128">128</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="129">129</th><td><i class="doc"><span class="command">@abstract</span>     Tests whether two JavaScript strings match.</i></td></tr>
+<tr><th id="130">130</th><td><i class="doc"><span class="command">@param</span> <span class="arg">a</span>      The first JSString to test.</i></td></tr>
+<tr><th id="131">131</th><td><i class="doc"><span class="command">@param</span> <span class="arg">b</span>      The second JSString to test.</i></td></tr>
+<tr><th id="132">132</th><td><i class="doc"><span class="command">@result</span>       true if the two strings match, otherwise false.</i></td></tr>
+<tr><th id="133">133</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="134">134</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <em>bool</em> <dfn class="decl fn" id="JSStringIsEqual" title='JSStringIsEqual' data-ref="JSStringIsEqual" data-ref-filename="JSStringIsEqual">JSStringIsEqual</dfn>(<a class="typedef" href="JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="local col8 decl" id="198a" title='a' data-type='JSStringRef' data-ref="198a" data-ref-filename="198a">a</dfn>, <a class="typedef" href="JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="local col9 decl" id="199b" title='b' data-type='JSStringRef' data-ref="199b" data-ref-filename="199b">b</dfn>);</td></tr>
+<tr><th id="135">135</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="136">136</th><td><i class="doc"><span class="command">@function</span></i></td></tr>
+<tr><th id="137">137</th><td><i class="doc"><span class="command">@abstract</span>     Tests whether a JavaScript string matches a null-terminated UTF8 string.</i></td></tr>
+<tr><th id="138">138</th><td><i class="doc"><span class="command">@param</span> <span class="arg">a</span>      The JSString to test.</i></td></tr>
+<tr><th id="139">139</th><td><i class="doc"><span class="command">@param</span> <span class="arg">b</span>      The null-terminated UTF8 string to test.</i></td></tr>
+<tr><th id="140">140</th><td><i class="doc"><span class="command">@result</span>       true if the two strings match, otherwise false.</i></td></tr>
+<tr><th id="141">141</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="142">142</th><td><a class="macro" href="JSBase.h.html#91" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT">JS_EXPORT</a> <em>bool</em> <dfn class="decl fn" id="JSStringIsEqualToUTF8CString" title='JSStringIsEqualToUTF8CString' data-ref="JSStringIsEqualToUTF8CString" data-ref-filename="JSStringIsEqualToUTF8CString">JSStringIsEqualToUTF8CString</dfn>(<a class="typedef" href="JSBase.h.html#JSStringRef" title='JSStringRef' data-type='struct OpaqueJSString *' data-ref="JSStringRef" data-ref-filename="JSStringRef">JSStringRef</a> <dfn class="local col0 decl" id="200a" title='a' data-type='JSStringRef' data-ref="200a" data-ref-filename="200a">a</dfn>, <em>const</em> <em>char</em>* <dfn class="local col1 decl" id="201b" title='b' data-type='const char *' data-ref="201b" data-ref-filename="201b">b</dfn>);</td></tr>
+<tr><th id="143">143</th><td></td></tr>
+<tr><th id="144">144</th><td><u>#<span data-ppcond="144">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="145">145</th><td>}</td></tr>
+<tr><th id="146">146</th><td><u>#<span data-ppcond="144">endif</span></u></td></tr>
+<tr><th id="147">147</th><td></td></tr>
+<tr><th id="148">148</th><td><u>#<span data-ppcond="26">endif</span> /* JSStringRef_h */</u></td></tr>
+<tr><th id="149">149</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/WebCore/bridge/objc/WebScriptObject.mm.html'>webkit/Source/WebCore/bridge/objc/WebScriptObject.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

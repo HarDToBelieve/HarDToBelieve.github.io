@@ -1,0 +1,57 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>vad_gmm.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/vad/vad_gmm.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/vad/vad_gmm.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>webrtc</a>/<a href='..'>common_audio</a>/<a href='./'>vad</a>/<a href='vad_gmm.h.html'>vad_gmm.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2011 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td><i></i></td></tr>
+<tr><th id="11">11</th><td><i>// Gaussian probability calculations internally used in vad_core.c.</i></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#<span data-ppcond="13">ifndef</span> <span class="macro" data-ref="_M/COMMON_AUDIO_VAD_VAD_GMM_H_">COMMON_AUDIO_VAD_VAD_GMM_H_</span></u></td></tr>
+<tr><th id="14">14</th><td><u>#define <dfn class="macro" id="_M/COMMON_AUDIO_VAD_VAD_GMM_H_" data-ref="_M/COMMON_AUDIO_VAD_VAD_GMM_H_">COMMON_AUDIO_VAD_VAD_GMM_H_</dfn></u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><i>// Calculates the probability for |input|, given that |input| comes from a</i></td></tr>
+<tr><th id="19">19</th><td><i>// normal distribution with mean and standard deviation (|mean|, |std|).</i></td></tr>
+<tr><th id="20">20</th><td><i>//</i></td></tr>
+<tr><th id="21">21</th><td><i>// Inputs:</i></td></tr>
+<tr><th id="22">22</th><td><i>//      - input         : input sample in Q4.</i></td></tr>
+<tr><th id="23">23</th><td><i>//      - mean          : mean input in the statistical model, Q7.</i></td></tr>
+<tr><th id="24">24</th><td><i>//      - std           : standard deviation, Q7.</i></td></tr>
+<tr><th id="25">25</th><td><i>//</i></td></tr>
+<tr><th id="26">26</th><td><i>// Output:</i></td></tr>
+<tr><th id="27">27</th><td><i>//</i></td></tr>
+<tr><th id="28">28</th><td><i>//      - delta         : input used when updating the model, Q11.</i></td></tr>
+<tr><th id="29">29</th><td><i>//                        |delta| = (|input| - |mean|) / |std|^2.</i></td></tr>
+<tr><th id="30">30</th><td><i>//</i></td></tr>
+<tr><th id="31">31</th><td><i>// Return:</i></td></tr>
+<tr><th id="32">32</th><td><i>//   (probability for |input|) =</i></td></tr>
+<tr><th id="33">33</th><td><i>//    1 / |std| * exp(-(|input| - |mean|)^2 / (2 * |std|^2));</i></td></tr>
+<tr><th id="34">34</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl fn" id="WebRtcVad_GaussianProbability" title='WebRtcVad_GaussianProbability' data-ref="WebRtcVad_GaussianProbability" data-ref-filename="WebRtcVad_GaussianProbability">WebRtcVad_GaussianProbability</dfn>(<span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col0 decl" id="20input" title='input' data-type='int16_t' data-ref="20input" data-ref-filename="20input">input</dfn>,</td></tr>
+<tr><th id="35">35</th><td>                                      <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col1 decl" id="21mean" title='mean' data-type='int16_t' data-ref="21mean" data-ref-filename="21mean">mean</dfn>,</td></tr>
+<tr><th id="36">36</th><td>                                      <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col2 decl" id="22std" title='std' data-type='int16_t' data-ref="22std" data-ref-filename="22std">std</dfn>,</td></tr>
+<tr><th id="37">37</th><td>                                      <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col3 decl" id="23delta" title='delta' data-type='int16_t *' data-ref="23delta" data-ref-filename="23delta">delta</dfn>);</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><u>#<span data-ppcond="13">endif</span>  // COMMON_AUDIO_VAD_VAD_GMM_H_</u></td></tr>
+<tr><th id="40">40</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='vad_core.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/vad/vad_core.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

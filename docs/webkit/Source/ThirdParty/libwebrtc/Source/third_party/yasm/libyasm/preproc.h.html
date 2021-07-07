@@ -1,0 +1,229 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>preproc.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/libyasm/preproc.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="yasm_preproc_base,yasm_preproc_module "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/libyasm/preproc.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>third_party</a>/<a href='..'>yasm</a>/<a href='./'>libyasm</a>/<a href='preproc.h.html'>preproc.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="2">2</th><td><i class="doc"> *<span class="command"> \file</span> libyasm/preproc.h</i></td></tr>
+<tr><th id="3">3</th><td><i class="doc"> * <span class="command">\brief</span> YASM preprocessor module interface.</i></td></tr>
+<tr><th id="4">4</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="5">5</th><td><i class="doc"> *<span class="command"> \license</span></i></td></tr>
+<tr><th id="6">6</th><td><i class="doc"> *  Copyright (C) 2001-2007  Peter Johnson</i></td></tr>
+<tr><th id="7">7</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="8">8</th><td><i class="doc"> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="9">9</th><td><i class="doc"> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="10">10</th><td><i class="doc"> * are met:</i></td></tr>
+<tr><th id="11">11</th><td><i class="doc"> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="12">12</th><td><i class="doc"> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="13">13</th><td><i class="doc"> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="14">14</th><td><i class="doc"> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="15">15</th><td><i class="doc"> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="16">16</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="17">17</th><td><i class="doc"> * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND OTHER CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="18">18</th><td><i class="doc"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="19">19</th><td><i class="doc"> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</i></td></tr>
+<tr><th id="20">20</th><td><i class="doc"> * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR OTHER CONTRIBUTORS BE</i></td></tr>
+<tr><th id="21">21</th><td><i class="doc"> * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="22">22</th><td><i class="doc"> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="23">23</th><td><i class="doc"> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="24">24</th><td><i class="doc"> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="25">25</th><td><i class="doc"> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="26">26</th><td><i class="doc"> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE</i></td></tr>
+<tr><th id="27">27</th><td><i class="doc"> * POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="28">28</th><td><i class="doc"> *<span class="command"> \endlicense</span></i></td></tr>
+<tr><th id="29">29</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="30">30</th><td><u>#<span data-ppcond="30">ifndef</span> <span class="macro" data-ref="_M/YASM_PREPROC_H">YASM_PREPROC_H</span></u></td></tr>
+<tr><th id="31">31</th><td><u>#define <dfn class="macro" id="_M/YASM_PREPROC_H" data-ref="_M/YASM_PREPROC_H">YASM_PREPROC_H</dfn></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><u>#<span data-ppcond="33">ifndef</span> <span class="macro" data-ref="_M/YASM_DOXYGEN">YASM_DOXYGEN</span></u></td></tr>
+<tr><th id="34">34</th><td><i class="doc">/** Base #yasm_preproc structure.  Must be present as the first element in any</i></td></tr>
+<tr><th id="35">35</th><td><i class="doc"> * #yasm_preproc implementation.</i></td></tr>
+<tr><th id="36">36</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="37">37</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="yasm_preproc_base" title='yasm_preproc_base' data-ref="yasm_preproc_base" data-ref-filename="yasm_preproc_base"><a class="type" href="#yasm_preproc_base" title='yasm_preproc_base' data-ref="yasm_preproc_base" data-ref-filename="yasm_preproc_base">yasm_preproc_base</a></dfn> {</td></tr>
+<tr><th id="38">38</th><td>    <i class="doc">/** #yasm_preproc_module implementation for this preprocessor. */</i></td></tr>
+<tr><th id="39">39</th><td>    <em>const</em> <b>struct</b> <a class="type" href="#yasm_preproc_module" title='yasm_preproc_module' data-ref="yasm_preproc_module" data-ref-filename="yasm_preproc_module">yasm_preproc_module</a> *<dfn class="decl field" id="yasm_preproc_base::module" title='yasm_preproc_base::module' data-ref="yasm_preproc_base::module" data-ref-filename="yasm_preproc_base..module">module</dfn>;</td></tr>
+<tr><th id="40">40</th><td>} <dfn class="typedef" id="yasm_preproc_base" title='yasm_preproc_base' data-type='struct yasm_preproc_base' data-ref="yasm_preproc_base" data-ref-filename="yasm_preproc_base">yasm_preproc_base</dfn>;</td></tr>
+<tr><th id="41">41</th><td><u>#<span data-ppcond="33">endif</span></u></td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><i class="doc">/** YASM preprocesor module interface. */</i></td></tr>
+<tr><th id="44">44</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="yasm_preproc_module" title='yasm_preproc_module' data-ref="yasm_preproc_module" data-ref-filename="yasm_preproc_module"><a class="type" href="#yasm_preproc_module" title='yasm_preproc_module' data-ref="yasm_preproc_module" data-ref-filename="yasm_preproc_module">yasm_preproc_module</a></dfn> {</td></tr>
+<tr><th id="45">45</th><td>    <i class="doc">/** One-line description of the preprocessor. */</i></td></tr>
+<tr><th id="46">46</th><td>    <em>const</em> <em>char</em> *<dfn class="decl field" id="yasm_preproc_module::name" title='yasm_preproc_module::name' data-ref="yasm_preproc_module::name" data-ref-filename="yasm_preproc_module..name">name</dfn>;</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td>    <i class="doc">/** Keyword used to select preprocessor on the command line. */</i></td></tr>
+<tr><th id="49">49</th><td>    <em>const</em> <em>char</em> *<dfn class="decl field" id="yasm_preproc_module::keyword" title='yasm_preproc_module::keyword' data-ref="yasm_preproc_module::keyword" data-ref-filename="yasm_preproc_module..keyword">keyword</dfn>;</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td>    <i class="doc">/** Create preprocessor.</i></td></tr>
+<tr><th id="52">52</th><td><i class="doc">     * Module-level implementation of yasm_preproc_create().</i></td></tr>
+<tr><th id="53">53</th><td><i class="doc">     * Call yasm_preproc_create() instead of calling this function.</i></td></tr>
+<tr><th id="54">54</th><td><i class="doc">     *</i></td></tr>
+<tr><th id="55">55</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">in_filename</span>       initial starting filename, or "-" to read from</i></td></tr>
+<tr><th id="56">56</th><td><i class="doc">     *                          stdin</i></td></tr>
+<tr><th id="57">57</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">symtab</span>            symbol table (may be NULL if none)</i></td></tr>
+<tr><th id="58">58</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">lm</span>                line mapping repository</i></td></tr>
+<tr><th id="59">59</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">errwarns</span>          error/warnning set.</i></td></tr>
+<tr><th id="60">60</th><td><i class="doc">     * <span class="command">\return</span> New preprocessor.</i></td></tr>
+<tr><th id="61">61</th><td><i class="doc">     *</i></td></tr>
+<tr><th id="62">62</th><td><i class="doc">     * <span class="command">\note</span> Any preprocessor errors and warnings are stored into errwarns.</i></td></tr>
+<tr><th id="63">63</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="64">64</th><td>    <i>/*@only@*/</i> <a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> * (*<dfn class="decl field" id="yasm_preproc_module::create" title='yasm_preproc_module::create' data-ref="yasm_preproc_module::create" data-ref-filename="yasm_preproc_module..create">create</dfn>) (<em>const</em> <em>char</em> *<dfn class="local col6 decl" id="1066in_filename" title='in_filename' data-type='const char *' data-ref="1066in_filename" data-ref-filename="1066in_filename">in_filename</dfn>,</td></tr>
+<tr><th id="65">65</th><td>                                         <a class="typedef" href="coretype.h.html#yasm_symtab" title='yasm_symtab' data-type='struct yasm_symtab' data-ref="yasm_symtab" data-ref-filename="yasm_symtab">yasm_symtab</a> *<dfn class="local col7 decl" id="1067symtab" title='symtab' data-type='yasm_symtab *' data-ref="1067symtab" data-ref-filename="1067symtab">symtab</dfn>,</td></tr>
+<tr><th id="66">66</th><td>                                         <a class="typedef" href="coretype.h.html#yasm_linemap" title='yasm_linemap' data-type='struct yasm_linemap' data-ref="yasm_linemap" data-ref-filename="yasm_linemap">yasm_linemap</a> *<dfn class="local col8 decl" id="1068lm" title='lm' data-type='yasm_linemap *' data-ref="1068lm" data-ref-filename="1068lm">lm</dfn>,</td></tr>
+<tr><th id="67">67</th><td>                                         <a class="typedef" href="coretype.h.html#yasm_errwarns" title='yasm_errwarns' data-type='struct yasm_errwarns' data-ref="yasm_errwarns" data-ref-filename="yasm_errwarns">yasm_errwarns</a> *<dfn class="local col9 decl" id="1069errwarns" title='errwarns' data-type='yasm_errwarns *' data-ref="1069errwarns" data-ref-filename="1069errwarns">errwarns</dfn>);</td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td>    <i class="doc">/** Module-level implementation of yasm_preproc_destroy().</i></td></tr>
+<tr><th id="70">70</th><td><i class="doc">     * Call yasm_preproc_destroy() instead of calling this function.</i></td></tr>
+<tr><th id="71">71</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="72">72</th><td>    <em>void</em> (*<dfn class="decl field" id="yasm_preproc_module::destroy" title='yasm_preproc_module::destroy' data-ref="yasm_preproc_module::destroy" data-ref-filename="yasm_preproc_module..destroy">destroy</dfn>) (<i>/*@only@*/</i> <a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col0 decl" id="1070preproc" title='preproc' data-type='yasm_preproc *' data-ref="1070preproc" data-ref-filename="1070preproc">preproc</dfn>);</td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td>    <i class="doc">/** Module-level implementation of yasm_preproc_get_line().</i></td></tr>
+<tr><th id="75">75</th><td><i class="doc">     * Call yasm_preproc_get_line() instead of calling this function.</i></td></tr>
+<tr><th id="76">76</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="77">77</th><td>    <em>char</em> * (*<dfn class="decl field" id="yasm_preproc_module::get_line" title='yasm_preproc_module::get_line' data-ref="yasm_preproc_module::get_line" data-ref-filename="yasm_preproc_module..get_line">get_line</dfn>) (<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col1 decl" id="1071preproc" title='preproc' data-type='yasm_preproc *' data-ref="1071preproc" data-ref-filename="1071preproc">preproc</dfn>);</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td>    <i class="doc">/** Module-level implementation of yasm_preproc_get_included_file().</i></td></tr>
+<tr><th id="80">80</th><td><i class="doc">     * Call yasm_preproc_get_included_file() instead of calling this function.</i></td></tr>
+<tr><th id="81">81</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="82">82</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> (*<dfn class="decl field" id="yasm_preproc_module::get_included_file" title='yasm_preproc_module::get_included_file' data-ref="yasm_preproc_module::get_included_file" data-ref-filename="yasm_preproc_module..get_included_file">get_included_file</dfn>) (<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col2 decl" id="1072preproc" title='preproc' data-type='yasm_preproc *' data-ref="1072preproc" data-ref-filename="1072preproc">preproc</dfn>, <i>/*@out@*/</i> <em>char</em> *<dfn class="local col3 decl" id="1073buf" title='buf' data-type='char *' data-ref="1073buf" data-ref-filename="1073buf">buf</dfn>,</td></tr>
+<tr><th id="83">83</th><td>                                 <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="1074max_size" title='max_size' data-type='size_t' data-ref="1074max_size" data-ref-filename="1074max_size">max_size</dfn>);</td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td>    <i class="doc">/** Module-level implementation of yasm_preproc_add_include_file().</i></td></tr>
+<tr><th id="86">86</th><td><i class="doc">     * Call yasm_preproc_add_include_file() instead of calling this function.</i></td></tr>
+<tr><th id="87">87</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="88">88</th><td>    <em>void</em> (*<dfn class="decl field" id="yasm_preproc_module::add_include_file" title='yasm_preproc_module::add_include_file' data-ref="yasm_preproc_module::add_include_file" data-ref-filename="yasm_preproc_module..add_include_file">add_include_file</dfn>) (<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col5 decl" id="1075preproc" title='preproc' data-type='yasm_preproc *' data-ref="1075preproc" data-ref-filename="1075preproc">preproc</dfn>, <em>const</em> <em>char</em> *<dfn class="local col6 decl" id="1076filename" title='filename' data-type='const char *' data-ref="1076filename" data-ref-filename="1076filename">filename</dfn>);</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td>    <i class="doc">/** Module-level implementation of yasm_preproc_predefine_macro().</i></td></tr>
+<tr><th id="91">91</th><td><i class="doc">     * Call yasm_preproc_predefine_macro() instead of calling this function.</i></td></tr>
+<tr><th id="92">92</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="93">93</th><td>    <em>void</em> (*<dfn class="decl field" id="yasm_preproc_module::predefine_macro" title='yasm_preproc_module::predefine_macro' data-ref="yasm_preproc_module::predefine_macro" data-ref-filename="yasm_preproc_module..predefine_macro">predefine_macro</dfn>) (<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col7 decl" id="1077preproc" title='preproc' data-type='yasm_preproc *' data-ref="1077preproc" data-ref-filename="1077preproc">preproc</dfn>, <em>const</em> <em>char</em> *<dfn class="local col8 decl" id="1078macronameval" title='macronameval' data-type='const char *' data-ref="1078macronameval" data-ref-filename="1078macronameval">macronameval</dfn>);</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td>    <i class="doc">/** Module-level implementation of yasm_preproc_undefine_macro().</i></td></tr>
+<tr><th id="96">96</th><td><i class="doc">     * Call yasm_preproc_undefine_macro() instead of calling this function.</i></td></tr>
+<tr><th id="97">97</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="98">98</th><td>    <em>void</em> (*<dfn class="decl field" id="yasm_preproc_module::undefine_macro" title='yasm_preproc_module::undefine_macro' data-ref="yasm_preproc_module::undefine_macro" data-ref-filename="yasm_preproc_module..undefine_macro">undefine_macro</dfn>) (<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col9 decl" id="1079preproc" title='preproc' data-type='yasm_preproc *' data-ref="1079preproc" data-ref-filename="1079preproc">preproc</dfn>, <em>const</em> <em>char</em> *<dfn class="local col0 decl" id="1080macroname" title='macroname' data-type='const char *' data-ref="1080macroname" data-ref-filename="1080macroname">macroname</dfn>);</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td>    <i class="doc">/** Module-level implementation of yasm_preproc_builtin_define().</i></td></tr>
+<tr><th id="101">101</th><td><i class="doc">     * Call yasm_preproc_builtin_define() instead of calling this function.</i></td></tr>
+<tr><th id="102">102</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="103">103</th><td>    <em>void</em> (*<dfn class="decl field" id="yasm_preproc_module::define_builtin" title='yasm_preproc_module::define_builtin' data-ref="yasm_preproc_module::define_builtin" data-ref-filename="yasm_preproc_module..define_builtin">define_builtin</dfn>) (<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col1 decl" id="1081preproc" title='preproc' data-type='yasm_preproc *' data-ref="1081preproc" data-ref-filename="1081preproc">preproc</dfn>, <em>const</em> <em>char</em> *<dfn class="local col2 decl" id="1082macronameval" title='macronameval' data-type='const char *' data-ref="1082macronameval" data-ref-filename="1082macronameval">macronameval</dfn>);</td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td>    <i class="doc">/** Module-level implementation of yasm_preproc_add_standard().</i></td></tr>
+<tr><th id="106">106</th><td><i class="doc">     * Call yasm_preproc_add_standard() instead of calling this function.</i></td></tr>
+<tr><th id="107">107</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="108">108</th><td>    <em>void</em> (*<dfn class="decl field" id="yasm_preproc_module::add_standard" title='yasm_preproc_module::add_standard' data-ref="yasm_preproc_module::add_standard" data-ref-filename="yasm_preproc_module..add_standard">add_standard</dfn>) (<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col3 decl" id="1083preproc" title='preproc' data-type='yasm_preproc *' data-ref="1083preproc" data-ref-filename="1083preproc">preproc</dfn>, <em>const</em> <em>char</em> **<dfn class="local col4 decl" id="1084macros" title='macros' data-type='const char **' data-ref="1084macros" data-ref-filename="1084macros">macros</dfn>);</td></tr>
+<tr><th id="109">109</th><td>} <dfn class="typedef" id="yasm_preproc_module" title='yasm_preproc_module' data-type='struct yasm_preproc_module' data-ref="yasm_preproc_module" data-ref-filename="yasm_preproc_module">yasm_preproc_module</dfn>;</td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td><i class="doc">/** Initialize preprocessor.</i></td></tr>
+<tr><th id="112">112</th><td><i class="doc"> * The preprocessor needs access to the object format module to find out</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc"> * any output format specific macros.</i></td></tr>
+<tr><th id="114">114</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">module</span>        preprocessor module</i></td></tr>
+<tr><th id="115">115</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">in_filename</span>   initial starting filename, or "-" to read from stdin</i></td></tr>
+<tr><th id="116">116</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">symtab</span>        symbol table (may be NULL if none)</i></td></tr>
+<tr><th id="117">117</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">lm</span>            line mapping repository</i></td></tr>
+<tr><th id="118">118</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">errwarns</span>      error/warning set</i></td></tr>
+<tr><th id="119">119</th><td><i class="doc"> * <span class="command">\return</span> New preprocessor.</i></td></tr>
+<tr><th id="120">120</th><td><i class="doc"> * <span class="command">\note</span> Errors/warnings are stored into errwarns.</i></td></tr>
+<tr><th id="121">121</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="122">122</th><td><i>/*@only@*/</i> <a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="decl fn" id="yasm_preproc_create" title='yasm_preproc_create' data-ref="yasm_preproc_create" data-ref-filename="yasm_preproc_create">yasm_preproc_create</dfn></td></tr>
+<tr><th id="123">123</th><td>    (<a class="typedef" href="#yasm_preproc_module" title='yasm_preproc_module' data-type='struct yasm_preproc_module' data-ref="yasm_preproc_module" data-ref-filename="yasm_preproc_module">yasm_preproc_module</a> *<dfn class="local col5 decl" id="1085module" title='module' data-type='yasm_preproc_module *' data-ref="1085module" data-ref-filename="1085module">module</dfn>, <em>const</em> <em>char</em> *<dfn class="local col6 decl" id="1086in_filename" title='in_filename' data-type='const char *' data-ref="1086in_filename" data-ref-filename="1086in_filename">in_filename</dfn>,</td></tr>
+<tr><th id="124">124</th><td>     <a class="typedef" href="coretype.h.html#yasm_symtab" title='yasm_symtab' data-type='struct yasm_symtab' data-ref="yasm_symtab" data-ref-filename="yasm_symtab">yasm_symtab</a> *<dfn class="local col7 decl" id="1087symtab" title='symtab' data-type='yasm_symtab *' data-ref="1087symtab" data-ref-filename="1087symtab">symtab</dfn>, <a class="typedef" href="coretype.h.html#yasm_linemap" title='yasm_linemap' data-type='struct yasm_linemap' data-ref="yasm_linemap" data-ref-filename="yasm_linemap">yasm_linemap</a> *<dfn class="local col8 decl" id="1088lm" title='lm' data-type='yasm_linemap *' data-ref="1088lm" data-ref-filename="1088lm">lm</dfn>, <a class="typedef" href="coretype.h.html#yasm_errwarns" title='yasm_errwarns' data-type='struct yasm_errwarns' data-ref="yasm_errwarns" data-ref-filename="yasm_errwarns">yasm_errwarns</a> *<dfn class="local col9 decl" id="1089errwarns" title='errwarns' data-type='yasm_errwarns *' data-ref="1089errwarns" data-ref-filename="1089errwarns">errwarns</dfn>);</td></tr>
+<tr><th id="125">125</th><td></td></tr>
+<tr><th id="126">126</th><td><i class="doc">/** Cleans up any allocated preproc memory.</i></td></tr>
+<tr><th id="127">127</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">preproc</span>       preprocessor</i></td></tr>
+<tr><th id="128">128</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="129">129</th><td><em>void</em> <dfn class="decl fn" id="yasm_preproc_destroy" title='yasm_preproc_destroy' data-ref="yasm_preproc_destroy" data-ref-filename="yasm_preproc_destroy">yasm_preproc_destroy</dfn>(<i>/*@only@*/</i> <a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col0 decl" id="1090preproc" title='preproc' data-type='yasm_preproc *' data-ref="1090preproc" data-ref-filename="1090preproc">preproc</dfn>);</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td><i class="doc">/** Gets a single line of preprocessed source code.</i></td></tr>
+<tr><th id="132">132</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">preproc</span>       preprocessor</i></td></tr>
+<tr><th id="133">133</th><td><i class="doc"> * <span class="command">\return</span> Allocated line of code, without the trailing<span class="command"> \n</span>.</i></td></tr>
+<tr><th id="134">134</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="135">135</th><td><em>char</em> *<dfn class="decl fn" id="yasm_preproc_get_line" title='yasm_preproc_get_line' data-ref="yasm_preproc_get_line" data-ref-filename="yasm_preproc_get_line">yasm_preproc_get_line</dfn>(<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col1 decl" id="1091preproc" title='preproc' data-type='yasm_preproc *' data-ref="1091preproc" data-ref-filename="1091preproc">preproc</dfn>);</td></tr>
+<tr><th id="136">136</th><td></td></tr>
+<tr><th id="137">137</th><td><i class="doc">/** Get the next filename included by the source code.</i></td></tr>
+<tr><th id="138">138</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">preproc</span>       preprocessor</i></td></tr>
+<tr><th id="139">139</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">buf</span>           destination buffer for filename</i></td></tr>
+<tr><th id="140">140</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">max_size</span>      maximum number of bytes that can be returned in buf</i></td></tr>
+<tr><th id="141">141</th><td><i class="doc"> * <span class="command">\return</span> Actual number of bytes returned in buf.</i></td></tr>
+<tr><th id="142">142</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="143">143</th><td><span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl fn" id="yasm_preproc_get_included_file" title='yasm_preproc_get_included_file' data-ref="yasm_preproc_get_included_file" data-ref-filename="yasm_preproc_get_included_file">yasm_preproc_get_included_file</dfn>(<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col2 decl" id="1092preproc" title='preproc' data-type='yasm_preproc *' data-ref="1092preproc" data-ref-filename="1092preproc">preproc</dfn>,</td></tr>
+<tr><th id="144">144</th><td>                                      <i>/*@out@*/</i> <em>char</em> *<dfn class="local col3 decl" id="1093buf" title='buf' data-type='char *' data-ref="1093buf" data-ref-filename="1093buf">buf</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="1094max_size" title='max_size' data-type='size_t' data-ref="1094max_size" data-ref-filename="1094max_size">max_size</dfn>);</td></tr>
+<tr><th id="145">145</th><td></td></tr>
+<tr><th id="146">146</th><td><i class="doc">/** Pre-include a file.</i></td></tr>
+<tr><th id="147">147</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">preproc</span>       preprocessor</i></td></tr>
+<tr><th id="148">148</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">filename</span>      filename</i></td></tr>
+<tr><th id="149">149</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="150">150</th><td><em>void</em> <dfn class="decl fn" id="yasm_preproc_add_include_file" title='yasm_preproc_add_include_file' data-ref="yasm_preproc_add_include_file" data-ref-filename="yasm_preproc_add_include_file">yasm_preproc_add_include_file</dfn>(<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col5 decl" id="1095preproc" title='preproc' data-type='yasm_preproc *' data-ref="1095preproc" data-ref-filename="1095preproc">preproc</dfn>,</td></tr>
+<tr><th id="151">151</th><td>                                   <em>const</em> <em>char</em> *<dfn class="local col6 decl" id="1096filename" title='filename' data-type='const char *' data-ref="1096filename" data-ref-filename="1096filename">filename</dfn>);</td></tr>
+<tr><th id="152">152</th><td></td></tr>
+<tr><th id="153">153</th><td><i class="doc">/** Pre-define a macro.</i></td></tr>
+<tr><th id="154">154</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">preproc</span>       preprocessor</i></td></tr>
+<tr><th id="155">155</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">macronameval</span>  "name=value" string</i></td></tr>
+<tr><th id="156">156</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="157">157</th><td><em>void</em> <dfn class="decl fn" id="yasm_preproc_predefine_macro" title='yasm_preproc_predefine_macro' data-ref="yasm_preproc_predefine_macro" data-ref-filename="yasm_preproc_predefine_macro">yasm_preproc_predefine_macro</dfn>(<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col7 decl" id="1097preproc" title='preproc' data-type='yasm_preproc *' data-ref="1097preproc" data-ref-filename="1097preproc">preproc</dfn>,</td></tr>
+<tr><th id="158">158</th><td>                                  <em>const</em> <em>char</em> *<dfn class="local col8 decl" id="1098macronameval" title='macronameval' data-type='const char *' data-ref="1098macronameval" data-ref-filename="1098macronameval">macronameval</dfn>);</td></tr>
+<tr><th id="159">159</th><td></td></tr>
+<tr><th id="160">160</th><td><i class="doc">/** Un-define a macro.</i></td></tr>
+<tr><th id="161">161</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">preproc</span>       preprocessor</i></td></tr>
+<tr><th id="162">162</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">macroname</span>     macro name</i></td></tr>
+<tr><th id="163">163</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="164">164</th><td><em>void</em> <dfn class="decl fn" id="yasm_preproc_undefine_macro" title='yasm_preproc_undefine_macro' data-ref="yasm_preproc_undefine_macro" data-ref-filename="yasm_preproc_undefine_macro">yasm_preproc_undefine_macro</dfn>(<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col9 decl" id="1099preproc" title='preproc' data-type='yasm_preproc *' data-ref="1099preproc" data-ref-filename="1099preproc">preproc</dfn>, <em>const</em> <em>char</em> *<dfn class="local col0 decl" id="1100macroname" title='macroname' data-type='const char *' data-ref="1100macroname" data-ref-filename="1100macroname">macroname</dfn>);</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td><i class="doc">/** Define a builtin macro, preprocessed before the "standard" macros.</i></td></tr>
+<tr><th id="167">167</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">preproc</span>       preprocessor</i></td></tr>
+<tr><th id="168">168</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">macronameval</span>  "name=value" string</i></td></tr>
+<tr><th id="169">169</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="170">170</th><td><em>void</em> <dfn class="decl fn" id="yasm_preproc_define_builtin" title='yasm_preproc_define_builtin' data-ref="yasm_preproc_define_builtin" data-ref-filename="yasm_preproc_define_builtin">yasm_preproc_define_builtin</dfn>(<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col1 decl" id="1101preproc" title='preproc' data-type='yasm_preproc *' data-ref="1101preproc" data-ref-filename="1101preproc">preproc</dfn>,</td></tr>
+<tr><th id="171">171</th><td>                                 <em>const</em> <em>char</em> *<dfn class="local col2 decl" id="1102macronameval" title='macronameval' data-type='const char *' data-ref="1102macronameval" data-ref-filename="1102macronameval">macronameval</dfn>);</td></tr>
+<tr><th id="172">172</th><td></td></tr>
+<tr><th id="173">173</th><td><i class="doc">/** Define additional standard macros, preprocessed after the builtins but</i></td></tr>
+<tr><th id="174">174</th><td><i class="doc"> * prior to any user-defined macros.</i></td></tr>
+<tr><th id="175">175</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">preproc</span>       preprocessor</i></td></tr>
+<tr><th id="176">176</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">macros</span>        NULL-terminated array of macro strings</i></td></tr>
+<tr><th id="177">177</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="178">178</th><td><em>void</em> <dfn class="decl fn" id="yasm_preproc_add_standard" title='yasm_preproc_add_standard' data-ref="yasm_preproc_add_standard" data-ref-filename="yasm_preproc_add_standard">yasm_preproc_add_standard</dfn>(<a class="typedef" href="coretype.h.html#yasm_preproc" title='yasm_preproc' data-type='struct yasm_preproc' data-ref="yasm_preproc" data-ref-filename="yasm_preproc">yasm_preproc</a> *<dfn class="local col3 decl" id="1103preproc" title='preproc' data-type='yasm_preproc *' data-ref="1103preproc" data-ref-filename="1103preproc">preproc</dfn>,</td></tr>
+<tr><th id="179">179</th><td>                               <em>const</em> <em>char</em> **<dfn class="local col4 decl" id="1104macros" title='macros' data-type='const char **' data-ref="1104macros" data-ref-filename="1104macros">macros</dfn>);</td></tr>
+<tr><th id="180">180</th><td></td></tr>
+<tr><th id="181">181</th><td><u>#<span data-ppcond="181">ifndef</span> <span class="macro" data-ref="_M/YASM_DOXYGEN">YASM_DOXYGEN</span></u></td></tr>
+<tr><th id="182">182</th><td></td></tr>
+<tr><th id="183">183</th><td><i>/* Inline macro implementations for preproc functions */</i></td></tr>
+<tr><th id="184">184</th><td></td></tr>
+<tr><th id="185">185</th><td><u>#define <dfn class="macro" id="_M/yasm_preproc_create" data-ref="_M/yasm_preproc_create">yasm_preproc_create</dfn>(module, in_filename, symtab, lm, ews) \</u></td></tr>
+<tr><th id="186">186</th><td><u>    module-&gt;create(in_filename, symtab, lm, ews)</u></td></tr>
+<tr><th id="187">187</th><td></td></tr>
+<tr><th id="188">188</th><td><u>#define <dfn class="macro" id="_M/yasm_preproc_destroy" data-ref="_M/yasm_preproc_destroy">yasm_preproc_destroy</dfn>(preproc) \</u></td></tr>
+<tr><th id="189">189</th><td><u>    ((yasm_preproc_base *)preproc)-&gt;module-&gt;destroy(preproc)</u></td></tr>
+<tr><th id="190">190</th><td><u>#define <dfn class="macro" id="_M/yasm_preproc_get_line" data-ref="_M/yasm_preproc_get_line">yasm_preproc_get_line</dfn>(preproc) \</u></td></tr>
+<tr><th id="191">191</th><td><u>    ((yasm_preproc_base *)preproc)-&gt;module-&gt;get_line(preproc)</u></td></tr>
+<tr><th id="192">192</th><td><u>#define <dfn class="macro" id="_M/yasm_preproc_get_included_file" data-ref="_M/yasm_preproc_get_included_file">yasm_preproc_get_included_file</dfn>(preproc, buf, max_size) \</u></td></tr>
+<tr><th id="193">193</th><td><u>    ((yasm_preproc_base *)preproc)-&gt;module-&gt;get_included_file(preproc, buf, max_size)</u></td></tr>
+<tr><th id="194">194</th><td><u>#define <dfn class="macro" id="_M/yasm_preproc_add_include_file" data-ref="_M/yasm_preproc_add_include_file">yasm_preproc_add_include_file</dfn>(preproc, filename) \</u></td></tr>
+<tr><th id="195">195</th><td><u>    ((yasm_preproc_base *)preproc)-&gt;module-&gt;add_include_file(preproc, filename)</u></td></tr>
+<tr><th id="196">196</th><td><u>#define <dfn class="macro" id="_M/yasm_preproc_predefine_macro" data-ref="_M/yasm_preproc_predefine_macro">yasm_preproc_predefine_macro</dfn>(preproc, macronameval) \</u></td></tr>
+<tr><th id="197">197</th><td><u>    ((yasm_preproc_base *)preproc)-&gt;module-&gt;predefine_macro(preproc, \</u></td></tr>
+<tr><th id="198">198</th><td><u>                                                            macronameval)</u></td></tr>
+<tr><th id="199">199</th><td><u>#define <dfn class="macro" id="_M/yasm_preproc_undefine_macro" data-ref="_M/yasm_preproc_undefine_macro">yasm_preproc_undefine_macro</dfn>(preproc, macroname) \</u></td></tr>
+<tr><th id="200">200</th><td><u>    ((yasm_preproc_base *)preproc)-&gt;module-&gt;undefine_macro(preproc, macroname)</u></td></tr>
+<tr><th id="201">201</th><td><u>#define <dfn class="macro" id="_M/yasm_preproc_define_builtin" data-ref="_M/yasm_preproc_define_builtin">yasm_preproc_define_builtin</dfn>(preproc, macronameval) \</u></td></tr>
+<tr><th id="202">202</th><td><u>    ((yasm_preproc_base *)preproc)-&gt;module-&gt;define_builtin(preproc, \</u></td></tr>
+<tr><th id="203">203</th><td><u>                                                           macronameval)</u></td></tr>
+<tr><th id="204">204</th><td><u>#define <dfn class="macro" id="_M/yasm_preproc_add_standard" data-ref="_M/yasm_preproc_add_standard">yasm_preproc_add_standard</dfn>(preproc, macros) \</u></td></tr>
+<tr><th id="205">205</th><td><u>    ((yasm_preproc_base *)preproc)-&gt;module-&gt;add_standard(preproc, \</u></td></tr>
+<tr><th id="206">206</th><td><u>                                                         macros)</u></td></tr>
+<tr><th id="207">207</th><td></td></tr>
+<tr><th id="208">208</th><td><u>#<span data-ppcond="181">endif</span></u></td></tr>
+<tr><th id="209">209</th><td></td></tr>
+<tr><th id="210">210</th><td><u>#<span data-ppcond="30">endif</span></u></td></tr>
+<tr><th id="211">211</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../frontends/yasm/yasm.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/frontends/yasm/yasm.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

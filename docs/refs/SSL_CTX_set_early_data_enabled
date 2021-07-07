@@ -1,0 +1,56 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='3498' type='void SSL_CTX_set_early_data_enabled(SSL_CTX * ctx, int enabled)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='3444'>// Early data.
+//
+// WARNING: 0-RTT support in BoringSSL is currently experimental and not fully
+// implemented. It may cause interoperability or security failures when used.
+//
+// Early data, or 0-RTT, is a feature in TLS 1.3 which allows clients to send
+// data on the first flight during a resumption handshake. This can save a
+// round-trip in some application protocols.
+//
+// WARNING: A 0-RTT handshake has different security properties from normal
+// handshake, so it is off by default unless opted in. In particular, early data
+// is replayable by a network attacker. Callers must account for this when
+// sending or processing data before the handshake is confirmed. See RFC 8446
+// for more information.
+//
+// As a server, if early data is accepted, |SSL_do_handshake| will complete as
+// soon as the ClientHello is processed and server flight sent. |SSL_write| may
+// be used to send half-RTT data. |SSL_read| will consume early data and
+// transition to 1-RTT data as appropriate. Prior to the transition,
+// |SSL_in_init| will report the handshake is still in progress. Callers may use
+// it or |SSL_in_early_data| to defer or reject requests as needed.
+//
+// Early data as a client is more complex. If the offered session (see
+// |SSL_set_session|) is 0-RTT-capable, the handshake will return after sending
+// the ClientHello. The predicted peer certificates and ALPN protocol will be
+// available via the usual APIs. |SSL_write| will write early data, up to the
+// session&apos;s limit. Writes past this limit and |SSL_read| will complete the
+// handshake before continuing. Callers may also call |SSL_do_handshake| again
+// to complete the handshake sooner.
+//
+// If the server accepts early data, the handshake will succeed. |SSL_read| and
+// |SSL_write| will then act as in a 1-RTT handshake. The peer certificates and
+// ALPN protocol will be as predicted and need not be re-queried.
+//
+// If the server rejects early data, |SSL_do_handshake| (and thus |SSL_read| and
+// |SSL_write|) will then fail with |SSL_get_error| returning
+// |SSL_ERROR_EARLY_DATA_REJECTED|. The caller should treat this as a connection
+// error and most likely perform a high-level retry. Note the server may still
+// have processed the early data due to attacker replays.
+//
+// To then continue the handshake on the original connection, use
+// |SSL_reset_early_data_reject|. The connection will then behave as one which
+// had not yet completed the handshake. This allows a faster retry than making a
+// fresh connection. |SSL_do_handshake| will complete the full handshake,
+// possibly resulting in different peer certificates, ALPN protocol, and other
+// properties. The caller must disregard any values from before the reset and
+// query again.
+//
+// Finally, to implement the fallback described in RFC 8446 appendix D.3, retry
+// on a fresh connection without 0-RTT if the handshake fails with
+// |SSL_R_WRONG_VERSION_ON_EARLY_DATA|.
+
+// SSL_CTX_set_early_data_enabled sets whether early data is allowed to be used
+// with resumptions using |ctx|.</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_lib.cc' l='1255' ll='1257' type='void SSL_CTX_set_early_data_enabled(SSL_CTX * ctx, int enabled)'/>

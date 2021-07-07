@@ -1,0 +1,100 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>push_sinc_resampler.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/resampler/push_sinc_resampler.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::PushSincResampler "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/resampler/push_sinc_resampler.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>webrtc</a>/<a href='..'>common_audio</a>/<a href='./'>resampler</a>/<a href='push_sinc_resampler.h.html'>push_sinc_resampler.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2013 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/COMMON_AUDIO_RESAMPLER_PUSH_SINC_RESAMPLER_H_">COMMON_AUDIO_RESAMPLER_PUSH_SINC_RESAMPLER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/COMMON_AUDIO_RESAMPLER_PUSH_SINC_RESAMPLER_H_" data-ref="_M/COMMON_AUDIO_RESAMPLER_PUSH_SINC_RESAMPLER_H_">COMMON_AUDIO_RESAMPLER_PUSH_SINC_RESAMPLER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="sinc_resampler.h.html">"common_audio/resampler/sinc_resampler.h"</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="../../rtc_base/constructor_magic.h.html">"rtc_base/constructor_magic.h"</a></u></td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><i>// A thin wrapper over SincResampler to provide a push-based interface as</i></td></tr>
+<tr><th id="25">25</th><td><i>// required by WebRTC. SincResampler uses a pull-based interface, and will</i></td></tr>
+<tr><th id="26">26</th><td><i>// use SincResamplerCallback::Run() to request data upon a call to Resample().</i></td></tr>
+<tr><th id="27">27</th><td><i>// These Run() calls will happen on the same thread Resample() is called on.</i></td></tr>
+<tr><th id="28">28</th><td><b>class</b> <dfn class="type def" id="webrtc::PushSincResampler" title='webrtc::PushSincResampler' data-ref="webrtc::PushSincResampler" data-ref-filename="webrtc..PushSincResampler">PushSincResampler</dfn> : <b>public</b> <a class="type" href="sinc_resampler.h.html#webrtc::SincResamplerCallback" title='webrtc::SincResamplerCallback' data-ref="webrtc::SincResamplerCallback" data-ref-filename="webrtc..SincResamplerCallback">SincResamplerCallback</a> {</td></tr>
+<tr><th id="29">29</th><td> <b>public</b>:</td></tr>
+<tr><th id="30">30</th><td>  <i>// Provide the size of the source and destination blocks in samples. These</i></td></tr>
+<tr><th id="31">31</th><td><i>  // must correspond to the same time duration (typically 10 ms) as the sample</i></td></tr>
+<tr><th id="32">32</th><td><i>  // ratio is inferred from them.</i></td></tr>
+<tr><th id="33">33</th><td>  <dfn class="decl fn" id="_ZN6webrtc17PushSincResamplerC1Emm" title='webrtc::PushSincResampler::PushSincResampler' data-ref="_ZN6webrtc17PushSincResamplerC1Emm" data-ref-filename="_ZN6webrtc17PushSincResamplerC1Emm">PushSincResampler</dfn>(<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="28source_frames" title='source_frames' data-type='size_t' data-ref="28source_frames" data-ref-filename="28source_frames">source_frames</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="29destination_frames" title='destination_frames' data-type='size_t' data-ref="29destination_frames" data-ref-filename="29destination_frames">destination_frames</dfn>);</td></tr>
+<tr><th id="34">34</th><td>  <dfn class="virtual decl fn" id="_ZN6webrtc17PushSincResamplerD1Ev" title='webrtc::PushSincResampler::~PushSincResampler' data-ref="_ZN6webrtc17PushSincResamplerD1Ev" data-ref-filename="_ZN6webrtc17PushSincResamplerD1Ev">~PushSincResampler</dfn>() override;</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td>  <i>// Perform the resampling. |source_frames| must always equal the</i></td></tr>
+<tr><th id="37">37</th><td><i>  // |source_frames| provided at construction. |destination_capacity| must be</i></td></tr>
+<tr><th id="38">38</th><td><i>  // at least as large as |destination_frames|. Returns the number of samples</i></td></tr>
+<tr><th id="39">39</th><td><i>  // provided in destination (for convenience, since this will always be equal</i></td></tr>
+<tr><th id="40">40</th><td><i>  // to |destination_frames|).</i></td></tr>
+<tr><th id="41">41</th><td>  <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl fn" id="_ZN6webrtc17PushSincResampler8ResampleEPKsmPsm" title='webrtc::PushSincResampler::Resample' data-ref="_ZN6webrtc17PushSincResampler8ResampleEPKsmPsm" data-ref-filename="_ZN6webrtc17PushSincResampler8ResampleEPKsmPsm">Resample</dfn>(<em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col0 decl" id="30source" title='source' data-type='const int16_t *' data-ref="30source" data-ref-filename="30source">source</dfn>,</td></tr>
+<tr><th id="42">42</th><td>                  <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="31source_frames" title='source_frames' data-type='size_t' data-ref="31source_frames" data-ref-filename="31source_frames">source_frames</dfn>,</td></tr>
+<tr><th id="43">43</th><td>                  <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col2 decl" id="32destination" title='destination' data-type='int16_t *' data-ref="32destination" data-ref-filename="32destination">destination</dfn>,</td></tr>
+<tr><th id="44">44</th><td>                  <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="33destination_capacity" title='destination_capacity' data-type='size_t' data-ref="33destination_capacity" data-ref-filename="33destination_capacity">destination_capacity</dfn>);</td></tr>
+<tr><th id="45">45</th><td>  <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl fn" id="_ZN6webrtc17PushSincResampler8ResampleEPKfmPfm" title='webrtc::PushSincResampler::Resample' data-ref="_ZN6webrtc17PushSincResampler8ResampleEPKfmPfm" data-ref-filename="_ZN6webrtc17PushSincResampler8ResampleEPKfmPfm">Resample</dfn>(<em>const</em> <em>float</em>* <dfn class="local col4 decl" id="34source" title='source' data-type='const float *' data-ref="34source" data-ref-filename="34source">source</dfn>,</td></tr>
+<tr><th id="46">46</th><td>                  <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="35source_frames" title='source_frames' data-type='size_t' data-ref="35source_frames" data-ref-filename="35source_frames">source_frames</dfn>,</td></tr>
+<tr><th id="47">47</th><td>                  <em>float</em>* <dfn class="local col6 decl" id="36destination" title='destination' data-type='float *' data-ref="36destination" data-ref-filename="36destination">destination</dfn>,</td></tr>
+<tr><th id="48">48</th><td>                  <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="37destination_capacity" title='destination_capacity' data-type='size_t' data-ref="37destination_capacity" data-ref-filename="37destination_capacity">destination_capacity</dfn>);</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td>  <i>// Delay due to the filter kernel. Essentially, the time after which an input</i></td></tr>
+<tr><th id="51">51</th><td><i>  // sample will appear in the resampled output.</i></td></tr>
+<tr><th id="52">52</th><td>  <em>static</em> <em>float</em> <dfn class="decl def fn" id="_ZN6webrtc17PushSincResampler23AlgorithmicDelaySecondsEi" title='webrtc::PushSincResampler::AlgorithmicDelaySeconds' data-ref="_ZN6webrtc17PushSincResampler23AlgorithmicDelaySecondsEi" data-ref-filename="_ZN6webrtc17PushSincResampler23AlgorithmicDelaySecondsEi">AlgorithmicDelaySeconds</dfn>(<em>int</em> <dfn class="local col8 decl" id="38source_rate_hz" title='source_rate_hz' data-type='int' data-ref="38source_rate_hz" data-ref-filename="38source_rate_hz">source_rate_hz</dfn>) {</td></tr>
+<tr><th id="53">53</th><td>    <b>return</b> <var>1.f</var> / <a class="local col8 ref" href="#38source_rate_hz" title='source_rate_hz' data-ref="38source_rate_hz" data-ref-filename="38source_rate_hz">source_rate_hz</a> * <a class="type" href="sinc_resampler.h.html#webrtc::SincResampler" title='webrtc::SincResampler' data-ref="webrtc::SincResampler" data-ref-filename="webrtc..SincResampler">SincResampler</a>::<a class="ref" href="sinc_resampler.h.html#webrtc::SincResampler::kKernelSize" title='webrtc::SincResampler::kKernelSize' data-ref="webrtc::SincResampler::kKernelSize" data-ref-filename="webrtc..SincResampler..kKernelSize">kKernelSize</a> / <var>2</var>;</td></tr>
+<tr><th id="54">54</th><td>  }</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td> <b>protected</b>:</td></tr>
+<tr><th id="57">57</th><td>  <i>// Implements SincResamplerCallback.</i></td></tr>
+<tr><th id="58">58</th><td>  <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc17PushSincResampler3RunEmPf" title='webrtc::PushSincResampler::Run' data-ref="_ZN6webrtc17PushSincResampler3RunEmPf" data-ref-filename="_ZN6webrtc17PushSincResampler3RunEmPf">Run</dfn>(<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="39frames" title='frames' data-type='size_t' data-ref="39frames" data-ref-filename="39frames">frames</dfn>, <em>float</em>* <dfn class="local col0 decl" id="40destination" title='destination' data-type='float *' data-ref="40destination" data-ref-filename="40destination">destination</dfn>) override;</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td> <b>private</b>:</td></tr>
+<tr><th id="61">61</th><td>  <b>friend</b> <b>class</b> <a class="type" href="#webrtc::PushSincResamplerTest" title='webrtc::PushSincResamplerTest' data-ref="webrtc::PushSincResamplerTest" data-ref-filename="webrtc..PushSincResamplerTest">PushSincResamplerTest</a>;</td></tr>
+<tr><th id="62">62</th><td>  <a class="type" href="sinc_resampler.h.html#webrtc::SincResampler" title='webrtc::SincResampler' data-ref="webrtc::SincResampler" data-ref-filename="webrtc..SincResampler">SincResampler</a>* <dfn class="decl def fn" id="_ZN6webrtc17PushSincResampler25get_resampler_for_testingEv" title='webrtc::PushSincResampler::get_resampler_for_testing' data-ref="_ZN6webrtc17PushSincResampler25get_resampler_for_testingEv" data-ref-filename="_ZN6webrtc17PushSincResampler25get_resampler_for_testingEv">get_resampler_for_testing</dfn>() { <b>return</b> <a class="member field" href="#webrtc::PushSincResampler::resampler_" title='webrtc::PushSincResampler::resampler_' data-ref="webrtc::PushSincResampler::resampler_" data-ref-filename="webrtc..PushSincResampler..resampler_">resampler_</a>.<span class='ref fn' title='std::__1::unique_ptr::get' data-ref="_ZNKSt3__110unique_ptr3getEv" data-ref-filename="_ZNKSt3__110unique_ptr3getEv">get</span>(); }</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="sinc_resampler.h.html#webrtc::SincResampler" title='webrtc::SincResampler' data-ref="webrtc::SincResampler" data-ref-filename="webrtc..SincResampler">SincResampler</a>&gt; <dfn class="decl field" id="webrtc::PushSincResampler::resampler_" title='webrtc::PushSincResampler::resampler_' data-ref="webrtc::PushSincResampler::resampler_" data-ref-filename="webrtc..PushSincResampler..resampler_">resampler_</dfn>;</td></tr>
+<tr><th id="65">65</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<em>float</em>[]&gt; <dfn class="decl field" id="webrtc::PushSincResampler::float_buffer_" title='webrtc::PushSincResampler::float_buffer_' data-ref="webrtc::PushSincResampler::float_buffer_" data-ref-filename="webrtc..PushSincResampler..float_buffer_">float_buffer_</dfn>;</td></tr>
+<tr><th id="66">66</th><td>  <em>const</em> <em>float</em>* <dfn class="decl field" id="webrtc::PushSincResampler::source_ptr_" title='webrtc::PushSincResampler::source_ptr_' data-ref="webrtc::PushSincResampler::source_ptr_" data-ref-filename="webrtc..PushSincResampler..source_ptr_">source_ptr_</dfn>;</td></tr>
+<tr><th id="67">67</th><td>  <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="decl field" id="webrtc::PushSincResampler::source_ptr_int_" title='webrtc::PushSincResampler::source_ptr_int_' data-ref="webrtc::PushSincResampler::source_ptr_int_" data-ref-filename="webrtc..PushSincResampler..source_ptr_int_">source_ptr_int_</dfn>;</td></tr>
+<tr><th id="68">68</th><td>  <em>const</em> <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="webrtc::PushSincResampler::destination_frames_" title='webrtc::PushSincResampler::destination_frames_' data-ref="webrtc::PushSincResampler::destination_frames_" data-ref-filename="webrtc..PushSincResampler..destination_frames_">destination_frames_</dfn>;</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td>  <i>// True on the first call to Resample(), to prime the SincResampler buffer.</i></td></tr>
+<tr><th id="71">71</th><td>  <em>bool</em> <dfn class="decl field" id="webrtc::PushSincResampler::first_pass_" title='webrtc::PushSincResampler::first_pass_' data-ref="webrtc::PushSincResampler::first_pass_" data-ref-filename="webrtc..PushSincResampler..first_pass_">first_pass_</dfn>;</td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td>  <i>// Used to assert we are only requested for as much data as is available.</i></td></tr>
+<tr><th id="74">74</th><td>  <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="webrtc::PushSincResampler::source_available_" title='webrtc::PushSincResampler::source_available_' data-ref="webrtc::PushSincResampler::source_available_" data-ref-filename="webrtc..PushSincResampler..source_available_">source_available_</dfn>;</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td>  <a class="macro" href="../../rtc_base/constructor_magic.h.html#16" title="PushSincResampler(const PushSincResampler&amp;) = delete; PushSincResampler&amp; operator=(const PushSincResampler&amp;) = delete" data-ref="_M/RTC_DISALLOW_COPY_AND_ASSIGN">RTC_DISALLOW_COPY_AND_ASSIGN</a>(<dfn class="decl def fn" id="_ZN6webrtc17PushSincResamplerC1ERKS0_" title='webrtc::PushSincResampler::PushSincResampler' data-ref="_ZN6webrtc17PushSincResamplerC1ERKS0_" data-ref-filename="_ZN6webrtc17PushSincResamplerC1ERKS0_"><a class="type" href="#webrtc::PushSincResampler" title='webrtc::PushSincResampler' data-ref="webrtc::PushSincResampler" data-ref-filename="webrtc..PushSincResampler"><a class="type" href="#webrtc::PushSincResampler" title='webrtc::PushSincResampler' data-ref="webrtc::PushSincResampler" data-ref-filename="webrtc..PushSincResampler"><a class="type" href="#webrtc::PushSincResampler" title='webrtc::PushSincResampler' data-ref="webrtc::PushSincResampler" data-ref-filename="webrtc..PushSincResampler">PushSincResampler</a></a></a></dfn>);</td></tr>
+<tr><th id="77">77</th><td>};</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td><u>#<span data-ppcond="11">endif</span>  // COMMON_AUDIO_RESAMPLER_PUSH_SINC_RESAMPLER_H_</u></td></tr>
+<tr><th id="82">82</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../audio_converter.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/audio_converter.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

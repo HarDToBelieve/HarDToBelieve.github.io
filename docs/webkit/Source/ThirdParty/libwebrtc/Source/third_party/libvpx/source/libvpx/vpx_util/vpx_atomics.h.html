@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>vpx_atomics.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_util/vpx_atomics.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="vpx_atomic_int "/>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_util/vpx_atomics.h'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>third_party</a>/<a href='../../..'>libvpx</a>/<a href='../..'>source</a>/<a href='..'>libvpx</a>/<a href='./'>vpx_util</a>/<a href='vpx_atomics.h.html'>vpx_atomics.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2017 The WebM project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/VPX_VPX_UTIL_VPX_ATOMICS_H_">VPX_VPX_UTIL_VPX_ATOMICS_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/VPX_VPX_UTIL_VPX_ATOMICS_H_" data-ref="_M/VPX_VPX_UTIL_VPX_ATOMICS_H_">VPX_VPX_UTIL_VPX_ATOMICS_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="../../config/ios/arm64/vpx_config.h.html">"./vpx_config.h"</a></u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#<span data-ppcond="16">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="17">17</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="18">18</th><td><u>#<span data-ppcond="16">endif</span>  // __cplusplus</u></td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><u>#<span data-ppcond="20">if</span> <a class="macro" href="../../config/ios/arm64/vpx_config.h.html#83" title="1" data-ref="_M/CONFIG_OS_SUPPORT">CONFIG_OS_SUPPORT</a> &amp;&amp; <a class="macro" href="../../config/ios/arm64/vpx_config.h.html#64" title="1" data-ref="_M/CONFIG_MULTITHREAD">CONFIG_MULTITHREAD</a></u></td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><i>// Look for built-in atomic support. We cannot use &lt;stdatomic.h&gt; or &lt;atomic&gt;</i></td></tr>
+<tr><th id="23">23</th><td><i>// since neither is guaranteed to exist on both C and C++ platforms, and we need</i></td></tr>
+<tr><th id="24">24</th><td><i>// to back the atomic type with the same type (g++ needs to be able to use</i></td></tr>
+<tr><th id="25">25</th><td><i>// gcc-built code). g++ 6 doesn't support _Atomic as a keyword and can't use the</i></td></tr>
+<tr><th id="26">26</th><td><i>// stdatomic.h header. Even if both &lt;stdatomic.h&gt; and &lt;atomic&gt; existed it's not</i></td></tr>
+<tr><th id="27">27</th><td><i>// guaranteed that atomic_int is the same type as std::atomic_int.</i></td></tr>
+<tr><th id="28">28</th><td><i>// See <a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60932#c13">https://gcc.gnu.org/bugzilla/show_bug.cgi?id=60932#c13</a>.</i></td></tr>
+<tr><th id="29">29</th><td><u>#<span data-ppcond="29">if</span> !defined(<span class="macro" data-ref="_M/__has_builtin">__has_builtin</span>)</u></td></tr>
+<tr><th id="30">30</th><td><u>#define __has_builtin(x) 0  // Compatibility with non-clang compilers.</u></td></tr>
+<tr><th id="31">31</th><td><u>#<span data-ppcond="29">endif</span>                      // !defined(__has_builtin)</u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><u>#<span data-ppcond="33">if</span> (<span class="macro" title="" data-ref="_M/__has_builtin">__has_builtin</span>(__atomic_load_n)) || \</u></td></tr>
+<tr><th id="34">34</th><td><u>    (defined(<span class="macro" data-ref="_M/__GNUC__">__GNUC__</span>) &amp;&amp;               \</u></td></tr>
+<tr><th id="35">35</th><td><u>     (<span class="macro" title="4" data-ref="_M/__GNUC__">__GNUC__</span> &gt; 4 || (<span class="macro" title="4" data-ref="_M/__GNUC__">__GNUC__</span> == 4 &amp;&amp; <span class="macro" title="2" data-ref="_M/__GNUC_MINOR__">__GNUC_MINOR__</span> &gt;= 7)))</u></td></tr>
+<tr><th id="36">36</th><td><i>// For GCC &gt;= 4.7 and Clang versions that support __atomic builtins, use those.</i></td></tr>
+<tr><th id="37">37</th><td><u>#define <dfn class="macro" id="_M/VPX_USE_ATOMIC_BUILTINS" data-ref="_M/VPX_USE_ATOMIC_BUILTINS">VPX_USE_ATOMIC_BUILTINS</dfn></u></td></tr>
+<tr><th id="38">38</th><td><u>#<span data-ppcond="33">else</span></u></td></tr>
+<tr><th id="39">39</th><td><i>// Use platform-specific asm barriers.</i></td></tr>
+<tr><th id="40">40</th><td><u>#if defined(_MSC_VER)</u></td></tr>
+<tr><th id="41">41</th><td><i>// TODO(pbos): This assumes that newer versions of MSVC are building with the</i></td></tr>
+<tr><th id="42">42</th><td><i>// default /volatile:ms (or older, where this is always true. Consider adding</i></td></tr>
+<tr><th id="43">43</th><td><i>// support for using &lt;atomic&gt; instead of stdatomic.h when building C++11 under</i></td></tr>
+<tr><th id="44">44</th><td><i>// MSVC. It's unclear what to do for plain C under /volatile:iso (inline asm?),</i></td></tr>
+<tr><th id="45">45</th><td><i>// there're no explicit Interlocked* functions for only storing or loading</i></td></tr>
+<tr><th id="46">46</th><td><i>// (presumably because volatile has historically implied that on MSVC).</i></td></tr>
+<tr><th id="47">47</th><td><i>//</i></td></tr>
+<tr><th id="48">48</th><td><i>// For earlier versions of MSVC or the default /volatile:ms volatile int are</i></td></tr>
+<tr><th id="49">49</th><td><i>// acquire/release and require no barrier.</i></td></tr>
+<tr><th id="50">50</th><td><u>#define vpx_atomic_memory_barrier() \</u></td></tr>
+<tr><th id="51">51</th><td><u>  do {                              \</u></td></tr>
+<tr><th id="52">52</th><td><u>  } while (0)</u></td></tr>
+<tr><th id="53">53</th><td><u>#else</u></td></tr>
+<tr><th id="54">54</th><td><u>#if VPX_ARCH_X86 || VPX_ARCH_X86_64</u></td></tr>
+<tr><th id="55">55</th><td><i>// Use a compiler barrier on x86, no runtime penalty.</i></td></tr>
+<tr><th id="56">56</th><td><u>#define vpx_atomic_memory_barrier() __asm__ __volatile__("" ::: "memory")</u></td></tr>
+<tr><th id="57">57</th><td><u>#elif VPX_ARCH_ARM</u></td></tr>
+<tr><th id="58">58</th><td><u>#define vpx_atomic_memory_barrier() __asm__ __volatile__("dmb ish" ::: "memory")</u></td></tr>
+<tr><th id="59">59</th><td><u>#elif VPX_ARCH_MIPS</u></td></tr>
+<tr><th id="60">60</th><td><u>#define vpx_atomic_memory_barrier() __asm__ __volatile__("sync" ::: "memory")</u></td></tr>
+<tr><th id="61">61</th><td><u>#else</u></td></tr>
+<tr><th id="62">62</th><td><u>#error Unsupported architecture!</u></td></tr>
+<tr><th id="63">63</th><td><u>#endif  // VPX_ARCH_X86 || VPX_ARCH_X86_64</u></td></tr>
+<tr><th id="64">64</th><td><u>#endif  // defined(_MSC_VER)</u></td></tr>
+<tr><th id="65">65</th><td><u>#<span data-ppcond="33">endif</span>  // atomic builtin availability check</u></td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><i>// These are wrapped in a struct so that they are not easily accessed directly</i></td></tr>
+<tr><th id="68">68</th><td><i>// on any platform (to discourage programmer errors by setting values directly).</i></td></tr>
+<tr><th id="69">69</th><td><i>// This primitive MUST be initialized using vpx_atomic_init or VPX_ATOMIC_INIT</i></td></tr>
+<tr><th id="70">70</th><td><i>// (NOT memset) and accessed through vpx_atomic_ functions.</i></td></tr>
+<tr><th id="71">71</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="vpx_atomic_int" title='vpx_atomic_int' data-ref="vpx_atomic_int" data-ref-filename="vpx_atomic_int"><a class="type" href="#vpx_atomic_int" title='vpx_atomic_int' data-ref="vpx_atomic_int" data-ref-filename="vpx_atomic_int">vpx_atomic_int</a></dfn> {</td></tr>
+<tr><th id="72">72</th><td>  <em>volatile</em> <em>int</em> <dfn class="decl field" id="vpx_atomic_int::value" title='vpx_atomic_int::value' data-ref="vpx_atomic_int::value" data-ref-filename="vpx_atomic_int..value">value</dfn>;</td></tr>
+<tr><th id="73">73</th><td>} <dfn class="typedef" id="vpx_atomic_int" title='vpx_atomic_int' data-type='struct vpx_atomic_int' data-ref="vpx_atomic_int" data-ref-filename="vpx_atomic_int">vpx_atomic_int</dfn>;</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td><u>#define <dfn class="macro" id="_M/VPX_ATOMIC_INIT" data-ref="_M/VPX_ATOMIC_INIT">VPX_ATOMIC_INIT</dfn>(num) \</u></td></tr>
+<tr><th id="76">76</th><td><u>  { num }</u></td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td><i>// Initialization of an atomic int, not thread safe.</i></td></tr>
+<tr><th id="79">79</th><td><em>static</em> <a class="macro" href="../../config/ios/arm64/vpx_config.h.html#12" title="inline" data-ref="_M/INLINE">INLINE</a> <em>void</em> <dfn class="decl def fn" id="vpx_atomic_init" title='vpx_atomic_init' data-ref="vpx_atomic_init" data-ref-filename="vpx_atomic_init">vpx_atomic_init</dfn>(<a class="typedef" href="#vpx_atomic_int" title='vpx_atomic_int' data-type='struct vpx_atomic_int' data-ref="vpx_atomic_int" data-ref-filename="vpx_atomic_int">vpx_atomic_int</a> *<dfn class="local col2 decl" id="152atomic" title='atomic' data-type='vpx_atomic_int *' data-ref="152atomic" data-ref-filename="152atomic">atomic</dfn>, <em>int</em> <dfn class="local col3 decl" id="153value" title='value' data-type='int' data-ref="153value" data-ref-filename="153value">value</dfn>) {</td></tr>
+<tr><th id="80">80</th><td>  <a class="local col2 ref" href="#152atomic" title='atomic' data-ref="152atomic" data-ref-filename="152atomic">atomic</a>-&gt;<a class="ref field" href="#vpx_atomic_int::value" title='vpx_atomic_int::value' data-ref="vpx_atomic_int::value" data-ref-filename="vpx_atomic_int..value">value</a> = <a class="local col3 ref" href="#153value" title='value' data-ref="153value" data-ref-filename="153value">value</a>;</td></tr>
+<tr><th id="81">81</th><td>}</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td><em>static</em> <a class="macro" href="../../config/ios/arm64/vpx_config.h.html#12" title="inline" data-ref="_M/INLINE">INLINE</a> <em>void</em> <dfn class="decl def fn" id="vpx_atomic_store_release" title='vpx_atomic_store_release' data-ref="vpx_atomic_store_release" data-ref-filename="vpx_atomic_store_release">vpx_atomic_store_release</dfn>(<a class="typedef" href="#vpx_atomic_int" title='vpx_atomic_int' data-type='struct vpx_atomic_int' data-ref="vpx_atomic_int" data-ref-filename="vpx_atomic_int">vpx_atomic_int</a> *<dfn class="local col4 decl" id="154atomic" title='atomic' data-type='vpx_atomic_int *' data-ref="154atomic" data-ref-filename="154atomic">atomic</dfn>, <em>int</em> <dfn class="local col5 decl" id="155value" title='value' data-type='int' data-ref="155value" data-ref-filename="155value">value</dfn>) {</td></tr>
+<tr><th id="84">84</th><td><u>#<span data-ppcond="84">if</span> defined(<a class="macro" href="#37" data-ref="_M/VPX_USE_ATOMIC_BUILTINS">VPX_USE_ATOMIC_BUILTINS</a>)</u></td></tr>
+<tr><th id="85">85</th><td>  __atomic_store_n(&amp;<a class="local col4 ref" href="#154atomic" title='atomic' data-ref="154atomic" data-ref-filename="154atomic">atomic</a>-&gt;<a class="ref field" href="#vpx_atomic_int::value" title='vpx_atomic_int::value' data-ref="vpx_atomic_int::value" data-ref-filename="vpx_atomic_int..value">value</a>, <a class="local col5 ref" href="#155value" title='value' data-ref="155value" data-ref-filename="155value">value</a>, <span class="macro" title="3" data-ref="_M/__ATOMIC_RELEASE">__ATOMIC_RELEASE</span>);</td></tr>
+<tr><th id="86">86</th><td><u>#<span data-ppcond="84">else</span></u></td></tr>
+<tr><th id="87">87</th><td>  vpx_atomic_memory_barrier();</td></tr>
+<tr><th id="88">88</th><td>  atomic-&gt;value = value;</td></tr>
+<tr><th id="89">89</th><td><u>#<span data-ppcond="84">endif</span>  // defined(VPX_USE_ATOMIC_BUILTINS)</u></td></tr>
+<tr><th id="90">90</th><td>}</td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td><em>static</em> <a class="macro" href="../../config/ios/arm64/vpx_config.h.html#12" title="inline" data-ref="_M/INLINE">INLINE</a> <em>int</em> <dfn class="decl def fn" id="vpx_atomic_load_acquire" title='vpx_atomic_load_acquire' data-ref="vpx_atomic_load_acquire" data-ref-filename="vpx_atomic_load_acquire">vpx_atomic_load_acquire</dfn>(<em>const</em> <a class="typedef" href="#vpx_atomic_int" title='vpx_atomic_int' data-type='struct vpx_atomic_int' data-ref="vpx_atomic_int" data-ref-filename="vpx_atomic_int">vpx_atomic_int</a> *<dfn class="local col6 decl" id="156atomic" title='atomic' data-type='const vpx_atomic_int *' data-ref="156atomic" data-ref-filename="156atomic">atomic</dfn>) {</td></tr>
+<tr><th id="93">93</th><td><u>#<span data-ppcond="93">if</span> defined(<a class="macro" href="#37" data-ref="_M/VPX_USE_ATOMIC_BUILTINS">VPX_USE_ATOMIC_BUILTINS</a>)</u></td></tr>
+<tr><th id="94">94</th><td>  <b>return</b> __atomic_load_n(&amp;<a class="local col6 ref" href="#156atomic" title='atomic' data-ref="156atomic" data-ref-filename="156atomic">atomic</a>-&gt;<a class="ref field" href="#vpx_atomic_int::value" title='vpx_atomic_int::value' data-ref="vpx_atomic_int::value" data-ref-filename="vpx_atomic_int..value">value</a>, <span class="macro" title="2" data-ref="_M/__ATOMIC_ACQUIRE">__ATOMIC_ACQUIRE</span>);</td></tr>
+<tr><th id="95">95</th><td><u>#<span data-ppcond="93">else</span></u></td></tr>
+<tr><th id="96">96</th><td>  <em>int</em> v = atomic-&gt;value;</td></tr>
+<tr><th id="97">97</th><td>  vpx_atomic_memory_barrier();</td></tr>
+<tr><th id="98">98</th><td>  <b>return</b> v;</td></tr>
+<tr><th id="99">99</th><td><u>#<span data-ppcond="93">endif</span>  // defined(VPX_USE_ATOMIC_BUILTINS)</u></td></tr>
+<tr><th id="100">100</th><td>}</td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td><u>#undef <a class="macro" href="#37" data-ref="_M/VPX_USE_ATOMIC_BUILTINS">VPX_USE_ATOMIC_BUILTINS</a></u></td></tr>
+<tr><th id="103">103</th><td><u>#undef <span class="macro" data-ref="_M/vpx_atomic_memory_barrier">vpx_atomic_memory_barrier</span></u></td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td><u>#<span data-ppcond="20">endif</span> /* CONFIG_OS_SUPPORT &amp;&amp; CONFIG_MULTITHREAD */</u></td></tr>
+<tr><th id="106">106</th><td></td></tr>
+<tr><th id="107">107</th><td><u>#<span data-ppcond="107">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="108">108</th><td>}  <i>// extern "C"</i></td></tr>
+<tr><th id="109">109</th><td><u>#<span data-ppcond="107">endif</span>  // __cplusplus</u></td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td><u>#<span data-ppcond="11">endif</span>  // VPX_VPX_UTIL_VPX_ATOMICS_H_</u></td></tr>
+<tr><th id="112">112</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../vp8/common/vp8_skin_detection.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp8/common/vp8_skin_detection.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

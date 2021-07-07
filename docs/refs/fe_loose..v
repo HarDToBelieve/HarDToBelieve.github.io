@@ -1,0 +1,25 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/internal.h' l='49' type='uint64_t [5]'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='190' u='w' c='fe_loose_1'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='198' u='r' c='fe_add'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='199' u='r' c='fe_add'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='207' u='r' c='fe_sub'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='208' u='r' c='fe_sub'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='212' u='r' c='fe_carry'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='213' u='r' c='fe_carry'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='227' u='r' c='fe_mul_ltt'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='231' u='r' c='fe_mul_llt'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='231' u='r' c='fe_mul_llt'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='239' u='r' c='fe_mul_tlt'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='243' u='r' c='fe_mul_ttl'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='247' u='r' c='fe_mul_tll'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='247' u='r' c='fe_mul_tll'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='251' u='r' c='fe_sq_tl'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='252' u='r' c='fe_sq_tl'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='277' u='r' c='fe_mul121666'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='278' u='r' c='fe_mul121666'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='285' u='r' c='fe_neg'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='286' u='r' c='fe_neg'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='303' u='r' c='fe_cmov'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='303' u='r' c='fe_cmov'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/curve25519/curve25519.c' l='305' u='w' c='fe_cmov'/>
+<offset>0</offset>

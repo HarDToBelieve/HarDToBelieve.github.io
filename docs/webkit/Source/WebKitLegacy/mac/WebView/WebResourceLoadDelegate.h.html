@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebResourceLoadDelegate.h source code [webkit/Source/WebKitLegacy/mac/WebView/WebResourceLoadDelegate.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/WebView/WebResourceLoadDelegate.h'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>WebView</a>/<a href='WebResourceLoadDelegate.h.html'>WebResourceLoadDelegate.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2003, 2004, 2005 Apple Inc.  All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * 1.  Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="9">9</th><td><i> *     notice, this list of conditions and the following disclaimer. </i></td></tr>
+<tr><th id="10">10</th><td><i> * 2.  Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="11">11</th><td><i> *     notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="12">12</th><td><i> *     documentation and/or other materials provided with the distribution. </i></td></tr>
+<tr><th id="13">13</th><td><i> * 3.  Neither the name of Apple Inc. ("Apple") nor the names of</i></td></tr>
+<tr><th id="14">14</th><td><i> *     its contributors may be used to endorse or promote products derived</i></td></tr>
+<tr><th id="15">15</th><td><i> *     from this software without specific prior written permission. </i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</i></td></tr>
+<tr><th id="19">19</th><td><i> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</i></td></tr>
+<tr><th id="20">20</th><td><i> * DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="21">21</th><td><i> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</i></td></tr>
+<tr><th id="23">23</th><td><i> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</i></td></tr>
+<tr><th id="24">24</th><td><i> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="25">25</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF</i></td></tr>
+<tr><th id="26">26</th><td><i> * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="27">27</th><td><i> */</i></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import &lt;Foundation/NSObjCRuntime.h&gt;</u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html">&lt;WebKitLegacy/WebKitAvailability.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td>@<b>class</b> WebView;</td></tr>
+<tr><th id="33">33</th><td>@<b>class</b> WebDataSource;</td></tr>
+<tr><th id="34">34</th><td>@<b>class</b> NSError;</td></tr>
+<tr><th id="35">35</th><td>@<b>class</b> NSURLAuthenticationChallenge;</td></tr>
+<tr><th id="36">36</th><td>@<b>class</b> NSURLResponse;</td></tr>
+<tr><th id="37">37</th><td>@<b>class</b> NSURLRequest;</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td>@protocol NSObject;</td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="42">42</th><td><i class="doc">    <span class="command">@category</span> <span class="verb"> WebResourceLoadDelegate</span></i></td></tr>
+<tr><th id="43">43</th><td><i class="doc">    <span class="command">@discussion</span> Implementors of this protocol will receive messages indicating</i></td></tr>
+<tr><th id="44">44</th><td><i class="doc">    that a resource is about to be loaded, data has been received for a resource,</i></td></tr>
+<tr><th id="45">45</th><td><i class="doc">    an error has been received for a resource, and completion of a resource load.</i></td></tr>
+<tr><th id="46">46</th><td><i class="doc">    Implementors are also given the opportunity to mutate requests before they are sent.</i></td></tr>
+<tr><th id="47">47</th><td><i class="doc">    The various progress methods of this protocol all receive an identifier as the</i></td></tr>
+<tr><th id="48">48</th><td><i class="doc">    parameter.  This identifier can be used to track messages associated with a single</i></td></tr>
+<tr><th id="49">49</th><td><i class="doc">    resource.  For example, a single resource may generate multiple </i></td></tr>
+<tr><th id="50">50</th><td><i class="doc">    resource:willSendRequest:redirectResponse:fromDataSource: messages as it's URL is redirected.</i></td></tr>
+<tr><th id="51">51</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="52">52</th><td><a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>)</td></tr>
+<tr><th id="53">53</th><td>@protocol WebResourceLoadDelegate &lt;NSObject&gt;</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td>@optional</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="58">58</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:identifierForInitialRequest:fromDataSource:</span></i></td></tr>
+<tr><th id="59">59</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message.</i></td></tr>
+<tr><th id="60">60</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">request</span> The request about to be sent.</i></td></tr>
+<tr><th id="61">61</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">dataSource</span> The datasource that initiated the load.</i></td></tr>
+<tr><th id="62">62</th><td><i class="doc">    <span class="command">@discussion</span> An implementor of WebResourceLoadDelegate should provide an identifier</i></td></tr>
+<tr><th id="63">63</th><td><i class="doc">    that can be used to track the load of a single resource.  This identifier will be</i></td></tr>
+<tr><th id="64">64</th><td><i class="doc">    passed as the first argument for all of the other WebResourceLoadDelegate methods.  The</i></td></tr>
+<tr><th id="65">65</th><td><i class="doc">    identifier is useful to track changes to a resources request, which will be</i></td></tr>
+<tr><th id="66">66</th><td><i class="doc">    provided by one or more calls to resource:willSendRequest:redirectResponse:fromDataSource:.</i></td></tr>
+<tr><th id="67">67</th><td><i class="doc">    <span class="command">@result</span> An identifier that will be passed back to the implementor for each callback.</i></td></tr>
+<tr><th id="68">68</th><td><i class="doc">    The identifier will be retained.</i></td></tr>
+<tr><th id="69">69</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="70">70</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)webView:(WebView *)<dfn class="local col6 decl" id="236sender" title='sender' data-type='WebView *' data-ref="236sender" data-ref-filename="236sender">sender</dfn> identifierForInitialRequest:(NSURLRequest *)<dfn class="local col7 decl" id="237request" title='request' data-type='NSURLRequest *' data-ref="237request" data-ref-filename="237request">request</dfn> fromDataSource:(WebDataSource *)<dfn class="local col8 decl" id="238dataSource" title='dataSource' data-type='WebDataSource *' data-ref="238dataSource" data-ref-filename="238dataSource">dataSource</dfn>;</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="73">73</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:resource:willSendRequest:redirectResponse:fromDataSource:</span></i></td></tr>
+<tr><th id="74">74</th><td><i class="doc">    <span class="command">@discussion</span> This message is sent before a load is initiated.  The request may be modified</i></td></tr>
+<tr><th id="75">75</th><td><i class="doc">    as necessary by the receiver.</i></td></tr>
+<tr><th id="76">76</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message.</i></td></tr>
+<tr><th id="77">77</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">identifier</span> An identifier that can be used to track the progress of a resource load across</i></td></tr>
+<tr><th id="78">78</th><td><i class="doc">    multiple call backs.</i></td></tr>
+<tr><th id="79">79</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">request</span> The request about to be sent.</i></td></tr>
+<tr><th id="80">80</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">redirectResponse</span> If the request is being made in response to a redirect we received,</i></td></tr>
+<tr><th id="81">81</th><td><i class="doc">    the response that conveyed that redirect.</i></td></tr>
+<tr><th id="82">82</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">dataSource</span> The dataSource that initiated the load.</i></td></tr>
+<tr><th id="83">83</th><td><i class="doc">    <span class="command">@result</span> Returns the request, which may be mutated by the implementor, although typically</i></td></tr>
+<tr><th id="84">84</th><td><i class="doc">    will be request.</i></td></tr>
+<tr><th id="85">85</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="86">86</th><td>- (NSURLRequest *)webView:(WebView *)<dfn class="local col9 decl" id="239sender" title='sender' data-type='WebView *' data-ref="239sender" data-ref-filename="239sender">sender</dfn> resource:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col0 decl" id="240identifier" title='identifier' data-type='id' data-ref="240identifier" data-ref-filename="240identifier">identifier</dfn> willSendRequest:(NSURLRequest *)<dfn class="local col1 decl" id="241request" title='request' data-type='NSURLRequest *' data-ref="241request" data-ref-filename="241request">request</dfn> redirectResponse:(NSURLResponse *)<dfn class="local col2 decl" id="242redirectResponse" title='redirectResponse' data-type='NSURLResponse *' data-ref="242redirectResponse" data-ref-filename="242redirectResponse">redirectResponse</dfn> fromDataSource:(WebDataSource *)<dfn class="local col3 decl" id="243dataSource" title='dataSource' data-type='WebDataSource *' data-ref="243dataSource" data-ref-filename="243dataSource">dataSource</dfn>;</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="89">89</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:resource:didReceiveAuthenticationChallenge:fromDataSource:</span></i></td></tr>
+<tr><th id="90">90</th><td><i class="doc">    <span class="command">@abstract</span> Start authentication for the resource, providing a challenge</i></td></tr>
+<tr><th id="91">91</th><td><i class="doc">    <span class="command">@discussion</span> Call useCredential::, continueWithoutCredential or</i></td></tr>
+<tr><th id="92">92</th><td><i class="doc">    cancel on the challenge when done.</i></td></tr>
+<tr><th id="93">93</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">challenge</span> The NSURLAuthenticationChallenge to start authentication for</i></td></tr>
+<tr><th id="94">94</th><td><i class="doc">    <span class="command">@discussion</span> If you do not implement this delegate method, WebKit will handle authentication</i></td></tr>
+<tr><th id="95">95</th><td><i class="doc">    automatically by prompting with a sheet on the window that the WebView is associated with.</i></td></tr>
+<tr><th id="96">96</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="97">97</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col4 decl" id="244sender" title='sender' data-type='WebView *' data-ref="244sender" data-ref-filename="244sender">sender</dfn> resource:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col5 decl" id="245identifier" title='identifier' data-type='id' data-ref="245identifier" data-ref-filename="245identifier">identifier</dfn> didReceiveAuthenticationChallenge:(NSURLAuthenticationChallenge *)<dfn class="local col6 decl" id="246challenge" title='challenge' data-type='NSURLAuthenticationChallenge *' data-ref="246challenge" data-ref-filename="246challenge">challenge</dfn> fromDataSource:(WebDataSource *)<dfn class="local col7 decl" id="247dataSource" title='dataSource' data-type='WebDataSource *' data-ref="247dataSource" data-ref-filename="247dataSource">dataSource</dfn>;</td></tr>
+<tr><th id="98">98</th><td></td></tr>
+<tr><th id="99">99</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="100">100</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:resource:didCancelAuthenticationChallenge:fromDataSource:</span></i></td></tr>
+<tr><th id="101">101</th><td><i class="doc">    <span class="command">@abstract</span> Cancel authentication for a given request</i></td></tr>
+<tr><th id="102">102</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">challenge</span> The NSURLAuthenticationChallenge for which to cancel authentication</i></td></tr>
+<tr><th id="103">103</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="104">104</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col8 decl" id="248sender" title='sender' data-type='WebView *' data-ref="248sender" data-ref-filename="248sender">sender</dfn> resource:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col9 decl" id="249identifier" title='identifier' data-type='id' data-ref="249identifier" data-ref-filename="249identifier">identifier</dfn> didCancelAuthenticationChallenge:(NSURLAuthenticationChallenge *)<dfn class="local col0 decl" id="250challenge" title='challenge' data-type='NSURLAuthenticationChallenge *' data-ref="250challenge" data-ref-filename="250challenge">challenge</dfn> fromDataSource:(WebDataSource *)<dfn class="local col1 decl" id="251dataSource" title='dataSource' data-type='WebDataSource *' data-ref="251dataSource" data-ref-filename="251dataSource">dataSource</dfn>;</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="107">107</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:resource:didReceiveResponse:fromDataSource:</span></i></td></tr>
+<tr><th id="108">108</th><td><i class="doc">    <span class="command">@abstract</span> This message is sent after a response has been received for this load.</i></td></tr>
+<tr><th id="109">109</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message.</i></td></tr>
+<tr><th id="110">110</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">identifier</span> An identifier that can be used to track the progress of a resource load across</i></td></tr>
+<tr><th id="111">111</th><td><i class="doc">    multiple call backs.</i></td></tr>
+<tr><th id="112">112</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">response</span> The response for the request.</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">dataSource</span> The dataSource that initiated the load.</i></td></tr>
+<tr><th id="114">114</th><td><i class="doc">    <span class="command">@discussion</span> In some rare cases, multiple responses may be received for a single load.</i></td></tr>
+<tr><th id="115">115</th><td><i class="doc">    This occurs with multipart/x-mixed-replace, or "server push". In this case, the client</i></td></tr>
+<tr><th id="116">116</th><td><i class="doc">    should assume that each new response resets progress so far for the resource back to 0,</i></td></tr>
+<tr><th id="117">117</th><td><i class="doc">    and should check the new response for the expected content length.</i></td></tr>
+<tr><th id="118">118</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="119">119</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col2 decl" id="252sender" title='sender' data-type='WebView *' data-ref="252sender" data-ref-filename="252sender">sender</dfn> resource:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col3 decl" id="253identifier" title='identifier' data-type='id' data-ref="253identifier" data-ref-filename="253identifier">identifier</dfn> didReceiveResponse:(NSURLResponse *)<dfn class="local col4 decl" id="254response" title='response' data-type='NSURLResponse *' data-ref="254response" data-ref-filename="254response">response</dfn> fromDataSource:(WebDataSource *)<dfn class="local col5 decl" id="255dataSource" title='dataSource' data-type='WebDataSource *' data-ref="255dataSource" data-ref-filename="255dataSource">dataSource</dfn>;</td></tr>
+<tr><th id="120">120</th><td></td></tr>
+<tr><th id="121">121</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="122">122</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:resource:didReceiveContentLength:fromDataSource:</span></i></td></tr>
+<tr><th id="123">123</th><td><i class="doc">    <span class="command">@discussion</span> Multiple of these messages may be sent as data arrives.</i></td></tr>
+<tr><th id="124">124</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message.</i></td></tr>
+<tr><th id="125">125</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">identifier</span> An identifier that can be used to track the progress of a resource load across</i></td></tr>
+<tr><th id="126">126</th><td><i class="doc">    multiple call backs.</i></td></tr>
+<tr><th id="127">127</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">length</span> The amount of new data received.  This is not the total amount, just the new amount received.</i></td></tr>
+<tr><th id="128">128</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">dataSource</span> The dataSource that initiated the load.</i></td></tr>
+<tr><th id="129">129</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="130">130</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col6 decl" id="256sender" title='sender' data-type='WebView *' data-ref="256sender" data-ref-filename="256sender">sender</dfn> resource:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col7 decl" id="257identifier" title='identifier' data-type='id' data-ref="257identifier" data-ref-filename="257identifier">identifier</dfn> didReceiveContentLength:(<span class='typedef' title='NSInteger' data-type='long' data-ref="NSInteger" data-ref-filename="NSInteger">NSInteger</span>)<dfn class="local col8 decl" id="258length" title='length' data-type='NSInteger' data-ref="258length" data-ref-filename="258length">length</dfn> fromDataSource:(WebDataSource *)<dfn class="local col9 decl" id="259dataSource" title='dataSource' data-type='WebDataSource *' data-ref="259dataSource" data-ref-filename="259dataSource">dataSource</dfn>;</td></tr>
+<tr><th id="131">131</th><td></td></tr>
+<tr><th id="132">132</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="133">133</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:resource:didFinishLoadingFromDataSource:</span></i></td></tr>
+<tr><th id="134">134</th><td><i class="doc">    <span class="command">@discussion</span> This message is sent after a load has successfully completed.</i></td></tr>
+<tr><th id="135">135</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message.</i></td></tr>
+<tr><th id="136">136</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">identifier</span> An identifier that can be used to track the progress of a resource load across</i></td></tr>
+<tr><th id="137">137</th><td><i class="doc">    multiple call backs.</i></td></tr>
+<tr><th id="138">138</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">dataSource</span> The dataSource that initiated the load.</i></td></tr>
+<tr><th id="139">139</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="140">140</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col0 decl" id="260sender" title='sender' data-type='WebView *' data-ref="260sender" data-ref-filename="260sender">sender</dfn> resource:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col1 decl" id="261identifier" title='identifier' data-type='id' data-ref="261identifier" data-ref-filename="261identifier">identifier</dfn> didFinishLoadingFromDataSource:(WebDataSource *)<dfn class="local col2 decl" id="262dataSource" title='dataSource' data-type='WebDataSource *' data-ref="262dataSource" data-ref-filename="262dataSource">dataSource</dfn>;</td></tr>
+<tr><th id="141">141</th><td></td></tr>
+<tr><th id="142">142</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="143">143</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:resource:didFailLoadingWithError:fromDataSource:</span></i></td></tr>
+<tr><th id="144">144</th><td><i class="doc">    <span class="command">@discussion</span> This message is sent after a load has failed to load due to an error.</i></td></tr>
+<tr><th id="145">145</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message.</i></td></tr>
+<tr><th id="146">146</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">identifier</span> An identifier that can be used to track the progress of a resource load across</i></td></tr>
+<tr><th id="147">147</th><td><i class="doc">    multiple call backs.</i></td></tr>
+<tr><th id="148">148</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">error</span> The error associated with this load.</i></td></tr>
+<tr><th id="149">149</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">dataSource</span> The dataSource that initiated the load.</i></td></tr>
+<tr><th id="150">150</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="151">151</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col3 decl" id="263sender" title='sender' data-type='WebView *' data-ref="263sender" data-ref-filename="263sender">sender</dfn> resource:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col4 decl" id="264identifier" title='identifier' data-type='id' data-ref="264identifier" data-ref-filename="264identifier">identifier</dfn> didFailLoadingWithError:(NSError *)<dfn class="local col5 decl" id="265error" title='error' data-type='NSError *' data-ref="265error" data-ref-filename="265error">error</dfn> fromDataSource:(WebDataSource *)<dfn class="local col6 decl" id="266dataSource" title='dataSource' data-type='WebDataSource *' data-ref="266dataSource" data-ref-filename="266dataSource">dataSource</dfn>;</td></tr>
+<tr><th id="152">152</th><td></td></tr>
+<tr><th id="153">153</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="154">154</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:plugInFailedWithError:dataSource:</span></i></td></tr>
+<tr><th id="155">155</th><td><i class="doc">    <span class="command">@discussion</span> Called when a plug-in is not found, fails to load or is not available for some reason.</i></td></tr>
+<tr><th id="156">156</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the message.</i></td></tr>
+<tr><th id="157">157</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">error</span> The plug-in error. In the userInfo dictionary of the error, the object for the</i></td></tr>
+<tr><th id="158">158</th><td><i class="doc">    NSErrorFailingURLKey key is a URL string of the SRC attribute, the object for the WebKitErrorPlugInNameKey</i></td></tr>
+<tr><th id="159">159</th><td><i class="doc">    key is a string of the plug-in's name, the object for the WebKitErrorPlugInPageURLStringKey key is a URL string</i></td></tr>
+<tr><th id="160">160</th><td><i class="doc">    of the PLUGINSPAGE attribute and the object for the WebKitErrorMIMETypeKey key is a string of the TYPE attribute.</i></td></tr>
+<tr><th id="161">161</th><td><i class="doc">    Some, none or all of the mentioned attributes can be present in the userInfo. The error returns nil for userInfo</i></td></tr>
+<tr><th id="162">162</th><td><i class="doc">    when none are present.</i></td></tr>
+<tr><th id="163">163</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">dataSource</span> The dataSource that contains the plug-in.</i></td></tr>
+<tr><th id="164">164</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="165">165</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col7 decl" id="267sender" title='sender' data-type='WebView *' data-ref="267sender" data-ref-filename="267sender">sender</dfn> plugInFailedWithError:(NSError *)<dfn class="local col8 decl" id="268error" title='error' data-type='NSError *' data-ref="268error" data-ref-filename="268error">error</dfn> dataSource:(WebDataSource *)<dfn class="local col9 decl" id="269dataSource" title='dataSource' data-type='WebDataSource *' data-ref="269dataSource" data-ref-filename="269dataSource">dataSource</dfn>;</td></tr>
+<tr><th id="166">166</th><td></td></tr>
+<tr><th id="167">167</th><td>@end</td></tr>
+<tr><th id="168">168</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../WebKitBuild/Debug/DerivedSources/WebKitLegacy/unified-sources/UnifiedSource19-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKitLegacy/unified-sources/UnifiedSource19-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

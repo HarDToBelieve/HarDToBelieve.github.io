@@ -1,0 +1,11 @@
+<dec f='webkit/Source/JavaScriptCore/dfg/DFGMayExit.h' l='61' type='1'/>
+<doc f='webkit/Source/JavaScriptCore/dfg/DFGMayExit.h' l='51'>// The node will exit, but only by properly throwing exceptions. A proper exception throw will
+    // divert execution to the matching op_catch and will not reexecute the exit origin. This means
+    // that the store elimination optimization above would be illegal, but the following would be OK:
+    //
+    // SideEffect(..., exit: bc#42)
+    // ExitsForExceptions(..., exit: #bc42, ExitInvalid)
+    //
+    // In particular, it&apos;s OK for a node that reports ExitsForExceptions to be executed in a context
+    // where !Node::origin.exitOK. That&apos;s because this node will not exit in a manner that could lead
+    // to the reexecution of SideEffect().</doc>

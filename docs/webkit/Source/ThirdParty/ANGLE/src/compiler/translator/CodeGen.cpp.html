@@ -1,0 +1,113 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CodeGen.cpp source code [webkit/Source/ThirdParty/ANGLE/src/compiler/translator/CodeGen.cpp] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/ANGLE/src/compiler/translator/CodeGen.cpp'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>ANGLE</a>/<a href='../..'>src</a>/<a href='..'>compiler</a>/<a href='./'>translator</a>/<a href='CodeGen.cpp.html'>CodeGen.cpp</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>//</i></td></tr>
+<tr><th id="2">2</th><td><i>// Copyright 2013 The ANGLE Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i>// Use of this source code is governed by a BSD-style license that can be</i></td></tr>
+<tr><th id="4">4</th><td><i>// found in the LICENSE file.</i></td></tr>
+<tr><th id="5">5</th><td><i>//</i></td></tr>
+<tr><th id="6">6</th><td></td></tr>
+<tr><th id="7">7</th><td><u>#<span data-ppcond="7">ifdef</span> <span class="macro" data-ref="_M/ANGLE_ENABLE_ESSL">ANGLE_ENABLE_ESSL</span></u></td></tr>
+<tr><th id="8">8</th><td><u>#    include <a href="TranslatorESSL.h.html">"compiler/translator/TranslatorESSL.h"</a></u></td></tr>
+<tr><th id="9">9</th><td><u>#<span data-ppcond="7">endif</span>  // ANGLE_ENABLE_ESSL</u></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifdef</span> <span class="macro" data-ref="_M/ANGLE_ENABLE_GLSL">ANGLE_ENABLE_GLSL</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#    include <a href="TranslatorGLSL.h.html">"compiler/translator/TranslatorGLSL.h"</a></u></td></tr>
+<tr><th id="13">13</th><td><u>#<span data-ppcond="11">endif</span>  // ANGLE_ENABLE_GLSL</u></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><u>#<span data-ppcond="15">ifdef</span> <span class="macro" data-ref="_M/ANGLE_ENABLE_HLSL">ANGLE_ENABLE_HLSL</span></u></td></tr>
+<tr><th id="16">16</th><td><u>#    include "compiler/translator/TranslatorHLSL.h"</u></td></tr>
+<tr><th id="17">17</th><td><u>#<span data-ppcond="15">endif</span>  // ANGLE_ENABLE_HLSL</u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#<span data-ppcond="19">ifdef</span> <span class="macro" data-ref="_M/ANGLE_ENABLE_VULKAN">ANGLE_ENABLE_VULKAN</span></u></td></tr>
+<tr><th id="20">20</th><td><u>#    include "compiler/translator/TranslatorVulkan.h"</u></td></tr>
+<tr><th id="21">21</th><td><u>#<span data-ppcond="19">endif</span>  // ANGLE_ENABLE_VULKAN</u></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><u>#<span data-ppcond="23">ifdef</span> <span class="macro" data-ref="_M/ANGLE_ENABLE_METAL">ANGLE_ENABLE_METAL</span></u></td></tr>
+<tr><th id="24">24</th><td><u>#    include <a href="TranslatorMetalDirect.h.html">"compiler/translator/TranslatorMetalDirect.h"</a></u></td></tr>
+<tr><th id="25">25</th><td><u>#<span data-ppcond="23">endif</span>  // ANGLE_ENABLE_METAL</u></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="26">ifdef</span> <span class="macro" data-ref="_M/ANGLE_ENABLE_METAL_SPIRV">ANGLE_ENABLE_METAL_SPIRV</span></u></td></tr>
+<tr><th id="27">27</th><td><u>#    include "compiler/translator/TranslatorMetal.h"</u></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="26">endif</span>  // ANGLE_ENABLE_METAL_SPIRV</u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="util.h.html">"compiler/translator/util.h"</a></u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><b>namespace</b> <span class="namespace">sh</span></td></tr>
+<tr><th id="33">33</th><td>{</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><i>//</i></td></tr>
+<tr><th id="36">36</th><td><i>// This function must be provided to create the actual</i></td></tr>
+<tr><th id="37">37</th><td><i>// compile object used by higher level code.  It returns</i></td></tr>
+<tr><th id="38">38</th><td><i>// a subclass of TCompiler.</i></td></tr>
+<tr><th id="39">39</th><td><i>//</i></td></tr>
+<tr><th id="40">40</th><td><a class="type" href="Compiler.h.html#sh::TCompiler" title='sh::TCompiler' data-ref="sh::TCompiler" data-ref-filename="sh..TCompiler">TCompiler</a> *<dfn class="decl def fn" id="_ZN2sh17ConstructCompilerEj12ShShaderSpec14ShShaderOutput" title='sh::ConstructCompiler' data-ref="_ZN2sh17ConstructCompilerEj12ShShaderSpec14ShShaderOutput" data-ref-filename="_ZN2sh17ConstructCompilerEj12ShShaderSpec14ShShaderOutput">ConstructCompiler</dfn>(<span class="namespace">sh::</span><a class="typedef" href="../../../include/GLSLANG/ShaderVars.h.html#sh::GLenum" title='sh::GLenum' data-type='unsigned int' data-ref="sh::GLenum" data-ref-filename="sh..GLenum">GLenum</a> <dfn class="local col5 decl" id="165type" title='type' data-type='sh::GLenum' data-ref="165type" data-ref-filename="165type">type</dfn>, <a class="type" href="../../../include/GLSLANG/ShaderLang.h.html#ShShaderSpec" title='ShShaderSpec' data-ref="ShShaderSpec" data-ref-filename="ShShaderSpec">ShShaderSpec</a> <dfn class="local col6 decl" id="166spec" title='spec' data-type='ShShaderSpec' data-ref="166spec" data-ref-filename="166spec">spec</dfn>, <a class="type" href="../../../include/GLSLANG/ShaderLang.h.html#ShShaderOutput" title='ShShaderOutput' data-ref="ShShaderOutput" data-ref-filename="ShShaderOutput">ShShaderOutput</a> <dfn class="local col7 decl" id="167output" title='output' data-type='ShShaderOutput' data-ref="167output" data-ref-filename="167output">output</dfn>)</td></tr>
+<tr><th id="41">41</th><td>{</td></tr>
+<tr><th id="42">42</th><td><u>#<span data-ppcond="42">ifdef</span> <span class="macro" data-ref="_M/ANGLE_ENABLE_ESSL">ANGLE_ENABLE_ESSL</span></u></td></tr>
+<tr><th id="43">43</th><td>    <b>if</b> (<a class="ref fn" href="util.h.html#_ZN2sh12IsOutputESSLE14ShShaderOutput" title='sh::IsOutputESSL' data-ref="_ZN2sh12IsOutputESSLE14ShShaderOutput" data-ref-filename="_ZN2sh12IsOutputESSLE14ShShaderOutput">IsOutputESSL</a>(<a class="local col7 ref" href="#167output" title='output' data-ref="167output" data-ref-filename="167output">output</a>))</td></tr>
+<tr><th id="44">44</th><td>    {</td></tr>
+<tr><th id="45">45</th><td>        <b>return</b> <b>new</b> <a class="type" href="TranslatorESSL.h.html#sh::TranslatorESSL" title='sh::TranslatorESSL' data-ref="sh::TranslatorESSL" data-ref-filename="sh..TranslatorESSL">TranslatorESSL</a><a class="ref fn" href="TranslatorESSL.h.html#_ZN2sh14TranslatorESSLC1Ej12ShShaderSpec" title='sh::TranslatorESSL::TranslatorESSL' data-ref="_ZN2sh14TranslatorESSLC1Ej12ShShaderSpec" data-ref-filename="_ZN2sh14TranslatorESSLC1Ej12ShShaderSpec">(</a><a class="local col5 ref" href="#165type" title='type' data-ref="165type" data-ref-filename="165type">type</a>, <a class="local col6 ref" href="#166spec" title='spec' data-ref="166spec" data-ref-filename="166spec">spec</a>);</td></tr>
+<tr><th id="46">46</th><td>    }</td></tr>
+<tr><th id="47">47</th><td><u>#<span data-ppcond="42">endif</span>  // ANGLE_ENABLE_ESSL</u></td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td><u>#<span data-ppcond="49">ifdef</span> <span class="macro" data-ref="_M/ANGLE_ENABLE_GLSL">ANGLE_ENABLE_GLSL</span></u></td></tr>
+<tr><th id="50">50</th><td>    <b>if</b> (<a class="ref fn" href="util.h.html#_ZN2sh12IsOutputGLSLE14ShShaderOutput" title='sh::IsOutputGLSL' data-ref="_ZN2sh12IsOutputGLSLE14ShShaderOutput" data-ref-filename="_ZN2sh12IsOutputGLSLE14ShShaderOutput">IsOutputGLSL</a>(<a class="local col7 ref" href="#167output" title='output' data-ref="167output" data-ref-filename="167output">output</a>))</td></tr>
+<tr><th id="51">51</th><td>    {</td></tr>
+<tr><th id="52">52</th><td>        <b>return</b> <b>new</b> <a class="type" href="TranslatorGLSL.h.html#sh::TranslatorGLSL" title='sh::TranslatorGLSL' data-ref="sh::TranslatorGLSL" data-ref-filename="sh..TranslatorGLSL">TranslatorGLSL</a><a class="ref fn" href="TranslatorGLSL.h.html#_ZN2sh14TranslatorGLSLC1Ej12ShShaderSpec14ShShaderOutput" title='sh::TranslatorGLSL::TranslatorGLSL' data-ref="_ZN2sh14TranslatorGLSLC1Ej12ShShaderSpec14ShShaderOutput" data-ref-filename="_ZN2sh14TranslatorGLSLC1Ej12ShShaderSpec14ShShaderOutput">(</a><a class="local col5 ref" href="#165type" title='type' data-ref="165type" data-ref-filename="165type">type</a>, <a class="local col6 ref" href="#166spec" title='spec' data-ref="166spec" data-ref-filename="166spec">spec</a>, <a class="local col7 ref" href="#167output" title='output' data-ref="167output" data-ref-filename="167output">output</a>);</td></tr>
+<tr><th id="53">53</th><td>    }</td></tr>
+<tr><th id="54">54</th><td><u>#<span data-ppcond="49">endif</span>  // ANGLE_ENABLE_GLSL</u></td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td><u>#<span data-ppcond="56">ifdef</span> <span class="macro" data-ref="_M/ANGLE_ENABLE_HLSL">ANGLE_ENABLE_HLSL</span></u></td></tr>
+<tr><th id="57">57</th><td>    <b>if</b> (IsOutputHLSL(output))</td></tr>
+<tr><th id="58">58</th><td>    {</td></tr>
+<tr><th id="59">59</th><td>        <b>return</b> <b>new</b> TranslatorHLSL(type, spec, output);</td></tr>
+<tr><th id="60">60</th><td>    }</td></tr>
+<tr><th id="61">61</th><td><u>#<span data-ppcond="56">endif</span>  // ANGLE_ENABLE_HLSL</u></td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><u>#<span data-ppcond="63">ifdef</span> <span class="macro" data-ref="_M/ANGLE_ENABLE_VULKAN">ANGLE_ENABLE_VULKAN</span></u></td></tr>
+<tr><th id="64">64</th><td>    <b>if</b> (IsOutputVulkan(output))</td></tr>
+<tr><th id="65">65</th><td>    {</td></tr>
+<tr><th id="66">66</th><td>        <b>return</b> <b>new</b> TranslatorVulkan(type, spec);</td></tr>
+<tr><th id="67">67</th><td>    }</td></tr>
+<tr><th id="68">68</th><td><u>#<span data-ppcond="63">endif</span>  // ANGLE_ENABLE_VULKAN</u></td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td><u>#<span data-ppcond="70">ifdef</span> <span class="macro" data-ref="_M/ANGLE_ENABLE_METAL_SPIRV">ANGLE_ENABLE_METAL_SPIRV</span></u></td></tr>
+<tr><th id="71">71</th><td>    <b>if</b> (IsOutputMetal(output))</td></tr>
+<tr><th id="72">72</th><td>    {</td></tr>
+<tr><th id="73">73</th><td>        <b>return</b> <b>new</b> TranslatorMetal(type, spec);</td></tr>
+<tr><th id="74">74</th><td>    }</td></tr>
+<tr><th id="75">75</th><td><u>#<span data-ppcond="70">endif</span></u></td></tr>
+<tr><th id="76">76</th><td><u>#<span data-ppcond="76">ifdef</span> <span class="macro" data-ref="_M/ANGLE_ENABLE_METAL">ANGLE_ENABLE_METAL</span></u></td></tr>
+<tr><th id="77">77</th><td>    <b>if</b> (<a class="ref fn" href="util.h.html#_ZN2sh19IsOutputMetalDirectE14ShShaderOutput" title='sh::IsOutputMetalDirect' data-ref="_ZN2sh19IsOutputMetalDirectE14ShShaderOutput" data-ref-filename="_ZN2sh19IsOutputMetalDirectE14ShShaderOutput">IsOutputMetalDirect</a>(<a class="local col7 ref" href="#167output" title='output' data-ref="167output" data-ref-filename="167output">output</a>))</td></tr>
+<tr><th id="78">78</th><td>    {</td></tr>
+<tr><th id="79">79</th><td>        <b>return</b> <b>new</b> <a class="type" href="TranslatorMetalDirect.h.html#sh::TranslatorMetalDirect" title='sh::TranslatorMetalDirect' data-ref="sh::TranslatorMetalDirect" data-ref-filename="sh..TranslatorMetalDirect">TranslatorMetalDirect</a><a class="ref fn" href="TranslatorMetalDirect.h.html#_ZN2sh21TranslatorMetalDirectC1Ej12ShShaderSpec14ShShaderOutput" title='sh::TranslatorMetalDirect::TranslatorMetalDirect' data-ref="_ZN2sh21TranslatorMetalDirectC1Ej12ShShaderSpec14ShShaderOutput" data-ref-filename="_ZN2sh21TranslatorMetalDirectC1Ej12ShShaderSpec14ShShaderOutput">(</a><a class="local col5 ref" href="#165type" title='type' data-ref="165type" data-ref-filename="165type">type</a>, <a class="local col6 ref" href="#166spec" title='spec' data-ref="166spec" data-ref-filename="166spec">spec</a>, <a class="local col7 ref" href="#167output" title='output' data-ref="167output" data-ref-filename="167output">output</a>);</td></tr>
+<tr><th id="80">80</th><td>    }</td></tr>
+<tr><th id="81">81</th><td><u>#<span data-ppcond="76">endif</span>  // ANGLE_ENABLE_METAL</u></td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td>    <i>// Unsupported compiler or unknown format. Return nullptr per the sh::ConstructCompiler API.</i></td></tr>
+<tr><th id="84">84</th><td>    <b>return</b> <b>nullptr</b>;</td></tr>
+<tr><th id="85">85</th><td>}</td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td><i>//</i></td></tr>
+<tr><th id="88">88</th><td><i>// Delete the compiler made by ConstructCompiler</i></td></tr>
+<tr><th id="89">89</th><td><i>//</i></td></tr>
+<tr><th id="90">90</th><td><em>void</em> <dfn class="decl def fn" id="_ZN2sh14DeleteCompilerEPNS_9TCompilerE" title='sh::DeleteCompiler' data-ref="_ZN2sh14DeleteCompilerEPNS_9TCompilerE" data-ref-filename="_ZN2sh14DeleteCompilerEPNS_9TCompilerE">DeleteCompiler</dfn>(<a class="type" href="Compiler.h.html#sh::TCompiler" title='sh::TCompiler' data-ref="sh::TCompiler" data-ref-filename="sh..TCompiler">TCompiler</a> *<dfn class="local col8 decl" id="168compiler" title='compiler' data-type='sh::TCompiler *' data-ref="168compiler" data-ref-filename="168compiler">compiler</dfn>)</td></tr>
+<tr><th id="91">91</th><td>{</td></tr>
+<tr><th id="92">92</th><td>    <a class="ref fn" href="../../common/angleutils.h.html#_Z10SafeDeleteRPT_" title='SafeDelete' data-ref="_Z10SafeDeleteRPT_" data-ref-filename="_Z10SafeDeleteRPT_">SafeDelete</a>(<span class='refarg'><a class="local col8 ref" href="#168compiler" title='compiler' data-ref="168compiler" data-ref-filename="168compiler">compiler</a></span>);</td></tr>
+<tr><th id="93">93</th><td>}</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td>}  <i>// namespace sh</i></td></tr>
+<tr><th id="96">96</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

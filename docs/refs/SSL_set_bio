@@ -1,0 +1,23 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='268' type='void SSL_set_bio(SSL * ssl, BIO * rbio, BIO * wbio)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='250'>// SSL_set_bio configures |ssl| to read from |rbio| and write to |wbio|. |ssl|
+// takes ownership of the two |BIO|s. If |rbio| and |wbio| are the same, |ssl|
+// only takes ownership of one reference.
+//
+// In DTLS, |rbio| must be non-blocking to properly handle timeouts and
+// retransmits.
+//
+// If |rbio| is the same as the currently configured |BIO| for reading, that
+// side is left untouched and is not freed.
+//
+// If |wbio| is the same as the currently configured |BIO| for writing AND |ssl|
+// is not currently configured to read from and write to the same |BIO|, that
+// side is left untouched and is not freed. This asymmetry is present for
+// historical reasons.
+//
+// Due to the very complex historical behavior of this function, calling this
+// function if |ssl| already has |BIO|s configured is deprecated. Prefer
+// |SSL_set0_rbio| and |SSL_set0_wbio| instead.</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_lib.cc' l='765' ll='797' type='void SSL_set_bio(SSL * ssl, BIO * rbio, BIO * wbio)'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_lib.cc' l='1636' u='c' c='SSL_set_fd'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/openssl_adapter.cc' l='380' u='c' c='_ZN3rtc14OpenSSLAdapter8BeginSSLEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/openssl_stream_adapter.cc' l='875' u='c' c='_ZN3rtc20OpenSSLStreamAdapter8BeginSSLEv'/>

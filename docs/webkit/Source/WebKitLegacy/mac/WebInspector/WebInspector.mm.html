@@ -1,0 +1,206 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebInspector.mm source code [webkit/Source/WebKitLegacy/mac/WebInspector/WebInspector.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/WebInspector/WebInspector.mm'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>WebInspector</a>/<a href='WebInspector.mm.html'>WebInspector.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2007, 2015 Apple Inc.  All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * 1.  Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="9">9</th><td><i> *     notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="10">10</th><td><i> * 2.  Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="11">11</th><td><i> *     notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="12">12</th><td><i> *     documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="13">13</th><td><i> * 3.  Neither the name of Apple Inc. ("Apple") nor the names of</i></td></tr>
+<tr><th id="14">14</th><td><i> *     its contributors may be used to endorse or promote products derived</i></td></tr>
+<tr><th id="15">15</th><td><i> *     from this software without specific prior written permission.</i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</i></td></tr>
+<tr><th id="19">19</th><td><i> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</i></td></tr>
+<tr><th id="20">20</th><td><i> * DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="21">21</th><td><i> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</i></td></tr>
+<tr><th id="23">23</th><td><i> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</i></td></tr>
+<tr><th id="24">24</th><td><i> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="25">25</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF</i></td></tr>
+<tr><th id="26">26</th><td><i> * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="27">27</th><td><i> */</i></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="WebInspector.h.html">"WebInspector.h"</a></u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="../WebView/WebFrameInternal.h.html">"WebFrameInternal.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#import <a href="WebInspectorPrivate.h.html">"WebInspectorPrivate.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#import <a href="WebInspectorFrontend.h.html">"WebInspectorFrontend.h"</a></u></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Document.h.html">&lt;WebCore/Document.h&gt;</a></u></td></tr>
+<tr><th id="36">36</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Frame.h.html">&lt;WebCore/Frame.h&gt;</a></u></td></tr>
+<tr><th id="37">37</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/InspectorController.h.html">&lt;WebCore/InspectorController.h&gt;</a></u></td></tr>
+<tr><th id="38">38</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Page.h.html">&lt;WebCore/Page.h&gt;</a></u></td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td>NSString *<dfn class="decl def" id="WebInspectorDidStartSearchingForNode" title='WebInspectorDidStartSearchingForNode' data-ref="WebInspectorDidStartSearchingForNode" data-ref-filename="WebInspectorDidStartSearchingForNode">WebInspectorDidStartSearchingForNode</dfn> = @<q>"WebInspectorDidStartSearchingForNode"</q>;</td></tr>
+<tr><th id="41">41</th><td>NSString *<dfn class="decl def" id="WebInspectorDidStopSearchingForNode" title='WebInspectorDidStopSearchingForNode' data-ref="WebInspectorDidStopSearchingForNode" data-ref-filename="WebInspectorDidStopSearchingForNode">WebInspectorDidStopSearchingForNode</dfn> = @<q>"WebInspectorDidStopSearchingForNode"</q>;</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td>@implementation WebInspector</td></tr>
+<tr><th id="44">44</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)initWithInspectedWebView:(WebView *)<dfn class="local col7 decl" id="697inspectedWebView" title='inspectedWebView' data-type='WebView *' data-ref="697inspectedWebView" data-ref-filename="697inspectedWebView">inspectedWebView</dfn></td></tr>
+<tr><th id="45">45</th><td>{</td></tr>
+<tr><th id="46">46</th><td>    <b>if</b> (!(<span class='local col8 ref' title='self' data-ref="18self" data-ref-filename="18self">self</span> = [super init]))</td></tr>
+<tr><th id="47">47</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="48">48</th><td>    _inspectedWebView = <a class="local col7 ref" href="#697inspectedWebView" title='inspectedWebView' data-ref="697inspectedWebView" data-ref-filename="697inspectedWebView">inspectedWebView</a>; <i>// not retained to prevent a cycle</i></td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td>    <b>return</b> <span class='local col8 ref' title='self' data-ref="18self" data-ref-filename="18self">self</span>;</td></tr>
+<tr><th id="51">51</th><td>}</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td>- (<em>void</em>)dealloc</td></tr>
+<tr><th id="54">54</th><td>{</td></tr>
+<tr><th id="55">55</th><td>    [_frontend release];</td></tr>
+<tr><th id="56">56</th><td>    [super dealloc];</td></tr>
+<tr><th id="57">57</th><td>}</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td>- (<em>void</em>)inspectedWebViewClosed</td></tr>
+<tr><th id="60">60</th><td>{</td></tr>
+<tr><th id="61">61</th><td>    [<span class='local col8 ref' title='self' data-ref="18self" data-ref-filename="18self">self</span> close:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="62">62</th><td>    _inspectedWebView = <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="63">63</th><td>}</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td>- (<em>void</em>)showWindow</td></tr>
+<tr><th id="66">66</th><td>{</td></tr>
+<tr><th id="67">67</th><td>    <b>if</b> (<em>auto</em>* <dfn class="local col8 decl" id="698inspectedPage" title='inspectedPage' data-type='WebCore::Page *' data-ref="698inspectedPage" data-ref-filename="698inspectedPage"><a class="local col8 ref" href="#698inspectedPage" title='inspectedPage' data-ref="698inspectedPage" data-ref-filename="698inspectedPage">inspectedPage</a></dfn> = <a class="ref fn" href="../WebView/WebFrameInternal.h.html#_Z4coreP7WebView" title='core' data-ref="_Z4coreP7WebView" data-ref-filename="_Z4coreP7WebView">core</a>(_inspectedWebView))</td></tr>
+<tr><th id="68">68</th><td>        <a class="local col8 ref" href="#698inspectedPage" title='inspectedPage' data-ref="698inspectedPage" data-ref-filename="698inspectedPage">inspectedPage</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Page.h.html#_ZNK7WebCore4Page19inspectorControllerEv" title='WebCore::Page::inspectorController' data-ref="_ZNK7WebCore4Page19inspectorControllerEv" data-ref-filename="_ZNK7WebCore4Page19inspectorControllerEv">inspectorController</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/InspectorController.h.html#_ZN7WebCore19InspectorController4showEv" title='WebCore::InspectorController::show' data-ref="_ZN7WebCore19InspectorController4showEv" data-ref-filename="_ZN7WebCore19InspectorController4showEv">show</a>();</td></tr>
+<tr><th id="69">69</th><td>}</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td>- (<em>void</em>)show:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col9 decl" id="699sender" title='sender' data-type='id' data-ref="699sender" data-ref-filename="699sender">sender</dfn></td></tr>
+<tr><th id="72">72</th><td>{</td></tr>
+<tr><th id="73">73</th><td>    [<span class='local col8 ref' title='self' data-ref="18self" data-ref-filename="18self">self</span> showWindow];</td></tr>
+<tr><th id="74">74</th><td>}</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td>- (<em>void</em>)showConsole:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col0 decl" id="700sender" title='sender' data-type='id' data-ref="700sender" data-ref-filename="700sender">sender</dfn></td></tr>
+<tr><th id="77">77</th><td>{</td></tr>
+<tr><th id="78">78</th><td>    [<span class='local col8 ref' title='self' data-ref="18self" data-ref-filename="18self">self</span> showWindow];</td></tr>
+<tr><th id="79">79</th><td>    [_frontend showConsole];</td></tr>
+<tr><th id="80">80</th><td>}</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isDebuggingJavaScript</td></tr>
+<tr><th id="83">83</th><td>{</td></tr>
+<tr><th id="84">84</th><td>    <b>return</b> _frontend &amp;&amp; [_frontend isDebuggingEnabled];</td></tr>
+<tr><th id="85">85</th><td>}</td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td>- (<em>void</em>)toggleDebuggingJavaScript:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col1 decl" id="701sender" title='sender' data-type='id' data-ref="701sender" data-ref-filename="701sender">sender</dfn></td></tr>
+<tr><th id="88">88</th><td>{</td></tr>
+<tr><th id="89">89</th><td>    [<span class='local col8 ref' title='self' data-ref="18self" data-ref-filename="18self">self</span> showWindow];</td></tr>
+<tr><th id="90">90</th><td></td></tr>
+<tr><th id="91">91</th><td>    <b>if</b> ([<span class='local col8 ref' title='self' data-ref="18self" data-ref-filename="18self">self</span> isDebuggingJavaScript])</td></tr>
+<tr><th id="92">92</th><td>        [_frontend setDebuggingEnabled:<b>false</b>];</td></tr>
+<tr><th id="93">93</th><td>    <b>else</b></td></tr>
+<tr><th id="94">94</th><td>        [_frontend setDebuggingEnabled:<b>true</b>];</td></tr>
+<tr><th id="95">95</th><td>}</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td>- (<em>void</em>)startDebuggingJavaScript:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col2 decl" id="702sender" title='sender' data-type='id' data-ref="702sender" data-ref-filename="702sender">sender</dfn></td></tr>
+<tr><th id="98">98</th><td>{</td></tr>
+<tr><th id="99">99</th><td>    <b>if</b> (_frontend)</td></tr>
+<tr><th id="100">100</th><td>        [_frontend setDebuggingEnabled:<b>true</b>];</td></tr>
+<tr><th id="101">101</th><td>}</td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td>- (<em>void</em>)stopDebuggingJavaScript:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col3 decl" id="703sender" title='sender' data-type='id' data-ref="703sender" data-ref-filename="703sender">sender</dfn></td></tr>
+<tr><th id="104">104</th><td>{</td></tr>
+<tr><th id="105">105</th><td>    <b>if</b> (_frontend)</td></tr>
+<tr><th id="106">106</th><td>        [_frontend setDebuggingEnabled:<b>false</b>];</td></tr>
+<tr><th id="107">107</th><td>}</td></tr>
+<tr><th id="108">108</th><td></td></tr>
+<tr><th id="109">109</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isProfilingJavaScript</td></tr>
+<tr><th id="110">110</th><td>{</td></tr>
+<tr><th id="111">111</th><td>    <i>// No longer supported.</i></td></tr>
+<tr><th id="112">112</th><td>    <b>return</b> <span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>;</td></tr>
+<tr><th id="113">113</th><td>}</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td>- (<em>void</em>)toggleProfilingJavaScript:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col4 decl" id="704sender" title='sender' data-type='id' data-ref="704sender" data-ref-filename="704sender">sender</dfn></td></tr>
+<tr><th id="116">116</th><td>{</td></tr>
+<tr><th id="117">117</th><td>    <i>// No longer supported.</i></td></tr>
+<tr><th id="118">118</th><td>}</td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td>- (<em>void</em>)startProfilingJavaScript:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col5 decl" id="705sender" title='sender' data-type='id' data-ref="705sender" data-ref-filename="705sender">sender</dfn></td></tr>
+<tr><th id="121">121</th><td>{</td></tr>
+<tr><th id="122">122</th><td>    <i>// No longer supported.</i></td></tr>
+<tr><th id="123">123</th><td>}</td></tr>
+<tr><th id="124">124</th><td></td></tr>
+<tr><th id="125">125</th><td>- (<em>void</em>)stopProfilingJavaScript:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col6 decl" id="706sender" title='sender' data-type='id' data-ref="706sender" data-ref-filename="706sender">sender</dfn></td></tr>
+<tr><th id="126">126</th><td>{</td></tr>
+<tr><th id="127">127</th><td>    <i>// No longer supported.</i></td></tr>
+<tr><th id="128">128</th><td>}</td></tr>
+<tr><th id="129">129</th><td></td></tr>
+<tr><th id="130">130</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isJavaScriptProfilingEnabled</td></tr>
+<tr><th id="131">131</th><td>{</td></tr>
+<tr><th id="132">132</th><td>    <i>// No longer supported.</i></td></tr>
+<tr><th id="133">133</th><td>    <b>return</b> <span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>;</td></tr>
+<tr><th id="134">134</th><td>}</td></tr>
+<tr><th id="135">135</th><td></td></tr>
+<tr><th id="136">136</th><td>- (<em>void</em>)setJavaScriptProfilingEnabled:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col7 decl" id="707enabled" title='enabled' data-type='BOOL' data-ref="707enabled" data-ref-filename="707enabled">enabled</dfn></td></tr>
+<tr><th id="137">137</th><td>{</td></tr>
+<tr><th id="138">138</th><td>    <i>// No longer supported.</i></td></tr>
+<tr><th id="139">139</th><td>}</td></tr>
+<tr><th id="140">140</th><td></td></tr>
+<tr><th id="141">141</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isTimelineProfilingEnabled</td></tr>
+<tr><th id="142">142</th><td>{</td></tr>
+<tr><th id="143">143</th><td>    <b>return</b> _frontend &amp;&amp; [_frontend isTimelineProfilingEnabled];</td></tr>
+<tr><th id="144">144</th><td>}</td></tr>
+<tr><th id="145">145</th><td></td></tr>
+<tr><th id="146">146</th><td>- (<em>void</em>)setTimelineProfilingEnabled:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col8 decl" id="708enabled" title='enabled' data-type='BOOL' data-ref="708enabled" data-ref-filename="708enabled">enabled</dfn></td></tr>
+<tr><th id="147">147</th><td>{</td></tr>
+<tr><th id="148">148</th><td>    <b>if</b> (_frontend)</td></tr>
+<tr><th id="149">149</th><td>        [_frontend setTimelineProfilingEnabled:<a class="local col8 ref" href="#708enabled" title='enabled' data-ref="708enabled" data-ref-filename="708enabled">enabled</a>];</td></tr>
+<tr><th id="150">150</th><td>}</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isOpen</td></tr>
+<tr><th id="153">153</th><td>{</td></tr>
+<tr><th id="154">154</th><td>    <b>return</b> !!_frontend;</td></tr>
+<tr><th id="155">155</th><td>}</td></tr>
+<tr><th id="156">156</th><td></td></tr>
+<tr><th id="157">157</th><td>- (<em>void</em>)close:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col9 decl" id="709sender" title='sender' data-type='id' data-ref="709sender" data-ref-filename="709sender">sender</dfn> </td></tr>
+<tr><th id="158">158</th><td>{</td></tr>
+<tr><th id="159">159</th><td>    [_frontend close];</td></tr>
+<tr><th id="160">160</th><td>}</td></tr>
+<tr><th id="161">161</th><td></td></tr>
+<tr><th id="162">162</th><td>- (<em>void</em>)attach:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col0 decl" id="710sender" title='sender' data-type='id' data-ref="710sender" data-ref-filename="710sender">sender</dfn></td></tr>
+<tr><th id="163">163</th><td>{</td></tr>
+<tr><th id="164">164</th><td>    [_frontend attach];</td></tr>
+<tr><th id="165">165</th><td>}</td></tr>
+<tr><th id="166">166</th><td></td></tr>
+<tr><th id="167">167</th><td>- (<em>void</em>)detach:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col1 decl" id="711sender" title='sender' data-type='id' data-ref="711sender" data-ref-filename="711sender">sender</dfn></td></tr>
+<tr><th id="168">168</th><td>{</td></tr>
+<tr><th id="169">169</th><td>    [_frontend detach];</td></tr>
+<tr><th id="170">170</th><td>}</td></tr>
+<tr><th id="171">171</th><td></td></tr>
+<tr><th id="172">172</th><td>- (<em>void</em>)evaluateInFrontend:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col2 decl" id="712sender" title='sender' data-type='id' data-ref="712sender" data-ref-filename="712sender">sender</dfn> script:(NSString *)<dfn class="local col3 decl" id="713script" title='script' data-type='NSString *' data-ref="713script" data-ref-filename="713script">script</dfn></td></tr>
+<tr><th id="173">173</th><td>{</td></tr>
+<tr><th id="174">174</th><td>    <b>if</b> (<em>auto</em>* <dfn class="local col4 decl" id="714inspectedPage" title='inspectedPage' data-type='WebCore::Page *' data-ref="714inspectedPage" data-ref-filename="714inspectedPage"><a class="local col4 ref" href="#714inspectedPage" title='inspectedPage' data-ref="714inspectedPage" data-ref-filename="714inspectedPage">inspectedPage</a></dfn> = <a class="ref fn" href="../WebView/WebFrameInternal.h.html#_Z4coreP7WebView" title='core' data-ref="_Z4coreP7WebView" data-ref-filename="_Z4coreP7WebView">core</a>(_inspectedWebView))</td></tr>
+<tr><th id="175">175</th><td>        <a class="local col4 ref" href="#714inspectedPage" title='inspectedPage' data-ref="714inspectedPage" data-ref-filename="714inspectedPage">inspectedPage</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Page.h.html#_ZNK7WebCore4Page19inspectorControllerEv" title='WebCore::Page::inspectorController' data-ref="_ZNK7WebCore4Page19inspectorControllerEv" data-ref-filename="_ZNK7WebCore4Page19inspectorControllerEv">inspectorController</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/InspectorController.h.html#_ZN7WebCore19InspectorController25evaluateForTestInFrontendERKN3WTF6StringE" title='WebCore::InspectorController::evaluateForTestInFrontend' data-ref="_ZN7WebCore19InspectorController25evaluateForTestInFrontendERKN3WTF6StringE" data-ref-filename="_ZN7WebCore19InspectorController25evaluateForTestInFrontendERKN3WTF6StringE">evaluateForTestInFrontend</a>(<a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZN3WTF6StringC1EP8NSString" title='WTF::String::String' data-ref="_ZN3WTF6StringC1EP8NSString" data-ref-filename="_ZN3WTF6StringC1EP8NSString"></a><a class="local col3 ref" href="#713script" title='script' data-ref="713script" data-ref-filename="713script">script</a>);</td></tr>
+<tr><th id="176">176</th><td>}</td></tr>
+<tr><th id="177">177</th><td></td></tr>
+<tr><th id="178">178</th><td>- (<em>void</em>)setFrontend:(WebInspectorFrontend *)<dfn class="local col5 decl" id="715frontend" title='frontend' data-type='WebInspectorFrontend *' data-ref="715frontend" data-ref-filename="715frontend">frontend</dfn></td></tr>
+<tr><th id="179">179</th><td>{</td></tr>
+<tr><th id="180">180</th><td>    _frontend = [<a class="local col5 ref" href="#715frontend" title='frontend' data-ref="715frontend" data-ref-filename="715frontend">frontend</a> retain];</td></tr>
+<tr><th id="181">181</th><td>}</td></tr>
+<tr><th id="182">182</th><td></td></tr>
+<tr><th id="183">183</th><td>- (<em>void</em>)releaseFrontend</td></tr>
+<tr><th id="184">184</th><td>{</td></tr>
+<tr><th id="185">185</th><td>    [_frontend release];</td></tr>
+<tr><th id="186">186</th><td>    _frontend = <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="187">187</th><td>}</td></tr>
+<tr><th id="188">188</th><td>@end</td></tr>
+<tr><th id="189">189</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../WebKitBuild/Debug/DerivedSources/WebKitLegacy/unified-sources/UnifiedSource19-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKitLegacy/unified-sources/UnifiedSource19-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

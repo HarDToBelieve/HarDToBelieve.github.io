@@ -1,0 +1,277 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>video_frame_buffer.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/video/video_frame_buffer.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::BiplanarYuv8Buffer,webrtc::BiplanarYuvBuffer,webrtc::I010BufferInterface,webrtc::I420ABufferInterface,webrtc::I420BufferInterface,webrtc::I444BufferInterface,webrtc::NV12BufferInterface,webrtc::PlanarYuv16BBuffer,webrtc::PlanarYuv8Buffer,webrtc::PlanarYuvBuffer,webrtc::VideoFrameBuffer "/>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/video/video_frame_buffer.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>WebKitBuild</a>/<a href='../../../../../..'>Debug</a>/<a href='../../../../..'>usr</a>/<a href='../../../..'>local</a>/<a href='../../..'>include</a>/<a href='../..'>webrtc</a>/<a href='..'>api</a>/<a href='./'>video</a>/<a href='video_frame_buffer.h.html'>video_frame_buffer.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2015 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/API_VIDEO_VIDEO_FRAME_BUFFER_H_">API_VIDEO_VIDEO_FRAME_BUFFER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/API_VIDEO_VIDEO_FRAME_BUFFER_H_" data-ref="_M/API_VIDEO_VIDEO_FRAME_BUFFER_H_">API_VIDEO_VIDEO_FRAME_BUFFER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="../array_view.h.html">"api/array_view.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../scoped_refptr.h.html">"api/scoped_refptr.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../../rtc_base/ref_count.h.html">"rtc_base/ref_count.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="../../rtc_base/system/rtc_export.h.html">"rtc_base/system/rtc_export.h"</a></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><b>class</b> <a class="type" href="#webrtc::I420BufferInterface" title='webrtc::I420BufferInterface' data-ref="webrtc::I420BufferInterface" data-ref-filename="webrtc..I420BufferInterface">I420BufferInterface</a>;</td></tr>
+<tr><th id="24">24</th><td><b>class</b> <a class="type" href="#webrtc::I420ABufferInterface" title='webrtc::I420ABufferInterface' data-ref="webrtc::I420ABufferInterface" data-ref-filename="webrtc..I420ABufferInterface">I420ABufferInterface</a>;</td></tr>
+<tr><th id="25">25</th><td><b>class</b> <a class="type" href="#webrtc::I444BufferInterface" title='webrtc::I444BufferInterface' data-ref="webrtc::I444BufferInterface" data-ref-filename="webrtc..I444BufferInterface">I444BufferInterface</a>;</td></tr>
+<tr><th id="26">26</th><td><b>class</b> <a class="type" href="#webrtc::I010BufferInterface" title='webrtc::I010BufferInterface' data-ref="webrtc::I010BufferInterface" data-ref-filename="webrtc..I010BufferInterface">I010BufferInterface</a>;</td></tr>
+<tr><th id="27">27</th><td><b>class</b> <a class="type" href="#webrtc::NV12BufferInterface" title='webrtc::NV12BufferInterface' data-ref="webrtc::NV12BufferInterface" data-ref-filename="webrtc..NV12BufferInterface">NV12BufferInterface</a>;</td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><i>// Base class for frame buffers of different types of pixel format and storage.</i></td></tr>
+<tr><th id="30">30</th><td><i>// The tag in type() indicates how the data is represented, and each type is</i></td></tr>
+<tr><th id="31">31</th><td><i>// implemented as a subclass. To access the pixel data, call the appropriate</i></td></tr>
+<tr><th id="32">32</th><td><i>// GetXXX() function, where XXX represents the type. There is also a function</i></td></tr>
+<tr><th id="33">33</th><td><i>// ToI420() that returns a frame buffer in I420 format, converting from the</i></td></tr>
+<tr><th id="34">34</th><td><i>// underlying representation if necessary. I420 is the most widely accepted</i></td></tr>
+<tr><th id="35">35</th><td><i>// format and serves as a fallback for video sinks that can only handle I420,</i></td></tr>
+<tr><th id="36">36</th><td><i>// e.g. the internal WebRTC software encoders. A special enum value 'kNative' is</i></td></tr>
+<tr><th id="37">37</th><td><i>// provided for external clients to implement their own frame buffer</i></td></tr>
+<tr><th id="38">38</th><td><i>// representations, e.g. as textures. The external client can produce such</i></td></tr>
+<tr><th id="39">39</th><td><i>// native frame buffers from custom video sources, and then cast it back to the</i></td></tr>
+<tr><th id="40">40</th><td><i>// correct subclass in custom video sinks. The purpose of this is to improve</i></td></tr>
+<tr><th id="41">41</th><td><i>// performance by providing an optimized path without intermediate conversions.</i></td></tr>
+<tr><th id="42">42</th><td><i>// Frame metadata such as rotation and timestamp are stored in</i></td></tr>
+<tr><th id="43">43</th><td><i>// webrtc::VideoFrame, and not here.</i></td></tr>
+<tr><th id="44">44</th><td><b>class</b> <a class="macro" href="../../rtc_base/system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <dfn class="type def" id="webrtc::VideoFrameBuffer" title='webrtc::VideoFrameBuffer' data-ref="webrtc::VideoFrameBuffer" data-ref-filename="webrtc..VideoFrameBuffer">VideoFrameBuffer</dfn> : <b>public</b> <span class="namespace">rtc::</span><a class="type" href="../../rtc_base/ref_count.h.html#rtc::RefCountInterface" title='rtc::RefCountInterface' data-ref="rtc::RefCountInterface" data-ref-filename="rtc..RefCountInterface">RefCountInterface</a> {</td></tr>
+<tr><th id="45">45</th><td> <b>public</b>:</td></tr>
+<tr><th id="46">46</th><td>  <i>// New frame buffer types will be added conservatively when there is an</i></td></tr>
+<tr><th id="47">47</th><td><i>  // opportunity to optimize the path between some pair of video source and</i></td></tr>
+<tr><th id="48">48</th><td><i>  // video sink.</i></td></tr>
+<tr><th id="49">49</th><td>  <b>enum</b> <b>class</b> <dfn class="type def" id="webrtc::VideoFrameBuffer::Type" title='webrtc::VideoFrameBuffer::Type' data-ref="webrtc::VideoFrameBuffer::Type" data-ref-filename="webrtc..VideoFrameBuffer..Type">Type</dfn> {</td></tr>
+<tr><th id="50">50</th><td>    <dfn class="enum" id="webrtc::VideoFrameBuffer::Type::kNative" title='webrtc::VideoFrameBuffer::Type::kNative' data-ref="webrtc::VideoFrameBuffer::Type::kNative" data-ref-filename="webrtc..VideoFrameBuffer..Type..kNative">kNative</dfn>,</td></tr>
+<tr><th id="51">51</th><td>    <dfn class="enum" id="webrtc::VideoFrameBuffer::Type::kI420" title='webrtc::VideoFrameBuffer::Type::kI420' data-ref="webrtc::VideoFrameBuffer::Type::kI420" data-ref-filename="webrtc..VideoFrameBuffer..Type..kI420">kI420</dfn>,</td></tr>
+<tr><th id="52">52</th><td>    <dfn class="enum" id="webrtc::VideoFrameBuffer::Type::kI420A" title='webrtc::VideoFrameBuffer::Type::kI420A' data-ref="webrtc::VideoFrameBuffer::Type::kI420A" data-ref-filename="webrtc..VideoFrameBuffer..Type..kI420A">kI420A</dfn>,</td></tr>
+<tr><th id="53">53</th><td>    <dfn class="enum" id="webrtc::VideoFrameBuffer::Type::kI444" title='webrtc::VideoFrameBuffer::Type::kI444' data-ref="webrtc::VideoFrameBuffer::Type::kI444" data-ref-filename="webrtc..VideoFrameBuffer..Type..kI444">kI444</dfn>,</td></tr>
+<tr><th id="54">54</th><td>    <dfn class="enum" id="webrtc::VideoFrameBuffer::Type::kI010" title='webrtc::VideoFrameBuffer::Type::kI010' data-ref="webrtc::VideoFrameBuffer::Type::kI010" data-ref-filename="webrtc..VideoFrameBuffer..Type..kI010">kI010</dfn>,</td></tr>
+<tr><th id="55">55</th><td>    <dfn class="enum" id="webrtc::VideoFrameBuffer::Type::kNV12" title='webrtc::VideoFrameBuffer::Type::kNV12' data-ref="webrtc::VideoFrameBuffer::Type::kNV12" data-ref-filename="webrtc..VideoFrameBuffer..Type..kNV12">kNV12</dfn>,</td></tr>
+<tr><th id="56">56</th><td>  };</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>  <i>// This function specifies in what pixel format the data is stored in.</i></td></tr>
+<tr><th id="59">59</th><td>  <b>virtual</b> <a class="type" href="#webrtc::VideoFrameBuffer::Type" title='webrtc::VideoFrameBuffer::Type' data-ref="webrtc::VideoFrameBuffer::Type" data-ref-filename="webrtc..VideoFrameBuffer..Type">Type</a> <dfn class="virtual decl fn" id="_ZNK6webrtc16VideoFrameBuffer4typeEv" title='webrtc::VideoFrameBuffer::type' data-ref="_ZNK6webrtc16VideoFrameBuffer4typeEv" data-ref-filename="_ZNK6webrtc16VideoFrameBuffer4typeEv">type</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td>  <i>// The resolution of the frame in pixels. For formats where some planes are</i></td></tr>
+<tr><th id="62">62</th><td><i>  // subsampled, this is the highest-resolution plane.</i></td></tr>
+<tr><th id="63">63</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc16VideoFrameBuffer5widthEv" title='webrtc::VideoFrameBuffer::width' data-ref="_ZNK6webrtc16VideoFrameBuffer5widthEv" data-ref-filename="_ZNK6webrtc16VideoFrameBuffer5widthEv">width</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="64">64</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc16VideoFrameBuffer6heightEv" title='webrtc::VideoFrameBuffer::height' data-ref="_ZNK6webrtc16VideoFrameBuffer6heightEv" data-ref-filename="_ZNK6webrtc16VideoFrameBuffer6heightEv">height</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td>  <i>// Returns a memory-backed frame buffer in I420 format. If the pixel data is</i></td></tr>
+<tr><th id="67">67</th><td><i>  // in another format, a conversion will take place. All implementations must</i></td></tr>
+<tr><th id="68">68</th><td><i>  // provide a fallback to I420 for compatibility with e.g. the internal WebRTC</i></td></tr>
+<tr><th id="69">69</th><td><i>  // software encoders.</i></td></tr>
+<tr><th id="70">70</th><td>  <b>virtual</b> <span class="namespace">rtc::</span><a class="type" href="../scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;<a class="type" href="#webrtc::I420BufferInterface" title='webrtc::I420BufferInterface' data-ref="webrtc::I420BufferInterface" data-ref-filename="webrtc..I420BufferInterface">I420BufferInterface</a>&gt; <dfn class="virtual decl fn" id="_ZN6webrtc16VideoFrameBuffer6ToI420Ev" title='webrtc::VideoFrameBuffer::ToI420' data-ref="_ZN6webrtc16VideoFrameBuffer6ToI420Ev" data-ref-filename="_ZN6webrtc16VideoFrameBuffer6ToI420Ev">ToI420</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td>  <i>// GetI420() methods should return I420 buffer if conversion is trivial, i.e</i></td></tr>
+<tr><th id="73">73</th><td><i>  // no change for binary data is needed. Otherwise these methods should return</i></td></tr>
+<tr><th id="74">74</th><td><i>  // nullptr. One example of buffer with that property is</i></td></tr>
+<tr><th id="75">75</th><td><i>  // WebrtcVideoFrameAdapter in Chrome - it's I420 buffer backed by a shared</i></td></tr>
+<tr><th id="76">76</th><td><i>  // memory buffer. Therefore it must have type kNative. Yet, ToI420()</i></td></tr>
+<tr><th id="77">77</th><td><i>  // doesn't affect binary data at all. Another example is any I420A buffer.</i></td></tr>
+<tr><th id="78">78</th><td><i>  // TODO(<a href="https://crbug.com/webrtc/12021):">https://crbug.com/webrtc/12021):</a> Make this method non-virtual and</i></td></tr>
+<tr><th id="79">79</th><td><i>  // behave as the other GetXXX methods below.</i></td></tr>
+<tr><th id="80">80</th><td>  <b>virtual</b> <em>const</em> <a class="type" href="#webrtc::I420BufferInterface" title='webrtc::I420BufferInterface' data-ref="webrtc::I420BufferInterface" data-ref-filename="webrtc..I420BufferInterface">I420BufferInterface</a>* <dfn class="virtual decl fn" id="_ZNK6webrtc16VideoFrameBuffer7GetI420Ev" title='webrtc::VideoFrameBuffer::GetI420' data-ref="_ZNK6webrtc16VideoFrameBuffer7GetI420Ev" data-ref-filename="_ZNK6webrtc16VideoFrameBuffer7GetI420Ev">GetI420</dfn>() <em>const</em>;</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td>  <i>// A format specific scale function. Default implementation works by</i></td></tr>
+<tr><th id="83">83</th><td><i>  // converting to I420. But more efficient implementations may override it,</i></td></tr>
+<tr><th id="84">84</th><td><i>  // especially for kNative.</i></td></tr>
+<tr><th id="85">85</th><td><i>  // First, the image is cropped to |crop_width| and |crop_height| and then</i></td></tr>
+<tr><th id="86">86</th><td><i>  // scaled to |scaled_width| and |scaled_height|.</i></td></tr>
+<tr><th id="87">87</th><td>  <b>virtual</b> <span class="namespace">rtc::</span><a class="type" href="../scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;<a class="type" href="#webrtc::VideoFrameBuffer" title='webrtc::VideoFrameBuffer' data-ref="webrtc::VideoFrameBuffer" data-ref-filename="webrtc..VideoFrameBuffer">VideoFrameBuffer</a>&gt; <dfn class="virtual decl fn" id="_ZN6webrtc16VideoFrameBuffer12CropAndScaleEiiiiii" title='webrtc::VideoFrameBuffer::CropAndScale' data-ref="_ZN6webrtc16VideoFrameBuffer12CropAndScaleEiiiiii" data-ref-filename="_ZN6webrtc16VideoFrameBuffer12CropAndScaleEiiiiii">CropAndScale</dfn>(<em>int</em> <dfn class="local col2 decl" id="742offset_x" title='offset_x' data-type='int' data-ref="742offset_x" data-ref-filename="742offset_x">offset_x</dfn>,</td></tr>
+<tr><th id="88">88</th><td>                                                            <em>int</em> <dfn class="local col3 decl" id="743offset_y" title='offset_y' data-type='int' data-ref="743offset_y" data-ref-filename="743offset_y">offset_y</dfn>,</td></tr>
+<tr><th id="89">89</th><td>                                                            <em>int</em> <dfn class="local col4 decl" id="744crop_width" title='crop_width' data-type='int' data-ref="744crop_width" data-ref-filename="744crop_width">crop_width</dfn>,</td></tr>
+<tr><th id="90">90</th><td>                                                            <em>int</em> <dfn class="local col5 decl" id="745crop_height" title='crop_height' data-type='int' data-ref="745crop_height" data-ref-filename="745crop_height">crop_height</dfn>,</td></tr>
+<tr><th id="91">91</th><td>                                                            <em>int</em> <dfn class="local col6 decl" id="746scaled_width" title='scaled_width' data-type='int' data-ref="746scaled_width" data-ref-filename="746scaled_width">scaled_width</dfn>,</td></tr>
+<tr><th id="92">92</th><td>                                                            <em>int</em> <dfn class="local col7 decl" id="747scaled_height" title='scaled_height' data-type='int' data-ref="747scaled_height" data-ref-filename="747scaled_height">scaled_height</dfn>);</td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td>  <i>// Alias for common use case.</i></td></tr>
+<tr><th id="95">95</th><td>  <span class="namespace">rtc::</span><a class="type" href="../scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;<a class="type" href="#webrtc::VideoFrameBuffer" title='webrtc::VideoFrameBuffer' data-ref="webrtc::VideoFrameBuffer" data-ref-filename="webrtc..VideoFrameBuffer">VideoFrameBuffer</a>&gt; <dfn class="decl def fn" id="_ZN6webrtc16VideoFrameBuffer5ScaleEii" title='webrtc::VideoFrameBuffer::Scale' data-ref="_ZN6webrtc16VideoFrameBuffer5ScaleEii" data-ref-filename="_ZN6webrtc16VideoFrameBuffer5ScaleEii">Scale</dfn>(<em>int</em> <dfn class="local col8 decl" id="748scaled_width" title='scaled_width' data-type='int' data-ref="748scaled_width" data-ref-filename="748scaled_width">scaled_width</dfn>,</td></tr>
+<tr><th id="96">96</th><td>                                             <em>int</em> <dfn class="local col9 decl" id="749scaled_height" title='scaled_height' data-type='int' data-ref="749scaled_height" data-ref-filename="749scaled_height">scaled_height</dfn>) {</td></tr>
+<tr><th id="97">97</th><td>    <b>return</b> <a class="virtual member fn" href="#_ZN6webrtc16VideoFrameBuffer12CropAndScaleEiiiiii" title='webrtc::VideoFrameBuffer::CropAndScale' data-ref="_ZN6webrtc16VideoFrameBuffer12CropAndScaleEiiiiii" data-ref-filename="_ZN6webrtc16VideoFrameBuffer12CropAndScaleEiiiiii">CropAndScale</a>(<var>0</var>, <var>0</var>, <a class="virtual member fn" href="#_ZNK6webrtc16VideoFrameBuffer5widthEv" title='webrtc::VideoFrameBuffer::width' data-ref="_ZNK6webrtc16VideoFrameBuffer5widthEv" data-ref-filename="_ZNK6webrtc16VideoFrameBuffer5widthEv">width</a>(), <a class="virtual member fn" href="#_ZNK6webrtc16VideoFrameBuffer6heightEv" title='webrtc::VideoFrameBuffer::height' data-ref="_ZNK6webrtc16VideoFrameBuffer6heightEv" data-ref-filename="_ZNK6webrtc16VideoFrameBuffer6heightEv">height</a>(), <a class="local col8 ref" href="#748scaled_width" title='scaled_width' data-ref="748scaled_width" data-ref-filename="748scaled_width">scaled_width</a>, <a class="local col9 ref" href="#749scaled_height" title='scaled_height' data-ref="749scaled_height" data-ref-filename="749scaled_height">scaled_height</a>);</td></tr>
+<tr><th id="98">98</th><td>  }</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td>  <i>// These functions should only be called if type() is of the correct type.</i></td></tr>
+<tr><th id="101">101</th><td><i>  // Calling with a different type will result in a crash.</i></td></tr>
+<tr><th id="102">102</th><td>  <em>const</em> <a class="type" href="#webrtc::I420ABufferInterface" title='webrtc::I420ABufferInterface' data-ref="webrtc::I420ABufferInterface" data-ref-filename="webrtc..I420ABufferInterface">I420ABufferInterface</a>* <dfn class="decl fn" id="_ZNK6webrtc16VideoFrameBuffer8GetI420AEv" title='webrtc::VideoFrameBuffer::GetI420A' data-ref="_ZNK6webrtc16VideoFrameBuffer8GetI420AEv" data-ref-filename="_ZNK6webrtc16VideoFrameBuffer8GetI420AEv">GetI420A</dfn>() <em>const</em>;</td></tr>
+<tr><th id="103">103</th><td>  <em>const</em> <a class="type" href="#webrtc::I444BufferInterface" title='webrtc::I444BufferInterface' data-ref="webrtc::I444BufferInterface" data-ref-filename="webrtc..I444BufferInterface">I444BufferInterface</a>* <dfn class="decl fn" id="_ZNK6webrtc16VideoFrameBuffer7GetI444Ev" title='webrtc::VideoFrameBuffer::GetI444' data-ref="_ZNK6webrtc16VideoFrameBuffer7GetI444Ev" data-ref-filename="_ZNK6webrtc16VideoFrameBuffer7GetI444Ev">GetI444</dfn>() <em>const</em>;</td></tr>
+<tr><th id="104">104</th><td>  <em>const</em> <a class="type" href="#webrtc::I010BufferInterface" title='webrtc::I010BufferInterface' data-ref="webrtc::I010BufferInterface" data-ref-filename="webrtc..I010BufferInterface">I010BufferInterface</a>* <dfn class="decl fn" id="_ZNK6webrtc16VideoFrameBuffer7GetI010Ev" title='webrtc::VideoFrameBuffer::GetI010' data-ref="_ZNK6webrtc16VideoFrameBuffer7GetI010Ev" data-ref-filename="_ZNK6webrtc16VideoFrameBuffer7GetI010Ev">GetI010</dfn>() <em>const</em>;</td></tr>
+<tr><th id="105">105</th><td>  <em>const</em> <a class="type" href="#webrtc::NV12BufferInterface" title='webrtc::NV12BufferInterface' data-ref="webrtc::NV12BufferInterface" data-ref-filename="webrtc..NV12BufferInterface">NV12BufferInterface</a>* <dfn class="decl fn" id="_ZNK6webrtc16VideoFrameBuffer7GetNV12Ev" title='webrtc::VideoFrameBuffer::GetNV12' data-ref="_ZNK6webrtc16VideoFrameBuffer7GetNV12Ev" data-ref-filename="_ZNK6webrtc16VideoFrameBuffer7GetNV12Ev">GetNV12</dfn>() <em>const</em>;</td></tr>
+<tr><th id="106">106</th><td></td></tr>
+<tr><th id="107">107</th><td>  <i>// From a kNative frame, returns a VideoFrameBuffer with a pixel format in</i></td></tr>
+<tr><th id="108">108</th><td><i>  // the list of types that is in the main memory with a pixel perfect</i></td></tr>
+<tr><th id="109">109</th><td><i>  // conversion for encoding with a software encoder. Returns nullptr if the</i></td></tr>
+<tr><th id="110">110</th><td><i>  // frame type is not supported, mapping is not possible, or if the kNative</i></td></tr>
+<tr><th id="111">111</th><td><i>  // frame has not implemented this method. Only callable if type() is kNative.</i></td></tr>
+<tr><th id="112">112</th><td>  <b>virtual</b> <span class="namespace">rtc::</span><a class="type" href="../scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;<a class="type" href="#webrtc::VideoFrameBuffer" title='webrtc::VideoFrameBuffer' data-ref="webrtc::VideoFrameBuffer" data-ref-filename="webrtc..VideoFrameBuffer">VideoFrameBuffer</a>&gt; <dfn class="virtual decl fn" id="_ZN6webrtc16VideoFrameBuffer20GetMappedFrameBufferEN3rtc9ArrayViewINS0_4TypeELln4711EEE" title='webrtc::VideoFrameBuffer::GetMappedFrameBuffer' data-ref="_ZN6webrtc16VideoFrameBuffer20GetMappedFrameBufferEN3rtc9ArrayViewINS0_4TypeELln4711EEE" data-ref-filename="_ZN6webrtc16VideoFrameBuffer20GetMappedFrameBufferEN3rtc9ArrayViewINS0_4TypeELln4711EEE">GetMappedFrameBuffer</dfn>(</td></tr>
+<tr><th id="113">113</th><td>      <span class="namespace">rtc::</span><a class="type" href="../array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<a class="type" href="#webrtc::VideoFrameBuffer::Type" title='webrtc::VideoFrameBuffer::Type' data-ref="webrtc::VideoFrameBuffer::Type" data-ref-filename="webrtc..VideoFrameBuffer..Type">Type</a>&gt; <dfn class="local col0 decl" id="750types" title='types' data-type='rtc::ArrayView&lt;Type&gt;' data-ref="750types" data-ref-filename="750types">types</dfn>);</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td> <b>protected</b>:</td></tr>
+<tr><th id="116">116</th><td>  <dfn class="virtual decl def fn" id="_ZN6webrtc16VideoFrameBufferD1Ev" title='webrtc::VideoFrameBuffer::~VideoFrameBuffer' data-ref="_ZN6webrtc16VideoFrameBufferD1Ev" data-ref-filename="_ZN6webrtc16VideoFrameBufferD1Ev">~VideoFrameBuffer</dfn>() override {}</td></tr>
+<tr><th id="117">117</th><td>};</td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td><i>// Update when VideoFrameBuffer::Type is updated.</i></td></tr>
+<tr><th id="120">120</th><td><em>const</em> <em>char</em>* <dfn class="decl fn" id="_ZN6webrtc28VideoFrameBufferTypeToStringENS_16VideoFrameBuffer4TypeE" title='webrtc::VideoFrameBufferTypeToString' data-ref="_ZN6webrtc28VideoFrameBufferTypeToStringENS_16VideoFrameBuffer4TypeE" data-ref-filename="_ZN6webrtc28VideoFrameBufferTypeToStringENS_16VideoFrameBuffer4TypeE">VideoFrameBufferTypeToString</dfn>(<a class="type" href="#webrtc::VideoFrameBuffer" title='webrtc::VideoFrameBuffer' data-ref="webrtc::VideoFrameBuffer" data-ref-filename="webrtc..VideoFrameBuffer">VideoFrameBuffer</a>::<a class="type" href="#webrtc::VideoFrameBuffer::Type" title='webrtc::VideoFrameBuffer::Type' data-ref="webrtc::VideoFrameBuffer::Type" data-ref-filename="webrtc..VideoFrameBuffer..Type">Type</a> <dfn class="local col1 decl" id="751type" title='type' data-type='VideoFrameBuffer::Type' data-ref="751type" data-ref-filename="751type">type</dfn>);</td></tr>
+<tr><th id="121">121</th><td></td></tr>
+<tr><th id="122">122</th><td><i>// This interface represents planar formats.</i></td></tr>
+<tr><th id="123">123</th><td><b>class</b> <dfn class="type def" id="webrtc::PlanarYuvBuffer" title='webrtc::PlanarYuvBuffer' data-ref="webrtc::PlanarYuvBuffer" data-ref-filename="webrtc..PlanarYuvBuffer">PlanarYuvBuffer</dfn> : <b>public</b> <a class="type" href="#webrtc::VideoFrameBuffer" title='webrtc::VideoFrameBuffer' data-ref="webrtc::VideoFrameBuffer" data-ref-filename="webrtc..VideoFrameBuffer">VideoFrameBuffer</a> {</td></tr>
+<tr><th id="124">124</th><td> <b>public</b>:</td></tr>
+<tr><th id="125">125</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc15PlanarYuvBuffer11ChromaWidthEv" title='webrtc::PlanarYuvBuffer::ChromaWidth' data-ref="_ZNK6webrtc15PlanarYuvBuffer11ChromaWidthEv" data-ref-filename="_ZNK6webrtc15PlanarYuvBuffer11ChromaWidthEv">ChromaWidth</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="126">126</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc15PlanarYuvBuffer12ChromaHeightEv" title='webrtc::PlanarYuvBuffer::ChromaHeight' data-ref="_ZNK6webrtc15PlanarYuvBuffer12ChromaHeightEv" data-ref-filename="_ZNK6webrtc15PlanarYuvBuffer12ChromaHeightEv">ChromaHeight</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td>  <i>// Returns the number of steps(in terms of Data*() return type) between</i></td></tr>
+<tr><th id="129">129</th><td><i>  // successive rows for a given plane.</i></td></tr>
+<tr><th id="130">130</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc15PlanarYuvBuffer7StrideYEv" title='webrtc::PlanarYuvBuffer::StrideY' data-ref="_ZNK6webrtc15PlanarYuvBuffer7StrideYEv" data-ref-filename="_ZNK6webrtc15PlanarYuvBuffer7StrideYEv">StrideY</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="131">131</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc15PlanarYuvBuffer7StrideUEv" title='webrtc::PlanarYuvBuffer::StrideU' data-ref="_ZNK6webrtc15PlanarYuvBuffer7StrideUEv" data-ref-filename="_ZNK6webrtc15PlanarYuvBuffer7StrideUEv">StrideU</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="132">132</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc15PlanarYuvBuffer7StrideVEv" title='webrtc::PlanarYuvBuffer::StrideV' data-ref="_ZNK6webrtc15PlanarYuvBuffer7StrideVEv" data-ref-filename="_ZNK6webrtc15PlanarYuvBuffer7StrideVEv">StrideV</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="133">133</th><td></td></tr>
+<tr><th id="134">134</th><td> <b>protected</b>:</td></tr>
+<tr><th id="135">135</th><td>  <dfn class="virtual decl def fn" id="_ZN6webrtc15PlanarYuvBufferD1Ev" title='webrtc::PlanarYuvBuffer::~PlanarYuvBuffer' data-ref="_ZN6webrtc15PlanarYuvBufferD1Ev" data-ref-filename="_ZN6webrtc15PlanarYuvBufferD1Ev">~PlanarYuvBuffer</dfn>() override {}</td></tr>
+<tr><th id="136">136</th><td>};</td></tr>
+<tr><th id="137">137</th><td></td></tr>
+<tr><th id="138">138</th><td><i>// This interface represents 8-bit color depth formats: Type::kI420,</i></td></tr>
+<tr><th id="139">139</th><td><i>// Type::kI420A and Type::kI444.</i></td></tr>
+<tr><th id="140">140</th><td><b>class</b> <dfn class="type def" id="webrtc::PlanarYuv8Buffer" title='webrtc::PlanarYuv8Buffer' data-ref="webrtc::PlanarYuv8Buffer" data-ref-filename="webrtc..PlanarYuv8Buffer">PlanarYuv8Buffer</dfn> : <b>public</b> <a class="type" href="#webrtc::PlanarYuvBuffer" title='webrtc::PlanarYuvBuffer' data-ref="webrtc::PlanarYuvBuffer" data-ref-filename="webrtc..PlanarYuvBuffer">PlanarYuvBuffer</a> {</td></tr>
+<tr><th id="141">141</th><td> <b>public</b>:</td></tr>
+<tr><th id="142">142</th><td>  <i>// Returns pointer to the pixel data for a given plane. The memory is owned by</i></td></tr>
+<tr><th id="143">143</th><td><i>  // the VideoFrameBuffer object and must not be freed by the caller.</i></td></tr>
+<tr><th id="144">144</th><td>  <b>virtual</b> <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="virtual decl fn" id="_ZNK6webrtc16PlanarYuv8Buffer5DataYEv" title='webrtc::PlanarYuv8Buffer::DataY' data-ref="_ZNK6webrtc16PlanarYuv8Buffer5DataYEv" data-ref-filename="_ZNK6webrtc16PlanarYuv8Buffer5DataYEv">DataY</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="145">145</th><td>  <b>virtual</b> <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="virtual decl fn" id="_ZNK6webrtc16PlanarYuv8Buffer5DataUEv" title='webrtc::PlanarYuv8Buffer::DataU' data-ref="_ZNK6webrtc16PlanarYuv8Buffer5DataUEv" data-ref-filename="_ZNK6webrtc16PlanarYuv8Buffer5DataUEv">DataU</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="146">146</th><td>  <b>virtual</b> <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="virtual decl fn" id="_ZNK6webrtc16PlanarYuv8Buffer5DataVEv" title='webrtc::PlanarYuv8Buffer::DataV' data-ref="_ZNK6webrtc16PlanarYuv8Buffer5DataVEv" data-ref-filename="_ZNK6webrtc16PlanarYuv8Buffer5DataVEv">DataV</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="147">147</th><td></td></tr>
+<tr><th id="148">148</th><td> <b>protected</b>:</td></tr>
+<tr><th id="149">149</th><td>  <dfn class="virtual decl def fn" id="_ZN6webrtc16PlanarYuv8BufferD1Ev" title='webrtc::PlanarYuv8Buffer::~PlanarYuv8Buffer' data-ref="_ZN6webrtc16PlanarYuv8BufferD1Ev" data-ref-filename="_ZN6webrtc16PlanarYuv8BufferD1Ev">~PlanarYuv8Buffer</dfn>() override {}</td></tr>
+<tr><th id="150">150</th><td>};</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td><b>class</b> <a class="macro" href="../../rtc_base/system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <dfn class="type def" id="webrtc::I420BufferInterface" title='webrtc::I420BufferInterface' data-ref="webrtc::I420BufferInterface" data-ref-filename="webrtc..I420BufferInterface">I420BufferInterface</dfn> : <b>public</b> <a class="type" href="#webrtc::PlanarYuv8Buffer" title='webrtc::PlanarYuv8Buffer' data-ref="webrtc::PlanarYuv8Buffer" data-ref-filename="webrtc..PlanarYuv8Buffer">PlanarYuv8Buffer</a> {</td></tr>
+<tr><th id="153">153</th><td> <b>public</b>:</td></tr>
+<tr><th id="154">154</th><td>  <a class="type" href="#webrtc::VideoFrameBuffer::Type" title='webrtc::VideoFrameBuffer::Type' data-ref="webrtc::VideoFrameBuffer::Type" data-ref-filename="webrtc..VideoFrameBuffer..Type">Type</a> <dfn class="virtual decl fn" id="_ZNK6webrtc19I420BufferInterface4typeEv" title='webrtc::I420BufferInterface::type' data-ref="_ZNK6webrtc19I420BufferInterface4typeEv" data-ref-filename="_ZNK6webrtc19I420BufferInterface4typeEv">type</dfn>() <em>const</em> override;</td></tr>
+<tr><th id="155">155</th><td></td></tr>
+<tr><th id="156">156</th><td>  <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc19I420BufferInterface11ChromaWidthEv" title='webrtc::I420BufferInterface::ChromaWidth' data-ref="_ZNK6webrtc19I420BufferInterface11ChromaWidthEv" data-ref-filename="_ZNK6webrtc19I420BufferInterface11ChromaWidthEv">ChromaWidth</dfn>() <em>const</em> final;</td></tr>
+<tr><th id="157">157</th><td>  <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc19I420BufferInterface12ChromaHeightEv" title='webrtc::I420BufferInterface::ChromaHeight' data-ref="_ZNK6webrtc19I420BufferInterface12ChromaHeightEv" data-ref-filename="_ZNK6webrtc19I420BufferInterface12ChromaHeightEv">ChromaHeight</dfn>() <em>const</em> final;</td></tr>
+<tr><th id="158">158</th><td></td></tr>
+<tr><th id="159">159</th><td>  <span class="namespace">rtc::</span><a class="type" href="../scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;<a class="type" href="#webrtc::I420BufferInterface" title='webrtc::I420BufferInterface' data-ref="webrtc::I420BufferInterface" data-ref-filename="webrtc..I420BufferInterface">I420BufferInterface</a>&gt; <dfn class="virtual decl fn" id="_ZN6webrtc19I420BufferInterface6ToI420Ev" title='webrtc::I420BufferInterface::ToI420' data-ref="_ZN6webrtc19I420BufferInterface6ToI420Ev" data-ref-filename="_ZN6webrtc19I420BufferInterface6ToI420Ev">ToI420</dfn>() final;</td></tr>
+<tr><th id="160">160</th><td>  <em>const</em> <a class="type" href="#webrtc::I420BufferInterface" title='webrtc::I420BufferInterface' data-ref="webrtc::I420BufferInterface" data-ref-filename="webrtc..I420BufferInterface">I420BufferInterface</a>* <dfn class="virtual decl fn" id="_ZNK6webrtc19I420BufferInterface7GetI420Ev" title='webrtc::I420BufferInterface::GetI420' data-ref="_ZNK6webrtc19I420BufferInterface7GetI420Ev" data-ref-filename="_ZNK6webrtc19I420BufferInterface7GetI420Ev">GetI420</dfn>() <em>const</em> final;</td></tr>
+<tr><th id="161">161</th><td></td></tr>
+<tr><th id="162">162</th><td> <b>protected</b>:</td></tr>
+<tr><th id="163">163</th><td>  <dfn class="virtual decl def fn" id="_ZN6webrtc19I420BufferInterfaceD1Ev" title='webrtc::I420BufferInterface::~I420BufferInterface' data-ref="_ZN6webrtc19I420BufferInterfaceD1Ev" data-ref-filename="_ZN6webrtc19I420BufferInterfaceD1Ev">~I420BufferInterface</dfn>() override {}</td></tr>
+<tr><th id="164">164</th><td>};</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td><b>class</b> <a class="macro" href="../../rtc_base/system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <dfn class="type def" id="webrtc::I420ABufferInterface" title='webrtc::I420ABufferInterface' data-ref="webrtc::I420ABufferInterface" data-ref-filename="webrtc..I420ABufferInterface">I420ABufferInterface</dfn> : <b>public</b> <a class="type" href="#webrtc::I420BufferInterface" title='webrtc::I420BufferInterface' data-ref="webrtc::I420BufferInterface" data-ref-filename="webrtc..I420BufferInterface">I420BufferInterface</a> {</td></tr>
+<tr><th id="167">167</th><td> <b>public</b>:</td></tr>
+<tr><th id="168">168</th><td>  <a class="type" href="#webrtc::VideoFrameBuffer::Type" title='webrtc::VideoFrameBuffer::Type' data-ref="webrtc::VideoFrameBuffer::Type" data-ref-filename="webrtc..VideoFrameBuffer..Type">Type</a> <dfn class="virtual decl fn" id="_ZNK6webrtc20I420ABufferInterface4typeEv" title='webrtc::I420ABufferInterface::type' data-ref="_ZNK6webrtc20I420ABufferInterface4typeEv" data-ref-filename="_ZNK6webrtc20I420ABufferInterface4typeEv">type</dfn>() <em>const</em> final;</td></tr>
+<tr><th id="169">169</th><td>  <b>virtual</b> <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="virtual decl fn" id="_ZNK6webrtc20I420ABufferInterface5DataAEv" title='webrtc::I420ABufferInterface::DataA' data-ref="_ZNK6webrtc20I420ABufferInterface5DataAEv" data-ref-filename="_ZNK6webrtc20I420ABufferInterface5DataAEv">DataA</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="170">170</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc20I420ABufferInterface7StrideAEv" title='webrtc::I420ABufferInterface::StrideA' data-ref="_ZNK6webrtc20I420ABufferInterface7StrideAEv" data-ref-filename="_ZNK6webrtc20I420ABufferInterface7StrideAEv">StrideA</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="171">171</th><td></td></tr>
+<tr><th id="172">172</th><td> <b>protected</b>:</td></tr>
+<tr><th id="173">173</th><td>  <dfn class="virtual decl def fn" id="_ZN6webrtc20I420ABufferInterfaceD1Ev" title='webrtc::I420ABufferInterface::~I420ABufferInterface' data-ref="_ZN6webrtc20I420ABufferInterfaceD1Ev" data-ref-filename="_ZN6webrtc20I420ABufferInterfaceD1Ev">~I420ABufferInterface</dfn>() override {}</td></tr>
+<tr><th id="174">174</th><td>};</td></tr>
+<tr><th id="175">175</th><td></td></tr>
+<tr><th id="176">176</th><td><b>class</b> <dfn class="type def" id="webrtc::I444BufferInterface" title='webrtc::I444BufferInterface' data-ref="webrtc::I444BufferInterface" data-ref-filename="webrtc..I444BufferInterface">I444BufferInterface</dfn> : <b>public</b> <a class="type" href="#webrtc::PlanarYuv8Buffer" title='webrtc::PlanarYuv8Buffer' data-ref="webrtc::PlanarYuv8Buffer" data-ref-filename="webrtc..PlanarYuv8Buffer">PlanarYuv8Buffer</a> {</td></tr>
+<tr><th id="177">177</th><td> <b>public</b>:</td></tr>
+<tr><th id="178">178</th><td>  <a class="type" href="#webrtc::VideoFrameBuffer::Type" title='webrtc::VideoFrameBuffer::Type' data-ref="webrtc::VideoFrameBuffer::Type" data-ref-filename="webrtc..VideoFrameBuffer..Type">Type</a> <dfn class="virtual decl fn" id="_ZNK6webrtc19I444BufferInterface4typeEv" title='webrtc::I444BufferInterface::type' data-ref="_ZNK6webrtc19I444BufferInterface4typeEv" data-ref-filename="_ZNK6webrtc19I444BufferInterface4typeEv">type</dfn>() <em>const</em> final;</td></tr>
+<tr><th id="179">179</th><td></td></tr>
+<tr><th id="180">180</th><td>  <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc19I444BufferInterface11ChromaWidthEv" title='webrtc::I444BufferInterface::ChromaWidth' data-ref="_ZNK6webrtc19I444BufferInterface11ChromaWidthEv" data-ref-filename="_ZNK6webrtc19I444BufferInterface11ChromaWidthEv">ChromaWidth</dfn>() <em>const</em> final;</td></tr>
+<tr><th id="181">181</th><td>  <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc19I444BufferInterface12ChromaHeightEv" title='webrtc::I444BufferInterface::ChromaHeight' data-ref="_ZNK6webrtc19I444BufferInterface12ChromaHeightEv" data-ref-filename="_ZNK6webrtc19I444BufferInterface12ChromaHeightEv">ChromaHeight</dfn>() <em>const</em> final;</td></tr>
+<tr><th id="182">182</th><td></td></tr>
+<tr><th id="183">183</th><td> <b>protected</b>:</td></tr>
+<tr><th id="184">184</th><td>  <dfn class="virtual decl def fn" id="_ZN6webrtc19I444BufferInterfaceD1Ev" title='webrtc::I444BufferInterface::~I444BufferInterface' data-ref="_ZN6webrtc19I444BufferInterfaceD1Ev" data-ref-filename="_ZN6webrtc19I444BufferInterfaceD1Ev">~I444BufferInterface</dfn>() override {}</td></tr>
+<tr><th id="185">185</th><td>};</td></tr>
+<tr><th id="186">186</th><td></td></tr>
+<tr><th id="187">187</th><td><i>// This interface represents 8-bit to 16-bit color depth formats: Type::kI010.</i></td></tr>
+<tr><th id="188">188</th><td><b>class</b> <dfn class="type def" id="webrtc::PlanarYuv16BBuffer" title='webrtc::PlanarYuv16BBuffer' data-ref="webrtc::PlanarYuv16BBuffer" data-ref-filename="webrtc..PlanarYuv16BBuffer">PlanarYuv16BBuffer</dfn> : <b>public</b> <a class="type" href="#webrtc::PlanarYuvBuffer" title='webrtc::PlanarYuvBuffer' data-ref="webrtc::PlanarYuvBuffer" data-ref-filename="webrtc..PlanarYuvBuffer">PlanarYuvBuffer</a> {</td></tr>
+<tr><th id="189">189</th><td> <b>public</b>:</td></tr>
+<tr><th id="190">190</th><td>  <i>// Returns pointer to the pixel data for a given plane. The memory is owned by</i></td></tr>
+<tr><th id="191">191</th><td><i>  // the VideoFrameBuffer object and must not be freed by the caller.</i></td></tr>
+<tr><th id="192">192</th><td>  <b>virtual</b> <em>const</em> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>* <dfn class="virtual decl fn" id="_ZNK6webrtc18PlanarYuv16BBuffer5DataYEv" title='webrtc::PlanarYuv16BBuffer::DataY' data-ref="_ZNK6webrtc18PlanarYuv16BBuffer5DataYEv" data-ref-filename="_ZNK6webrtc18PlanarYuv16BBuffer5DataYEv">DataY</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="193">193</th><td>  <b>virtual</b> <em>const</em> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>* <dfn class="virtual decl fn" id="_ZNK6webrtc18PlanarYuv16BBuffer5DataUEv" title='webrtc::PlanarYuv16BBuffer::DataU' data-ref="_ZNK6webrtc18PlanarYuv16BBuffer5DataUEv" data-ref-filename="_ZNK6webrtc18PlanarYuv16BBuffer5DataUEv">DataU</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="194">194</th><td>  <b>virtual</b> <em>const</em> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>* <dfn class="virtual decl fn" id="_ZNK6webrtc18PlanarYuv16BBuffer5DataVEv" title='webrtc::PlanarYuv16BBuffer::DataV' data-ref="_ZNK6webrtc18PlanarYuv16BBuffer5DataVEv" data-ref-filename="_ZNK6webrtc18PlanarYuv16BBuffer5DataVEv">DataV</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="195">195</th><td></td></tr>
+<tr><th id="196">196</th><td> <b>protected</b>:</td></tr>
+<tr><th id="197">197</th><td>  <dfn class="virtual decl def fn" id="_ZN6webrtc18PlanarYuv16BBufferD1Ev" title='webrtc::PlanarYuv16BBuffer::~PlanarYuv16BBuffer' data-ref="_ZN6webrtc18PlanarYuv16BBufferD1Ev" data-ref-filename="_ZN6webrtc18PlanarYuv16BBufferD1Ev">~PlanarYuv16BBuffer</dfn>() override {}</td></tr>
+<tr><th id="198">198</th><td>};</td></tr>
+<tr><th id="199">199</th><td></td></tr>
+<tr><th id="200">200</th><td><i>// Represents Type::kI010, allocates 16 bits per pixel and fills 10 least</i></td></tr>
+<tr><th id="201">201</th><td><i>// significant bits with color information.</i></td></tr>
+<tr><th id="202">202</th><td><b>class</b> <dfn class="type def" id="webrtc::I010BufferInterface" title='webrtc::I010BufferInterface' data-ref="webrtc::I010BufferInterface" data-ref-filename="webrtc..I010BufferInterface">I010BufferInterface</dfn> : <b>public</b> <a class="type" href="#webrtc::PlanarYuv16BBuffer" title='webrtc::PlanarYuv16BBuffer' data-ref="webrtc::PlanarYuv16BBuffer" data-ref-filename="webrtc..PlanarYuv16BBuffer">PlanarYuv16BBuffer</a> {</td></tr>
+<tr><th id="203">203</th><td> <b>public</b>:</td></tr>
+<tr><th id="204">204</th><td>  <a class="type" href="#webrtc::VideoFrameBuffer::Type" title='webrtc::VideoFrameBuffer::Type' data-ref="webrtc::VideoFrameBuffer::Type" data-ref-filename="webrtc..VideoFrameBuffer..Type">Type</a> <dfn class="virtual decl fn" id="_ZNK6webrtc19I010BufferInterface4typeEv" title='webrtc::I010BufferInterface::type' data-ref="_ZNK6webrtc19I010BufferInterface4typeEv" data-ref-filename="_ZNK6webrtc19I010BufferInterface4typeEv">type</dfn>() <em>const</em> override;</td></tr>
+<tr><th id="205">205</th><td></td></tr>
+<tr><th id="206">206</th><td>  <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc19I010BufferInterface11ChromaWidthEv" title='webrtc::I010BufferInterface::ChromaWidth' data-ref="_ZNK6webrtc19I010BufferInterface11ChromaWidthEv" data-ref-filename="_ZNK6webrtc19I010BufferInterface11ChromaWidthEv">ChromaWidth</dfn>() <em>const</em> final;</td></tr>
+<tr><th id="207">207</th><td>  <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc19I010BufferInterface12ChromaHeightEv" title='webrtc::I010BufferInterface::ChromaHeight' data-ref="_ZNK6webrtc19I010BufferInterface12ChromaHeightEv" data-ref-filename="_ZNK6webrtc19I010BufferInterface12ChromaHeightEv">ChromaHeight</dfn>() <em>const</em> final;</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td> <b>protected</b>:</td></tr>
+<tr><th id="210">210</th><td>  <dfn class="virtual decl def fn" id="_ZN6webrtc19I010BufferInterfaceD1Ev" title='webrtc::I010BufferInterface::~I010BufferInterface' data-ref="_ZN6webrtc19I010BufferInterfaceD1Ev" data-ref-filename="_ZN6webrtc19I010BufferInterfaceD1Ev">~I010BufferInterface</dfn>() override {}</td></tr>
+<tr><th id="211">211</th><td>};</td></tr>
+<tr><th id="212">212</th><td></td></tr>
+<tr><th id="213">213</th><td><b>class</b> <dfn class="type def" id="webrtc::BiplanarYuvBuffer" title='webrtc::BiplanarYuvBuffer' data-ref="webrtc::BiplanarYuvBuffer" data-ref-filename="webrtc..BiplanarYuvBuffer">BiplanarYuvBuffer</dfn> : <b>public</b> <a class="type" href="#webrtc::VideoFrameBuffer" title='webrtc::VideoFrameBuffer' data-ref="webrtc::VideoFrameBuffer" data-ref-filename="webrtc..VideoFrameBuffer">VideoFrameBuffer</a> {</td></tr>
+<tr><th id="214">214</th><td> <b>public</b>:</td></tr>
+<tr><th id="215">215</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc17BiplanarYuvBuffer11ChromaWidthEv" title='webrtc::BiplanarYuvBuffer::ChromaWidth' data-ref="_ZNK6webrtc17BiplanarYuvBuffer11ChromaWidthEv" data-ref-filename="_ZNK6webrtc17BiplanarYuvBuffer11ChromaWidthEv">ChromaWidth</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="216">216</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc17BiplanarYuvBuffer12ChromaHeightEv" title='webrtc::BiplanarYuvBuffer::ChromaHeight' data-ref="_ZNK6webrtc17BiplanarYuvBuffer12ChromaHeightEv" data-ref-filename="_ZNK6webrtc17BiplanarYuvBuffer12ChromaHeightEv">ChromaHeight</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="217">217</th><td></td></tr>
+<tr><th id="218">218</th><td>  <i>// Returns the number of steps(in terms of Data*() return type) between</i></td></tr>
+<tr><th id="219">219</th><td><i>  // successive rows for a given plane.</i></td></tr>
+<tr><th id="220">220</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc17BiplanarYuvBuffer7StrideYEv" title='webrtc::BiplanarYuvBuffer::StrideY' data-ref="_ZNK6webrtc17BiplanarYuvBuffer7StrideYEv" data-ref-filename="_ZNK6webrtc17BiplanarYuvBuffer7StrideYEv">StrideY</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="221">221</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc17BiplanarYuvBuffer8StrideUVEv" title='webrtc::BiplanarYuvBuffer::StrideUV' data-ref="_ZNK6webrtc17BiplanarYuvBuffer8StrideUVEv" data-ref-filename="_ZNK6webrtc17BiplanarYuvBuffer8StrideUVEv">StrideUV</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="222">222</th><td></td></tr>
+<tr><th id="223">223</th><td> <b>protected</b>:</td></tr>
+<tr><th id="224">224</th><td>  <dfn class="virtual decl def fn" id="_ZN6webrtc17BiplanarYuvBufferD1Ev" title='webrtc::BiplanarYuvBuffer::~BiplanarYuvBuffer' data-ref="_ZN6webrtc17BiplanarYuvBufferD1Ev" data-ref-filename="_ZN6webrtc17BiplanarYuvBufferD1Ev">~BiplanarYuvBuffer</dfn>() override {}</td></tr>
+<tr><th id="225">225</th><td>};</td></tr>
+<tr><th id="226">226</th><td></td></tr>
+<tr><th id="227">227</th><td><b>class</b> <dfn class="type def" id="webrtc::BiplanarYuv8Buffer" title='webrtc::BiplanarYuv8Buffer' data-ref="webrtc::BiplanarYuv8Buffer" data-ref-filename="webrtc..BiplanarYuv8Buffer">BiplanarYuv8Buffer</dfn> : <b>public</b> <a class="type" href="#webrtc::BiplanarYuvBuffer" title='webrtc::BiplanarYuvBuffer' data-ref="webrtc::BiplanarYuvBuffer" data-ref-filename="webrtc..BiplanarYuvBuffer">BiplanarYuvBuffer</a> {</td></tr>
+<tr><th id="228">228</th><td> <b>public</b>:</td></tr>
+<tr><th id="229">229</th><td>  <b>virtual</b> <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="virtual decl fn" id="_ZNK6webrtc18BiplanarYuv8Buffer5DataYEv" title='webrtc::BiplanarYuv8Buffer::DataY' data-ref="_ZNK6webrtc18BiplanarYuv8Buffer5DataYEv" data-ref-filename="_ZNK6webrtc18BiplanarYuv8Buffer5DataYEv">DataY</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="230">230</th><td>  <b>virtual</b> <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="virtual decl fn" id="_ZNK6webrtc18BiplanarYuv8Buffer6DataUVEv" title='webrtc::BiplanarYuv8Buffer::DataUV' data-ref="_ZNK6webrtc18BiplanarYuv8Buffer6DataUVEv" data-ref-filename="_ZNK6webrtc18BiplanarYuv8Buffer6DataUVEv">DataUV</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="231">231</th><td></td></tr>
+<tr><th id="232">232</th><td> <b>protected</b>:</td></tr>
+<tr><th id="233">233</th><td>  <dfn class="virtual decl def fn" id="_ZN6webrtc18BiplanarYuv8BufferD1Ev" title='webrtc::BiplanarYuv8Buffer::~BiplanarYuv8Buffer' data-ref="_ZN6webrtc18BiplanarYuv8BufferD1Ev" data-ref-filename="_ZN6webrtc18BiplanarYuv8BufferD1Ev">~BiplanarYuv8Buffer</dfn>() override {}</td></tr>
+<tr><th id="234">234</th><td>};</td></tr>
+<tr><th id="235">235</th><td></td></tr>
+<tr><th id="236">236</th><td><i>// Represents Type::kNV12. NV12 is full resolution Y and half-resolution</i></td></tr>
+<tr><th id="237">237</th><td><i>// interleved UV.</i></td></tr>
+<tr><th id="238">238</th><td><b>class</b> <a class="macro" href="../../rtc_base/system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <dfn class="type def" id="webrtc::NV12BufferInterface" title='webrtc::NV12BufferInterface' data-ref="webrtc::NV12BufferInterface" data-ref-filename="webrtc..NV12BufferInterface">NV12BufferInterface</dfn> : <b>public</b> <a class="type" href="#webrtc::BiplanarYuv8Buffer" title='webrtc::BiplanarYuv8Buffer' data-ref="webrtc::BiplanarYuv8Buffer" data-ref-filename="webrtc..BiplanarYuv8Buffer">BiplanarYuv8Buffer</a> {</td></tr>
+<tr><th id="239">239</th><td> <b>public</b>:</td></tr>
+<tr><th id="240">240</th><td>  <a class="type" href="#webrtc::VideoFrameBuffer::Type" title='webrtc::VideoFrameBuffer::Type' data-ref="webrtc::VideoFrameBuffer::Type" data-ref-filename="webrtc..VideoFrameBuffer..Type">Type</a> <dfn class="virtual decl fn" id="_ZNK6webrtc19NV12BufferInterface4typeEv" title='webrtc::NV12BufferInterface::type' data-ref="_ZNK6webrtc19NV12BufferInterface4typeEv" data-ref-filename="_ZNK6webrtc19NV12BufferInterface4typeEv">type</dfn>() <em>const</em> override;</td></tr>
+<tr><th id="241">241</th><td></td></tr>
+<tr><th id="242">242</th><td>  <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc19NV12BufferInterface11ChromaWidthEv" title='webrtc::NV12BufferInterface::ChromaWidth' data-ref="_ZNK6webrtc19NV12BufferInterface11ChromaWidthEv" data-ref-filename="_ZNK6webrtc19NV12BufferInterface11ChromaWidthEv">ChromaWidth</dfn>() <em>const</em> final;</td></tr>
+<tr><th id="243">243</th><td>  <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc19NV12BufferInterface12ChromaHeightEv" title='webrtc::NV12BufferInterface::ChromaHeight' data-ref="_ZNK6webrtc19NV12BufferInterface12ChromaHeightEv" data-ref-filename="_ZNK6webrtc19NV12BufferInterface12ChromaHeightEv">ChromaHeight</dfn>() <em>const</em> final;</td></tr>
+<tr><th id="244">244</th><td></td></tr>
+<tr><th id="245">245</th><td>  <span class="namespace">rtc::</span><a class="type" href="../scoped_refptr.h.html#rtc::scoped_refptr" title='rtc::scoped_refptr' data-ref="rtc::scoped_refptr" data-ref-filename="rtc..scoped_refptr">scoped_refptr</a>&lt;<a class="type" href="#webrtc::VideoFrameBuffer" title='webrtc::VideoFrameBuffer' data-ref="webrtc::VideoFrameBuffer" data-ref-filename="webrtc..VideoFrameBuffer">VideoFrameBuffer</a>&gt; <dfn class="virtual decl fn" id="_ZN6webrtc19NV12BufferInterface12CropAndScaleEiiiiii" title='webrtc::NV12BufferInterface::CropAndScale' data-ref="_ZN6webrtc19NV12BufferInterface12CropAndScaleEiiiiii" data-ref-filename="_ZN6webrtc19NV12BufferInterface12CropAndScaleEiiiiii">CropAndScale</dfn>(<em>int</em> <dfn class="local col2 decl" id="752offset_x" title='offset_x' data-type='int' data-ref="752offset_x" data-ref-filename="752offset_x">offset_x</dfn>,</td></tr>
+<tr><th id="246">246</th><td>                                                    <em>int</em> <dfn class="local col3 decl" id="753offset_y" title='offset_y' data-type='int' data-ref="753offset_y" data-ref-filename="753offset_y">offset_y</dfn>,</td></tr>
+<tr><th id="247">247</th><td>                                                    <em>int</em> <dfn class="local col4 decl" id="754crop_width" title='crop_width' data-type='int' data-ref="754crop_width" data-ref-filename="754crop_width">crop_width</dfn>,</td></tr>
+<tr><th id="248">248</th><td>                                                    <em>int</em> <dfn class="local col5 decl" id="755crop_height" title='crop_height' data-type='int' data-ref="755crop_height" data-ref-filename="755crop_height">crop_height</dfn>,</td></tr>
+<tr><th id="249">249</th><td>                                                    <em>int</em> <dfn class="local col6 decl" id="756scaled_width" title='scaled_width' data-type='int' data-ref="756scaled_width" data-ref-filename="756scaled_width">scaled_width</dfn>,</td></tr>
+<tr><th id="250">250</th><td>                                                    <em>int</em> <dfn class="local col7 decl" id="757scaled_height" title='scaled_height' data-type='int' data-ref="757scaled_height" data-ref-filename="757scaled_height">scaled_height</dfn>) override;</td></tr>
+<tr><th id="251">251</th><td></td></tr>
+<tr><th id="252">252</th><td> <b>protected</b>:</td></tr>
+<tr><th id="253">253</th><td>  <dfn class="virtual decl def fn" id="_ZN6webrtc19NV12BufferInterfaceD1Ev" title='webrtc::NV12BufferInterface::~NV12BufferInterface' data-ref="_ZN6webrtc19NV12BufferInterfaceD1Ev" data-ref-filename="_ZN6webrtc19NV12BufferInterfaceD1Ev">~NV12BufferInterface</dfn>() override {}</td></tr>
+<tr><th id="254">254</th><td>};</td></tr>
+<tr><th id="255">255</th><td></td></tr>
+<tr><th id="256">256</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="257">257</th><td></td></tr>
+<tr><th id="258">258</th><td><u>#<span data-ppcond="11">endif</span>  // API_VIDEO_VIDEO_FRAME_BUFFER_H_</u></td></tr>
+<tr><th id="259">259</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

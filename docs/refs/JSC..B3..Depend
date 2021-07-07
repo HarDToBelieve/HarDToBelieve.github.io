@@ -1,0 +1,28 @@
+<dec f='webkit/Source/JavaScriptCore/b3/B3Opcode.h' l='275' type='72'/>
+<use f='webkit/Source/JavaScriptCore/b3/B3Value.h' l='419' c='_ZN3JSC2B35Value18adjacencyListSpaceENS0_4KindE'/>
+<use f='webkit/Source/JavaScriptCore/b3/B3Value.h' l='593' c='_ZN3JSC2B35Value18numChildrenForKindENS0_4KindEj'/>
+<doc f='webkit/Source/JavaScriptCore/b3/B3Opcode.h' l='254'>// Introduce an invisible dependency for blocking motion of loads with respect to each other. Syntax:
+    //
+    // @result = Depend(@phantom)
+    //
+    // This is eventually codegenerated to have local semantics as if we did:
+    //
+    // @result = $0
+    //
+    // But it ensures that the users of @result cannot execute until @phantom is computed.
+    //
+    // The compiler is not allowed to reason about the fact that Depend codegenerates this way. Any kind
+    // of transformation or analysis that relies on the insight that Depend is really zero is unsound,
+    // because it unlocks reordering of users of @result and @phantom.
+    //
+    // On X86, this is lowered to a load-load fence and @result folds to zero.
+    //
+    // On ARM, this is lowered as if like:
+    //
+    // @result = BitXor(@phantom, @phantom)
+    //
+    // Except that the compiler never gets an opportunity to simplify out the BitXor.</doc>
+<use f='webkit/Source/JavaScriptCore/b3/B3ValueInlines.h' l='84' c='_ZNK3JSC2B35Value19adjacencyListOffsetEv'/>
+<use f='webkit/Source/JavaScriptCore/b3/B3ValueInlines.h' l='84' c='_ZNK3JSC2B35Value9cloneImplEv'/>
+<use f='webkit/Source/JavaScriptCore/b3/testb3_7.cpp' l='1049' u='r' c='_Z12testDepend32v'/>
+<use f='webkit/Source/JavaScriptCore/b3/testb3_7.cpp' l='1079' u='r' c='_Z12testDepend64v'/>

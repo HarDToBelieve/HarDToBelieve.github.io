@@ -1,0 +1,118 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>DOMNode.h source code [webkit/Source/WebKitLegacy/mac/DOM/DOMNode.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/DOM/DOMNode.h'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>DOM</a>/<a href='DOMNode.h.html'>DOMNode.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2004-2016 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import <a href="DOMObject.h.html">&lt;WebKitLegacy/DOMObject.h&gt;</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#import <a href="DOMEventTarget.h.html">&lt;WebKitLegacy/DOMEventTarget.h&gt;</a></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td>@class DOMDocument;</td></tr>
+<tr><th id="30">30</th><td>@class DOMElement;</td></tr>
+<tr><th id="31">31</th><td>@class DOMNamedNodeMap;</td></tr>
+<tr><th id="32">32</th><td>@class DOMNode;</td></tr>
+<tr><th id="33">33</th><td>@class DOMNodeList;</td></tr>
+<tr><th id="34">34</th><td>@class NSString;</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><b>enum</b> {</td></tr>
+<tr><th id="37">37</th><td>    <dfn class="enum" id="DOM_ELEMENT_NODE" title='DOM_ELEMENT_NODE' data-ref="DOM_ELEMENT_NODE" data-ref-filename="DOM_ELEMENT_NODE">DOM_ELEMENT_NODE</dfn> = <var>1</var>,</td></tr>
+<tr><th id="38">38</th><td>    <dfn class="enum" id="DOM_ATTRIBUTE_NODE" title='DOM_ATTRIBUTE_NODE' data-ref="DOM_ATTRIBUTE_NODE" data-ref-filename="DOM_ATTRIBUTE_NODE">DOM_ATTRIBUTE_NODE</dfn> = <var>2</var>,</td></tr>
+<tr><th id="39">39</th><td>    <dfn class="enum" id="DOM_TEXT_NODE" title='DOM_TEXT_NODE' data-ref="DOM_TEXT_NODE" data-ref-filename="DOM_TEXT_NODE">DOM_TEXT_NODE</dfn> = <var>3</var>,</td></tr>
+<tr><th id="40">40</th><td>    <dfn class="enum" id="DOM_CDATA_SECTION_NODE" title='DOM_CDATA_SECTION_NODE' data-ref="DOM_CDATA_SECTION_NODE" data-ref-filename="DOM_CDATA_SECTION_NODE">DOM_CDATA_SECTION_NODE</dfn> = <var>4</var>,</td></tr>
+<tr><th id="41">41</th><td>    <dfn class="enum" id="DOM_ENTITY_REFERENCE_NODE" title='DOM_ENTITY_REFERENCE_NODE' data-ref="DOM_ENTITY_REFERENCE_NODE" data-ref-filename="DOM_ENTITY_REFERENCE_NODE">DOM_ENTITY_REFERENCE_NODE</dfn> = <var>5</var>,</td></tr>
+<tr><th id="42">42</th><td>    <dfn class="enum" id="DOM_ENTITY_NODE" title='DOM_ENTITY_NODE' data-ref="DOM_ENTITY_NODE" data-ref-filename="DOM_ENTITY_NODE">DOM_ENTITY_NODE</dfn> = <var>6</var>,</td></tr>
+<tr><th id="43">43</th><td>    <dfn class="enum" id="DOM_PROCESSING_INSTRUCTION_NODE" title='DOM_PROCESSING_INSTRUCTION_NODE' data-ref="DOM_PROCESSING_INSTRUCTION_NODE" data-ref-filename="DOM_PROCESSING_INSTRUCTION_NODE">DOM_PROCESSING_INSTRUCTION_NODE</dfn> = <var>7</var>,</td></tr>
+<tr><th id="44">44</th><td>    <dfn class="enum" id="DOM_COMMENT_NODE" title='DOM_COMMENT_NODE' data-ref="DOM_COMMENT_NODE" data-ref-filename="DOM_COMMENT_NODE">DOM_COMMENT_NODE</dfn> = <var>8</var>,</td></tr>
+<tr><th id="45">45</th><td>    <dfn class="enum" id="DOM_DOCUMENT_NODE" title='DOM_DOCUMENT_NODE' data-ref="DOM_DOCUMENT_NODE" data-ref-filename="DOM_DOCUMENT_NODE">DOM_DOCUMENT_NODE</dfn> = <var>9</var>,</td></tr>
+<tr><th id="46">46</th><td>    <dfn class="enum" id="DOM_DOCUMENT_TYPE_NODE" title='DOM_DOCUMENT_TYPE_NODE' data-ref="DOM_DOCUMENT_TYPE_NODE" data-ref-filename="DOM_DOCUMENT_TYPE_NODE">DOM_DOCUMENT_TYPE_NODE</dfn> = <var>10</var>,</td></tr>
+<tr><th id="47">47</th><td>    <dfn class="enum" id="DOM_DOCUMENT_FRAGMENT_NODE" title='DOM_DOCUMENT_FRAGMENT_NODE' data-ref="DOM_DOCUMENT_FRAGMENT_NODE" data-ref-filename="DOM_DOCUMENT_FRAGMENT_NODE">DOM_DOCUMENT_FRAGMENT_NODE</dfn> = <var>11</var>,</td></tr>
+<tr><th id="48">48</th><td>    <dfn class="enum" id="DOM_NOTATION_NODE" title='DOM_NOTATION_NODE' data-ref="DOM_NOTATION_NODE" data-ref-filename="DOM_NOTATION_NODE">DOM_NOTATION_NODE</dfn> = <var>12</var>,</td></tr>
+<tr><th id="49">49</th><td>    <dfn class="enum" id="DOM_DOCUMENT_POSITION_DISCONNECTED" title='DOM_DOCUMENT_POSITION_DISCONNECTED' data-ref="DOM_DOCUMENT_POSITION_DISCONNECTED" data-ref-filename="DOM_DOCUMENT_POSITION_DISCONNECTED">DOM_DOCUMENT_POSITION_DISCONNECTED</dfn> = <var>0x01</var>,</td></tr>
+<tr><th id="50">50</th><td>    <dfn class="enum" id="DOM_DOCUMENT_POSITION_PRECEDING" title='DOM_DOCUMENT_POSITION_PRECEDING' data-ref="DOM_DOCUMENT_POSITION_PRECEDING" data-ref-filename="DOM_DOCUMENT_POSITION_PRECEDING">DOM_DOCUMENT_POSITION_PRECEDING</dfn> = <var>0x02</var>,</td></tr>
+<tr><th id="51">51</th><td>    <dfn class="enum" id="DOM_DOCUMENT_POSITION_FOLLOWING" title='DOM_DOCUMENT_POSITION_FOLLOWING' data-ref="DOM_DOCUMENT_POSITION_FOLLOWING" data-ref-filename="DOM_DOCUMENT_POSITION_FOLLOWING">DOM_DOCUMENT_POSITION_FOLLOWING</dfn> = <var>0x04</var>,</td></tr>
+<tr><th id="52">52</th><td>    <dfn class="enum" id="DOM_DOCUMENT_POSITION_CONTAINS" title='DOM_DOCUMENT_POSITION_CONTAINS' data-ref="DOM_DOCUMENT_POSITION_CONTAINS" data-ref-filename="DOM_DOCUMENT_POSITION_CONTAINS">DOM_DOCUMENT_POSITION_CONTAINS</dfn> = <var>0x08</var>,</td></tr>
+<tr><th id="53">53</th><td>    <dfn class="enum" id="DOM_DOCUMENT_POSITION_CONTAINED_BY" title='DOM_DOCUMENT_POSITION_CONTAINED_BY' data-ref="DOM_DOCUMENT_POSITION_CONTAINED_BY" data-ref-filename="DOM_DOCUMENT_POSITION_CONTAINED_BY">DOM_DOCUMENT_POSITION_CONTAINED_BY</dfn> = <var>0x10</var>,</td></tr>
+<tr><th id="54">54</th><td>    <dfn class="enum" id="DOM_DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC" title='DOM_DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC' data-ref="DOM_DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC" data-ref-filename="DOM_DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC">DOM_DOCUMENT_POSITION_IMPLEMENTATION_SPECIFIC</dfn> = <var>0x20</var></td></tr>
+<tr><th id="55">55</th><td>} <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#47" title="__attribute__((availability(macosx,introduced=10_4)))" data-ref="_M/WEBKIT_ENUM_DEPRECATED_MAC">WEBKIT_ENUM_DEPRECATED_MAC</a>(<var>10_4</var>, <var>10_14</var>);</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td><a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#46" title="__attribute__((visibility(&quot;default&quot;))) __attribute__((availability(macosx,introduced=10_4)))" data-ref="_M/WEBKIT_CLASS_DEPRECATED_MAC">WEBKIT_CLASS_DEPRECATED_MAC</a>(<var>10_4</var>, <var>10_14</var>)</td></tr>
+<tr><th id="58">58</th><td>@interface DOMNode : DOMObject &lt;DOMEventTarget&gt;</td></tr>
+<tr><th id="59">59</th><td>@property (readonly, copy) NSString *nodeName;</td></tr>
+<tr><th id="60">60</th><td>@property (copy) NSString *nodeValue;</td></tr>
+<tr><th id="61">61</th><td>@property (readonly) <em>unsigned</em> <em>short</em> nodeType;</td></tr>
+<tr><th id="62">62</th><td>@property (readonly, strong) DOMNode *parentNode;</td></tr>
+<tr><th id="63">63</th><td>@property (readonly, strong) DOMNodeList *childNodes;</td></tr>
+<tr><th id="64">64</th><td>@property (readonly, strong) DOMNode *firstChild;</td></tr>
+<tr><th id="65">65</th><td>@property (readonly, strong) DOMNode *lastChild;</td></tr>
+<tr><th id="66">66</th><td>@property (readonly, strong) DOMNode *previousSibling;</td></tr>
+<tr><th id="67">67</th><td>@property (readonly, strong) DOMNode *nextSibling;</td></tr>
+<tr><th id="68">68</th><td>@property (readonly, strong) DOMDocument *ownerDocument;</td></tr>
+<tr><th id="69">69</th><td>@property (readonly, copy) NSString *namespaceURI;</td></tr>
+<tr><th id="70">70</th><td>@property (copy) NSString *prefix;</td></tr>
+<tr><th id="71">71</th><td>@property (readonly, copy) NSString *localName;</td></tr>
+<tr><th id="72">72</th><td>@property (readonly, strong) DOMNamedNodeMap *attributes;</td></tr>
+<tr><th id="73">73</th><td>@property (readonly, copy) NSString *baseURI <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_5)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_5</var>);</td></tr>
+<tr><th id="74">74</th><td>@property (copy) NSString *textContent <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_5)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_5</var>);</td></tr>
+<tr><th id="75">75</th><td>@property (readonly, strong) DOMElement *parentElement <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_5)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_5</var>);</td></tr>
+<tr><th id="76">76</th><td>@property (readonly) <span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> isContentEditable <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_5)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_5</var>);</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td>- (DOMNode *)insertBefore:(DOMNode *)<dfn class="local col2 decl" id="32newChild" title='newChild' data-type='DOMNode *' data-ref="32newChild" data-ref-filename="32newChild">newChild</dfn> refChild:(DOMNode *)<dfn class="local col3 decl" id="33refChild" title='refChild' data-type='DOMNode *' data-ref="33refChild" data-ref-filename="33refChild">refChild</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_5)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_5</var>);</td></tr>
+<tr><th id="79">79</th><td>- (DOMNode *)replaceChild:(DOMNode *)<dfn class="local col4 decl" id="34newChild" title='newChild' data-type='DOMNode *' data-ref="34newChild" data-ref-filename="34newChild">newChild</dfn> oldChild:(DOMNode *)<dfn class="local col5 decl" id="35oldChild" title='oldChild' data-type='DOMNode *' data-ref="35oldChild" data-ref-filename="35oldChild">oldChild</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_5)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_5</var>);</td></tr>
+<tr><th id="80">80</th><td>- (DOMNode *)removeChild:(DOMNode *)<dfn class="local col6 decl" id="36oldChild" title='oldChild' data-type='DOMNode *' data-ref="36oldChild" data-ref-filename="36oldChild">oldChild</dfn>;</td></tr>
+<tr><th id="81">81</th><td>- (DOMNode *)appendChild:(DOMNode *)<dfn class="local col7 decl" id="37newChild" title='newChild' data-type='DOMNode *' data-ref="37newChild" data-ref-filename="37newChild">newChild</dfn>;</td></tr>
+<tr><th id="82">82</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)hasChildNodes;</td></tr>
+<tr><th id="83">83</th><td>- (DOMNode *)cloneNode:(<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col8 decl" id="38deep" title='deep' data-type='BOOL' data-ref="38deep" data-ref-filename="38deep">deep</dfn>;</td></tr>
+<tr><th id="84">84</th><td>- (<em>void</em>)normalize;</td></tr>
+<tr><th id="85">85</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isSupported:(NSString *)<dfn class="local col9 decl" id="39feature" title='feature' data-type='NSString *' data-ref="39feature" data-ref-filename="39feature">feature</dfn> version:(NSString *)<dfn class="local col0 decl" id="40version" title='version' data-type='NSString *' data-ref="40version" data-ref-filename="40version">version</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_5)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_5</var>);</td></tr>
+<tr><th id="86">86</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)hasAttributes;</td></tr>
+<tr><th id="87">87</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isSameNode:(DOMNode *)<dfn class="local col1 decl" id="41other" title='other' data-type='DOMNode *' data-ref="41other" data-ref-filename="41other">other</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_5)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_5</var>);</td></tr>
+<tr><th id="88">88</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isEqualNode:(DOMNode *)<dfn class="local col2 decl" id="42other" title='other' data-type='DOMNode *' data-ref="42other" data-ref-filename="42other">other</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_5)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_5</var>);</td></tr>
+<tr><th id="89">89</th><td>- (NSString *)lookupPrefix:(NSString *)<dfn class="local col3 decl" id="43namespaceURI" title='namespaceURI' data-type='NSString *' data-ref="43namespaceURI" data-ref-filename="43namespaceURI">namespaceURI</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_5)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_5</var>);</td></tr>
+<tr><th id="90">90</th><td>- (NSString *)lookupNamespaceURI:(NSString *)<dfn class="local col4 decl" id="44prefix" title='prefix' data-type='NSString *' data-ref="44prefix" data-ref-filename="44prefix">prefix</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_5)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_5</var>);</td></tr>
+<tr><th id="91">91</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isDefaultNamespace:(NSString *)<dfn class="local col5 decl" id="45namespaceURI" title='namespaceURI' data-type='NSString *' data-ref="45namespaceURI" data-ref-filename="45namespaceURI">namespaceURI</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_5)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_5</var>);</td></tr>
+<tr><th id="92">92</th><td>- (<em>unsigned</em> <em>short</em>)compareDocumentPosition:(DOMNode *)<dfn class="local col6 decl" id="46other" title='other' data-type='DOMNode *' data-ref="46other" data-ref-filename="46other">other</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_6)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_6</var>);</td></tr>
+<tr><th id="93">93</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)contains:(DOMNode *)<dfn class="local col7 decl" id="47other" title='other' data-type='DOMNode *' data-ref="47other" data-ref-filename="47other">other</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_5)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_5</var>);</td></tr>
+<tr><th id="94">94</th><td>@end</td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td>@interface DOMNode (DOMNodeDeprecated)</td></tr>
+<tr><th id="97">97</th><td>- (DOMNode *)insertBefore:(DOMNode *)<dfn class="local col8 decl" id="48newChild" title='newChild' data-type='DOMNode *' data-ref="48newChild" data-ref-filename="48newChild">newChild</dfn> :(DOMNode *)<dfn class="local col9 decl" id="49refChild" title='refChild' data-type='DOMNode *' data-ref="49refChild" data-ref-filename="49refChild">refChild</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_4)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_4</var>, <var>10_5</var>);</td></tr>
+<tr><th id="98">98</th><td>- (DOMNode *)replaceChild:(DOMNode *)<dfn class="local col0 decl" id="50newChild" title='newChild' data-type='DOMNode *' data-ref="50newChild" data-ref-filename="50newChild">newChild</dfn> :(DOMNode *)<dfn class="local col1 decl" id="51oldChild" title='oldChild' data-type='DOMNode *' data-ref="51oldChild" data-ref-filename="51oldChild">oldChild</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_4)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_4</var>, <var>10_5</var>);</td></tr>
+<tr><th id="99">99</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isSupported:(NSString *)<dfn class="local col2 decl" id="52feature" title='feature' data-type='NSString *' data-ref="52feature" data-ref-filename="52feature">feature</dfn> :(NSString *)<dfn class="local col3 decl" id="53version" title='version' data-type='NSString *' data-ref="53version" data-ref-filename="53version">version</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_4)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_4</var>, <var>10_5</var>);</td></tr>
+<tr><th id="100">100</th><td>@end</td></tr>
+<tr><th id="101">101</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../DefaultDelegates/WebDefaultEditingDelegate.m.html'>webkit/Source/WebKitLegacy/mac/DefaultDelegates/WebDefaultEditingDelegate.m</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

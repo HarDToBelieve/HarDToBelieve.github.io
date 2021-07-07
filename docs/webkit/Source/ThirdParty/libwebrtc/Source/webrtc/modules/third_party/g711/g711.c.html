@@ -1,0 +1,90 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>g711.c source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/g711/g711.c] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/g711/g711.c'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>third_party</a>/<a href='./'>g711</a>/<a href='g711.c.html'>g711.c</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * SpanDSP - a series of DSP components for telephony</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * g711.c - A-law and u-law transcoding routines</i></td></tr>
+<tr><th id="5">5</th><td><i> *</i></td></tr>
+<tr><th id="6">6</th><td><i> * Written by Steve Underwood &lt;steveu@coppice.org&gt;</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * Copyright (C) 2006 Steve Underwood</i></td></tr>
+<tr><th id="9">9</th><td><i> *</i></td></tr>
+<tr><th id="10">10</th><td><i> *  Despite my general liking of the GPL, I place this code in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *  public domain for the benefit of all mankind - even the slimy</i></td></tr>
+<tr><th id="12">12</th><td><i> *  ones who might try to proprietize my work and use it to my</i></td></tr>
+<tr><th id="13">13</th><td><i> *  detriment.</i></td></tr>
+<tr><th id="14">14</th><td><i> *</i></td></tr>
+<tr><th id="15">15</th><td><i> * $Id: g711.c,v 1.1 2006/06/07 15:46:39 steveu Exp $</i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> * Modifications for WebRtc, 2011/04/28, by tlegrand:</i></td></tr>
+<tr><th id="18">18</th><td><i> * -Removed unused include files</i></td></tr>
+<tr><th id="19">19</th><td><i> * -Changed to use WebRtc types</i></td></tr>
+<tr><th id="20">20</th><td><i> * -Added option to run encoder bitexact with ITU-T reference implementation</i></td></tr>
+<tr><th id="21">21</th><td><i> */</i></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><u>#include <a href="g711.h.html">"modules/third_party/g711/g711.h"</a></u></td></tr>
+<tr><th id="24">24</th><td></td></tr>
+<tr><th id="25">25</th><td><i  data-doc="ulaw_to_alaw_table">/* Copied from the CCITT G.711 specification */</i></td></tr>
+<tr><th id="26">26</th><td><em>static</em> <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="tu decl def" id="ulaw_to_alaw_table" title='ulaw_to_alaw_table' data-type='const uint8_t [256]' data-ref="ulaw_to_alaw_table" data-ref-filename="ulaw_to_alaw_table">ulaw_to_alaw_table</dfn>[<var>256</var>] = {</td></tr>
+<tr><th id="27">27</th><td>   <var>42</var>,  <var>43</var>,  <var>40</var>,  <var>41</var>,  <var>46</var>,  <var>47</var>,  <var>44</var>,  <var>45</var>,  <var>34</var>,  <var>35</var>,  <var>32</var>,  <var>33</var>,  <var>38</var>,  <var>39</var>,  <var>36</var>,</td></tr>
+<tr><th id="28">28</th><td>   <var>37</var>,  <var>58</var>,  <var>59</var>,  <var>56</var>,  <var>57</var>,  <var>62</var>,  <var>63</var>,  <var>60</var>,  <var>61</var>,  <var>50</var>,  <var>51</var>,  <var>48</var>,  <var>49</var>,  <var>54</var>,  <var>55</var>,</td></tr>
+<tr><th id="29">29</th><td>   <var>52</var>,  <var>53</var>,  <var>10</var>,  <var>11</var>,   <var>8</var>,   <var>9</var>,  <var>14</var>,  <var>15</var>,  <var>12</var>,  <var>13</var>,   <var>2</var>,   <var>3</var>,   <var>0</var>,   <var>1</var>,   <var>6</var>,</td></tr>
+<tr><th id="30">30</th><td>    <var>7</var>,   <var>4</var>,  <var>26</var>,  <var>27</var>,  <var>24</var>,  <var>25</var>,  <var>30</var>,  <var>31</var>,  <var>28</var>,  <var>29</var>,  <var>18</var>,  <var>19</var>,  <var>16</var>,  <var>17</var>,  <var>22</var>,</td></tr>
+<tr><th id="31">31</th><td>   <var>23</var>,  <var>20</var>,  <var>21</var>, <var>106</var>, <var>104</var>, <var>105</var>, <var>110</var>, <var>111</var>, <var>108</var>, <var>109</var>,  <var>98</var>,  <var>99</var>,  <var>96</var>,  <var>97</var>, <var>102</var>,</td></tr>
+<tr><th id="32">32</th><td>  <var>103</var>, <var>100</var>, <var>101</var>, <var>122</var>, <var>120</var>, <var>126</var>, <var>127</var>, <var>124</var>, <var>125</var>, <var>114</var>, <var>115</var>, <var>112</var>, <var>113</var>, <var>118</var>, <var>119</var>,</td></tr>
+<tr><th id="33">33</th><td>  <var>116</var>, <var>117</var>,  <var>75</var>,  <var>73</var>,  <var>79</var>,  <var>77</var>,  <var>66</var>,  <var>67</var>,  <var>64</var>,  <var>65</var>,  <var>70</var>,  <var>71</var>,  <var>68</var>,  <var>69</var>,  <var>90</var>,</td></tr>
+<tr><th id="34">34</th><td>   <var>91</var>,  <var>88</var>,  <var>89</var>,  <var>94</var>,  <var>95</var>,  <var>92</var>,  <var>93</var>,  <var>82</var>,  <var>82</var>,  <var>83</var>,  <var>83</var>,  <var>80</var>,  <var>80</var>,  <var>81</var>,  <var>81</var>,</td></tr>
+<tr><th id="35">35</th><td>   <var>86</var>,  <var>86</var>,  <var>87</var>,  <var>87</var>,  <var>84</var>,  <var>84</var>,  <var>85</var>,  <var>85</var>, <var>170</var>, <var>171</var>, <var>168</var>, <var>169</var>, <var>174</var>, <var>175</var>, <var>172</var>,</td></tr>
+<tr><th id="36">36</th><td>  <var>173</var>, <var>162</var>, <var>163</var>, <var>160</var>, <var>161</var>, <var>166</var>, <var>167</var>, <var>164</var>, <var>165</var>, <var>186</var>, <var>187</var>, <var>184</var>, <var>185</var>, <var>190</var>, <var>191</var>,</td></tr>
+<tr><th id="37">37</th><td>  <var>188</var>, <var>189</var>, <var>178</var>, <var>179</var>, <var>176</var>, <var>177</var>, <var>182</var>, <var>183</var>, <var>180</var>, <var>181</var>, <var>138</var>, <var>139</var>, <var>136</var>, <var>137</var>, <var>142</var>,</td></tr>
+<tr><th id="38">38</th><td>  <var>143</var>, <var>140</var>, <var>141</var>, <var>130</var>, <var>131</var>, <var>128</var>, <var>129</var>, <var>134</var>, <var>135</var>, <var>132</var>, <var>154</var>, <var>155</var>, <var>152</var>, <var>153</var>, <var>158</var>,</td></tr>
+<tr><th id="39">39</th><td>  <var>159</var>, <var>156</var>, <var>157</var>, <var>146</var>, <var>147</var>, <var>144</var>, <var>145</var>, <var>150</var>, <var>151</var>, <var>148</var>, <var>149</var>, <var>234</var>, <var>232</var>, <var>233</var>, <var>238</var>,</td></tr>
+<tr><th id="40">40</th><td>  <var>239</var>, <var>236</var>, <var>237</var>, <var>226</var>, <var>227</var>, <var>224</var>, <var>225</var>, <var>230</var>, <var>231</var>, <var>228</var>, <var>229</var>, <var>250</var>, <var>248</var>, <var>254</var>, <var>255</var>,</td></tr>
+<tr><th id="41">41</th><td>  <var>252</var>, <var>253</var>, <var>242</var>, <var>243</var>, <var>240</var>, <var>241</var>, <var>246</var>, <var>247</var>, <var>244</var>, <var>245</var>, <var>203</var>, <var>201</var>, <var>207</var>, <var>205</var>, <var>194</var>,</td></tr>
+<tr><th id="42">42</th><td>  <var>195</var>, <var>192</var>, <var>193</var>, <var>198</var>, <var>199</var>, <var>196</var>, <var>197</var>, <var>218</var>, <var>219</var>, <var>216</var>, <var>217</var>, <var>222</var>, <var>223</var>, <var>220</var>, <var>221</var>,</td></tr>
+<tr><th id="43">43</th><td>  <var>210</var>, <var>210</var>, <var>211</var>, <var>211</var>, <var>208</var>, <var>208</var>, <var>209</var>, <var>209</var>, <var>214</var>, <var>214</var>, <var>215</var>, <var>215</var>, <var>212</var>, <var>212</var>, <var>213</var>,</td></tr>
+<tr><th id="44">44</th><td>  <var>213</var></td></tr>
+<tr><th id="45">45</th><td>};</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td><i  data-doc="alaw_to_ulaw_table">/* These transcoding tables are copied from the CCITT G.711 specification. To</i></td></tr>
+<tr><th id="48">48</th><td><i  data-doc="alaw_to_ulaw_table">   achieve optimal results, do not change them. */</i></td></tr>
+<tr><th id="49">49</th><td><em>static</em> <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="tu decl def" id="alaw_to_ulaw_table" title='alaw_to_ulaw_table' data-type='const uint8_t [256]' data-ref="alaw_to_ulaw_table" data-ref-filename="alaw_to_ulaw_table">alaw_to_ulaw_table</dfn>[<var>256</var>] = {</td></tr>
+<tr><th id="50">50</th><td>   <var>42</var>,  <var>43</var>,  <var>40</var>,  <var>41</var>,  <var>46</var>,  <var>47</var>,  <var>44</var>,  <var>45</var>,  <var>34</var>,  <var>35</var>,  <var>32</var>,  <var>33</var>,  <var>38</var>,  <var>39</var>,  <var>36</var>,</td></tr>
+<tr><th id="51">51</th><td>   <var>37</var>,  <var>57</var>,  <var>58</var>,  <var>55</var>,  <var>56</var>,  <var>61</var>,  <var>62</var>,  <var>59</var>,  <var>60</var>,  <var>49</var>,  <var>50</var>,  <var>47</var>,  <var>48</var>,  <var>53</var>,  <var>54</var>,</td></tr>
+<tr><th id="52">52</th><td>   <var>51</var>,  <var>52</var>,  <var>10</var>,  <var>11</var>,   <var>8</var>,   <var>9</var>,  <var>14</var>,  <var>15</var>,  <var>12</var>,  <var>13</var>,   <var>2</var>,   <var>3</var>,   <var>0</var>,   <var>1</var>,   <var>6</var>,</td></tr>
+<tr><th id="53">53</th><td>    <var>7</var>,   <var>4</var>,   <var>5</var>,  <var>26</var>,  <var>27</var>,  <var>24</var>,  <var>25</var>,  <var>30</var>,  <var>31</var>,  <var>28</var>,  <var>29</var>,  <var>18</var>,  <var>19</var>,  <var>16</var>,  <var>17</var>,</td></tr>
+<tr><th id="54">54</th><td>   <var>22</var>,  <var>23</var>,  <var>20</var>,  <var>21</var>,  <var>98</var>,  <var>99</var>,  <var>96</var>,  <var>97</var>, <var>102</var>, <var>103</var>, <var>100</var>, <var>101</var>,  <var>93</var>,  <var>93</var>,  <var>92</var>,</td></tr>
+<tr><th id="55">55</th><td>   <var>92</var>,  <var>95</var>,  <var>95</var>,  <var>94</var>,  <var>94</var>, <var>116</var>, <var>118</var>, <var>112</var>, <var>114</var>, <var>124</var>, <var>126</var>, <var>120</var>, <var>122</var>, <var>106</var>, <var>107</var>,</td></tr>
+<tr><th id="56">56</th><td>  <var>104</var>, <var>105</var>, <var>110</var>, <var>111</var>, <var>108</var>, <var>109</var>,  <var>72</var>,  <var>73</var>,  <var>70</var>,  <var>71</var>,  <var>76</var>,  <var>77</var>,  <var>74</var>,  <var>75</var>,  <var>64</var>,</td></tr>
+<tr><th id="57">57</th><td>   <var>65</var>,  <var>63</var>,  <var>63</var>,  <var>68</var>,  <var>69</var>,  <var>66</var>,  <var>67</var>,  <var>86</var>,  <var>87</var>,  <var>84</var>,  <var>85</var>,  <var>90</var>,  <var>91</var>,  <var>88</var>,  <var>89</var>,</td></tr>
+<tr><th id="58">58</th><td>   <var>79</var>,  <var>79</var>,  <var>78</var>,  <var>78</var>,  <var>82</var>,  <var>83</var>,  <var>80</var>,  <var>81</var>, <var>170</var>, <var>171</var>, <var>168</var>, <var>169</var>, <var>174</var>, <var>175</var>, <var>172</var>,</td></tr>
+<tr><th id="59">59</th><td>  <var>173</var>, <var>162</var>, <var>163</var>, <var>160</var>, <var>161</var>, <var>166</var>, <var>167</var>, <var>164</var>, <var>165</var>, <var>185</var>, <var>186</var>, <var>183</var>, <var>184</var>, <var>189</var>, <var>190</var>,</td></tr>
+<tr><th id="60">60</th><td>  <var>187</var>, <var>188</var>, <var>177</var>, <var>178</var>, <var>175</var>, <var>176</var>, <var>181</var>, <var>182</var>, <var>179</var>, <var>180</var>, <var>138</var>, <var>139</var>, <var>136</var>, <var>137</var>, <var>142</var>,</td></tr>
+<tr><th id="61">61</th><td>  <var>143</var>, <var>140</var>, <var>141</var>, <var>130</var>, <var>131</var>, <var>128</var>, <var>129</var>, <var>134</var>, <var>135</var>, <var>132</var>, <var>133</var>, <var>154</var>, <var>155</var>, <var>152</var>, <var>153</var>,</td></tr>
+<tr><th id="62">62</th><td>  <var>158</var>, <var>159</var>, <var>156</var>, <var>157</var>, <var>146</var>, <var>147</var>, <var>144</var>, <var>145</var>, <var>150</var>, <var>151</var>, <var>148</var>, <var>149</var>, <var>226</var>, <var>227</var>, <var>224</var>,</td></tr>
+<tr><th id="63">63</th><td>  <var>225</var>, <var>230</var>, <var>231</var>, <var>228</var>, <var>229</var>, <var>221</var>, <var>221</var>, <var>220</var>, <var>220</var>, <var>223</var>, <var>223</var>, <var>222</var>, <var>222</var>, <var>244</var>, <var>246</var>,</td></tr>
+<tr><th id="64">64</th><td>  <var>240</var>, <var>242</var>, <var>252</var>, <var>254</var>, <var>248</var>, <var>250</var>, <var>234</var>, <var>235</var>, <var>232</var>, <var>233</var>, <var>238</var>, <var>239</var>, <var>236</var>, <var>237</var>, <var>200</var>,</td></tr>
+<tr><th id="65">65</th><td>  <var>201</var>, <var>198</var>, <var>199</var>, <var>204</var>, <var>205</var>, <var>202</var>, <var>203</var>, <var>192</var>, <var>193</var>, <var>191</var>, <var>191</var>, <var>196</var>, <var>197</var>, <var>194</var>, <var>195</var>,</td></tr>
+<tr><th id="66">66</th><td>  <var>214</var>, <var>215</var>, <var>212</var>, <var>213</var>, <var>218</var>, <var>219</var>, <var>216</var>, <var>217</var>, <var>207</var>, <var>207</var>, <var>206</var>, <var>206</var>, <var>210</var>, <var>211</var>, <var>208</var>,</td></tr>
+<tr><th id="67">67</th><td>  <var>209</var></td></tr>
+<tr><th id="68">68</th><td>};</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td><span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl def fn" id="alaw_to_ulaw" title='alaw_to_ulaw' data-ref="alaw_to_ulaw" data-ref-filename="alaw_to_ulaw">alaw_to_ulaw</dfn>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col1 decl" id="1alaw" title='alaw' data-type='uint8_t' data-ref="1alaw" data-ref-filename="1alaw">alaw</dfn>) { <b>return</b> <a class="tu ref" href="#alaw_to_ulaw_table" title='alaw_to_ulaw_table' data-use='r' data-ref="alaw_to_ulaw_table" data-ref-filename="alaw_to_ulaw_table">alaw_to_ulaw_table</a>[<a class="local col1 ref" href="#1alaw" title='alaw' data-ref="1alaw" data-ref-filename="1alaw">alaw</a>]; }</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td><span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl def fn" id="ulaw_to_alaw" title='ulaw_to_alaw' data-ref="ulaw_to_alaw" data-ref-filename="ulaw_to_alaw">ulaw_to_alaw</dfn>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="local col2 decl" id="2ulaw" title='ulaw' data-type='uint8_t' data-ref="2ulaw" data-ref-filename="2ulaw">ulaw</dfn>) { <b>return</b> <a class="tu ref" href="#ulaw_to_alaw_table" title='ulaw_to_alaw_table' data-use='r' data-ref="ulaw_to_alaw_table" data-ref-filename="ulaw_to_alaw_table">ulaw_to_alaw_table</a>[<a class="local col2 ref" href="#2ulaw" title='ulaw' data-ref="2ulaw" data-ref-filename="2ulaw">ulaw</a>]; }</td></tr>
+<tr><th id="73">73</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

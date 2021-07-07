@@ -1,0 +1,92 @@
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/async_invoker_inl.h' l='30' c='_ZN3rtc12AsyncClosureC1EPNS_23DEPRECATED_AsyncInvokerE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/async_invoker_inl.h' l='37'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/async_invoker_inl.h' l='49' c='_ZN3rtc25FireAndForgetAsyncClosureC1EPNS_23DEPRECATED_AsyncInvokerEOT_'/>
+<inh f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/message_handler.h' l='36' c='rtc::MessageHandlerAutoCleanup'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/async_invoker.h' l='90' ll='170'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/async_invoker.h' l='169' c='_ZN3rtc23DEPRECATED_AsyncInvokerC1ERKS0_'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/async_invoker.h' l='169' c='_ZN3rtc23DEPRECATED_AsyncInvokeraSERKS0_'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/async_invoker.h' l='169' c='_ZN3rtc23DEPRECATED_AsyncInvokeraSERKS0_'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/async_invoker.h' l='173'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/async_invoker.cc' l='106' c='_ZN3rtc12AsyncClosureC1EPNS_23DEPRECATED_AsyncInvokerE'/>
+<size>32</size>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/async_invoker.h' l='29'>// Invokes function objects (aka functors) asynchronously on a Thread, and
+// owns the lifetime of calls (ie, when this object is destroyed, calls in
+// flight are cancelled). AsyncInvoker can optionally execute a user-specified
+// function when the asynchronous call is complete, or operates in
+// fire-and-forget mode otherwise.
+//
+// AsyncInvoker does not own the thread it calls functors on.
+//
+// A note about async calls and object lifetimes: users should
+// be mindful of object lifetimes when calling functions asynchronously and
+// ensure objects used by the function _cannot_ be deleted between the
+// invocation and execution of the functor. AsyncInvoker is designed to
+// help: any calls in flight will be cancelled when the AsyncInvoker used to
+// make the call is destructed, and any calls executing will be allowed to
+// complete before AsyncInvoker destructs.
+//
+// The easiest way to ensure lifetimes are handled correctly is to create a
+// class that owns the Thread and AsyncInvoker objects, and then call its
+// methods asynchronously as needed.
+//
+// Example:
+//   class MyClass {
+//    public:
+//     void FireAsyncTaskWithResult(Thread* thread, int x) {
+//       // Specify a callback to get the result upon completion.
+//       invoker_.AsyncInvoke&lt;int&gt;(RTC_FROM_HERE,
+//           thread, Bind(&amp;MyClass::AsyncTaskWithResult, this, x),
+//           &amp;MyClass::OnTaskComplete, this);
+//     }
+//     void FireAnotherAsyncTask(Thread* thread) {
+//       // No callback specified means fire-and-forget.
+//       invoker_.AsyncInvoke&lt;void&gt;(RTC_FROM_HERE,
+//           thread, Bind(&amp;MyClass::AnotherAsyncTask, this));
+//
+//    private:
+//     int AsyncTaskWithResult(int x) {
+//       // Some long running process...
+//       return x * x;
+//     }
+//     void AnotherAsyncTask() {
+//       // Some other long running process...
+//     }
+//     void OnTaskComplete(int result) { result_ = result; }
+//
+//     AsyncInvoker invoker_;
+//     int result_;
+//   };
+//
+// More details about threading:
+// - It&apos;s safe to construct/destruct AsyncInvoker on different threads.
+// - It&apos;s safe to call AsyncInvoke from different threads.
+// - It&apos;s safe to call AsyncInvoke recursively from *within* a functor that&apos;s
+//   being AsyncInvoked.
+// - However, it&apos;s *not* safe to call AsyncInvoke from *outside* a functor
+//   that&apos;s being AsyncInvoked while the AsyncInvoker is being destroyed on
+//   another thread. This is just inherently unsafe and there&apos;s no way to
+//   prevent that. So, the user of this class should ensure that the start of
+//   each &quot;chain&quot; of invocations is synchronized somehow with the AsyncInvoker&apos;s
+//   destruction. This can be done by starting each chain of invocations on the
+//   same thread on which it will be destroyed, or by using some other
+//   synchronization method.</doc>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvokerC1Ev'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvokerD1Ev'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvoker11AsyncInvokeERKNS_8LocationEPNS_6ThreadEOT0_j'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvoker18AsyncInvokeDelayedERKNS_8LocationEPNS_6ThreadEOT0_jj'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvoker5FlushEPNS_6ThreadEj'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvoker5ClearEv'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvoker9OnMessageEPNS_7MessageE'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvoker8DoInvokeERKNS_8LocationEPNS_6ThreadENSt3__110unique_ptrINS_12AsyncClosureENS6_14default_deleteIS8_EEEEj'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvoker15DoInvokeDelayedERKNS_8LocationEPNS_6ThreadENSt3__110unique_ptrINS_12AsyncClosureENS6_14default_deleteIS8_EEEEjj'/>
+<mbr r='rtc::DEPRECATED_AsyncInvoker::pending_invocations_' o='64' t='std::atomic&lt;int&gt;'/>
+<mbr r='rtc::DEPRECATED_AsyncInvoker::invocation_complete_' o='128' t='rtc::Ref&lt;Event&gt;::Ptr'/>
+<mbr r='rtc::DEPRECATED_AsyncInvoker::destroying_' o='192' t='std::atomic&lt;bool&gt;'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvokerC1ERKS0_'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvokerC1Ev'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvokerD1Ev'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvoker9OnMessageEPNS_7MessageE'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvoker5FlushEPNS_6ThreadEj'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvoker5ClearEv'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvoker8DoInvokeERKNS_8LocationEPNS_6ThreadENSt3__110unique_ptrINS_12AsyncClosureENS6_14default_deleteIS8_EEEEj'/>
+<fun r='_ZN3rtc23DEPRECATED_AsyncInvoker15DoInvokeDelayedERKNS_8LocationEPNS_6ThreadENSt3__110unique_ptrINS_12AsyncClosureENS6_14default_deleteIS8_EEEEjj'/>

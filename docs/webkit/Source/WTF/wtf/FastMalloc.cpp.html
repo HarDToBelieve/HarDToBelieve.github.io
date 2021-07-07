@@ -1,0 +1,707 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>FastMalloc.cpp source code [webkit/Source/WTF/wtf/FastMalloc.cpp] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WTF/wtf/FastMalloc.cpp'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>WTF</a>/<a href='./'>wtf</a>/<a href='FastMalloc.cpp.html'>FastMalloc.cpp</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (c) 2005, 2007, Google Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> * Copyright (C) 2005-2018 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#include <a href="../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html">&lt;wtf/FastMalloc.h&gt;</a></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#include &lt;string.h&gt;</u></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/wtf/CheckedArithmetic.h.html">&lt;wtf/CheckedArithmetic.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><u>#<span data-ppcond="32">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformOS.h.html#43" title="(defined WTF_OS_WINDOWS &amp;&amp; WTF_OS_WINDOWS)" data-ref="_M/OS">OS</a>(WINDOWS)</u></td></tr>
+<tr><th id="33">33</th><td><u>#include &lt;windows.h&gt;</u></td></tr>
+<tr><th id="34">34</th><td><u>#<span data-ppcond="32">else</span></u></td></tr>
+<tr><th id="35">35</th><td><u>#<span data-ppcond="35">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformHave.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/HAVE">HAVE</a>(RESOURCE_H)</u></td></tr>
+<tr><th id="36">36</th><td><u>#include &lt;sys/resource.h&gt;</u></td></tr>
+<tr><th id="37">37</th><td><u>#<span data-ppcond="35">endif</span> // HAVE(RESOURCE_H)</u></td></tr>
+<tr><th id="38">38</th><td><u>#<span data-ppcond="32">endif</span></u></td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><u>#<span data-ppcond="40">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 0 &amp;&amp; 0)" data-ref="_M/ENABLE">ENABLE</a>(MALLOC_HEAP_BREAKDOWN)</u></td></tr>
+<tr><th id="41">41</th><td><u>#include &lt;wtf/Atomics.h&gt;</u></td></tr>
+<tr><th id="42">42</th><td><u>#include &lt;wtf/HashMap.h&gt;</u></td></tr>
+<tr><th id="43">43</th><td><u>#include &lt;wtf/Lock.h&gt;</u></td></tr>
+<tr><th id="44">44</th><td><u>#include &lt;wtf/NeverDestroyed.h&gt;</u></td></tr>
+<tr><th id="45">45</th><td><u>#include &lt;wtf/SetForScope.h&gt;</u></td></tr>
+<tr><th id="46">46</th><td><u>#include &lt;wtf/StackShot.h&gt;</u></td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td><u>#if PLATFORM(COCOA)</u></td></tr>
+<tr><th id="49">49</th><td><u>#include &lt;notify.h&gt;</u></td></tr>
+<tr><th id="50">50</th><td><u>#endif</u></td></tr>
+<tr><th id="51">51</th><td></td></tr>
+<tr><th id="52">52</th><td><u>#<span data-ppcond="40">endif</span></u></td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td><u>#<span data-ppcond="56">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#68" title="1" data-ref="_M/ASSERT_ENABLED">ASSERT_ENABLED</a></u></td></tr>
+<tr><th id="57">57</th><td><b>thread_local</b> <em>static</em> <em>unsigned</em> <dfn class="tu decl def" id="WTF::forbidMallocUseScopeCount" title='WTF::forbidMallocUseScopeCount' data-type='unsigned int' data-ref="WTF::forbidMallocUseScopeCount" data-ref-filename="WTF..forbidMallocUseScopeCount">forbidMallocUseScopeCount</dfn>;</td></tr>
+<tr><th id="58">58</th><td><b>thread_local</b> <em>static</em> <em>unsigned</em> <dfn class="tu decl def" id="WTF::disableMallocRestrictionScopeCount" title='WTF::disableMallocRestrictionScopeCount' data-type='unsigned int' data-ref="WTF::disableMallocRestrictionScopeCount" data-ref-filename="WTF..disableMallocRestrictionScopeCount">disableMallocRestrictionScopeCount</dfn>;</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#WTF::ForbidMallocUseForCurrentThreadScope" title='WTF::ForbidMallocUseForCurrentThreadScope' data-ref="WTF::ForbidMallocUseForCurrentThreadScope" data-ref-filename="WTF..ForbidMallocUseForCurrentThreadScope">ForbidMallocUseForCurrentThreadScope</a>::<dfn class="decl def fn" id="_ZN3WTF36ForbidMallocUseForCurrentThreadScopeC1Ev" title='WTF::ForbidMallocUseForCurrentThreadScope::ForbidMallocUseForCurrentThreadScope' data-ref="_ZN3WTF36ForbidMallocUseForCurrentThreadScopeC1Ev" data-ref-filename="_ZN3WTF36ForbidMallocUseForCurrentThreadScopeC1Ev">ForbidMallocUseForCurrentThreadScope</dfn>()</td></tr>
+<tr><th id="61">61</th><td>{</td></tr>
+<tr><th id="62">62</th><td>    ++<a class="tu ref" href="#WTF::forbidMallocUseScopeCount" title='WTF::forbidMallocUseScopeCount' data-use='w' data-ref="WTF::forbidMallocUseScopeCount" data-ref-filename="WTF..forbidMallocUseScopeCount">forbidMallocUseScopeCount</a>;</td></tr>
+<tr><th id="63">63</th><td>}</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td><a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#WTF::ForbidMallocUseForCurrentThreadScope" title='WTF::ForbidMallocUseForCurrentThreadScope' data-ref="WTF::ForbidMallocUseForCurrentThreadScope" data-ref-filename="WTF..ForbidMallocUseForCurrentThreadScope">ForbidMallocUseForCurrentThreadScope</a>::<dfn class="decl def fn" id="_ZN3WTF36ForbidMallocUseForCurrentThreadScopeD1Ev" title='WTF::ForbidMallocUseForCurrentThreadScope::~ForbidMallocUseForCurrentThreadScope' data-ref="_ZN3WTF36ForbidMallocUseForCurrentThreadScopeD1Ev" data-ref-filename="_ZN3WTF36ForbidMallocUseForCurrentThreadScopeD1Ev">~ForbidMallocUseForCurrentThreadScope</dfn>()</td></tr>
+<tr><th id="66">66</th><td>{</td></tr>
+<tr><th id="67">67</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(forbidMallocUseScopeCount)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, 67, __PRETTY_FUNCTION__, &quot;forbidMallocUseScopeCount&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(67, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, __PRETTY_FUNCTION__, 10); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(<a class="tu ref" href="#WTF::forbidMallocUseScopeCount" title='WTF::forbidMallocUseScopeCount' data-use='r' data-ref="WTF::forbidMallocUseScopeCount" data-ref-filename="WTF..forbidMallocUseScopeCount">forbidMallocUseScopeCount</a>);</td></tr>
+<tr><th id="68">68</th><td>    --<a class="tu ref" href="#WTF::forbidMallocUseScopeCount" title='WTF::forbidMallocUseScopeCount' data-use='w' data-ref="WTF::forbidMallocUseScopeCount" data-ref-filename="WTF..forbidMallocUseScopeCount">forbidMallocUseScopeCount</a>;</td></tr>
+<tr><th id="69">69</th><td>}</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#WTF::DisableMallocRestrictionsForCurrentThreadScope" title='WTF::DisableMallocRestrictionsForCurrentThreadScope' data-ref="WTF::DisableMallocRestrictionsForCurrentThreadScope" data-ref-filename="WTF..DisableMallocRestrictionsForCurrentThreadScope">DisableMallocRestrictionsForCurrentThreadScope</a>::<dfn class="decl def fn" id="_ZN3WTF46DisableMallocRestrictionsForCurrentThreadScopeC1Ev" title='WTF::DisableMallocRestrictionsForCurrentThreadScope::DisableMallocRestrictionsForCurrentThreadScope' data-ref="_ZN3WTF46DisableMallocRestrictionsForCurrentThreadScopeC1Ev" data-ref-filename="_ZN3WTF46DisableMallocRestrictionsForCurrentThreadScopeC1Ev">DisableMallocRestrictionsForCurrentThreadScope</dfn>()</td></tr>
+<tr><th id="72">72</th><td>{</td></tr>
+<tr><th id="73">73</th><td>    ++<a class="tu ref" href="#WTF::disableMallocRestrictionScopeCount" title='WTF::disableMallocRestrictionScopeCount' data-use='w' data-ref="WTF::disableMallocRestrictionScopeCount" data-ref-filename="WTF..disableMallocRestrictionScopeCount">disableMallocRestrictionScopeCount</a>;</td></tr>
+<tr><th id="74">74</th><td>}</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td><a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#WTF::DisableMallocRestrictionsForCurrentThreadScope" title='WTF::DisableMallocRestrictionsForCurrentThreadScope' data-ref="WTF::DisableMallocRestrictionsForCurrentThreadScope" data-ref-filename="WTF..DisableMallocRestrictionsForCurrentThreadScope">DisableMallocRestrictionsForCurrentThreadScope</a>::<dfn class="decl def fn" id="_ZN3WTF46DisableMallocRestrictionsForCurrentThreadScopeD1Ev" title='WTF::DisableMallocRestrictionsForCurrentThreadScope::~DisableMallocRestrictionsForCurrentThreadScope' data-ref="_ZN3WTF46DisableMallocRestrictionsForCurrentThreadScopeD1Ev" data-ref-filename="_ZN3WTF46DisableMallocRestrictionsForCurrentThreadScopeD1Ev">~DisableMallocRestrictionsForCurrentThreadScope</dfn>()</td></tr>
+<tr><th id="77">77</th><td>{</td></tr>
+<tr><th id="78">78</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(disableMallocRestrictionScopeCount)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, 78, __PRETTY_FUNCTION__, &quot;disableMallocRestrictionScopeCount&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(78, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, __PRETTY_FUNCTION__, 12); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(<a class="tu ref" href="#WTF::disableMallocRestrictionScopeCount" title='WTF::disableMallocRestrictionScopeCount' data-use='r' data-ref="WTF::disableMallocRestrictionScopeCount" data-ref-filename="WTF..disableMallocRestrictionScopeCount">disableMallocRestrictionScopeCount</a>);</td></tr>
+<tr><th id="79">79</th><td>    --<a class="tu ref" href="#WTF::disableMallocRestrictionScopeCount" title='WTF::disableMallocRestrictionScopeCount' data-use='w' data-ref="WTF::disableMallocRestrictionScopeCount" data-ref-filename="WTF..disableMallocRestrictionScopeCount">disableMallocRestrictionScopeCount</a>;</td></tr>
+<tr><th id="80">80</th><td>}</td></tr>
+<tr><th id="81">81</th><td><u>#<span data-ppcond="56">endif</span></u></td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td><u>#<span data-ppcond="83">if</span> !defined(<span class="macro" data-ref="_M/NDEBUG">NDEBUG</span>)</u></td></tr>
+<tr><th id="84">84</th><td><b>namespace</b> {</td></tr>
+<tr><th id="85">85</th><td><i  data-doc="WTF::(anonymousnamespace)::maxSingleAllocationSize">// We do not use std::numeric_limits&lt;size_t&gt;::max() here due to the edge case in VC++.</i></td></tr>
+<tr><th id="86">86</th><td><i  data-doc="WTF::(anonymousnamespace)::maxSingleAllocationSize">// <a href="https://bugs.webkit.org/show_bug.cgi?id=173720">https://bugs.webkit.org/show_bug.cgi?id=173720</a></i></td></tr>
+<tr><th id="87">87</th><td><em>static</em> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="tu decl def" id="WTF::(anonymousnamespace)::maxSingleAllocationSize" title='WTF::(anonymous namespace)::maxSingleAllocationSize' data-type='size_t' data-ref="WTF::(anonymousnamespace)::maxSingleAllocationSize" data-ref-filename="WTF..(anonymousnamespace)..maxSingleAllocationSize">maxSingleAllocationSize</dfn> = <span class="macro" title="18446744073709551615UL" data-ref="_M/SIZE_MAX">SIZE_MAX</span>;</td></tr>
+<tr><th id="88">88</th><td>};</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td><em>void</em> <dfn class="decl def fn" id="_ZN3WTF30fastSetMaxSingleAllocationSizeEm" title='WTF::fastSetMaxSingleAllocationSize' data-ref="_ZN3WTF30fastSetMaxSingleAllocationSizeEm" data-ref-filename="_ZN3WTF30fastSetMaxSingleAllocationSizeEm">fastSetMaxSingleAllocationSize</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="1size" title='size' data-type='size_t' data-ref="1size" data-ref-filename="1size">size</dfn>)</td></tr>
+<tr><th id="91">91</th><td>{</td></tr>
+<tr><th id="92">92</th><td>    <a class="tu ref" href="#WTF::(anonymousnamespace)::maxSingleAllocationSize" title='WTF::(anonymous namespace)::maxSingleAllocationSize' data-use='w' data-ref="WTF::(anonymousnamespace)::maxSingleAllocationSize" data-ref-filename="WTF..(anonymousnamespace)..maxSingleAllocationSize">maxSingleAllocationSize</a> = <a class="local col1 ref" href="#1size" title='size' data-ref="1size" data-ref-filename="1size">size</a>;</td></tr>
+<tr><th id="93">93</th><td>}</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td><u>#define <dfn class="macro" id="_M/ASSERT_IS_WITHIN_LIMIT" data-ref="_M/ASSERT_IS_WITHIN_LIMIT">ASSERT_IS_WITHIN_LIMIT</dfn>(size) do { \</u></td></tr>
+<tr><th id="96">96</th><td><u>        <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="406size__" title='size__' data-type='size_t' data-ref="406size__" data-ref-filename="406size__"><dfn class="local col0 decl" id="410size__" title='size__' data-type='size_t' data-ref="410size__" data-ref-filename="410size__"><dfn class="local col5 decl" id="415size__" title='size__' data-type='size_t' data-ref="415size__" data-ref-filename="415size__"><dfn class="local col1 decl" id="421size__" title='size__' data-type='size_t' data-ref="421size__" data-ref-filename="421size__">size__</dfn></dfn></dfn></dfn> = (size); \</u></td></tr>
+<tr><th id="97">97</th><td><u>        ASSERT_WITH_MESSAGE((<a class="local col6 ref" href="#523" title='size__' data-ref="406size__" data-ref-filename="406size__"><a class="local col0 ref" href="#535" title='size__' data-ref="410size__" data-ref-filename="410size__"><a class="local col5 ref" href="#546" title='size__' data-ref="415size__" data-ref-filename="415size__"><a class="local col1 ref" href="#580" title='size__' data-ref="421size__" data-ref-filename="421size__">size__</a></a></a></a>) &lt;= <a class="tu ref" href="#WTF::(anonymousnamespace)::maxSingleAllocationSize" title='WTF::(anonymous namespace)::maxSingleAllocationSize' data-use='r' data-ref="WTF::(anonymousnamespace)::maxSingleAllocationSize" data-ref-filename="WTF..(anonymousnamespace)..maxSingleAllocationSize">maxSingleAllocationSize</a>, "Requested size (%zu) exceeds max single allocation size set for testing (%zu)", (<a class="local col6 ref" href="#523" title='size__' data-ref="406size__" data-ref-filename="406size__"><a class="local col0 ref" href="#535" title='size__' data-ref="410size__" data-ref-filename="410size__"><a class="local col5 ref" href="#546" title='size__' data-ref="415size__" data-ref-filename="415size__"><a class="local col1 ref" href="#580" title='size__' data-ref="421size__" data-ref-filename="421size__">size__</a></a></a></a>), <a class="tu ref" href="#WTF::(anonymousnamespace)::maxSingleAllocationSize" title='WTF::(anonymous namespace)::maxSingleAllocationSize' data-use='r' data-ref="WTF::(anonymousnamespace)::maxSingleAllocationSize" data-ref-filename="WTF..(anonymousnamespace)..maxSingleAllocationSize">maxSingleAllocationSize</a>); \</u></td></tr>
+<tr><th id="98">98</th><td><u>    } while (false)</u></td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td><u>#define <dfn class="macro" id="_M/FAIL_IF_EXCEEDS_LIMIT" data-ref="_M/FAIL_IF_EXCEEDS_LIMIT">FAIL_IF_EXCEEDS_LIMIT</dfn>(size) do { \</u></td></tr>
+<tr><th id="101">101</th><td><u>        if (UNLIKELY((size) &gt; <a class="tu ref" href="#WTF::(anonymousnamespace)::maxSingleAllocationSize" title='WTF::(anonymous namespace)::maxSingleAllocationSize' data-use='r' data-ref="WTF::(anonymousnamespace)::maxSingleAllocationSize" data-ref-filename="WTF..(anonymousnamespace)..maxSingleAllocationSize">maxSingleAllocationSize</a>)) \</u></td></tr>
+<tr><th id="102">102</th><td><u>            return <a class="ref fn fake" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#_ZN3WTF20TryMallocReturnValueC1EPv" title='WTF::TryMallocReturnValue::TryMallocReturnValue' data-ref="_ZN3WTF20TryMallocReturnValueC1EPv" data-ref-filename="_ZN3WTF20TryMallocReturnValueC1EPv"></a><a class="ref fn fake" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#_ZN3WTF20TryMallocReturnValueC1EPv" title='WTF::TryMallocReturnValue::TryMallocReturnValue' data-ref="_ZN3WTF20TryMallocReturnValueC1EPv" data-ref-filename="_ZN3WTF20TryMallocReturnValueC1EPv"></a><a class="ref fn fake" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#_ZN3WTF20TryMallocReturnValueC1EPv" title='WTF::TryMallocReturnValue::TryMallocReturnValue' data-ref="_ZN3WTF20TryMallocReturnValueC1EPv" data-ref-filename="_ZN3WTF20TryMallocReturnValueC1EPv"></a>nullptr; \</u></td></tr>
+<tr><th id="103">103</th><td><u>    } while (false)</u></td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td><u>#<span data-ppcond="83">else</span> // !defined(NDEBUG)</u></td></tr>
+<tr><th id="106">106</th><td></td></tr>
+<tr><th id="107">107</th><td><u>#define ASSERT_IS_WITHIN_LIMIT(size)</u></td></tr>
+<tr><th id="108">108</th><td><u>#define FAIL_IF_EXCEEDS_LIMIT(size)</u></td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td><u>#<span data-ppcond="83">endif</span> // !defined(NDEBUG)</u></td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td><em>void</em>* <dfn class="decl def fn" id="_ZN3WTF16fastZeroedMallocEm" title='WTF::fastZeroedMalloc' data-ref="_ZN3WTF16fastZeroedMallocEm" data-ref-filename="_ZN3WTF16fastZeroedMallocEm">fastZeroedMalloc</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="2n" title='n' data-type='size_t' data-ref="2n" data-ref-filename="2n">n</dfn>) </td></tr>
+<tr><th id="113">113</th><td>{</td></tr>
+<tr><th id="114">114</th><td>    <em>void</em>* <dfn class="local col3 decl" id="3result" title='result' data-type='void *' data-ref="3result" data-ref-filename="3result">result</dfn> = <a class="ref fn" href="#_ZN3WTF10fastMallocEm" title='WTF::fastMalloc' data-ref="_ZN3WTF10fastMallocEm" data-ref-filename="_ZN3WTF10fastMallocEm">fastMalloc</a>(<a class="local col2 ref" href="#2n" title='n' data-ref="2n" data-ref-filename="2n">n</a>);</td></tr>
+<tr><th id="115">115</th><td>    <span class='ref fn' title='memset' data-ref="memset" data-ref-filename="memset">memset</span>(<a class="local col3 ref" href="#3result" title='result' data-ref="3result" data-ref-filename="3result">result</a>, <var>0</var>, <a class="local col2 ref" href="#2n" title='n' data-ref="2n" data-ref-filename="2n">n</a>);</td></tr>
+<tr><th id="116">116</th><td>    <b>return</b> <a class="local col3 ref" href="#3result" title='result' data-ref="3result" data-ref-filename="3result">result</a>;</td></tr>
+<tr><th id="117">117</th><td>}</td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td><em>char</em>* <dfn class="decl def fn" id="_ZN3WTF10fastStrDupEPKc" title='WTF::fastStrDup' data-ref="_ZN3WTF10fastStrDupEPKc" data-ref-filename="_ZN3WTF10fastStrDupEPKc">fastStrDup</dfn>(<em>const</em> <em>char</em>* <dfn class="local col4 decl" id="4src" title='src' data-type='const char *' data-ref="4src" data-ref-filename="4src">src</dfn>)</td></tr>
+<tr><th id="120">120</th><td>{</td></tr>
+<tr><th id="121">121</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="5len" title='len' data-type='size_t' data-ref="5len" data-ref-filename="5len">len</dfn> = <span class='ref fn' title='strlen' data-ref="strlen" data-ref-filename="strlen">strlen</span>(<a class="local col4 ref" href="#4src" title='src' data-ref="4src" data-ref-filename="4src">src</a>) + <var>1</var>;</td></tr>
+<tr><th id="122">122</th><td>    <em>char</em>* <dfn class="local col6 decl" id="6dup" title='dup' data-type='char *' data-ref="6dup" data-ref-filename="6dup">dup</dfn> = <b>static_cast</b>&lt;<em>char</em>*&gt;(<a class="ref fn" href="#_ZN3WTF10fastMallocEm" title='WTF::fastMalloc' data-ref="_ZN3WTF10fastMallocEm" data-ref-filename="_ZN3WTF10fastMallocEm">fastMalloc</a>(<a class="local col5 ref" href="#5len" title='len' data-ref="5len" data-ref-filename="5len">len</a>));</td></tr>
+<tr><th id="123">123</th><td>    <span class='ref fn' title='memcpy' data-ref="memcpy" data-ref-filename="memcpy">memcpy</span>(<a class="local col6 ref" href="#6dup" title='dup' data-ref="6dup" data-ref-filename="6dup">dup</a>, <a class="local col4 ref" href="#4src" title='src' data-ref="4src" data-ref-filename="4src">src</a>, <a class="local col5 ref" href="#5len" title='len' data-ref="5len" data-ref-filename="5len">len</a>);</td></tr>
+<tr><th id="124">124</th><td>    <b>return</b> <a class="local col6 ref" href="#6dup" title='dup' data-ref="6dup" data-ref-filename="6dup">dup</a>;</td></tr>
+<tr><th id="125">125</th><td>}</td></tr>
+<tr><th id="126">126</th><td></td></tr>
+<tr><th id="127">127</th><td><em>void</em>* <dfn class="decl def fn" id="_ZN3WTF10fastMemDupEPKvm" title='WTF::fastMemDup' data-ref="_ZN3WTF10fastMemDupEPKvm" data-ref-filename="_ZN3WTF10fastMemDupEPKvm">fastMemDup</dfn>(<em>const</em> <em>void</em>* <dfn class="local col7 decl" id="7mem" title='mem' data-type='const void *' data-ref="7mem" data-ref-filename="7mem">mem</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="8bytes" title='bytes' data-type='size_t' data-ref="8bytes" data-ref-filename="8bytes">bytes</dfn>)</td></tr>
+<tr><th id="128">128</th><td>{</td></tr>
+<tr><th id="129">129</th><td>    <b>if</b> (!<a class="local col7 ref" href="#7mem" title='mem' data-ref="7mem" data-ref-filename="7mem">mem</a> || !<a class="local col8 ref" href="#8bytes" title='bytes' data-ref="8bytes" data-ref-filename="8bytes">bytes</a>)</td></tr>
+<tr><th id="130">130</th><td>        <b>return</b> <b>nullptr</b>;</td></tr>
+<tr><th id="131">131</th><td></td></tr>
+<tr><th id="132">132</th><td>    <em>void</em>* <dfn class="local col9 decl" id="9result" title='result' data-type='void *' data-ref="9result" data-ref-filename="9result">result</dfn> = <a class="ref fn" href="#_ZN3WTF10fastMallocEm" title='WTF::fastMalloc' data-ref="_ZN3WTF10fastMallocEm" data-ref-filename="_ZN3WTF10fastMallocEm">fastMalloc</a>(<a class="local col8 ref" href="#8bytes" title='bytes' data-ref="8bytes" data-ref-filename="8bytes">bytes</a>);</td></tr>
+<tr><th id="133">133</th><td>    <span class='ref fn' title='memcpy' data-ref="memcpy" data-ref-filename="memcpy">memcpy</span>(<a class="local col9 ref" href="#9result" title='result' data-ref="9result" data-ref-filename="9result">result</a>, <a class="local col7 ref" href="#7mem" title='mem' data-ref="7mem" data-ref-filename="7mem">mem</a>, <a class="local col8 ref" href="#8bytes" title='bytes' data-ref="8bytes" data-ref-filename="8bytes">bytes</a>);</td></tr>
+<tr><th id="134">134</th><td>    <b>return</b> <a class="local col9 ref" href="#9result" title='result' data-ref="9result" data-ref-filename="9result">result</a>;</td></tr>
+<tr><th id="135">135</th><td>}</td></tr>
+<tr><th id="136">136</th><td></td></tr>
+<tr><th id="137">137</th><td><a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#WTF::TryMallocReturnValue" title='WTF::TryMallocReturnValue' data-ref="WTF::TryMallocReturnValue" data-ref-filename="WTF..TryMallocReturnValue">TryMallocReturnValue</a> <dfn class="decl def fn" id="_ZN3WTF19tryFastZeroedMallocEm" title='WTF::tryFastZeroedMalloc' data-ref="_ZN3WTF19tryFastZeroedMallocEm" data-ref-filename="_ZN3WTF19tryFastZeroedMallocEm">tryFastZeroedMalloc</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="10n" title='n' data-type='size_t' data-ref="10n" data-ref-filename="10n">n</dfn>) </td></tr>
+<tr><th id="138">138</th><td>{</td></tr>
+<tr><th id="139">139</th><td>    <em>void</em>* <dfn class="local col1 decl" id="11result" title='result' data-type='void *' data-ref="11result" data-ref-filename="11result">result</dfn>;</td></tr>
+<tr><th id="140">140</th><td>    <b>if</b> (!<a class="ref fn" href="#_ZN3WTF13tryFastMallocEm" title='WTF::tryFastMalloc' data-ref="_ZN3WTF13tryFastMallocEm" data-ref-filename="_ZN3WTF13tryFastMallocEm">tryFastMalloc</a>(<a class="local col0 ref" href="#10n" title='n' data-ref="10n" data-ref-filename="10n">n</a>).<a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#_ZN3WTF20TryMallocReturnValue8getValueERPT_" title='WTF::TryMallocReturnValue::getValue' data-ref="_ZN3WTF20TryMallocReturnValue8getValueERPT_" data-ref-filename="_ZN3WTF20TryMallocReturnValue8getValueERPT_">getValue</a>(<span class='refarg'><a class="local col1 ref" href="#11result" title='result' data-ref="11result" data-ref-filename="11result">result</a></span>))</td></tr>
+<tr><th id="141">141</th><td>        <b>return</b> <a class="ref fn fake" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#_ZN3WTF20TryMallocReturnValueC1EPv" title='WTF::TryMallocReturnValue::TryMallocReturnValue' data-ref="_ZN3WTF20TryMallocReturnValueC1EPv" data-ref-filename="_ZN3WTF20TryMallocReturnValueC1EPv"></a><b>nullptr</b>;</td></tr>
+<tr><th id="142">142</th><td>    <span class='ref fn' title='memset' data-ref="memset" data-ref-filename="memset">memset</span>(<a class="local col1 ref" href="#11result" title='result' data-ref="11result" data-ref-filename="11result">result</a>, <var>0</var>, <a class="local col0 ref" href="#10n" title='n' data-ref="10n" data-ref-filename="10n">n</a>);</td></tr>
+<tr><th id="143">143</th><td>    <b>return</b> <a class="ref fn fake" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#_ZN3WTF20TryMallocReturnValueC1EPv" title='WTF::TryMallocReturnValue::TryMallocReturnValue' data-ref="_ZN3WTF20TryMallocReturnValueC1EPv" data-ref-filename="_ZN3WTF20TryMallocReturnValueC1EPv"></a><a class="local col1 ref" href="#11result" title='result' data-ref="11result" data-ref-filename="11result">result</a>;</td></tr>
+<tr><th id="144">144</th><td>}</td></tr>
+<tr><th id="145">145</th><td></td></tr>
+<tr><th id="146">146</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="147">147</th><td></td></tr>
+<tr><th id="148">148</th><td><u>#<span data-ppcond="148">if</span> defined(<span class="macro" data-ref="_M/USE_SYSTEM_MALLOC">USE_SYSTEM_MALLOC</span>) &amp;&amp; USE_SYSTEM_MALLOC</u></td></tr>
+<tr><th id="149">149</th><td></td></tr>
+<tr><th id="150">150</th><td><u>#include &lt;wtf/OSAllocator.h&gt;</u></td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td><u>#if OS(WINDOWS)</u></td></tr>
+<tr><th id="153">153</th><td><u>#include &lt;malloc.h&gt;</u></td></tr>
+<tr><th id="154">154</th><td><u>#endif</u></td></tr>
+<tr><th id="155">155</th><td></td></tr>
+<tr><th id="156">156</th><td><b>namespace</b> WTF {</td></tr>
+<tr><th id="157">157</th><td></td></tr>
+<tr><th id="158">158</th><td><em>bool</em> isFastMallocEnabled()</td></tr>
+<tr><th id="159">159</th><td>{</td></tr>
+<tr><th id="160">160</th><td>    <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="161">161</th><td>}</td></tr>
+<tr><th id="162">162</th><td></td></tr>
+<tr><th id="163">163</th><td>size_t fastMallocGoodSize(size_t bytes)</td></tr>
+<tr><th id="164">164</th><td>{</td></tr>
+<tr><th id="165">165</th><td><u>#if OS(DARWIN)</u></td></tr>
+<tr><th id="166">166</th><td>    <b>return</b> malloc_good_size(bytes);</td></tr>
+<tr><th id="167">167</th><td><u>#else</u></td></tr>
+<tr><th id="168">168</th><td>    <b>return</b> bytes;</td></tr>
+<tr><th id="169">169</th><td><u>#endif</u></td></tr>
+<tr><th id="170">170</th><td>}</td></tr>
+<tr><th id="171">171</th><td></td></tr>
+<tr><th id="172">172</th><td><u>#if OS(WINDOWS)</u></td></tr>
+<tr><th id="173">173</th><td></td></tr>
+<tr><th id="174">174</th><td><em>void</em>* fastAlignedMalloc(size_t alignment, size_t size) </td></tr>
+<tr><th id="175">175</th><td>{</td></tr>
+<tr><th id="176">176</th><td>    ASSERT_IS_WITHIN_LIMIT(size);</td></tr>
+<tr><th id="177">177</th><td>    <em>void</em>* p = _aligned_malloc(size, alignment);</td></tr>
+<tr><th id="178">178</th><td>    <b>if</b> (UNLIKELY(!p))</td></tr>
+<tr><th id="179">179</th><td>        CRASH();</td></tr>
+<tr><th id="180">180</th><td>    <b>return</b> p;</td></tr>
+<tr><th id="181">181</th><td>}</td></tr>
+<tr><th id="182">182</th><td></td></tr>
+<tr><th id="183">183</th><td><em>void</em>* tryFastAlignedMalloc(size_t alignment, size_t size) </td></tr>
+<tr><th id="184">184</th><td>{</td></tr>
+<tr><th id="185">185</th><td>    FAIL_IF_EXCEEDS_LIMIT(size);</td></tr>
+<tr><th id="186">186</th><td>    <b>return</b> _aligned_malloc(size, alignment);</td></tr>
+<tr><th id="187">187</th><td>}</td></tr>
+<tr><th id="188">188</th><td></td></tr>
+<tr><th id="189">189</th><td><em>void</em> fastAlignedFree(<em>void</em>* p) </td></tr>
+<tr><th id="190">190</th><td>{</td></tr>
+<tr><th id="191">191</th><td>    _aligned_free(p);</td></tr>
+<tr><th id="192">192</th><td>}</td></tr>
+<tr><th id="193">193</th><td></td></tr>
+<tr><th id="194">194</th><td><u>#else</u></td></tr>
+<tr><th id="195">195</th><td></td></tr>
+<tr><th id="196">196</th><td><em>void</em>* fastAlignedMalloc(size_t alignment, size_t size) </td></tr>
+<tr><th id="197">197</th><td>{</td></tr>
+<tr><th id="198">198</th><td>    ASSERT_IS_WITHIN_LIMIT(size);</td></tr>
+<tr><th id="199">199</th><td>    <em>void</em>* p = <b>nullptr</b>;</td></tr>
+<tr><th id="200">200</th><td>    posix_memalign(&amp;p, alignment, size);</td></tr>
+<tr><th id="201">201</th><td>    <b>if</b> (UNLIKELY(!p))</td></tr>
+<tr><th id="202">202</th><td>        CRASH();</td></tr>
+<tr><th id="203">203</th><td>    <b>return</b> p;</td></tr>
+<tr><th id="204">204</th><td>}</td></tr>
+<tr><th id="205">205</th><td></td></tr>
+<tr><th id="206">206</th><td><em>void</em>* tryFastAlignedMalloc(size_t alignment, size_t size) </td></tr>
+<tr><th id="207">207</th><td>{</td></tr>
+<tr><th id="208">208</th><td>    FAIL_IF_EXCEEDS_LIMIT(size);</td></tr>
+<tr><th id="209">209</th><td>    <em>void</em>* p = <b>nullptr</b>;</td></tr>
+<tr><th id="210">210</th><td>    posix_memalign(&amp;p, alignment, size);</td></tr>
+<tr><th id="211">211</th><td>    <b>return</b> p;</td></tr>
+<tr><th id="212">212</th><td>}</td></tr>
+<tr><th id="213">213</th><td></td></tr>
+<tr><th id="214">214</th><td><em>void</em> fastAlignedFree(<em>void</em>* p) </td></tr>
+<tr><th id="215">215</th><td>{</td></tr>
+<tr><th id="216">216</th><td>    free(p);</td></tr>
+<tr><th id="217">217</th><td>}</td></tr>
+<tr><th id="218">218</th><td></td></tr>
+<tr><th id="219">219</th><td><u>#endif // OS(WINDOWS)</u></td></tr>
+<tr><th id="220">220</th><td></td></tr>
+<tr><th id="221">221</th><td>TryMallocReturnValue tryFastMalloc(size_t n) </td></tr>
+<tr><th id="222">222</th><td>{</td></tr>
+<tr><th id="223">223</th><td>    FAIL_IF_EXCEEDS_LIMIT(n);</td></tr>
+<tr><th id="224">224</th><td>    ASSERT(!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount);</td></tr>
+<tr><th id="225">225</th><td>    <b>return</b> malloc(n);</td></tr>
+<tr><th id="226">226</th><td>}</td></tr>
+<tr><th id="227">227</th><td></td></tr>
+<tr><th id="228">228</th><td><em>void</em>* fastMalloc(size_t n) </td></tr>
+<tr><th id="229">229</th><td>{</td></tr>
+<tr><th id="230">230</th><td>    ASSERT_IS_WITHIN_LIMIT(n);</td></tr>
+<tr><th id="231">231</th><td>    ASSERT(!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount);</td></tr>
+<tr><th id="232">232</th><td>    <em>void</em>* result = malloc(n);</td></tr>
+<tr><th id="233">233</th><td>    <b>if</b> (!result)</td></tr>
+<tr><th id="234">234</th><td>        CRASH();</td></tr>
+<tr><th id="235">235</th><td></td></tr>
+<tr><th id="236">236</th><td>    <b>return</b> result;</td></tr>
+<tr><th id="237">237</th><td>}</td></tr>
+<tr><th id="238">238</th><td></td></tr>
+<tr><th id="239">239</th><td>TryMallocReturnValue tryFastCalloc(size_t n_elements, size_t element_size)</td></tr>
+<tr><th id="240">240</th><td>{</td></tr>
+<tr><th id="241">241</th><td>    FAIL_IF_EXCEEDS_LIMIT(n_elements * element_size);</td></tr>
+<tr><th id="242">242</th><td>    ASSERT(!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount);</td></tr>
+<tr><th id="243">243</th><td>    <b>return</b> calloc(n_elements, element_size);</td></tr>
+<tr><th id="244">244</th><td>}</td></tr>
+<tr><th id="245">245</th><td></td></tr>
+<tr><th id="246">246</th><td><em>void</em>* fastCalloc(size_t n_elements, size_t element_size)</td></tr>
+<tr><th id="247">247</th><td>{</td></tr>
+<tr><th id="248">248</th><td>    ASSERT_IS_WITHIN_LIMIT(n_elements * element_size);</td></tr>
+<tr><th id="249">249</th><td>    ASSERT(!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount);</td></tr>
+<tr><th id="250">250</th><td>    <em>void</em>* result = calloc(n_elements, element_size);</td></tr>
+<tr><th id="251">251</th><td>    <b>if</b> (!result)</td></tr>
+<tr><th id="252">252</th><td>        CRASH();</td></tr>
+<tr><th id="253">253</th><td></td></tr>
+<tr><th id="254">254</th><td>    <b>return</b> result;</td></tr>
+<tr><th id="255">255</th><td>}</td></tr>
+<tr><th id="256">256</th><td></td></tr>
+<tr><th id="257">257</th><td><em>void</em> fastFree(<em>void</em>* p)</td></tr>
+<tr><th id="258">258</th><td>{</td></tr>
+<tr><th id="259">259</th><td>    free(p);</td></tr>
+<tr><th id="260">260</th><td>}</td></tr>
+<tr><th id="261">261</th><td></td></tr>
+<tr><th id="262">262</th><td><em>void</em>* fastRealloc(<em>void</em>* p, size_t n)</td></tr>
+<tr><th id="263">263</th><td>{</td></tr>
+<tr><th id="264">264</th><td>    ASSERT_IS_WITHIN_LIMIT(n);</td></tr>
+<tr><th id="265">265</th><td>    ASSERT(!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount);</td></tr>
+<tr><th id="266">266</th><td>    <em>void</em>* result = realloc(p, n);</td></tr>
+<tr><th id="267">267</th><td>    <b>if</b> (!result)</td></tr>
+<tr><th id="268">268</th><td>        CRASH();</td></tr>
+<tr><th id="269">269</th><td>    <b>return</b> result;</td></tr>
+<tr><th id="270">270</th><td>}</td></tr>
+<tr><th id="271">271</th><td></td></tr>
+<tr><th id="272">272</th><td>TryMallocReturnValue tryFastRealloc(<em>void</em>* p, size_t n)</td></tr>
+<tr><th id="273">273</th><td>{</td></tr>
+<tr><th id="274">274</th><td>    FAIL_IF_EXCEEDS_LIMIT(n);</td></tr>
+<tr><th id="275">275</th><td>    ASSERT(!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount);</td></tr>
+<tr><th id="276">276</th><td>    <b>return</b> realloc(p, n);</td></tr>
+<tr><th id="277">277</th><td>}</td></tr>
+<tr><th id="278">278</th><td></td></tr>
+<tr><th id="279">279</th><td><em>void</em> releaseFastMallocFreeMemory() { }</td></tr>
+<tr><th id="280">280</th><td><em>void</em> releaseFastMallocFreeMemoryForThisThread() { }</td></tr>
+<tr><th id="281">281</th><td></td></tr>
+<tr><th id="282">282</th><td>FastMallocStatistics fastMallocStatistics()</td></tr>
+<tr><th id="283">283</th><td>{</td></tr>
+<tr><th id="284">284</th><td>    FastMallocStatistics statistics = { <var>0</var>, <var>0</var>, <var>0</var> };</td></tr>
+<tr><th id="285">285</th><td>    <b>return</b> statistics;</td></tr>
+<tr><th id="286">286</th><td>}</td></tr>
+<tr><th id="287">287</th><td></td></tr>
+<tr><th id="288">288</th><td>size_t fastMallocSize(<em>const</em> <em>void</em>* p)</td></tr>
+<tr><th id="289">289</th><td>{</td></tr>
+<tr><th id="290">290</th><td><u>#if OS(DARWIN)</u></td></tr>
+<tr><th id="291">291</th><td>    <b>return</b> malloc_size(p);</td></tr>
+<tr><th id="292">292</th><td><u>#elif OS(WINDOWS)</u></td></tr>
+<tr><th id="293">293</th><td>    <b>return</b> _msize(<b>const_cast</b>&lt;<em>void</em>*&gt;(p));</td></tr>
+<tr><th id="294">294</th><td><u>#else</u></td></tr>
+<tr><th id="295">295</th><td>    UNUSED_PARAM(p);</td></tr>
+<tr><th id="296">296</th><td>    <b>return</b> <var>1</var>;</td></tr>
+<tr><th id="297">297</th><td><u>#endif</u></td></tr>
+<tr><th id="298">298</th><td>}</td></tr>
+<tr><th id="299">299</th><td></td></tr>
+<tr><th id="300">300</th><td><em>void</em> fastCommitAlignedMemory(<em>void</em>* ptr, size_t size)</td></tr>
+<tr><th id="301">301</th><td>{</td></tr>
+<tr><th id="302">302</th><td>    OSAllocator::commit(ptr, size, <b>true</b>, <b>false</b>);</td></tr>
+<tr><th id="303">303</th><td>}</td></tr>
+<tr><th id="304">304</th><td></td></tr>
+<tr><th id="305">305</th><td><em>void</em> fastDecommitAlignedMemory(<em>void</em>* ptr, size_t size)</td></tr>
+<tr><th id="306">306</th><td>{</td></tr>
+<tr><th id="307">307</th><td>    OSAllocator::decommit(ptr, size);</td></tr>
+<tr><th id="308">308</th><td>}</td></tr>
+<tr><th id="309">309</th><td></td></tr>
+<tr><th id="310">310</th><td><em>void</em> fastEnableMiniMode() { }</td></tr>
+<tr><th id="311">311</th><td></td></tr>
+<tr><th id="312">312</th><td><em>void</em> fastDisableScavenger() { }</td></tr>
+<tr><th id="313">313</th><td></td></tr>
+<tr><th id="314">314</th><td><em>void</em> fastMallocDumpMallocStats() { }</td></tr>
+<tr><th id="315">315</th><td></td></tr>
+<tr><th id="316">316</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="317">317</th><td></td></tr>
+<tr><th id="318">318</th><td><u>#<span data-ppcond="148">else</span> // defined(USE_SYSTEM_MALLOC) &amp;&amp; USE_SYSTEM_MALLOC</u></td></tr>
+<tr><th id="319">319</th><td></td></tr>
+<tr><th id="320">320</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html">&lt;bmalloc/bmalloc.h&gt;</a></u></td></tr>
+<tr><th id="321">321</th><td></td></tr>
+<tr><th id="322">322</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="323">323</th><td></td></tr>
+<tr><th id="324">324</th><td><u>#define <dfn class="macro" id="_M/TRACK_MALLOC_CALLSTACK" data-ref="_M/TRACK_MALLOC_CALLSTACK">TRACK_MALLOC_CALLSTACK</dfn> 0</u></td></tr>
+<tr><th id="325">325</th><td></td></tr>
+<tr><th id="326">326</th><td><u>#<span data-ppcond="326">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 0 &amp;&amp; 0)" data-ref="_M/ENABLE">ENABLE</a>(MALLOC_HEAP_BREAKDOWN) &amp;&amp; <a class="macro" href="#324" title="0" data-ref="_M/TRACK_MALLOC_CALLSTACK">TRACK_MALLOC_CALLSTACK</a></u></td></tr>
+<tr><th id="327">327</th><td></td></tr>
+<tr><th id="328">328</th><td><em>static</em> ThreadSpecificKey avoidRecordingCountKey { InvalidThreadSpecificKey };</td></tr>
+<tr><th id="329">329</th><td><b>class</b> AvoidRecordingScope {</td></tr>
+<tr><th id="330">330</th><td><b>public</b>:</td></tr>
+<tr><th id="331">331</th><td>    AvoidRecordingScope();</td></tr>
+<tr><th id="332">332</th><td>    ~AvoidRecordingScope();</td></tr>
+<tr><th id="333">333</th><td></td></tr>
+<tr><th id="334">334</th><td>    <em>static</em> uintptr_t avoidRecordingCount()</td></tr>
+<tr><th id="335">335</th><td>    {</td></tr>
+<tr><th id="336">336</th><td>        <b>return</b> bitwise_cast&lt;uintptr_t&gt;(threadSpecificGet(avoidRecordingCountKey));</td></tr>
+<tr><th id="337">337</th><td>    }</td></tr>
+<tr><th id="338">338</th><td>};</td></tr>
+<tr><th id="339">339</th><td></td></tr>
+<tr><th id="340">340</th><td>AvoidRecordingScope::AvoidRecordingScope()</td></tr>
+<tr><th id="341">341</th><td>{</td></tr>
+<tr><th id="342">342</th><td>    <em>static</em> std::once_flag onceKey;</td></tr>
+<tr><th id="343">343</th><td>    std::call_once(onceKey, [] {</td></tr>
+<tr><th id="344">344</th><td>        <i>// The value stored in TLS is initially 0.</i></td></tr>
+<tr><th id="345">345</th><td>        threadSpecificKeyCreate(&amp;avoidRecordingCountKey, [](<em>void</em>*) { });</td></tr>
+<tr><th id="346">346</th><td>    });</td></tr>
+<tr><th id="347">347</th><td>    threadSpecificSet(avoidRecordingCountKey, bitwise_cast&lt;<em>void</em>*&gt;(avoidRecordingCount() + <var>1</var>));</td></tr>
+<tr><th id="348">348</th><td>}</td></tr>
+<tr><th id="349">349</th><td></td></tr>
+<tr><th id="350">350</th><td>AvoidRecordingScope::~AvoidRecordingScope()</td></tr>
+<tr><th id="351">351</th><td>{</td></tr>
+<tr><th id="352">352</th><td>    threadSpecificSet(avoidRecordingCountKey, bitwise_cast&lt;<em>void</em>*&gt;(avoidRecordingCount() - <var>1</var>));</td></tr>
+<tr><th id="353">353</th><td>}</td></tr>
+<tr><th id="354">354</th><td></td></tr>
+<tr><th id="355">355</th><td><b>class</b> MallocCallTracker {</td></tr>
+<tr><th id="356">356</th><td><b>public</b>:</td></tr>
+<tr><th id="357">357</th><td>    MallocCallTracker();</td></tr>
+<tr><th id="358">358</th><td></td></tr>
+<tr><th id="359">359</th><td>    <em>void</em> recordMalloc(<em>void</em>*, size_t);</td></tr>
+<tr><th id="360">360</th><td>    <em>void</em> recordRealloc(<em>void</em>* oldAddress, <em>void</em>* newAddress, size_t);</td></tr>
+<tr><th id="361">361</th><td>    <em>void</em> recordFree(<em>void</em>*);</td></tr>
+<tr><th id="362">362</th><td></td></tr>
+<tr><th id="363">363</th><td>    <em>void</em> dumpStats();</td></tr>
+<tr><th id="364">364</th><td></td></tr>
+<tr><th id="365">365</th><td>    <em>static</em> MallocCallTracker&amp; singleton();</td></tr>
+<tr><th id="366">366</th><td></td></tr>
+<tr><th id="367">367</th><td><b>private</b>:</td></tr>
+<tr><th id="368">368</th><td>    <b>struct</b> MallocSiteData {</td></tr>
+<tr><th id="369">369</th><td>        StackShot stack;</td></tr>
+<tr><th id="370">370</th><td>        size_t size;</td></tr>
+<tr><th id="371">371</th><td></td></tr>
+<tr><th id="372">372</th><td>        MallocSiteData(size_t stackSize, size_t allocationSize)</td></tr>
+<tr><th id="373">373</th><td>            : stack(stackSize)</td></tr>
+<tr><th id="374">374</th><td>            , size(allocationSize)</td></tr>
+<tr><th id="375">375</th><td>        {</td></tr>
+<tr><th id="376">376</th><td>        }</td></tr>
+<tr><th id="377">377</th><td>    };</td></tr>
+<tr><th id="378">378</th><td></td></tr>
+<tr><th id="379">379</th><td>    Lock m_lock;</td></tr>
+<tr><th id="380">380</th><td>    HashMap&lt;<em>void</em>*, std::unique_ptr&lt;MallocSiteData&gt;&gt; m_addressMallocSiteData WTF_GUARDED_BY_LOCK(m_lock);</td></tr>
+<tr><th id="381">381</th><td>};</td></tr>
+<tr><th id="382">382</th><td></td></tr>
+<tr><th id="383">383</th><td>MallocCallTracker&amp; MallocCallTracker::singleton()</td></tr>
+<tr><th id="384">384</th><td>{</td></tr>
+<tr><th id="385">385</th><td>    AvoidRecordingScope avoidRecording;</td></tr>
+<tr><th id="386">386</th><td>    <em>static</em> LazyNeverDestroyed&lt;MallocCallTracker&gt; tracker;</td></tr>
+<tr><th id="387">387</th><td>    <em>static</em> std::once_flag onceKey;</td></tr>
+<tr><th id="388">388</th><td>    std::call_once(onceKey, [&amp;] {</td></tr>
+<tr><th id="389">389</th><td>        tracker.construct();</td></tr>
+<tr><th id="390">390</th><td>    });</td></tr>
+<tr><th id="391">391</th><td>    <b>return</b> tracker;</td></tr>
+<tr><th id="392">392</th><td>}</td></tr>
+<tr><th id="393">393</th><td></td></tr>
+<tr><th id="394">394</th><td></td></tr>
+<tr><th id="395">395</th><td>MallocCallTracker::MallocCallTracker()</td></tr>
+<tr><th id="396">396</th><td>{</td></tr>
+<tr><th id="397">397</th><td>    <em>int</em> token;</td></tr>
+<tr><th id="398">398</th><td>    notify_register_dispatch(<q>"com.apple.WebKit.dumpUntrackedMallocs"</q>, &amp;token, dispatch_get_main_queue(), ^(<em>int</em>) {</td></tr>
+<tr><th id="399">399</th><td>        MallocCallTracker::singleton().dumpStats();</td></tr>
+<tr><th id="400">400</th><td>    });</td></tr>
+<tr><th id="401">401</th><td>}</td></tr>
+<tr><th id="402">402</th><td></td></tr>
+<tr><th id="403">403</th><td><em>void</em> MallocCallTracker::recordMalloc(<em>void</em>* address, size_t allocationSize)</td></tr>
+<tr><th id="404">404</th><td>{</td></tr>
+<tr><th id="405">405</th><td>    AvoidRecordingScope avoidRecording;</td></tr>
+<tr><th id="406">406</th><td></td></tr>
+<tr><th id="407">407</th><td>    <i>// Intentionally using std::make_unique not to use FastMalloc for data structure tracking FastMalloc.</i></td></tr>
+<tr><th id="408">408</th><td>    <em>const</em> size_t stackSize = <var>10</var>;</td></tr>
+<tr><th id="409">409</th><td>    <em>auto</em> siteData = std::make_unique&lt;MallocSiteData&gt;(stackSize, allocationSize);</td></tr>
+<tr><th id="410">410</th><td></td></tr>
+<tr><th id="411">411</th><td>    Locker locker { m_lock };</td></tr>
+<tr><th id="412">412</th><td>    <em>auto</em> addResult = m_addressMallocSiteData.add(address, WTFMove(siteData));</td></tr>
+<tr><th id="413">413</th><td>    UNUSED_PARAM(addResult);</td></tr>
+<tr><th id="414">414</th><td>}</td></tr>
+<tr><th id="415">415</th><td></td></tr>
+<tr><th id="416">416</th><td><em>void</em> MallocCallTracker::recordRealloc(<em>void</em>* oldAddress, <em>void</em>* newAddress, size_t newSize)</td></tr>
+<tr><th id="417">417</th><td>{</td></tr>
+<tr><th id="418">418</th><td>    AvoidRecordingScope avoidRecording;</td></tr>
+<tr><th id="419">419</th><td></td></tr>
+<tr><th id="420">420</th><td>    Locker locker { m_lock };</td></tr>
+<tr><th id="421">421</th><td></td></tr>
+<tr><th id="422">422</th><td>    <em>auto</em> it = m_addressMallocSiteData.find(oldAddress);</td></tr>
+<tr><th id="423">423</th><td>    <b>if</b> (it == m_addressMallocSiteData.end()) {</td></tr>
+<tr><th id="424">424</th><td>        ASSERT_NOT_REACHED();</td></tr>
+<tr><th id="425">425</th><td>        <b>return</b>;</td></tr>
+<tr><th id="426">426</th><td>    }</td></tr>
+<tr><th id="427">427</th><td></td></tr>
+<tr><th id="428">428</th><td>    it-&gt;value-&gt;size = newSize;</td></tr>
+<tr><th id="429">429</th><td>    <b>if</b> (oldAddress != newAddress) {</td></tr>
+<tr><th id="430">430</th><td>        <em>auto</em> value = WTFMove(it-&gt;value);</td></tr>
+<tr><th id="431">431</th><td>        m_addressMallocSiteData.remove(it);</td></tr>
+<tr><th id="432">432</th><td>        <em>auto</em> addResult = m_addressMallocSiteData.add(newAddress, WTFMove(value));</td></tr>
+<tr><th id="433">433</th><td>        ASSERT_UNUSED(addResult, addResult.isNewEntry);</td></tr>
+<tr><th id="434">434</th><td>    }</td></tr>
+<tr><th id="435">435</th><td>}</td></tr>
+<tr><th id="436">436</th><td></td></tr>
+<tr><th id="437">437</th><td><em>void</em> MallocCallTracker::recordFree(<em>void</em>* address)</td></tr>
+<tr><th id="438">438</th><td>{</td></tr>
+<tr><th id="439">439</th><td>    AvoidRecordingScope avoidRecording;</td></tr>
+<tr><th id="440">440</th><td></td></tr>
+<tr><th id="441">441</th><td>    Locker locker { m_lock };</td></tr>
+<tr><th id="442">442</th><td>    <em>bool</em> removed = m_addressMallocSiteData.remove(address);</td></tr>
+<tr><th id="443">443</th><td>    UNUSED_PARAM(removed);</td></tr>
+<tr><th id="444">444</th><td>}</td></tr>
+<tr><th id="445">445</th><td></td></tr>
+<tr><th id="446">446</th><td><em>void</em> MallocCallTracker::dumpStats()</td></tr>
+<tr><th id="447">447</th><td>{</td></tr>
+<tr><th id="448">448</th><td>    AvoidRecordingScope avoidRecording;</td></tr>
+<tr><th id="449">449</th><td></td></tr>
+<tr><th id="450">450</th><td>    {</td></tr>
+<tr><th id="451">451</th><td>        Locker locker { m_lock };</td></tr>
+<tr><th id="452">452</th><td></td></tr>
+<tr><th id="453">453</th><td>        <i>// Build a hash of stack to address vector</i></td></tr>
+<tr><th id="454">454</th><td>        <b>struct</b> MallocSiteTotals {</td></tr>
+<tr><th id="455">455</th><td>            Vector&lt;MallocSiteData*&gt; siteData;</td></tr>
+<tr><th id="456">456</th><td>            size_t count { <var>0</var> };</td></tr>
+<tr><th id="457">457</th><td>            size_t totalSize { <var>0</var> };</td></tr>
+<tr><th id="458">458</th><td>        };</td></tr>
+<tr><th id="459">459</th><td></td></tr>
+<tr><th id="460">460</th><td>        size_t totalUntrackedSize = <var>0</var>;</td></tr>
+<tr><th id="461">461</th><td>        size_t totalUntrackedCount = <var>0</var>;</td></tr>
+<tr><th id="462">462</th><td></td></tr>
+<tr><th id="463">463</th><td>        HashMap&lt;<em>unsigned</em>, std::unique_ptr&lt;MallocSiteTotals&gt;&gt; callSiteToMallocData;</td></tr>
+<tr><th id="464">464</th><td>        <b>for</b> (<em>const</em> <em>auto</em>&amp; it : m_addressMallocSiteData) {</td></tr>
+<tr><th id="465">465</th><td>            <em>auto</em> result = callSiteToMallocData.ensure(it.value-&gt;stack.hash(), [] () {</td></tr>
+<tr><th id="466">466</th><td>                <i>// Intentionally using std::make_unique not to use FastMalloc for data structure tracking FastMalloc.</i></td></tr>
+<tr><th id="467">467</th><td>                <b>return</b> std::make_unique&lt;MallocSiteTotals&gt;();</td></tr>
+<tr><th id="468">468</th><td>            });</td></tr>
+<tr><th id="469">469</th><td>            <em>auto</em>&amp; siteTotal = result.iterator-&gt;value;</td></tr>
+<tr><th id="470">470</th><td>            siteTotal-&gt;siteData.append(it.value.get());</td></tr>
+<tr><th id="471">471</th><td>            ++siteTotal-&gt;count;</td></tr>
+<tr><th id="472">472</th><td>            siteTotal-&gt;totalSize += it.value-&gt;size;</td></tr>
+<tr><th id="473">473</th><td>            totalUntrackedSize += it.value-&gt;size;</td></tr>
+<tr><th id="474">474</th><td>            ++totalUntrackedCount;</td></tr>
+<tr><th id="475">475</th><td>        }</td></tr>
+<tr><th id="476">476</th><td></td></tr>
+<tr><th id="477">477</th><td>        Vector&lt;<em>unsigned</em>&gt; stackHashes;</td></tr>
+<tr><th id="478">478</th><td>        <em>auto</em> stackKeys = callSiteToMallocData.keys();</td></tr>
+<tr><th id="479">479</th><td>        <b>for</b> (<em>auto</em> key : stackKeys)</td></tr>
+<tr><th id="480">480</th><td>            stackHashes.append(key);</td></tr>
+<tr><th id="481">481</th><td></td></tr>
+<tr><th id="482">482</th><td>        <i>// Sort by reverse total size.</i></td></tr>
+<tr><th id="483">483</th><td>        std::sort(stackHashes.begin(), stackHashes.end(), [&amp;] (<em>unsigned</em> a, <em>unsigned</em> b) {</td></tr>
+<tr><th id="484">484</th><td>            <em>const</em> <em>auto</em>&amp; aSiteTotals = callSiteToMallocData.get(a);</td></tr>
+<tr><th id="485">485</th><td>            <em>const</em> <em>auto</em>&amp; bSiteTotals = callSiteToMallocData.get(b);</td></tr>
+<tr><th id="486">486</th><td></td></tr>
+<tr><th id="487">487</th><td>            <b>return</b> aSiteTotals-&gt;totalSize &gt; bSiteTotals-&gt;totalSize;</td></tr>
+<tr><th id="488">488</th><td>        });</td></tr>
+<tr><th id="489">489</th><td></td></tr>
+<tr><th id="490">490</th><td>        WTFLogAlways(<q>"Total untracked bytes: %lu (%lu allocations)\n"</q>, totalUntrackedSize, totalUntrackedCount);</td></tr>
+<tr><th id="491">491</th><td></td></tr>
+<tr><th id="492">492</th><td>        <em>const</em> size_t numStacksToDump = <var>100</var>;</td></tr>
+<tr><th id="493">493</th><td>        <b>for</b> (size_t i = <var>0</var>; i &lt; std::min(numStacksToDump, stackHashes.size()); ++i) {</td></tr>
+<tr><th id="494">494</th><td>            <em>const</em> <em>auto</em>&amp; mallocDataForStack = callSiteToMallocData.get(stackHashes[i]);</td></tr>
+<tr><th id="495">495</th><td></td></tr>
+<tr><th id="496">496</th><td>            WTFLogAlways(<q>"Total allocation size: %lu (%lu allocations)\n"</q>, mallocDataForStack-&gt;totalSize, mallocDataForStack-&gt;count);</td></tr>
+<tr><th id="497">497</th><td>            <i>// FIXME: Add a way to remove some entries in StackShot in a programable way.</i></td></tr>
+<tr><th id="498">498</th><td><i>            // <a href="https://bugs.webkit.org/show_bug.cgi?id=205701">https://bugs.webkit.org/show_bug.cgi?id=205701</a></i></td></tr>
+<tr><th id="499">499</th><td>            <em>const</em> size_t framesToSkip = <var>6</var>;</td></tr>
+<tr><th id="500">500</th><td>            WTFPrintBacktrace(mallocDataForStack-&gt;siteData[<var>0</var>]-&gt;stack.array() + framesToSkip, mallocDataForStack-&gt;siteData[<var>0</var>]-&gt;stack.size() - framesToSkip);</td></tr>
+<tr><th id="501">501</th><td>            WTFLogAlways(<q>"\n"</q>);</td></tr>
+<tr><th id="502">502</th><td>        }</td></tr>
+<tr><th id="503">503</th><td>    }</td></tr>
+<tr><th id="504">504</th><td>}</td></tr>
+<tr><th id="505">505</th><td><em>void</em> fastMallocDumpMallocStats()</td></tr>
+<tr><th id="506">506</th><td>{</td></tr>
+<tr><th id="507">507</th><td>    MallocCallTracker::singleton().dumpStats();</td></tr>
+<tr><th id="508">508</th><td>}</td></tr>
+<tr><th id="509">509</th><td><u>#<span data-ppcond="326">else</span></u></td></tr>
+<tr><th id="510">510</th><td><em>void</em> <dfn class="decl def fn" id="_ZN3WTF25fastMallocDumpMallocStatsEv" title='WTF::fastMallocDumpMallocStats' data-ref="_ZN3WTF25fastMallocDumpMallocStatsEv" data-ref-filename="_ZN3WTF25fastMallocDumpMallocStatsEv">fastMallocDumpMallocStats</dfn>()</td></tr>
+<tr><th id="511">511</th><td>{</td></tr>
+<tr><th id="512">512</th><td>}</td></tr>
+<tr><th id="513">513</th><td><u>#<span data-ppcond="326">endif</span></u></td></tr>
+<tr><th id="514">514</th><td></td></tr>
+<tr><th id="515">515</th><td></td></tr>
+<tr><th id="516">516</th><td><em>bool</em> <dfn class="decl def fn" id="_ZN3WTF19isFastMallocEnabledEv" title='WTF::isFastMallocEnabled' data-ref="_ZN3WTF19isFastMallocEnabledEv" data-ref-filename="_ZN3WTF19isFastMallocEnabledEv">isFastMallocEnabled</dfn>()</td></tr>
+<tr><th id="517">517</th><td>{</td></tr>
+<tr><th id="518">518</th><td>    <b>return</b> <span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api9isEnabledENS_8HeapKindE" title='bmalloc::api::isEnabled' data-ref="_ZN7bmalloc3api9isEnabledENS_8HeapKindE" data-ref-filename="_ZN7bmalloc3api9isEnabledENS_8HeapKindE">isEnabled</a>();</td></tr>
+<tr><th id="519">519</th><td>}</td></tr>
+<tr><th id="520">520</th><td></td></tr>
+<tr><th id="521">521</th><td><em>void</em>* <dfn class="decl def fn" id="_ZN3WTF10fastMallocEm" title='WTF::fastMalloc' data-ref="_ZN3WTF10fastMallocEm" data-ref-filename="_ZN3WTF10fastMallocEm">fastMalloc</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="405size" title='size' data-type='size_t' data-ref="405size" data-ref-filename="405size">size</dfn>)</td></tr>
+<tr><th id="522">522</th><td>{</td></tr>
+<tr><th id="523">523</th><td>    <a class="macro" href="#95" title="do { size_t size__ = (size); do { if (!((size__) &lt;= maxSingleAllocationSize)) { WTFReportAssertionFailureWithMessage(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, 523, __PRETTY_FUNCTION__, &quot;(size__) &lt;= maxSingleAllocationSize&quot;, &quot;Requested size (%zu) exceeds max single allocation size set for testing (%zu)&quot;, (size__), maxSingleAllocationSize); WTFCrash(); } } while (0); } while (false)" data-ref="_M/ASSERT_IS_WITHIN_LIMIT">ASSERT_IS_WITHIN_LIMIT</a>(<a class="local col5 ref" href="#405size" title='size' data-ref="405size" data-ref-filename="405size">size</a>);</td></tr>
+<tr><th id="524">524</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, 524, __PRETTY_FUNCTION__, &quot;!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(524, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, __PRETTY_FUNCTION__, 14); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(!<a class="tu ref" href="#WTF::forbidMallocUseScopeCount" title='WTF::forbidMallocUseScopeCount' data-use='r' data-ref="WTF::forbidMallocUseScopeCount" data-ref-filename="WTF..forbidMallocUseScopeCount">forbidMallocUseScopeCount</a> || <a class="tu ref" href="#WTF::disableMallocRestrictionScopeCount" title='WTF::disableMallocRestrictionScopeCount' data-use='r' data-ref="WTF::disableMallocRestrictionScopeCount" data-ref-filename="WTF..disableMallocRestrictionScopeCount">disableMallocRestrictionScopeCount</a>);</td></tr>
+<tr><th id="525">525</th><td>    <em>void</em>* <dfn class="local col7 decl" id="407result" title='result' data-type='void *' data-ref="407result" data-ref-filename="407result">result</dfn> = <span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api6mallocEmNS_8HeapKindE" title='bmalloc::api::malloc' data-ref="_ZN7bmalloc3api6mallocEmNS_8HeapKindE" data-ref-filename="_ZN7bmalloc3api6mallocEmNS_8HeapKindE">malloc</a>(<a class="local col5 ref" href="#405size" title='size' data-ref="405size" data-ref-filename="405size">size</a>);</td></tr>
+<tr><th id="526">526</th><td><u>#<span data-ppcond="526">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 0 &amp;&amp; 0)" data-ref="_M/ENABLE">ENABLE</a>(MALLOC_HEAP_BREAKDOWN) &amp;&amp; <a class="macro" href="#324" title="0" data-ref="_M/TRACK_MALLOC_CALLSTACK">TRACK_MALLOC_CALLSTACK</a></u></td></tr>
+<tr><th id="527">527</th><td>    <b>if</b> (!AvoidRecordingScope::avoidRecordingCount())</td></tr>
+<tr><th id="528">528</th><td>        MallocCallTracker::singleton().recordMalloc(result, size);</td></tr>
+<tr><th id="529">529</th><td><u>#<span data-ppcond="526">endif</span></u></td></tr>
+<tr><th id="530">530</th><td>    <b>return</b> <a class="local col7 ref" href="#407result" title='result' data-ref="407result" data-ref-filename="407result">result</a>;</td></tr>
+<tr><th id="531">531</th><td>}</td></tr>
+<tr><th id="532">532</th><td></td></tr>
+<tr><th id="533">533</th><td><em>void</em>* <dfn class="decl def fn" id="_ZN3WTF10fastCallocEmm" title='WTF::fastCalloc' data-ref="_ZN3WTF10fastCallocEmm" data-ref-filename="_ZN3WTF10fastCallocEmm">fastCalloc</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="408numElements" title='numElements' data-type='size_t' data-ref="408numElements" data-ref-filename="408numElements">numElements</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="409elementSize" title='elementSize' data-type='size_t' data-ref="409elementSize" data-ref-filename="409elementSize">elementSize</dfn>)</td></tr>
+<tr><th id="534">534</th><td>{</td></tr>
+<tr><th id="535">535</th><td>    <a class="macro" href="#95" title="do { size_t size__ = (numElements * elementSize); do { if (!((size__) &lt;= maxSingleAllocationSize)) { WTFReportAssertionFailureWithMessage(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, 535, __PRETTY_FUNCTION__, &quot;(size__) &lt;= maxSingleAllocationSize&quot;, &quot;Requested size (%zu) exceeds max single allocation size set for testing (%zu)&quot;, (size__), maxSingleAllocationSize); WTFCrash(); } } while (0); } while (false)" data-ref="_M/ASSERT_IS_WITHIN_LIMIT">ASSERT_IS_WITHIN_LIMIT</a>(<a class="local col8 ref" href="#408numElements" title='numElements' data-ref="408numElements" data-ref-filename="408numElements">numElements</a> * <a class="local col9 ref" href="#409elementSize" title='elementSize' data-ref="409elementSize" data-ref-filename="409elementSize">elementSize</a>);</td></tr>
+<tr><th id="536">536</th><td>    <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/CheckedArithmetic.h.html#WTF::Checked" title='WTF::Checked' data-ref="WTF::Checked" data-ref-filename="WTF..Checked">Checked</a>&lt;<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span>&gt; <dfn class="local col1 decl" id="411checkedSize" title='checkedSize' data-type='Checked&lt;size_t&gt;' data-ref="411checkedSize" data-ref-filename="411checkedSize">checkedSize</dfn> = <a class="ref fn fake" href="../../../WebKitBuild/Debug/usr/local/include/wtf/CheckedArithmetic.h.html#_ZN3WTF7CheckedC1ETL0__" title='WTF::Checked::Checked&lt;T, OverflowHandler&gt;' data-ref="_ZN3WTF7CheckedC1ETL0__" data-ref-filename="_ZN3WTF7CheckedC1ETL0__"></a><a class="local col9 ref" href="#409elementSize" title='elementSize' data-ref="409elementSize" data-ref-filename="409elementSize">elementSize</a>;</td></tr>
+<tr><th id="537">537</th><td>    <a class="local col1 ref" href="#411checkedSize" title='checkedSize' data-ref="411checkedSize" data-ref-filename="411checkedSize">checkedSize</a> <a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/CheckedArithmetic.h.html#_ZN3WTF7CheckedmLETL0__" title='WTF::Checked::operator*=' data-ref="_ZN3WTF7CheckedmLETL0__" data-ref-filename="_ZN3WTF7CheckedmLETL0__">*=</a> <a class="local col8 ref" href="#408numElements" title='numElements' data-ref="408numElements" data-ref-filename="408numElements">numElements</a>;</td></tr>
+<tr><th id="538">538</th><td>    <em>void</em>* <dfn class="local col2 decl" id="412result" title='result' data-type='void *' data-ref="412result" data-ref-filename="412result">result</dfn> = <a class="ref fn" href="#_ZN3WTF16fastZeroedMallocEm" title='WTF::fastZeroedMalloc' data-ref="_ZN3WTF16fastZeroedMallocEm" data-ref-filename="_ZN3WTF16fastZeroedMallocEm">fastZeroedMalloc</a>(<a class="ref fn fake" href="../../../WebKitBuild/Debug/usr/local/include/wtf/CheckedArithmetic.h.html#_ZNK3WTF7CheckedcvT_Ev" title='WTF::Checked::operator type-parameter-0-0' data-ref="_ZNK3WTF7CheckedcvT_Ev" data-ref-filename="_ZNK3WTF7CheckedcvT_Ev"></a><a class="local col1 ref" href="#411checkedSize" title='checkedSize' data-ref="411checkedSize" data-ref-filename="411checkedSize">checkedSize</a>);</td></tr>
+<tr><th id="539">539</th><td>    <b>if</b> (!<a class="local col2 ref" href="#412result" title='result' data-ref="412result" data-ref-filename="412result">result</a>)</td></tr>
+<tr><th id="540">540</th><td>        <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#274" title="WTFCrash()" data-ref="_M/CRASH">CRASH</a>();</td></tr>
+<tr><th id="541">541</th><td>    <b>return</b> <a class="local col2 ref" href="#412result" title='result' data-ref="412result" data-ref-filename="412result">result</a>;</td></tr>
+<tr><th id="542">542</th><td>}</td></tr>
+<tr><th id="543">543</th><td></td></tr>
+<tr><th id="544">544</th><td><em>void</em>* <dfn class="decl def fn" id="_ZN3WTF11fastReallocEPvm" title='WTF::fastRealloc' data-ref="_ZN3WTF11fastReallocEPvm" data-ref-filename="_ZN3WTF11fastReallocEPvm">fastRealloc</dfn>(<em>void</em>* <dfn class="local col3 decl" id="413object" title='object' data-type='void *' data-ref="413object" data-ref-filename="413object">object</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="414size" title='size' data-type='size_t' data-ref="414size" data-ref-filename="414size">size</dfn>)</td></tr>
+<tr><th id="545">545</th><td>{</td></tr>
+<tr><th id="546">546</th><td>    <a class="macro" href="#95" title="do { size_t size__ = (size); do { if (!((size__) &lt;= maxSingleAllocationSize)) { WTFReportAssertionFailureWithMessage(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, 546, __PRETTY_FUNCTION__, &quot;(size__) &lt;= maxSingleAllocationSize&quot;, &quot;Requested size (%zu) exceeds max single allocation size set for testing (%zu)&quot;, (size__), maxSingleAllocationSize); WTFCrash(); } } while (0); } while (false)" data-ref="_M/ASSERT_IS_WITHIN_LIMIT">ASSERT_IS_WITHIN_LIMIT</a>(<a class="local col4 ref" href="#414size" title='size' data-ref="414size" data-ref-filename="414size">size</a>);</td></tr>
+<tr><th id="547">547</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, 547, __PRETTY_FUNCTION__, &quot;!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(547, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, __PRETTY_FUNCTION__, 16); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(!<a class="tu ref" href="#WTF::forbidMallocUseScopeCount" title='WTF::forbidMallocUseScopeCount' data-use='r' data-ref="WTF::forbidMallocUseScopeCount" data-ref-filename="WTF..forbidMallocUseScopeCount">forbidMallocUseScopeCount</a> || <a class="tu ref" href="#WTF::disableMallocRestrictionScopeCount" title='WTF::disableMallocRestrictionScopeCount' data-use='r' data-ref="WTF::disableMallocRestrictionScopeCount" data-ref-filename="WTF..disableMallocRestrictionScopeCount">disableMallocRestrictionScopeCount</a>);</td></tr>
+<tr><th id="548">548</th><td>    <em>void</em>* <dfn class="local col6 decl" id="416result" title='result' data-type='void *' data-ref="416result" data-ref-filename="416result">result</dfn> = <span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api7reallocEPvmNS_8HeapKindE" title='bmalloc::api::realloc' data-ref="_ZN7bmalloc3api7reallocEPvmNS_8HeapKindE" data-ref-filename="_ZN7bmalloc3api7reallocEPvmNS_8HeapKindE">realloc</a>(<a class="local col3 ref" href="#413object" title='object' data-ref="413object" data-ref-filename="413object">object</a>, <a class="local col4 ref" href="#414size" title='size' data-ref="414size" data-ref-filename="414size">size</a>);</td></tr>
+<tr><th id="549">549</th><td><u>#<span data-ppcond="549">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 0 &amp;&amp; 0)" data-ref="_M/ENABLE">ENABLE</a>(MALLOC_HEAP_BREAKDOWN) &amp;&amp; <a class="macro" href="#324" title="0" data-ref="_M/TRACK_MALLOC_CALLSTACK">TRACK_MALLOC_CALLSTACK</a></u></td></tr>
+<tr><th id="550">550</th><td>    <b>if</b> (!AvoidRecordingScope::avoidRecordingCount())</td></tr>
+<tr><th id="551">551</th><td>        MallocCallTracker::singleton().recordRealloc(object, result, size);</td></tr>
+<tr><th id="552">552</th><td><u>#<span data-ppcond="549">endif</span></u></td></tr>
+<tr><th id="553">553</th><td>    <b>return</b> <a class="local col6 ref" href="#416result" title='result' data-ref="416result" data-ref-filename="416result">result</a>;</td></tr>
+<tr><th id="554">554</th><td>}</td></tr>
+<tr><th id="555">555</th><td></td></tr>
+<tr><th id="556">556</th><td><em>void</em> <dfn class="decl def fn" id="_ZN3WTF8fastFreeEPv" title='WTF::fastFree' data-ref="_ZN3WTF8fastFreeEPv" data-ref-filename="_ZN3WTF8fastFreeEPv">fastFree</dfn>(<em>void</em>* <dfn class="local col7 decl" id="417object" title='object' data-type='void *' data-ref="417object" data-ref-filename="417object">object</dfn>)</td></tr>
+<tr><th id="557">557</th><td>{</td></tr>
+<tr><th id="558">558</th><td>    <span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api4freeEPvNS_8HeapKindE" title='bmalloc::api::free' data-ref="_ZN7bmalloc3api4freeEPvNS_8HeapKindE" data-ref-filename="_ZN7bmalloc3api4freeEPvNS_8HeapKindE">free</a>(<a class="local col7 ref" href="#417object" title='object' data-ref="417object" data-ref-filename="417object">object</a>);</td></tr>
+<tr><th id="559">559</th><td><u>#<span data-ppcond="559">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 0 &amp;&amp; 0)" data-ref="_M/ENABLE">ENABLE</a>(MALLOC_HEAP_BREAKDOWN) &amp;&amp; <a class="macro" href="#324" title="0" data-ref="_M/TRACK_MALLOC_CALLSTACK">TRACK_MALLOC_CALLSTACK</a></u></td></tr>
+<tr><th id="560">560</th><td>    <b>if</b> (!AvoidRecordingScope::avoidRecordingCount())</td></tr>
+<tr><th id="561">561</th><td>        MallocCallTracker::singleton().recordFree(object);</td></tr>
+<tr><th id="562">562</th><td><u>#<span data-ppcond="559">endif</span></u></td></tr>
+<tr><th id="563">563</th><td>}</td></tr>
+<tr><th id="564">564</th><td></td></tr>
+<tr><th id="565">565</th><td><span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl def fn" id="_ZN3WTF14fastMallocSizeEPKv" title='WTF::fastMallocSize' data-ref="_ZN3WTF14fastMallocSizeEPKv" data-ref-filename="_ZN3WTF14fastMallocSizeEPKv">fastMallocSize</dfn>(<em>const</em> <em>void</em>*)</td></tr>
+<tr><th id="566">566</th><td>{</td></tr>
+<tr><th id="567">567</th><td>    <i>// FIXME: This is incorrect; best fix is probably to remove this function.</i></td></tr>
+<tr><th id="568">568</th><td><i>    // Caller currently are all using this for assertion, not to actually check</i></td></tr>
+<tr><th id="569">569</th><td><i>    // the size of the allocation, so maybe we can come up with something for that.</i></td></tr>
+<tr><th id="570">570</th><td>    <b>return</b> <var>1</var>;</td></tr>
+<tr><th id="571">571</th><td>}</td></tr>
+<tr><th id="572">572</th><td></td></tr>
+<tr><th id="573">573</th><td><span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl def fn" id="_ZN3WTF18fastMallocGoodSizeEm" title='WTF::fastMallocGoodSize' data-ref="_ZN3WTF18fastMallocGoodSizeEm" data-ref-filename="_ZN3WTF18fastMallocGoodSizeEm">fastMallocGoodSize</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="418size" title='size' data-type='size_t' data-ref="418size" data-ref-filename="418size">size</dfn>)</td></tr>
+<tr><th id="574">574</th><td>{</td></tr>
+<tr><th id="575">575</th><td>    <b>return</b> <a class="local col8 ref" href="#418size" title='size' data-ref="418size" data-ref-filename="418size">size</a>;</td></tr>
+<tr><th id="576">576</th><td>}</td></tr>
+<tr><th id="577">577</th><td></td></tr>
+<tr><th id="578">578</th><td><em>void</em>* <dfn class="decl def fn" id="_ZN3WTF17fastAlignedMallocEmm" title='WTF::fastAlignedMalloc' data-ref="_ZN3WTF17fastAlignedMallocEmm" data-ref-filename="_ZN3WTF17fastAlignedMallocEmm">fastAlignedMalloc</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="419alignment" title='alignment' data-type='size_t' data-ref="419alignment" data-ref-filename="419alignment">alignment</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="420size" title='size' data-type='size_t' data-ref="420size" data-ref-filename="420size">size</dfn>)</td></tr>
+<tr><th id="579">579</th><td>{</td></tr>
+<tr><th id="580">580</th><td>    <a class="macro" href="#95" title="do { size_t size__ = (size); do { if (!((size__) &lt;= maxSingleAllocationSize)) { WTFReportAssertionFailureWithMessage(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, 580, __PRETTY_FUNCTION__, &quot;(size__) &lt;= maxSingleAllocationSize&quot;, &quot;Requested size (%zu) exceeds max single allocation size set for testing (%zu)&quot;, (size__), maxSingleAllocationSize); WTFCrash(); } } while (0); } while (false)" data-ref="_M/ASSERT_IS_WITHIN_LIMIT">ASSERT_IS_WITHIN_LIMIT</a>(<a class="local col0 ref" href="#420size" title='size' data-ref="420size" data-ref-filename="420size">size</a>);</td></tr>
+<tr><th id="581">581</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, 581, __PRETTY_FUNCTION__, &quot;!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(581, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, __PRETTY_FUNCTION__, 18); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(!<a class="tu ref" href="#WTF::forbidMallocUseScopeCount" title='WTF::forbidMallocUseScopeCount' data-use='r' data-ref="WTF::forbidMallocUseScopeCount" data-ref-filename="WTF..forbidMallocUseScopeCount">forbidMallocUseScopeCount</a> || <a class="tu ref" href="#WTF::disableMallocRestrictionScopeCount" title='WTF::disableMallocRestrictionScopeCount' data-use='r' data-ref="WTF::disableMallocRestrictionScopeCount" data-ref-filename="WTF..disableMallocRestrictionScopeCount">disableMallocRestrictionScopeCount</a>);</td></tr>
+<tr><th id="582">582</th><td>    <em>void</em>* <dfn class="local col2 decl" id="422result" title='result' data-type='void *' data-ref="422result" data-ref-filename="422result">result</dfn> = <span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api8memalignEmmNS_8HeapKindE" title='bmalloc::api::memalign' data-ref="_ZN7bmalloc3api8memalignEmmNS_8HeapKindE" data-ref-filename="_ZN7bmalloc3api8memalignEmmNS_8HeapKindE">memalign</a>(<a class="local col9 ref" href="#419alignment" title='alignment' data-ref="419alignment" data-ref-filename="419alignment">alignment</a>, <a class="local col0 ref" href="#420size" title='size' data-ref="420size" data-ref-filename="420size">size</a>);</td></tr>
+<tr><th id="583">583</th><td><u>#<span data-ppcond="583">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 0 &amp;&amp; 0)" data-ref="_M/ENABLE">ENABLE</a>(MALLOC_HEAP_BREAKDOWN) &amp;&amp; <a class="macro" href="#324" title="0" data-ref="_M/TRACK_MALLOC_CALLSTACK">TRACK_MALLOC_CALLSTACK</a></u></td></tr>
+<tr><th id="584">584</th><td>    <b>if</b> (!AvoidRecordingScope::avoidRecordingCount())</td></tr>
+<tr><th id="585">585</th><td>        MallocCallTracker::singleton().recordMalloc(result, size);</td></tr>
+<tr><th id="586">586</th><td><u>#<span data-ppcond="583">endif</span></u></td></tr>
+<tr><th id="587">587</th><td>    <b>return</b> <a class="local col2 ref" href="#422result" title='result' data-ref="422result" data-ref-filename="422result">result</a>;</td></tr>
+<tr><th id="588">588</th><td>}</td></tr>
+<tr><th id="589">589</th><td></td></tr>
+<tr><th id="590">590</th><td><em>void</em>* <dfn class="decl def fn" id="_ZN3WTF20tryFastAlignedMallocEmm" title='WTF::tryFastAlignedMalloc' data-ref="_ZN3WTF20tryFastAlignedMallocEmm" data-ref-filename="_ZN3WTF20tryFastAlignedMallocEmm">tryFastAlignedMalloc</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="423alignment" title='alignment' data-type='size_t' data-ref="423alignment" data-ref-filename="423alignment">alignment</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="424size" title='size' data-type='size_t' data-ref="424size" data-ref-filename="424size">size</dfn>)</td></tr>
+<tr><th id="591">591</th><td>{</td></tr>
+<tr><th id="592">592</th><td>    <a class="macro" href="#100" title="do { if (__builtin_expect(!!((size) &gt; maxSingleAllocationSize), 0)) return nullptr; } while (false)" data-ref="_M/FAIL_IF_EXCEEDS_LIMIT">FAIL_IF_EXCEEDS_LIMIT</a>(<a class="local col4 ref" href="#424size" title='size' data-ref="424size" data-ref-filename="424size">size</a>);</td></tr>
+<tr><th id="593">593</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, 593, __PRETTY_FUNCTION__, &quot;!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(593, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, __PRETTY_FUNCTION__, 20); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(!<a class="tu ref" href="#WTF::forbidMallocUseScopeCount" title='WTF::forbidMallocUseScopeCount' data-use='r' data-ref="WTF::forbidMallocUseScopeCount" data-ref-filename="WTF..forbidMallocUseScopeCount">forbidMallocUseScopeCount</a> || <a class="tu ref" href="#WTF::disableMallocRestrictionScopeCount" title='WTF::disableMallocRestrictionScopeCount' data-use='r' data-ref="WTF::disableMallocRestrictionScopeCount" data-ref-filename="WTF..disableMallocRestrictionScopeCount">disableMallocRestrictionScopeCount</a>);</td></tr>
+<tr><th id="594">594</th><td>    <em>void</em>* <dfn class="local col5 decl" id="425result" title='result' data-type='void *' data-ref="425result" data-ref-filename="425result">result</dfn> = <span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api11tryMemalignEmmNS_8HeapKindE" title='bmalloc::api::tryMemalign' data-ref="_ZN7bmalloc3api11tryMemalignEmmNS_8HeapKindE" data-ref-filename="_ZN7bmalloc3api11tryMemalignEmmNS_8HeapKindE">tryMemalign</a>(<a class="local col3 ref" href="#423alignment" title='alignment' data-ref="423alignment" data-ref-filename="423alignment">alignment</a>, <a class="local col4 ref" href="#424size" title='size' data-ref="424size" data-ref-filename="424size">size</a>);</td></tr>
+<tr><th id="595">595</th><td><u>#<span data-ppcond="595">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 0 &amp;&amp; 0)" data-ref="_M/ENABLE">ENABLE</a>(MALLOC_HEAP_BREAKDOWN) &amp;&amp; <a class="macro" href="#324" title="0" data-ref="_M/TRACK_MALLOC_CALLSTACK">TRACK_MALLOC_CALLSTACK</a></u></td></tr>
+<tr><th id="596">596</th><td>    <b>if</b> (!AvoidRecordingScope::avoidRecordingCount())</td></tr>
+<tr><th id="597">597</th><td>        MallocCallTracker::singleton().recordMalloc(result, size);</td></tr>
+<tr><th id="598">598</th><td><u>#<span data-ppcond="595">endif</span></u></td></tr>
+<tr><th id="599">599</th><td>    <b>return</b> <a class="local col5 ref" href="#425result" title='result' data-ref="425result" data-ref-filename="425result">result</a>;</td></tr>
+<tr><th id="600">600</th><td>}</td></tr>
+<tr><th id="601">601</th><td></td></tr>
+<tr><th id="602">602</th><td><em>void</em> <dfn class="decl def fn" id="_ZN3WTF15fastAlignedFreeEPv" title='WTF::fastAlignedFree' data-ref="_ZN3WTF15fastAlignedFreeEPv" data-ref-filename="_ZN3WTF15fastAlignedFreeEPv">fastAlignedFree</dfn>(<em>void</em>* <dfn class="local col6 decl" id="426p" title='p' data-type='void *' data-ref="426p" data-ref-filename="426p">p</dfn>)</td></tr>
+<tr><th id="603">603</th><td>{</td></tr>
+<tr><th id="604">604</th><td>    <span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api4freeEPvNS_8HeapKindE" title='bmalloc::api::free' data-ref="_ZN7bmalloc3api4freeEPvNS_8HeapKindE" data-ref-filename="_ZN7bmalloc3api4freeEPvNS_8HeapKindE">free</a>(<a class="local col6 ref" href="#426p" title='p' data-ref="426p" data-ref-filename="426p">p</a>);</td></tr>
+<tr><th id="605">605</th><td>}</td></tr>
+<tr><th id="606">606</th><td></td></tr>
+<tr><th id="607">607</th><td><a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#WTF::TryMallocReturnValue" title='WTF::TryMallocReturnValue' data-ref="WTF::TryMallocReturnValue" data-ref-filename="WTF..TryMallocReturnValue">TryMallocReturnValue</a> <dfn class="decl def fn" id="_ZN3WTF13tryFastMallocEm" title='WTF::tryFastMalloc' data-ref="_ZN3WTF13tryFastMallocEm" data-ref-filename="_ZN3WTF13tryFastMallocEm">tryFastMalloc</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="427size" title='size' data-type='size_t' data-ref="427size" data-ref-filename="427size">size</dfn>)</td></tr>
+<tr><th id="608">608</th><td>{</td></tr>
+<tr><th id="609">609</th><td>    <a class="macro" href="#100" title="do { if (__builtin_expect(!!((size) &gt; maxSingleAllocationSize), 0)) return nullptr; } while (false)" data-ref="_M/FAIL_IF_EXCEEDS_LIMIT">FAIL_IF_EXCEEDS_LIMIT</a>(<a class="local col7 ref" href="#427size" title='size' data-ref="427size" data-ref-filename="427size">size</a>);</td></tr>
+<tr><th id="610">610</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, 610, __PRETTY_FUNCTION__, &quot;!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(610, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, __PRETTY_FUNCTION__, 22); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(!<a class="tu ref" href="#WTF::forbidMallocUseScopeCount" title='WTF::forbidMallocUseScopeCount' data-use='r' data-ref="WTF::forbidMallocUseScopeCount" data-ref-filename="WTF..forbidMallocUseScopeCount">forbidMallocUseScopeCount</a> || <a class="tu ref" href="#WTF::disableMallocRestrictionScopeCount" title='WTF::disableMallocRestrictionScopeCount' data-use='r' data-ref="WTF::disableMallocRestrictionScopeCount" data-ref-filename="WTF..disableMallocRestrictionScopeCount">disableMallocRestrictionScopeCount</a>);</td></tr>
+<tr><th id="611">611</th><td>    <b>return</b> <a class="ref fn fake" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#_ZN3WTF20TryMallocReturnValueC1EPv" title='WTF::TryMallocReturnValue::TryMallocReturnValue' data-ref="_ZN3WTF20TryMallocReturnValueC1EPv" data-ref-filename="_ZN3WTF20TryMallocReturnValueC1EPv"></a><span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api9tryMallocEmNS_8HeapKindE" title='bmalloc::api::tryMalloc' data-ref="_ZN7bmalloc3api9tryMallocEmNS_8HeapKindE" data-ref-filename="_ZN7bmalloc3api9tryMallocEmNS_8HeapKindE">tryMalloc</a>(<a class="local col7 ref" href="#427size" title='size' data-ref="427size" data-ref-filename="427size">size</a>);</td></tr>
+<tr><th id="612">612</th><td>}</td></tr>
+<tr><th id="613">613</th><td></td></tr>
+<tr><th id="614">614</th><td><a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#WTF::TryMallocReturnValue" title='WTF::TryMallocReturnValue' data-ref="WTF::TryMallocReturnValue" data-ref-filename="WTF..TryMallocReturnValue">TryMallocReturnValue</a> <dfn class="decl def fn" id="_ZN3WTF13tryFastCallocEmm" title='WTF::tryFastCalloc' data-ref="_ZN3WTF13tryFastCallocEmm" data-ref-filename="_ZN3WTF13tryFastCallocEmm">tryFastCalloc</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="428numElements" title='numElements' data-type='size_t' data-ref="428numElements" data-ref-filename="428numElements">numElements</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="429elementSize" title='elementSize' data-type='size_t' data-ref="429elementSize" data-ref-filename="429elementSize">elementSize</dfn>)</td></tr>
+<tr><th id="615">615</th><td>{</td></tr>
+<tr><th id="616">616</th><td>    <a class="macro" href="#100" title="do { if (__builtin_expect(!!((numElements * elementSize) &gt; maxSingleAllocationSize), 0)) return nullptr; } while (false)" data-ref="_M/FAIL_IF_EXCEEDS_LIMIT">FAIL_IF_EXCEEDS_LIMIT</a>(<a class="local col8 ref" href="#428numElements" title='numElements' data-ref="428numElements" data-ref-filename="428numElements">numElements</a> * <a class="local col9 ref" href="#429elementSize" title='elementSize' data-ref="429elementSize" data-ref-filename="429elementSize">elementSize</a>);</td></tr>
+<tr><th id="617">617</th><td>    <a class="typedef" href="../../../WebKitBuild/Debug/usr/local/include/wtf/CheckedArithmetic.h.html#WTF::CheckedSize" title='WTF::CheckedSize' data-type='Checked&lt;size_t, WTF::RecordOverflow&gt;' data-ref="WTF::CheckedSize" data-ref-filename="WTF..CheckedSize">CheckedSize</a> <dfn class="local col0 decl" id="430checkedSize" title='checkedSize' data-type='WTF::CheckedSize' data-ref="430checkedSize" data-ref-filename="430checkedSize">checkedSize</dfn> = <a class="ref fn fake" href="../../../WebKitBuild/Debug/usr/local/include/wtf/CheckedArithmetic.h.html#_ZN3WTF7CheckedC1ETL0__" title='WTF::Checked::Checked&lt;T, OverflowHandler&gt;' data-ref="_ZN3WTF7CheckedC1ETL0__" data-ref-filename="_ZN3WTF7CheckedC1ETL0__"></a><a class="local col9 ref" href="#429elementSize" title='elementSize' data-ref="429elementSize" data-ref-filename="429elementSize">elementSize</a>;</td></tr>
+<tr><th id="618">618</th><td>    <a class="local col0 ref" href="#430checkedSize" title='checkedSize' data-ref="430checkedSize" data-ref-filename="430checkedSize">checkedSize</a> <a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/CheckedArithmetic.h.html#_ZN3WTF7CheckedmLETL0__" title='WTF::Checked::operator*=' data-ref="_ZN3WTF7CheckedmLETL0__" data-ref-filename="_ZN3WTF7CheckedmLETL0__">*=</a> <a class="local col8 ref" href="#428numElements" title='numElements' data-ref="428numElements" data-ref-filename="428numElements">numElements</a>;</td></tr>
+<tr><th id="619">619</th><td>    <b>if</b> (<a class="local col0 ref" href="#430checkedSize" title='checkedSize' data-ref="430checkedSize" data-ref-filename="430checkedSize">checkedSize</a>.<a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/CheckedArithmetic.h.html#_ZNK3WTF14RecordOverflow13hasOverflowedEv" title='WTF::RecordOverflow::hasOverflowed' data-ref="_ZNK3WTF14RecordOverflow13hasOverflowedEv" data-ref-filename="_ZNK3WTF14RecordOverflow13hasOverflowedEv">hasOverflowed</a>())</td></tr>
+<tr><th id="620">620</th><td>        <b>return</b> <a class="ref fn fake" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#_ZN3WTF20TryMallocReturnValueC1EPv" title='WTF::TryMallocReturnValue::TryMallocReturnValue' data-ref="_ZN3WTF20TryMallocReturnValueC1EPv" data-ref-filename="_ZN3WTF20TryMallocReturnValueC1EPv"></a><b>nullptr</b>;</td></tr>
+<tr><th id="621">621</th><td>    <b>return</b> <a class="ref fn" href="#_ZN3WTF19tryFastZeroedMallocEm" title='WTF::tryFastZeroedMalloc' data-ref="_ZN3WTF19tryFastZeroedMallocEm" data-ref-filename="_ZN3WTF19tryFastZeroedMallocEm">tryFastZeroedMalloc</a>(<a class="ref fn fake" href="../../../WebKitBuild/Debug/usr/local/include/wtf/CheckedArithmetic.h.html#_ZNK3WTF7CheckedcvT_Ev" title='WTF::Checked::operator type-parameter-0-0' data-ref="_ZNK3WTF7CheckedcvT_Ev" data-ref-filename="_ZNK3WTF7CheckedcvT_Ev"></a><a class="local col0 ref" href="#430checkedSize" title='checkedSize' data-ref="430checkedSize" data-ref-filename="430checkedSize">checkedSize</a>);</td></tr>
+<tr><th id="622">622</th><td>}</td></tr>
+<tr><th id="623">623</th><td></td></tr>
+<tr><th id="624">624</th><td><a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#WTF::TryMallocReturnValue" title='WTF::TryMallocReturnValue' data-ref="WTF::TryMallocReturnValue" data-ref-filename="WTF..TryMallocReturnValue">TryMallocReturnValue</a> <dfn class="decl def fn" id="_ZN3WTF14tryFastReallocEPvm" title='WTF::tryFastRealloc' data-ref="_ZN3WTF14tryFastReallocEPvm" data-ref-filename="_ZN3WTF14tryFastReallocEPvm">tryFastRealloc</dfn>(<em>void</em>* <dfn class="local col1 decl" id="431object" title='object' data-type='void *' data-ref="431object" data-ref-filename="431object">object</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="432newSize" title='newSize' data-type='size_t' data-ref="432newSize" data-ref-filename="432newSize">newSize</dfn>)</td></tr>
+<tr><th id="625">625</th><td>{</td></tr>
+<tr><th id="626">626</th><td>    <a class="macro" href="#100" title="do { if (__builtin_expect(!!((newSize) &gt; maxSingleAllocationSize), 0)) return nullptr; } while (false)" data-ref="_M/FAIL_IF_EXCEEDS_LIMIT">FAIL_IF_EXCEEDS_LIMIT</a>(<a class="local col2 ref" href="#432newSize" title='newSize' data-ref="432newSize" data-ref-filename="432newSize">newSize</a>);</td></tr>
+<tr><th id="627">627</th><td>    <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, 627, __PRETTY_FUNCTION__, &quot;!forbidMallocUseScopeCount || disableMallocRestrictionScopeCount&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(627, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WTF/wtf/FastMalloc.cpp&quot;, __PRETTY_FUNCTION__, 24); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(!<a class="tu ref" href="#WTF::forbidMallocUseScopeCount" title='WTF::forbidMallocUseScopeCount' data-use='r' data-ref="WTF::forbidMallocUseScopeCount" data-ref-filename="WTF..forbidMallocUseScopeCount">forbidMallocUseScopeCount</a> || <a class="tu ref" href="#WTF::disableMallocRestrictionScopeCount" title='WTF::disableMallocRestrictionScopeCount' data-use='r' data-ref="WTF::disableMallocRestrictionScopeCount" data-ref-filename="WTF..disableMallocRestrictionScopeCount">disableMallocRestrictionScopeCount</a>);</td></tr>
+<tr><th id="628">628</th><td>    <b>return</b> <a class="ref fn fake" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#_ZN3WTF20TryMallocReturnValueC1EPv" title='WTF::TryMallocReturnValue::TryMallocReturnValue' data-ref="_ZN3WTF20TryMallocReturnValueC1EPv" data-ref-filename="_ZN3WTF20TryMallocReturnValueC1EPv"></a><span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api10tryReallocEPvmNS_8HeapKindE" title='bmalloc::api::tryRealloc' data-ref="_ZN7bmalloc3api10tryReallocEPvmNS_8HeapKindE" data-ref-filename="_ZN7bmalloc3api10tryReallocEPvmNS_8HeapKindE">tryRealloc</a>(<a class="local col1 ref" href="#431object" title='object' data-ref="431object" data-ref-filename="431object">object</a>, <a class="local col2 ref" href="#432newSize" title='newSize' data-ref="432newSize" data-ref-filename="432newSize">newSize</a>);</td></tr>
+<tr><th id="629">629</th><td>}</td></tr>
+<tr><th id="630">630</th><td></td></tr>
+<tr><th id="631">631</th><td><em>void</em> <dfn class="decl def fn" id="_ZN3WTF40releaseFastMallocFreeMemoryForThisThreadEv" title='WTF::releaseFastMallocFreeMemoryForThisThread' data-ref="_ZN3WTF40releaseFastMallocFreeMemoryForThisThreadEv" data-ref-filename="_ZN3WTF40releaseFastMallocFreeMemoryForThisThreadEv">releaseFastMallocFreeMemoryForThisThread</dfn>()</td></tr>
+<tr><th id="632">632</th><td>{</td></tr>
+<tr><th id="633">633</th><td>    <span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api18scavengeThisThreadEv" title='bmalloc::api::scavengeThisThread' data-ref="_ZN7bmalloc3api18scavengeThisThreadEv" data-ref-filename="_ZN7bmalloc3api18scavengeThisThreadEv">scavengeThisThread</a>();</td></tr>
+<tr><th id="634">634</th><td>}</td></tr>
+<tr><th id="635">635</th><td></td></tr>
+<tr><th id="636">636</th><td><em>void</em> <dfn class="decl def fn" id="_ZN3WTF27releaseFastMallocFreeMemoryEv" title='WTF::releaseFastMallocFreeMemory' data-ref="_ZN3WTF27releaseFastMallocFreeMemoryEv" data-ref-filename="_ZN3WTF27releaseFastMallocFreeMemoryEv">releaseFastMallocFreeMemory</dfn>()</td></tr>
+<tr><th id="637">637</th><td>{</td></tr>
+<tr><th id="638">638</th><td>    <span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api8scavengeEv" title='bmalloc::api::scavenge' data-ref="_ZN7bmalloc3api8scavengeEv" data-ref-filename="_ZN7bmalloc3api8scavengeEv">scavenge</a>();</td></tr>
+<tr><th id="639">639</th><td>}</td></tr>
+<tr><th id="640">640</th><td></td></tr>
+<tr><th id="641">641</th><td><a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#WTF::FastMallocStatistics" title='WTF::FastMallocStatistics' data-ref="WTF::FastMallocStatistics" data-ref-filename="WTF..FastMallocStatistics">FastMallocStatistics</a> <dfn class="decl def fn" id="_ZN3WTF20fastMallocStatisticsEv" title='WTF::fastMallocStatistics' data-ref="_ZN3WTF20fastMallocStatisticsEv" data-ref-filename="_ZN3WTF20fastMallocStatisticsEv">fastMallocStatistics</dfn>()</td></tr>
+<tr><th id="642">642</th><td>{</td></tr>
+<tr><th id="643">643</th><td></td></tr>
+<tr><th id="644">644</th><td>    <i>// FIXME: Can bmalloc itself report the stats instead of relying on the OS?</i></td></tr>
+<tr><th id="645">645</th><td>    <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#WTF::FastMallocStatistics" title='WTF::FastMallocStatistics' data-ref="WTF::FastMallocStatistics" data-ref-filename="WTF..FastMallocStatistics">FastMallocStatistics</a> <a class="ref fn fake" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#157" title='WTF::FastMallocStatistics::FastMallocStatistics' data-ref="_ZN3WTF20FastMallocStatisticsC1Ev" data-ref-filename="_ZN3WTF20FastMallocStatisticsC1Ev"></a><dfn class="local col3 decl" id="433statistics" title='statistics' data-type='WTF::FastMallocStatistics' data-ref="433statistics" data-ref-filename="433statistics">statistics</dfn>;</td></tr>
+<tr><th id="646">646</th><td>    <a class="local col3 ref" href="#433statistics" title='statistics' data-ref="433statistics" data-ref-filename="433statistics">statistics</a>.<a class="ref field" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#WTF::FastMallocStatistics::freeListBytes" title='WTF::FastMallocStatistics::freeListBytes' data-ref="WTF::FastMallocStatistics::freeListBytes" data-ref-filename="WTF..FastMallocStatistics..freeListBytes">freeListBytes</a> = <var>0</var>;</td></tr>
+<tr><th id="647">647</th><td>    <a class="local col3 ref" href="#433statistics" title='statistics' data-ref="433statistics" data-ref-filename="433statistics">statistics</a>.<a class="ref field" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#WTF::FastMallocStatistics::reservedVMBytes" title='WTF::FastMallocStatistics::reservedVMBytes' data-ref="WTF::FastMallocStatistics::reservedVMBytes" data-ref-filename="WTF..FastMallocStatistics..reservedVMBytes">reservedVMBytes</a> = <var>0</var>;</td></tr>
+<tr><th id="648">648</th><td></td></tr>
+<tr><th id="649">649</th><td><u>#<span data-ppcond="649">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformOS.h.html#43" title="(defined WTF_OS_WINDOWS &amp;&amp; WTF_OS_WINDOWS)" data-ref="_M/OS">OS</a>(WINDOWS)</u></td></tr>
+<tr><th id="650">650</th><td>    PROCESS_MEMORY_COUNTERS resourceUsage;</td></tr>
+<tr><th id="651">651</th><td>    GetProcessMemoryInfo(GetCurrentProcess(), &amp;resourceUsage, <b>sizeof</b>(resourceUsage));</td></tr>
+<tr><th id="652">652</th><td>    statistics.committedVMBytes = resourceUsage.PeakWorkingSetSize;</td></tr>
+<tr><th id="653">653</th><td><u>#<span data-ppcond="649">elif</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformHave.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/HAVE">HAVE</a>(RESOURCE_H)</u></td></tr>
+<tr><th id="654">654</th><td>    <b>struct</b> <span class='type' title='rusage' data-ref="rusage" data-ref-filename="rusage">rusage</span> <span class='ref fn fake' title='rusage::rusage' data-ref="_ZN6rusageC1Ev" data-ref-filename="_ZN6rusageC1Ev"></span><dfn class="local col4 decl" id="434resourceUsage" title='resourceUsage' data-type='struct rusage' data-ref="434resourceUsage" data-ref-filename="434resourceUsage">resourceUsage</dfn>;</td></tr>
+<tr><th id="655">655</th><td>    <span class='ref fn' title='getrusage' data-ref="getrusage" data-ref-filename="getrusage">getrusage</span>(<span class="macro" title="0" data-ref="_M/RUSAGE_SELF">RUSAGE_SELF</span>, &amp;<a class="local col4 ref" href="#434resourceUsage" title='resourceUsage' data-ref="434resourceUsage" data-ref-filename="434resourceUsage">resourceUsage</a>);</td></tr>
+<tr><th id="656">656</th><td></td></tr>
+<tr><th id="657">657</th><td><u>#<span data-ppcond="657">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformOS.h.html#43" title="(defined 1 &amp;&amp; 1)" data-ref="_M/OS">OS</a>(DARWIN)</u></td></tr>
+<tr><th id="658">658</th><td>    <a class="local col3 ref" href="#433statistics" title='statistics' data-ref="433statistics" data-ref-filename="433statistics">statistics</a>.<a class="ref field" href="../../../WebKitBuild/Debug/usr/local/include/wtf/FastMalloc.h.html#WTF::FastMallocStatistics::committedVMBytes" title='WTF::FastMallocStatistics::committedVMBytes' data-ref="WTF::FastMallocStatistics::committedVMBytes" data-ref-filename="WTF..FastMallocStatistics..committedVMBytes">committedVMBytes</a> = <a class="local col4 ref" href="#434resourceUsage" title='resourceUsage' data-ref="434resourceUsage" data-ref-filename="434resourceUsage">resourceUsage</a>.<span class='ref field' title='rusage::ru_maxrss' data-ref="rusage::ru_maxrss" data-ref-filename="rusage..ru_maxrss">ru_maxrss</span>;</td></tr>
+<tr><th id="659">659</th><td><u>#<span data-ppcond="657">else</span></u></td></tr>
+<tr><th id="660">660</th><td>    statistics.committedVMBytes = resourceUsage.ru_maxrss * <var>1024</var>;</td></tr>
+<tr><th id="661">661</th><td><u>#<span data-ppcond="657">endif</span> // OS(DARWIN)</u></td></tr>
+<tr><th id="662">662</th><td></td></tr>
+<tr><th id="663">663</th><td><u>#<span data-ppcond="649">endif</span> // OS(WINDOWS)</u></td></tr>
+<tr><th id="664">664</th><td>    <b>return</b> <a class="local col3 ref" href="#433statistics" title='statistics' data-ref="433statistics" data-ref-filename="433statistics">statistics</a>;</td></tr>
+<tr><th id="665">665</th><td>}</td></tr>
+<tr><th id="666">666</th><td></td></tr>
+<tr><th id="667">667</th><td><em>void</em> <dfn class="decl def fn" id="_ZN3WTF23fastCommitAlignedMemoryEPvm" title='WTF::fastCommitAlignedMemory' data-ref="_ZN3WTF23fastCommitAlignedMemoryEPvm" data-ref-filename="_ZN3WTF23fastCommitAlignedMemoryEPvm">fastCommitAlignedMemory</dfn>(<em>void</em>* <dfn class="local col5 decl" id="435ptr" title='ptr' data-type='void *' data-ref="435ptr" data-ref-filename="435ptr">ptr</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="436size" title='size' data-type='size_t' data-ref="436size" data-ref-filename="436size">size</dfn>)</td></tr>
+<tr><th id="668">668</th><td>{</td></tr>
+<tr><th id="669">669</th><td>    <span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api21commitAlignedPhysicalEPvmNS_8HeapKindE" title='bmalloc::api::commitAlignedPhysical' data-ref="_ZN7bmalloc3api21commitAlignedPhysicalEPvmNS_8HeapKindE" data-ref-filename="_ZN7bmalloc3api21commitAlignedPhysicalEPvmNS_8HeapKindE">commitAlignedPhysical</a>(<a class="local col5 ref" href="#435ptr" title='ptr' data-ref="435ptr" data-ref-filename="435ptr">ptr</a>, <a class="local col6 ref" href="#436size" title='size' data-ref="436size" data-ref-filename="436size">size</a>);</td></tr>
+<tr><th id="670">670</th><td>}</td></tr>
+<tr><th id="671">671</th><td></td></tr>
+<tr><th id="672">672</th><td><em>void</em> <dfn class="decl def fn" id="_ZN3WTF25fastDecommitAlignedMemoryEPvm" title='WTF::fastDecommitAlignedMemory' data-ref="_ZN3WTF25fastDecommitAlignedMemoryEPvm" data-ref-filename="_ZN3WTF25fastDecommitAlignedMemoryEPvm">fastDecommitAlignedMemory</dfn>(<em>void</em>* <dfn class="local col7 decl" id="437ptr" title='ptr' data-type='void *' data-ref="437ptr" data-ref-filename="437ptr">ptr</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="438size" title='size' data-type='size_t' data-ref="438size" data-ref-filename="438size">size</dfn>)</td></tr>
+<tr><th id="673">673</th><td>{</td></tr>
+<tr><th id="674">674</th><td>    <span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api23decommitAlignedPhysicalEPvmNS_8HeapKindE" title='bmalloc::api::decommitAlignedPhysical' data-ref="_ZN7bmalloc3api23decommitAlignedPhysicalEPvmNS_8HeapKindE" data-ref-filename="_ZN7bmalloc3api23decommitAlignedPhysicalEPvmNS_8HeapKindE">decommitAlignedPhysical</a>(<a class="local col7 ref" href="#437ptr" title='ptr' data-ref="437ptr" data-ref-filename="437ptr">ptr</a>, <a class="local col8 ref" href="#438size" title='size' data-ref="438size" data-ref-filename="438size">size</a>);</td></tr>
+<tr><th id="675">675</th><td>}</td></tr>
+<tr><th id="676">676</th><td></td></tr>
+<tr><th id="677">677</th><td><em>void</em> <dfn class="decl def fn" id="_ZN3WTF18fastEnableMiniModeEv" title='WTF::fastEnableMiniMode' data-ref="_ZN3WTF18fastEnableMiniModeEv" data-ref-filename="_ZN3WTF18fastEnableMiniModeEv">fastEnableMiniMode</dfn>()</td></tr>
+<tr><th id="678">678</th><td>{</td></tr>
+<tr><th id="679">679</th><td>    <span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api14enableMiniModeEv" title='bmalloc::api::enableMiniMode' data-ref="_ZN7bmalloc3api14enableMiniModeEv" data-ref-filename="_ZN7bmalloc3api14enableMiniModeEv">enableMiniMode</a>();</td></tr>
+<tr><th id="680">680</th><td>}</td></tr>
+<tr><th id="681">681</th><td></td></tr>
+<tr><th id="682">682</th><td><em>void</em> <dfn class="decl def fn" id="_ZN3WTF20fastDisableScavengerEv" title='WTF::fastDisableScavenger' data-ref="_ZN3WTF20fastDisableScavengerEv" data-ref-filename="_ZN3WTF20fastDisableScavengerEv">fastDisableScavenger</dfn>()</td></tr>
+<tr><th id="683">683</th><td>{</td></tr>
+<tr><th id="684">684</th><td>    <span class="namespace">bmalloc::api::</span><a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/bmalloc/bmalloc.h.html#_ZN7bmalloc3api16disableScavengerEv" title='bmalloc::api::disableScavenger' data-ref="_ZN7bmalloc3api16disableScavengerEv" data-ref-filename="_ZN7bmalloc3api16disableScavengerEv">disableScavenger</a>();</td></tr>
+<tr><th id="685">685</th><td>}</td></tr>
+<tr><th id="686">686</th><td></td></tr>
+<tr><th id="687">687</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="688">688</th><td></td></tr>
+<tr><th id="689">689</th><td><u>#<span data-ppcond="148">endif</span> // defined(USE_SYSTEM_MALLOC) &amp;&amp; USE_SYSTEM_MALLOC</u></td></tr>
+<tr><th id="690">690</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

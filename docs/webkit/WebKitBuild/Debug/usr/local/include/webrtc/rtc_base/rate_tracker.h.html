@@ -1,0 +1,91 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>rate_tracker.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/rate_tracker.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::RateTracker "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/rate_tracker.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>WebKitBuild</a>/<a href='../../../../..'>Debug</a>/<a href='../../../..'>usr</a>/<a href='../../..'>local</a>/<a href='../..'>include</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='rate_tracker.h.html'>rate_tracker.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2015 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_RATE_TRACKER_H_">RTC_BASE_RATE_TRACKER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_RATE_TRACKER_H_" data-ref="_M/RTC_BASE_RATE_TRACKER_H_">RTC_BASE_RATE_TRACKER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;stdlib.h&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><i>// Computes units per second over a given interval by tracking the units over</i></td></tr>
+<tr><th id="20">20</th><td><i>// each bucket of a given size and calculating the instantaneous rate assuming</i></td></tr>
+<tr><th id="21">21</th><td><i>// that over each bucket the rate was constant.</i></td></tr>
+<tr><th id="22">22</th><td><b>class</b> <dfn class="type def" id="rtc::RateTracker" title='rtc::RateTracker' data-ref="rtc::RateTracker" data-ref-filename="rtc..RateTracker">RateTracker</dfn> {</td></tr>
+<tr><th id="23">23</th><td> <b>public</b>:</td></tr>
+<tr><th id="24">24</th><td>  <dfn class="decl fn" id="_ZN3rtc11RateTrackerC1Exm" title='rtc::RateTracker::RateTracker' data-ref="_ZN3rtc11RateTrackerC1Exm" data-ref-filename="_ZN3rtc11RateTrackerC1Exm">RateTracker</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col0 decl" id="3450bucket_milliseconds" title='bucket_milliseconds' data-type='int64_t' data-ref="3450bucket_milliseconds" data-ref-filename="3450bucket_milliseconds">bucket_milliseconds</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="3451bucket_count" title='bucket_count' data-type='size_t' data-ref="3451bucket_count" data-ref-filename="3451bucket_count">bucket_count</dfn>);</td></tr>
+<tr><th id="25">25</th><td>  <b>virtual</b> <dfn class="virtual decl fn" id="_ZN3rtc11RateTrackerD1Ev" title='rtc::RateTracker::~RateTracker' data-ref="_ZN3rtc11RateTrackerD1Ev" data-ref-filename="_ZN3rtc11RateTrackerD1Ev">~RateTracker</dfn>();</td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td>  <i>// Computes the average rate over the most recent interval_milliseconds,</i></td></tr>
+<tr><th id="28">28</th><td><i>  // or if the first sample was added within this period, computes the rate</i></td></tr>
+<tr><th id="29">29</th><td><i>  // since the first sample was added.</i></td></tr>
+<tr><th id="30">30</th><td>  <em>double</em> <dfn class="decl fn" id="_ZNK3rtc11RateTracker22ComputeRateForIntervalEx" title='rtc::RateTracker::ComputeRateForInterval' data-ref="_ZNK3rtc11RateTracker22ComputeRateForIntervalEx" data-ref-filename="_ZNK3rtc11RateTracker22ComputeRateForIntervalEx">ComputeRateForInterval</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col2 decl" id="3452interval_milliseconds" title='interval_milliseconds' data-type='int64_t' data-ref="3452interval_milliseconds" data-ref-filename="3452interval_milliseconds">interval_milliseconds</dfn>) <em>const</em>;</td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td>  <i>// Computes the average rate over the rate tracker's recording interval</i></td></tr>
+<tr><th id="33">33</th><td><i>  // of bucket_milliseconds * bucket_count.</i></td></tr>
+<tr><th id="34">34</th><td>  <em>double</em> <dfn class="decl def fn" id="_ZNK3rtc11RateTracker11ComputeRateEv" title='rtc::RateTracker::ComputeRate' data-ref="_ZNK3rtc11RateTracker11ComputeRateEv" data-ref-filename="_ZNK3rtc11RateTracker11ComputeRateEv">ComputeRate</dfn>() <em>const</em> {</td></tr>
+<tr><th id="35">35</th><td>    <b>return</b> <a class="member fn" href="#_ZNK3rtc11RateTracker22ComputeRateForIntervalEx" title='rtc::RateTracker::ComputeRateForInterval' data-ref="_ZNK3rtc11RateTracker22ComputeRateForIntervalEx" data-ref-filename="_ZNK3rtc11RateTracker22ComputeRateForIntervalEx">ComputeRateForInterval</a>(<a class="member field" href="#rtc::RateTracker::bucket_milliseconds_" title='rtc::RateTracker::bucket_milliseconds_' data-ref="rtc::RateTracker::bucket_milliseconds_" data-ref-filename="rtc..RateTracker..bucket_milliseconds_">bucket_milliseconds_</a> *</td></tr>
+<tr><th id="36">36</th><td>                                  <b>static_cast</b>&lt;<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span>&gt;(<a class="member field" href="#rtc::RateTracker::bucket_count_" title='rtc::RateTracker::bucket_count_' data-ref="rtc::RateTracker::bucket_count_" data-ref-filename="rtc..RateTracker..bucket_count_">bucket_count_</a>));</td></tr>
+<tr><th id="37">37</th><td>  }</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td>  <i>// Computes the average rate since the first sample was added to the</i></td></tr>
+<tr><th id="40">40</th><td><i>  // rate tracker.</i></td></tr>
+<tr><th id="41">41</th><td>  <em>double</em> <dfn class="decl fn" id="_ZNK3rtc11RateTracker16ComputeTotalRateEv" title='rtc::RateTracker::ComputeTotalRate' data-ref="_ZNK3rtc11RateTracker16ComputeTotalRateEv" data-ref-filename="_ZNK3rtc11RateTracker16ComputeTotalRateEv">ComputeTotalRate</dfn>() <em>const</em>;</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td>  <i>// The total number of samples added.</i></td></tr>
+<tr><th id="44">44</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl fn" id="_ZNK3rtc11RateTracker16TotalSampleCountEv" title='rtc::RateTracker::TotalSampleCount' data-ref="_ZNK3rtc11RateTracker16TotalSampleCountEv" data-ref-filename="_ZNK3rtc11RateTracker16TotalSampleCountEv">TotalSampleCount</dfn>() <em>const</em>;</td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td>  <i>// Reads the current time in order to determine the appropriate bucket for</i></td></tr>
+<tr><th id="47">47</th><td><i>  // these samples, and increments the count for that bucket by sample_count.</i></td></tr>
+<tr><th id="48">48</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN3rtc11RateTracker10AddSamplesEx" title='rtc::RateTracker::AddSamples' data-ref="_ZN3rtc11RateTracker10AddSamplesEx" data-ref-filename="_ZN3rtc11RateTracker10AddSamplesEx">AddSamples</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col3 decl" id="3453sample_count" title='sample_count' data-type='int64_t' data-ref="3453sample_count" data-ref-filename="3453sample_count">sample_count</dfn>);</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td>  <i>// Increment count for bucket at |current_time_ms|.</i></td></tr>
+<tr><th id="51">51</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN3rtc11RateTracker16AddSamplesAtTimeExx" title='rtc::RateTracker::AddSamplesAtTime' data-ref="_ZN3rtc11RateTracker16AddSamplesAtTimeExx" data-ref-filename="_ZN3rtc11RateTracker16AddSamplesAtTimeExx">AddSamplesAtTime</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col4 decl" id="3454current_time_ms" title='current_time_ms' data-type='int64_t' data-ref="3454current_time_ms" data-ref-filename="3454current_time_ms">current_time_ms</dfn>, <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col5 decl" id="3455sample_count" title='sample_count' data-type='int64_t' data-ref="3455sample_count" data-ref-filename="3455sample_count">sample_count</dfn>);</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td> <b>protected</b>:</td></tr>
+<tr><th id="54">54</th><td>  <i>// overrideable for tests</i></td></tr>
+<tr><th id="55">55</th><td>  <b>virtual</b> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="virtual decl fn" id="_ZNK3rtc11RateTracker4TimeEv" title='rtc::RateTracker::Time' data-ref="_ZNK3rtc11RateTracker4TimeEv" data-ref-filename="_ZNK3rtc11RateTracker4TimeEv">Time</dfn>() <em>const</em>;</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td> <b>private</b>:</td></tr>
+<tr><th id="58">58</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN3rtc11RateTracker17EnsureInitializedEv" title='rtc::RateTracker::EnsureInitialized' data-ref="_ZN3rtc11RateTracker17EnsureInitializedEv" data-ref-filename="_ZN3rtc11RateTracker17EnsureInitializedEv">EnsureInitialized</dfn>();</td></tr>
+<tr><th id="59">59</th><td>  <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl fn" id="_ZNK3rtc11RateTracker15NextBucketIndexEm" title='rtc::RateTracker::NextBucketIndex' data-ref="_ZNK3rtc11RateTracker15NextBucketIndexEm" data-ref-filename="_ZNK3rtc11RateTracker15NextBucketIndexEm">NextBucketIndex</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col6 decl" id="3456bucket_index" title='bucket_index' data-type='size_t' data-ref="3456bucket_index" data-ref-filename="3456bucket_index">bucket_index</dfn>) <em>const</em>;</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td>  <em>const</em> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl field" id="rtc::RateTracker::bucket_milliseconds_" title='rtc::RateTracker::bucket_milliseconds_' data-ref="rtc::RateTracker::bucket_milliseconds_" data-ref-filename="rtc..RateTracker..bucket_milliseconds_">bucket_milliseconds_</dfn>;</td></tr>
+<tr><th id="62">62</th><td>  <em>const</em> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="rtc::RateTracker::bucket_count_" title='rtc::RateTracker::bucket_count_' data-ref="rtc::RateTracker::bucket_count_" data-ref-filename="rtc..RateTracker..bucket_count_">bucket_count_</dfn>;</td></tr>
+<tr><th id="63">63</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span>* <dfn class="decl field" id="rtc::RateTracker::sample_buckets_" title='rtc::RateTracker::sample_buckets_' data-ref="rtc::RateTracker::sample_buckets_" data-ref-filename="rtc..RateTracker..sample_buckets_">sample_buckets_</dfn>;</td></tr>
+<tr><th id="64">64</th><td>  <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="rtc::RateTracker::total_sample_count_" title='rtc::RateTracker::total_sample_count_' data-ref="rtc::RateTracker::total_sample_count_" data-ref-filename="rtc..RateTracker..total_sample_count_">total_sample_count_</dfn>;</td></tr>
+<tr><th id="65">65</th><td>  <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="rtc::RateTracker::current_bucket_" title='rtc::RateTracker::current_bucket_' data-ref="rtc::RateTracker::current_bucket_" data-ref-filename="rtc..RateTracker..current_bucket_">current_bucket_</dfn>;</td></tr>
+<tr><th id="66">66</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl field" id="rtc::RateTracker::bucket_start_time_milliseconds_" title='rtc::RateTracker::bucket_start_time_milliseconds_' data-ref="rtc::RateTracker::bucket_start_time_milliseconds_" data-ref-filename="rtc..RateTracker..bucket_start_time_milliseconds_">bucket_start_time_milliseconds_</dfn>;</td></tr>
+<tr><th id="67">67</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl field" id="rtc::RateTracker::initialization_time_milliseconds_" title='rtc::RateTracker::initialization_time_milliseconds_' data-ref="rtc::RateTracker::initialization_time_milliseconds_" data-ref-filename="rtc..RateTracker..initialization_time_milliseconds_">initialization_time_milliseconds_</dfn>;</td></tr>
+<tr><th id="68">68</th><td>};</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_RATE_TRACKER_H_</u></td></tr>
+<tr><th id="73">73</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

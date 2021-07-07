@@ -1,0 +1,889 @@
+<use f='webkit/Source/JavaScriptCore/heap/GCLogging.h' l='43' c='_ZN3JSC9GCLogging15dumpObjectGraphEPNS_4HeapE'/>
+<use f='webkit/Source/JavaScriptCore/heap/Allocator.h' l='49' c='_ZNK3JSC9Allocator8allocateERNS_4HeapEPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<use f='webkit/Source/JavaScriptCore/heap/HeapCell.h' l='76' c='_ZNK3JSC8HeapCell4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/heap/CellContainer.h' l='62' c='_ZNK3JSC13CellContainer4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/heap/WeakBlock.h' l='58' c='_ZN3JSC9WeakBlock6createERNS_4HeapENS_13CellContainerE'/>
+<use f='webkit/Source/JavaScriptCore/heap/WeakBlock.h' l='59' c='_ZN3JSC9WeakBlock7destroyERNS_4HeapEPS0_'/>
+<use f='webkit/Source/JavaScriptCore/heap/WeakSet.h' l='48' c='_ZNK3JSC7WeakSet4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/heap/MarkedBlock.h' l='128' c='_ZNK3JSC11MarkedBlock6Handle4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/heap/MarkedBlock.h' l='209' c='_ZN3JSC11MarkedBlock6HandleC1ERNS_4HeapEPNS_22AlignedMemoryAllocatorEPv'/>
+<use f='webkit/Source/JavaScriptCore/heap/MarkedBlock.h' l='313' c='_ZN3JSC11MarkedBlock9tryCreateERNS_4HeapEPNS_22AlignedMemoryAllocatorE'/>
+<use f='webkit/Source/JavaScriptCore/heap/MarkedBlock.h' l='319' c='_ZNK3JSC11MarkedBlock4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/heap/MarkedBlock.h' l='474' c='_ZNK3JSC11MarkedBlock6Handle4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/heap/LocalAllocator.h' l='46' c='_ZN3JSC14LocalAllocator8allocateERNS_4HeapEPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<use f='webkit/Source/JavaScriptCore/heap/LocalAllocator.h' l='64' c='_ZN3JSC14LocalAllocator16allocateSlowCaseERNS_4HeapEPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<use f='webkit/Source/JavaScriptCore/heap/LocalAllocator.h' l='69' c='_ZN3JSC14LocalAllocator25doTestCollectionsIfNeededERNS_4HeapEPNS_17GCDeferralContextE'/>
+<use f='webkit/Source/JavaScriptCore/heap/BlockDirectory.h' l='150' c='_ZN3JSC14BlockDirectory16tryAllocateBlockERNS_4HeapE'/>
+<use f='webkit/Source/JavaScriptCore/heap/PreciseAllocation.h' l='46' c='_ZN3JSC17PreciseAllocation9tryCreateERNS_4HeapEmPNS_8SubspaceEj'/>
+<use f='webkit/Source/JavaScriptCore/heap/PreciseAllocation.h' l='48' c='_ZN3JSC17PreciseAllocation18createForLowerTierERNS_4HeapEmPNS_8SubspaceEh'/>
+<use f='webkit/Source/JavaScriptCore/heap/PreciseAllocation.h' l='74' c='_ZNK3JSC17PreciseAllocation4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/heap/PreciseAllocation.h' l='161' c='_ZN3JSC17PreciseAllocationC1ERNS_4HeapEmPNS_8SubspaceEjb'/>
+<use f='webkit/Source/JavaScriptCore/heap/MarkedSpace.h' l='96' c='_ZN3JSC11MarkedSpaceC1EPNS_4HeapE'/>
+<use f='webkit/Source/JavaScriptCore/heap/MarkedSpace.h' l='99' c='_ZNK3JSC11MarkedSpace4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/heap/Subspace.h' l='47' c='_ZN3JSC8SubspaceC1EN3WTF7CStringERNS_4HeapE'/>
+<use f='webkit/Source/JavaScriptCore/heap/CompleteSubspace.h' l='34' c='_ZN3JSC16CompleteSubspaceC1EN3WTF7CStringERNS_4HeapEPNS_12HeapCellTypeEPNS_22AlignedMemoryAllocatorE'/>
+<def f='webkit/Source/JavaScriptCore/heap/Heap.h' l='117' ll='767'/>
+<use f='webkit/Source/JavaScriptCore/heap/Heap.h' l='118' c='_ZN3JSC4HeapC1ERKS0_'/>
+<use f='webkit/Source/JavaScriptCore/heap/Heap.h' l='118' c='_ZN3JSC4HeapaSERKS0_'/>
+<use f='webkit/Source/JavaScriptCore/heap/Heap.h' l='118' c='_ZN3JSC4HeapaSERKS0_'/>
+<use f='webkit/Source/JavaScriptCore/heap/Heap.h' l='122' c='_ZN3JSC4Heap4heapENS_7JSValueE'/>
+<use f='webkit/Source/JavaScriptCore/heap/Heap.h' l='123' c='_ZN3JSC4Heap4heapEPKNS_8HeapCellE'/>
+<use f='webkit/Source/JavaScriptCore/heap/DeferGC.h' l='39' c='_ZN3JSC7DeferGCC1ERNS_4HeapE'/>
+<use f='webkit/Source/JavaScriptCore/heap/DeferGC.h' l='53'/>
+<use f='webkit/Source/JavaScriptCore/heap/DeferGC.h' l='60' c='_ZN3JSC16DeferGCForAWhileC1ERNS_4HeapE'/>
+<use f='webkit/Source/JavaScriptCore/heap/DeferGC.h' l='72'/>
+<use f='webkit/Source/JavaScriptCore/runtime/ConcurrentJSLock.h' l='72' c='_ZN3JSC24GCSafeConcurrentJSLockerC1ERN3WTF4LockERNS_4HeapE'/>
+<use f='webkit/Source/JavaScriptCore/runtime/ConcurrentJSLock.h' l='78' c='_ZN3JSC24GCSafeConcurrentJSLockerC1EPN3WTF4LockERNS_4HeapE'/>
+<use f='webkit/Source/JavaScriptCore/heap/IsoSubspace.h' l='40' c='_ZN3JSC11IsoSubspaceC1EN3WTF7CStringERNS_4HeapEPNS_12HeapCellTypeEmh'/>
+<use f='webkit/Source/JavaScriptCore/runtime/VM.h' l='394'/>
+<use f='webkit/Source/JavaScriptCore/runtime/VM.h' l='900' c='_ZN3JSC2VM28offsetOfHeapBarrierThresholdEv'/>
+<use f='webkit/Source/JavaScriptCore/runtime/VM.h' l='905' c='_ZN3JSC2VM33offsetOfHeapMutatorShouldBeFencedEv'/>
+<use f='webkit/Source/JavaScriptCore/runtime/VM.h' l='1300'/>
+<use f='webkit/Source/JavaScriptCore/runtime/VM.h' l='1321' c='_ZNK3JSC7WeakSet4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/heap/AbstractSlotVisitor.h' l='140' c='_ZNK3JSC19AbstractSlotVisitor4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/heap/AbstractSlotVisitor.h' l='208' c='_ZN3JSC19AbstractSlotVisitorC1ERNS_4HeapEN3WTF7CStringERNS3_20ConcurrentPtrHashSetE'/>
+<use f='webkit/Source/JavaScriptCore/heap/AbstractSlotVisitor.h' l='221'/>
+<use f='webkit/Source/JavaScriptCore/heap/SlotVisitor.h' l='51'/>
+<use f='webkit/Source/JavaScriptCore/heap/SlotVisitor.h' l='88' c='_ZN3JSC11SlotVisitorC1ERNS_4HeapEN3WTF7CStringE'/>
+<use f='webkit/Source/JavaScriptCore/runtime/JSCell.h' l='62' c='_ZN3JSC12allocateCellERNS_4HeapEm'/>
+<use f='webkit/Source/JavaScriptCore/runtime/JSCell.h' l='63' c='_ZN3JSC15tryAllocateCellERNS_4HeapEm'/>
+<use f='webkit/Source/JavaScriptCore/runtime/JSCell.h' l='64' c='_ZN3JSC12allocateCellERNS_4HeapEPNS_17GCDeferralContextEm'/>
+<use f='webkit/Source/JavaScriptCore/runtime/JSCell.h' l='65' c='_ZN3JSC15tryAllocateCellERNS_4HeapEPNS_17GCDeferralContextEm'/>
+<use f='webkit/Source/JavaScriptCore/runtime/JSCell.h' l='83' c='_ZN3JSC21tryAllocateCellHelperERNS_4HeapEmPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<size>1400</size>
+<fun r='_ZN3JSC4HeapC1ERKS0_'/>
+<fun r='_ZN3JSC4Heap4heapENS_7JSValueE'/>
+<fun r='_ZN3JSC4Heap4heapEPKNS_8HeapCellE'/>
+<smbr r='JSC::Heap::s_timeCheckResolution' t='const unsigned int'/>
+<fun r='_ZN3JSC4Heap8isMarkedEPKv'/>
+<fun r='_ZN3JSC4Heap16testAndSetMarkedEjPKv'/>
+<fun r='_ZN3JSC4Heap8cellSizeEPKv'/>
+<fun r='_ZN3JSC4Heap12writeBarrierEPKNS_6JSCellE'/>
+<fun r='_ZN3JSC4Heap12writeBarrierEPKNS_6JSCellENS_7JSValueE'/>
+<fun r='_ZN3JSC4Heap12writeBarrierEPKNS_6JSCellEPS1_'/>
+<fun r='_ZN3JSC4Heap24writeBarrierWithoutFenceEPKNS_6JSCellE'/>
+<fun r='_ZN3JSC4Heap12mutatorFenceEv'/>
+<fun r='_ZN3JSC4Heap20writeBarrierSlowPathEPKNS_6JSCellE'/>
+<fun r='_ZN3JSC4HeapC1ERNS_2VMENS_8HeapTypeE'/>
+<fun r='_ZN3JSC4HeapD1Ev'/>
+<fun r='_ZN3JSC4Heap20lastChanceToFinalizeEv'/>
+<fun r='_ZN3JSC4Heap29releaseDelayedReleasedObjectsEv'/>
+<fun r='_ZNK3JSC4Heap2vmEv'/>
+<fun r='_ZN3JSC4Heap11objectSpaceEv'/>
+<fun r='_ZN3JSC4Heap14machineThreadsEv'/>
+<fun r='_ZN3JSC4Heap20collectorSlotVisitorEv'/>
+<fun r='_ZN3JSC4Heap20fullActivityCallbackEv'/>
+<fun r='_ZN3JSC4Heap20edenActivityCallbackEv'/>
+<fun r='_ZN3JSC4Heap32setGarbageCollectionTimerEnabledEb'/>
+<fun r='_ZN3JSC4Heap7sweeperEv'/>
+<fun r='_ZN3JSC4Heap11addObserverEPNS_12HeapObserverE'/>
+<fun r='_ZN3JSC4Heap14removeObserverEPNS_12HeapObserverE'/>
+<fun r='_ZNK3JSC4Heap12mutatorStateEv'/>
+<fun r='_ZNK3JSC4Heap15collectionScopeEv'/>
+<fun r='_ZNK3JSC4Heap13hasHeapAccessEv'/>
+<fun r='_ZNK3JSC4Heap14worldIsStoppedEv'/>
+<fun r='_ZNK3JSC4Heap14worldIsRunningEv'/>
+<fun r='_ZN3JSC4Heap19isCurrentThreadBusyEv'/>
+<fun r='_ZN3JSC4Heap12addFinalizerEPNS_6JSCellEPFvS2_E'/>
+<fun r='_ZN3JSC4Heap12addFinalizerEPNS_6JSCellEN3WTF8FunctionIFvS2_EEE'/>
+<fun r='_ZN3JSC4Heap21notifyIsSafeToCollectEv'/>
+<fun r='_ZNK3JSC4Heap15isSafeToCollectEv'/>
+<fun r='_ZNK3JSC4Heap14isShuttingDownEv'/>
+<fun r='_ZN3JSC4Heap18sweepSynchronouslyEv'/>
+<fun r='_ZN3JSC4Heap22shouldCollectHeuristicEv'/>
+<fun r='_ZN3JSC4Heap12collectAsyncENS_9GCRequestE'/>
+<fun r='_ZN3JSC4Heap11collectSyncENS_9GCRequestE'/>
+<fun r='_ZN3JSC4Heap7collectENS_15SynchronousnessENS_9GCRequestE'/>
+<fun r='_ZN3JSC4Heap10collectNowENS_15SynchronousnessENS_9GCRequestE'/>
+<fun r='_ZN3JSC4Heap31collectNowFullIfNotDoneRecentlyENS_15SynchronousnessE'/>
+<fun r='_ZN3JSC4Heap25collectIfNecessaryOrDeferEPNS_17GCDeferralContextE'/>
+<fun r='_ZN3JSC4Heap19completeAllJITPlansEv'/>
+<fun r='_ZN3JSC4Heap26reportExtraMemoryAllocatedEm'/>
+<fun r='_ZN3JSC4Heap24reportExtraMemoryVisitedEm'/>
+<fun r='_ZN3JSC4Heap27reportExternalMemoryVisitedEm'/>
+<fun r='_ZN3JSC4Heap18externalMemorySizeEv'/>
+<fun r='_ZN3JSC4Heap27deprecatedReportExtraMemoryEm'/>
+<fun r='_ZN3JSC4Heap26reportAbandonedObjectGraphEv'/>
+<fun r='_ZN3JSC4Heap7protectENS_7JSValueE'/>
+<fun r='_ZN3JSC4Heap9unprotectENS_7JSValueE'/>
+<fun r='_ZN3JSC4Heap15extraMemorySizeEv'/>
+<fun r='_ZN3JSC4Heap4sizeEv'/>
+<fun r='_ZN3JSC4Heap8capacityEv'/>
+<fun r='_ZN3JSC4Heap11objectCountEv'/>
+<fun r='_ZN3JSC4Heap17globalObjectCountEv'/>
+<fun r='_ZN3JSC4Heap20protectedObjectCountEv'/>
+<fun r='_ZN3JSC4Heap26protectedGlobalObjectCountEv'/>
+<fun r='_ZN3JSC4Heap25protectedObjectTypeCountsEv'/>
+<fun r='_ZN3JSC4Heap16objectTypeCountsEv'/>
+<fun r='_ZN3JSC4Heap11markListSetEv'/>
+<fun r='_ZN3JSC4Heap24addMarkedJSValueRefArrayEPNS_21MarkedJSValueRefArrayE'/>
+<fun r='_ZN3JSC4Heap20forEachProtectedCellERKT_'/>
+<fun r='_ZN3JSC4Heap16forEachCodeBlockERKT_'/>
+<fun r='_ZN3JSC4Heap32forEachCodeBlockIgnoringJITPlansERKN3WTF14AbstractLockerERKT_'/>
+<fun r='_ZN3JSC4Heap9handleSetEv'/>
+<fun r='_ZN3JSC4Heap18willStartIteratingEv'/>
+<fun r='_ZN3JSC4Heap18didFinishIteratingEv'/>
+<fun r='_ZNK3JSC4Heap16lastFullGCLengthEv'/>
+<fun r='_ZNK3JSC4Heap16lastEdenGCLengthEv'/>
+<fun r='_ZN3JSC4Heap24increaseLastFullGCLengthEN3WTF7SecondsE'/>
+<fun r='_ZNK3JSC4Heap28sizeBeforeLastEdenCollectionEv'/>
+<fun r='_ZNK3JSC4Heap27sizeAfterLastEdenCollectionEv'/>
+<fun r='_ZNK3JSC4Heap28sizeBeforeLastFullCollectionEv'/>
+<fun r='_ZNK3JSC4Heap27sizeAfterLastFullCollectionEv'/>
+<fun r='_ZN3JSC4Heap19deleteAllCodeBlocksENS_19DeleteAllCodeEffortE'/>
+<fun r='_ZN3JSC4Heap27deleteAllUnlinkedCodeBlocksENS_19DeleteAllCodeEffortE'/>
+<fun r='_ZN3JSC4Heap11didAllocateEm'/>
+<fun r='_ZN3JSC4Heap10isPagedOutEv'/>
+<fun r='_ZN3JSC4Heap15jitStubRoutinesEv'/>
+<fun r='_ZN3JSC4Heap12addReferenceEPNS_6JSCellEPNS_11ArrayBufferE'/>
+<fun r='_ZNK3JSC4Heap10isDeferredEv'/>
+<fun r='_ZN3JSC4Heap16structureIDTableEv'/>
+<fun r='_ZN3JSC4Heap12codeBlockSetEv'/>
+<fun r='_ZN3JSC4Heap11releaseSoonEON3WTF9RetainPtrIT_EE'/>
+<fun r='_ZN3JSC4Heap23registerWeakGCHashTableEPNS_15WeakGCHashTableE'/>
+<fun r='_ZN3JSC4Heap25unregisterWeakGCHashTableEPNS_15WeakGCHashTableE'/>
+<fun r='_ZN3JSC4Heap26addLogicallyEmptyWeakBlockEPNS_9WeakBlockE'/>
+<fun r='_ZNK3JSC4Heap19blockBytesAllocatedEv'/>
+<fun r='_ZN3JSC4Heap16didAllocateBlockEm'/>
+<fun r='_ZN3JSC4Heap12didFreeBlockEm'/>
+<fun r='_ZNK3JSC4Heap21mutatorShouldBeFencedEv'/>
+<fun r='_ZNK3JSC4Heap30addressOfMutatorShouldBeFencedEv'/>
+<fun r='_ZNK3JSC4Heap16barrierThresholdEv'/>
+<fun r='_ZNK3JSC4Heap25addressOfBarrierThresholdEv'/>
+<fun r='_ZN3JSC4Heap15addressOfDoesGCEv'/>
+<fun r='_ZN3JSC4Heap20setDoesGCExpectationEbjj'/>
+<fun r='_ZN3JSC4Heap20setDoesGCExpectationEbNS_3DFG11DoesGCCheck7SpecialE'/>
+<fun r='_ZN3JSC4Heap11verifyCanGCEv'/>
+<fun r='_ZNK3JSC4Heap9hasAccessEv'/>
+<fun r='_ZN3JSC4Heap13acquireAccessEv'/>
+<fun r='_ZN3JSC4Heap13releaseAccessEv'/>
+<fun r='_ZN3JSC4Heap15stopIfNecessaryEv'/>
+<fun r='_ZN3JSC4Heap14relinquishConnEv'/>
+<fun r='_ZN3JSC4Heap13mayNeedToStopEv'/>
+<fun r='_ZN3JSC4Heap16performIncrementEm'/>
+<fun r='_ZN3JSC4Heap17preventCollectionEv'/>
+<fun r='_ZN3JSC4Heap15allowCollectionEv'/>
+<fun r='_ZNK3JSC4Heap23mutatorExecutionVersionEv'/>
+<fun r='_ZNK3JSC4Heap12phaseVersionEv'/>
+<fun r='_ZN3JSC4Heap20addMarkingConstraintENSt3__110unique_ptrINS_17MarkingConstraintENS1_14default_deleteIS3_EEEE'/>
+<fun r='_ZNK3JSC4Heap8verifierEv'/>
+<fun r='_ZN3JSC4Heap24addHeapFinalizerCallbackERKNS_21HeapFinalizerCallbackE'/>
+<fun r='_ZN3JSC4Heap27removeHeapFinalizerCallbackERKNS_21HeapFinalizerCallbackE'/>
+<fun r='_ZN3JSC4Heap17runTaskInParallelEN3WTF6RefPtrINS1_10SharedTaskIFvRNS_11SlotVisitorEEEENS1_12RawPtrTraitsIS7_EENS1_21DefaultRefDerefTraitsIS7_EEEE'/>
+<fun r='_ZN3JSC4Heap21runFunctionInParallelERKT_'/>
+<fun r='_ZN3JSC4Heap18forEachSlotVisitorERKT_'/>
+<fun r='_ZNK3JSC4Heap11totalGCTimeEv'/>
+<mbr r='JSC::Heap::immutableButterflyToStringCache' o='0' t='HashMap&lt;JSC::JSImmutableButterfly *, JSC::JSString *&gt;'/>
+<fun r='_ZNK3JSC4Heap22isMarkingForGCVerifierEv'/>
+<fun r='_ZN3JSC4Heap30mayHaveJITStubRoutinesToDeleteEv'/>
+<fun r='_ZN3JSC4Heap25deleteDeadJITStubRoutinesEN3WTF7SecondsE'/>
+<smbr r='JSC::Heap::minExtraMemory' t='const size_t'/>
+<fun r='_ZN3JSC4Heap17isValidAllocationEm'/>
+<fun r='_ZN3JSC4Heap34reportExtraMemoryAllocatedSlowCaseEm'/>
+<fun r='_ZN3JSC4Heap35deprecatedReportExtraMemorySlowCaseEm'/>
+<fun r='_ZN3JSC4Heap30shouldCollectInCollectorThreadERKN3WTF14AbstractLockerE'/>
+<fun r='_ZN3JSC4Heap24collectInCollectorThreadEv'/>
+<fun r='_ZN3JSC4Heap9checkConnENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap15runCurrentPhaseENS_11GCConductorEPNS_18CurrentThreadStateE'/>
+<fun r='_ZN3JSC4Heap18runNotRunningPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap13runBeginPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap16runFixpointPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap18runConcurrentPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap14runReloopPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap11runEndPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap11changePhaseENS_11GCConductorENS_14CollectorPhaseE'/>
+<fun r='_ZN3JSC4Heap19finishChangingPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap22collectInMutatorThreadEv'/>
+<fun r='_ZN3JSC4Heap16stopThePeripheryENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap18resumeThePeripheryEv'/>
+<fun r='_ZN3JSC4Heap14stopTheMutatorEv'/>
+<fun r='_ZN3JSC4Heap16resumeTheMutatorEv'/>
+<fun r='_ZN3JSC4Heap19stopIfNecessarySlowEv'/>
+<fun r='_ZN3JSC4Heap19stopIfNecessarySlowEj'/>
+<fun r='_ZN3JSC4Heap16waitForCollectorERKT_'/>
+<fun r='_ZN3JSC4Heap17acquireAccessSlowEv'/>
+<fun r='_ZN3JSC4Heap17releaseAccessSlowEv'/>
+<fun r='_ZN3JSC4Heap18handleNeedFinalizeEj'/>
+<fun r='_ZN3JSC4Heap18handleNeedFinalizeEv'/>
+<fun r='_ZN3JSC4Heap14relinquishConnEj'/>
+<fun r='_ZN3JSC4Heap23finishRelinquishingConnEv'/>
+<fun r='_ZN3JSC4Heap15setNeedFinalizeEv'/>
+<fun r='_ZN3JSC4Heap21waitWhileNeedFinalizeEv'/>
+<fun r='_ZN3JSC4Heap17setMutatorWaitingEv'/>
+<fun r='_ZN3JSC4Heap19clearMutatorWaitingEv'/>
+<fun r='_ZN3JSC4Heap20notifyThreadStoppingERKN3WTF14AbstractLockerE'/>
+<fun r='_ZN3JSC4Heap17requestCollectionENS_9GCRequestE'/>
+<fun r='_ZN3JSC4Heap17waitForCollectionEy'/>
+<fun r='_ZN3JSC4Heap22suspendCompilerThreadsEv'/>
+<fun r='_ZN3JSC4Heap19willStartCollectionEv'/>
+<fun r='_ZN3JSC4Heap17prepareForMarkingEv'/>
+<fun r='_ZN3JSC4Heap16gatherStackRootsERNS_17ConservativeRootsE'/>
+<fun r='_ZN3JSC4Heap18gatherJSStackRootsERNS_17ConservativeRootsE'/>
+<fun r='_ZN3JSC4Heap24gatherScratchBufferRootsERNS_17ConservativeRootsE'/>
+<fun r='_ZN3JSC4Heap12beginMarkingEv'/>
+<fun r='_ZN3JSC4Heap35visitCompilerWorklistWeakReferencesEv'/>
+<fun r='_ZN3JSC4Heap33removeDeadCompilerWorklistEntriesEv'/>
+<fun r='_ZN3JSC4Heap18updateObjectCountsEv'/>
+<fun r='_ZN3JSC4Heap10endMarkingEv'/>
+<fun r='_ZN3JSC4Heap15reapWeakHandlesEv'/>
+<fun r='_ZN3JSC4Heap37pruneStaleEntriesFromWeakGCHashTablesEv'/>
+<fun r='_ZN3JSC4Heap17sweepArrayBuffersEv'/>
+<fun r='_ZN3JSC4Heap15snapshotUnsweptEv'/>
+<fun r='_ZN3JSC4Heap26deleteSourceProviderCachesEv'/>
+<fun r='_ZN3JSC4Heap24notifyIncrementalSweeperEv'/>
+<fun r='_ZN3JSC4Heap21harvestWeakReferencesEv'/>
+<fun r='_ZN3JSC4Heap37finalizeMarkedUnconditionalFinalizersERT0_'/>
+<fun r='_ZN3JSC4Heap31finalizeUnconditionalFinalizersEv'/>
+<fun r='_ZN3JSC4Heap26deleteUnmarkedCompiledCodeEv'/>
+<fun r='_ZN3JSC4Heap18addToRememberedSetEPKNS_6JSCellE'/>
+<fun r='_ZN3JSC4Heap22updateAllocationLimitsEv'/>
+<fun r='_ZN3JSC4Heap19didFinishCollectionEv'/>
+<fun r='_ZN3JSC4Heap21resumeCompilerThreadsEv'/>
+<fun r='_ZN3JSC4Heap19gatherExtraHeapDataERNS_12HeapProfilerE'/>
+<fun r='_ZN3JSC4Heap27removeDeadHeapSnapshotNodesERNS_12HeapProfilerE'/>
+<fun r='_ZN3JSC4Heap8finalizeEv'/>
+<fun r='_ZN3JSC4Heap15sweepInFinalizeEv'/>
+<fun r='_ZN3JSC4Heap32sweepAllLogicallyEmptyWeakBlocksEv'/>
+<fun r='_ZN3JSC4Heap32sweepNextLogicallyEmptyWeakBlockEv'/>
+<fun r='_ZN3JSC4Heap22shouldDoFullCollectionEv'/>
+<fun r='_ZN3JSC4Heap22incrementDeferralDepthEv'/>
+<fun r='_ZN3JSC4Heap22decrementDeferralDepthEv'/>
+<fun r='_ZN3JSC4Heap35decrementDeferralDepthAndGCIfNeededEv'/>
+<fun r='_ZN3JSC4Heap39decrementDeferralDepthAndGCIfNeededSlowEv'/>
+<fun r='_ZN3JSC4Heap10visitCountEv'/>
+<fun r='_ZN3JSC4Heap12bytesVisitedEv'/>
+<fun r='_ZN3JSC4Heap20forEachCodeBlockImplERKN3WTF12ScopedLambdaIFvPNS_9CodeBlockEEEE'/>
+<fun r='_ZN3JSC4Heap36forEachCodeBlockIgnoringJITPlansImplERKN3WTF14AbstractLockerERKNS1_12ScopedLambdaIFvPNS_9CodeBlockEEEE'/>
+<fun r='_ZN3JSC4Heap24setMutatorShouldBeFencedEb'/>
+<fun r='_ZN3JSC4Heap18addCoreConstraintsEv'/>
+<fun r='_ZN3JSC4Heap27overCriticalMemoryThresholdENS0_23MemoryThresholdCallTypeE'/>
+<fun r='_ZN3JSC4Heap38iterateExecutingAndCompilingCodeBlocksERT_RKN3WTF8FunctionIFvPNS_9CodeBlockEEEE'/>
+<fun r='_ZN3JSC4Heap57iterateExecutingAndCompilingCodeBlocksWithoutHoldingLocksERT0_RKT_'/>
+<fun r='_ZN3JSC4Heap21assertMarkStacksEmptyEv'/>
+<fun r='_ZN3JSC4Heap19setBonusVisitorTaskEN3WTF6RefPtrINS1_10SharedTaskIFvRNS_11SlotVisitorEEEENS1_12RawPtrTraitsIS7_EENS1_21DefaultRefDerefTraitsIS7_EEEE'/>
+<fun r='_ZN3JSC4Heap33dumpHeapStatisticsAtVMDestructionEv'/>
+<fun r='_ZN3JSC4Heap17useGenerationalGCEv'/>
+<fun r='_ZN3JSC4Heap24shouldSweepSynchronouslyEv'/>
+<fun r='_ZN3JSC4Heap8verifyGCEv'/>
+<mbr r='JSC::Heap::m_heapType' o='192' t='const JSC::HeapType'/>
+<mbr r='JSC::Heap::m_mutatorState' o='224' t='JSC::MutatorState'/>
+<mbr r='JSC::Heap::m_ramSize' o='256' t='const size_t'/>
+<mbr r='JSC::Heap::m_minBytesPerCycle' o='320' t='const size_t'/>
+<mbr r='JSC::Heap::m_sizeAfterLastCollect' o='384' t='size_t'/>
+<mbr r='JSC::Heap::m_sizeAfterLastFullCollect' o='448' t='size_t'/>
+<mbr r='JSC::Heap::m_sizeBeforeLastFullCollect' o='512' t='size_t'/>
+<mbr r='JSC::Heap::m_sizeAfterLastEdenCollect' o='576' t='size_t'/>
+<mbr r='JSC::Heap::m_sizeBeforeLastEdenCollect' o='640' t='size_t'/>
+<mbr r='JSC::Heap::m_bytesAllocatedThisCycle' o='704' t='size_t'/>
+<mbr r='JSC::Heap::m_bytesAbandonedSinceLastFullCollect' o='768' t='size_t'/>
+<mbr r='JSC::Heap::m_maxEdenSize' o='832' t='size_t'/>
+<mbr r='JSC::Heap::m_maxEdenSizeWhenCritical' o='896' t='size_t'/>
+<mbr r='JSC::Heap::m_maxHeapSize' o='960' t='size_t'/>
+<mbr r='JSC::Heap::m_totalBytesVisited' o='1024' t='size_t'/>
+<mbr r='JSC::Heap::m_totalBytesVisitedThisCycle' o='1088' t='size_t'/>
+<mbr r='JSC::Heap::m_incrementBalance' o='1152' t='double'/>
+<mbr r='JSC::Heap::m_shouldDoFullCollection' o='1216' t='bool'/>
+<mbr r='JSC::Heap::m_collectionScope' o='1224' t='Markable&lt;JSC::CollectionScope, EnumMarkableTraits&lt;JSC::CollectionScope&gt;&gt;'/>
+<mbr r='JSC::Heap::m_lastCollectionScope' o='1232' t='Markable&lt;JSC::CollectionScope, EnumMarkableTraits&lt;JSC::CollectionScope&gt;&gt;'/>
+<mbr r='JSC::Heap::m_raceMarkStackLock' o='1240' t='WTF::Lock'/>
+<mbr r='JSC::Heap::m_doesGC' o='1248' t='JSC::DFG::DoesGCCheck'/>
+<mbr r='JSC::Heap::m_structureIDTable' o='1280' t='JSC::StructureIDTable'/>
+<mbr r='JSC::Heap::m_objectSpace' o='1856' t='JSC::MarkedSpace'/>
+<mbr r='JSC::Heap::m_arrayBuffers' o='3520' t='GCIncomingRefCountedSet&lt;JSC::ArrayBuffer&gt;'/>
+<mbr r='JSC::Heap::m_extraMemorySize' o='3712' t='size_t'/>
+<mbr r='JSC::Heap::m_deprecatedExtraMemorySize' o='3776' t='size_t'/>
+<mbr r='JSC::Heap::m_copyingRememberedSet' o='3840' t='HashSet&lt;const JSC::JSCell *&gt;'/>
+<mbr r='JSC::Heap::m_protectedValues' o='4032' t='JSC::ProtectCountSet'/>
+<mbr r='JSC::Heap::m_markListSet' o='4224' t='std::unique_ptr&lt;HashSet&lt;MarkedArgumentBuffer *&gt;&gt;'/>
+<mbr r='JSC::Heap::m_markedJSValueRefArrays' o='4288' t='SentinelLinkedList&lt;JSC::MarkedJSValueRefArray, BasicRawSentinelNode&lt;JSC::MarkedJSValueRefArray&gt;&gt;'/>
+<mbr r='JSC::Heap::m_machineThreads' o='4544' t='std::unique_ptr&lt;MachineThreads&gt;'/>
+<mbr r='JSC::Heap::m_collectorSlotVisitor' o='4608' t='std::unique_ptr&lt;SlotVisitor&gt;'/>
+<mbr r='JSC::Heap::m_mutatorSlotVisitor' o='4672' t='std::unique_ptr&lt;SlotVisitor&gt;'/>
+<mbr r='JSC::Heap::m_mutatorMarkStack' o='4736' t='std::unique_ptr&lt;MarkStackArray&gt;'/>
+<mbr r='JSC::Heap::m_raceMarkStack' o='4800' t='std::unique_ptr&lt;MarkStackArray&gt;'/>
+<mbr r='JSC::Heap::m_constraintSet' o='4864' t='std::unique_ptr&lt;MarkingConstraintSet&gt;'/>
+<mbr r='JSC::Heap::m_verifierSlotVisitor' o='4928' t='std::unique_ptr&lt;VerifierSlotVisitor&gt;'/>
+<mbr r='JSC::Heap::m_parallelSlotVisitors' o='4992' t='Vector&lt;std::unique_ptr&lt;SlotVisitor&gt;&gt;'/>
+<mbr r='JSC::Heap::m_availableParallelSlotVisitors' o='5120' t='Vector&lt;JSC::SlotVisitor *&gt;'/>
+<mbr r='JSC::Heap::m_handleSet' o='5248' t='JSC::HandleSet'/>
+<mbr r='JSC::Heap::m_codeBlocks' o='6272' t='std::unique_ptr&lt;CodeBlockSet&gt;'/>
+<mbr r='JSC::Heap::m_jitStubRoutines' o='6336' t='std::unique_ptr&lt;JITStubRoutineSet&gt;'/>
+<mbr r='JSC::Heap::m_cFinalizerOwner' o='6400' t='JSC::Heap::CFinalizerOwner'/>
+<mbr r='JSC::Heap::m_lambdaFinalizerOwner' o='6464' t='JSC::Heap::LambdaFinalizerOwner'/>
+<mbr r='JSC::Heap::m_parallelSlotVisitorLock' o='6528' t='WTF::Lock'/>
+<mbr r='JSC::Heap::m_isSafeToCollect' o='6536' t='bool'/>
+<mbr r='JSC::Heap::m_isShuttingDown' o='6544' t='bool'/>
+<mbr r='JSC::Heap::m_mutatorShouldBeFenced' o='6552' t='bool'/>
+<mbr r='JSC::Heap::m_isMarkingForGCVerifier' o='6560' t='bool'/>
+<mbr r='JSC::Heap::m_barrierThreshold' o='6592' t='unsigned int'/>
+<mbr r='JSC::Heap::m_vm' o='6656' t='JSC::VM &amp;'/>
+<mbr r='JSC::Heap::m_lastFullGCLength' o='6720' t='WTF::Seconds'/>
+<mbr r='JSC::Heap::m_lastEdenGCLength' o='6784' t='WTF::Seconds'/>
+<mbr r='JSC::Heap::m_logicallyEmptyWeakBlocks' o='6848' t='Vector&lt;JSC::WeakBlock *&gt;'/>
+<mbr r='JSC::Heap::m_indexOfNextLogicallyEmptyWeakBlockToSweep' o='6976' t='size_t'/>
+<mbr r='JSC::Heap::m_fullActivityCallback' o='7040' t='RefPtr&lt;JSC::FullGCActivityCallback&gt;'/>
+<mbr r='JSC::Heap::m_edenActivityCallback' o='7104' t='RefPtr&lt;JSC::GCActivityCallback&gt;'/>
+<mbr r='JSC::Heap::m_sweeper' o='7168' t='Ref&lt;JSC::IncrementalSweeper&gt;'/>
+<mbr r='JSC::Heap::m_stopIfNecessaryTimer' o='7232' t='Ref&lt;JSC::StopIfNecessaryTimer&gt;'/>
+<mbr r='JSC::Heap::m_observers' o='7296' t='Vector&lt;JSC::HeapObserver *&gt;'/>
+<mbr r='JSC::Heap::m_heapFinalizerCallbacks' o='7424' t='Vector&lt;JSC::HeapFinalizerCallback&gt;'/>
+<mbr r='JSC::Heap::m_verifier' o='7552' t='std::unique_ptr&lt;HeapVerifier&gt;'/>
+<mbr r='JSC::Heap::m_delayedReleaseObjects' o='7616' t='Vector&lt;RetainPtr&lt;CFTypeRef&gt;&gt;'/>
+<mbr r='JSC::Heap::m_delayedReleaseRecursionCount' o='7744' t='unsigned int'/>
+<mbr r='JSC::Heap::m_deferralDepth' o='7776' t='unsigned int'/>
+<mbr r='JSC::Heap::m_weakGCHashTables' o='7808' t='HashSet&lt;JSC::WeakGCHashTable *&gt;'/>
+<mbr r='JSC::Heap::m_sharedCollectorMarkStack' o='8000' t='std::unique_ptr&lt;MarkStackArray&gt;'/>
+<mbr r='JSC::Heap::m_sharedMutatorMarkStack' o='8064' t='std::unique_ptr&lt;MarkStackArray&gt;'/>
+<mbr r='JSC::Heap::m_numberOfActiveParallelMarkers' o='8128' t='unsigned int'/>
+<mbr r='JSC::Heap::m_numberOfWaitingParallelMarkers' o='8160' t='unsigned int'/>
+<mbr r='JSC::Heap::m_opaqueRoots' o='8192' t='WTF::ConcurrentPtrHashSet'/>
+<smbr r='JSC::Heap::s_blockFragmentLength' t='const size_t'/>
+<mbr r='JSC::Heap::m_helperClient' o='8896' t='WTF::ParallelHelperClient'/>
+<mbr r='JSC::Heap::m_bonusVisitorTask' o='9088' t='RefPtr&lt;SharedTask&lt;void (JSC::SlotVisitor &amp;)&gt;&gt;'/>
+<mbr r='JSC::Heap::m_blockBytesAllocated' o='9152' t='size_t'/>
+<mbr r='JSC::Heap::m_externalMemorySize' o='9216' t='size_t'/>
+<mbr r='JSC::Heap::m_scheduler' o='9280' t='std::unique_ptr&lt;MutatorScheduler&gt;'/>
+<smbr r='JSC::Heap::mutatorHasConnBit' t='const unsigned int'/>
+<smbr r='JSC::Heap::stoppedBit' t='const unsigned int'/>
+<smbr r='JSC::Heap::hasAccessBit' t='const unsigned int'/>
+<smbr r='JSC::Heap::needFinalizeBit' t='const unsigned int'/>
+<smbr r='JSC::Heap::mutatorWaitingBit' t='const unsigned int'/>
+<mbr r='JSC::Heap::m_worldState' o='9344' t='Atomic&lt;unsigned int&gt;'/>
+<mbr r='JSC::Heap::m_worldIsStopped' o='9376' t='bool'/>
+<mbr r='JSC::Heap::m_visitRaceLock' o='9384' t='WTF::Lock'/>
+<mbr r='JSC::Heap::m_markingMutex' o='9392' t='WTF::Lock'/>
+<mbr r='JSC::Heap::m_markingConditionVariable' o='9400' t='WTF::Condition'/>
+<mbr r='JSC::Heap::m_beforeGC' o='9408' t='WTF::MonotonicTime'/>
+<mbr r='JSC::Heap::m_afterGC' o='9472' t='WTF::MonotonicTime'/>
+<mbr r='JSC::Heap::m_stopTime' o='9536' t='WTF::MonotonicTime'/>
+<mbr r='JSC::Heap::m_requests' o='9600' t='Deque&lt;JSC::GCRequest&gt;'/>
+<mbr r='JSC::Heap::m_currentRequest' o='9920' t='JSC::GCRequest'/>
+<mbr r='JSC::Heap::m_lastServedTicket' o='10048' t='JSC::Heap::Ticket'/>
+<mbr r='JSC::Heap::m_lastGrantedTicket' o='10112' t='JSC::Heap::Ticket'/>
+<mbr r='JSC::Heap::m_lastPhase' o='10176' t='JSC::CollectorPhase'/>
+<mbr r='JSC::Heap::m_currentPhase' o='10184' t='JSC::CollectorPhase'/>
+<mbr r='JSC::Heap::m_nextPhase' o='10192' t='JSC::CollectorPhase'/>
+<mbr r='JSC::Heap::m_collectorThreadIsRunning' o='10200' t='bool'/>
+<mbr r='JSC::Heap::m_threadShouldStop' o='10208' t='bool'/>
+<mbr r='JSC::Heap::m_threadIsStopping' o='10216' t='bool'/>
+<mbr r='JSC::Heap::m_mutatorDidRun' o='10224' t='bool'/>
+<mbr r='JSC::Heap::m_didDeferGCWork' o='10232' t='bool'/>
+<mbr r='JSC::Heap::m_shouldStopCollectingContinuously' o='10240' t='bool'/>
+<mbr r='JSC::Heap::m_mutatorExecutionVersion' o='10304' t='uint64_t'/>
+<mbr r='JSC::Heap::m_phaseVersion' o='10368' t='uint64_t'/>
+<mbr r='JSC::Heap::m_threadLock' o='10432' t='Box&lt;WTF::Lock&gt;'/>
+<mbr r='JSC::Heap::m_threadCondition' o='10496' t='Ref&lt;WTF::AutomaticThreadCondition&gt;'/>
+<mbr r='JSC::Heap::m_thread' o='10560' t='RefPtr&lt;WTF::AutomaticThread&gt;'/>
+<mbr r='JSC::Heap::m_collectContinuouslyThread' o='10624' t='RefPtr&lt;WTF::Thread&gt;'/>
+<mbr r='JSC::Heap::m_lastGCStartTime' o='10688' t='WTF::MonotonicTime'/>
+<mbr r='JSC::Heap::m_lastGCEndTime' o='10752' t='WTF::MonotonicTime'/>
+<mbr r='JSC::Heap::m_currentGCStartTime' o='10816' t='WTF::MonotonicTime'/>
+<mbr r='JSC::Heap::m_totalGCTime' o='10880' t='WTF::Seconds'/>
+<mbr r='JSC::Heap::m_barriersExecuted' o='10944' t='uintptr_t'/>
+<mbr r='JSC::Heap::m_currentThreadState' o='11008' t='JSC::CurrentThreadState *'/>
+<mbr r='JSC::Heap::m_currentThread' o='11072' t='WTF::Thread *'/>
+<mbr r='JSC::Heap::m_parallelMarkersShouldExit' o='11136' t='bool'/>
+<mbr r='JSC::Heap::m_collectContinuouslyLock' o='11144' t='WTF::Lock'/>
+<mbr r='JSC::Heap::m_collectContinuouslyCondition' o='11152' t='WTF::Condition'/>
+<use f='webkit/Source/JavaScriptCore/heap/GCDeferralContext.h' l='39'/>
+<use f='webkit/Source/JavaScriptCore/heap/GCDeferralContext.h' l='43' c='_ZN3JSC17GCDeferralContextC1ERNS_4HeapE'/>
+<use f='webkit/Source/JavaScriptCore/heap/GCDeferralContext.h' l='47'/>
+<use f='webkit/Source/JavaScriptCore/heap/HeapCellInlines.h' l='57' c='_ZNK3JSC8HeapCell4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/heap/HeapInlines.h' l='47' c='_ZN3JSC4Heap4heapEPKNS_8HeapCellE'/>
+<use f='webkit/Source/JavaScriptCore/heap/HeapInlines.h' l='54' c='_ZN3JSC4Heap4heapENS_7JSValueE'/>
+<use f='webkit/Source/JavaScriptCore/heap/AllocatorInlines.h' l='33' c='_ZNK3JSC9Allocator8allocateERNS_4HeapEPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<use f='webkit/Source/JavaScriptCore/bytecode/CodeBlock.h' l='588' c='_ZNK3JSC9CodeBlock4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/heap/LocalAllocatorInlines.h' l='33' c='_ZN3JSC14LocalAllocator8allocateERNS_4HeapEPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<use f='webkit/Source/JavaScriptCore/heap/CellContainerInlines.h' l='43' c='_ZNK3JSC13CellContainer4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/heap/AbstractSlotVisitorInlines.h' l='97' c='_ZN3JSC19AbstractSlotVisitorC1ERNS_4HeapEN3WTF7CStringERNS3_20ConcurrentPtrHashSetE'/>
+<use f='webkit/Source/JavaScriptCore/heap/AbstractSlotVisitorInlines.h' l='104' c='_ZNK3JSC19AbstractSlotVisitor4heapEv'/>
+<use f='webkit/Source/JavaScriptCore/runtime/JSCellInlines.h' l='175' c='_ZN3JSC21tryAllocateCellHelperERNS_4HeapEmPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<use f='webkit/Source/JavaScriptCore/runtime/JSCellInlines.h' l='192' c='_ZN3JSC12allocateCellERNS_4HeapEm'/>
+<use f='webkit/Source/JavaScriptCore/runtime/JSCellInlines.h' l='198' c='_ZN3JSC15tryAllocateCellERNS_4HeapEm'/>
+<use f='webkit/Source/JavaScriptCore/runtime/JSCellInlines.h' l='204' c='_ZN3JSC12allocateCellERNS_4HeapEPNS_17GCDeferralContextEm'/>
+<use f='webkit/Source/JavaScriptCore/runtime/JSCellInlines.h' l='210' c='_ZN3JSC15tryAllocateCellERNS_4HeapEPNS_17GCDeferralContextEm'/>
+<size>1400</size>
+<fun r='_ZNK3JSC4Heap2vmEv'/>
+<fun r='_ZN3JSC4Heap4heapEPKNS_8HeapCellE'/>
+<fun r='_ZN3JSC4Heap4heapENS_7JSValueE'/>
+<fun r='_ZNK3JSC4Heap13hasHeapAccessEv'/>
+<fun r='_ZNK3JSC4Heap14worldIsStoppedEv'/>
+<fun r='_ZN3JSC4Heap8isMarkedEPKv'/>
+<fun r='_ZN3JSC4Heap16testAndSetMarkedEjPKv'/>
+<fun r='_ZN3JSC4Heap8cellSizeEPKv'/>
+<fun r='_ZN3JSC4Heap12writeBarrierEPKNS_6JSCellENS_7JSValueE'/>
+<fun r='_ZN3JSC4Heap12writeBarrierEPKNS_6JSCellEPS1_'/>
+<fun r='_ZN3JSC4Heap12writeBarrierEPKNS_6JSCellE'/>
+<fun r='_ZN3JSC4Heap24writeBarrierWithoutFenceEPKNS_6JSCellE'/>
+<fun r='_ZN3JSC4Heap12mutatorFenceEv'/>
+<fun r='_ZN3JSC4Heap16forEachCodeBlockERKT_'/>
+<fun r='_ZN3JSC4Heap32forEachCodeBlockIgnoringJITPlansERKN3WTF14AbstractLockerERKT_'/>
+<fun r='_ZN3JSC4Heap20forEachProtectedCellERKT_'/>
+<fun r='_ZN3JSC4Heap11releaseSoonEON3WTF9RetainPtrIT_EE'/>
+<fun r='_ZN3JSC4Heap22incrementDeferralDepthEv'/>
+<fun r='_ZN3JSC4Heap22decrementDeferralDepthEv'/>
+<fun r='_ZN3JSC4Heap35decrementDeferralDepthAndGCIfNeededEv'/>
+<fun r='_ZN3JSC4Heap11markListSetEv'/>
+<fun r='_ZN3JSC4Heap26reportExtraMemoryAllocatedEm'/>
+<fun r='_ZN3JSC4Heap27deprecatedReportExtraMemoryEm'/>
+<fun r='_ZN3JSC4Heap13acquireAccessEv'/>
+<fun r='_ZNK3JSC4Heap9hasAccessEv'/>
+<fun r='_ZN3JSC4Heap13releaseAccessEv'/>
+<fun r='_ZN3JSC4Heap13mayNeedToStopEv'/>
+<fun r='_ZN3JSC4Heap15stopIfNecessaryEv'/>
+<fun r='_ZN3JSC4Heap18forEachSlotVisitorERKT_'/>
+<fun r='_ZN3JSC4Heap30mayHaveJITStubRoutinesToDeleteEv'/>
+<fun r='_ZN3JSC4Heap25deleteDeadJITStubRoutinesEN3WTF7SecondsE'/>
+<use f='webkit/Source/JavaScriptCore/heap/ReleaseHeapAccessScope.h' l='42' c='_ZN3JSC22ReleaseHeapAccessScopeC1ERNS_4HeapE'/>
+<use f='webkit/Source/JavaScriptCore/heap/ReleaseHeapAccessScope.h' l='54'/>
+<size>1400</size>
+<use f='webkit/WebKitBuild/Debug/LLIntOffsets/arm64/LLIntDesiredOffsets.h' l='1507' c='_ZN3JSC21LLIntOffsetsExtractor5dummyEv'/>
+<size>1400</size>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/GCLogging.h' l='43' c='_ZN3JSC9GCLogging15dumpObjectGraphEPNS_4HeapE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/HeapCell.h' l='76' c='_ZNK3JSC8HeapCell4heapEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/CellContainer.h' l='62' c='_ZNK3JSC13CellContainer4heapEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/WeakBlock.h' l='58' c='_ZN3JSC9WeakBlock6createERNS_4HeapENS_13CellContainerE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/WeakBlock.h' l='59' c='_ZN3JSC9WeakBlock7destroyERNS_4HeapEPS0_'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/WeakSet.h' l='48' c='_ZNK3JSC7WeakSet4heapEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/MarkedBlock.h' l='128' c='_ZNK3JSC11MarkedBlock6Handle4heapEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/MarkedBlock.h' l='209' c='_ZN3JSC11MarkedBlock6HandleC1ERNS_4HeapEPNS_22AlignedMemoryAllocatorEPv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/MarkedBlock.h' l='313' c='_ZN3JSC11MarkedBlock9tryCreateERNS_4HeapEPNS_22AlignedMemoryAllocatorE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/MarkedBlock.h' l='319' c='_ZNK3JSC11MarkedBlock4heapEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/MarkedBlock.h' l='474' c='_ZNK3JSC11MarkedBlock6Handle4heapEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/LocalAllocator.h' l='46' c='_ZN3JSC14LocalAllocator8allocateERNS_4HeapEPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/LocalAllocator.h' l='64' c='_ZN3JSC14LocalAllocator16allocateSlowCaseERNS_4HeapEPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/LocalAllocator.h' l='69' c='_ZN3JSC14LocalAllocator25doTestCollectionsIfNeededERNS_4HeapEPNS_17GCDeferralContextE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/BlockDirectory.h' l='150' c='_ZN3JSC14BlockDirectory16tryAllocateBlockERNS_4HeapE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/PreciseAllocation.h' l='46' c='_ZN3JSC17PreciseAllocation9tryCreateERNS_4HeapEmPNS_8SubspaceEj'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/PreciseAllocation.h' l='48' c='_ZN3JSC17PreciseAllocation18createForLowerTierERNS_4HeapEmPNS_8SubspaceEh'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/PreciseAllocation.h' l='74' c='_ZNK3JSC17PreciseAllocation4heapEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/PreciseAllocation.h' l='161' c='_ZN3JSC17PreciseAllocationC1ERNS_4HeapEmPNS_8SubspaceEjb'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/MarkedSpace.h' l='96' c='_ZN3JSC11MarkedSpaceC1EPNS_4HeapE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/MarkedSpace.h' l='99' c='_ZNK3JSC11MarkedSpace4heapEv'/>
+<def f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/Heap.h' l='117' ll='767'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/Heap.h' l='118' c='_ZN3JSC4HeapC1ERKS0_'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/Heap.h' l='118' c='_ZN3JSC4HeapaSERKS0_'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/Heap.h' l='118' c='_ZN3JSC4HeapaSERKS0_'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/Heap.h' l='122' c='_ZN3JSC4Heap4heapENS_7JSValueE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/Heap.h' l='123' c='_ZN3JSC4Heap4heapEPKNS_8HeapCellE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/AbstractSlotVisitor.h' l='140' c='_ZNK3JSC19AbstractSlotVisitor4heapEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/AbstractSlotVisitor.h' l='208' c='_ZN3JSC19AbstractSlotVisitorC1ERNS_4HeapEN3WTF7CStringERNS3_20ConcurrentPtrHashSetE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/AbstractSlotVisitor.h' l='221'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/SlotVisitor.h' l='51'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/SlotVisitor.h' l='88' c='_ZN3JSC11SlotVisitorC1ERNS_4HeapEN3WTF7CStringE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSCell.h' l='62' c='_ZN3JSC12allocateCellERNS_4HeapEm'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSCell.h' l='63' c='_ZN3JSC15tryAllocateCellERNS_4HeapEm'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSCell.h' l='64' c='_ZN3JSC12allocateCellERNS_4HeapEPNS_17GCDeferralContextEm'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSCell.h' l='65' c='_ZN3JSC15tryAllocateCellERNS_4HeapEPNS_17GCDeferralContextEm'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSCell.h' l='83' c='_ZN3JSC21tryAllocateCellHelperERNS_4HeapEmPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/Allocator.h' l='49' c='_ZNK3JSC9Allocator8allocateERNS_4HeapEPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/Subspace.h' l='47' c='_ZN3JSC8SubspaceC1EN3WTF7CStringERNS_4HeapE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/CompleteSubspace.h' l='34' c='_ZN3JSC16CompleteSubspaceC1EN3WTF7CStringERNS_4HeapEPNS_12HeapCellTypeEPNS_22AlignedMemoryAllocatorE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/DeferGC.h' l='39' c='_ZN3JSC7DeferGCC1ERNS_4HeapE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/DeferGC.h' l='53'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/DeferGC.h' l='60' c='_ZN3JSC16DeferGCForAWhileC1ERNS_4HeapE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/DeferGC.h' l='72'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/ConcurrentJSLock.h' l='72' c='_ZN3JSC24GCSafeConcurrentJSLockerC1ERN3WTF4LockERNS_4HeapE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/ConcurrentJSLock.h' l='78' c='_ZN3JSC24GCSafeConcurrentJSLockerC1EPN3WTF4LockERNS_4HeapE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/IsoSubspace.h' l='40' c='_ZN3JSC11IsoSubspaceC1EN3WTF7CStringERNS_4HeapEPNS_12HeapCellTypeEmh'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/VM.h' l='394'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/VM.h' l='900' c='_ZN3JSC2VM28offsetOfHeapBarrierThresholdEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/VM.h' l='905' c='_ZN3JSC2VM33offsetOfHeapMutatorShouldBeFencedEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/VM.h' l='1300'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/VM.h' l='1321' c='_ZNK3JSC7WeakSet4heapEv'/>
+<size>1400</size>
+<fun r='_ZN3JSC4HeapC1ERKS0_'/>
+<fun r='_ZN3JSC4Heap4heapENS_7JSValueE'/>
+<fun r='_ZN3JSC4Heap4heapEPKNS_8HeapCellE'/>
+<smbr r='JSC::Heap::s_timeCheckResolution' t='const unsigned int'/>
+<fun r='_ZN3JSC4Heap8isMarkedEPKv'/>
+<fun r='_ZN3JSC4Heap16testAndSetMarkedEjPKv'/>
+<fun r='_ZN3JSC4Heap8cellSizeEPKv'/>
+<fun r='_ZN3JSC4Heap12writeBarrierEPKNS_6JSCellE'/>
+<fun r='_ZN3JSC4Heap12writeBarrierEPKNS_6JSCellENS_7JSValueE'/>
+<fun r='_ZN3JSC4Heap12writeBarrierEPKNS_6JSCellEPS1_'/>
+<fun r='_ZN3JSC4Heap24writeBarrierWithoutFenceEPKNS_6JSCellE'/>
+<fun r='_ZN3JSC4Heap12mutatorFenceEv'/>
+<fun r='_ZN3JSC4Heap20writeBarrierSlowPathEPKNS_6JSCellE'/>
+<fun r='_ZN3JSC4HeapC1ERNS_2VMENS_8HeapTypeE'/>
+<fun r='_ZN3JSC4HeapD1Ev'/>
+<fun r='_ZN3JSC4Heap20lastChanceToFinalizeEv'/>
+<fun r='_ZN3JSC4Heap29releaseDelayedReleasedObjectsEv'/>
+<fun r='_ZNK3JSC4Heap2vmEv'/>
+<fun r='_ZN3JSC4Heap11objectSpaceEv'/>
+<fun r='_ZN3JSC4Heap14machineThreadsEv'/>
+<fun r='_ZN3JSC4Heap20collectorSlotVisitorEv'/>
+<fun r='_ZN3JSC4Heap20fullActivityCallbackEv'/>
+<fun r='_ZN3JSC4Heap20edenActivityCallbackEv'/>
+<fun r='_ZN3JSC4Heap32setGarbageCollectionTimerEnabledEb'/>
+<fun r='_ZN3JSC4Heap7sweeperEv'/>
+<fun r='_ZN3JSC4Heap11addObserverEPNS_12HeapObserverE'/>
+<fun r='_ZN3JSC4Heap14removeObserverEPNS_12HeapObserverE'/>
+<fun r='_ZNK3JSC4Heap12mutatorStateEv'/>
+<fun r='_ZNK3JSC4Heap15collectionScopeEv'/>
+<fun r='_ZNK3JSC4Heap13hasHeapAccessEv'/>
+<fun r='_ZNK3JSC4Heap14worldIsStoppedEv'/>
+<fun r='_ZNK3JSC4Heap14worldIsRunningEv'/>
+<fun r='_ZN3JSC4Heap19isCurrentThreadBusyEv'/>
+<fun r='_ZN3JSC4Heap12addFinalizerEPNS_6JSCellEPFvS2_E'/>
+<fun r='_ZN3JSC4Heap12addFinalizerEPNS_6JSCellEN3WTF8FunctionIFvS2_EEE'/>
+<fun r='_ZN3JSC4Heap21notifyIsSafeToCollectEv'/>
+<fun r='_ZNK3JSC4Heap15isSafeToCollectEv'/>
+<fun r='_ZNK3JSC4Heap14isShuttingDownEv'/>
+<fun r='_ZN3JSC4Heap18sweepSynchronouslyEv'/>
+<fun r='_ZN3JSC4Heap22shouldCollectHeuristicEv'/>
+<fun r='_ZN3JSC4Heap12collectAsyncENS_9GCRequestE'/>
+<fun r='_ZN3JSC4Heap11collectSyncENS_9GCRequestE'/>
+<fun r='_ZN3JSC4Heap7collectENS_15SynchronousnessENS_9GCRequestE'/>
+<fun r='_ZN3JSC4Heap10collectNowENS_15SynchronousnessENS_9GCRequestE'/>
+<fun r='_ZN3JSC4Heap31collectNowFullIfNotDoneRecentlyENS_15SynchronousnessE'/>
+<fun r='_ZN3JSC4Heap25collectIfNecessaryOrDeferEPNS_17GCDeferralContextE'/>
+<fun r='_ZN3JSC4Heap19completeAllJITPlansEv'/>
+<fun r='_ZN3JSC4Heap26reportExtraMemoryAllocatedEm'/>
+<fun r='_ZN3JSC4Heap24reportExtraMemoryVisitedEm'/>
+<fun r='_ZN3JSC4Heap27reportExternalMemoryVisitedEm'/>
+<fun r='_ZN3JSC4Heap18externalMemorySizeEv'/>
+<fun r='_ZN3JSC4Heap27deprecatedReportExtraMemoryEm'/>
+<fun r='_ZN3JSC4Heap26reportAbandonedObjectGraphEv'/>
+<fun r='_ZN3JSC4Heap7protectENS_7JSValueE'/>
+<fun r='_ZN3JSC4Heap9unprotectENS_7JSValueE'/>
+<fun r='_ZN3JSC4Heap15extraMemorySizeEv'/>
+<fun r='_ZN3JSC4Heap4sizeEv'/>
+<fun r='_ZN3JSC4Heap8capacityEv'/>
+<fun r='_ZN3JSC4Heap11objectCountEv'/>
+<fun r='_ZN3JSC4Heap17globalObjectCountEv'/>
+<fun r='_ZN3JSC4Heap20protectedObjectCountEv'/>
+<fun r='_ZN3JSC4Heap26protectedGlobalObjectCountEv'/>
+<fun r='_ZN3JSC4Heap25protectedObjectTypeCountsEv'/>
+<fun r='_ZN3JSC4Heap16objectTypeCountsEv'/>
+<fun r='_ZN3JSC4Heap11markListSetEv'/>
+<fun r='_ZN3JSC4Heap24addMarkedJSValueRefArrayEPNS_21MarkedJSValueRefArrayE'/>
+<fun r='_ZN3JSC4Heap20forEachProtectedCellERKT_'/>
+<fun r='_ZN3JSC4Heap16forEachCodeBlockERKT_'/>
+<fun r='_ZN3JSC4Heap32forEachCodeBlockIgnoringJITPlansERKN3WTF14AbstractLockerERKT_'/>
+<fun r='_ZN3JSC4Heap9handleSetEv'/>
+<fun r='_ZN3JSC4Heap18willStartIteratingEv'/>
+<fun r='_ZN3JSC4Heap18didFinishIteratingEv'/>
+<fun r='_ZNK3JSC4Heap16lastFullGCLengthEv'/>
+<fun r='_ZNK3JSC4Heap16lastEdenGCLengthEv'/>
+<fun r='_ZN3JSC4Heap24increaseLastFullGCLengthEN3WTF7SecondsE'/>
+<fun r='_ZNK3JSC4Heap28sizeBeforeLastEdenCollectionEv'/>
+<fun r='_ZNK3JSC4Heap27sizeAfterLastEdenCollectionEv'/>
+<fun r='_ZNK3JSC4Heap28sizeBeforeLastFullCollectionEv'/>
+<fun r='_ZNK3JSC4Heap27sizeAfterLastFullCollectionEv'/>
+<fun r='_ZN3JSC4Heap19deleteAllCodeBlocksENS_19DeleteAllCodeEffortE'/>
+<fun r='_ZN3JSC4Heap27deleteAllUnlinkedCodeBlocksENS_19DeleteAllCodeEffortE'/>
+<fun r='_ZN3JSC4Heap11didAllocateEm'/>
+<fun r='_ZN3JSC4Heap10isPagedOutEv'/>
+<fun r='_ZN3JSC4Heap15jitStubRoutinesEv'/>
+<fun r='_ZN3JSC4Heap12addReferenceEPNS_6JSCellEPNS_11ArrayBufferE'/>
+<fun r='_ZNK3JSC4Heap10isDeferredEv'/>
+<fun r='_ZN3JSC4Heap16structureIDTableEv'/>
+<fun r='_ZN3JSC4Heap12codeBlockSetEv'/>
+<fun r='_ZN3JSC4Heap11releaseSoonEON3WTF9RetainPtrIT_EE'/>
+<fun r='_ZN3JSC4Heap23registerWeakGCHashTableEPNS_15WeakGCHashTableE'/>
+<fun r='_ZN3JSC4Heap25unregisterWeakGCHashTableEPNS_15WeakGCHashTableE'/>
+<fun r='_ZN3JSC4Heap26addLogicallyEmptyWeakBlockEPNS_9WeakBlockE'/>
+<fun r='_ZNK3JSC4Heap19blockBytesAllocatedEv'/>
+<fun r='_ZN3JSC4Heap16didAllocateBlockEm'/>
+<fun r='_ZN3JSC4Heap12didFreeBlockEm'/>
+<fun r='_ZNK3JSC4Heap21mutatorShouldBeFencedEv'/>
+<fun r='_ZNK3JSC4Heap30addressOfMutatorShouldBeFencedEv'/>
+<fun r='_ZNK3JSC4Heap16barrierThresholdEv'/>
+<fun r='_ZNK3JSC4Heap25addressOfBarrierThresholdEv'/>
+<fun r='_ZN3JSC4Heap15addressOfDoesGCEv'/>
+<fun r='_ZN3JSC4Heap20setDoesGCExpectationEbjj'/>
+<fun r='_ZN3JSC4Heap20setDoesGCExpectationEbNS_3DFG11DoesGCCheck7SpecialE'/>
+<fun r='_ZN3JSC4Heap11verifyCanGCEv'/>
+<fun r='_ZNK3JSC4Heap9hasAccessEv'/>
+<fun r='_ZN3JSC4Heap13acquireAccessEv'/>
+<fun r='_ZN3JSC4Heap13releaseAccessEv'/>
+<fun r='_ZN3JSC4Heap15stopIfNecessaryEv'/>
+<fun r='_ZN3JSC4Heap14relinquishConnEv'/>
+<fun r='_ZN3JSC4Heap13mayNeedToStopEv'/>
+<fun r='_ZN3JSC4Heap16performIncrementEm'/>
+<fun r='_ZN3JSC4Heap17preventCollectionEv'/>
+<fun r='_ZN3JSC4Heap15allowCollectionEv'/>
+<fun r='_ZNK3JSC4Heap23mutatorExecutionVersionEv'/>
+<fun r='_ZNK3JSC4Heap12phaseVersionEv'/>
+<fun r='_ZN3JSC4Heap20addMarkingConstraintENSt3__110unique_ptrINS_17MarkingConstraintENS1_14default_deleteIS3_EEEE'/>
+<fun r='_ZNK3JSC4Heap8verifierEv'/>
+<fun r='_ZN3JSC4Heap24addHeapFinalizerCallbackERKNS_21HeapFinalizerCallbackE'/>
+<fun r='_ZN3JSC4Heap27removeHeapFinalizerCallbackERKNS_21HeapFinalizerCallbackE'/>
+<fun r='_ZN3JSC4Heap17runTaskInParallelEN3WTF6RefPtrINS1_10SharedTaskIFvRNS_11SlotVisitorEEEENS1_12RawPtrTraitsIS7_EENS1_21DefaultRefDerefTraitsIS7_EEEE'/>
+<fun r='_ZN3JSC4Heap21runFunctionInParallelERKT_'/>
+<fun r='_ZN3JSC4Heap18forEachSlotVisitorERKT_'/>
+<fun r='_ZNK3JSC4Heap11totalGCTimeEv'/>
+<mbr r='JSC::Heap::immutableButterflyToStringCache' o='0' t='HashMap&lt;JSC::JSImmutableButterfly *, JSC::JSString *&gt;'/>
+<fun r='_ZNK3JSC4Heap22isMarkingForGCVerifierEv'/>
+<fun r='_ZN3JSC4Heap30mayHaveJITStubRoutinesToDeleteEv'/>
+<fun r='_ZN3JSC4Heap25deleteDeadJITStubRoutinesEN3WTF7SecondsE'/>
+<smbr r='JSC::Heap::minExtraMemory' t='const size_t'/>
+<fun r='_ZN3JSC4Heap17isValidAllocationEm'/>
+<fun r='_ZN3JSC4Heap34reportExtraMemoryAllocatedSlowCaseEm'/>
+<fun r='_ZN3JSC4Heap35deprecatedReportExtraMemorySlowCaseEm'/>
+<fun r='_ZN3JSC4Heap30shouldCollectInCollectorThreadERKN3WTF14AbstractLockerE'/>
+<fun r='_ZN3JSC4Heap24collectInCollectorThreadEv'/>
+<fun r='_ZN3JSC4Heap9checkConnENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap15runCurrentPhaseENS_11GCConductorEPNS_18CurrentThreadStateE'/>
+<fun r='_ZN3JSC4Heap18runNotRunningPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap13runBeginPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap16runFixpointPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap18runConcurrentPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap14runReloopPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap11runEndPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap11changePhaseENS_11GCConductorENS_14CollectorPhaseE'/>
+<fun r='_ZN3JSC4Heap19finishChangingPhaseENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap22collectInMutatorThreadEv'/>
+<fun r='_ZN3JSC4Heap16stopThePeripheryENS_11GCConductorE'/>
+<fun r='_ZN3JSC4Heap18resumeThePeripheryEv'/>
+<fun r='_ZN3JSC4Heap14stopTheMutatorEv'/>
+<fun r='_ZN3JSC4Heap16resumeTheMutatorEv'/>
+<fun r='_ZN3JSC4Heap19stopIfNecessarySlowEv'/>
+<fun r='_ZN3JSC4Heap19stopIfNecessarySlowEj'/>
+<fun r='_ZN3JSC4Heap16waitForCollectorERKT_'/>
+<fun r='_ZN3JSC4Heap17acquireAccessSlowEv'/>
+<fun r='_ZN3JSC4Heap17releaseAccessSlowEv'/>
+<fun r='_ZN3JSC4Heap18handleNeedFinalizeEj'/>
+<fun r='_ZN3JSC4Heap18handleNeedFinalizeEv'/>
+<fun r='_ZN3JSC4Heap14relinquishConnEj'/>
+<fun r='_ZN3JSC4Heap23finishRelinquishingConnEv'/>
+<fun r='_ZN3JSC4Heap15setNeedFinalizeEv'/>
+<fun r='_ZN3JSC4Heap21waitWhileNeedFinalizeEv'/>
+<fun r='_ZN3JSC4Heap17setMutatorWaitingEv'/>
+<fun r='_ZN3JSC4Heap19clearMutatorWaitingEv'/>
+<fun r='_ZN3JSC4Heap20notifyThreadStoppingERKN3WTF14AbstractLockerE'/>
+<fun r='_ZN3JSC4Heap17requestCollectionENS_9GCRequestE'/>
+<fun r='_ZN3JSC4Heap17waitForCollectionEy'/>
+<fun r='_ZN3JSC4Heap22suspendCompilerThreadsEv'/>
+<fun r='_ZN3JSC4Heap19willStartCollectionEv'/>
+<fun r='_ZN3JSC4Heap17prepareForMarkingEv'/>
+<fun r='_ZN3JSC4Heap16gatherStackRootsERNS_17ConservativeRootsE'/>
+<fun r='_ZN3JSC4Heap18gatherJSStackRootsERNS_17ConservativeRootsE'/>
+<fun r='_ZN3JSC4Heap24gatherScratchBufferRootsERNS_17ConservativeRootsE'/>
+<fun r='_ZN3JSC4Heap12beginMarkingEv'/>
+<fun r='_ZN3JSC4Heap35visitCompilerWorklistWeakReferencesEv'/>
+<fun r='_ZN3JSC4Heap33removeDeadCompilerWorklistEntriesEv'/>
+<fun r='_ZN3JSC4Heap18updateObjectCountsEv'/>
+<fun r='_ZN3JSC4Heap10endMarkingEv'/>
+<fun r='_ZN3JSC4Heap15reapWeakHandlesEv'/>
+<fun r='_ZN3JSC4Heap37pruneStaleEntriesFromWeakGCHashTablesEv'/>
+<fun r='_ZN3JSC4Heap17sweepArrayBuffersEv'/>
+<fun r='_ZN3JSC4Heap15snapshotUnsweptEv'/>
+<fun r='_ZN3JSC4Heap26deleteSourceProviderCachesEv'/>
+<fun r='_ZN3JSC4Heap24notifyIncrementalSweeperEv'/>
+<fun r='_ZN3JSC4Heap21harvestWeakReferencesEv'/>
+<fun r='_ZN3JSC4Heap37finalizeMarkedUnconditionalFinalizersERT0_'/>
+<fun r='_ZN3JSC4Heap31finalizeUnconditionalFinalizersEv'/>
+<fun r='_ZN3JSC4Heap26deleteUnmarkedCompiledCodeEv'/>
+<fun r='_ZN3JSC4Heap18addToRememberedSetEPKNS_6JSCellE'/>
+<fun r='_ZN3JSC4Heap22updateAllocationLimitsEv'/>
+<fun r='_ZN3JSC4Heap19didFinishCollectionEv'/>
+<fun r='_ZN3JSC4Heap21resumeCompilerThreadsEv'/>
+<fun r='_ZN3JSC4Heap19gatherExtraHeapDataERNS_12HeapProfilerE'/>
+<fun r='_ZN3JSC4Heap27removeDeadHeapSnapshotNodesERNS_12HeapProfilerE'/>
+<fun r='_ZN3JSC4Heap8finalizeEv'/>
+<fun r='_ZN3JSC4Heap15sweepInFinalizeEv'/>
+<fun r='_ZN3JSC4Heap32sweepAllLogicallyEmptyWeakBlocksEv'/>
+<fun r='_ZN3JSC4Heap32sweepNextLogicallyEmptyWeakBlockEv'/>
+<fun r='_ZN3JSC4Heap22shouldDoFullCollectionEv'/>
+<fun r='_ZN3JSC4Heap22incrementDeferralDepthEv'/>
+<fun r='_ZN3JSC4Heap22decrementDeferralDepthEv'/>
+<fun r='_ZN3JSC4Heap35decrementDeferralDepthAndGCIfNeededEv'/>
+<fun r='_ZN3JSC4Heap39decrementDeferralDepthAndGCIfNeededSlowEv'/>
+<fun r='_ZN3JSC4Heap10visitCountEv'/>
+<fun r='_ZN3JSC4Heap12bytesVisitedEv'/>
+<fun r='_ZN3JSC4Heap20forEachCodeBlockImplERKN3WTF12ScopedLambdaIFvPNS_9CodeBlockEEEE'/>
+<fun r='_ZN3JSC4Heap36forEachCodeBlockIgnoringJITPlansImplERKN3WTF14AbstractLockerERKNS1_12ScopedLambdaIFvPNS_9CodeBlockEEEE'/>
+<fun r='_ZN3JSC4Heap24setMutatorShouldBeFencedEb'/>
+<fun r='_ZN3JSC4Heap18addCoreConstraintsEv'/>
+<fun r='_ZN3JSC4Heap27overCriticalMemoryThresholdENS0_23MemoryThresholdCallTypeE'/>
+<fun r='_ZN3JSC4Heap38iterateExecutingAndCompilingCodeBlocksERT_RKN3WTF8FunctionIFvPNS_9CodeBlockEEEE'/>
+<fun r='_ZN3JSC4Heap57iterateExecutingAndCompilingCodeBlocksWithoutHoldingLocksERT0_RKT_'/>
+<fun r='_ZN3JSC4Heap21assertMarkStacksEmptyEv'/>
+<fun r='_ZN3JSC4Heap19setBonusVisitorTaskEN3WTF6RefPtrINS1_10SharedTaskIFvRNS_11SlotVisitorEEEENS1_12RawPtrTraitsIS7_EENS1_21DefaultRefDerefTraitsIS7_EEEE'/>
+<fun r='_ZN3JSC4Heap33dumpHeapStatisticsAtVMDestructionEv'/>
+<fun r='_ZN3JSC4Heap17useGenerationalGCEv'/>
+<fun r='_ZN3JSC4Heap24shouldSweepSynchronouslyEv'/>
+<fun r='_ZN3JSC4Heap8verifyGCEv'/>
+<mbr r='JSC::Heap::m_heapType' o='192' t='const JSC::HeapType'/>
+<mbr r='JSC::Heap::m_mutatorState' o='224' t='JSC::MutatorState'/>
+<mbr r='JSC::Heap::m_ramSize' o='256' t='const size_t'/>
+<mbr r='JSC::Heap::m_minBytesPerCycle' o='320' t='const size_t'/>
+<mbr r='JSC::Heap::m_sizeAfterLastCollect' o='384' t='size_t'/>
+<mbr r='JSC::Heap::m_sizeAfterLastFullCollect' o='448' t='size_t'/>
+<mbr r='JSC::Heap::m_sizeBeforeLastFullCollect' o='512' t='size_t'/>
+<mbr r='JSC::Heap::m_sizeAfterLastEdenCollect' o='576' t='size_t'/>
+<mbr r='JSC::Heap::m_sizeBeforeLastEdenCollect' o='640' t='size_t'/>
+<mbr r='JSC::Heap::m_bytesAllocatedThisCycle' o='704' t='size_t'/>
+<mbr r='JSC::Heap::m_bytesAbandonedSinceLastFullCollect' o='768' t='size_t'/>
+<mbr r='JSC::Heap::m_maxEdenSize' o='832' t='size_t'/>
+<mbr r='JSC::Heap::m_maxEdenSizeWhenCritical' o='896' t='size_t'/>
+<mbr r='JSC::Heap::m_maxHeapSize' o='960' t='size_t'/>
+<mbr r='JSC::Heap::m_totalBytesVisited' o='1024' t='size_t'/>
+<mbr r='JSC::Heap::m_totalBytesVisitedThisCycle' o='1088' t='size_t'/>
+<mbr r='JSC::Heap::m_incrementBalance' o='1152' t='double'/>
+<mbr r='JSC::Heap::m_shouldDoFullCollection' o='1216' t='bool'/>
+<mbr r='JSC::Heap::m_collectionScope' o='1224' t='Markable&lt;JSC::CollectionScope, EnumMarkableTraits&lt;JSC::CollectionScope&gt;&gt;'/>
+<mbr r='JSC::Heap::m_lastCollectionScope' o='1232' t='Markable&lt;JSC::CollectionScope, EnumMarkableTraits&lt;JSC::CollectionScope&gt;&gt;'/>
+<mbr r='JSC::Heap::m_raceMarkStackLock' o='1240' t='WTF::Lock'/>
+<mbr r='JSC::Heap::m_doesGC' o='1248' t='JSC::DFG::DoesGCCheck'/>
+<mbr r='JSC::Heap::m_structureIDTable' o='1280' t='JSC::StructureIDTable'/>
+<mbr r='JSC::Heap::m_objectSpace' o='1856' t='JSC::MarkedSpace'/>
+<mbr r='JSC::Heap::m_arrayBuffers' o='3520' t='GCIncomingRefCountedSet&lt;JSC::ArrayBuffer&gt;'/>
+<mbr r='JSC::Heap::m_extraMemorySize' o='3712' t='size_t'/>
+<mbr r='JSC::Heap::m_deprecatedExtraMemorySize' o='3776' t='size_t'/>
+<mbr r='JSC::Heap::m_copyingRememberedSet' o='3840' t='HashSet&lt;const JSC::JSCell *&gt;'/>
+<mbr r='JSC::Heap::m_protectedValues' o='4032' t='JSC::ProtectCountSet'/>
+<mbr r='JSC::Heap::m_markListSet' o='4224' t='std::unique_ptr&lt;HashSet&lt;MarkedArgumentBuffer *&gt;&gt;'/>
+<mbr r='JSC::Heap::m_markedJSValueRefArrays' o='4288' t='SentinelLinkedList&lt;JSC::MarkedJSValueRefArray, BasicRawSentinelNode&lt;JSC::MarkedJSValueRefArray&gt;&gt;'/>
+<mbr r='JSC::Heap::m_machineThreads' o='4544' t='std::unique_ptr&lt;MachineThreads&gt;'/>
+<mbr r='JSC::Heap::m_collectorSlotVisitor' o='4608' t='std::unique_ptr&lt;SlotVisitor&gt;'/>
+<mbr r='JSC::Heap::m_mutatorSlotVisitor' o='4672' t='std::unique_ptr&lt;SlotVisitor&gt;'/>
+<mbr r='JSC::Heap::m_mutatorMarkStack' o='4736' t='std::unique_ptr&lt;MarkStackArray&gt;'/>
+<mbr r='JSC::Heap::m_raceMarkStack' o='4800' t='std::unique_ptr&lt;MarkStackArray&gt;'/>
+<mbr r='JSC::Heap::m_constraintSet' o='4864' t='std::unique_ptr&lt;MarkingConstraintSet&gt;'/>
+<mbr r='JSC::Heap::m_verifierSlotVisitor' o='4928' t='std::unique_ptr&lt;VerifierSlotVisitor&gt;'/>
+<mbr r='JSC::Heap::m_parallelSlotVisitors' o='4992' t='Vector&lt;std::unique_ptr&lt;SlotVisitor&gt;&gt;'/>
+<mbr r='JSC::Heap::m_availableParallelSlotVisitors' o='5120' t='Vector&lt;JSC::SlotVisitor *&gt;'/>
+<mbr r='JSC::Heap::m_handleSet' o='5248' t='JSC::HandleSet'/>
+<mbr r='JSC::Heap::m_codeBlocks' o='6272' t='std::unique_ptr&lt;CodeBlockSet&gt;'/>
+<mbr r='JSC::Heap::m_jitStubRoutines' o='6336' t='std::unique_ptr&lt;JITStubRoutineSet&gt;'/>
+<mbr r='JSC::Heap::m_cFinalizerOwner' o='6400' t='JSC::Heap::CFinalizerOwner'/>
+<mbr r='JSC::Heap::m_lambdaFinalizerOwner' o='6464' t='JSC::Heap::LambdaFinalizerOwner'/>
+<mbr r='JSC::Heap::m_parallelSlotVisitorLock' o='6528' t='WTF::Lock'/>
+<mbr r='JSC::Heap::m_isSafeToCollect' o='6536' t='bool'/>
+<mbr r='JSC::Heap::m_isShuttingDown' o='6544' t='bool'/>
+<mbr r='JSC::Heap::m_mutatorShouldBeFenced' o='6552' t='bool'/>
+<mbr r='JSC::Heap::m_isMarkingForGCVerifier' o='6560' t='bool'/>
+<mbr r='JSC::Heap::m_barrierThreshold' o='6592' t='unsigned int'/>
+<mbr r='JSC::Heap::m_vm' o='6656' t='JSC::VM &amp;'/>
+<mbr r='JSC::Heap::m_lastFullGCLength' o='6720' t='WTF::Seconds'/>
+<mbr r='JSC::Heap::m_lastEdenGCLength' o='6784' t='WTF::Seconds'/>
+<mbr r='JSC::Heap::m_logicallyEmptyWeakBlocks' o='6848' t='Vector&lt;JSC::WeakBlock *&gt;'/>
+<mbr r='JSC::Heap::m_indexOfNextLogicallyEmptyWeakBlockToSweep' o='6976' t='size_t'/>
+<mbr r='JSC::Heap::m_fullActivityCallback' o='7040' t='RefPtr&lt;JSC::FullGCActivityCallback&gt;'/>
+<mbr r='JSC::Heap::m_edenActivityCallback' o='7104' t='RefPtr&lt;JSC::GCActivityCallback&gt;'/>
+<mbr r='JSC::Heap::m_sweeper' o='7168' t='Ref&lt;JSC::IncrementalSweeper&gt;'/>
+<mbr r='JSC::Heap::m_stopIfNecessaryTimer' o='7232' t='Ref&lt;JSC::StopIfNecessaryTimer&gt;'/>
+<mbr r='JSC::Heap::m_observers' o='7296' t='Vector&lt;JSC::HeapObserver *&gt;'/>
+<mbr r='JSC::Heap::m_heapFinalizerCallbacks' o='7424' t='Vector&lt;JSC::HeapFinalizerCallback&gt;'/>
+<mbr r='JSC::Heap::m_verifier' o='7552' t='std::unique_ptr&lt;HeapVerifier&gt;'/>
+<mbr r='JSC::Heap::m_delayedReleaseObjects' o='7616' t='Vector&lt;RetainPtr&lt;CFTypeRef&gt;&gt;'/>
+<mbr r='JSC::Heap::m_delayedReleaseRecursionCount' o='7744' t='unsigned int'/>
+<mbr r='JSC::Heap::m_deferralDepth' o='7776' t='unsigned int'/>
+<mbr r='JSC::Heap::m_weakGCHashTables' o='7808' t='HashSet&lt;JSC::WeakGCHashTable *&gt;'/>
+<mbr r='JSC::Heap::m_sharedCollectorMarkStack' o='8000' t='std::unique_ptr&lt;MarkStackArray&gt;'/>
+<mbr r='JSC::Heap::m_sharedMutatorMarkStack' o='8064' t='std::unique_ptr&lt;MarkStackArray&gt;'/>
+<mbr r='JSC::Heap::m_numberOfActiveParallelMarkers' o='8128' t='unsigned int'/>
+<mbr r='JSC::Heap::m_numberOfWaitingParallelMarkers' o='8160' t='unsigned int'/>
+<mbr r='JSC::Heap::m_opaqueRoots' o='8192' t='WTF::ConcurrentPtrHashSet'/>
+<smbr r='JSC::Heap::s_blockFragmentLength' t='const size_t'/>
+<mbr r='JSC::Heap::m_helperClient' o='8896' t='WTF::ParallelHelperClient'/>
+<mbr r='JSC::Heap::m_bonusVisitorTask' o='9088' t='RefPtr&lt;SharedTask&lt;void (JSC::SlotVisitor &amp;)&gt;&gt;'/>
+<mbr r='JSC::Heap::m_blockBytesAllocated' o='9152' t='size_t'/>
+<mbr r='JSC::Heap::m_externalMemorySize' o='9216' t='size_t'/>
+<mbr r='JSC::Heap::m_scheduler' o='9280' t='std::unique_ptr&lt;MutatorScheduler&gt;'/>
+<smbr r='JSC::Heap::mutatorHasConnBit' t='const unsigned int'/>
+<smbr r='JSC::Heap::stoppedBit' t='const unsigned int'/>
+<smbr r='JSC::Heap::hasAccessBit' t='const unsigned int'/>
+<smbr r='JSC::Heap::needFinalizeBit' t='const unsigned int'/>
+<smbr r='JSC::Heap::mutatorWaitingBit' t='const unsigned int'/>
+<mbr r='JSC::Heap::m_worldState' o='9344' t='Atomic&lt;unsigned int&gt;'/>
+<mbr r='JSC::Heap::m_worldIsStopped' o='9376' t='bool'/>
+<mbr r='JSC::Heap::m_visitRaceLock' o='9384' t='WTF::Lock'/>
+<mbr r='JSC::Heap::m_markingMutex' o='9392' t='WTF::Lock'/>
+<mbr r='JSC::Heap::m_markingConditionVariable' o='9400' t='WTF::Condition'/>
+<mbr r='JSC::Heap::m_beforeGC' o='9408' t='WTF::MonotonicTime'/>
+<mbr r='JSC::Heap::m_afterGC' o='9472' t='WTF::MonotonicTime'/>
+<mbr r='JSC::Heap::m_stopTime' o='9536' t='WTF::MonotonicTime'/>
+<mbr r='JSC::Heap::m_requests' o='9600' t='Deque&lt;JSC::GCRequest&gt;'/>
+<mbr r='JSC::Heap::m_currentRequest' o='9920' t='JSC::GCRequest'/>
+<mbr r='JSC::Heap::m_lastServedTicket' o='10048' t='JSC::Heap::Ticket'/>
+<mbr r='JSC::Heap::m_lastGrantedTicket' o='10112' t='JSC::Heap::Ticket'/>
+<mbr r='JSC::Heap::m_lastPhase' o='10176' t='JSC::CollectorPhase'/>
+<mbr r='JSC::Heap::m_currentPhase' o='10184' t='JSC::CollectorPhase'/>
+<mbr r='JSC::Heap::m_nextPhase' o='10192' t='JSC::CollectorPhase'/>
+<mbr r='JSC::Heap::m_collectorThreadIsRunning' o='10200' t='bool'/>
+<mbr r='JSC::Heap::m_threadShouldStop' o='10208' t='bool'/>
+<mbr r='JSC::Heap::m_threadIsStopping' o='10216' t='bool'/>
+<mbr r='JSC::Heap::m_mutatorDidRun' o='10224' t='bool'/>
+<mbr r='JSC::Heap::m_didDeferGCWork' o='10232' t='bool'/>
+<mbr r='JSC::Heap::m_shouldStopCollectingContinuously' o='10240' t='bool'/>
+<mbr r='JSC::Heap::m_mutatorExecutionVersion' o='10304' t='uint64_t'/>
+<mbr r='JSC::Heap::m_phaseVersion' o='10368' t='uint64_t'/>
+<mbr r='JSC::Heap::m_threadLock' o='10432' t='Box&lt;WTF::Lock&gt;'/>
+<mbr r='JSC::Heap::m_threadCondition' o='10496' t='Ref&lt;WTF::AutomaticThreadCondition&gt;'/>
+<mbr r='JSC::Heap::m_thread' o='10560' t='RefPtr&lt;WTF::AutomaticThread&gt;'/>
+<mbr r='JSC::Heap::m_collectContinuouslyThread' o='10624' t='RefPtr&lt;WTF::Thread&gt;'/>
+<mbr r='JSC::Heap::m_lastGCStartTime' o='10688' t='WTF::MonotonicTime'/>
+<mbr r='JSC::Heap::m_lastGCEndTime' o='10752' t='WTF::MonotonicTime'/>
+<mbr r='JSC::Heap::m_currentGCStartTime' o='10816' t='WTF::MonotonicTime'/>
+<mbr r='JSC::Heap::m_totalGCTime' o='10880' t='WTF::Seconds'/>
+<mbr r='JSC::Heap::m_barriersExecuted' o='10944' t='uintptr_t'/>
+<mbr r='JSC::Heap::m_currentThreadState' o='11008' t='JSC::CurrentThreadState *'/>
+<mbr r='JSC::Heap::m_currentThread' o='11072' t='WTF::Thread *'/>
+<mbr r='JSC::Heap::m_parallelMarkersShouldExit' o='11136' t='bool'/>
+<mbr r='JSC::Heap::m_collectContinuouslyLock' o='11144' t='WTF::Lock'/>
+<mbr r='JSC::Heap::m_collectContinuouslyCondition' o='11152' t='WTF::Condition'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/CellContainerInlines.h' l='43' c='_ZNK3JSC13CellContainer4heapEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/GCDeferralContext.h' l='39'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/GCDeferralContext.h' l='43' c='_ZN3JSC17GCDeferralContextC1ERNS_4HeapE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/GCDeferralContext.h' l='47'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/HeapCellInlines.h' l='57' c='_ZNK3JSC8HeapCell4heapEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/HeapInlines.h' l='47' c='_ZN3JSC4Heap4heapEPKNS_8HeapCellE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/HeapInlines.h' l='54' c='_ZN3JSC4Heap4heapENS_7JSValueE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/AllocatorInlines.h' l='33' c='_ZNK3JSC9Allocator8allocateERNS_4HeapEPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/CodeBlock.h' l='588' c='_ZNK3JSC9CodeBlock4heapEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/LocalAllocatorInlines.h' l='33' c='_ZN3JSC14LocalAllocator8allocateERNS_4HeapEPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/AbstractSlotVisitorInlines.h' l='97' c='_ZN3JSC19AbstractSlotVisitorC1ERNS_4HeapEN3WTF7CStringERNS3_20ConcurrentPtrHashSetE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/AbstractSlotVisitorInlines.h' l='104' c='_ZNK3JSC19AbstractSlotVisitor4heapEv'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSCellInlines.h' l='175' c='_ZN3JSC21tryAllocateCellHelperERNS_4HeapEmPNS_17GCDeferralContextENS_21AllocationFailureModeE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSCellInlines.h' l='192' c='_ZN3JSC12allocateCellERNS_4HeapEm'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSCellInlines.h' l='198' c='_ZN3JSC15tryAllocateCellERNS_4HeapEm'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSCellInlines.h' l='204' c='_ZN3JSC12allocateCellERNS_4HeapEPNS_17GCDeferralContextEm'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSCellInlines.h' l='210' c='_ZN3JSC15tryAllocateCellERNS_4HeapEPNS_17GCDeferralContextEm'/>
+<size>1400</size>
+<fun r='_ZNK3JSC4Heap2vmEv'/>
+<fun r='_ZN3JSC4Heap4heapEPKNS_8HeapCellE'/>
+<fun r='_ZN3JSC4Heap4heapENS_7JSValueE'/>
+<fun r='_ZNK3JSC4Heap13hasHeapAccessEv'/>
+<fun r='_ZNK3JSC4Heap14worldIsStoppedEv'/>
+<fun r='_ZN3JSC4Heap8isMarkedEPKv'/>
+<fun r='_ZN3JSC4Heap16testAndSetMarkedEjPKv'/>
+<fun r='_ZN3JSC4Heap8cellSizeEPKv'/>
+<fun r='_ZN3JSC4Heap12writeBarrierEPKNS_6JSCellENS_7JSValueE'/>
+<fun r='_ZN3JSC4Heap12writeBarrierEPKNS_6JSCellEPS1_'/>
+<fun r='_ZN3JSC4Heap12writeBarrierEPKNS_6JSCellE'/>
+<fun r='_ZN3JSC4Heap24writeBarrierWithoutFenceEPKNS_6JSCellE'/>
+<fun r='_ZN3JSC4Heap12mutatorFenceEv'/>
+<fun r='_ZN3JSC4Heap16forEachCodeBlockERKT_'/>
+<fun r='_ZN3JSC4Heap32forEachCodeBlockIgnoringJITPlansERKN3WTF14AbstractLockerERKT_'/>
+<fun r='_ZN3JSC4Heap20forEachProtectedCellERKT_'/>
+<fun r='_ZN3JSC4Heap11releaseSoonEON3WTF9RetainPtrIT_EE'/>
+<fun r='_ZN3JSC4Heap22incrementDeferralDepthEv'/>
+<fun r='_ZN3JSC4Heap22decrementDeferralDepthEv'/>
+<fun r='_ZN3JSC4Heap35decrementDeferralDepthAndGCIfNeededEv'/>
+<fun r='_ZN3JSC4Heap11markListSetEv'/>
+<fun r='_ZN3JSC4Heap26reportExtraMemoryAllocatedEm'/>
+<fun r='_ZN3JSC4Heap27deprecatedReportExtraMemoryEm'/>
+<fun r='_ZN3JSC4Heap13acquireAccessEv'/>
+<fun r='_ZNK3JSC4Heap9hasAccessEv'/>
+<fun r='_ZN3JSC4Heap13releaseAccessEv'/>
+<fun r='_ZN3JSC4Heap13mayNeedToStopEv'/>
+<fun r='_ZN3JSC4Heap15stopIfNecessaryEv'/>
+<fun r='_ZN3JSC4Heap18forEachSlotVisitorERKT_'/>
+<fun r='_ZN3JSC4Heap30mayHaveJITStubRoutinesToDeleteEv'/>
+<fun r='_ZN3JSC4Heap25deleteDeadJITStubRoutinesEN3WTF7SecondsE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/GCActivityCallback.h' l='46' c='_ZN3JSC18GCActivityCallback18tryCreateFullTimerEPNS_4HeapE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/GCActivityCallback.h' l='47' c='_ZN3JSC18GCActivityCallback18tryCreateEdenTimerEPNS_4HeapE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/GCActivityCallback.h' l='49' c='_ZN3JSC18GCActivityCallbackC1EPNS_4HeapE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/GCActivityCallback.h' l='55' c='_ZN3JSC18GCActivityCallback11didAllocateERNS_4HeapEm'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/GCActivityCallback.h' l='64' c='_ZN3JSC18GCActivityCallback12lastGCLengthERNS_4HeapE'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/GCActivityCallback.h' l='66' c='_ZN3JSC18GCActivityCallback9deathRateERNS_4HeapE'/>
+<size>1400</size>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/MarkedBlockInlines.h' l='53' c='_ZNK3JSC11MarkedBlock4heapEv'/>
+<use f='webkit/Source/WebCore/bindings/js/DOMGCOutputConstraint.cpp' l='55' c='_ZN7WebCore21DOMGCOutputConstraint15executeImplImplERT_'/>
+<size>1400</size>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/AlignedMemoryAllocator.h' l='49' c='_ZN3JSC22AlignedMemoryAllocator17registerDirectoryERNS_4HeapEPNS_14BlockDirectoryE'/>
+<size>1400</size>

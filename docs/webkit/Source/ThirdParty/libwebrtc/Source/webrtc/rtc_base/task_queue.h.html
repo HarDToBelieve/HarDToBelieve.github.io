@@ -1,0 +1,153 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>task_queue.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_queue.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::TaskQueue "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_queue.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='task_queue.h.html'>task_queue.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2016 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_TASK_QUEUE_H_">RTC_BASE_TASK_QUEUE_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_TASK_QUEUE_H_" data-ref="_M/RTC_BASE_TASK_QUEUE_H_">RTC_BASE_TASK_QUEUE_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;utility&gt;</u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="../../third_party/abseil-cpp/absl/memory/memory.h.html">"absl/memory/memory.h"</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="../api/task_queue/queued_task.h.html">"api/task_queue/queued_task.h"</a></u></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="../api/task_queue/task_queue_base.h.html">"api/task_queue/task_queue_base.h"</a></u></td></tr>
+<tr><th id="22">22</th><td><u>#include <a href="../api/task_queue/task_queue_factory.h.html">"api/task_queue/task_queue_factory.h"</a></u></td></tr>
+<tr><th id="23">23</th><td><u>#include <a href="constructor_magic.h.html">"rtc_base/constructor_magic.h"</a></u></td></tr>
+<tr><th id="24">24</th><td><u>#include <a href="system/rtc_export.h.html">"rtc_base/system/rtc_export.h"</a></u></td></tr>
+<tr><th id="25">25</th><td><u>#include <a href="task_utils/to_queued_task.h.html">"rtc_base/task_utils/to_queued_task.h"</a></u></td></tr>
+<tr><th id="26">26</th><td><u>#include <a href="thread_annotations.h.html">"rtc_base/thread_annotations.h"</a></u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="29">29</th><td><i>// Implements a task queue that asynchronously executes tasks in a way that</i></td></tr>
+<tr><th id="30">30</th><td><i>// guarantees that they're executed in FIFO order and that tasks never overlap.</i></td></tr>
+<tr><th id="31">31</th><td><i>// Tasks may always execute on the same worker thread and they may not.</i></td></tr>
+<tr><th id="32">32</th><td><i>// To DCHECK that tasks are executing on a known task queue, use IsCurrent().</i></td></tr>
+<tr><th id="33">33</th><td><i>//</i></td></tr>
+<tr><th id="34">34</th><td><i>// Here are some usage examples:</i></td></tr>
+<tr><th id="35">35</th><td><i>//</i></td></tr>
+<tr><th id="36">36</th><td><i>//   1) Asynchronously running a lambda:</i></td></tr>
+<tr><th id="37">37</th><td><i>//</i></td></tr>
+<tr><th id="38">38</th><td><i>//     class MyClass {</i></td></tr>
+<tr><th id="39">39</th><td><i>//       ...</i></td></tr>
+<tr><th id="40">40</th><td><i>//       TaskQueue queue_("MyQueue");</i></td></tr>
+<tr><th id="41">41</th><td><i>//     };</i></td></tr>
+<tr><th id="42">42</th><td><i>//</i></td></tr>
+<tr><th id="43">43</th><td><i>//     void MyClass::StartWork() {</i></td></tr>
+<tr><th id="44">44</th><td><i>//       queue_.PostTask([]() { Work(); });</i></td></tr>
+<tr><th id="45">45</th><td><i>//     ...</i></td></tr>
+<tr><th id="46">46</th><td><i>//</i></td></tr>
+<tr><th id="47">47</th><td><i>//   2) Posting a custom task on a timer.  The task posts itself again after</i></td></tr>
+<tr><th id="48">48</th><td><i>//      every running:</i></td></tr>
+<tr><th id="49">49</th><td><i>//</i></td></tr>
+<tr><th id="50">50</th><td><i>//     class TimerTask : public QueuedTask {</i></td></tr>
+<tr><th id="51">51</th><td><i>//      public:</i></td></tr>
+<tr><th id="52">52</th><td><i>//       TimerTask() {}</i></td></tr>
+<tr><th id="53">53</th><td><i>//      private:</i></td></tr>
+<tr><th id="54">54</th><td><i>//       bool Run() override {</i></td></tr>
+<tr><th id="55">55</th><td><i>//         ++count_;</i></td></tr>
+<tr><th id="56">56</th><td><i>//         TaskQueueBase::Current()-&gt;PostDelayedTask(</i></td></tr>
+<tr><th id="57">57</th><td><i>//             absl::WrapUnique(this), 1000);</i></td></tr>
+<tr><th id="58">58</th><td><i>//         // Ownership has been transferred to the next occurance,</i></td></tr>
+<tr><th id="59">59</th><td><i>//         // so return false to prevent from being deleted now.</i></td></tr>
+<tr><th id="60">60</th><td><i>//         return false;</i></td></tr>
+<tr><th id="61">61</th><td><i>//       }</i></td></tr>
+<tr><th id="62">62</th><td><i>//       int count_ = 0;</i></td></tr>
+<tr><th id="63">63</th><td><i>//     };</i></td></tr>
+<tr><th id="64">64</th><td><i>//     ...</i></td></tr>
+<tr><th id="65">65</th><td><i>//     queue_.PostDelayedTask(std::make_unique&lt;TimerTask&gt;(), 1000);</i></td></tr>
+<tr><th id="66">66</th><td><i>//</i></td></tr>
+<tr><th id="67">67</th><td><i>// For more examples, see task_queue_unittests.cc.</i></td></tr>
+<tr><th id="68">68</th><td><i>//</i></td></tr>
+<tr><th id="69">69</th><td><i>// A note on destruction:</i></td></tr>
+<tr><th id="70">70</th><td><i>//</i></td></tr>
+<tr><th id="71">71</th><td><i>// When a TaskQueue is deleted, pending tasks will not be executed but they will</i></td></tr>
+<tr><th id="72">72</th><td><i>// be deleted.  The deletion of tasks may happen asynchronously after the</i></td></tr>
+<tr><th id="73">73</th><td><i>// TaskQueue itself has been deleted or it may happen synchronously while the</i></td></tr>
+<tr><th id="74">74</th><td><i>// TaskQueue instance is being deleted.  This may vary from one OS to the next</i></td></tr>
+<tr><th id="75">75</th><td><i>// so assumptions about lifetimes of pending tasks should not be made.</i></td></tr>
+<tr><th id="76">76</th><td><b>class</b> <a class="macro" href="thread_annotations.h.html#70" title="__attribute__((lockable))" data-ref="_M/RTC_LOCKABLE">RTC_LOCKABLE</a> <a class="macro" href="system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <dfn class="type def" id="rtc::TaskQueue" title='rtc::TaskQueue' data-ref="rtc::TaskQueue" data-ref-filename="rtc..TaskQueue">TaskQueue</dfn> {</td></tr>
+<tr><th id="77">77</th><td> <b>public</b>:</td></tr>
+<tr><th id="78">78</th><td>  <i>// TaskQueue priority levels. On some platforms these will map to thread</i></td></tr>
+<tr><th id="79">79</th><td><i>  // priorities, on others such as Mac and iOS, GCD queue priorities.</i></td></tr>
+<tr><th id="80">80</th><td>  <b>using</b> <dfn class="typedef" id="rtc::TaskQueue::Priority" title='rtc::TaskQueue::Priority' data-type='::webrtc::TaskQueueFactory::Priority' data-ref="rtc::TaskQueue::Priority" data-ref-filename="rtc..TaskQueue..Priority">Priority</dfn> = <span class="namespace">::webrtc::</span><a class="type" href="../api/task_queue/task_queue_factory.h.html#webrtc::TaskQueueFactory" title='webrtc::TaskQueueFactory' data-ref="webrtc::TaskQueueFactory" data-ref-filename="webrtc..TaskQueueFactory">TaskQueueFactory</a>::<a class="type" href="../api/task_queue/task_queue_factory.h.html#webrtc::TaskQueueFactory::Priority" title='webrtc::TaskQueueFactory::Priority' data-ref="webrtc::TaskQueueFactory::Priority" data-ref-filename="webrtc..TaskQueueFactory..Priority">Priority</a>;</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td>  <b>explicit</b> <dfn class="decl fn" id="_ZN3rtc9TaskQueueC1ENSt3__110unique_ptrIN6webrtc13TaskQueueBaseENS3_16TaskQueueDeleterEEE" title='rtc::TaskQueue::TaskQueue' data-ref="_ZN3rtc9TaskQueueC1ENSt3__110unique_ptrIN6webrtc13TaskQueueBaseENS3_16TaskQueueDeleterEEE" data-ref-filename="_ZN3rtc9TaskQueueC1ENSt3__110unique_ptrIN6webrtc13TaskQueueBaseENS3_16TaskQueueDeleterEEE">TaskQueue</dfn>(<span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<span class="namespace">webrtc::</span><a class="type" href="../api/task_queue/task_queue_base.h.html#webrtc::TaskQueueBase" title='webrtc::TaskQueueBase' data-ref="webrtc::TaskQueueBase" data-ref-filename="webrtc..TaskQueueBase">TaskQueueBase</a>,</td></tr>
+<tr><th id="83">83</th><td>                                     <span class="namespace">webrtc::</span><a class="type" href="../api/task_queue/task_queue_base.h.html#webrtc::TaskQueueDeleter" title='webrtc::TaskQueueDeleter' data-ref="webrtc::TaskQueueDeleter" data-ref-filename="webrtc..TaskQueueDeleter">TaskQueueDeleter</a>&gt; <dfn class="local col8 decl" id="1528task_queue" title='task_queue' data-type='std::unique_ptr&lt;webrtc::TaskQueueBase, webrtc::TaskQueueDeleter&gt;' data-ref="1528task_queue" data-ref-filename="1528task_queue">task_queue</dfn>);</td></tr>
+<tr><th id="84">84</th><td>  <dfn class="decl fn" id="_ZN3rtc9TaskQueueD1Ev" title='rtc::TaskQueue::~TaskQueue' data-ref="_ZN3rtc9TaskQueueD1Ev" data-ref-filename="_ZN3rtc9TaskQueueD1Ev">~TaskQueue</dfn>();</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>  <i>// Used for DCHECKing the current queue.</i></td></tr>
+<tr><th id="87">87</th><td>  <em>bool</em> <dfn class="decl fn" id="_ZNK3rtc9TaskQueue9IsCurrentEv" title='rtc::TaskQueue::IsCurrent' data-ref="_ZNK3rtc9TaskQueue9IsCurrentEv" data-ref-filename="_ZNK3rtc9TaskQueue9IsCurrentEv">IsCurrent</dfn>() <em>const</em>;</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td>  <i>// Returns non-owning pointer to the task queue implementation.</i></td></tr>
+<tr><th id="90">90</th><td>  <span class="namespace">webrtc::</span><a class="type" href="../api/task_queue/task_queue_base.h.html#webrtc::TaskQueueBase" title='webrtc::TaskQueueBase' data-ref="webrtc::TaskQueueBase" data-ref-filename="webrtc..TaskQueueBase">TaskQueueBase</a>* <dfn class="decl def fn" id="_ZN3rtc9TaskQueue3GetEv" title='rtc::TaskQueue::Get' data-ref="_ZN3rtc9TaskQueue3GetEv" data-ref-filename="_ZN3rtc9TaskQueue3GetEv">Get</dfn>() { <b>return</b> <a class="member field" href="#rtc::TaskQueue::impl_" title='rtc::TaskQueue::impl_' data-ref="rtc::TaskQueue::impl_" data-ref-filename="rtc..TaskQueue..impl_">impl_</a>; }</td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td>  <i>// TODO(tommi): For better debuggability, implement RTC_FROM_HERE.</i></td></tr>
+<tr><th id="93">93</th><td><i></i></td></tr>
+<tr><th id="94">94</th><td><i>  // Ownership of the task is passed to PostTask.</i></td></tr>
+<tr><th id="95">95</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN3rtc9TaskQueue8PostTaskENSt3__110unique_ptrIN6webrtc10QueuedTaskENS1_14default_deleteIS4_EEEE" title='rtc::TaskQueue::PostTask' data-ref="_ZN3rtc9TaskQueue8PostTaskENSt3__110unique_ptrIN6webrtc10QueuedTaskENS1_14default_deleteIS4_EEEE" data-ref-filename="_ZN3rtc9TaskQueue8PostTaskENSt3__110unique_ptrIN6webrtc10QueuedTaskENS1_14default_deleteIS4_EEEE">PostTask</dfn>(<span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<span class="namespace">webrtc::</span><a class="type" href="../api/task_queue/queued_task.h.html#webrtc::QueuedTask" title='webrtc::QueuedTask' data-ref="webrtc::QueuedTask" data-ref-filename="webrtc..QueuedTask">QueuedTask</a>&gt; <dfn class="local col9 decl" id="1529task" title='task' data-type='std::unique_ptr&lt;webrtc::QueuedTask&gt;' data-ref="1529task" data-ref-filename="1529task">task</dfn>);</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td>  <i>// Schedules a task to execute a specified number of milliseconds from when</i></td></tr>
+<tr><th id="98">98</th><td><i>  // the call is made. The precision should be considered as "best effort"</i></td></tr>
+<tr><th id="99">99</th><td><i>  // and in some cases, such as on Windows when all high precision timers have</i></td></tr>
+<tr><th id="100">100</th><td><i>  // been used up, can be off by as much as 15 millseconds (although 8 would be</i></td></tr>
+<tr><th id="101">101</th><td><i>  // more likely). This can be mitigated by limiting the use of delayed tasks.</i></td></tr>
+<tr><th id="102">102</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN3rtc9TaskQueue15PostDelayedTaskENSt3__110unique_ptrIN6webrtc10QueuedTaskENS1_14default_deleteIS4_EEEEj" title='rtc::TaskQueue::PostDelayedTask' data-ref="_ZN3rtc9TaskQueue15PostDelayedTaskENSt3__110unique_ptrIN6webrtc10QueuedTaskENS1_14default_deleteIS4_EEEEj" data-ref-filename="_ZN3rtc9TaskQueue15PostDelayedTaskENSt3__110unique_ptrIN6webrtc10QueuedTaskENS1_14default_deleteIS4_EEEEj">PostDelayedTask</dfn>(<span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<span class="namespace">webrtc::</span><a class="type" href="../api/task_queue/queued_task.h.html#webrtc::QueuedTask" title='webrtc::QueuedTask' data-ref="webrtc::QueuedTask" data-ref-filename="webrtc..QueuedTask">QueuedTask</a>&gt; <dfn class="local col0 decl" id="1530task" title='task' data-type='std::unique_ptr&lt;webrtc::QueuedTask&gt;' data-ref="1530task" data-ref-filename="1530task">task</dfn>,</td></tr>
+<tr><th id="103">103</th><td>                       <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col1 decl" id="1531milliseconds" title='milliseconds' data-type='uint32_t' data-ref="1531milliseconds" data-ref-filename="1531milliseconds">milliseconds</dfn>);</td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td>  <i>// std::enable_if is used here to make sure that calls to PostTask() with</i></td></tr>
+<tr><th id="106">106</th><td><i>  // std::unique_ptr&lt;SomeClassDerivedFromQueuedTask&gt; would not end up being</i></td></tr>
+<tr><th id="107">107</th><td><i>  // caught by this template.</i></td></tr>
+<tr><th id="108">108</th><td>  <b>template</b> &lt;<b>class</b> Closure,</td></tr>
+<tr><th id="109">109</th><td>            <b>typename</b> <span class="namespace">std::</span><span class='type' title='std::__1::enable_if' data-ref="std::__1::enable_if" data-ref-filename="std..__1..enable_if">enable_if</span>&lt;!<span class="namespace">std::</span><span class='type' title='std::__1::is_convertible' data-ref="std::__1::is_convertible" data-ref-filename="std..__1..is_convertible">is_convertible</span>&lt;</td></tr>
+<tr><th id="110">110</th><td>                Closure,</td></tr>
+<tr><th id="111">111</th><td>                <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<span class="namespace">webrtc::</span><a class="type" href="../api/task_queue/queued_task.h.html#webrtc::QueuedTask" title='webrtc::QueuedTask' data-ref="webrtc::QueuedTask" data-ref-filename="webrtc..QueuedTask">QueuedTask</a>&gt;&gt;::value&gt;::type* = <b>nullptr</b>&gt;</td></tr>
+<tr><th id="112">112</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN3rtc9TaskQueue8PostTaskEOT_" title='rtc::TaskQueue::PostTask' data-ref="_ZN3rtc9TaskQueue8PostTaskEOT_" data-ref-filename="_ZN3rtc9TaskQueue8PostTaskEOT_">PostTask</dfn>(Closure&amp;&amp; <dfn class="local col2 decl" id="1532closure" title='closure' data-type='Closure &amp;&amp;' data-ref="1532closure" data-ref-filename="1532closure">closure</dfn>) {</td></tr>
+<tr><th id="113">113</th><td>    PostTask(<span class="namespace">webrtc::</span>ToQueuedTask(<span class="namespace">std::</span>forward&lt;Closure&gt;(<a class="local col2 ref" href="#1532closure" title='closure' data-ref="1532closure" data-ref-filename="1532closure">closure</a>)));</td></tr>
+<tr><th id="114">114</th><td>  }</td></tr>
+<tr><th id="115">115</th><td></td></tr>
+<tr><th id="116">116</th><td>  <i>// See documentation above for performance expectations.</i></td></tr>
+<tr><th id="117">117</th><td>  <b>template</b> &lt;<b>class</b> Closure,</td></tr>
+<tr><th id="118">118</th><td>            <b>typename</b> <span class="namespace">std::</span><span class='type' title='std::__1::enable_if' data-ref="std::__1::enable_if" data-ref-filename="std..__1..enable_if">enable_if</span>&lt;!<span class="namespace">std::</span><span class='type' title='std::__1::is_convertible' data-ref="std::__1::is_convertible" data-ref-filename="std..__1..is_convertible">is_convertible</span>&lt;</td></tr>
+<tr><th id="119">119</th><td>                Closure,</td></tr>
+<tr><th id="120">120</th><td>                <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<span class="namespace">webrtc::</span><a class="type" href="../api/task_queue/queued_task.h.html#webrtc::QueuedTask" title='webrtc::QueuedTask' data-ref="webrtc::QueuedTask" data-ref-filename="webrtc..QueuedTask">QueuedTask</a>&gt;&gt;::value&gt;::type* = <b>nullptr</b>&gt;</td></tr>
+<tr><th id="121">121</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN3rtc9TaskQueue15PostDelayedTaskEOT_j" title='rtc::TaskQueue::PostDelayedTask' data-ref="_ZN3rtc9TaskQueue15PostDelayedTaskEOT_j" data-ref-filename="_ZN3rtc9TaskQueue15PostDelayedTaskEOT_j">PostDelayedTask</dfn>(Closure&amp;&amp; <dfn class="local col3 decl" id="1533closure" title='closure' data-type='Closure &amp;&amp;' data-ref="1533closure" data-ref-filename="1533closure">closure</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col4 decl" id="1534milliseconds" title='milliseconds' data-type='uint32_t' data-ref="1534milliseconds" data-ref-filename="1534milliseconds">milliseconds</dfn>) {</td></tr>
+<tr><th id="122">122</th><td>    PostDelayedTask(<span class="namespace">webrtc::</span>ToQueuedTask(<span class="namespace">std::</span>forward&lt;Closure&gt;(<a class="local col3 ref" href="#1533closure" title='closure' data-ref="1533closure" data-ref-filename="1533closure">closure</a>)),</td></tr>
+<tr><th id="123">123</th><td>                    <a class="local col4 ref" href="#1534milliseconds" title='milliseconds' data-ref="1534milliseconds" data-ref-filename="1534milliseconds">milliseconds</a>);</td></tr>
+<tr><th id="124">124</th><td>  }</td></tr>
+<tr><th id="125">125</th><td></td></tr>
+<tr><th id="126">126</th><td> <b>private</b>:</td></tr>
+<tr><th id="127">127</th><td>  <span class="namespace">webrtc::</span><a class="type" href="../api/task_queue/task_queue_base.h.html#webrtc::TaskQueueBase" title='webrtc::TaskQueueBase' data-ref="webrtc::TaskQueueBase" data-ref-filename="webrtc..TaskQueueBase">TaskQueueBase</a>* <em>const</em> <dfn class="decl field" id="rtc::TaskQueue::impl_" title='rtc::TaskQueue::impl_' data-ref="rtc::TaskQueue::impl_" data-ref-filename="rtc..TaskQueue..impl_">impl_</dfn>;</td></tr>
+<tr><th id="128">128</th><td></td></tr>
+<tr><th id="129">129</th><td>  <a class="macro" href="constructor_magic.h.html#16" title="TaskQueue(const TaskQueue&amp;) = delete; TaskQueue&amp; operator=(const TaskQueue&amp;) = delete" data-ref="_M/RTC_DISALLOW_COPY_AND_ASSIGN">RTC_DISALLOW_COPY_AND_ASSIGN</a>(<dfn class="decl def fn" id="_ZN3rtc9TaskQueueC1ERKS0_" title='rtc::TaskQueue::TaskQueue' data-ref="_ZN3rtc9TaskQueueC1ERKS0_" data-ref-filename="_ZN3rtc9TaskQueueC1ERKS0_"><a class="type" href="#rtc::TaskQueue" title='rtc::TaskQueue' data-ref="rtc::TaskQueue" data-ref-filename="rtc..TaskQueue"><a class="type" href="#rtc::TaskQueue" title='rtc::TaskQueue' data-ref="rtc::TaskQueue" data-ref-filename="rtc..TaskQueue"><a class="type" href="#rtc::TaskQueue" title='rtc::TaskQueue' data-ref="rtc::TaskQueue" data-ref-filename="rtc..TaskQueue">TaskQueue</a></a></a></dfn>);</td></tr>
+<tr><th id="130">130</th><td>};</td></tr>
+<tr><th id="131">131</th><td></td></tr>
+<tr><th id="132">132</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="133">133</th><td></td></tr>
+<tr><th id="134">134</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_TASK_QUEUE_H_</u></td></tr>
+<tr><th id="135">135</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../api/create_peerconnection_factory.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/create_peerconnection_factory.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

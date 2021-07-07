@@ -1,0 +1,85 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>arith_routines.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/arith_routines.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/arith_routines.h'; var root_path = '../../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../../..'>Source</a>/<a href='../../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../../..'>libwebrtc</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>webrtc</a>/<a href='../../../../..'>modules</a>/<a href='../../../..'>audio_coding</a>/<a href='../../..'>codecs</a>/<a href='../..'>isac</a>/<a href='..'>main</a>/<a href='./'>source</a>/<a href='arith_routines.h.html'>arith_routines.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2011 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><i>/*</i></td></tr>
+<tr><th id="12">12</th><td><i> * arith_routines.h</i></td></tr>
+<tr><th id="13">13</th><td><i> *</i></td></tr>
+<tr><th id="14">14</th><td><i> * Functions for arithmetic coding.</i></td></tr>
+<tr><th id="15">15</th><td><i> *</i></td></tr>
+<tr><th id="16">16</th><td><i> */</i></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><u>#<span data-ppcond="18">ifndef</span> <span class="macro" data-ref="_M/MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_ARITH_ROUTINES_H_">MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_ARITH_ROUTINES_H_</span></u></td></tr>
+<tr><th id="19">19</th><td><u>#define <dfn class="macro" id="_M/MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_ARITH_ROUTINES_H_" data-ref="_M/MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_ARITH_ROUTINES_H_">MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_ARITH_ROUTINES_H_</dfn></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="structs.h.html">"modules/audio_coding/codecs/isac/main/source/structs.h"</a></u></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><em>int</em> <dfn class="decl fn" id="WebRtcIsac_EncLogisticMulti2" title='WebRtcIsac_EncLogisticMulti2' data-ref="WebRtcIsac_EncLogisticMulti2" data-ref-filename="WebRtcIsac_EncLogisticMulti2">WebRtcIsac_EncLogisticMulti2</dfn>(</td></tr>
+<tr><th id="24">24</th><td>    <a class="typedef" href="structs.h.html#Bitstr" title='Bitstr' data-type='struct Bitstreamstruct' data-ref="Bitstr" data-ref-filename="Bitstr">Bitstr</a>* <dfn class="local col1 decl" id="1streamdata" title='streamdata' data-type='Bitstr *' data-ref="1streamdata" data-ref-filename="1streamdata">streamdata</dfn>, <i>/* in-/output struct containing bitstream */</i></td></tr>
+<tr><th id="25">25</th><td>    <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col2 decl" id="2dataQ7" title='dataQ7' data-type='int16_t *' data-ref="2dataQ7" data-ref-filename="2dataQ7">dataQ7</dfn>,    <i>/* input: data vector */</i></td></tr>
+<tr><th id="26">26</th><td>    <em>const</em> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>*</td></tr>
+<tr><th id="27">27</th><td>        <dfn class="local col3 decl" id="3env" title='env' data-type='const uint16_t *' data-ref="3env" data-ref-filename="3env">env</dfn>,     <i>/* input: side info vector defining the width of the pdf */</i></td></tr>
+<tr><th id="28">28</th><td>    <em>const</em> <em>int</em> <dfn class="local col4 decl" id="4N" title='N' data-type='const int' data-ref="4N" data-ref-filename="4N">N</dfn>, <i>/* input: data vector length */</i></td></tr>
+<tr><th id="29">29</th><td>    <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col5 decl" id="5isSWB12kHz" title='isSWB12kHz' data-type='const int16_t' data-ref="5isSWB12kHz" data-ref-filename="5isSWB12kHz">isSWB12kHz</dfn>); <i>/* if the codec is working in 12kHz bandwidth */</i></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><i>/* returns the number of bytes in the stream */</i></td></tr>
+<tr><th id="32">32</th><td><em>int</em> <a class="decl fn" href="arith_routines.c.html#WebRtcIsac_EncTerminate" title='WebRtcIsac_EncTerminate' data-ref="WebRtcIsac_EncTerminate" data-ref-filename="WebRtcIsac_EncTerminate" id="WebRtcIsac_EncTerminate">WebRtcIsac_EncTerminate</a>(</td></tr>
+<tr><th id="33">33</th><td>    <a class="typedef" href="structs.h.html#Bitstr" title='Bitstr' data-type='struct Bitstreamstruct' data-ref="Bitstr" data-ref-filename="Bitstr">Bitstr</a>* <dfn class="local col6 decl" id="6streamdata" title='streamdata' data-type='Bitstr *' data-ref="6streamdata" data-ref-filename="6streamdata">streamdata</dfn>); <i>/* in-/output struct containing bitstream */</i></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><i>/* returns the number of bytes in the stream so far */</i></td></tr>
+<tr><th id="36">36</th><td><em>int</em> <dfn class="decl fn" id="WebRtcIsac_DecLogisticMulti2" title='WebRtcIsac_DecLogisticMulti2' data-ref="WebRtcIsac_DecLogisticMulti2" data-ref-filename="WebRtcIsac_DecLogisticMulti2">WebRtcIsac_DecLogisticMulti2</dfn>(</td></tr>
+<tr><th id="37">37</th><td>    <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col7 decl" id="7data" title='data' data-type='int16_t *' data-ref="7data" data-ref-filename="7data">data</dfn>,      <i>/* output: data vector */</i></td></tr>
+<tr><th id="38">38</th><td>    <a class="typedef" href="structs.h.html#Bitstr" title='Bitstr' data-type='struct Bitstreamstruct' data-ref="Bitstr" data-ref-filename="Bitstr">Bitstr</a>* <dfn class="local col8 decl" id="8streamdata" title='streamdata' data-type='Bitstr *' data-ref="8streamdata" data-ref-filename="8streamdata">streamdata</dfn>, <i>/* in-/output struct containing bitstream */</i></td></tr>
+<tr><th id="39">39</th><td>    <em>const</em> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>*</td></tr>
+<tr><th id="40">40</th><td>        <dfn class="local col9 decl" id="9env" title='env' data-type='const uint16_t *' data-ref="9env" data-ref-filename="9env">env</dfn>, <i>/* input: side info vector defining the width of the pdf */</i></td></tr>
+<tr><th id="41">41</th><td>    <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col0 decl" id="10dither" title='dither' data-type='const int16_t *' data-ref="10dither" data-ref-filename="10dither">dither</dfn>,     <i>/* input: dither vector */</i></td></tr>
+<tr><th id="42">42</th><td>    <em>const</em> <em>int</em> <dfn class="local col1 decl" id="11N" title='N' data-type='const int' data-ref="11N" data-ref-filename="11N">N</dfn>,               <i>/* input: data vector length */</i></td></tr>
+<tr><th id="43">43</th><td>    <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col2 decl" id="12isSWB12kHz" title='isSWB12kHz' data-type='const int16_t' data-ref="12isSWB12kHz" data-ref-filename="12isSWB12kHz">isSWB12kHz</dfn>); <i>/* if the codec is working in 12kHz bandwidth */</i></td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td><em>void</em> <dfn class="decl fn" id="WebRtcIsac_EncHistMulti" title='WebRtcIsac_EncHistMulti' data-ref="WebRtcIsac_EncHistMulti" data-ref-filename="WebRtcIsac_EncHistMulti">WebRtcIsac_EncHistMulti</dfn>(</td></tr>
+<tr><th id="46">46</th><td>    <a class="typedef" href="structs.h.html#Bitstr" title='Bitstr' data-type='struct Bitstreamstruct' data-ref="Bitstr" data-ref-filename="Bitstr">Bitstr</a>* <dfn class="local col3 decl" id="13streamdata" title='streamdata' data-type='Bitstr *' data-ref="13streamdata" data-ref-filename="13streamdata">streamdata</dfn>,         <i>/* in-/output struct containing bitstream */</i></td></tr>
+<tr><th id="47">47</th><td>    <em>const</em> <em>int</em>* <dfn class="local col4 decl" id="14data" title='data' data-type='const int *' data-ref="14data" data-ref-filename="14data">data</dfn>,            <i>/* input: data vector */</i></td></tr>
+<tr><th id="48">48</th><td>    <em>const</em> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>* <em>const</em>* <dfn class="local col5 decl" id="15cdf" title='cdf' data-type='const uint16_t *const *' data-ref="15cdf" data-ref-filename="15cdf">cdf</dfn>, <i>/* input: array of cdf arrays */</i></td></tr>
+<tr><th id="49">49</th><td>    <em>const</em> <em>int</em> <dfn class="local col6 decl" id="16N" title='N' data-type='const int' data-ref="16N" data-ref-filename="16N">N</dfn>);               <i>/* input: data vector length */</i></td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><em>int</em> <dfn class="decl fn" id="WebRtcIsac_DecHistBisectMulti" title='WebRtcIsac_DecHistBisectMulti' data-ref="WebRtcIsac_DecHistBisectMulti" data-ref-filename="WebRtcIsac_DecHistBisectMulti">WebRtcIsac_DecHistBisectMulti</dfn>(</td></tr>
+<tr><th id="52">52</th><td>    <em>int</em>* <dfn class="local col7 decl" id="17data" title='data' data-type='int *' data-ref="17data" data-ref-filename="17data">data</dfn>,                  <i>/* output: data vector */</i></td></tr>
+<tr><th id="53">53</th><td>    <a class="typedef" href="structs.h.html#Bitstr" title='Bitstr' data-type='struct Bitstreamstruct' data-ref="Bitstr" data-ref-filename="Bitstr">Bitstr</a>* <dfn class="local col8 decl" id="18streamdata" title='streamdata' data-type='Bitstr *' data-ref="18streamdata" data-ref-filename="18streamdata">streamdata</dfn>,         <i>/* in-/output struct containing bitstream */</i></td></tr>
+<tr><th id="54">54</th><td>    <em>const</em> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>* <em>const</em>* <dfn class="local col9 decl" id="19cdf" title='cdf' data-type='const uint16_t *const *' data-ref="19cdf" data-ref-filename="19cdf">cdf</dfn>, <i>/* input: array of cdf arrays */</i></td></tr>
+<tr><th id="55">55</th><td>    <em>const</em> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>*</td></tr>
+<tr><th id="56">56</th><td>        <dfn class="local col0 decl" id="20cdf_size" title='cdf_size' data-type='const uint16_t *' data-ref="20cdf_size" data-ref-filename="20cdf_size">cdf_size</dfn>, <i>/* input: array of cdf table sizes+1 (power of two: 2^k) */</i></td></tr>
+<tr><th id="57">57</th><td>    <em>const</em> <em>int</em> <dfn class="local col1 decl" id="21N" title='N' data-type='const int' data-ref="21N" data-ref-filename="21N">N</dfn>); <i>/* input: data vector length */</i></td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><em>int</em> <dfn class="decl fn" id="WebRtcIsac_DecHistOneStepMulti" title='WebRtcIsac_DecHistOneStepMulti' data-ref="WebRtcIsac_DecHistOneStepMulti" data-ref-filename="WebRtcIsac_DecHistOneStepMulti">WebRtcIsac_DecHistOneStepMulti</dfn>(</td></tr>
+<tr><th id="60">60</th><td>    <em>int</em>* <dfn class="local col2 decl" id="22data" title='data' data-type='int *' data-ref="22data" data-ref-filename="22data">data</dfn>,                  <i>/* output: data vector */</i></td></tr>
+<tr><th id="61">61</th><td>    <a class="typedef" href="structs.h.html#Bitstr" title='Bitstr' data-type='struct Bitstreamstruct' data-ref="Bitstr" data-ref-filename="Bitstr">Bitstr</a>* <dfn class="local col3 decl" id="23streamdata" title='streamdata' data-type='Bitstr *' data-ref="23streamdata" data-ref-filename="23streamdata">streamdata</dfn>,         <i>/* in-/output struct containing bitstream */</i></td></tr>
+<tr><th id="62">62</th><td>    <em>const</em> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>* <em>const</em>* <dfn class="local col4 decl" id="24cdf" title='cdf' data-type='const uint16_t *const *' data-ref="24cdf" data-ref-filename="24cdf">cdf</dfn>, <i>/* input: array of cdf arrays */</i></td></tr>
+<tr><th id="63">63</th><td>    <em>const</em> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>*</td></tr>
+<tr><th id="64">64</th><td>        <dfn class="local col5 decl" id="25init_index" title='init_index' data-type='const uint16_t *' data-ref="25init_index" data-ref-filename="25init_index">init_index</dfn>, <i>/* input: vector of initial cdf table search entries */</i></td></tr>
+<tr><th id="65">65</th><td>    <em>const</em> <em>int</em> <dfn class="local col6 decl" id="26N" title='N' data-type='const int' data-ref="26N" data-ref-filename="26N">N</dfn>);   <i>/* input: data vector length */</i></td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><u>#<span data-ppcond="18">endif</span> /* MODULES_AUDIO_CODING_CODECS_ISAC_MAIN_SOURCE_ARITH_ROUTINES_H_ */</u></td></tr>
+<tr><th id="68">68</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='arith_routines.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/codecs/isac/main/source/arith_routines.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

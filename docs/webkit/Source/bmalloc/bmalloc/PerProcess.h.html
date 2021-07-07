@@ -1,0 +1,150 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>PerProcess.h source code [webkit/Source/bmalloc/bmalloc/PerProcess.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="bmalloc::PerProcess,bmalloc::PerProcessData "/>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/bmalloc/bmalloc/PerProcess.h'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>bmalloc</a>/<a href='./'>bmalloc</a>/<a href='PerProcess.h.html'>PerProcess.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2014-2018 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="BInline.h.html">"BInline.h"</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="Mutex.h.html">"Mutex.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="Sizes.h.html">"Sizes.h"</a></u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><b>namespace</b> <span class="namespace">bmalloc</span> {</td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><i>// Usage:</i></td></tr>
+<tr><th id="35">35</th><td><i>//     Object* object = PerProcess&lt;Object&gt;::get();</i></td></tr>
+<tr><th id="36">36</th><td><i>//     x = object-&gt;field-&gt;field;</i></td></tr>
+<tr><th id="37">37</th><td><i>//</i></td></tr>
+<tr><th id="38">38</th><td><i>// Object will be instantiated only once, even in the face of concurrency.</i></td></tr>
+<tr><th id="39">39</th><td><i>//</i></td></tr>
+<tr><th id="40">40</th><td><i>// NOTE: If you observe global side-effects of the Object constructor, be</i></td></tr>
+<tr><th id="41">41</th><td><i>// sure to lock the Object mutex. For example:</i></td></tr>
+<tr><th id="42">42</th><td><i>//</i></td></tr>
+<tr><th id="43">43</th><td><i>// Object() : m_field(...) { globalFlag = true }</i></td></tr>
+<tr><th id="44">44</th><td><i>//</i></td></tr>
+<tr><th id="45">45</th><td><i>// Object* object = PerProcess&lt;Object&gt;::get();</i></td></tr>
+<tr><th id="46">46</th><td><i>// x = object-&gt;m_field; // OK</i></td></tr>
+<tr><th id="47">47</th><td><i>// if (globalFlag) { ... } // Undefined behavior.</i></td></tr>
+<tr><th id="48">48</th><td><i>//</i></td></tr>
+<tr><th id="49">49</th><td><i>// LockHolder lock(PerProcess&lt;Object&gt;::mutex());</i></td></tr>
+<tr><th id="50">50</th><td><i>// Object* object = PerProcess&lt;Object&gt;::get(lock);</i></td></tr>
+<tr><th id="51">51</th><td><i>// if (globalFlag) { ... } // OK.</i></td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td><b>struct</b> <dfn class="type def" id="bmalloc::PerProcessData" title='bmalloc::PerProcessData' data-ref="bmalloc::PerProcessData" data-ref-filename="bmalloc..PerProcessData">PerProcessData</dfn> {</td></tr>
+<tr><th id="54">54</th><td>    <em>const</em> <em>char</em>* <dfn class="decl field" id="bmalloc::PerProcessData::disambiguator" title='bmalloc::PerProcessData::disambiguator' data-ref="bmalloc::PerProcessData::disambiguator" data-ref-filename="bmalloc..PerProcessData..disambiguator">disambiguator</dfn>;</td></tr>
+<tr><th id="55">55</th><td>    <em>void</em>* <dfn class="decl field" id="bmalloc::PerProcessData::memory" title='bmalloc::PerProcessData::memory' data-ref="bmalloc::PerProcessData::memory" data-ref-filename="bmalloc..PerProcessData..memory">memory</dfn>;</td></tr>
+<tr><th id="56">56</th><td>    <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="bmalloc::PerProcessData::size" title='bmalloc::PerProcessData::size' data-ref="bmalloc::PerProcessData::size" data-ref-filename="bmalloc..PerProcessData..size">size</dfn>;</td></tr>
+<tr><th id="57">57</th><td>    <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="bmalloc::PerProcessData::alignment" title='bmalloc::PerProcessData::alignment' data-ref="bmalloc::PerProcessData::alignment" data-ref-filename="bmalloc..PerProcessData..alignment">alignment</dfn>;</td></tr>
+<tr><th id="58">58</th><td>    <a class="type" href="Mutex.h.html#bmalloc::Mutex" title='bmalloc::Mutex' data-ref="bmalloc::Mutex" data-ref-filename="bmalloc..Mutex">Mutex</a> <dfn class="decl field" id="bmalloc::PerProcessData::mutex" title='bmalloc::PerProcessData::mutex' data-ref="bmalloc::PerProcessData::mutex" data-ref-filename="bmalloc..PerProcessData..mutex">mutex</dfn>;</td></tr>
+<tr><th id="59">59</th><td>    <em>bool</em> <dfn class="decl field" id="bmalloc::PerProcessData::isInitialized" title='bmalloc::PerProcessData::isInitialized' data-ref="bmalloc::PerProcessData::isInitialized" data-ref-filename="bmalloc..PerProcessData..isInitialized">isInitialized</dfn>;</td></tr>
+<tr><th id="60">60</th><td>    <a class="type" href="#bmalloc::PerProcessData" title='bmalloc::PerProcessData' data-ref="bmalloc::PerProcessData" data-ref-filename="bmalloc..PerProcessData">PerProcessData</a>* <dfn class="decl field" id="bmalloc::PerProcessData::next" title='bmalloc::PerProcessData::next' data-ref="bmalloc::PerProcessData::next" data-ref-filename="bmalloc..PerProcessData..next">next</dfn>;</td></tr>
+<tr><th id="61">61</th><td>};</td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><b>constexpr</b> <em>unsigned</em> <dfn class="decl def fn" id="_ZN7bmalloc10stringHashEPKc" title='bmalloc::stringHash' data-ref="_ZN7bmalloc10stringHashEPKc" data-ref-filename="_ZN7bmalloc10stringHashEPKc">stringHash</dfn>(<em>const</em> <em>char</em>* <dfn class="local col3 decl" id="393string" title='string' data-type='const char *' data-ref="393string" data-ref-filename="393string">string</dfn>)</td></tr>
+<tr><th id="64">64</th><td>{</td></tr>
+<tr><th id="65">65</th><td>    <em>unsigned</em> <dfn class="local col4 decl" id="394result" title='result' data-type='unsigned int' data-ref="394result" data-ref-filename="394result">result</dfn> = <var>5381</var>;</td></tr>
+<tr><th id="66">66</th><td>    <b>while</b> (<em>char</em> <dfn class="local col5 decl" id="395c" title='c' data-type='char' data-ref="395c" data-ref-filename="395c"><a class="local col5 ref" href="#395c" title='c' data-ref="395c" data-ref-filename="395c">c</a></dfn> = *<a class="local col3 ref" href="#393string" title='string' data-ref="393string" data-ref-filename="393string">string</a>++)</td></tr>
+<tr><th id="67">67</th><td>        <a class="local col4 ref" href="#394result" title='result' data-ref="394result" data-ref-filename="394result">result</a> = <a class="local col4 ref" href="#394result" title='result' data-ref="394result" data-ref-filename="394result">result</a> * <var>33</var> + <a class="local col5 ref" href="#395c" title='c' data-ref="395c" data-ref-filename="395c">c</a>;</td></tr>
+<tr><th id="68">68</th><td>    <b>return</b> <a class="local col4 ref" href="#394result" title='result' data-ref="394result" data-ref-filename="394result">result</a>;</td></tr>
+<tr><th id="69">69</th><td>}</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><a class="macro" href="BExport.h.html#46" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/BEXPORT">BEXPORT</a> <a class="type" href="#bmalloc::PerProcessData" title='bmalloc::PerProcessData' data-ref="bmalloc::PerProcessData" data-ref-filename="bmalloc..PerProcessData">PerProcessData</a>* <dfn class="decl fn" id="_ZN7bmalloc17getPerProcessDataEjPKcmm" title='bmalloc::getPerProcessData' data-ref="_ZN7bmalloc17getPerProcessDataEjPKcmm" data-ref-filename="_ZN7bmalloc17getPerProcessDataEjPKcmm">getPerProcessData</dfn>(<em>unsigned</em> <dfn class="local col6 decl" id="396disambiguatorHash" title='disambiguatorHash' data-type='unsigned int' data-ref="396disambiguatorHash" data-ref-filename="396disambiguatorHash">disambiguatorHash</dfn>, <em>const</em> <em>char</em>* <dfn class="local col7 decl" id="397disambiguator" title='disambiguator' data-type='const char *' data-ref="397disambiguator" data-ref-filename="397disambiguator">disambiguator</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="398size" title='size' data-type='size_t' data-ref="398size" data-ref-filename="398size">size</dfn>, <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="399alignment" title='alignment' data-type='size_t' data-ref="399alignment" data-ref-filename="399alignment">alignment</dfn>);</td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td><b>template</b>&lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="74">74</th><td><b>class</b> <dfn class="type def" id="bmalloc::PerProcess" title='bmalloc::PerProcess' data-ref="bmalloc::PerProcess" data-ref-filename="bmalloc..PerProcess">PerProcess</dfn> {</td></tr>
+<tr><th id="75">75</th><td><b>public</b>:</td></tr>
+<tr><th id="76">76</th><td>    <em>static</em> T* <dfn class="decl def fn" id="_ZN7bmalloc10PerProcess3getEv" title='bmalloc::PerProcess::get' data-ref="_ZN7bmalloc10PerProcess3getEv" data-ref-filename="_ZN7bmalloc10PerProcess3getEv">get</dfn>()</td></tr>
+<tr><th id="77">77</th><td>    {</td></tr>
+<tr><th id="78">78</th><td>        T* <dfn class="local col0 decl" id="400object" title='object' data-type='T *' data-ref="400object" data-ref-filename="400object">object</dfn> = <a class="member fn" href="#_ZN7bmalloc10PerProcess11getFastCaseEv" title='bmalloc::PerProcess::getFastCase' data-ref="_ZN7bmalloc10PerProcess11getFastCaseEv" data-ref-filename="_ZN7bmalloc10PerProcess11getFastCaseEv">getFastCase</a>();</td></tr>
+<tr><th id="79">79</th><td>        <b>if</b> (!<a class="local col0 ref" href="#400object" title='object' data-ref="400object" data-ref-filename="400object">object</a>)</td></tr>
+<tr><th id="80">80</th><td>            <b>return</b> <a class="member fn" href="#_ZN7bmalloc10PerProcess11getSlowCaseEv" title='bmalloc::PerProcess::getSlowCase' data-ref="_ZN7bmalloc10PerProcess11getSlowCaseEv" data-ref-filename="_ZN7bmalloc10PerProcess11getSlowCaseEv">getSlowCase</a>();</td></tr>
+<tr><th id="81">81</th><td>        <b>return</b> <a class="local col0 ref" href="#400object" title='object' data-ref="400object" data-ref-filename="400object">object</a>;</td></tr>
+<tr><th id="82">82</th><td>    }</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td>    <em>static</em> T* <dfn class="decl def fn" id="_ZN7bmalloc10PerProcess11getFastCaseEv" title='bmalloc::PerProcess::getFastCase' data-ref="_ZN7bmalloc10PerProcess11getFastCaseEv" data-ref-filename="_ZN7bmalloc10PerProcess11getFastCaseEv">getFastCase</dfn>()</td></tr>
+<tr><th id="85">85</th><td>    {</td></tr>
+<tr><th id="86">86</th><td>        <b>return</b> <a class="member" href="#bmalloc::PerProcess::s_object" title='bmalloc::PerProcess::s_object' data-ref="bmalloc::PerProcess::s_object" data-ref-filename="bmalloc..PerProcess..s_object">s_object</a>.load(<span class="namespace">std::</span><span class='enum' title='std::__1::memory_order_relaxed' data-ref="std::__1::memory_order_relaxed" data-ref-filename="std..__1..memory_order_relaxed">memory_order_relaxed</span>);</td></tr>
+<tr><th id="87">87</th><td>    }</td></tr>
+<tr><th id="88">88</th><td>    </td></tr>
+<tr><th id="89">89</th><td>    <em>static</em> <a class="type" href="Mutex.h.html#bmalloc::Mutex" title='bmalloc::Mutex' data-ref="bmalloc::Mutex" data-ref-filename="bmalloc..Mutex">Mutex</a>&amp; <dfn class="decl def fn" id="_ZN7bmalloc10PerProcess5mutexEv" title='bmalloc::PerProcess::mutex' data-ref="_ZN7bmalloc10PerProcess5mutexEv" data-ref-filename="_ZN7bmalloc10PerProcess5mutexEv">mutex</dfn>()</td></tr>
+<tr><th id="90">90</th><td>    {</td></tr>
+<tr><th id="91">91</th><td>        <b>if</b> (!<a class="member" href="#bmalloc::PerProcess::s_data" title='bmalloc::PerProcess::s_data' data-ref="bmalloc::PerProcess::s_data" data-ref-filename="bmalloc..PerProcess..s_data">s_data</a>)</td></tr>
+<tr><th id="92">92</th><td>            <a class="member fn" href="#_ZN7bmalloc10PerProcess8coalesceEv" title='bmalloc::PerProcess::coalesce' data-ref="_ZN7bmalloc10PerProcess8coalesceEv" data-ref-filename="_ZN7bmalloc10PerProcess8coalesceEv">coalesce</a>();</td></tr>
+<tr><th id="93">93</th><td>        <b>return</b> <a class="member" href="#bmalloc::PerProcess::s_data" title='bmalloc::PerProcess::s_data' data-ref="bmalloc::PerProcess::s_data" data-ref-filename="bmalloc..PerProcess..s_data">s_data</a>-&gt;<a class="ref field" href="#bmalloc::PerProcessData::mutex" title='bmalloc::PerProcessData::mutex' data-ref="bmalloc::PerProcessData::mutex" data-ref-filename="bmalloc..PerProcessData..mutex">mutex</a>;</td></tr>
+<tr><th id="94">94</th><td>    }</td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td><b>private</b>:</td></tr>
+<tr><th id="97">97</th><td>    <em>static</em> <em>void</em> <dfn class="decl def fn" id="_ZN7bmalloc10PerProcess8coalesceEv" title='bmalloc::PerProcess::coalesce' data-ref="_ZN7bmalloc10PerProcess8coalesceEv" data-ref-filename="_ZN7bmalloc10PerProcess8coalesceEv">coalesce</dfn>()</td></tr>
+<tr><th id="98">98</th><td>    {</td></tr>
+<tr><th id="99">99</th><td>        <b>if</b> (<a class="member" href="#bmalloc::PerProcess::s_data" title='bmalloc::PerProcess::s_data' data-ref="bmalloc::PerProcess::s_data" data-ref-filename="bmalloc..PerProcess..s_data">s_data</a>)</td></tr>
+<tr><th id="100">100</th><td>            <b>return</b>;</td></tr>
+<tr><th id="101">101</th><td>        </td></tr>
+<tr><th id="102">102</th><td>        <em>const</em> <em>char</em>* <dfn class="local col1 decl" id="401disambiguator" title='disambiguator' data-type='const char *' data-ref="401disambiguator" data-ref-filename="401disambiguator">disambiguator</dfn> = <b>__PRETTY_FUNCTION__</b>;</td></tr>
+<tr><th id="103">103</th><td>        <a class="member" href="#bmalloc::PerProcess::s_data" title='bmalloc::PerProcess::s_data' data-ref="bmalloc::PerProcess::s_data" data-ref-filename="bmalloc..PerProcess..s_data">s_data</a> = getPerProcessData(<a class="ref fn" href="#_ZN7bmalloc10stringHashEPKc" title='bmalloc::stringHash' data-ref="_ZN7bmalloc10stringHashEPKc" data-ref-filename="_ZN7bmalloc10stringHashEPKc">stringHash</a>(<a class="local col1 ref" href="#401disambiguator" title='disambiguator' data-ref="401disambiguator" data-ref-filename="401disambiguator">disambiguator</a>), <a class="local col1 ref" href="#401disambiguator" title='disambiguator' data-ref="401disambiguator" data-ref-filename="401disambiguator">disambiguator</a>, <b>sizeof</b>(T), <span class="namespace">std::</span><span class='type' title='std::__1::alignment_of' data-ref="std::__1::alignment_of" data-ref-filename="std..__1..alignment_of">alignment_of</span>&lt;T&gt;::value);</td></tr>
+<tr><th id="104">104</th><td>    }</td></tr>
+<tr><th id="105">105</th><td>    </td></tr>
+<tr><th id="106">106</th><td>    <a class="macro" href="BInline.h.html#31" title="__attribute__((noinline))" data-ref="_M/BNO_INLINE">BNO_INLINE</a> <em>static</em> T* <dfn class="decl def fn" id="_ZN7bmalloc10PerProcess11getSlowCaseEv" title='bmalloc::PerProcess::getSlowCase' data-ref="_ZN7bmalloc10PerProcess11getSlowCaseEv" data-ref-filename="_ZN7bmalloc10PerProcess11getSlowCaseEv">getSlowCase</dfn>()</td></tr>
+<tr><th id="107">107</th><td>    {</td></tr>
+<tr><th id="108">108</th><td>        <a class="typedef" href="Mutex.h.html#bmalloc::LockHolder" title='bmalloc::LockHolder' data-type='std::scoped_lock&lt;Mutex&gt;' data-ref="bmalloc::LockHolder" data-ref-filename="bmalloc..LockHolder">LockHolder</a> <dfn class="local col2 decl" id="402lock" title='lock' data-type='bmalloc::LockHolder' data-ref="402lock" data-ref-filename="402lock">lock</dfn><span class='ref fn' title='std::__1::scoped_lock&lt;type-parameter-0-0&gt;::scoped_lock&lt;type-parameter-0-0&gt;' data-ref="_ZNSt3__111scoped_lockIJT_EEC1ERS1_" data-ref-filename="_ZNSt3__111scoped_lockIJT_EEC1ERS1_">(</span><a class="member fn" href="#_ZN7bmalloc10PerProcess5mutexEv" title='bmalloc::PerProcess::mutex' data-ref="_ZN7bmalloc10PerProcess5mutexEv" data-ref-filename="_ZN7bmalloc10PerProcess5mutexEv">mutex</a>());</td></tr>
+<tr><th id="109">109</th><td>        <b>if</b> (!<a class="member" href="#bmalloc::PerProcess::s_object" title='bmalloc::PerProcess::s_object' data-ref="bmalloc::PerProcess::s_object" data-ref-filename="bmalloc..PerProcess..s_object">s_object</a>.load()) {</td></tr>
+<tr><th id="110">110</th><td>            <b>if</b> (<a class="member" href="#bmalloc::PerProcess::s_data" title='bmalloc::PerProcess::s_data' data-ref="bmalloc::PerProcess::s_data" data-ref-filename="bmalloc..PerProcess..s_data">s_data</a>-&gt;<a class="ref field" href="#bmalloc::PerProcessData::isInitialized" title='bmalloc::PerProcessData::isInitialized' data-ref="bmalloc::PerProcessData::isInitialized" data-ref-filename="bmalloc..PerProcessData..isInitialized">isInitialized</a>)</td></tr>
+<tr><th id="111">111</th><td>                <a class="member" href="#bmalloc::PerProcess::s_object" title='bmalloc::PerProcess::s_object' data-ref="bmalloc::PerProcess::s_object" data-ref-filename="bmalloc..PerProcess..s_object">s_object</a>.store(<b>static_cast</b>&lt;T*&gt;(<a class="member" href="#bmalloc::PerProcess::s_data" title='bmalloc::PerProcess::s_data' data-ref="bmalloc::PerProcess::s_data" data-ref-filename="bmalloc..PerProcess..s_data">s_data</a>-&gt;<a class="ref field" href="#bmalloc::PerProcessData::memory" title='bmalloc::PerProcessData::memory' data-ref="bmalloc::PerProcessData::memory" data-ref-filename="bmalloc..PerProcessData..memory">memory</a>));</td></tr>
+<tr><th id="112">112</th><td>            <b>else</b> {</td></tr>
+<tr><th id="113">113</th><td>                T* <dfn class="local col3 decl" id="403t" title='t' data-type='T *' data-ref="403t" data-ref-filename="403t">t</dfn> = <b>new</b> (<a class="member" href="#bmalloc::PerProcess::s_data" title='bmalloc::PerProcess::s_data' data-ref="bmalloc::PerProcess::s_data" data-ref-filename="bmalloc..PerProcess..s_data">s_data</a>-&gt;<a class="ref field" href="#bmalloc::PerProcessData::memory" title='bmalloc::PerProcessData::memory' data-ref="bmalloc::PerProcessData::memory" data-ref-filename="bmalloc..PerProcessData..memory">memory</a>) T(<a class="local col2 ref" href="#402lock" title='lock' data-ref="402lock" data-ref-filename="402lock">lock</a>);</td></tr>
+<tr><th id="114">114</th><td>                <a class="member" href="#bmalloc::PerProcess::s_object" title='bmalloc::PerProcess::s_object' data-ref="bmalloc::PerProcess::s_object" data-ref-filename="bmalloc..PerProcess..s_object">s_object</a>.store(<a class="local col3 ref" href="#403t" title='t' data-ref="403t" data-ref-filename="403t">t</a>);</td></tr>
+<tr><th id="115">115</th><td>                <a class="member" href="#bmalloc::PerProcess::s_data" title='bmalloc::PerProcess::s_data' data-ref="bmalloc::PerProcess::s_data" data-ref-filename="bmalloc..PerProcess..s_data">s_data</a>-&gt;<a class="ref field" href="#bmalloc::PerProcessData::isInitialized" title='bmalloc::PerProcessData::isInitialized' data-ref="bmalloc::PerProcessData::isInitialized" data-ref-filename="bmalloc..PerProcessData..isInitialized">isInitialized</a> = <b>true</b>;</td></tr>
+<tr><th id="116">116</th><td>            }</td></tr>
+<tr><th id="117">117</th><td>        }</td></tr>
+<tr><th id="118">118</th><td>        <b>return</b> <a class="member" href="#bmalloc::PerProcess::s_object" title='bmalloc::PerProcess::s_object' data-ref="bmalloc::PerProcess::s_object" data-ref-filename="bmalloc..PerProcess..s_object">s_object</a>.load();</td></tr>
+<tr><th id="119">119</th><td>    }</td></tr>
+<tr><th id="120">120</th><td></td></tr>
+<tr><th id="121">121</th><td>    <em>static</em> <span class="namespace">std::</span><span class='type' title='std::__1::atomic' data-ref="std::__1::atomic" data-ref-filename="std..__1..atomic">atomic</span>&lt;T*&gt; <dfn class="decl" id="bmalloc::PerProcess::s_object" title='bmalloc::PerProcess::s_object' data-ref="bmalloc::PerProcess::s_object" data-ref-filename="bmalloc..PerProcess..s_object">s_object</dfn>;</td></tr>
+<tr><th id="122">122</th><td>    <em>static</em> <a class="type" href="#bmalloc::PerProcessData" title='bmalloc::PerProcessData' data-ref="bmalloc::PerProcessData" data-ref-filename="bmalloc..PerProcessData">PerProcessData</a>* <dfn class="decl" id="bmalloc::PerProcess::s_data" title='bmalloc::PerProcess::s_data' data-ref="bmalloc::PerProcess::s_data" data-ref-filename="bmalloc..PerProcess..s_data">s_data</dfn>;</td></tr>
+<tr><th id="123">123</th><td>};</td></tr>
+<tr><th id="124">124</th><td></td></tr>
+<tr><th id="125">125</th><td><b>template</b>&lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="126">126</th><td><span class="namespace">std::</span><span class='type' title='std::__1::atomic' data-ref="std::__1::atomic" data-ref-filename="std..__1..atomic">atomic</span>&lt;T*&gt; <a class="type" href="#bmalloc::PerProcess" title='bmalloc::PerProcess' data-ref="bmalloc::PerProcess" data-ref-filename="bmalloc..PerProcess">PerProcess</a>&lt;T&gt;::<dfn class="decl def" id="bmalloc::PerProcess::s_object" title='bmalloc::PerProcess::s_object' data-ref="bmalloc::PerProcess::s_object" data-ref-filename="bmalloc..PerProcess..s_object">s_object</dfn> { <b>nullptr</b> };</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td><b>template</b>&lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="129">129</th><td><a class="type" href="#bmalloc::PerProcessData" title='bmalloc::PerProcessData' data-ref="bmalloc::PerProcessData" data-ref-filename="bmalloc..PerProcessData">PerProcessData</a>* <a class="type" href="#bmalloc::PerProcess" title='bmalloc::PerProcess' data-ref="bmalloc::PerProcess" data-ref-filename="bmalloc..PerProcess">PerProcess</a>&lt;T&gt;::<dfn class="decl def" id="bmalloc::PerProcess::s_data" title='bmalloc::PerProcess::s_data' data-ref="bmalloc::PerProcess::s_data" data-ref-filename="bmalloc..PerProcess..s_data">s_data</dfn> { <b>nullptr</b> };</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td>} <i>// namespace bmalloc</i></td></tr>
+<tr><th id="132">132</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='AllIsoHeaps.cpp.html'>webkit/Source/bmalloc/bmalloc/AllIsoHeaps.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

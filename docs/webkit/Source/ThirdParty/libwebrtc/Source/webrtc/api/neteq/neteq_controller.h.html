@@ -1,0 +1,210 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>neteq_controller.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/neteq/neteq_controller.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::NetEqController "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/neteq/neteq_controller.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>webrtc</a>/<a href='..'>api</a>/<a href='./'>neteq</a>/<a href='neteq_controller.h.html'>neteq_controller.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2019 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/API_NETEQ_NETEQ_CONTROLLER_H_">API_NETEQ_NETEQ_CONTROLLER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/API_NETEQ_NETEQ_CONTROLLER_H_" data-ref="_M/API_NETEQ_NETEQ_CONTROLLER_H_">API_NETEQ_NETEQ_CONTROLLER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;cstddef&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;cstdint&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;functional&gt;</u></td></tr>
+<tr><th id="18">18</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="../../../third_party/abseil-cpp/absl/types/optional.h.html">"absl/types/optional.h"</a></u></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="neteq.h.html">"api/neteq/neteq.h"</a></u></td></tr>
+<tr><th id="22">22</th><td><u>#include <a href="tick_timer.h.html">"api/neteq/tick_timer.h"</a></u></td></tr>
+<tr><th id="23">23</th><td><u>#include <a href="../../system_wrappers/include/clock.h.html">"system_wrappers/include/clock.h"</a></u></td></tr>
+<tr><th id="24">24</th><td></td></tr>
+<tr><th id="25">25</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td><i>// Decides the actions that NetEq should take. This affects the behavior of the</i></td></tr>
+<tr><th id="28">28</th><td><i>// jitter buffer, and how it reacts to network conditions.</i></td></tr>
+<tr><th id="29">29</th><td><i>// This class will undergo substantial refactoring in the near future, and the</i></td></tr>
+<tr><th id="30">30</th><td><i>// API is expected to undergo significant changes. A target API is given below:</i></td></tr>
+<tr><th id="31">31</th><td><i>//</i></td></tr>
+<tr><th id="32">32</th><td><i>// class NetEqController {</i></td></tr>
+<tr><th id="33">33</th><td><i>//  public:</i></td></tr>
+<tr><th id="34">34</th><td><i>//   // Resets object to a clean state.</i></td></tr>
+<tr><th id="35">35</th><td><i>//   void Reset();</i></td></tr>
+<tr><th id="36">36</th><td><i>//   // Given NetEq status, make a decision.</i></td></tr>
+<tr><th id="37">37</th><td><i>//   Operation GetDecision(NetEqStatus neteq_status);</i></td></tr>
+<tr><th id="38">38</th><td><i>//   // Register every packet received.</i></td></tr>
+<tr><th id="39">39</th><td><i>//   void RegisterPacket(PacketInfo packet_info);</i></td></tr>
+<tr><th id="40">40</th><td><i>//   // Register empty packet.</i></td></tr>
+<tr><th id="41">41</th><td><i>//   void RegisterEmptyPacket();</i></td></tr>
+<tr><th id="42">42</th><td><i>//   // Register a codec switching.</i></td></tr>
+<tr><th id="43">43</th><td><i>//   void CodecSwithed();</i></td></tr>
+<tr><th id="44">44</th><td><i>//   // Sets the sample rate.</i></td></tr>
+<tr><th id="45">45</th><td><i>//   void SetSampleRate(int fs_hz);</i></td></tr>
+<tr><th id="46">46</th><td><i>//   // Sets the packet length in samples.</i></td></tr>
+<tr><th id="47">47</th><td><i>//   void SetPacketLengthSamples();</i></td></tr>
+<tr><th id="48">48</th><td><i>//   // Sets maximum delay.</i></td></tr>
+<tr><th id="49">49</th><td><i>//   void SetMaximumDelay(int delay_ms);</i></td></tr>
+<tr><th id="50">50</th><td><i>//   // Sets mininum delay.</i></td></tr>
+<tr><th id="51">51</th><td><i>//   void SetMinimumDelay(int delay_ms);</i></td></tr>
+<tr><th id="52">52</th><td><i>//   // Sets base mininum delay.</i></td></tr>
+<tr><th id="53">53</th><td><i>//   void SetBaseMinimumDelay(int delay_ms);</i></td></tr>
+<tr><th id="54">54</th><td><i>//   // Gets target buffer level.</i></td></tr>
+<tr><th id="55">55</th><td><i>//   int GetTargetBufferLevelMs() const;</i></td></tr>
+<tr><th id="56">56</th><td><i>//   // Gets filtered buffer level.</i></td></tr>
+<tr><th id="57">57</th><td><i>//   int GetFilteredBufferLevel() const;</i></td></tr>
+<tr><th id="58">58</th><td><i>//   // Gets base minimum delay.</i></td></tr>
+<tr><th id="59">59</th><td><i>//   int GetBaseMinimumDelay() const;</i></td></tr>
+<tr><th id="60">60</th><td><i>// }</i></td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><b>class</b> <dfn class="type def" id="webrtc::NetEqController" title='webrtc::NetEqController' data-ref="webrtc::NetEqController" data-ref-filename="webrtc..NetEqController">NetEqController</dfn> {</td></tr>
+<tr><th id="63">63</th><td> <b>public</b>:</td></tr>
+<tr><th id="64">64</th><td>  <i>// This struct is used to create a NetEqController.</i></td></tr>
+<tr><th id="65">65</th><td>  <b>struct</b> <dfn class="type def" id="webrtc::NetEqController::Config" title='webrtc::NetEqController::Config' data-ref="webrtc::NetEqController::Config" data-ref-filename="webrtc..NetEqController..Config">Config</dfn> {</td></tr>
+<tr><th id="66">66</th><td>    <em>bool</em> <dfn class="decl field" id="webrtc::NetEqController::Config::allow_time_stretching" title='webrtc::NetEqController::Config::allow_time_stretching' data-ref="webrtc::NetEqController::Config::allow_time_stretching" data-ref-filename="webrtc..NetEqController..Config..allow_time_stretching">allow_time_stretching</dfn>;</td></tr>
+<tr><th id="67">67</th><td>    <em>bool</em> <dfn class="decl field" id="webrtc::NetEqController::Config::enable_rtx_handling" title='webrtc::NetEqController::Config::enable_rtx_handling' data-ref="webrtc::NetEqController::Config::enable_rtx_handling" data-ref-filename="webrtc..NetEqController..Config..enable_rtx_handling">enable_rtx_handling</dfn>;</td></tr>
+<tr><th id="68">68</th><td>    <em>int</em> <dfn class="decl field" id="webrtc::NetEqController::Config::max_packets_in_buffer" title='webrtc::NetEqController::Config::max_packets_in_buffer' data-ref="webrtc::NetEqController::Config::max_packets_in_buffer" data-ref-filename="webrtc..NetEqController..Config..max_packets_in_buffer">max_packets_in_buffer</dfn>;</td></tr>
+<tr><th id="69">69</th><td>    <em>int</em> <dfn class="decl field" id="webrtc::NetEqController::Config::base_min_delay_ms" title='webrtc::NetEqController::Config::base_min_delay_ms' data-ref="webrtc::NetEqController::Config::base_min_delay_ms" data-ref-filename="webrtc..NetEqController..Config..base_min_delay_ms">base_min_delay_ms</dfn>;</td></tr>
+<tr><th id="70">70</th><td>    <a class="type" href="tick_timer.h.html#webrtc::TickTimer" title='webrtc::TickTimer' data-ref="webrtc::TickTimer" data-ref-filename="webrtc..TickTimer">TickTimer</a>* <dfn class="decl field" id="webrtc::NetEqController::Config::tick_timer" title='webrtc::NetEqController::Config::tick_timer' data-ref="webrtc::NetEqController::Config::tick_timer" data-ref-filename="webrtc..NetEqController..Config..tick_timer">tick_timer</dfn>;</td></tr>
+<tr><th id="71">71</th><td>    <span class="namespace">webrtc::</span><a class="type" href="../../system_wrappers/include/clock.h.html#webrtc::Clock" title='webrtc::Clock' data-ref="webrtc::Clock" data-ref-filename="webrtc..Clock">Clock</a>* <dfn class="decl field" id="webrtc::NetEqController::Config::clock" title='webrtc::NetEqController::Config::clock' data-ref="webrtc::NetEqController::Config::clock" data-ref-filename="webrtc..NetEqController..Config..clock">clock</dfn> = <b>nullptr</b>;</td></tr>
+<tr><th id="72">72</th><td>  };</td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td>  <b>struct</b> <dfn class="type def" id="webrtc::NetEqController::PacketInfo" title='webrtc::NetEqController::PacketInfo' data-ref="webrtc::NetEqController::PacketInfo" data-ref-filename="webrtc..NetEqController..PacketInfo">PacketInfo</dfn> {</td></tr>
+<tr><th id="75">75</th><td>    <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="webrtc::NetEqController::PacketInfo::timestamp" title='webrtc::NetEqController::PacketInfo::timestamp' data-ref="webrtc::NetEqController::PacketInfo::timestamp" data-ref-filename="webrtc..NetEqController..PacketInfo..timestamp">timestamp</dfn>;</td></tr>
+<tr><th id="76">76</th><td>    <em>bool</em> <dfn class="decl field" id="webrtc::NetEqController::PacketInfo::is_dtx" title='webrtc::NetEqController::PacketInfo::is_dtx' data-ref="webrtc::NetEqController::PacketInfo::is_dtx" data-ref-filename="webrtc..NetEqController..PacketInfo..is_dtx">is_dtx</dfn>;</td></tr>
+<tr><th id="77">77</th><td>    <em>bool</em> <dfn class="decl field" id="webrtc::NetEqController::PacketInfo::is_cng" title='webrtc::NetEqController::PacketInfo::is_cng' data-ref="webrtc::NetEqController::PacketInfo::is_cng" data-ref-filename="webrtc..NetEqController..PacketInfo..is_cng">is_cng</dfn>;</td></tr>
+<tr><th id="78">78</th><td>  };</td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td>  <b>struct</b> <dfn class="type def" id="webrtc::NetEqController::PacketBufferInfo" title='webrtc::NetEqController::PacketBufferInfo' data-ref="webrtc::NetEqController::PacketBufferInfo" data-ref-filename="webrtc..NetEqController..PacketBufferInfo">PacketBufferInfo</dfn> {</td></tr>
+<tr><th id="81">81</th><td>    <em>bool</em> <dfn class="decl field" id="webrtc::NetEqController::PacketBufferInfo::dtx_or_cng" title='webrtc::NetEqController::PacketBufferInfo::dtx_or_cng' data-ref="webrtc::NetEqController::PacketBufferInfo::dtx_or_cng" data-ref-filename="webrtc..NetEqController..PacketBufferInfo..dtx_or_cng">dtx_or_cng</dfn>;</td></tr>
+<tr><th id="82">82</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="webrtc::NetEqController::PacketBufferInfo::num_samples" title='webrtc::NetEqController::PacketBufferInfo::num_samples' data-ref="webrtc::NetEqController::PacketBufferInfo::num_samples" data-ref-filename="webrtc..NetEqController..PacketBufferInfo..num_samples">num_samples</dfn>;</td></tr>
+<tr><th id="83">83</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="webrtc::NetEqController::PacketBufferInfo::span_samples" title='webrtc::NetEqController::PacketBufferInfo::span_samples' data-ref="webrtc::NetEqController::PacketBufferInfo::span_samples" data-ref-filename="webrtc..NetEqController..PacketBufferInfo..span_samples">span_samples</dfn>;</td></tr>
+<tr><th id="84">84</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="webrtc::NetEqController::PacketBufferInfo::span_samples_no_dtx" title='webrtc::NetEqController::PacketBufferInfo::span_samples_no_dtx' data-ref="webrtc::NetEqController::PacketBufferInfo::span_samples_no_dtx" data-ref-filename="webrtc..NetEqController..PacketBufferInfo..span_samples_no_dtx">span_samples_no_dtx</dfn>;</td></tr>
+<tr><th id="85">85</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="webrtc::NetEqController::PacketBufferInfo::num_packets" title='webrtc::NetEqController::PacketBufferInfo::num_packets' data-ref="webrtc::NetEqController::PacketBufferInfo::num_packets" data-ref-filename="webrtc..NetEqController..PacketBufferInfo..num_packets">num_packets</dfn>;</td></tr>
+<tr><th id="86">86</th><td>  };</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td>  <b>struct</b> <dfn class="type def" id="webrtc::NetEqController::NetEqStatus" title='webrtc::NetEqController::NetEqStatus' data-ref="webrtc::NetEqController::NetEqStatus" data-ref-filename="webrtc..NetEqController..NetEqStatus">NetEqStatus</dfn> {</td></tr>
+<tr><th id="89">89</th><td>    <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="webrtc::NetEqController::NetEqStatus::target_timestamp" title='webrtc::NetEqController::NetEqStatus::target_timestamp' data-ref="webrtc::NetEqController::NetEqStatus::target_timestamp" data-ref-filename="webrtc..NetEqController..NetEqStatus..target_timestamp">target_timestamp</dfn>;</td></tr>
+<tr><th id="90">90</th><td>    <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="decl field" id="webrtc::NetEqController::NetEqStatus::expand_mutefactor" title='webrtc::NetEqController::NetEqStatus::expand_mutefactor' data-ref="webrtc::NetEqController::NetEqStatus::expand_mutefactor" data-ref-filename="webrtc..NetEqController..NetEqStatus..expand_mutefactor">expand_mutefactor</dfn>;</td></tr>
+<tr><th id="91">91</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="webrtc::NetEqController::NetEqStatus::last_packet_samples" title='webrtc::NetEqController::NetEqStatus::last_packet_samples' data-ref="webrtc::NetEqController::NetEqStatus::last_packet_samples" data-ref-filename="webrtc..NetEqController..NetEqStatus..last_packet_samples">last_packet_samples</dfn>;</td></tr>
+<tr><th id="92">92</th><td>    <span class="namespace">absl::</span><span class='type' title='std::__1::optional' data-ref="std::__1::optional" data-ref-filename="std..__1..optional">optional</span>&lt;<a class="type" href="#webrtc::NetEqController::PacketInfo" title='webrtc::NetEqController::PacketInfo' data-ref="webrtc::NetEqController::PacketInfo" data-ref-filename="webrtc..NetEqController..PacketInfo">PacketInfo</a>&gt; <dfn class="decl field" id="webrtc::NetEqController::NetEqStatus::next_packet" title='webrtc::NetEqController::NetEqStatus::next_packet' data-ref="webrtc::NetEqController::NetEqStatus::next_packet" data-ref-filename="webrtc..NetEqController..NetEqStatus..next_packet">next_packet</dfn>;</td></tr>
+<tr><th id="93">93</th><td>    <a class="type" href="neteq.h.html#webrtc::NetEq" title='webrtc::NetEq' data-ref="webrtc::NetEq" data-ref-filename="webrtc..NetEq">NetEq</a>::<a class="type" href="neteq.h.html#webrtc::NetEq::Mode" title='webrtc::NetEq::Mode' data-ref="webrtc::NetEq::Mode" data-ref-filename="webrtc..NetEq..Mode">Mode</a> <dfn class="decl field" id="webrtc::NetEqController::NetEqStatus::last_mode" title='webrtc::NetEqController::NetEqStatus::last_mode' data-ref="webrtc::NetEqController::NetEqStatus::last_mode" data-ref-filename="webrtc..NetEqController..NetEqStatus..last_mode">last_mode</dfn>;</td></tr>
+<tr><th id="94">94</th><td>    <em>bool</em> <dfn class="decl field" id="webrtc::NetEqController::NetEqStatus::play_dtmf" title='webrtc::NetEqController::NetEqStatus::play_dtmf' data-ref="webrtc::NetEqController::NetEqStatus::play_dtmf" data-ref-filename="webrtc..NetEqController..NetEqStatus..play_dtmf">play_dtmf</dfn>;</td></tr>
+<tr><th id="95">95</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="webrtc::NetEqController::NetEqStatus::generated_noise_samples" title='webrtc::NetEqController::NetEqStatus::generated_noise_samples' data-ref="webrtc::NetEqController::NetEqStatus::generated_noise_samples" data-ref-filename="webrtc..NetEqController..NetEqStatus..generated_noise_samples">generated_noise_samples</dfn>;</td></tr>
+<tr><th id="96">96</th><td>    <a class="type" href="#webrtc::NetEqController::PacketBufferInfo" title='webrtc::NetEqController::PacketBufferInfo' data-ref="webrtc::NetEqController::PacketBufferInfo" data-ref-filename="webrtc..NetEqController..PacketBufferInfo">PacketBufferInfo</a> <dfn class="decl field" id="webrtc::NetEqController::NetEqStatus::packet_buffer_info" title='webrtc::NetEqController::NetEqStatus::packet_buffer_info' data-ref="webrtc::NetEqController::NetEqStatus::packet_buffer_info" data-ref-filename="webrtc..NetEqController..NetEqStatus..packet_buffer_info">packet_buffer_info</dfn>;</td></tr>
+<tr><th id="97">97</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="webrtc::NetEqController::NetEqStatus::sync_buffer_samples" title='webrtc::NetEqController::NetEqStatus::sync_buffer_samples' data-ref="webrtc::NetEqController::NetEqStatus::sync_buffer_samples" data-ref-filename="webrtc..NetEqController..NetEqStatus..sync_buffer_samples">sync_buffer_samples</dfn>;</td></tr>
+<tr><th id="98">98</th><td>  };</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td>  <b>struct</b> <dfn class="type def" id="webrtc::NetEqController::PacketArrivedInfo" title='webrtc::NetEqController::PacketArrivedInfo' data-ref="webrtc::NetEqController::PacketArrivedInfo" data-ref-filename="webrtc..NetEqController..PacketArrivedInfo">PacketArrivedInfo</dfn> {</td></tr>
+<tr><th id="101">101</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="webrtc::NetEqController::PacketArrivedInfo::packet_length_samples" title='webrtc::NetEqController::PacketArrivedInfo::packet_length_samples' data-ref="webrtc::NetEqController::PacketArrivedInfo::packet_length_samples" data-ref-filename="webrtc..NetEqController..PacketArrivedInfo..packet_length_samples">packet_length_samples</dfn>;</td></tr>
+<tr><th id="102">102</th><td>    <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="webrtc::NetEqController::PacketArrivedInfo::main_timestamp" title='webrtc::NetEqController::PacketArrivedInfo::main_timestamp' data-ref="webrtc::NetEqController::PacketArrivedInfo::main_timestamp" data-ref-filename="webrtc..NetEqController..PacketArrivedInfo..main_timestamp">main_timestamp</dfn>;</td></tr>
+<tr><th id="103">103</th><td>    <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="decl field" id="webrtc::NetEqController::PacketArrivedInfo::main_sequence_number" title='webrtc::NetEqController::PacketArrivedInfo::main_sequence_number' data-ref="webrtc::NetEqController::PacketArrivedInfo::main_sequence_number" data-ref-filename="webrtc..NetEqController..PacketArrivedInfo..main_sequence_number">main_sequence_number</dfn>;</td></tr>
+<tr><th id="104">104</th><td>    <em>bool</em> <dfn class="decl field" id="webrtc::NetEqController::PacketArrivedInfo::is_cng_or_dtmf" title='webrtc::NetEqController::PacketArrivedInfo::is_cng_or_dtmf' data-ref="webrtc::NetEqController::PacketArrivedInfo::is_cng_or_dtmf" data-ref-filename="webrtc..NetEqController..PacketArrivedInfo..is_cng_or_dtmf">is_cng_or_dtmf</dfn>;</td></tr>
+<tr><th id="105">105</th><td>    <em>bool</em> <dfn class="decl field" id="webrtc::NetEqController::PacketArrivedInfo::is_dtx" title='webrtc::NetEqController::PacketArrivedInfo::is_dtx' data-ref="webrtc::NetEqController::PacketArrivedInfo::is_dtx" data-ref-filename="webrtc..NetEqController..PacketArrivedInfo..is_dtx">is_dtx</dfn>;</td></tr>
+<tr><th id="106">106</th><td>    <em>bool</em> <dfn class="decl field" id="webrtc::NetEqController::PacketArrivedInfo::buffer_flush" title='webrtc::NetEqController::PacketArrivedInfo::buffer_flush' data-ref="webrtc::NetEqController::PacketArrivedInfo::buffer_flush" data-ref-filename="webrtc..NetEqController..PacketArrivedInfo..buffer_flush">buffer_flush</dfn>;</td></tr>
+<tr><th id="107">107</th><td>  };</td></tr>
+<tr><th id="108">108</th><td></td></tr>
+<tr><th id="109">109</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc15NetEqControllerD1Ev" title='webrtc::NetEqController::~NetEqController' data-ref="_ZN6webrtc15NetEqControllerD1Ev" data-ref-filename="_ZN6webrtc15NetEqControllerD1Ev">~NetEqController</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td>  <i>// Resets object to a clean state.</i></td></tr>
+<tr><th id="112">112</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController5ResetEv" title='webrtc::NetEqController::Reset' data-ref="_ZN6webrtc15NetEqController5ResetEv" data-ref-filename="_ZN6webrtc15NetEqController5ResetEv">Reset</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="113">113</th><td></td></tr>
+<tr><th id="114">114</th><td>  <i>// Resets parts of the state. Typically done when switching codecs.</i></td></tr>
+<tr><th id="115">115</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController9SoftResetEv" title='webrtc::NetEqController::SoftReset' data-ref="_ZN6webrtc15NetEqController9SoftResetEv" data-ref-filename="_ZN6webrtc15NetEqController9SoftResetEv">SoftReset</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="116">116</th><td></td></tr>
+<tr><th id="117">117</th><td>  <i>// Given info about the latest received packet, and current jitter buffer</i></td></tr>
+<tr><th id="118">118</th><td><i>  // status, returns the operation. |target_timestamp| and |expand_mutefactor|</i></td></tr>
+<tr><th id="119">119</th><td><i>  // are provided for reference. |last_packet_samples| is the number of samples</i></td></tr>
+<tr><th id="120">120</th><td><i>  // obtained from the last decoded frame. If there is a packet available, it</i></td></tr>
+<tr><th id="121">121</th><td><i>  // should be supplied in |packet|. The mode resulting from the last call to</i></td></tr>
+<tr><th id="122">122</th><td><i>  // NetEqImpl::GetAudio is supplied in |last_mode|. If there is a DTMF event to</i></td></tr>
+<tr><th id="123">123</th><td><i>  // play, |play_dtmf| should be set to true. The output variable</i></td></tr>
+<tr><th id="124">124</th><td><i>  // |reset_decoder| will be set to true if a reset is required; otherwise it is</i></td></tr>
+<tr><th id="125">125</th><td><i>  // left unchanged (i.e., it can remain true if it was true before the call).</i></td></tr>
+<tr><th id="126">126</th><td>  <b>virtual</b> <a class="type" href="neteq.h.html#webrtc::NetEq" title='webrtc::NetEq' data-ref="webrtc::NetEq" data-ref-filename="webrtc..NetEq">NetEq</a>::<a class="type" href="neteq.h.html#webrtc::NetEq::Operation" title='webrtc::NetEq::Operation' data-ref="webrtc::NetEq::Operation" data-ref-filename="webrtc..NetEq..Operation">Operation</a> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController11GetDecisionERKNS0_11NetEqStatusEPb" title='webrtc::NetEqController::GetDecision' data-ref="_ZN6webrtc15NetEqController11GetDecisionERKNS0_11NetEqStatusEPb" data-ref-filename="_ZN6webrtc15NetEqController11GetDecisionERKNS0_11NetEqStatusEPb">GetDecision</dfn>(<em>const</em> <a class="type" href="#webrtc::NetEqController::NetEqStatus" title='webrtc::NetEqController::NetEqStatus' data-ref="webrtc::NetEqController::NetEqStatus" data-ref-filename="webrtc..NetEqController..NetEqStatus">NetEqStatus</a>&amp; <dfn class="local col9 decl" id="9status" title='status' data-type='const webrtc::NetEqController::NetEqStatus &amp;' data-ref="9status" data-ref-filename="9status">status</dfn>,</td></tr>
+<tr><th id="127">127</th><td>                                       <em>bool</em>* <dfn class="local col0 decl" id="10reset_decoder" title='reset_decoder' data-type='bool *' data-ref="10reset_decoder" data-ref-filename="10reset_decoder">reset_decoder</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="128">128</th><td></td></tr>
+<tr><th id="129">129</th><td>  <i>// Inform NetEqController that an empty packet has arrived.</i></td></tr>
+<tr><th id="130">130</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController19RegisterEmptyPacketEv" title='webrtc::NetEqController::RegisterEmptyPacket' data-ref="_ZN6webrtc15NetEqController19RegisterEmptyPacketEv" data-ref-filename="_ZN6webrtc15NetEqController19RegisterEmptyPacketEv">RegisterEmptyPacket</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="131">131</th><td></td></tr>
+<tr><th id="132">132</th><td>  <i>// Sets the sample rate and the output block size.</i></td></tr>
+<tr><th id="133">133</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController13SetSampleRateEim" title='webrtc::NetEqController::SetSampleRate' data-ref="_ZN6webrtc15NetEqController13SetSampleRateEim" data-ref-filename="_ZN6webrtc15NetEqController13SetSampleRateEim">SetSampleRate</dfn>(<em>int</em> <dfn class="local col1 decl" id="11fs_hz" title='fs_hz' data-type='int' data-ref="11fs_hz" data-ref-filename="11fs_hz">fs_hz</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="12output_size_samples" title='output_size_samples' data-type='size_t' data-ref="12output_size_samples" data-ref-filename="12output_size_samples">output_size_samples</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="134">134</th><td></td></tr>
+<tr><th id="135">135</th><td>  <i>// Sets a minimum or maximum delay in millisecond.</i></td></tr>
+<tr><th id="136">136</th><td><i>  // Returns true if the delay bound is successfully applied, otherwise false.</i></td></tr>
+<tr><th id="137">137</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController15SetMaximumDelayEi" title='webrtc::NetEqController::SetMaximumDelay' data-ref="_ZN6webrtc15NetEqController15SetMaximumDelayEi" data-ref-filename="_ZN6webrtc15NetEqController15SetMaximumDelayEi">SetMaximumDelay</dfn>(<em>int</em> <dfn class="local col3 decl" id="13delay_ms" title='delay_ms' data-type='int' data-ref="13delay_ms" data-ref-filename="13delay_ms">delay_ms</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="138">138</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController15SetMinimumDelayEi" title='webrtc::NetEqController::SetMinimumDelay' data-ref="_ZN6webrtc15NetEqController15SetMinimumDelayEi" data-ref-filename="_ZN6webrtc15NetEqController15SetMinimumDelayEi">SetMinimumDelay</dfn>(<em>int</em> <dfn class="local col4 decl" id="14delay_ms" title='delay_ms' data-type='int' data-ref="14delay_ms" data-ref-filename="14delay_ms">delay_ms</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="139">139</th><td></td></tr>
+<tr><th id="140">140</th><td>  <i>// Sets a base minimum delay in milliseconds for packet buffer. The effective</i></td></tr>
+<tr><th id="141">141</th><td><i>  // minimum delay can't be lower than base minimum delay, even if a lower value</i></td></tr>
+<tr><th id="142">142</th><td><i>  // is set using SetMinimumDelay.</i></td></tr>
+<tr><th id="143">143</th><td><i>  // Returns true if the base minimum is successfully applied, otherwise false.</i></td></tr>
+<tr><th id="144">144</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController19SetBaseMinimumDelayEi" title='webrtc::NetEqController::SetBaseMinimumDelay' data-ref="_ZN6webrtc15NetEqController19SetBaseMinimumDelayEi" data-ref-filename="_ZN6webrtc15NetEqController19SetBaseMinimumDelayEi">SetBaseMinimumDelay</dfn>(<em>int</em> <dfn class="local col5 decl" id="15delay_ms" title='delay_ms' data-type='int' data-ref="15delay_ms" data-ref-filename="15delay_ms">delay_ms</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="145">145</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc15NetEqController19GetBaseMinimumDelayEv" title='webrtc::NetEqController::GetBaseMinimumDelay' data-ref="_ZNK6webrtc15NetEqController19GetBaseMinimumDelayEv" data-ref-filename="_ZNK6webrtc15NetEqController19GetBaseMinimumDelayEv">GetBaseMinimumDelay</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="146">146</th><td></td></tr>
+<tr><th id="147">147</th><td>  <i>// These methods test the |cng_state_| for different conditions.</i></td></tr>
+<tr><th id="148">148</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZNK6webrtc15NetEqController12CngRfc3389OnEv" title='webrtc::NetEqController::CngRfc3389On' data-ref="_ZNK6webrtc15NetEqController12CngRfc3389OnEv" data-ref-filename="_ZNK6webrtc15NetEqController12CngRfc3389OnEv">CngRfc3389On</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="149">149</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZNK6webrtc15NetEqController6CngOffEv" title='webrtc::NetEqController::CngOff' data-ref="_ZNK6webrtc15NetEqController6CngOffEv" data-ref-filename="_ZNK6webrtc15NetEqController6CngOffEv">CngOff</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="150">150</th><td></td></tr>
+<tr><th id="151">151</th><td>  <i>// Resets the |cng_state_| to kCngOff.</i></td></tr>
+<tr><th id="152">152</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController9SetCngOffEv" title='webrtc::NetEqController::SetCngOff' data-ref="_ZN6webrtc15NetEqController9SetCngOffEv" data-ref-filename="_ZN6webrtc15NetEqController9SetCngOffEv">SetCngOff</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="153">153</th><td></td></tr>
+<tr><th id="154">154</th><td>  <i>// Reports back to DecisionLogic whether the decision to do expand remains or</i></td></tr>
+<tr><th id="155">155</th><td><i>  // not. Note that this is necessary, since an expand decision can be changed</i></td></tr>
+<tr><th id="156">156</th><td><i>  // to kNormal in NetEqImpl::GetDecision if there is still enough data in the</i></td></tr>
+<tr><th id="157">157</th><td><i>  // sync buffer.</i></td></tr>
+<tr><th id="158">158</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController14ExpandDecisionENS_5NetEq9OperationE" title='webrtc::NetEqController::ExpandDecision' data-ref="_ZN6webrtc15NetEqController14ExpandDecisionENS_5NetEq9OperationE" data-ref-filename="_ZN6webrtc15NetEqController14ExpandDecisionENS_5NetEq9OperationE">ExpandDecision</dfn>(<a class="type" href="neteq.h.html#webrtc::NetEq" title='webrtc::NetEq' data-ref="webrtc::NetEq" data-ref-filename="webrtc..NetEq">NetEq</a>::<a class="type" href="neteq.h.html#webrtc::NetEq::Operation" title='webrtc::NetEq::Operation' data-ref="webrtc::NetEq::Operation" data-ref-filename="webrtc..NetEq..Operation">Operation</a> <dfn class="local col6 decl" id="16operation" title='operation' data-type='NetEq::Operation' data-ref="16operation" data-ref-filename="16operation">operation</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="159">159</th><td></td></tr>
+<tr><th id="160">160</th><td>  <i>// Adds |value| to |sample_memory_|.</i></td></tr>
+<tr><th id="161">161</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController15AddSampleMemoryEi" title='webrtc::NetEqController::AddSampleMemory' data-ref="_ZN6webrtc15NetEqController15AddSampleMemoryEi" data-ref-filename="_ZN6webrtc15NetEqController15AddSampleMemoryEi">AddSampleMemory</dfn>(<span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col7 decl" id="17value" title='value' data-type='int32_t' data-ref="17value" data-ref-filename="17value">value</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="162">162</th><td></td></tr>
+<tr><th id="163">163</th><td>  <i>// Returns the target buffer level in ms.</i></td></tr>
+<tr><th id="164">164</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc15NetEqController13TargetLevelMsEv" title='webrtc::NetEqController::TargetLevelMs' data-ref="_ZNK6webrtc15NetEqController13TargetLevelMsEv" data-ref-filename="_ZNK6webrtc15NetEqController13TargetLevelMsEv">TargetLevelMs</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td>  <i>// Notify the NetEqController that a packet has arrived. Returns the relative</i></td></tr>
+<tr><th id="167">167</th><td><i>  // arrival delay, if it can be computed.</i></td></tr>
+<tr><th id="168">168</th><td>  <b>virtual</b> <span class="namespace">absl::</span><span class='type' title='std::__1::optional' data-ref="std::__1::optional" data-ref-filename="std..__1..optional">optional</span>&lt;<em>int</em>&gt; <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController13PacketArrivedEibRKNS0_17PacketArrivedInfoE" title='webrtc::NetEqController::PacketArrived' data-ref="_ZN6webrtc15NetEqController13PacketArrivedEibRKNS0_17PacketArrivedInfoE" data-ref-filename="_ZN6webrtc15NetEqController13PacketArrivedEibRKNS0_17PacketArrivedInfoE">PacketArrived</dfn>(<em>int</em> <dfn class="local col8 decl" id="18fs_hz" title='fs_hz' data-type='int' data-ref="18fs_hz" data-ref-filename="18fs_hz">fs_hz</dfn>,</td></tr>
+<tr><th id="169">169</th><td>                                            <em>bool</em> <dfn class="local col9 decl" id="19should_update_stats" title='should_update_stats' data-type='bool' data-ref="19should_update_stats" data-ref-filename="19should_update_stats">should_update_stats</dfn>,</td></tr>
+<tr><th id="170">170</th><td>                                            <em>const</em> <a class="type" href="#webrtc::NetEqController::PacketArrivedInfo" title='webrtc::NetEqController::PacketArrivedInfo' data-ref="webrtc::NetEqController::PacketArrivedInfo" data-ref-filename="webrtc..NetEqController..PacketArrivedInfo">PacketArrivedInfo</a>&amp; <dfn class="local col0 decl" id="20info" title='info' data-type='const webrtc::NetEqController::PacketArrivedInfo &amp;' data-ref="20info" data-ref-filename="20info">info</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="171">171</th><td></td></tr>
+<tr><th id="172">172</th><td>  <i>// Notify the NetEqController that we are currently in muted state.</i></td></tr>
+<tr><th id="173">173</th><td><i>  // TODO(ivoc): Make pure virtual when downstream is updated.</i></td></tr>
+<tr><th id="174">174</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl def fn" id="_ZN6webrtc15NetEqController16NotifyMutedStateEv" title='webrtc::NetEqController::NotifyMutedState' data-ref="_ZN6webrtc15NetEqController16NotifyMutedStateEv" data-ref-filename="_ZN6webrtc15NetEqController16NotifyMutedStateEv">NotifyMutedState</dfn>() {}</td></tr>
+<tr><th id="175">175</th><td></td></tr>
+<tr><th id="176">176</th><td>  <i>// Returns true if a peak was found.</i></td></tr>
+<tr><th id="177">177</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZNK6webrtc15NetEqController9PeakFoundEv" title='webrtc::NetEqController::PeakFound' data-ref="_ZNK6webrtc15NetEqController9PeakFoundEv" data-ref-filename="_ZNK6webrtc15NetEqController9PeakFoundEv">PeakFound</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="178">178</th><td></td></tr>
+<tr><th id="179">179</th><td>  <i>// Get the filtered buffer level in samples.</i></td></tr>
+<tr><th id="180">180</th><td>  <b>virtual</b> <em>int</em> <dfn class="virtual decl fn" id="_ZNK6webrtc15NetEqController22GetFilteredBufferLevelEv" title='webrtc::NetEqController::GetFilteredBufferLevel' data-ref="_ZNK6webrtc15NetEqController22GetFilteredBufferLevelEv" data-ref-filename="_ZNK6webrtc15NetEqController22GetFilteredBufferLevelEv">GetFilteredBufferLevel</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="181">181</th><td></td></tr>
+<tr><th id="182">182</th><td>  <i>// Accessors and mutators.</i></td></tr>
+<tr><th id="183">183</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController17set_sample_memoryEi" title='webrtc::NetEqController::set_sample_memory' data-ref="_ZN6webrtc15NetEqController17set_sample_memoryEi" data-ref-filename="_ZN6webrtc15NetEqController17set_sample_memoryEi">set_sample_memory</dfn>(<span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col1 decl" id="21value" title='value' data-type='int32_t' data-ref="21value" data-ref-filename="21value">value</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="184">184</th><td>  <b>virtual</b> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="virtual decl fn" id="_ZNK6webrtc15NetEqController18noise_fast_forwardEv" title='webrtc::NetEqController::noise_fast_forward' data-ref="_ZNK6webrtc15NetEqController18noise_fast_forwardEv" data-ref-filename="_ZNK6webrtc15NetEqController18noise_fast_forwardEv">noise_fast_forward</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="185">185</th><td>  <b>virtual</b> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="virtual decl fn" id="_ZNK6webrtc15NetEqController21packet_length_samplesEv" title='webrtc::NetEqController::packet_length_samples' data-ref="_ZNK6webrtc15NetEqController21packet_length_samplesEv" data-ref-filename="_ZNK6webrtc15NetEqController21packet_length_samplesEv">packet_length_samples</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="186">186</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController25set_packet_length_samplesEm" title='webrtc::NetEqController::set_packet_length_samples' data-ref="_ZN6webrtc15NetEqController25set_packet_length_samplesEm" data-ref-filename="_ZN6webrtc15NetEqController25set_packet_length_samplesEm">set_packet_length_samples</dfn>(<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="22value" title='value' data-type='size_t' data-ref="22value" data-ref-filename="22value">value</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="187">187</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN6webrtc15NetEqController19set_prev_time_scaleEb" title='webrtc::NetEqController::set_prev_time_scale' data-ref="_ZN6webrtc15NetEqController19set_prev_time_scaleEb" data-ref-filename="_ZN6webrtc15NetEqController19set_prev_time_scaleEb">set_prev_time_scale</dfn>(<em>bool</em> <dfn class="local col3 decl" id="23value" title='value' data-type='bool' data-ref="23value" data-ref-filename="23value">value</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="188">188</th><td>};</td></tr>
+<tr><th id="189">189</th><td></td></tr>
+<tr><th id="190">190</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="191">191</th><td><u>#<span data-ppcond="11">endif</span>  // API_NETEQ_NETEQ_CONTROLLER_H_</u></td></tr>
+<tr><th id="192">192</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='custom_neteq_factory.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/neteq/custom_neteq_factory.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

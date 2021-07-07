@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>sent_packet.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/network/sent_packet.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::PacketInfo,rtc::PacketInfoProtocolType,rtc::PacketType,rtc::SentPacket "/>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/network/sent_packet.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>WebKitBuild</a>/<a href='../../../../../..'>Debug</a>/<a href='../../../../..'>usr</a>/<a href='../../../..'>local</a>/<a href='../../..'>include</a>/<a href='../..'>webrtc</a>/<a href='..'>rtc_base</a>/<a href='./'>network</a>/<a href='sent_packet.h.html'>sent_packet.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2018 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_NETWORK_SENT_PACKET_H_">RTC_BASE_NETWORK_SENT_PACKET_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_NETWORK_SENT_PACKET_H_" data-ref="_M/RTC_BASE_NETWORK_SENT_PACKET_H_">RTC_BASE_NETWORK_SENT_PACKET_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../../../absl/types/optional.h.html">"absl/types/optional.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../system/rtc_export.h.html">"rtc_base/system/rtc_export.h"</a></u></td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><b>enum</b> <b>class</b> <dfn class="type def" id="rtc::PacketType" title='rtc::PacketType' data-ref="rtc::PacketType" data-ref-filename="rtc..PacketType">PacketType</dfn> {</td></tr>
+<tr><th id="23">23</th><td>  <dfn class="enum" id="rtc::PacketType::kUnknown" title='rtc::PacketType::kUnknown' data-ref="rtc::PacketType::kUnknown" data-ref-filename="rtc..PacketType..kUnknown">kUnknown</dfn>,</td></tr>
+<tr><th id="24">24</th><td>  <dfn class="enum" id="rtc::PacketType::kData" title='rtc::PacketType::kData' data-ref="rtc::PacketType::kData" data-ref-filename="rtc..PacketType..kData">kData</dfn>,</td></tr>
+<tr><th id="25">25</th><td>  <dfn class="enum" id="rtc::PacketType::kIceConnectivityCheck" title='rtc::PacketType::kIceConnectivityCheck' data-ref="rtc::PacketType::kIceConnectivityCheck" data-ref-filename="rtc..PacketType..kIceConnectivityCheck">kIceConnectivityCheck</dfn>,</td></tr>
+<tr><th id="26">26</th><td>  <dfn class="enum" id="rtc::PacketType::kIceConnectivityCheckResponse" title='rtc::PacketType::kIceConnectivityCheckResponse' data-ref="rtc::PacketType::kIceConnectivityCheckResponse" data-ref-filename="rtc..PacketType..kIceConnectivityCheckResponse">kIceConnectivityCheckResponse</dfn>,</td></tr>
+<tr><th id="27">27</th><td>  <dfn class="enum" id="rtc::PacketType::kStunMessage" title='rtc::PacketType::kStunMessage' data-ref="rtc::PacketType::kStunMessage" data-ref-filename="rtc..PacketType..kStunMessage">kStunMessage</dfn>,</td></tr>
+<tr><th id="28">28</th><td>  <dfn class="enum" id="rtc::PacketType::kTurnMessage" title='rtc::PacketType::kTurnMessage' data-ref="rtc::PacketType::kTurnMessage" data-ref-filename="rtc..PacketType..kTurnMessage">kTurnMessage</dfn>,</td></tr>
+<tr><th id="29">29</th><td>};</td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><b>enum</b> <b>class</b> <dfn class="type def" id="rtc::PacketInfoProtocolType" title='rtc::PacketInfoProtocolType' data-ref="rtc::PacketInfoProtocolType" data-ref-filename="rtc..PacketInfoProtocolType">PacketInfoProtocolType</dfn> {</td></tr>
+<tr><th id="32">32</th><td>  <dfn class="enum" id="rtc::PacketInfoProtocolType::kUnknown" title='rtc::PacketInfoProtocolType::kUnknown' data-ref="rtc::PacketInfoProtocolType::kUnknown" data-ref-filename="rtc..PacketInfoProtocolType..kUnknown">kUnknown</dfn>,</td></tr>
+<tr><th id="33">33</th><td>  <dfn class="enum" id="rtc::PacketInfoProtocolType::kUdp" title='rtc::PacketInfoProtocolType::kUdp' data-ref="rtc::PacketInfoProtocolType::kUdp" data-ref-filename="rtc..PacketInfoProtocolType..kUdp">kUdp</dfn>,</td></tr>
+<tr><th id="34">34</th><td>  <dfn class="enum" id="rtc::PacketInfoProtocolType::kTcp" title='rtc::PacketInfoProtocolType::kTcp' data-ref="rtc::PacketInfoProtocolType::kTcp" data-ref-filename="rtc..PacketInfoProtocolType..kTcp">kTcp</dfn>,</td></tr>
+<tr><th id="35">35</th><td>  <dfn class="enum" id="rtc::PacketInfoProtocolType::kSsltcp" title='rtc::PacketInfoProtocolType::kSsltcp' data-ref="rtc::PacketInfoProtocolType::kSsltcp" data-ref-filename="rtc..PacketInfoProtocolType..kSsltcp">kSsltcp</dfn>,</td></tr>
+<tr><th id="36">36</th><td>  <dfn class="enum" id="rtc::PacketInfoProtocolType::kTls" title='rtc::PacketInfoProtocolType::kTls' data-ref="rtc::PacketInfoProtocolType::kTls" data-ref-filename="rtc..PacketInfoProtocolType..kTls">kTls</dfn>,</td></tr>
+<tr><th id="37">37</th><td>};</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><b>struct</b> <a class="macro" href="../system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <dfn class="type def" id="rtc::PacketInfo" title='rtc::PacketInfo' data-ref="rtc::PacketInfo" data-ref-filename="rtc..PacketInfo">PacketInfo</dfn> {</td></tr>
+<tr><th id="40">40</th><td>  <dfn class="decl fn" id="_ZN3rtc10PacketInfoC1Ev" title='rtc::PacketInfo::PacketInfo' data-ref="_ZN3rtc10PacketInfoC1Ev" data-ref-filename="_ZN3rtc10PacketInfoC1Ev">PacketInfo</dfn>();</td></tr>
+<tr><th id="41">41</th><td>  <dfn class="decl fn" id="_ZN3rtc10PacketInfoC1ERKS0_" title='rtc::PacketInfo::PacketInfo' data-ref="_ZN3rtc10PacketInfoC1ERKS0_" data-ref-filename="_ZN3rtc10PacketInfoC1ERKS0_">PacketInfo</dfn>(<em>const</em> <a class="type" href="#rtc::PacketInfo" title='rtc::PacketInfo' data-ref="rtc::PacketInfo" data-ref-filename="rtc..PacketInfo">PacketInfo</a>&amp; <dfn class="local col2 decl" id="902info" title='info' data-type='const rtc::PacketInfo &amp;' data-ref="902info" data-ref-filename="902info">info</dfn>);</td></tr>
+<tr><th id="42">42</th><td>  <dfn class="decl fn" id="_ZN3rtc10PacketInfoD1Ev" title='rtc::PacketInfo::~PacketInfo' data-ref="_ZN3rtc10PacketInfoD1Ev" data-ref-filename="_ZN3rtc10PacketInfoD1Ev">~PacketInfo</dfn>();</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td>  <em>bool</em> <dfn class="decl field" id="rtc::PacketInfo::included_in_feedback" title='rtc::PacketInfo::included_in_feedback' data-ref="rtc::PacketInfo::included_in_feedback" data-ref-filename="rtc..PacketInfo..included_in_feedback">included_in_feedback</dfn> = <b>false</b>;</td></tr>
+<tr><th id="45">45</th><td>  <em>bool</em> <dfn class="decl field" id="rtc::PacketInfo::included_in_allocation" title='rtc::PacketInfo::included_in_allocation' data-ref="rtc::PacketInfo::included_in_allocation" data-ref-filename="rtc..PacketInfo..included_in_allocation">included_in_allocation</dfn> = <b>false</b>;</td></tr>
+<tr><th id="46">46</th><td>  <a class="type" href="#rtc::PacketType" title='rtc::PacketType' data-ref="rtc::PacketType" data-ref-filename="rtc..PacketType">PacketType</a> <dfn class="decl field" id="rtc::PacketInfo::packet_type" title='rtc::PacketInfo::packet_type' data-ref="rtc::PacketInfo::packet_type" data-ref-filename="rtc..PacketInfo..packet_type">packet_type</dfn> = <a class="type" href="#rtc::PacketType" title='rtc::PacketType' data-ref="rtc::PacketType" data-ref-filename="rtc..PacketType">PacketType</a>::<a class="enum" href="#rtc::PacketType::kUnknown" title='rtc::PacketType::kUnknown' data-ref="rtc::PacketType::kUnknown" data-ref-filename="rtc..PacketType..kUnknown">kUnknown</a>;</td></tr>
+<tr><th id="47">47</th><td>  <a class="type" href="#rtc::PacketInfoProtocolType" title='rtc::PacketInfoProtocolType' data-ref="rtc::PacketInfoProtocolType" data-ref-filename="rtc..PacketInfoProtocolType">PacketInfoProtocolType</a> <dfn class="decl field" id="rtc::PacketInfo::protocol" title='rtc::PacketInfo::protocol' data-ref="rtc::PacketInfo::protocol" data-ref-filename="rtc..PacketInfo..protocol">protocol</dfn> = <a class="type" href="#rtc::PacketInfoProtocolType" title='rtc::PacketInfoProtocolType' data-ref="rtc::PacketInfoProtocolType" data-ref-filename="rtc..PacketInfoProtocolType">PacketInfoProtocolType</a>::<a class="enum" href="#rtc::PacketInfoProtocolType::kUnknown" title='rtc::PacketInfoProtocolType::kUnknown' data-ref="rtc::PacketInfoProtocolType::kUnknown" data-ref-filename="rtc..PacketInfoProtocolType..kUnknown">kUnknown</a>;</td></tr>
+<tr><th id="48">48</th><td>  <i>// A unique id assigned by the network manager, and absl::nullopt if not set.</i></td></tr>
+<tr><th id="49">49</th><td>  <span class="namespace">absl::</span><span class='type' title='std::__1::optional' data-ref="std::__1::optional" data-ref-filename="std..__1..optional">optional</span>&lt;<span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>&gt; <dfn class="decl field" id="rtc::PacketInfo::network_id" title='rtc::PacketInfo::network_id' data-ref="rtc::PacketInfo::network_id" data-ref-filename="rtc..PacketInfo..network_id">network_id</dfn>;</td></tr>
+<tr><th id="50">50</th><td>  <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="rtc::PacketInfo::packet_size_bytes" title='rtc::PacketInfo::packet_size_bytes' data-ref="rtc::PacketInfo::packet_size_bytes" data-ref-filename="rtc..PacketInfo..packet_size_bytes">packet_size_bytes</dfn> = <var>0</var>;</td></tr>
+<tr><th id="51">51</th><td>  <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="rtc::PacketInfo::turn_overhead_bytes" title='rtc::PacketInfo::turn_overhead_bytes' data-ref="rtc::PacketInfo::turn_overhead_bytes" data-ref-filename="rtc..PacketInfo..turn_overhead_bytes">turn_overhead_bytes</dfn> = <var>0</var>;</td></tr>
+<tr><th id="52">52</th><td>  <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="rtc::PacketInfo::ip_overhead_bytes" title='rtc::PacketInfo::ip_overhead_bytes' data-ref="rtc::PacketInfo::ip_overhead_bytes" data-ref-filename="rtc..PacketInfo..ip_overhead_bytes">ip_overhead_bytes</dfn> = <var>0</var>;</td></tr>
+<tr><th id="53">53</th><td>};</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><b>struct</b> <a class="macro" href="../system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <dfn class="type def" id="rtc::SentPacket" title='rtc::SentPacket' data-ref="rtc::SentPacket" data-ref-filename="rtc..SentPacket">SentPacket</dfn> {</td></tr>
+<tr><th id="56">56</th><td>  <dfn class="decl fn" id="_ZN3rtc10SentPacketC1Ev" title='rtc::SentPacket::SentPacket' data-ref="_ZN3rtc10SentPacketC1Ev" data-ref-filename="_ZN3rtc10SentPacketC1Ev">SentPacket</dfn>();</td></tr>
+<tr><th id="57">57</th><td>  <dfn class="decl fn" id="_ZN3rtc10SentPacketC1Exx" title='rtc::SentPacket::SentPacket' data-ref="_ZN3rtc10SentPacketC1Exx" data-ref-filename="_ZN3rtc10SentPacketC1Exx">SentPacket</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col3 decl" id="903packet_id" title='packet_id' data-type='int64_t' data-ref="903packet_id" data-ref-filename="903packet_id">packet_id</dfn>, <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col4 decl" id="904send_time_ms" title='send_time_ms' data-type='int64_t' data-ref="904send_time_ms" data-ref-filename="904send_time_ms">send_time_ms</dfn>);</td></tr>
+<tr><th id="58">58</th><td>  <dfn class="decl fn" id="_ZN3rtc10SentPacketC1ExxRKNS_10PacketInfoE" title='rtc::SentPacket::SentPacket' data-ref="_ZN3rtc10SentPacketC1ExxRKNS_10PacketInfoE" data-ref-filename="_ZN3rtc10SentPacketC1ExxRKNS_10PacketInfoE">SentPacket</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col5 decl" id="905packet_id" title='packet_id' data-type='int64_t' data-ref="905packet_id" data-ref-filename="905packet_id">packet_id</dfn>,</td></tr>
+<tr><th id="59">59</th><td>             <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col6 decl" id="906send_time_ms" title='send_time_ms' data-type='int64_t' data-ref="906send_time_ms" data-ref-filename="906send_time_ms">send_time_ms</dfn>,</td></tr>
+<tr><th id="60">60</th><td>             <em>const</em> <span class="namespace">rtc::</span><a class="type" href="#rtc::PacketInfo" title='rtc::PacketInfo' data-ref="rtc::PacketInfo" data-ref-filename="rtc..PacketInfo">PacketInfo</a>&amp; <dfn class="local col7 decl" id="907info" title='info' data-type='const rtc::PacketInfo &amp;' data-ref="907info" data-ref-filename="907info">info</dfn>);</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl field" id="rtc::SentPacket::packet_id" title='rtc::SentPacket::packet_id' data-ref="rtc::SentPacket::packet_id" data-ref-filename="rtc..SentPacket..packet_id">packet_id</dfn> = -<var>1</var>;</td></tr>
+<tr><th id="63">63</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl field" id="rtc::SentPacket::send_time_ms" title='rtc::SentPacket::send_time_ms' data-ref="rtc::SentPacket::send_time_ms" data-ref-filename="rtc..SentPacket..send_time_ms">send_time_ms</dfn> = -<var>1</var>;</td></tr>
+<tr><th id="64">64</th><td>  <span class="namespace">rtc::</span><a class="type" href="#rtc::PacketInfo" title='rtc::PacketInfo' data-ref="rtc::PacketInfo" data-ref-filename="rtc..PacketInfo">PacketInfo</a> <dfn class="decl field" id="rtc::SentPacket::info" title='rtc::SentPacket::info' data-ref="rtc::SentPacket::info" data-ref-filename="rtc..SentPacket..info">info</dfn>;</td></tr>
+<tr><th id="65">65</th><td>};</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_NETWORK_SENT_PACKET_H_</u></td></tr>
+<tr><th id="70">70</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

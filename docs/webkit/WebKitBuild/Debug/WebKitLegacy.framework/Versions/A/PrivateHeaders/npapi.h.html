@@ -1,0 +1,888 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>npapi.h source code [webkit/WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="NP_CGContext,_NPByteRange,_NPCocoaEvent,_NPEmbedPrint,_NPFullPrint,_NPP,_NPPrint,_NPRect,_NPSavedData,_NPSize,_NPStream,_NPWindow "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>WebKitLegacy.framework</a>/<a href='../..'>Versions</a>/<a href='..'>A</a>/<a href='./'>PrivateHeaders</a>/<a href='npapi.h.html'>npapi.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/* -*- Mode: C; tab-width: 4; indent-tabs-mode: nil; c-basic-offset: 2 -*- */</i></td></tr>
+<tr><th id="2">2</th><td><i>/* ***** BEGIN LICENSE BLOCK *****</i></td></tr>
+<tr><th id="3">3</th><td><i> * Version: MPL 1.1/GPL 2.0/LGPL 2.1</i></td></tr>
+<tr><th id="4">4</th><td><i> *</i></td></tr>
+<tr><th id="5">5</th><td><i> * The contents of this file are subject to the Mozilla Public License Version</i></td></tr>
+<tr><th id="6">6</th><td><i> * 1.1 (the "License"); you may not use this file except in compliance with</i></td></tr>
+<tr><th id="7">7</th><td><i> * the License. You may obtain a copy of the License at</i></td></tr>
+<tr><th id="8">8</th><td><i> * <a href="http://www.mozilla.org/MPL/">http://www.mozilla.org/MPL/</a></i></td></tr>
+<tr><th id="9">9</th><td><i> *</i></td></tr>
+<tr><th id="10">10</th><td><i> * Software distributed under the License is distributed on an "AS IS" basis,</i></td></tr>
+<tr><th id="11">11</th><td><i> * WITHOUT WARRANTY OF ANY KIND, either express or implied. See the License</i></td></tr>
+<tr><th id="12">12</th><td><i> * for the specific language governing rights and limitations under the</i></td></tr>
+<tr><th id="13">13</th><td><i> * License.</i></td></tr>
+<tr><th id="14">14</th><td><i> *</i></td></tr>
+<tr><th id="15">15</th><td><i> * The Original Code is mozilla.org code.</i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> * The Initial Developer of the Original Code is</i></td></tr>
+<tr><th id="18">18</th><td><i> * Netscape Communications Corporation.</i></td></tr>
+<tr><th id="19">19</th><td><i> * Portions created by the Initial Developer are Copyright (C) 1998</i></td></tr>
+<tr><th id="20">20</th><td><i> * the Initial Developer. All Rights Reserved.</i></td></tr>
+<tr><th id="21">21</th><td><i> *</i></td></tr>
+<tr><th id="22">22</th><td><i> * Contributor(s):</i></td></tr>
+<tr><th id="23">23</th><td><i> *</i></td></tr>
+<tr><th id="24">24</th><td><i> * Alternatively, the contents of this file may be used under the terms of</i></td></tr>
+<tr><th id="25">25</th><td><i> * either the GNU General Public License Version 2 or later (the "GPL"), or</i></td></tr>
+<tr><th id="26">26</th><td><i> * the GNU Lesser General Public License Version 2.1 or later (the "LGPL"),</i></td></tr>
+<tr><th id="27">27</th><td><i> * in which case the provisions of the GPL or the LGPL are applicable instead</i></td></tr>
+<tr><th id="28">28</th><td><i> * of those above. If you wish to allow use of your version of this file only</i></td></tr>
+<tr><th id="29">29</th><td><i> * under the terms of either the GPL or the LGPL, and not to allow others to</i></td></tr>
+<tr><th id="30">30</th><td><i> * use your version of this file under the terms of the MPL, indicate your</i></td></tr>
+<tr><th id="31">31</th><td><i> * decision by deleting the provisions above and replace them with the notice</i></td></tr>
+<tr><th id="32">32</th><td><i> * and other provisions required by the GPL or the LGPL. If you do not delete</i></td></tr>
+<tr><th id="33">33</th><td><i> * the provisions above, a recipient may use your version of this file under</i></td></tr>
+<tr><th id="34">34</th><td><i> * the terms of any one of the MPL, the GPL or the LGPL.</i></td></tr>
+<tr><th id="35">35</th><td><i> *</i></td></tr>
+<tr><th id="36">36</th><td><i> * ***** END LICENSE BLOCK ***** */</i></td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><u>#<span data-ppcond="38">ifndef</span> <span class="macro" data-ref="_M/npapi_h_">npapi_h_</span></u></td></tr>
+<tr><th id="39">39</th><td><u>#define <dfn class="macro" id="_M/npapi_h_" data-ref="_M/npapi_h_">npapi_h_</dfn></u></td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><u>#<span data-ppcond="41">if</span> defined(<span class="macro" data-ref="_M/__OS2__">__OS2__</span>)</u></td></tr>
+<tr><th id="42">42</th><td><u>#pragma pack(1)</u></td></tr>
+<tr><th id="43">43</th><td><u>#<span data-ppcond="41">endif</span></u></td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td><u>#include <a href="nptypes.h.html">"nptypes.h"</a></u></td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td><u>#<span data-ppcond="47">if</span> defined(<span class="macro" data-ref="_M/__OS2__">__OS2__</span>) || defined(<span class="macro" data-ref="_M/OS2">OS2</span>)</u></td></tr>
+<tr><th id="48">48</th><td><u>#ifndef XP_OS2</u></td></tr>
+<tr><th id="49">49</th><td><u>#define XP_OS2 1</u></td></tr>
+<tr><th id="50">50</th><td><u>#endif</u></td></tr>
+<tr><th id="51">51</th><td><u>#<span data-ppcond="47">endif</span></u></td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td><u>#<span data-ppcond="53">ifdef</span> <span class="macro" data-ref="_M/INCLUDE_JAVA">INCLUDE_JAVA</span></u></td></tr>
+<tr><th id="54">54</th><td><u>#include "jri.h"                /* Java Runtime Interface */</u></td></tr>
+<tr><th id="55">55</th><td><u>#<span data-ppcond="53">else</span></u></td></tr>
+<tr><th id="56">56</th><td><u>#define <dfn class="macro" id="_M/jref" data-ref="_M/jref">jref</dfn>    void *</u></td></tr>
+<tr><th id="57">57</th><td><u>#define <dfn class="macro" id="_M/JRIEnv" data-ref="_M/JRIEnv">JRIEnv</dfn>  void</u></td></tr>
+<tr><th id="58">58</th><td><u>#<span data-ppcond="53">endif</span></u></td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><u>#<span data-ppcond="60">ifdef</span> <span class="macro" data-ref="_M/_WIN32">_WIN32</span></u></td></tr>
+<tr><th id="61">61</th><td><u>#include &lt;windows.h&gt;</u></td></tr>
+<tr><th id="62">62</th><td><u>#ifndef XP_WIN</u></td></tr>
+<tr><th id="63">63</th><td><u>#define XP_WIN 1</u></td></tr>
+<tr><th id="64">64</th><td><u>#endif</u></td></tr>
+<tr><th id="65">65</th><td><u>#<span data-ppcond="60">endif</span></u></td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><u>#<span data-ppcond="67">if</span> defined(<span class="macro" data-ref="_M/__APPLE_CC__">__APPLE_CC__</span>) &amp;&amp; !defined(<span class="macro" data-ref="_M/XP_UNIX">XP_UNIX</span>)</u></td></tr>
+<tr><th id="68">68</th><td><u>#<span data-ppcond="68">ifndef</span> <span class="macro" data-ref="_M/XP_MACOSX">XP_MACOSX</span></u></td></tr>
+<tr><th id="69">69</th><td><u>#define <dfn class="macro" id="_M/XP_MACOSX" data-ref="_M/XP_MACOSX">XP_MACOSX</dfn> 1</u></td></tr>
+<tr><th id="70">70</th><td><u>#<span data-ppcond="68">endif</span></u></td></tr>
+<tr><th id="71">71</th><td><u>#<span data-ppcond="67">endif</span></u></td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td><u>#<span data-ppcond="73">if</span> defined(<a class="macro" href="#69" data-ref="_M/XP_MACOSX">XP_MACOSX</a>) &amp;&amp; defined(<span class="macro" data-ref="_M/__LP64__">__LP64__</span>)</u></td></tr>
+<tr><th id="74">74</th><td><u>#define <dfn class="macro" id="_M/NP_NO_QUICKDRAW" data-ref="_M/NP_NO_QUICKDRAW">NP_NO_QUICKDRAW</dfn></u></td></tr>
+<tr><th id="75">75</th><td><u>#define <dfn class="macro" id="_M/NP_NO_CARBON" data-ref="_M/NP_NO_CARBON">NP_NO_CARBON</dfn></u></td></tr>
+<tr><th id="76">76</th><td><u>#<span data-ppcond="73">endif</span></u></td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td><u>#<span data-ppcond="78">if</span> defined(<a class="macro" href="#69" data-ref="_M/XP_MACOSX">XP_MACOSX</a>)</u></td></tr>
+<tr><th id="79">79</th><td><u>#include &lt;CoreGraphics/CoreGraphics.h&gt;</u></td></tr>
+<tr><th id="80">80</th><td><u>#include &lt;OpenGL/OpenGL.h&gt;</u></td></tr>
+<tr><th id="81">81</th><td><u>#<span data-ppcond="81">ifndef</span> <a class="macro" href="#75" data-ref="_M/NP_NO_CARBON">NP_NO_CARBON</a></u></td></tr>
+<tr><th id="82">82</th><td><u>#include &lt;Carbon/Carbon.h&gt;</u></td></tr>
+<tr><th id="83">83</th><td><u>#<span data-ppcond="81">endif</span></u></td></tr>
+<tr><th id="84">84</th><td><u>#<span data-ppcond="78">endif</span></u></td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td><u>#<span data-ppcond="86">if</span> defined(<span class="macro" data-ref="_M/XP_UNIX">XP_UNIX</span>)</u></td></tr>
+<tr><th id="87">87</th><td><u>#include &lt;stdio.h&gt;</u></td></tr>
+<tr><th id="88">88</th><td><u>#if defined(MOZ_X11)</u></td></tr>
+<tr><th id="89">89</th><td><u>#include &lt;X11/Xlib.h&gt;</u></td></tr>
+<tr><th id="90">90</th><td><u>#include &lt;X11/Xutil.h&gt;</u></td></tr>
+<tr><th id="91">91</th><td><u>#endif</u></td></tr>
+<tr><th id="92">92</th><td><u>#<span data-ppcond="86">endif</span></u></td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td><i>/*----------------------------------------------------------------------*/</i></td></tr>
+<tr><th id="95">95</th><td><i>/*                        Plugin Version Constants                      */</i></td></tr>
+<tr><th id="96">96</th><td><i>/*----------------------------------------------------------------------*/</i></td></tr>
+<tr><th id="97">97</th><td></td></tr>
+<tr><th id="98">98</th><td><u>#define <dfn class="macro" id="_M/NP_VERSION_MAJOR" data-ref="_M/NP_VERSION_MAJOR">NP_VERSION_MAJOR</dfn> 0</u></td></tr>
+<tr><th id="99">99</th><td><u>#define <dfn class="macro" id="_M/NP_VERSION_MINOR" data-ref="_M/NP_VERSION_MINOR">NP_VERSION_MINOR</dfn> 26</u></td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td><i>/* The OS/2 version of Netscape uses RC_DATA to define the</i></td></tr>
+<tr><th id="103">103</th><td><i>   mime types, file extensions, etc that are required.</i></td></tr>
+<tr><th id="104">104</th><td><i>   Use a vertical bar to separate types, end types with \0.</i></td></tr>
+<tr><th id="105">105</th><td><i>   FileVersion and ProductVersion are 32bit ints, all other</i></td></tr>
+<tr><th id="106">106</th><td><i>   entries are strings that MUST be terminated with a \0.</i></td></tr>
+<tr><th id="107">107</th><td><i></i></td></tr>
+<tr><th id="108">108</th><td><i>AN EXAMPLE:</i></td></tr>
+<tr><th id="109">109</th><td><i></i></td></tr>
+<tr><th id="110">110</th><td><i>RCDATA NP_INFO_ProductVersion { 1,0,0,1,}</i></td></tr>
+<tr><th id="111">111</th><td><i></i></td></tr>
+<tr><th id="112">112</th><td><i>RCDATA NP_INFO_MIMEType    { "video/x-video|",</i></td></tr>
+<tr><th id="113">113</th><td><i>                             "video/x-flick\0" }</i></td></tr>
+<tr><th id="114">114</th><td><i>RCDATA NP_INFO_FileExtents { "avi|",</i></td></tr>
+<tr><th id="115">115</th><td><i>                             "flc\0" }</i></td></tr>
+<tr><th id="116">116</th><td><i>RCDATA NP_INFO_FileOpenName{ "MMOS2 video player(*.avi)|",</i></td></tr>
+<tr><th id="117">117</th><td><i>                             "MMOS2 Flc/Fli player(*.flc)\0" }</i></td></tr>
+<tr><th id="118">118</th><td><i></i></td></tr>
+<tr><th id="119">119</th><td><i>RCDATA NP_INFO_FileVersion       { 1,0,0,1 }</i></td></tr>
+<tr><th id="120">120</th><td><i>RCDATA NP_INFO_CompanyName       { "Netscape Communications\0" }</i></td></tr>
+<tr><th id="121">121</th><td><i>RCDATA NP_INFO_FileDescription   { "NPAVI32 Extension DLL\0"</i></td></tr>
+<tr><th id="122">122</th><td><i>RCDATA NP_INFO_InternalName      { "NPAVI32\0" )</i></td></tr>
+<tr><th id="123">123</th><td><i>RCDATA NP_INFO_LegalCopyright    { "Copyright Netscape Communications \251 1996\0"</i></td></tr>
+<tr><th id="124">124</th><td><i>RCDATA NP_INFO_OriginalFilename  { "NVAPI32.DLL" }</i></td></tr>
+<tr><th id="125">125</th><td><i>RCDATA NP_INFO_ProductName       { "NPAVI32 Dynamic Link Library\0" }</i></td></tr>
+<tr><th id="126">126</th><td><i>*/</i></td></tr>
+<tr><th id="127">127</th><td><i>/* RC_DATA types for version info - required */</i></td></tr>
+<tr><th id="128">128</th><td><u>#define <dfn class="macro" id="_M/NP_INFO_ProductVersion" data-ref="_M/NP_INFO_ProductVersion">NP_INFO_ProductVersion</dfn>      1</u></td></tr>
+<tr><th id="129">129</th><td><u>#define <dfn class="macro" id="_M/NP_INFO_MIMEType" data-ref="_M/NP_INFO_MIMEType">NP_INFO_MIMEType</dfn>            2</u></td></tr>
+<tr><th id="130">130</th><td><u>#define <dfn class="macro" id="_M/NP_INFO_FileOpenName" data-ref="_M/NP_INFO_FileOpenName">NP_INFO_FileOpenName</dfn>        3</u></td></tr>
+<tr><th id="131">131</th><td><u>#define <dfn class="macro" id="_M/NP_INFO_FileExtents" data-ref="_M/NP_INFO_FileExtents">NP_INFO_FileExtents</dfn>         4</u></td></tr>
+<tr><th id="132">132</th><td><i>/* RC_DATA types for version info - used if found */</i></td></tr>
+<tr><th id="133">133</th><td><u>#define <dfn class="macro" id="_M/NP_INFO_FileDescription" data-ref="_M/NP_INFO_FileDescription">NP_INFO_FileDescription</dfn>     5</u></td></tr>
+<tr><th id="134">134</th><td><u>#define <dfn class="macro" id="_M/NP_INFO_ProductName" data-ref="_M/NP_INFO_ProductName">NP_INFO_ProductName</dfn>         6</u></td></tr>
+<tr><th id="135">135</th><td><i>/* RC_DATA types for version info - optional */</i></td></tr>
+<tr><th id="136">136</th><td><u>#define <dfn class="macro" id="_M/NP_INFO_CompanyName" data-ref="_M/NP_INFO_CompanyName">NP_INFO_CompanyName</dfn>         7</u></td></tr>
+<tr><th id="137">137</th><td><u>#define <dfn class="macro" id="_M/NP_INFO_FileVersion" data-ref="_M/NP_INFO_FileVersion">NP_INFO_FileVersion</dfn>         8</u></td></tr>
+<tr><th id="138">138</th><td><u>#define <dfn class="macro" id="_M/NP_INFO_InternalName" data-ref="_M/NP_INFO_InternalName">NP_INFO_InternalName</dfn>        9</u></td></tr>
+<tr><th id="139">139</th><td><u>#define <dfn class="macro" id="_M/NP_INFO_LegalCopyright" data-ref="_M/NP_INFO_LegalCopyright">NP_INFO_LegalCopyright</dfn>      10</u></td></tr>
+<tr><th id="140">140</th><td><u>#define <dfn class="macro" id="_M/NP_INFO_OriginalFilename" data-ref="_M/NP_INFO_OriginalFilename">NP_INFO_OriginalFilename</dfn>    11</u></td></tr>
+<tr><th id="141">141</th><td></td></tr>
+<tr><th id="142">142</th><td><u>#<span data-ppcond="142">ifndef</span> <span class="macro" data-ref="_M/RC_INVOKED">RC_INVOKED</span></u></td></tr>
+<tr><th id="143">143</th><td></td></tr>
+<tr><th id="144">144</th><td><i>/*----------------------------------------------------------------------*/</i></td></tr>
+<tr><th id="145">145</th><td><i>/*                       Definition of Basic Types                      */</i></td></tr>
+<tr><th id="146">146</th><td><i>/*----------------------------------------------------------------------*/</i></td></tr>
+<tr><th id="147">147</th><td></td></tr>
+<tr><th id="148">148</th><td><u>#<span data-ppcond="148">ifndef</span> <span class="macro" data-ref="_M/FALSE">FALSE</span></u></td></tr>
+<tr><th id="149">149</th><td><u>#define FALSE (0)</u></td></tr>
+<tr><th id="150">150</th><td><u>#<span data-ppcond="148">endif</span></u></td></tr>
+<tr><th id="151">151</th><td><u>#<span data-ppcond="151">ifndef</span> <span class="macro" data-ref="_M/TRUE">TRUE</span></u></td></tr>
+<tr><th id="152">152</th><td><u>#define TRUE (1)</u></td></tr>
+<tr><th id="153">153</th><td><u>#<span data-ppcond="151">endif</span></u></td></tr>
+<tr><th id="154">154</th><td><u>#<span data-ppcond="154">ifndef</span> <span class="macro" data-ref="_M/NULL">NULL</span></u></td></tr>
+<tr><th id="155">155</th><td><u>#define NULL (0L)</u></td></tr>
+<tr><th id="156">156</th><td><u>#<span data-ppcond="154">endif</span></u></td></tr>
+<tr><th id="157">157</th><td></td></tr>
+<tr><th id="158">158</th><td><b>typedef</b> <em>unsigned</em> <em>char</em> <dfn class="typedef" id="NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</dfn>;</td></tr>
+<tr><th id="159">159</th><td><b>typedef</b> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>       <dfn class="typedef" id="NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</dfn>;</td></tr>
+<tr><th id="160">160</th><td><b>typedef</b> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>       <dfn class="typedef" id="NPReason" title='NPReason' data-type='int16_t' data-ref="NPReason" data-ref-filename="NPReason">NPReason</dfn>;</td></tr>
+<tr><th id="161">161</th><td><b>typedef</b> <em>char</em>*         <dfn class="typedef" id="NPMIMEType" title='NPMIMEType' data-type='char *' data-ref="NPMIMEType" data-ref-filename="NPMIMEType">NPMIMEType</dfn>;</td></tr>
+<tr><th id="162">162</th><td></td></tr>
+<tr><th id="163">163</th><td><i>/*----------------------------------------------------------------------*/</i></td></tr>
+<tr><th id="164">164</th><td><i>/*                       Structures and definitions                     */</i></td></tr>
+<tr><th id="165">165</th><td><i>/*----------------------------------------------------------------------*/</i></td></tr>
+<tr><th id="166">166</th><td></td></tr>
+<tr><th id="167">167</th><td><u>#<span data-ppcond="167">if</span> !defined(<span class="macro" data-ref="_M/__LP64__">__LP64__</span>)</u></td></tr>
+<tr><th id="168">168</th><td><u>#if defined(XP_MACOSX)</u></td></tr>
+<tr><th id="169">169</th><td><u>#pragma options align=mac68k</u></td></tr>
+<tr><th id="170">170</th><td><u>#endif</u></td></tr>
+<tr><th id="171">171</th><td><u>#<span data-ppcond="167">endif</span> /* __LP64__ */</u></td></tr>
+<tr><th id="172">172</th><td></td></tr>
+<tr><th id="173">173</th><td><i>/*</i></td></tr>
+<tr><th id="174">174</th><td><i> *  NPP is a plug-in's opaque instance handle</i></td></tr>
+<tr><th id="175">175</th><td><i> */</i></td></tr>
+<tr><th id="176">176</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="_NPP" title='_NPP' data-ref="_NPP" data-ref-filename="_NPP"><a class="type" href="#_NPP" title='_NPP' data-ref="_NPP" data-ref-filename="_NPP">_NPP</a></dfn></td></tr>
+<tr><th id="177">177</th><td>{</td></tr>
+<tr><th id="178">178</th><td>  <em>void</em>* <dfn class="decl field" id="_NPP::pdata" title='_NPP::pdata' data-ref="_NPP::pdata" data-ref-filename="_NPP..pdata">pdata</dfn>;      <i>/* plug-in private data */</i></td></tr>
+<tr><th id="179">179</th><td>  <em>void</em>* <dfn class="decl field" id="_NPP::ndata" title='_NPP::ndata' data-ref="_NPP::ndata" data-ref-filename="_NPP..ndata">ndata</dfn>;      <i>/* netscape private data */</i></td></tr>
+<tr><th id="180">180</th><td>} <dfn class="typedef" id="NPP_t" title='NPP_t' data-type='struct _NPP' data-ref="NPP_t" data-ref-filename="NPP_t">NPP_t</dfn>;</td></tr>
+<tr><th id="181">181</th><td></td></tr>
+<tr><th id="182">182</th><td><b>typedef</b> <a class="typedef" href="#NPP_t" title='NPP_t' data-type='struct _NPP' data-ref="NPP_t" data-ref-filename="NPP_t">NPP_t</a>*  <dfn class="typedef" id="NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</dfn>;</td></tr>
+<tr><th id="183">183</th><td></td></tr>
+<tr><th id="184">184</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="_NPStream" title='_NPStream' data-ref="_NPStream" data-ref-filename="_NPStream"><a class="type" href="#_NPStream" title='_NPStream' data-ref="_NPStream" data-ref-filename="_NPStream">_NPStream</a></dfn></td></tr>
+<tr><th id="185">185</th><td>{</td></tr>
+<tr><th id="186">186</th><td>  <em>void</em>*    <dfn class="decl field" id="_NPStream::pdata" title='_NPStream::pdata' data-ref="_NPStream::pdata" data-ref-filename="_NPStream..pdata">pdata</dfn>; <i>/* plug-in private data */</i></td></tr>
+<tr><th id="187">187</th><td>  <em>void</em>*    <dfn class="decl field" id="_NPStream::ndata" title='_NPStream::ndata' data-ref="_NPStream::ndata" data-ref-filename="_NPStream..ndata">ndata</dfn>; <i>/* netscape private data */</i></td></tr>
+<tr><th id="188">188</th><td>  <em>const</em>    <em>char</em>* <dfn class="decl field" id="_NPStream::url" title='_NPStream::url' data-ref="_NPStream::url" data-ref-filename="_NPStream..url">url</dfn>;</td></tr>
+<tr><th id="189">189</th><td>  <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="_NPStream::end" title='_NPStream::end' data-ref="_NPStream::end" data-ref-filename="_NPStream..end">end</dfn>;</td></tr>
+<tr><th id="190">190</th><td>  <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="_NPStream::lastmodified" title='_NPStream::lastmodified' data-ref="_NPStream::lastmodified" data-ref-filename="_NPStream..lastmodified">lastmodified</dfn>;</td></tr>
+<tr><th id="191">191</th><td>  <em>void</em>*    <dfn class="decl field" id="_NPStream::notifyData" title='_NPStream::notifyData' data-ref="_NPStream::notifyData" data-ref-filename="_NPStream..notifyData">notifyData</dfn>;</td></tr>
+<tr><th id="192">192</th><td>  <em>const</em>    <em>char</em>* <dfn class="decl field" id="_NPStream::headers" title='_NPStream::headers' data-ref="_NPStream::headers" data-ref-filename="_NPStream..headers">headers</dfn>; <i>/* Response headers from host.</i></td></tr>
+<tr><th id="193">193</th><td><i>                           * Exists only for &gt;= NPVERS_HAS_RESPONSE_HEADERS.</i></td></tr>
+<tr><th id="194">194</th><td><i>                           * Used for HTTP only; NULL for non-HTTP.</i></td></tr>
+<tr><th id="195">195</th><td><i>                           * Available from NPP_NewStream onwards.</i></td></tr>
+<tr><th id="196">196</th><td><i>                           * Plugin should copy this data before storing it.</i></td></tr>
+<tr><th id="197">197</th><td><i>                           * Includes HTTP status line and all headers,</i></td></tr>
+<tr><th id="198">198</th><td><i>                           * preferably verbatim as received from server,</i></td></tr>
+<tr><th id="199">199</th><td><i>                           * headers formatted as in HTTP ("Header: Value"),</i></td></tr>
+<tr><th id="200">200</th><td><i>                           * and newlines (\n, NOT \r\n) separating lines.</i></td></tr>
+<tr><th id="201">201</th><td><i>                           * Terminated by \n\0 (NOT \n\n\0). */</i></td></tr>
+<tr><th id="202">202</th><td>} <dfn class="typedef" id="NPStream" title='NPStream' data-type='struct _NPStream' data-ref="NPStream" data-ref-filename="NPStream">NPStream</dfn>;</td></tr>
+<tr><th id="203">203</th><td></td></tr>
+<tr><th id="204">204</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="_NPByteRange" title='_NPByteRange' data-ref="_NPByteRange" data-ref-filename="_NPByteRange"><a class="type" href="#_NPByteRange" title='_NPByteRange' data-ref="_NPByteRange" data-ref-filename="_NPByteRange">_NPByteRange</a></dfn></td></tr>
+<tr><th id="205">205</th><td>{</td></tr>
+<tr><th id="206">206</th><td>  <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>  <dfn class="decl field" id="_NPByteRange::offset" title='_NPByteRange::offset' data-ref="_NPByteRange::offset" data-ref-filename="_NPByteRange..offset">offset</dfn>; <i>/* negative offset means from the end */</i></td></tr>
+<tr><th id="207">207</th><td>  <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="_NPByteRange::length" title='_NPByteRange::length' data-ref="_NPByteRange::length" data-ref-filename="_NPByteRange..length">length</dfn>;</td></tr>
+<tr><th id="208">208</th><td>  <b>struct</b> <a class="type" href="#_NPByteRange" title='_NPByteRange' data-ref="_NPByteRange" data-ref-filename="_NPByteRange">_NPByteRange</a>* <dfn class="decl field" id="_NPByteRange::next" title='_NPByteRange::next' data-ref="_NPByteRange::next" data-ref-filename="_NPByteRange..next">next</dfn>;</td></tr>
+<tr><th id="209">209</th><td>} <dfn class="typedef" id="NPByteRange" title='NPByteRange' data-type='struct _NPByteRange' data-ref="NPByteRange" data-ref-filename="NPByteRange">NPByteRange</dfn>;</td></tr>
+<tr><th id="210">210</th><td></td></tr>
+<tr><th id="211">211</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="_NPSavedData" title='_NPSavedData' data-ref="_NPSavedData" data-ref-filename="_NPSavedData"><a class="type" href="#_NPSavedData" title='_NPSavedData' data-ref="_NPSavedData" data-ref-filename="_NPSavedData">_NPSavedData</a></dfn></td></tr>
+<tr><th id="212">212</th><td>{</td></tr>
+<tr><th id="213">213</th><td>  <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl field" id="_NPSavedData::len" title='_NPSavedData::len' data-ref="_NPSavedData::len" data-ref-filename="_NPSavedData..len">len</dfn>;</td></tr>
+<tr><th id="214">214</th><td>  <em>void</em>*   <dfn class="decl field" id="_NPSavedData::buf" title='_NPSavedData::buf' data-ref="_NPSavedData::buf" data-ref-filename="_NPSavedData..buf">buf</dfn>;</td></tr>
+<tr><th id="215">215</th><td>} <dfn class="typedef" id="NPSavedData" title='NPSavedData' data-type='struct _NPSavedData' data-ref="NPSavedData" data-ref-filename="NPSavedData">NPSavedData</dfn>;</td></tr>
+<tr><th id="216">216</th><td></td></tr>
+<tr><th id="217">217</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="_NPRect" title='_NPRect' data-ref="_NPRect" data-ref-filename="_NPRect"><a class="type" href="#_NPRect" title='_NPRect' data-ref="_NPRect" data-ref-filename="_NPRect">_NPRect</a></dfn></td></tr>
+<tr><th id="218">218</th><td>{</td></tr>
+<tr><th id="219">219</th><td>  <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="decl field" id="_NPRect::top" title='_NPRect::top' data-ref="_NPRect::top" data-ref-filename="_NPRect..top">top</dfn>;</td></tr>
+<tr><th id="220">220</th><td>  <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="decl field" id="_NPRect::left" title='_NPRect::left' data-ref="_NPRect::left" data-ref-filename="_NPRect..left">left</dfn>;</td></tr>
+<tr><th id="221">221</th><td>  <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="decl field" id="_NPRect::bottom" title='_NPRect::bottom' data-ref="_NPRect::bottom" data-ref-filename="_NPRect..bottom">bottom</dfn>;</td></tr>
+<tr><th id="222">222</th><td>  <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="decl field" id="_NPRect::right" title='_NPRect::right' data-ref="_NPRect::right" data-ref-filename="_NPRect..right">right</dfn>;</td></tr>
+<tr><th id="223">223</th><td>} <dfn class="typedef" id="NPRect" title='NPRect' data-type='struct _NPRect' data-ref="NPRect" data-ref-filename="NPRect">NPRect</dfn>;</td></tr>
+<tr><th id="224">224</th><td></td></tr>
+<tr><th id="225">225</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="_NPSize" title='_NPSize' data-ref="_NPSize" data-ref-filename="_NPSize"><a class="type" href="#_NPSize" title='_NPSize' data-ref="_NPSize" data-ref-filename="_NPSize">_NPSize</a></dfn></td></tr>
+<tr><th id="226">226</th><td>{</td></tr>
+<tr><th id="227">227</th><td>  <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl field" id="_NPSize::width" title='_NPSize::width' data-ref="_NPSize::width" data-ref-filename="_NPSize..width">width</dfn>;</td></tr>
+<tr><th id="228">228</th><td>  <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl field" id="_NPSize::height" title='_NPSize::height' data-ref="_NPSize::height" data-ref-filename="_NPSize..height">height</dfn>;</td></tr>
+<tr><th id="229">229</th><td>} <dfn class="typedef" id="NPSize" title='NPSize' data-type='struct _NPSize' data-ref="NPSize" data-ref-filename="NPSize">NPSize</dfn>;</td></tr>
+<tr><th id="230">230</th><td></td></tr>
+<tr><th id="231">231</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="232">232</th><td>  <dfn class="enum" id="NPFocusNext" title='NPFocusNext' data-ref="NPFocusNext" data-ref-filename="NPFocusNext">NPFocusNext</dfn> = <var>0</var>,</td></tr>
+<tr><th id="233">233</th><td>  <dfn class="enum" id="NPFocusPrevious" title='NPFocusPrevious' data-ref="NPFocusPrevious" data-ref-filename="NPFocusPrevious">NPFocusPrevious</dfn> = <var>1</var></td></tr>
+<tr><th id="234">234</th><td>} <dfn class="typedef" id="NPFocusDirection" title='NPFocusDirection' data-type='enum NPFocusDirection' data-ref="NPFocusDirection" data-ref-filename="NPFocusDirection">NPFocusDirection</dfn>;</td></tr>
+<tr><th id="235">235</th><td></td></tr>
+<tr><th id="236">236</th><td><i>/* Return values for NPP_HandleEvent */</i></td></tr>
+<tr><th id="237">237</th><td><u>#define <dfn class="macro" id="_M/kNPEventNotHandled" data-ref="_M/kNPEventNotHandled">kNPEventNotHandled</dfn> 0</u></td></tr>
+<tr><th id="238">238</th><td><u>#define <dfn class="macro" id="_M/kNPEventHandled" data-ref="_M/kNPEventHandled">kNPEventHandled</dfn> 1</u></td></tr>
+<tr><th id="239">239</th><td><i>/* Exact meaning must be spec'd in event model. */</i></td></tr>
+<tr><th id="240">240</th><td><u>#define <dfn class="macro" id="_M/kNPEventStartIME" data-ref="_M/kNPEventStartIME">kNPEventStartIME</dfn> 2</u></td></tr>
+<tr><th id="241">241</th><td></td></tr>
+<tr><th id="242">242</th><td><u>#<span data-ppcond="242">if</span> defined(<span class="macro" data-ref="_M/XP_UNIX">XP_UNIX</span>)</u></td></tr>
+<tr><th id="243">243</th><td><i>/*</i></td></tr>
+<tr><th id="244">244</th><td><i> * Unix specific structures and definitions</i></td></tr>
+<tr><th id="245">245</th><td><i> */</i></td></tr>
+<tr><th id="246">246</th><td></td></tr>
+<tr><th id="247">247</th><td><i>/*</i></td></tr>
+<tr><th id="248">248</th><td><i> * Callback Structures.</i></td></tr>
+<tr><th id="249">249</th><td><i> *</i></td></tr>
+<tr><th id="250">250</th><td><i> * These are used to pass additional platform specific information.</i></td></tr>
+<tr><th id="251">251</th><td><i> */</i></td></tr>
+<tr><th id="252">252</th><td><b>enum</b> {</td></tr>
+<tr><th id="253">253</th><td>  NP_SETWINDOW = <var>1</var>,</td></tr>
+<tr><th id="254">254</th><td>  NP_PRINT</td></tr>
+<tr><th id="255">255</th><td>};</td></tr>
+<tr><th id="256">256</th><td></td></tr>
+<tr><th id="257">257</th><td><b>typedef</b> <b>struct</b></td></tr>
+<tr><th id="258">258</th><td>{</td></tr>
+<tr><th id="259">259</th><td>  int32_t type;</td></tr>
+<tr><th id="260">260</th><td>} NPAnyCallbackStruct;</td></tr>
+<tr><th id="261">261</th><td></td></tr>
+<tr><th id="262">262</th><td><b>typedef</b> <b>struct</b></td></tr>
+<tr><th id="263">263</th><td>{</td></tr>
+<tr><th id="264">264</th><td>  int32_t      type;</td></tr>
+<tr><th id="265">265</th><td><u>#if defined(MOZ_X11)</u></td></tr>
+<tr><th id="266">266</th><td>  Display*     display;</td></tr>
+<tr><th id="267">267</th><td>  Visual*      visual;</td></tr>
+<tr><th id="268">268</th><td>  Colormap     colormap;</td></tr>
+<tr><th id="269">269</th><td>  <em>unsigned</em> <em>int</em> depth;</td></tr>
+<tr><th id="270">270</th><td><u>#endif</u></td></tr>
+<tr><th id="271">271</th><td>} NPSetWindowCallbackStruct;</td></tr>
+<tr><th id="272">272</th><td></td></tr>
+<tr><th id="273">273</th><td><b>typedef</b> <b>struct</b></td></tr>
+<tr><th id="274">274</th><td>{</td></tr>
+<tr><th id="275">275</th><td>  int32_t type;</td></tr>
+<tr><th id="276">276</th><td>  FILE* fp;</td></tr>
+<tr><th id="277">277</th><td>} NPPrintCallbackStruct;</td></tr>
+<tr><th id="278">278</th><td></td></tr>
+<tr><th id="279">279</th><td><u>#<span data-ppcond="242">endif</span> /* XP_UNIX */</u></td></tr>
+<tr><th id="280">280</th><td></td></tr>
+<tr><th id="281">281</th><td><u>#<span data-ppcond="281">if</span> defined(<a class="macro" href="#69" data-ref="_M/XP_MACOSX">XP_MACOSX</a>)</u></td></tr>
+<tr><th id="282">282</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="283">283</th><td><u>#<span data-ppcond="283">ifndef</span> <a class="macro" href="#74" data-ref="_M/NP_NO_QUICKDRAW">NP_NO_QUICKDRAW</a></u></td></tr>
+<tr><th id="284">284</th><td>  NPDrawingModelQuickDraw = <var>0</var>,</td></tr>
+<tr><th id="285">285</th><td><u>#<span data-ppcond="283">endif</span></u></td></tr>
+<tr><th id="286">286</th><td>  <dfn class="enum" id="NPDrawingModelCoreGraphics" title='NPDrawingModelCoreGraphics' data-ref="NPDrawingModelCoreGraphics" data-ref-filename="NPDrawingModelCoreGraphics">NPDrawingModelCoreGraphics</dfn> = <var>1</var>,</td></tr>
+<tr><th id="287">287</th><td>  <dfn class="enum" id="NPDrawingModelOpenGL" title='NPDrawingModelOpenGL' data-ref="NPDrawingModelOpenGL" data-ref-filename="NPDrawingModelOpenGL">NPDrawingModelOpenGL</dfn> = <var>2</var>, <i>// Note: This is not supported.</i></td></tr>
+<tr><th id="288">288</th><td>  <dfn class="enum" id="NPDrawingModelCoreAnimation" title='NPDrawingModelCoreAnimation' data-ref="NPDrawingModelCoreAnimation" data-ref-filename="NPDrawingModelCoreAnimation">NPDrawingModelCoreAnimation</dfn> = <var>3</var></td></tr>
+<tr><th id="289">289</th><td>} <dfn class="typedef" id="NPDrawingModel" title='NPDrawingModel' data-type='enum NPDrawingModel' data-ref="NPDrawingModel" data-ref-filename="NPDrawingModel">NPDrawingModel</dfn>;</td></tr>
+<tr><th id="290">290</th><td></td></tr>
+<tr><th id="291">291</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="292">292</th><td><u>#<span data-ppcond="292">ifndef</span> <a class="macro" href="#75" data-ref="_M/NP_NO_CARBON">NP_NO_CARBON</a></u></td></tr>
+<tr><th id="293">293</th><td>  NPEventModelCarbon = <var>0</var>,</td></tr>
+<tr><th id="294">294</th><td><u>#<span data-ppcond="292">endif</span></u></td></tr>
+<tr><th id="295">295</th><td>  <dfn class="enum" id="NPEventModelCocoa" title='NPEventModelCocoa' data-ref="NPEventModelCocoa" data-ref-filename="NPEventModelCocoa">NPEventModelCocoa</dfn> = <var>1</var></td></tr>
+<tr><th id="296">296</th><td>} <dfn class="typedef" id="NPEventModel" title='NPEventModel' data-type='enum NPEventModel' data-ref="NPEventModel" data-ref-filename="NPEventModel">NPEventModel</dfn>;</td></tr>
+<tr><th id="297">297</th><td><u>#<span data-ppcond="281">endif</span></u></td></tr>
+<tr><th id="298">298</th><td></td></tr>
+<tr><th id="299">299</th><td><i>/*</i></td></tr>
+<tr><th id="300">300</th><td><i> *   The following masks are applied on certain platforms to NPNV and</i></td></tr>
+<tr><th id="301">301</th><td><i> *   NPPV selectors that pass around pointers to COM interfaces. Newer</i></td></tr>
+<tr><th id="302">302</th><td><i> *   compilers on some platforms may generate vtables that are not</i></td></tr>
+<tr><th id="303">303</th><td><i> *   compatible with older compilers. To prevent older plugins from</i></td></tr>
+<tr><th id="304">304</th><td><i> *   not understanding a new browser's ABI, these masks change the</i></td></tr>
+<tr><th id="305">305</th><td><i> *   values of those selectors on those platforms. To remain backwards</i></td></tr>
+<tr><th id="306">306</th><td><i> *   compatible with different versions of the browser, plugins can</i></td></tr>
+<tr><th id="307">307</th><td><i> *   use these masks to dynamically determine and use the correct C++</i></td></tr>
+<tr><th id="308">308</th><td><i> *   ABI that the browser is expecting. This does not apply to Windows</i></td></tr>
+<tr><th id="309">309</th><td><i> *   as Microsoft's COM ABI will likely not change.</i></td></tr>
+<tr><th id="310">310</th><td><i> */</i></td></tr>
+<tr><th id="311">311</th><td></td></tr>
+<tr><th id="312">312</th><td><u>#define <dfn class="macro" id="_M/NP_ABI_GCC3_MASK" data-ref="_M/NP_ABI_GCC3_MASK">NP_ABI_GCC3_MASK</dfn>  0x10000000</u></td></tr>
+<tr><th id="313">313</th><td><i>/*</i></td></tr>
+<tr><th id="314">314</th><td><i> *   gcc 3.x generated vtables on UNIX and OSX are incompatible with</i></td></tr>
+<tr><th id="315">315</th><td><i> *   previous compilers.</i></td></tr>
+<tr><th id="316">316</th><td><i> */</i></td></tr>
+<tr><th id="317">317</th><td><u>#<span data-ppcond="317">if</span> (defined(<span class="macro" data-ref="_M/XP_UNIX">XP_UNIX</span>) &amp;&amp; defined(<span class="macro" data-ref="_M/__GNUC__">__GNUC__</span>) &amp;&amp; (<span class="macro" title="4" data-ref="_M/__GNUC__">__GNUC__</span> &gt;= 3))</u></td></tr>
+<tr><th id="318">318</th><td><u>#define _NP_ABI_MIXIN_FOR_GCC3 NP_ABI_GCC3_MASK</u></td></tr>
+<tr><th id="319">319</th><td><u>#<span data-ppcond="317">else</span></u></td></tr>
+<tr><th id="320">320</th><td><u>#define <dfn class="macro" id="_M/_NP_ABI_MIXIN_FOR_GCC3" data-ref="_M/_NP_ABI_MIXIN_FOR_GCC3">_NP_ABI_MIXIN_FOR_GCC3</dfn> 0</u></td></tr>
+<tr><th id="321">321</th><td><u>#<span data-ppcond="317">endif</span></u></td></tr>
+<tr><th id="322">322</th><td></td></tr>
+<tr><th id="323">323</th><td><u>#<span data-ppcond="323">if</span> defined(<a class="macro" href="#69" data-ref="_M/XP_MACOSX">XP_MACOSX</a>)</u></td></tr>
+<tr><th id="324">324</th><td><u>#define <dfn class="macro" id="_M/NP_ABI_MACHO_MASK" data-ref="_M/NP_ABI_MACHO_MASK">NP_ABI_MACHO_MASK</dfn> 0x01000000</u></td></tr>
+<tr><th id="325">325</th><td><u>#define <dfn class="macro" id="_M/_NP_ABI_MIXIN_FOR_MACHO" data-ref="_M/_NP_ABI_MIXIN_FOR_MACHO">_NP_ABI_MIXIN_FOR_MACHO</dfn> NP_ABI_MACHO_MASK</u></td></tr>
+<tr><th id="326">326</th><td><u>#<span data-ppcond="323">else</span></u></td></tr>
+<tr><th id="327">327</th><td><u>#define _NP_ABI_MIXIN_FOR_MACHO 0</u></td></tr>
+<tr><th id="328">328</th><td><u>#<span data-ppcond="323">endif</span></u></td></tr>
+<tr><th id="329">329</th><td></td></tr>
+<tr><th id="330">330</th><td><u>#define <dfn class="macro" id="_M/NP_ABI_MASK" data-ref="_M/NP_ABI_MASK">NP_ABI_MASK</dfn> (_NP_ABI_MIXIN_FOR_GCC3 | _NP_ABI_MIXIN_FOR_MACHO)</u></td></tr>
+<tr><th id="331">331</th><td></td></tr>
+<tr><th id="332">332</th><td><i>/*</i></td></tr>
+<tr><th id="333">333</th><td><i> * List of variable names for which NPP_GetValue shall be implemented</i></td></tr>
+<tr><th id="334">334</th><td><i> */</i></td></tr>
+<tr><th id="335">335</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="336">336</th><td>  <dfn class="enum" id="NPPVpluginNameString" title='NPPVpluginNameString' data-ref="NPPVpluginNameString" data-ref-filename="NPPVpluginNameString">NPPVpluginNameString</dfn> = <var>1</var>,</td></tr>
+<tr><th id="337">337</th><td>  <dfn class="enum" id="NPPVpluginDescriptionString" title='NPPVpluginDescriptionString' data-ref="NPPVpluginDescriptionString" data-ref-filename="NPPVpluginDescriptionString">NPPVpluginDescriptionString</dfn>,</td></tr>
+<tr><th id="338">338</th><td>  <dfn class="enum" id="NPPVpluginWindowBool" title='NPPVpluginWindowBool' data-ref="NPPVpluginWindowBool" data-ref-filename="NPPVpluginWindowBool">NPPVpluginWindowBool</dfn>,</td></tr>
+<tr><th id="339">339</th><td>  <dfn class="enum" id="NPPVpluginTransparentBool" title='NPPVpluginTransparentBool' data-ref="NPPVpluginTransparentBool" data-ref-filename="NPPVpluginTransparentBool">NPPVpluginTransparentBool</dfn>,</td></tr>
+<tr><th id="340">340</th><td>  <dfn class="enum" id="NPPVjavaClass" title='NPPVjavaClass' data-ref="NPPVjavaClass" data-ref-filename="NPPVjavaClass">NPPVjavaClass</dfn>,                <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="341">341</th><td>  <dfn class="enum" id="NPPVpluginWindowSize" title='NPPVpluginWindowSize' data-ref="NPPVpluginWindowSize" data-ref-filename="NPPVpluginWindowSize">NPPVpluginWindowSize</dfn>,         <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="342">342</th><td>  <dfn class="enum" id="NPPVpluginTimerInterval" title='NPPVpluginTimerInterval' data-ref="NPPVpluginTimerInterval" data-ref-filename="NPPVpluginTimerInterval">NPPVpluginTimerInterval</dfn>,      <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="343">343</th><td>  <dfn class="enum" id="NPPVpluginScriptableInstance" title='NPPVpluginScriptableInstance' data-ref="NPPVpluginScriptableInstance" data-ref-filename="NPPVpluginScriptableInstance">NPPVpluginScriptableInstance</dfn> = (<var>10</var> | <a class="macro" href="#330" title="(0 | 0x01000000)" data-ref="_M/NP_ABI_MASK">NP_ABI_MASK</a>), <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="344">344</th><td>  <dfn class="enum" id="NPPVpluginScriptableIID" title='NPPVpluginScriptableIID' data-ref="NPPVpluginScriptableIID" data-ref-filename="NPPVpluginScriptableIID">NPPVpluginScriptableIID</dfn> = <var>11</var>, <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="345">345</th><td>  <dfn class="enum" id="NPPVjavascriptPushCallerBool" title='NPPVjavascriptPushCallerBool' data-ref="NPPVjavascriptPushCallerBool" data-ref-filename="NPPVjavascriptPushCallerBool">NPPVjavascriptPushCallerBool</dfn> = <var>12</var>,  <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="346">346</th><td>  <dfn class="enum" id="NPPVpluginKeepLibraryInMemory" title='NPPVpluginKeepLibraryInMemory' data-ref="NPPVpluginKeepLibraryInMemory" data-ref-filename="NPPVpluginKeepLibraryInMemory">NPPVpluginKeepLibraryInMemory</dfn> = <var>13</var>, <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="347">347</th><td>  <dfn class="enum" id="NPPVpluginNeedsXEmbed" title='NPPVpluginNeedsXEmbed' data-ref="NPPVpluginNeedsXEmbed" data-ref-filename="NPPVpluginNeedsXEmbed">NPPVpluginNeedsXEmbed</dfn>         = <var>14</var>, <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="348">348</th><td></td></tr>
+<tr><th id="349">349</th><td>  <i>/* Get the NPObject for scripting the plugin. Introduced in NPAPI minor version 14.</i></td></tr>
+<tr><th id="350">350</th><td><i>   */</i></td></tr>
+<tr><th id="351">351</th><td>  <dfn class="enum" id="NPPVpluginScriptableNPObject" title='NPPVpluginScriptableNPObject' data-ref="NPPVpluginScriptableNPObject" data-ref-filename="NPPVpluginScriptableNPObject">NPPVpluginScriptableNPObject</dfn>  = <var>15</var>,</td></tr>
+<tr><th id="352">352</th><td></td></tr>
+<tr><th id="353">353</th><td>  <i>/* Get the plugin value (as \0-terminated UTF-8 string data) for</i></td></tr>
+<tr><th id="354">354</th><td><i>   * form submission if the plugin is part of a form. Use</i></td></tr>
+<tr><th id="355">355</th><td><i>   * NPN_MemAlloc() to allocate memory for the string data. Introduced</i></td></tr>
+<tr><th id="356">356</th><td><i>   * in NPAPI minor version 15.</i></td></tr>
+<tr><th id="357">357</th><td><i>   */</i></td></tr>
+<tr><th id="358">358</th><td>  <dfn class="enum" id="NPPVformValue" title='NPPVformValue' data-ref="NPPVformValue" data-ref-filename="NPPVformValue">NPPVformValue</dfn> = <var>16</var>,    <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="359">359</th><td></td></tr>
+<tr><th id="360">360</th><td>  <dfn class="enum" id="NPPVpluginUrlRequestsDisplayedBool" title='NPPVpluginUrlRequestsDisplayedBool' data-ref="NPPVpluginUrlRequestsDisplayedBool" data-ref-filename="NPPVpluginUrlRequestsDisplayedBool">NPPVpluginUrlRequestsDisplayedBool</dfn> = <var>17</var>, <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="361">361</th><td></td></tr>
+<tr><th id="362">362</th><td>  <i>/* Checks if the plugin is interested in receiving the http body of</i></td></tr>
+<tr><th id="363">363</th><td><i>   * all http requests (including failed ones, http status != 200).</i></td></tr>
+<tr><th id="364">364</th><td><i>   */</i></td></tr>
+<tr><th id="365">365</th><td>  <dfn class="enum" id="NPPVpluginWantsAllNetworkStreams" title='NPPVpluginWantsAllNetworkStreams' data-ref="NPPVpluginWantsAllNetworkStreams" data-ref-filename="NPPVpluginWantsAllNetworkStreams">NPPVpluginWantsAllNetworkStreams</dfn> = <var>18</var>,</td></tr>
+<tr><th id="366">366</th><td></td></tr>
+<tr><th id="367">367</th><td>  <i>/* Browsers can retrieve a native ATK accessibility plug ID via this variable. */</i></td></tr>
+<tr><th id="368">368</th><td>  <dfn class="enum" id="NPPVpluginNativeAccessibleAtkPlugId" title='NPPVpluginNativeAccessibleAtkPlugId' data-ref="NPPVpluginNativeAccessibleAtkPlugId" data-ref-filename="NPPVpluginNativeAccessibleAtkPlugId">NPPVpluginNativeAccessibleAtkPlugId</dfn> = <var>19</var>,</td></tr>
+<tr><th id="369">369</th><td></td></tr>
+<tr><th id="370">370</th><td>  <i>/* Checks to see if the plug-in would like the browser to load the "src" attribute. */</i></td></tr>
+<tr><th id="371">371</th><td>  <dfn class="enum" id="NPPVpluginCancelSrcStream" title='NPPVpluginCancelSrcStream' data-ref="NPPVpluginCancelSrcStream" data-ref-filename="NPPVpluginCancelSrcStream">NPPVpluginCancelSrcStream</dfn> = <var>20</var></td></tr>
+<tr><th id="372">372</th><td></td></tr>
+<tr><th id="373">373</th><td><u>#<span data-ppcond="373">if</span> defined(<a class="macro" href="#69" data-ref="_M/XP_MACOSX">XP_MACOSX</a>)</u></td></tr>
+<tr><th id="374">374</th><td>  <i>/* Used for negotiating drawing models */</i></td></tr>
+<tr><th id="375">375</th><td>  , <dfn class="enum" id="NPPVpluginDrawingModel" title='NPPVpluginDrawingModel' data-ref="NPPVpluginDrawingModel" data-ref-filename="NPPVpluginDrawingModel">NPPVpluginDrawingModel</dfn> = <var>1000</var></td></tr>
+<tr><th id="376">376</th><td>  <i>/* Used for negotiating event models */</i></td></tr>
+<tr><th id="377">377</th><td>  , <dfn class="enum" id="NPPVpluginEventModel" title='NPPVpluginEventModel' data-ref="NPPVpluginEventModel" data-ref-filename="NPPVpluginEventModel">NPPVpluginEventModel</dfn> = <var>1001</var></td></tr>
+<tr><th id="378">378</th><td>  <i>/* In the NPDrawingModelCoreAnimation drawing model, the browser asks the plug-in for a Core Animation layer. */</i></td></tr>
+<tr><th id="379">379</th><td>  , <dfn class="enum" id="NPPVpluginCoreAnimationLayer" title='NPPVpluginCoreAnimationLayer' data-ref="NPPVpluginCoreAnimationLayer" data-ref-filename="NPPVpluginCoreAnimationLayer">NPPVpluginCoreAnimationLayer</dfn> = <var>1003</var></td></tr>
+<tr><th id="380">380</th><td><u>#<span data-ppcond="373">endif</span></u></td></tr>
+<tr><th id="381">381</th><td></td></tr>
+<tr><th id="382">382</th><td>  <i>/* Used for figuring out whether a plug-in is playing audio. */</i></td></tr>
+<tr><th id="383">383</th><td>  , <dfn class="enum" id="NPPVpluginIsPlayingAudio" title='NPPVpluginIsPlayingAudio' data-ref="NPPVpluginIsPlayingAudio" data-ref-filename="NPPVpluginIsPlayingAudio">NPPVpluginIsPlayingAudio</dfn> = <var>4000</var></td></tr>
+<tr><th id="384">384</th><td></td></tr>
+<tr><th id="385">385</th><td>} <dfn class="typedef" id="NPPVariable" title='NPPVariable' data-type='enum NPPVariable' data-ref="NPPVariable" data-ref-filename="NPPVariable">NPPVariable</dfn>;</td></tr>
+<tr><th id="386">386</th><td></td></tr>
+<tr><th id="387">387</th><td><i>/*</i></td></tr>
+<tr><th id="388">388</th><td><i> * List of variable names for which NPN_GetValue should be implemented.</i></td></tr>
+<tr><th id="389">389</th><td><i> */</i></td></tr>
+<tr><th id="390">390</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="391">391</th><td>  <dfn class="enum" id="NPNVxDisplay" title='NPNVxDisplay' data-ref="NPNVxDisplay" data-ref-filename="NPNVxDisplay">NPNVxDisplay</dfn> = <var>1</var>,</td></tr>
+<tr><th id="392">392</th><td>  <dfn class="enum" id="NPNVxtAppContext" title='NPNVxtAppContext' data-ref="NPNVxtAppContext" data-ref-filename="NPNVxtAppContext">NPNVxtAppContext</dfn>,</td></tr>
+<tr><th id="393">393</th><td>  <dfn class="enum" id="NPNVnetscapeWindow" title='NPNVnetscapeWindow' data-ref="NPNVnetscapeWindow" data-ref-filename="NPNVnetscapeWindow">NPNVnetscapeWindow</dfn>,</td></tr>
+<tr><th id="394">394</th><td>  <dfn class="enum" id="NPNVjavascriptEnabledBool" title='NPNVjavascriptEnabledBool' data-ref="NPNVjavascriptEnabledBool" data-ref-filename="NPNVjavascriptEnabledBool">NPNVjavascriptEnabledBool</dfn>,</td></tr>
+<tr><th id="395">395</th><td>  <dfn class="enum" id="NPNVasdEnabledBool" title='NPNVasdEnabledBool' data-ref="NPNVasdEnabledBool" data-ref-filename="NPNVasdEnabledBool">NPNVasdEnabledBool</dfn>,</td></tr>
+<tr><th id="396">396</th><td>  <dfn class="enum" id="NPNVisOfflineBool" title='NPNVisOfflineBool' data-ref="NPNVisOfflineBool" data-ref-filename="NPNVisOfflineBool">NPNVisOfflineBool</dfn>,</td></tr>
+<tr><th id="397">397</th><td></td></tr>
+<tr><th id="398">398</th><td>  <dfn class="enum" id="NPNVserviceManager" title='NPNVserviceManager' data-ref="NPNVserviceManager" data-ref-filename="NPNVserviceManager">NPNVserviceManager</dfn> = (<var>10</var> | <a class="macro" href="#330" title="(0 | 0x01000000)" data-ref="_M/NP_ABI_MASK">NP_ABI_MASK</a>),  <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="399">399</th><td>  <dfn class="enum" id="NPNVDOMElement" title='NPNVDOMElement' data-ref="NPNVDOMElement" data-ref-filename="NPNVDOMElement">NPNVDOMElement</dfn>     = (<var>11</var> | <a class="macro" href="#330" title="(0 | 0x01000000)" data-ref="_M/NP_ABI_MASK">NP_ABI_MASK</a>),  <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="400">400</th><td>  <dfn class="enum" id="NPNVDOMWindow" title='NPNVDOMWindow' data-ref="NPNVDOMWindow" data-ref-filename="NPNVDOMWindow">NPNVDOMWindow</dfn>      = (<var>12</var> | <a class="macro" href="#330" title="(0 | 0x01000000)" data-ref="_M/NP_ABI_MASK">NP_ABI_MASK</a>),  <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="401">401</th><td>  <dfn class="enum" id="NPNVToolkit" title='NPNVToolkit' data-ref="NPNVToolkit" data-ref-filename="NPNVToolkit">NPNVToolkit</dfn>        = (<var>13</var> | <a class="macro" href="#330" title="(0 | 0x01000000)" data-ref="_M/NP_ABI_MASK">NP_ABI_MASK</a>),  <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="402">402</th><td>  <dfn class="enum" id="NPNVSupportsXEmbedBool" title='NPNVSupportsXEmbedBool' data-ref="NPNVSupportsXEmbedBool" data-ref-filename="NPNVSupportsXEmbedBool">NPNVSupportsXEmbedBool</dfn> = <var>14</var>,              <i>/* Not implemented in WebKit */</i></td></tr>
+<tr><th id="403">403</th><td></td></tr>
+<tr><th id="404">404</th><td>  <i>/* Get the NPObject wrapper for the browser window. */</i></td></tr>
+<tr><th id="405">405</th><td>  <dfn class="enum" id="NPNVWindowNPObject" title='NPNVWindowNPObject' data-ref="NPNVWindowNPObject" data-ref-filename="NPNVWindowNPObject">NPNVWindowNPObject</dfn> = <var>15</var>,</td></tr>
+<tr><th id="406">406</th><td></td></tr>
+<tr><th id="407">407</th><td>  <i>/* Get the NPObject wrapper for the plugins DOM element. */</i></td></tr>
+<tr><th id="408">408</th><td>  <dfn class="enum" id="NPNVPluginElementNPObject" title='NPNVPluginElementNPObject' data-ref="NPNVPluginElementNPObject" data-ref-filename="NPNVPluginElementNPObject">NPNVPluginElementNPObject</dfn> = <var>16</var>,</td></tr>
+<tr><th id="409">409</th><td></td></tr>
+<tr><th id="410">410</th><td>  <dfn class="enum" id="NPNVSupportsWindowless" title='NPNVSupportsWindowless' data-ref="NPNVSupportsWindowless" data-ref-filename="NPNVSupportsWindowless">NPNVSupportsWindowless</dfn> = <var>17</var>,</td></tr>
+<tr><th id="411">411</th><td></td></tr>
+<tr><th id="412">412</th><td>  <dfn class="enum" id="NPNVprivateModeBool" title='NPNVprivateModeBool' data-ref="NPNVprivateModeBool" data-ref-filename="NPNVprivateModeBool">NPNVprivateModeBool</dfn> = <var>18</var>,</td></tr>
+<tr><th id="413">413</th><td></td></tr>
+<tr><th id="414">414</th><td>  <dfn class="enum" id="NPNVsupportsAdvancedKeyHandling" title='NPNVsupportsAdvancedKeyHandling' data-ref="NPNVsupportsAdvancedKeyHandling" data-ref-filename="NPNVsupportsAdvancedKeyHandling">NPNVsupportsAdvancedKeyHandling</dfn> = <var>21</var></td></tr>
+<tr><th id="415">415</th><td></td></tr>
+<tr><th id="416">416</th><td><u>#<span data-ppcond="416">if</span> defined(<a class="macro" href="#69" data-ref="_M/XP_MACOSX">XP_MACOSX</a>)</u></td></tr>
+<tr><th id="417">417</th><td>  <i>/* Used for negotiating drawing models */</i></td></tr>
+<tr><th id="418">418</th><td>  , <dfn class="enum" id="NPNVpluginDrawingModel" title='NPNVpluginDrawingModel' data-ref="NPNVpluginDrawingModel" data-ref-filename="NPNVpluginDrawingModel">NPNVpluginDrawingModel</dfn> = <var>1000</var></td></tr>
+<tr><th id="419">419</th><td>  , <dfn class="enum" id="NPNVcontentsScaleFactor" title='NPNVcontentsScaleFactor' data-ref="NPNVcontentsScaleFactor" data-ref-filename="NPNVcontentsScaleFactor">NPNVcontentsScaleFactor</dfn> = <var>1001</var></td></tr>
+<tr><th id="420">420</th><td><u>#<span data-ppcond="420">ifndef</span> <a class="macro" href="#74" data-ref="_M/NP_NO_QUICKDRAW">NP_NO_QUICKDRAW</a></u></td></tr>
+<tr><th id="421">421</th><td>  , NPNVsupportsQuickDrawBool = <var>2000</var></td></tr>
+<tr><th id="422">422</th><td><u>#<span data-ppcond="420">endif</span></u></td></tr>
+<tr><th id="423">423</th><td>  , <dfn class="enum" id="NPNVsupportsCoreGraphicsBool" title='NPNVsupportsCoreGraphicsBool' data-ref="NPNVsupportsCoreGraphicsBool" data-ref-filename="NPNVsupportsCoreGraphicsBool">NPNVsupportsCoreGraphicsBool</dfn> = <var>2001</var></td></tr>
+<tr><th id="424">424</th><td>  , <dfn class="enum" id="NPNVsupportsOpenGLBool" title='NPNVsupportsOpenGLBool' data-ref="NPNVsupportsOpenGLBool" data-ref-filename="NPNVsupportsOpenGLBool">NPNVsupportsOpenGLBool</dfn> = <var>2002</var></td></tr>
+<tr><th id="425">425</th><td>  , <dfn class="enum" id="NPNVsupportsCoreAnimationBool" title='NPNVsupportsCoreAnimationBool' data-ref="NPNVsupportsCoreAnimationBool" data-ref-filename="NPNVsupportsCoreAnimationBool">NPNVsupportsCoreAnimationBool</dfn> = <var>2003</var></td></tr>
+<tr><th id="426">426</th><td><u>#<span data-ppcond="426">ifndef</span> <a class="macro" href="#75" data-ref="_M/NP_NO_CARBON">NP_NO_CARBON</a></u></td></tr>
+<tr><th id="427">427</th><td>  , NPNVsupportsCarbonBool = <var>3000</var> <i>/* TRUE if the browser supports the Carbon event model */</i></td></tr>
+<tr><th id="428">428</th><td><u>#<span data-ppcond="426">endif</span></u></td></tr>
+<tr><th id="429">429</th><td>  , <dfn class="enum" id="NPNVsupportsCocoaBool" title='NPNVsupportsCocoaBool' data-ref="NPNVsupportsCocoaBool" data-ref-filename="NPNVsupportsCocoaBool">NPNVsupportsCocoaBool</dfn> = <var>3001</var> <i>/* TRUE if the browser supports the Cocoa event model */</i></td></tr>
+<tr><th id="430">430</th><td>  , <dfn class="enum" id="NPNVsupportsUpdatedCocoaTextInputBool" title='NPNVsupportsUpdatedCocoaTextInputBool' data-ref="NPNVsupportsUpdatedCocoaTextInputBool" data-ref-filename="NPNVsupportsUpdatedCocoaTextInputBool">NPNVsupportsUpdatedCocoaTextInputBool</dfn> = <var>3002</var> <i>/* TRUE if the browser supports the updated</i></td></tr>
+<tr><th id="431">431</th><td><i>                                                    Cocoa text input specification. */</i></td></tr>
+<tr><th id="432">432</th><td>  , <dfn class="enum" id="NPNVsupportsCompositingCoreAnimationPluginsBool" title='NPNVsupportsCompositingCoreAnimationPluginsBool' data-ref="NPNVsupportsCompositingCoreAnimationPluginsBool" data-ref-filename="NPNVsupportsCompositingCoreAnimationPluginsBool">NPNVsupportsCompositingCoreAnimationPluginsBool</dfn> = <var>74656</var> <i>/* TRUE if the browser supports</i></td></tr>
+<tr><th id="433">433</th><td><i>                                                               CA model compositing */</i></td></tr>
+<tr><th id="434">434</th><td><u>#<span data-ppcond="416">endif</span> /* XP_MACOSX */</u></td></tr>
+<tr><th id="435">435</th><td></td></tr>
+<tr><th id="436">436</th><td>  , <dfn class="enum" id="NPNVmuteAudioBool" title='NPNVmuteAudioBool' data-ref="NPNVmuteAudioBool" data-ref-filename="NPNVmuteAudioBool">NPNVmuteAudioBool</dfn> = <var>4000</var></td></tr>
+<tr><th id="437">437</th><td></td></tr>
+<tr><th id="438">438</th><td>} <dfn class="typedef" id="NPNVariable" title='NPNVariable' data-type='enum NPNVariable' data-ref="NPNVariable" data-ref-filename="NPNVariable">NPNVariable</dfn>;</td></tr>
+<tr><th id="439">439</th><td></td></tr>
+<tr><th id="440">440</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="441">441</th><td>  <dfn class="enum" id="NPNURLVCookie" title='NPNURLVCookie' data-ref="NPNURLVCookie" data-ref-filename="NPNURLVCookie">NPNURLVCookie</dfn> = <var>501</var>,</td></tr>
+<tr><th id="442">442</th><td>  <dfn class="enum" id="NPNURLVProxy" title='NPNURLVProxy' data-ref="NPNURLVProxy" data-ref-filename="NPNURLVProxy">NPNURLVProxy</dfn></td></tr>
+<tr><th id="443">443</th><td>} <dfn class="typedef" id="NPNURLVariable" title='NPNURLVariable' data-type='enum NPNURLVariable' data-ref="NPNURLVariable" data-ref-filename="NPNURLVariable">NPNURLVariable</dfn>;</td></tr>
+<tr><th id="444">444</th><td></td></tr>
+<tr><th id="445">445</th><td><i>/*</i></td></tr>
+<tr><th id="446">446</th><td><i> * The type of Toolkit the widgets use</i></td></tr>
+<tr><th id="447">447</th><td><i> */</i></td></tr>
+<tr><th id="448">448</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="449">449</th><td>  <dfn class="enum" id="NPNVGtk12" title='NPNVGtk12' data-ref="NPNVGtk12" data-ref-filename="NPNVGtk12">NPNVGtk12</dfn> = <var>1</var>,</td></tr>
+<tr><th id="450">450</th><td>  <dfn class="enum" id="NPNVGtk2" title='NPNVGtk2' data-ref="NPNVGtk2" data-ref-filename="NPNVGtk2">NPNVGtk2</dfn></td></tr>
+<tr><th id="451">451</th><td>} <dfn class="typedef" id="NPNToolkitType" title='NPNToolkitType' data-type='enum NPNToolkitType' data-ref="NPNToolkitType" data-ref-filename="NPNToolkitType">NPNToolkitType</dfn>;</td></tr>
+<tr><th id="452">452</th><td></td></tr>
+<tr><th id="453">453</th><td><i>/*</i></td></tr>
+<tr><th id="454">454</th><td><i> * The type of a NPWindow - it specifies the type of the data structure</i></td></tr>
+<tr><th id="455">455</th><td><i> * returned in the window field.</i></td></tr>
+<tr><th id="456">456</th><td><i> */</i></td></tr>
+<tr><th id="457">457</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="458">458</th><td>  <dfn class="enum" id="NPWindowTypeWindow" title='NPWindowTypeWindow' data-ref="NPWindowTypeWindow" data-ref-filename="NPWindowTypeWindow">NPWindowTypeWindow</dfn> = <var>1</var>,</td></tr>
+<tr><th id="459">459</th><td>  <dfn class="enum" id="NPWindowTypeDrawable" title='NPWindowTypeDrawable' data-ref="NPWindowTypeDrawable" data-ref-filename="NPWindowTypeDrawable">NPWindowTypeDrawable</dfn></td></tr>
+<tr><th id="460">460</th><td>} <dfn class="typedef" id="NPWindowType" title='NPWindowType' data-type='enum NPWindowType' data-ref="NPWindowType" data-ref-filename="NPWindowType">NPWindowType</dfn>;</td></tr>
+<tr><th id="461">461</th><td></td></tr>
+<tr><th id="462">462</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="_NPWindow" title='_NPWindow' data-ref="_NPWindow" data-ref-filename="_NPWindow"><a class="type" href="#_NPWindow" title='_NPWindow' data-ref="_NPWindow" data-ref-filename="_NPWindow">_NPWindow</a></dfn></td></tr>
+<tr><th id="463">463</th><td>{</td></tr>
+<tr><th id="464">464</th><td>  <em>void</em>* <dfn class="decl field" id="_NPWindow::window" title='_NPWindow::window' data-ref="_NPWindow::window" data-ref-filename="_NPWindow..window">window</dfn>;  <i>/* Platform specific window handle */</i></td></tr>
+<tr><th id="465">465</th><td>                 <i>/* OS/2: x - Position of bottom left corner */</i></td></tr>
+<tr><th id="466">466</th><td>                 <i>/* OS/2: y - relative to visible netscape window */</i></td></tr>
+<tr><th id="467">467</th><td>  <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>  <dfn class="decl field" id="_NPWindow::x" title='_NPWindow::x' data-ref="_NPWindow::x" data-ref-filename="_NPWindow..x">x</dfn>;      <i>/* Position of top left corner relative */</i></td></tr>
+<tr><th id="468">468</th><td>  <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>  <dfn class="decl field" id="_NPWindow::y" title='_NPWindow::y' data-ref="_NPWindow::y" data-ref-filename="_NPWindow..y">y</dfn>;      <i>/* to a netscape page. */</i></td></tr>
+<tr><th id="469">469</th><td>  <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="_NPWindow::width" title='_NPWindow::width' data-ref="_NPWindow::width" data-ref-filename="_NPWindow..width">width</dfn>;  <i>/* Maximum window size */</i></td></tr>
+<tr><th id="470">470</th><td>  <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="_NPWindow::height" title='_NPWindow::height' data-ref="_NPWindow::height" data-ref-filename="_NPWindow..height">height</dfn>;</td></tr>
+<tr><th id="471">471</th><td>  <a class="typedef" href="#NPRect" title='NPRect' data-type='struct _NPRect' data-ref="NPRect" data-ref-filename="NPRect">NPRect</a>   <dfn class="decl field" id="_NPWindow::clipRect" title='_NPWindow::clipRect' data-ref="_NPWindow::clipRect" data-ref-filename="_NPWindow..clipRect">clipRect</dfn>; <i>/* Clipping rectangle in port coordinates */</i></td></tr>
+<tr><th id="472">472</th><td><u>#<span data-ppcond="472">if</span> defined(<span class="macro" data-ref="_M/XP_UNIX">XP_UNIX</span>)</u></td></tr>
+<tr><th id="473">473</th><td>  <em>void</em> * ws_info; <i>/* Platform-dependent additonal data */</i></td></tr>
+<tr><th id="474">474</th><td><u>#<span data-ppcond="472">endif</span> /* XP_UNIX */</u></td></tr>
+<tr><th id="475">475</th><td>  <a class="typedef" href="#NPWindowType" title='NPWindowType' data-type='enum NPWindowType' data-ref="NPWindowType" data-ref-filename="NPWindowType">NPWindowType</a> <dfn class="decl field" id="_NPWindow::type" title='_NPWindow::type' data-ref="_NPWindow::type" data-ref-filename="_NPWindow..type">type</dfn>; <i>/* Is this a window or a drawable? */</i></td></tr>
+<tr><th id="476">476</th><td>} <dfn class="typedef" id="NPWindow" title='NPWindow' data-type='struct _NPWindow' data-ref="NPWindow" data-ref-filename="NPWindow">NPWindow</dfn>;</td></tr>
+<tr><th id="477">477</th><td></td></tr>
+<tr><th id="478">478</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="_NPFullPrint" title='_NPFullPrint' data-ref="_NPFullPrint" data-ref-filename="_NPFullPrint"><a class="type" href="#_NPFullPrint" title='_NPFullPrint' data-ref="_NPFullPrint" data-ref-filename="_NPFullPrint">_NPFullPrint</a></dfn></td></tr>
+<tr><th id="479">479</th><td>{</td></tr>
+<tr><th id="480">480</th><td>  <a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a> <dfn class="decl field" id="_NPFullPrint::pluginPrinted" title='_NPFullPrint::pluginPrinted' data-ref="_NPFullPrint::pluginPrinted" data-ref-filename="_NPFullPrint..pluginPrinted">pluginPrinted</dfn>;<i>/* Set TRUE if plugin handled fullscreen printing */</i></td></tr>
+<tr><th id="481">481</th><td>  <a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a> <dfn class="decl field" id="_NPFullPrint::printOne" title='_NPFullPrint::printOne' data-ref="_NPFullPrint::printOne" data-ref-filename="_NPFullPrint..printOne">printOne</dfn>;     <i>/* TRUE if plugin should print one copy to default</i></td></tr>
+<tr><th id="482">482</th><td><i>                          printer */</i></td></tr>
+<tr><th id="483">483</th><td>  <em>void</em>* <dfn class="decl field" id="_NPFullPrint::platformPrint" title='_NPFullPrint::platformPrint' data-ref="_NPFullPrint::platformPrint" data-ref-filename="_NPFullPrint..platformPrint">platformPrint</dfn>; <i>/* Platform-specific printing info */</i></td></tr>
+<tr><th id="484">484</th><td>} <dfn class="typedef" id="NPFullPrint" title='NPFullPrint' data-type='struct _NPFullPrint' data-ref="NPFullPrint" data-ref-filename="NPFullPrint">NPFullPrint</dfn>;</td></tr>
+<tr><th id="485">485</th><td></td></tr>
+<tr><th id="486">486</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="_NPEmbedPrint" title='_NPEmbedPrint' data-ref="_NPEmbedPrint" data-ref-filename="_NPEmbedPrint"><a class="type" href="#_NPEmbedPrint" title='_NPEmbedPrint' data-ref="_NPEmbedPrint" data-ref-filename="_NPEmbedPrint">_NPEmbedPrint</a></dfn></td></tr>
+<tr><th id="487">487</th><td>{</td></tr>
+<tr><th id="488">488</th><td>  <a class="typedef" href="#NPWindow" title='NPWindow' data-type='struct _NPWindow' data-ref="NPWindow" data-ref-filename="NPWindow">NPWindow</a> <dfn class="decl field" id="_NPEmbedPrint::window" title='_NPEmbedPrint::window' data-ref="_NPEmbedPrint::window" data-ref-filename="_NPEmbedPrint..window">window</dfn>;</td></tr>
+<tr><th id="489">489</th><td>  <em>void</em>* <dfn class="decl field" id="_NPEmbedPrint::platformPrint" title='_NPEmbedPrint::platformPrint' data-ref="_NPEmbedPrint::platformPrint" data-ref-filename="_NPEmbedPrint..platformPrint">platformPrint</dfn>; <i>/* Platform-specific printing info */</i></td></tr>
+<tr><th id="490">490</th><td>} <dfn class="typedef" id="NPEmbedPrint" title='NPEmbedPrint' data-type='struct _NPEmbedPrint' data-ref="NPEmbedPrint" data-ref-filename="NPEmbedPrint">NPEmbedPrint</dfn>;</td></tr>
+<tr><th id="491">491</th><td></td></tr>
+<tr><th id="492">492</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="_NPPrint" title='_NPPrint' data-ref="_NPPrint" data-ref-filename="_NPPrint"><a class="type" href="#_NPPrint" title='_NPPrint' data-ref="_NPPrint" data-ref-filename="_NPPrint">_NPPrint</a></dfn></td></tr>
+<tr><th id="493">493</th><td>{</td></tr>
+<tr><th id="494">494</th><td>  <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="decl field" id="_NPPrint::mode" title='_NPPrint::mode' data-ref="_NPPrint::mode" data-ref-filename="_NPPrint..mode">mode</dfn>;               <i>/* NP_FULL or NP_EMBED */</i></td></tr>
+<tr><th id="495">495</th><td>  <b>union</b></td></tr>
+<tr><th id="496">496</th><td>  {</td></tr>
+<tr><th id="497">497</th><td>    <a class="typedef" href="#NPFullPrint" title='NPFullPrint' data-type='struct _NPFullPrint' data-ref="NPFullPrint" data-ref-filename="NPFullPrint">NPFullPrint</a> <dfn class="decl field" id="_NPPrint::(anonymous)::fullPrint" title='_NPPrint::(anonymous union)::fullPrint' data-ref="_NPPrint::(anonymous)::fullPrint" data-ref-filename="_NPPrint..(anonymous)..fullPrint">fullPrint</dfn>;   <i>/* if mode is NP_FULL */</i></td></tr>
+<tr><th id="498">498</th><td>    <a class="typedef" href="#NPEmbedPrint" title='NPEmbedPrint' data-type='struct _NPEmbedPrint' data-ref="NPEmbedPrint" data-ref-filename="NPEmbedPrint">NPEmbedPrint</a> <dfn class="decl field" id="_NPPrint::(anonymous)::embedPrint" title='_NPPrint::(anonymous union)::embedPrint' data-ref="_NPPrint::(anonymous)::embedPrint" data-ref-filename="_NPPrint..(anonymous)..embedPrint">embedPrint</dfn>; <i>/* if mode is NP_EMBED */</i></td></tr>
+<tr><th id="499">499</th><td>  } <dfn class="decl field" id="_NPPrint::print" title='_NPPrint::print' data-ref="_NPPrint::print" data-ref-filename="_NPPrint..print">print</dfn>;</td></tr>
+<tr><th id="500">500</th><td>} <dfn class="typedef" id="NPPrint" title='NPPrint' data-type='struct _NPPrint' data-ref="NPPrint" data-ref-filename="NPPrint">NPPrint</dfn>;</td></tr>
+<tr><th id="501">501</th><td></td></tr>
+<tr><th id="502">502</th><td><u>#<span data-ppcond="502">if</span> defined(<a class="macro" href="#69" data-ref="_M/XP_MACOSX">XP_MACOSX</a>)</u></td></tr>
+<tr><th id="503">503</th><td><u>#<span data-ppcond="503">ifndef</span> <a class="macro" href="#75" data-ref="_M/NP_NO_CARBON">NP_NO_CARBON</a></u></td></tr>
+<tr><th id="504">504</th><td><b>typedef</b> EventRecord NPEvent;</td></tr>
+<tr><th id="505">505</th><td><u>#<span data-ppcond="503">else</span></u></td></tr>
+<tr><th id="506">506</th><td><b>typedef</b> <em>void</em>*  <dfn class="typedef" id="NPEvent" title='NPEvent' data-type='void *' data-ref="NPEvent" data-ref-filename="NPEvent">NPEvent</dfn>;</td></tr>
+<tr><th id="507">507</th><td><u>#<span data-ppcond="503">endif</span></u></td></tr>
+<tr><th id="508">508</th><td><u>#<span data-ppcond="502">elif</span> defined(XP_WIN)</u></td></tr>
+<tr><th id="509">509</th><td><b>typedef</b> <b>struct</b> _NPEvent</td></tr>
+<tr><th id="510">510</th><td>{</td></tr>
+<tr><th id="511">511</th><td>  uint16_t event;</td></tr>
+<tr><th id="512">512</th><td>  uintptr_t wParam;</td></tr>
+<tr><th id="513">513</th><td>  uintptr_t lParam;</td></tr>
+<tr><th id="514">514</th><td>} NPEvent;</td></tr>
+<tr><th id="515">515</th><td><u>#elif defined(XP_OS2)</u></td></tr>
+<tr><th id="516">516</th><td><b>typedef</b> <b>struct</b> _NPEvent</td></tr>
+<tr><th id="517">517</th><td>{</td></tr>
+<tr><th id="518">518</th><td>  uint32_t event;</td></tr>
+<tr><th id="519">519</th><td>  uint32_t wParam;</td></tr>
+<tr><th id="520">520</th><td>  uint32_t lParam;</td></tr>
+<tr><th id="521">521</th><td>} NPEvent;</td></tr>
+<tr><th id="522">522</th><td><u>#elif defined(XP_UNIX) &amp;&amp; defined(MOZ_X11)</u></td></tr>
+<tr><th id="523">523</th><td><b>typedef</b> XEvent NPEvent;</td></tr>
+<tr><th id="524">524</th><td><u>#else</u></td></tr>
+<tr><th id="525">525</th><td><b>typedef</b> <em>void</em>*  NPEvent;</td></tr>
+<tr><th id="526">526</th><td><u>#<span data-ppcond="502">endif</span></u></td></tr>
+<tr><th id="527">527</th><td></td></tr>
+<tr><th id="528">528</th><td><u>#<span data-ppcond="528">if</span> defined(<a class="macro" href="#69" data-ref="_M/XP_MACOSX">XP_MACOSX</a>)</u></td></tr>
+<tr><th id="529">529</th><td><b>typedef</b> <em>void</em>* <dfn class="typedef" id="NPRegion" title='NPRegion' data-type='void *' data-ref="NPRegion" data-ref-filename="NPRegion">NPRegion</dfn>;</td></tr>
+<tr><th id="530">530</th><td><u>#<span data-ppcond="530">ifndef</span> <a class="macro" href="#74" data-ref="_M/NP_NO_QUICKDRAW">NP_NO_QUICKDRAW</a></u></td></tr>
+<tr><th id="531">531</th><td><b>typedef</b> RgnHandle NPQDRegion;</td></tr>
+<tr><th id="532">532</th><td><u>#<span data-ppcond="530">endif</span></u></td></tr>
+<tr><th id="533">533</th><td><b>typedef</b> <span class='typedef' title='CGPathRef' data-type='const struct CGPath *' data-ref="CGPathRef" data-ref-filename="CGPathRef">CGPathRef</span> <dfn class="typedef" id="NPCGRegion" title='NPCGRegion' data-type='CGPathRef' data-ref="NPCGRegion" data-ref-filename="NPCGRegion">NPCGRegion</dfn>;</td></tr>
+<tr><th id="534">534</th><td><u>#<span data-ppcond="528">elif</span> defined(XP_WIN)</u></td></tr>
+<tr><th id="535">535</th><td><b>typedef</b> HRGN NPRegion;</td></tr>
+<tr><th id="536">536</th><td><u>#elif defined(XP_UNIX) &amp;&amp; defined(MOZ_X11)</u></td></tr>
+<tr><th id="537">537</th><td><b>typedef</b> Region NPRegion;</td></tr>
+<tr><th id="538">538</th><td><u>#else</u></td></tr>
+<tr><th id="539">539</th><td><b>typedef</b> <em>void</em> *NPRegion;</td></tr>
+<tr><th id="540">540</th><td><u>#<span data-ppcond="528">endif</span></u></td></tr>
+<tr><th id="541">541</th><td></td></tr>
+<tr><th id="542">542</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="_NPNSString" title='_NPNSString' data-ref="_NPNSString" data-ref-filename="_NPNSString"><a class="type" href="#_NPNSString" title='_NPNSString' data-ref="_NPNSString" data-ref-filename="_NPNSString">_NPNSString</a></dfn> <dfn class="typedef" id="NPNSString" title='NPNSString' data-type='struct _NPNSString' data-ref="NPNSString" data-ref-filename="NPNSString">NPNSString</dfn>;</td></tr>
+<tr><th id="543">543</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="_NPNSWindow" title='_NPNSWindow' data-ref="_NPNSWindow" data-ref-filename="_NPNSWindow"><a class="type" href="#_NPNSWindow" title='_NPNSWindow' data-ref="_NPNSWindow" data-ref-filename="_NPNSWindow">_NPNSWindow</a></dfn> <dfn class="typedef" id="NPNSWindow" title='NPNSWindow' data-type='struct _NPNSWindow' data-ref="NPNSWindow" data-ref-filename="NPNSWindow">NPNSWindow</dfn>;</td></tr>
+<tr><th id="544">544</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="_NPNSMenu" title='_NPNSMenu' data-ref="_NPNSMenu" data-ref-filename="_NPNSMenu"><a class="type" href="#_NPNSMenu" title='_NPNSMenu' data-ref="_NPNSMenu" data-ref-filename="_NPNSMenu">_NPNSMenu</a></dfn>   <dfn class="typedef" id="NPNSMenu" title='NPNSMenu' data-type='struct _NPNSMenu' data-ref="NPNSMenu" data-ref-filename="NPNSMenu">NPNSMenu</dfn>;</td></tr>
+<tr><th id="545">545</th><td></td></tr>
+<tr><th id="546">546</th><td><u>#<span data-ppcond="546">if</span> defined(<a class="macro" href="#69" data-ref="_M/XP_MACOSX">XP_MACOSX</a>)</u></td></tr>
+<tr><th id="547">547</th><td><b>typedef</b> <a class="typedef" href="#NPNSMenu" title='NPNSMenu' data-type='struct _NPNSMenu' data-ref="NPNSMenu" data-ref-filename="NPNSMenu">NPNSMenu</a> <dfn class="typedef" id="NPMenu" title='NPMenu' data-type='NPNSMenu' data-ref="NPMenu" data-ref-filename="NPMenu">NPMenu</dfn>;</td></tr>
+<tr><th id="548">548</th><td><u>#<span data-ppcond="546">else</span></u></td></tr>
+<tr><th id="549">549</th><td><b>typedef</b> <em>void</em> *NPMenu;</td></tr>
+<tr><th id="550">550</th><td><u>#<span data-ppcond="546">endif</span></u></td></tr>
+<tr><th id="551">551</th><td></td></tr>
+<tr><th id="552">552</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="553">553</th><td>  <dfn class="enum" id="NPCoordinateSpacePlugin" title='NPCoordinateSpacePlugin' data-ref="NPCoordinateSpacePlugin" data-ref-filename="NPCoordinateSpacePlugin">NPCoordinateSpacePlugin</dfn> = <var>1</var>,</td></tr>
+<tr><th id="554">554</th><td>  <dfn class="enum" id="NPCoordinateSpaceWindow" title='NPCoordinateSpaceWindow' data-ref="NPCoordinateSpaceWindow" data-ref-filename="NPCoordinateSpaceWindow">NPCoordinateSpaceWindow</dfn>,</td></tr>
+<tr><th id="555">555</th><td>  <dfn class="enum" id="NPCoordinateSpaceFlippedWindow" title='NPCoordinateSpaceFlippedWindow' data-ref="NPCoordinateSpaceFlippedWindow" data-ref-filename="NPCoordinateSpaceFlippedWindow">NPCoordinateSpaceFlippedWindow</dfn>,</td></tr>
+<tr><th id="556">556</th><td>  <dfn class="enum" id="NPCoordinateSpaceScreen" title='NPCoordinateSpaceScreen' data-ref="NPCoordinateSpaceScreen" data-ref-filename="NPCoordinateSpaceScreen">NPCoordinateSpaceScreen</dfn>,</td></tr>
+<tr><th id="557">557</th><td>  <dfn class="enum" id="NPCoordinateSpaceFlippedScreen" title='NPCoordinateSpaceFlippedScreen' data-ref="NPCoordinateSpaceFlippedScreen" data-ref-filename="NPCoordinateSpaceFlippedScreen">NPCoordinateSpaceFlippedScreen</dfn></td></tr>
+<tr><th id="558">558</th><td>} <dfn class="typedef" id="NPCoordinateSpace" title='NPCoordinateSpace' data-type='enum NPCoordinateSpace' data-ref="NPCoordinateSpace" data-ref-filename="NPCoordinateSpace">NPCoordinateSpace</dfn>;</td></tr>
+<tr><th id="559">559</th><td></td></tr>
+<tr><th id="560">560</th><td><u>#<span data-ppcond="560">if</span> defined(<a class="macro" href="#69" data-ref="_M/XP_MACOSX">XP_MACOSX</a>)</u></td></tr>
+<tr><th id="561">561</th><td></td></tr>
+<tr><th id="562">562</th><td><u>#<span data-ppcond="562">ifndef</span> <a class="macro" href="#74" data-ref="_M/NP_NO_QUICKDRAW">NP_NO_QUICKDRAW</a></u></td></tr>
+<tr><th id="563">563</th><td><b>typedef</b> <b>struct</b> NP_Port</td></tr>
+<tr><th id="564">564</th><td>{</td></tr>
+<tr><th id="565">565</th><td>  CGrafPtr port;</td></tr>
+<tr><th id="566">566</th><td>  int32_t portx; <i>/* position inside the topmost window */</i></td></tr>
+<tr><th id="567">567</th><td>  int32_t porty;</td></tr>
+<tr><th id="568">568</th><td>} NP_Port;</td></tr>
+<tr><th id="569">569</th><td><u>#<span data-ppcond="562">endif</span> /* NP_NO_QUICKDRAW */</u></td></tr>
+<tr><th id="570">570</th><td></td></tr>
+<tr><th id="571">571</th><td><i>/*</i></td></tr>
+<tr><th id="572">572</th><td><i> * NP_CGContext is the type of the NPWindow's 'window' when the plugin specifies NPDrawingModelCoreGraphics</i></td></tr>
+<tr><th id="573">573</th><td><i> * as its drawing model.</i></td></tr>
+<tr><th id="574">574</th><td><i> */</i></td></tr>
+<tr><th id="575">575</th><td></td></tr>
+<tr><th id="576">576</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="NP_CGContext" title='NP_CGContext' data-ref="NP_CGContext" data-ref-filename="NP_CGContext"><a class="type" href="#NP_CGContext" title='NP_CGContext' data-ref="NP_CGContext" data-ref-filename="NP_CGContext">NP_CGContext</a></dfn></td></tr>
+<tr><th id="577">577</th><td>{</td></tr>
+<tr><th id="578">578</th><td>  <span class='typedef' title='CGContextRef' data-type='struct CGContext *' data-ref="CGContextRef" data-ref-filename="CGContextRef">CGContextRef</span> <dfn class="decl field" id="NP_CGContext::context" title='NP_CGContext::context' data-ref="NP_CGContext::context" data-ref-filename="NP_CGContext..context">context</dfn>;</td></tr>
+<tr><th id="579">579</th><td><u>#<span data-ppcond="579">ifdef</span> <a class="macro" href="#75" data-ref="_M/NP_NO_CARBON">NP_NO_CARBON</a></u></td></tr>
+<tr><th id="580">580</th><td>  <a class="typedef" href="#NPNSWindow" title='NPNSWindow' data-type='struct _NPNSWindow' data-ref="NPNSWindow" data-ref-filename="NPNSWindow">NPNSWindow</a> *<dfn class="decl field" id="NP_CGContext::window" title='NP_CGContext::window' data-ref="NP_CGContext::window" data-ref-filename="NP_CGContext..window">window</dfn>;</td></tr>
+<tr><th id="581">581</th><td><u>#<span data-ppcond="579">else</span></u></td></tr>
+<tr><th id="582">582</th><td>  <em>void</em> *window; <i>/* A WindowRef or NULL for the Cocoa event model. */</i></td></tr>
+<tr><th id="583">583</th><td><u>#<span data-ppcond="579">endif</span></u></td></tr>
+<tr><th id="584">584</th><td>} <dfn class="typedef" id="NP_CGContext" title='NP_CGContext' data-type='struct NP_CGContext' data-ref="NP_CGContext" data-ref-filename="NP_CGContext">NP_CGContext</dfn>;</td></tr>
+<tr><th id="585">585</th><td></td></tr>
+<tr><th id="586">586</th><td><b>typedef</b> <b>enum</b> {</td></tr>
+<tr><th id="587">587</th><td>  <dfn class="enum" id="NPCocoaEventDrawRect" title='NPCocoaEventDrawRect' data-ref="NPCocoaEventDrawRect" data-ref-filename="NPCocoaEventDrawRect">NPCocoaEventDrawRect</dfn> = <var>1</var>,</td></tr>
+<tr><th id="588">588</th><td>  <dfn class="enum" id="NPCocoaEventMouseDown" title='NPCocoaEventMouseDown' data-ref="NPCocoaEventMouseDown" data-ref-filename="NPCocoaEventMouseDown">NPCocoaEventMouseDown</dfn>,</td></tr>
+<tr><th id="589">589</th><td>  <dfn class="enum" id="NPCocoaEventMouseUp" title='NPCocoaEventMouseUp' data-ref="NPCocoaEventMouseUp" data-ref-filename="NPCocoaEventMouseUp">NPCocoaEventMouseUp</dfn>,</td></tr>
+<tr><th id="590">590</th><td>  <dfn class="enum" id="NPCocoaEventMouseMoved" title='NPCocoaEventMouseMoved' data-ref="NPCocoaEventMouseMoved" data-ref-filename="NPCocoaEventMouseMoved">NPCocoaEventMouseMoved</dfn>,</td></tr>
+<tr><th id="591">591</th><td>  <dfn class="enum" id="NPCocoaEventMouseEntered" title='NPCocoaEventMouseEntered' data-ref="NPCocoaEventMouseEntered" data-ref-filename="NPCocoaEventMouseEntered">NPCocoaEventMouseEntered</dfn>,</td></tr>
+<tr><th id="592">592</th><td>  <dfn class="enum" id="NPCocoaEventMouseExited" title='NPCocoaEventMouseExited' data-ref="NPCocoaEventMouseExited" data-ref-filename="NPCocoaEventMouseExited">NPCocoaEventMouseExited</dfn>,</td></tr>
+<tr><th id="593">593</th><td>  <dfn class="enum" id="NPCocoaEventMouseDragged" title='NPCocoaEventMouseDragged' data-ref="NPCocoaEventMouseDragged" data-ref-filename="NPCocoaEventMouseDragged">NPCocoaEventMouseDragged</dfn>,</td></tr>
+<tr><th id="594">594</th><td>  <dfn class="enum" id="NPCocoaEventKeyDown" title='NPCocoaEventKeyDown' data-ref="NPCocoaEventKeyDown" data-ref-filename="NPCocoaEventKeyDown">NPCocoaEventKeyDown</dfn>,</td></tr>
+<tr><th id="595">595</th><td>  <dfn class="enum" id="NPCocoaEventKeyUp" title='NPCocoaEventKeyUp' data-ref="NPCocoaEventKeyUp" data-ref-filename="NPCocoaEventKeyUp">NPCocoaEventKeyUp</dfn>,</td></tr>
+<tr><th id="596">596</th><td>  <dfn class="enum" id="NPCocoaEventFlagsChanged" title='NPCocoaEventFlagsChanged' data-ref="NPCocoaEventFlagsChanged" data-ref-filename="NPCocoaEventFlagsChanged">NPCocoaEventFlagsChanged</dfn>,</td></tr>
+<tr><th id="597">597</th><td>  <dfn class="enum" id="NPCocoaEventFocusChanged" title='NPCocoaEventFocusChanged' data-ref="NPCocoaEventFocusChanged" data-ref-filename="NPCocoaEventFocusChanged">NPCocoaEventFocusChanged</dfn>,</td></tr>
+<tr><th id="598">598</th><td>  <dfn class="enum" id="NPCocoaEventWindowFocusChanged" title='NPCocoaEventWindowFocusChanged' data-ref="NPCocoaEventWindowFocusChanged" data-ref-filename="NPCocoaEventWindowFocusChanged">NPCocoaEventWindowFocusChanged</dfn>,</td></tr>
+<tr><th id="599">599</th><td>  <dfn class="enum" id="NPCocoaEventScrollWheel" title='NPCocoaEventScrollWheel' data-ref="NPCocoaEventScrollWheel" data-ref-filename="NPCocoaEventScrollWheel">NPCocoaEventScrollWheel</dfn>,</td></tr>
+<tr><th id="600">600</th><td>  <dfn class="enum" id="NPCocoaEventTextInput" title='NPCocoaEventTextInput' data-ref="NPCocoaEventTextInput" data-ref-filename="NPCocoaEventTextInput">NPCocoaEventTextInput</dfn></td></tr>
+<tr><th id="601">601</th><td>} <dfn class="typedef" id="NPCocoaEventType" title='NPCocoaEventType' data-type='enum NPCocoaEventType' data-ref="NPCocoaEventType" data-ref-filename="NPCocoaEventType">NPCocoaEventType</dfn>;</td></tr>
+<tr><th id="602">602</th><td></td></tr>
+<tr><th id="603">603</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="_NPCocoaEvent" title='_NPCocoaEvent' data-ref="_NPCocoaEvent" data-ref-filename="_NPCocoaEvent"><a class="type" href="#_NPCocoaEvent" title='_NPCocoaEvent' data-ref="_NPCocoaEvent" data-ref-filename="_NPCocoaEvent">_NPCocoaEvent</a></dfn> {</td></tr>
+<tr><th id="604">604</th><td>  <a class="typedef" href="#NPCocoaEventType" title='NPCocoaEventType' data-type='enum NPCocoaEventType' data-ref="NPCocoaEventType" data-ref-filename="NPCocoaEventType">NPCocoaEventType</a> <dfn class="decl field" id="_NPCocoaEvent::type" title='_NPCocoaEvent::type' data-ref="_NPCocoaEvent::type" data-ref-filename="_NPCocoaEvent..type">type</dfn>;</td></tr>
+<tr><th id="605">605</th><td>  <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="_NPCocoaEvent::version" title='_NPCocoaEvent::version' data-ref="_NPCocoaEvent::version" data-ref-filename="_NPCocoaEvent..version">version</dfn>;</td></tr>
+<tr><th id="606">606</th><td>  <b>union</b> {</td></tr>
+<tr><th id="607">607</th><td>    <b>struct</b> {</td></tr>
+<tr><th id="608">608</th><td>      <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::modifierFlags" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::modifierFlags' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::modifierFlags" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..modifierFlags">modifierFlags</dfn>;</td></tr>
+<tr><th id="609">609</th><td>      <em>double</em>   <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::pluginX" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::pluginX' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::pluginX" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..pluginX">pluginX</dfn>;</td></tr>
+<tr><th id="610">610</th><td>      <em>double</em>   <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::pluginY" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::pluginY' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::pluginY" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..pluginY">pluginY</dfn>;</td></tr>
+<tr><th id="611">611</th><td>      <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>  <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::buttonNumber" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::buttonNumber' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::buttonNumber" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..buttonNumber">buttonNumber</dfn>;</td></tr>
+<tr><th id="612">612</th><td>      <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>  <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::clickCount" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::clickCount' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::clickCount" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..clickCount">clickCount</dfn>;</td></tr>
+<tr><th id="613">613</th><td>      <em>double</em>   <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::deltaX" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::deltaX' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::deltaX" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..deltaX">deltaX</dfn>;</td></tr>
+<tr><th id="614">614</th><td>      <em>double</em>   <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::deltaY" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::deltaY' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::deltaY" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..deltaY">deltaY</dfn>;</td></tr>
+<tr><th id="615">615</th><td>      <em>double</em>   <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::deltaZ" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::deltaZ' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::deltaZ" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..deltaZ">deltaZ</dfn>;</td></tr>
+<tr><th id="616">616</th><td>    } <dfn class="decl field" id="_NPCocoaEvent::(anonymous)::mouse" title='_NPCocoaEvent::(anonymous union)::mouse' data-ref="_NPCocoaEvent::(anonymous)::mouse" data-ref-filename="_NPCocoaEvent..(anonymous)..mouse">mouse</dfn>;</td></tr>
+<tr><th id="617">617</th><td>    <b>struct</b> {</td></tr>
+<tr><th id="618">618</th><td>      <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span>    <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::modifierFlags" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::modifierFlags' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::modifierFlags" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..modifierFlags">modifierFlags</dfn>;</td></tr>
+<tr><th id="619">619</th><td>      <a class="typedef" href="#NPNSString" title='NPNSString' data-type='struct _NPNSString' data-ref="NPNSString" data-ref-filename="NPNSString">NPNSString</a> *<dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::characters" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::characters' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::characters" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..characters">characters</dfn>;</td></tr>
+<tr><th id="620">620</th><td>      <a class="typedef" href="#NPNSString" title='NPNSString' data-type='struct _NPNSString' data-ref="NPNSString" data-ref-filename="NPNSString">NPNSString</a> *<dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::charactersIgnoringModifiers" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::charactersIgnoringModifiers' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::charactersIgnoringModifiers" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..charactersIgnoringModifiers">charactersIgnoringModifiers</dfn>;</td></tr>
+<tr><th id="621">621</th><td>      <a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a>      <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::isARepeat" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::isARepeat' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::isARepeat" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..isARepeat">isARepeat</dfn>;</td></tr>
+<tr><th id="622">622</th><td>      <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>    <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::keyCode" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::keyCode' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::keyCode" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..keyCode">keyCode</dfn>;</td></tr>
+<tr><th id="623">623</th><td>    } <dfn class="decl field" id="_NPCocoaEvent::(anonymous)::key" title='_NPCocoaEvent::(anonymous union)::key' data-ref="_NPCocoaEvent::(anonymous)::key" data-ref-filename="_NPCocoaEvent..(anonymous)..key">key</dfn>;</td></tr>
+<tr><th id="624">624</th><td>    <b>struct</b> {</td></tr>
+<tr><th id="625">625</th><td>      <span class='typedef' title='CGContextRef' data-type='struct CGContext *' data-ref="CGContextRef" data-ref-filename="CGContextRef">CGContextRef</span> <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::context" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::context' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::context" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..context">context</dfn>;</td></tr>
+<tr><th id="626">626</th><td>      <em>double</em> <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::x" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::x' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::x" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..x">x</dfn>;</td></tr>
+<tr><th id="627">627</th><td>      <em>double</em> <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::y" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::y' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::y" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..y">y</dfn>;</td></tr>
+<tr><th id="628">628</th><td>      <em>double</em> <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::width" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::width' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::width" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..width">width</dfn>;</td></tr>
+<tr><th id="629">629</th><td>      <em>double</em> <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::height" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::height' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::height" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..height">height</dfn>;</td></tr>
+<tr><th id="630">630</th><td>    } <dfn class="decl field" id="_NPCocoaEvent::(anonymous)::draw" title='_NPCocoaEvent::(anonymous union)::draw' data-ref="_NPCocoaEvent::(anonymous)::draw" data-ref-filename="_NPCocoaEvent..(anonymous)..draw">draw</dfn>;</td></tr>
+<tr><th id="631">631</th><td>    <b>struct</b> {</td></tr>
+<tr><th id="632">632</th><td>      <a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a> <dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::hasFocus" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::hasFocus' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::hasFocus" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..hasFocus">hasFocus</dfn>;</td></tr>
+<tr><th id="633">633</th><td>    } <dfn class="decl field" id="_NPCocoaEvent::(anonymous)::focus" title='_NPCocoaEvent::(anonymous union)::focus' data-ref="_NPCocoaEvent::(anonymous)::focus" data-ref-filename="_NPCocoaEvent..(anonymous)..focus">focus</dfn>;</td></tr>
+<tr><th id="634">634</th><td>    <b>struct</b> {</td></tr>
+<tr><th id="635">635</th><td>      <a class="typedef" href="#NPNSString" title='NPNSString' data-type='struct _NPNSString' data-ref="NPNSString" data-ref-filename="NPNSString">NPNSString</a> *<dfn class="decl field" id="_NPCocoaEvent::(anonymousunion)::(anonymous)::text" title='_NPCocoaEvent::(anonymous union)::(anonymous struct)::text' data-ref="_NPCocoaEvent::(anonymousunion)::(anonymous)::text" data-ref-filename="_NPCocoaEvent..(anonymousunion)..(anonymous)..text">text</dfn>;</td></tr>
+<tr><th id="636">636</th><td>    } <dfn class="decl field" id="_NPCocoaEvent::(anonymous)::text" title='_NPCocoaEvent::(anonymous union)::text' data-ref="_NPCocoaEvent::(anonymous)::text" data-ref-filename="_NPCocoaEvent..(anonymous)..text">text</dfn>;</td></tr>
+<tr><th id="637">637</th><td>  } <dfn class="decl field" id="_NPCocoaEvent::data" title='_NPCocoaEvent::data' data-ref="_NPCocoaEvent::data" data-ref-filename="_NPCocoaEvent..data">data</dfn>;</td></tr>
+<tr><th id="638">638</th><td>} <dfn class="typedef" id="NPCocoaEvent" title='NPCocoaEvent' data-type='struct _NPCocoaEvent' data-ref="NPCocoaEvent" data-ref-filename="NPCocoaEvent">NPCocoaEvent</dfn>;</td></tr>
+<tr><th id="639">639</th><td></td></tr>
+<tr><th id="640">640</th><td><u>#<span data-ppcond="640">ifndef</span> <a class="macro" href="#75" data-ref="_M/NP_NO_CARBON">NP_NO_CARBON</a></u></td></tr>
+<tr><th id="641">641</th><td><i>/* Non-standard event types that can be passed to HandleEvent */</i></td></tr>
+<tr><th id="642">642</th><td><b>enum</b> NPEventType {</td></tr>
+<tr><th id="643">643</th><td>  NPEventType_GetFocusEvent = (osEvt + <var>16</var>),</td></tr>
+<tr><th id="644">644</th><td>  NPEventType_LoseFocusEvent,</td></tr>
+<tr><th id="645">645</th><td>  NPEventType_AdjustCursorEvent,</td></tr>
+<tr><th id="646">646</th><td>  NPEventType_MenuCommandEvent,</td></tr>
+<tr><th id="647">647</th><td>  NPEventType_ClippingChangedEvent,</td></tr>
+<tr><th id="648">648</th><td>  NPEventType_ScrollingBeginsEvent = <var>1000</var>,</td></tr>
+<tr><th id="649">649</th><td>  NPEventType_ScrollingEndsEvent</td></tr>
+<tr><th id="650">650</th><td>};</td></tr>
+<tr><th id="651">651</th><td><u>#<span data-ppcond="640">endif</span> /* NP_NO_CARBON */</u></td></tr>
+<tr><th id="652">652</th><td></td></tr>
+<tr><th id="653">653</th><td><u>#<span data-ppcond="560">endif</span> /* XP_MACOSX */</u></td></tr>
+<tr><th id="654">654</th><td></td></tr>
+<tr><th id="655">655</th><td><i>/*</i></td></tr>
+<tr><th id="656">656</th><td><i> * Values for mode passed to NPP_New:</i></td></tr>
+<tr><th id="657">657</th><td><i> */</i></td></tr>
+<tr><th id="658">658</th><td><u>#define <dfn class="macro" id="_M/NP_EMBED" data-ref="_M/NP_EMBED">NP_EMBED</dfn> 1</u></td></tr>
+<tr><th id="659">659</th><td><u>#define <dfn class="macro" id="_M/NP_FULL" data-ref="_M/NP_FULL">NP_FULL</dfn>  2</u></td></tr>
+<tr><th id="660">660</th><td></td></tr>
+<tr><th id="661">661</th><td><i>/*</i></td></tr>
+<tr><th id="662">662</th><td><i> * Values for stream type passed to NPP_NewStream:</i></td></tr>
+<tr><th id="663">663</th><td><i> */</i></td></tr>
+<tr><th id="664">664</th><td><u>#define <dfn class="macro" id="_M/NP_NORMAL" data-ref="_M/NP_NORMAL">NP_NORMAL</dfn>     1</u></td></tr>
+<tr><th id="665">665</th><td><u>#define <dfn class="macro" id="_M/NP_SEEK" data-ref="_M/NP_SEEK">NP_SEEK</dfn>       2</u></td></tr>
+<tr><th id="666">666</th><td><u>#define <dfn class="macro" id="_M/NP_ASFILE" data-ref="_M/NP_ASFILE">NP_ASFILE</dfn>     3</u></td></tr>
+<tr><th id="667">667</th><td><u>#define <dfn class="macro" id="_M/NP_ASFILEONLY" data-ref="_M/NP_ASFILEONLY">NP_ASFILEONLY</dfn> 4</u></td></tr>
+<tr><th id="668">668</th><td></td></tr>
+<tr><th id="669">669</th><td><u>#define <dfn class="macro" id="_M/NP_MAXREADY" data-ref="_M/NP_MAXREADY">NP_MAXREADY</dfn> (((unsigned)(~0)&lt;&lt;1)&gt;&gt;1)</u></td></tr>
+<tr><th id="670">670</th><td></td></tr>
+<tr><th id="671">671</th><td><i>/*</i></td></tr>
+<tr><th id="672">672</th><td><i> * Flags for NPP_ClearSiteData.</i></td></tr>
+<tr><th id="673">673</th><td><i> */</i></td></tr>
+<tr><th id="674">674</th><td><u>#define <dfn class="macro" id="_M/NP_CLEAR_ALL" data-ref="_M/NP_CLEAR_ALL">NP_CLEAR_ALL</dfn>   0</u></td></tr>
+<tr><th id="675">675</th><td><u>#define <dfn class="macro" id="_M/NP_CLEAR_CACHE" data-ref="_M/NP_CLEAR_CACHE">NP_CLEAR_CACHE</dfn> (1 &lt;&lt; 0)</u></td></tr>
+<tr><th id="676">676</th><td></td></tr>
+<tr><th id="677">677</th><td><u>#<span data-ppcond="677">if</span> !defined(<span class="macro" data-ref="_M/__LP64__">__LP64__</span>)</u></td></tr>
+<tr><th id="678">678</th><td><u>#if defined(XP_MACOSX)</u></td></tr>
+<tr><th id="679">679</th><td><u>#pragma options align=reset</u></td></tr>
+<tr><th id="680">680</th><td><u>#endif</u></td></tr>
+<tr><th id="681">681</th><td><u>#<span data-ppcond="677">endif</span> /* __LP64__ */</u></td></tr>
+<tr><th id="682">682</th><td></td></tr>
+<tr><th id="683">683</th><td><i>/*----------------------------------------------------------------------*/</i></td></tr>
+<tr><th id="684">684</th><td><i>/*       Error and Reason Code definitions                              */</i></td></tr>
+<tr><th id="685">685</th><td><i>/*----------------------------------------------------------------------*/</i></td></tr>
+<tr><th id="686">686</th><td></td></tr>
+<tr><th id="687">687</th><td><i>/*</i></td></tr>
+<tr><th id="688">688</th><td><i> * Values of type NPError:</i></td></tr>
+<tr><th id="689">689</th><td><i> */</i></td></tr>
+<tr><th id="690">690</th><td><u>#define <dfn class="macro" id="_M/NPERR_BASE" data-ref="_M/NPERR_BASE">NPERR_BASE</dfn>                         0</u></td></tr>
+<tr><th id="691">691</th><td><u>#define <dfn class="macro" id="_M/NPERR_NO_ERROR" data-ref="_M/NPERR_NO_ERROR">NPERR_NO_ERROR</dfn>                    (NPERR_BASE + 0)</u></td></tr>
+<tr><th id="692">692</th><td><u>#define <dfn class="macro" id="_M/NPERR_GENERIC_ERROR" data-ref="_M/NPERR_GENERIC_ERROR">NPERR_GENERIC_ERROR</dfn>               (NPERR_BASE + 1)</u></td></tr>
+<tr><th id="693">693</th><td><u>#define <dfn class="macro" id="_M/NPERR_INVALID_INSTANCE_ERROR" data-ref="_M/NPERR_INVALID_INSTANCE_ERROR">NPERR_INVALID_INSTANCE_ERROR</dfn>      (NPERR_BASE + 2)</u></td></tr>
+<tr><th id="694">694</th><td><u>#define <dfn class="macro" id="_M/NPERR_INVALID_FUNCTABLE_ERROR" data-ref="_M/NPERR_INVALID_FUNCTABLE_ERROR">NPERR_INVALID_FUNCTABLE_ERROR</dfn>     (NPERR_BASE + 3)</u></td></tr>
+<tr><th id="695">695</th><td><u>#define <dfn class="macro" id="_M/NPERR_MODULE_LOAD_FAILED_ERROR" data-ref="_M/NPERR_MODULE_LOAD_FAILED_ERROR">NPERR_MODULE_LOAD_FAILED_ERROR</dfn>    (NPERR_BASE + 4)</u></td></tr>
+<tr><th id="696">696</th><td><u>#define <dfn class="macro" id="_M/NPERR_OUT_OF_MEMORY_ERROR" data-ref="_M/NPERR_OUT_OF_MEMORY_ERROR">NPERR_OUT_OF_MEMORY_ERROR</dfn>         (NPERR_BASE + 5)</u></td></tr>
+<tr><th id="697">697</th><td><u>#define <dfn class="macro" id="_M/NPERR_INVALID_PLUGIN_ERROR" data-ref="_M/NPERR_INVALID_PLUGIN_ERROR">NPERR_INVALID_PLUGIN_ERROR</dfn>        (NPERR_BASE + 6)</u></td></tr>
+<tr><th id="698">698</th><td><u>#define <dfn class="macro" id="_M/NPERR_INVALID_PLUGIN_DIR_ERROR" data-ref="_M/NPERR_INVALID_PLUGIN_DIR_ERROR">NPERR_INVALID_PLUGIN_DIR_ERROR</dfn>    (NPERR_BASE + 7)</u></td></tr>
+<tr><th id="699">699</th><td><u>#define <dfn class="macro" id="_M/NPERR_INCOMPATIBLE_VERSION_ERROR" data-ref="_M/NPERR_INCOMPATIBLE_VERSION_ERROR">NPERR_INCOMPATIBLE_VERSION_ERROR</dfn>  (NPERR_BASE + 8)</u></td></tr>
+<tr><th id="700">700</th><td><u>#define <dfn class="macro" id="_M/NPERR_INVALID_PARAM" data-ref="_M/NPERR_INVALID_PARAM">NPERR_INVALID_PARAM</dfn>               (NPERR_BASE + 9)</u></td></tr>
+<tr><th id="701">701</th><td><u>#define <dfn class="macro" id="_M/NPERR_INVALID_URL" data-ref="_M/NPERR_INVALID_URL">NPERR_INVALID_URL</dfn>                 (NPERR_BASE + 10)</u></td></tr>
+<tr><th id="702">702</th><td><u>#define <dfn class="macro" id="_M/NPERR_FILE_NOT_FOUND" data-ref="_M/NPERR_FILE_NOT_FOUND">NPERR_FILE_NOT_FOUND</dfn>              (NPERR_BASE + 11)</u></td></tr>
+<tr><th id="703">703</th><td><u>#define <dfn class="macro" id="_M/NPERR_NO_DATA" data-ref="_M/NPERR_NO_DATA">NPERR_NO_DATA</dfn>                     (NPERR_BASE + 12)</u></td></tr>
+<tr><th id="704">704</th><td><u>#define <dfn class="macro" id="_M/NPERR_STREAM_NOT_SEEKABLE" data-ref="_M/NPERR_STREAM_NOT_SEEKABLE">NPERR_STREAM_NOT_SEEKABLE</dfn>         (NPERR_BASE + 13)</u></td></tr>
+<tr><th id="705">705</th><td></td></tr>
+<tr><th id="706">706</th><td><i>/*</i></td></tr>
+<tr><th id="707">707</th><td><i> * Values of type NPReason:</i></td></tr>
+<tr><th id="708">708</th><td><i> */</i></td></tr>
+<tr><th id="709">709</th><td><u>#define <dfn class="macro" id="_M/NPRES_BASE" data-ref="_M/NPRES_BASE">NPRES_BASE</dfn>          0</u></td></tr>
+<tr><th id="710">710</th><td><u>#define <dfn class="macro" id="_M/NPRES_DONE" data-ref="_M/NPRES_DONE">NPRES_DONE</dfn>         (NPRES_BASE + 0)</u></td></tr>
+<tr><th id="711">711</th><td><u>#define <dfn class="macro" id="_M/NPRES_NETWORK_ERR" data-ref="_M/NPRES_NETWORK_ERR">NPRES_NETWORK_ERR</dfn>  (NPRES_BASE + 1)</u></td></tr>
+<tr><th id="712">712</th><td><u>#define <dfn class="macro" id="_M/NPRES_USER_BREAK" data-ref="_M/NPRES_USER_BREAK">NPRES_USER_BREAK</dfn>   (NPRES_BASE + 2)</u></td></tr>
+<tr><th id="713">713</th><td></td></tr>
+<tr><th id="714">714</th><td><i>/*</i></td></tr>
+<tr><th id="715">715</th><td><i> * Don't use these obsolete error codes any more.</i></td></tr>
+<tr><th id="716">716</th><td><i> */</i></td></tr>
+<tr><th id="717">717</th><td><u>#define <dfn class="macro" id="_M/NP_NOERR" data-ref="_M/NP_NOERR">NP_NOERR</dfn>  NP_NOERR_is_obsolete_use_NPERR_NO_ERROR</u></td></tr>
+<tr><th id="718">718</th><td><u>#define <dfn class="macro" id="_M/NP_EINVAL" data-ref="_M/NP_EINVAL">NP_EINVAL</dfn> NP_EINVAL_is_obsolete_use_NPERR_GENERIC_ERROR</u></td></tr>
+<tr><th id="719">719</th><td><u>#define <dfn class="macro" id="_M/NP_EABORT" data-ref="_M/NP_EABORT">NP_EABORT</dfn> NP_EABORT_is_obsolete_use_NPRES_USER_BREAK</u></td></tr>
+<tr><th id="720">720</th><td></td></tr>
+<tr><th id="721">721</th><td><i>/*</i></td></tr>
+<tr><th id="722">722</th><td><i> * Version feature information</i></td></tr>
+<tr><th id="723">723</th><td><i> */</i></td></tr>
+<tr><th id="724">724</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_STREAMOUTPUT" data-ref="_M/NPVERS_HAS_STREAMOUTPUT">NPVERS_HAS_STREAMOUTPUT</dfn>             8</u></td></tr>
+<tr><th id="725">725</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_NOTIFICATION" data-ref="_M/NPVERS_HAS_NOTIFICATION">NPVERS_HAS_NOTIFICATION</dfn>             9</u></td></tr>
+<tr><th id="726">726</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_LIVECONNECT" data-ref="_M/NPVERS_HAS_LIVECONNECT">NPVERS_HAS_LIVECONNECT</dfn>              9</u></td></tr>
+<tr><th id="727">727</th><td><u>#define <dfn class="macro" id="_M/NPVERS_WIN16_HAS_LIVECONNECT" data-ref="_M/NPVERS_WIN16_HAS_LIVECONNECT">NPVERS_WIN16_HAS_LIVECONNECT</dfn>        9</u></td></tr>
+<tr><th id="728">728</th><td><u>#define <dfn class="macro" id="_M/NPVERS_68K_HAS_LIVECONNECT" data-ref="_M/NPVERS_68K_HAS_LIVECONNECT">NPVERS_68K_HAS_LIVECONNECT</dfn>          11</u></td></tr>
+<tr><th id="729">729</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_WINDOWLESS" data-ref="_M/NPVERS_HAS_WINDOWLESS">NPVERS_HAS_WINDOWLESS</dfn>               11</u></td></tr>
+<tr><th id="730">730</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_XPCONNECT_SCRIPTING" data-ref="_M/NPVERS_HAS_XPCONNECT_SCRIPTING">NPVERS_HAS_XPCONNECT_SCRIPTING</dfn>      13  /* Not implemented in WebKit */</u></td></tr>
+<tr><th id="731">731</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_NPRUNTIME_SCRIPTING" data-ref="_M/NPVERS_HAS_NPRUNTIME_SCRIPTING">NPVERS_HAS_NPRUNTIME_SCRIPTING</dfn>      14</u></td></tr>
+<tr><th id="732">732</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_FORM_VALUES" data-ref="_M/NPVERS_HAS_FORM_VALUES">NPVERS_HAS_FORM_VALUES</dfn>              15  /* Not implemented in WebKit; see bug 13061 */</u></td></tr>
+<tr><th id="733">733</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_POPUPS_ENABLED_STATE" data-ref="_M/NPVERS_HAS_POPUPS_ENABLED_STATE">NPVERS_HAS_POPUPS_ENABLED_STATE</dfn>     16  /* Not implemented in WebKit */</u></td></tr>
+<tr><th id="734">734</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_RESPONSE_HEADERS" data-ref="_M/NPVERS_HAS_RESPONSE_HEADERS">NPVERS_HAS_RESPONSE_HEADERS</dfn>         17</u></td></tr>
+<tr><th id="735">735</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_NPOBJECT_ENUM" data-ref="_M/NPVERS_HAS_NPOBJECT_ENUM">NPVERS_HAS_NPOBJECT_ENUM</dfn>            18</u></td></tr>
+<tr><th id="736">736</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_PLUGIN_THREAD_ASYNC_CALL" data-ref="_M/NPVERS_HAS_PLUGIN_THREAD_ASYNC_CALL">NPVERS_HAS_PLUGIN_THREAD_ASYNC_CALL</dfn> 19</u></td></tr>
+<tr><th id="737">737</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_ALL_NETWORK_STREAMS" data-ref="_M/NPVERS_HAS_ALL_NETWORK_STREAMS">NPVERS_HAS_ALL_NETWORK_STREAMS</dfn>      20</u></td></tr>
+<tr><th id="738">738</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_URL_AND_AUTH_INFO" data-ref="_M/NPVERS_HAS_URL_AND_AUTH_INFO">NPVERS_HAS_URL_AND_AUTH_INFO</dfn>        21</u></td></tr>
+<tr><th id="739">739</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_PRIVATE_MODE" data-ref="_M/NPVERS_HAS_PRIVATE_MODE">NPVERS_HAS_PRIVATE_MODE</dfn>             22</u></td></tr>
+<tr><th id="740">740</th><td><u>#define <dfn class="macro" id="_M/NPVERS_MACOSX_HAS_EVENT_MODELS" data-ref="_M/NPVERS_MACOSX_HAS_EVENT_MODELS">NPVERS_MACOSX_HAS_EVENT_MODELS</dfn>      23</u></td></tr>
+<tr><th id="741">741</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_CANCEL_SRC_STREAM" data-ref="_M/NPVERS_HAS_CANCEL_SRC_STREAM">NPVERS_HAS_CANCEL_SRC_STREAM</dfn>        24</u></td></tr>
+<tr><th id="742">742</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_ADVANCED_KEY_HANDLING" data-ref="_M/NPVERS_HAS_ADVANCED_KEY_HANDLING">NPVERS_HAS_ADVANCED_KEY_HANDLING</dfn>    25</u></td></tr>
+<tr><th id="743">743</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_URL_REDIRECT_HANDLING" data-ref="_M/NPVERS_HAS_URL_REDIRECT_HANDLING">NPVERS_HAS_URL_REDIRECT_HANDLING</dfn>    26</u></td></tr>
+<tr><th id="744">744</th><td><u>#define <dfn class="macro" id="_M/NPVERS_HAS_CLEAR_SITE_DATA" data-ref="_M/NPVERS_HAS_CLEAR_SITE_DATA">NPVERS_HAS_CLEAR_SITE_DATA</dfn>          27</u></td></tr>
+<tr><th id="745">745</th><td></td></tr>
+<tr><th id="746">746</th><td><i>/*----------------------------------------------------------------------*/</i></td></tr>
+<tr><th id="747">747</th><td><i>/*                        Function Prototypes                           */</i></td></tr>
+<tr><th id="748">748</th><td><i>/*----------------------------------------------------------------------*/</i></td></tr>
+<tr><th id="749">749</th><td></td></tr>
+<tr><th id="750">750</th><td><u>#<span data-ppcond="750">if</span> defined(<span class="macro" data-ref="_M/__OS2__">__OS2__</span>)</u></td></tr>
+<tr><th id="751">751</th><td><u>#define NP_LOADDS _System</u></td></tr>
+<tr><th id="752">752</th><td><u>#<span data-ppcond="750">else</span></u></td></tr>
+<tr><th id="753">753</th><td><u>#define <dfn class="macro" id="_M/NP_LOADDS" data-ref="_M/NP_LOADDS">NP_LOADDS</dfn></u></td></tr>
+<tr><th id="754">754</th><td><u>#<span data-ppcond="750">endif</span></u></td></tr>
+<tr><th id="755">755</th><td></td></tr>
+<tr><th id="756">756</th><td><u>#<span data-ppcond="756">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="757">757</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="758">758</th><td><u>#<span data-ppcond="756">endif</span></u></td></tr>
+<tr><th id="759">759</th><td></td></tr>
+<tr><th id="760">760</th><td><i>/* NPP_* functions are provided by the plugin and called by the navigator. */</i></td></tr>
+<tr><th id="761">761</th><td></td></tr>
+<tr><th id="762">762</th><td><u>#<span data-ppcond="762">if</span> defined(<span class="macro" data-ref="_M/XP_UNIX">XP_UNIX</span>)</u></td></tr>
+<tr><th id="763">763</th><td><em>const</em> <em>char</em>* NPP_GetMIMEDescription(<em>void</em>);</td></tr>
+<tr><th id="764">764</th><td><u>#<span data-ppcond="762">endif</span></u></td></tr>
+<tr><th id="765">765</th><td></td></tr>
+<tr><th id="766">766</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a> <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_Initialize" title='NPP_Initialize' data-ref="NPP_Initialize" data-ref-filename="NPP_Initialize">NPP_Initialize</dfn>(<em>void</em>);</td></tr>
+<tr><th id="767">767</th><td><em>void</em>    <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_Shutdown" title='NPP_Shutdown' data-ref="NPP_Shutdown" data-ref-filename="NPP_Shutdown">NPP_Shutdown</dfn>(<em>void</em>);</td></tr>
+<tr><th id="768">768</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a> <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_New" title='NPP_New' data-ref="NPP_New" data-ref-filename="NPP_New">NPP_New</dfn>(<a class="typedef" href="#NPMIMEType" title='NPMIMEType' data-type='char *' data-ref="NPMIMEType" data-ref-filename="NPMIMEType">NPMIMEType</a> <dfn class="local col4 decl" id="154pluginType" title='pluginType' data-type='NPMIMEType' data-ref="154pluginType" data-ref-filename="154pluginType">pluginType</dfn>, <a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col5 decl" id="155instance" title='instance' data-type='NPP' data-ref="155instance" data-ref-filename="155instance">instance</dfn>,</td></tr>
+<tr><th id="769">769</th><td>                          <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="local col6 decl" id="156mode" title='mode' data-type='uint16_t' data-ref="156mode" data-ref-filename="156mode">mode</dfn>, <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col7 decl" id="157argc" title='argc' data-type='int16_t' data-ref="157argc" data-ref-filename="157argc">argc</dfn>, <em>char</em>* <dfn class="local col8 decl" id="158argn" title='argn' data-type='char **' data-ref="158argn" data-ref-filename="158argn">argn</dfn>[],</td></tr>
+<tr><th id="770">770</th><td>                          <em>char</em>* <dfn class="local col9 decl" id="159argv" title='argv' data-type='char **' data-ref="159argv" data-ref-filename="159argv">argv</dfn>[], <a class="typedef" href="#NPSavedData" title='NPSavedData' data-type='struct _NPSavedData' data-ref="NPSavedData" data-ref-filename="NPSavedData">NPSavedData</a>* <dfn class="local col0 decl" id="160saved" title='saved' data-type='NPSavedData *' data-ref="160saved" data-ref-filename="160saved">saved</dfn>);</td></tr>
+<tr><th id="771">771</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a> <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_Destroy" title='NPP_Destroy' data-ref="NPP_Destroy" data-ref-filename="NPP_Destroy">NPP_Destroy</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col1 decl" id="161instance" title='instance' data-type='NPP' data-ref="161instance" data-ref-filename="161instance">instance</dfn>, <a class="typedef" href="#NPSavedData" title='NPSavedData' data-type='struct _NPSavedData' data-ref="NPSavedData" data-ref-filename="NPSavedData">NPSavedData</a>** <dfn class="local col2 decl" id="162save" title='save' data-type='NPSavedData **' data-ref="162save" data-ref-filename="162save">save</dfn>);</td></tr>
+<tr><th id="772">772</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a> <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_SetWindow" title='NPP_SetWindow' data-ref="NPP_SetWindow" data-ref-filename="NPP_SetWindow">NPP_SetWindow</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col3 decl" id="163instance" title='instance' data-type='NPP' data-ref="163instance" data-ref-filename="163instance">instance</dfn>, <a class="typedef" href="#NPWindow" title='NPWindow' data-type='struct _NPWindow' data-ref="NPWindow" data-ref-filename="NPWindow">NPWindow</a>* <dfn class="local col4 decl" id="164window" title='window' data-type='NPWindow *' data-ref="164window" data-ref-filename="164window">window</dfn>);</td></tr>
+<tr><th id="773">773</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a> <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_NewStream" title='NPP_NewStream' data-ref="NPP_NewStream" data-ref-filename="NPP_NewStream">NPP_NewStream</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col5 decl" id="165instance" title='instance' data-type='NPP' data-ref="165instance" data-ref-filename="165instance">instance</dfn>, <a class="typedef" href="#NPMIMEType" title='NPMIMEType' data-type='char *' data-ref="NPMIMEType" data-ref-filename="NPMIMEType">NPMIMEType</a> <dfn class="local col6 decl" id="166type" title='type' data-type='NPMIMEType' data-ref="166type" data-ref-filename="166type">type</dfn>,</td></tr>
+<tr><th id="774">774</th><td>                                <a class="typedef" href="#NPStream" title='NPStream' data-type='struct _NPStream' data-ref="NPStream" data-ref-filename="NPStream">NPStream</a>* <dfn class="local col7 decl" id="167stream" title='stream' data-type='NPStream *' data-ref="167stream" data-ref-filename="167stream">stream</dfn>, <a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a> <dfn class="local col8 decl" id="168seekable" title='seekable' data-type='NPBool' data-ref="168seekable" data-ref-filename="168seekable">seekable</dfn>,</td></tr>
+<tr><th id="775">775</th><td>                                <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>* <dfn class="local col9 decl" id="169stype" title='stype' data-type='uint16_t *' data-ref="169stype" data-ref-filename="169stype">stype</dfn>);</td></tr>
+<tr><th id="776">776</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a> <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_DestroyStream" title='NPP_DestroyStream' data-ref="NPP_DestroyStream" data-ref-filename="NPP_DestroyStream">NPP_DestroyStream</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col0 decl" id="170instance" title='instance' data-type='NPP' data-ref="170instance" data-ref-filename="170instance">instance</dfn>, <a class="typedef" href="#NPStream" title='NPStream' data-type='struct _NPStream' data-ref="NPStream" data-ref-filename="NPStream">NPStream</a>* <dfn class="local col1 decl" id="171stream" title='stream' data-type='NPStream *' data-ref="171stream" data-ref-filename="171stream">stream</dfn>,</td></tr>
+<tr><th id="777">777</th><td>                                    <a class="typedef" href="#NPReason" title='NPReason' data-type='int16_t' data-ref="NPReason" data-ref-filename="NPReason">NPReason</a> <dfn class="local col2 decl" id="172reason" title='reason' data-type='NPReason' data-ref="172reason" data-ref-filename="172reason">reason</dfn>);</td></tr>
+<tr><th id="778">778</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_WriteReady" title='NPP_WriteReady' data-ref="NPP_WriteReady" data-ref-filename="NPP_WriteReady">NPP_WriteReady</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col3 decl" id="173instance" title='instance' data-type='NPP' data-ref="173instance" data-ref-filename="173instance">instance</dfn>, <a class="typedef" href="#NPStream" title='NPStream' data-type='struct _NPStream' data-ref="NPStream" data-ref-filename="NPStream">NPStream</a>* <dfn class="local col4 decl" id="174stream" title='stream' data-type='NPStream *' data-ref="174stream" data-ref-filename="174stream">stream</dfn>);</td></tr>
+<tr><th id="779">779</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_Write" title='NPP_Write' data-ref="NPP_Write" data-ref-filename="NPP_Write">NPP_Write</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col5 decl" id="175instance" title='instance' data-type='NPP' data-ref="175instance" data-ref-filename="175instance">instance</dfn>, <a class="typedef" href="#NPStream" title='NPStream' data-type='struct _NPStream' data-ref="NPStream" data-ref-filename="NPStream">NPStream</a>* <dfn class="local col6 decl" id="176stream" title='stream' data-type='NPStream *' data-ref="176stream" data-ref-filename="176stream">stream</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col7 decl" id="177offset" title='offset' data-type='int32_t' data-ref="177offset" data-ref-filename="177offset">offset</dfn>,</td></tr>
+<tr><th id="780">780</th><td>                            <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col8 decl" id="178len" title='len' data-type='int32_t' data-ref="178len" data-ref-filename="178len">len</dfn>, <em>void</em>* <dfn class="local col9 decl" id="179buffer" title='buffer' data-type='void *' data-ref="179buffer" data-ref-filename="179buffer">buffer</dfn>);</td></tr>
+<tr><th id="781">781</th><td><em>void</em>    <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_StreamAsFile" title='NPP_StreamAsFile' data-ref="NPP_StreamAsFile" data-ref-filename="NPP_StreamAsFile">NPP_StreamAsFile</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col0 decl" id="180instance" title='instance' data-type='NPP' data-ref="180instance" data-ref-filename="180instance">instance</dfn>, <a class="typedef" href="#NPStream" title='NPStream' data-type='struct _NPStream' data-ref="NPStream" data-ref-filename="NPStream">NPStream</a>* <dfn class="local col1 decl" id="181stream" title='stream' data-type='NPStream *' data-ref="181stream" data-ref-filename="181stream">stream</dfn>,</td></tr>
+<tr><th id="782">782</th><td>                                   <em>const</em> <em>char</em>* <dfn class="local col2 decl" id="182fname" title='fname' data-type='const char *' data-ref="182fname" data-ref-filename="182fname">fname</dfn>);</td></tr>
+<tr><th id="783">783</th><td><em>void</em>    <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_Print" title='NPP_Print' data-ref="NPP_Print" data-ref-filename="NPP_Print">NPP_Print</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col3 decl" id="183instance" title='instance' data-type='NPP' data-ref="183instance" data-ref-filename="183instance">instance</dfn>, <a class="typedef" href="#NPPrint" title='NPPrint' data-type='struct _NPPrint' data-ref="NPPrint" data-ref-filename="NPPrint">NPPrint</a>* <dfn class="local col4 decl" id="184platformPrint" title='platformPrint' data-type='NPPrint *' data-ref="184platformPrint" data-ref-filename="184platformPrint">platformPrint</dfn>);</td></tr>
+<tr><th id="784">784</th><td><span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_HandleEvent" title='NPP_HandleEvent' data-ref="NPP_HandleEvent" data-ref-filename="NPP_HandleEvent">NPP_HandleEvent</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col5 decl" id="185instance" title='instance' data-type='NPP' data-ref="185instance" data-ref-filename="185instance">instance</dfn>, <em>void</em>* <dfn class="local col6 decl" id="186event" title='event' data-type='void *' data-ref="186event" data-ref-filename="186event">event</dfn>);</td></tr>
+<tr><th id="785">785</th><td><em>void</em>    <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_URLNotify" title='NPP_URLNotify' data-ref="NPP_URLNotify" data-ref-filename="NPP_URLNotify">NPP_URLNotify</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col7 decl" id="187instance" title='instance' data-type='NPP' data-ref="187instance" data-ref-filename="187instance">instance</dfn>, <em>const</em> <em>char</em>* <dfn class="local col8 decl" id="188url" title='url' data-type='const char *' data-ref="188url" data-ref-filename="188url">url</dfn>,</td></tr>
+<tr><th id="786">786</th><td>                                <a class="typedef" href="#NPReason" title='NPReason' data-type='int16_t' data-ref="NPReason" data-ref-filename="NPReason">NPReason</a> <dfn class="local col9 decl" id="189reason" title='reason' data-type='NPReason' data-ref="189reason" data-ref-filename="189reason">reason</dfn>, <em>void</em>* <dfn class="local col0 decl" id="190notifyData" title='notifyData' data-type='void *' data-ref="190notifyData" data-ref-filename="190notifyData">notifyData</dfn>);</td></tr>
+<tr><th id="787">787</th><td><a class="macro" href="#56" title="void *" data-ref="_M/jref">jref</a>    <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_GetJavaClass" title='NPP_GetJavaClass' data-ref="NPP_GetJavaClass" data-ref-filename="NPP_GetJavaClass">NPP_GetJavaClass</dfn>(<em>void</em>);</td></tr>
+<tr><th id="788">788</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a> <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_GetValue" title='NPP_GetValue' data-ref="NPP_GetValue" data-ref-filename="NPP_GetValue">NPP_GetValue</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col1 decl" id="191instance" title='instance' data-type='NPP' data-ref="191instance" data-ref-filename="191instance">instance</dfn>, <a class="typedef" href="#NPPVariable" title='NPPVariable' data-type='enum NPPVariable' data-ref="NPPVariable" data-ref-filename="NPPVariable">NPPVariable</a> <dfn class="local col2 decl" id="192variable" title='variable' data-type='NPPVariable' data-ref="192variable" data-ref-filename="192variable">variable</dfn>, <em>void</em> *<dfn class="local col3 decl" id="193value" title='value' data-type='void *' data-ref="193value" data-ref-filename="193value">value</dfn>);</td></tr>
+<tr><th id="789">789</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a> <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_SetValue" title='NPP_SetValue' data-ref="NPP_SetValue" data-ref-filename="NPP_SetValue">NPP_SetValue</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col4 decl" id="194instance" title='instance' data-type='NPP' data-ref="194instance" data-ref-filename="194instance">instance</dfn>, <a class="typedef" href="#NPNVariable" title='NPNVariable' data-type='enum NPNVariable' data-ref="NPNVariable" data-ref-filename="NPNVariable">NPNVariable</a> <dfn class="local col5 decl" id="195variable" title='variable' data-type='NPNVariable' data-ref="195variable" data-ref-filename="195variable">variable</dfn>, <em>void</em> *<dfn class="local col6 decl" id="196value" title='value' data-type='void *' data-ref="196value" data-ref-filename="196value">value</dfn>);</td></tr>
+<tr><th id="790">790</th><td><a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a>  <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_GotFocus" title='NPP_GotFocus' data-ref="NPP_GotFocus" data-ref-filename="NPP_GotFocus">NPP_GotFocus</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col7 decl" id="197instance" title='instance' data-type='NPP' data-ref="197instance" data-ref-filename="197instance">instance</dfn>, <a class="typedef" href="#NPFocusDirection" title='NPFocusDirection' data-type='enum NPFocusDirection' data-ref="NPFocusDirection" data-ref-filename="NPFocusDirection">NPFocusDirection</a> <dfn class="local col8 decl" id="198direction" title='direction' data-type='NPFocusDirection' data-ref="198direction" data-ref-filename="198direction">direction</dfn>);</td></tr>
+<tr><th id="791">791</th><td><em>void</em>    <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_LostFocus" title='NPP_LostFocus' data-ref="NPP_LostFocus" data-ref-filename="NPP_LostFocus">NPP_LostFocus</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col9 decl" id="199instance" title='instance' data-type='NPP' data-ref="199instance" data-ref-filename="199instance">instance</dfn>);</td></tr>
+<tr><th id="792">792</th><td><em>void</em>    <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_URLRedirectNotify" title='NPP_URLRedirectNotify' data-ref="NPP_URLRedirectNotify" data-ref-filename="NPP_URLRedirectNotify">NPP_URLRedirectNotify</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col0 decl" id="200instance" title='instance' data-type='NPP' data-ref="200instance" data-ref-filename="200instance">instance</dfn>, <em>const</em> <em>char</em>* <dfn class="local col1 decl" id="201url" title='url' data-type='const char *' data-ref="201url" data-ref-filename="201url">url</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col2 decl" id="202status" title='status' data-type='int32_t' data-ref="202status" data-ref-filename="202status">status</dfn>, <em>void</em>* <dfn class="local col3 decl" id="203notifyData" title='notifyData' data-type='void *' data-ref="203notifyData" data-ref-filename="203notifyData">notifyData</dfn>);</td></tr>
+<tr><th id="793">793</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a> <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_ClearSiteData" title='NPP_ClearSiteData' data-ref="NPP_ClearSiteData" data-ref-filename="NPP_ClearSiteData">NPP_ClearSiteData</dfn>(<em>const</em> <em>char</em>* <dfn class="local col4 decl" id="204site" title='site' data-type='const char *' data-ref="204site" data-ref-filename="204site">site</dfn>, <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col5 decl" id="205flags" title='flags' data-type='uint64_t' data-ref="205flags" data-ref-filename="205flags">flags</dfn>, <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col6 decl" id="206maxAge" title='maxAge' data-type='uint64_t' data-ref="206maxAge" data-ref-filename="206maxAge">maxAge</dfn>);</td></tr>
+<tr><th id="794">794</th><td><em>char</em>**  <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPP_GetSitesWithData" title='NPP_GetSitesWithData' data-ref="NPP_GetSitesWithData" data-ref-filename="NPP_GetSitesWithData">NPP_GetSitesWithData</dfn>(<em>void</em>);</td></tr>
+<tr><th id="795">795</th><td></td></tr>
+<tr><th id="796">796</th><td><i>/* NPN_* functions are provided by the navigator and called by the plugin. */</i></td></tr>
+<tr><th id="797">797</th><td><em>void</em>        <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_Version" title='NPN_Version' data-ref="NPN_Version" data-ref-filename="NPN_Version">NPN_Version</dfn>(<em>int</em>* <dfn class="local col7 decl" id="207plugin_major" title='plugin_major' data-type='int *' data-ref="207plugin_major" data-ref-filename="207plugin_major">plugin_major</dfn>, <em>int</em>* <dfn class="local col8 decl" id="208plugin_minor" title='plugin_minor' data-type='int *' data-ref="208plugin_minor" data-ref-filename="208plugin_minor">plugin_minor</dfn>,</td></tr>
+<tr><th id="798">798</th><td>                                  <em>int</em>* <dfn class="local col9 decl" id="209netscape_major" title='netscape_major' data-type='int *' data-ref="209netscape_major" data-ref-filename="209netscape_major">netscape_major</dfn>, <em>int</em>* <dfn class="local col0 decl" id="210netscape_minor" title='netscape_minor' data-type='int *' data-ref="210netscape_minor" data-ref-filename="210netscape_minor">netscape_minor</dfn>);</td></tr>
+<tr><th id="799">799</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_GetURLNotify" title='NPN_GetURLNotify' data-ref="NPN_GetURLNotify" data-ref-filename="NPN_GetURLNotify">NPN_GetURLNotify</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col1 decl" id="211instance" title='instance' data-type='NPP' data-ref="211instance" data-ref-filename="211instance">instance</dfn>, <em>const</em> <em>char</em>* <dfn class="local col2 decl" id="212url" title='url' data-type='const char *' data-ref="212url" data-ref-filename="212url">url</dfn>,</td></tr>
+<tr><th id="800">800</th><td>                                       <em>const</em> <em>char</em>* <dfn class="local col3 decl" id="213target" title='target' data-type='const char *' data-ref="213target" data-ref-filename="213target">target</dfn>, <em>void</em>* <dfn class="local col4 decl" id="214notifyData" title='notifyData' data-type='void *' data-ref="214notifyData" data-ref-filename="214notifyData">notifyData</dfn>);</td></tr>
+<tr><th id="801">801</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_GetURL" title='NPN_GetURL' data-ref="NPN_GetURL" data-ref-filename="NPN_GetURL">NPN_GetURL</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col5 decl" id="215instance" title='instance' data-type='NPP' data-ref="215instance" data-ref-filename="215instance">instance</dfn>, <em>const</em> <em>char</em>* <dfn class="local col6 decl" id="216url" title='url' data-type='const char *' data-ref="216url" data-ref-filename="216url">url</dfn>,</td></tr>
+<tr><th id="802">802</th><td>                                 <em>const</em> <em>char</em>* <dfn class="local col7 decl" id="217target" title='target' data-type='const char *' data-ref="217target" data-ref-filename="217target">target</dfn>);</td></tr>
+<tr><th id="803">803</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_PostURLNotify" title='NPN_PostURLNotify' data-ref="NPN_PostURLNotify" data-ref-filename="NPN_PostURLNotify">NPN_PostURLNotify</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col8 decl" id="218instance" title='instance' data-type='NPP' data-ref="218instance" data-ref-filename="218instance">instance</dfn>, <em>const</em> <em>char</em>* <dfn class="local col9 decl" id="219url" title='url' data-type='const char *' data-ref="219url" data-ref-filename="219url">url</dfn>,</td></tr>
+<tr><th id="804">804</th><td>                                        <em>const</em> <em>char</em>* <dfn class="local col0 decl" id="220target" title='target' data-type='const char *' data-ref="220target" data-ref-filename="220target">target</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col1 decl" id="221len" title='len' data-type='uint32_t' data-ref="221len" data-ref-filename="221len">len</dfn>,</td></tr>
+<tr><th id="805">805</th><td>                                        <em>const</em> <em>char</em>* <dfn class="local col2 decl" id="222buf" title='buf' data-type='const char *' data-ref="222buf" data-ref-filename="222buf">buf</dfn>, <a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a> <dfn class="local col3 decl" id="223file" title='file' data-type='NPBool' data-ref="223file" data-ref-filename="223file">file</dfn>,</td></tr>
+<tr><th id="806">806</th><td>                                        <em>void</em>* <dfn class="local col4 decl" id="224notifyData" title='notifyData' data-type='void *' data-ref="224notifyData" data-ref-filename="224notifyData">notifyData</dfn>);</td></tr>
+<tr><th id="807">807</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_PostURL" title='NPN_PostURL' data-ref="NPN_PostURL" data-ref-filename="NPN_PostURL">NPN_PostURL</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col5 decl" id="225instance" title='instance' data-type='NPP' data-ref="225instance" data-ref-filename="225instance">instance</dfn>, <em>const</em> <em>char</em>* <dfn class="local col6 decl" id="226url" title='url' data-type='const char *' data-ref="226url" data-ref-filename="226url">url</dfn>,</td></tr>
+<tr><th id="808">808</th><td>                                  <em>const</em> <em>char</em>* <dfn class="local col7 decl" id="227target" title='target' data-type='const char *' data-ref="227target" data-ref-filename="227target">target</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col8 decl" id="228len" title='len' data-type='uint32_t' data-ref="228len" data-ref-filename="228len">len</dfn>,</td></tr>
+<tr><th id="809">809</th><td>                                  <em>const</em> <em>char</em>* <dfn class="local col9 decl" id="229buf" title='buf' data-type='const char *' data-ref="229buf" data-ref-filename="229buf">buf</dfn>, <a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a> <dfn class="local col0 decl" id="230file" title='file' data-type='NPBool' data-ref="230file" data-ref-filename="230file">file</dfn>);</td></tr>
+<tr><th id="810">810</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_RequestRead" title='NPN_RequestRead' data-ref="NPN_RequestRead" data-ref-filename="NPN_RequestRead">NPN_RequestRead</dfn>(<a class="typedef" href="#NPStream" title='NPStream' data-type='struct _NPStream' data-ref="NPStream" data-ref-filename="NPStream">NPStream</a>* <dfn class="local col1 decl" id="231stream" title='stream' data-type='NPStream *' data-ref="231stream" data-ref-filename="231stream">stream</dfn>, <a class="typedef" href="#NPByteRange" title='NPByteRange' data-type='struct _NPByteRange' data-ref="NPByteRange" data-ref-filename="NPByteRange">NPByteRange</a>* <dfn class="local col2 decl" id="232rangeList" title='rangeList' data-type='NPByteRange *' data-ref="232rangeList" data-ref-filename="232rangeList">rangeList</dfn>);</td></tr>
+<tr><th id="811">811</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_NewStream" title='NPN_NewStream' data-ref="NPN_NewStream" data-ref-filename="NPN_NewStream">NPN_NewStream</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col3 decl" id="233instance" title='instance' data-type='NPP' data-ref="233instance" data-ref-filename="233instance">instance</dfn>, <a class="typedef" href="#NPMIMEType" title='NPMIMEType' data-type='char *' data-ref="NPMIMEType" data-ref-filename="NPMIMEType">NPMIMEType</a> <dfn class="local col4 decl" id="234type" title='type' data-type='NPMIMEType' data-ref="234type" data-ref-filename="234type">type</dfn>,</td></tr>
+<tr><th id="812">812</th><td>                                    <em>const</em> <em>char</em>* <dfn class="local col5 decl" id="235target" title='target' data-type='const char *' data-ref="235target" data-ref-filename="235target">target</dfn>, <a class="typedef" href="#NPStream" title='NPStream' data-type='struct _NPStream' data-ref="NPStream" data-ref-filename="NPStream">NPStream</a>** <dfn class="local col6 decl" id="236stream" title='stream' data-type='NPStream **' data-ref="236stream" data-ref-filename="236stream">stream</dfn>);</td></tr>
+<tr><th id="813">813</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_Write" title='NPN_Write' data-ref="NPN_Write" data-ref-filename="NPN_Write">NPN_Write</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col7 decl" id="237instance" title='instance' data-type='NPP' data-ref="237instance" data-ref-filename="237instance">instance</dfn>, <a class="typedef" href="#NPStream" title='NPStream' data-type='struct _NPStream' data-ref="NPStream" data-ref-filename="NPStream">NPStream</a>* <dfn class="local col8 decl" id="238stream" title='stream' data-type='NPStream *' data-ref="238stream" data-ref-filename="238stream">stream</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col9 decl" id="239len" title='len' data-type='int32_t' data-ref="239len" data-ref-filename="239len">len</dfn>,</td></tr>
+<tr><th id="814">814</th><td>                                <em>void</em>* <dfn class="local col0 decl" id="240buffer" title='buffer' data-type='void *' data-ref="240buffer" data-ref-filename="240buffer">buffer</dfn>);</td></tr>
+<tr><th id="815">815</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_DestroyStream" title='NPN_DestroyStream' data-ref="NPN_DestroyStream" data-ref-filename="NPN_DestroyStream">NPN_DestroyStream</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col1 decl" id="241instance" title='instance' data-type='NPP' data-ref="241instance" data-ref-filename="241instance">instance</dfn>, <a class="typedef" href="#NPStream" title='NPStream' data-type='struct _NPStream' data-ref="NPStream" data-ref-filename="NPStream">NPStream</a>* <dfn class="local col2 decl" id="242stream" title='stream' data-type='NPStream *' data-ref="242stream" data-ref-filename="242stream">stream</dfn>,</td></tr>
+<tr><th id="816">816</th><td>                                        <a class="typedef" href="#NPReason" title='NPReason' data-type='int16_t' data-ref="NPReason" data-ref-filename="NPReason">NPReason</a> <dfn class="local col3 decl" id="243reason" title='reason' data-type='NPReason' data-ref="243reason" data-ref-filename="243reason">reason</dfn>);</td></tr>
+<tr><th id="817">817</th><td><em>void</em>        <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_Status" title='NPN_Status' data-ref="NPN_Status" data-ref-filename="NPN_Status">NPN_Status</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col4 decl" id="244instance" title='instance' data-type='NPP' data-ref="244instance" data-ref-filename="244instance">instance</dfn>, <em>const</em> <em>char</em>* <dfn class="local col5 decl" id="245message" title='message' data-type='const char *' data-ref="245message" data-ref-filename="245message">message</dfn>);</td></tr>
+<tr><th id="818">818</th><td><em>const</em> <em>char</em>* <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_UserAgent" title='NPN_UserAgent' data-ref="NPN_UserAgent" data-ref-filename="NPN_UserAgent">NPN_UserAgent</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col6 decl" id="246instance" title='instance' data-type='NPP' data-ref="246instance" data-ref-filename="246instance">instance</dfn>);</td></tr>
+<tr><th id="819">819</th><td><em>void</em>*       <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_MemAlloc" title='NPN_MemAlloc' data-ref="NPN_MemAlloc" data-ref-filename="NPN_MemAlloc">NPN_MemAlloc</dfn>(<span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col7 decl" id="247size" title='size' data-type='uint32_t' data-ref="247size" data-ref-filename="247size">size</dfn>);</td></tr>
+<tr><th id="820">820</th><td><em>void</em>        <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_MemFree" title='NPN_MemFree' data-ref="NPN_MemFree" data-ref-filename="NPN_MemFree">NPN_MemFree</dfn>(<em>void</em>* <dfn class="local col8 decl" id="248ptr" title='ptr' data-type='void *' data-ref="248ptr" data-ref-filename="248ptr">ptr</dfn>);</td></tr>
+<tr><th id="821">821</th><td><span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span>    <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_MemFlush" title='NPN_MemFlush' data-ref="NPN_MemFlush" data-ref-filename="NPN_MemFlush">NPN_MemFlush</dfn>(<span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col9 decl" id="249size" title='size' data-type='uint32_t' data-ref="249size" data-ref-filename="249size">size</dfn>);</td></tr>
+<tr><th id="822">822</th><td><em>void</em>        <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_ReloadPlugins" title='NPN_ReloadPlugins' data-ref="NPN_ReloadPlugins" data-ref-filename="NPN_ReloadPlugins">NPN_ReloadPlugins</dfn>(<a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a> <dfn class="local col0 decl" id="250reloadPages" title='reloadPages' data-type='NPBool' data-ref="250reloadPages" data-ref-filename="250reloadPages">reloadPages</dfn>);</td></tr>
+<tr><th id="823">823</th><td><a class="macro" href="#57" title="void" data-ref="_M/JRIEnv">JRIEnv</a>*     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_GetJavaEnv" title='NPN_GetJavaEnv' data-ref="NPN_GetJavaEnv" data-ref-filename="NPN_GetJavaEnv">NPN_GetJavaEnv</dfn>(<em>void</em>);</td></tr>
+<tr><th id="824">824</th><td><a class="macro" href="#56" title="void *" data-ref="_M/jref">jref</a>        <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_GetJavaPeer" title='NPN_GetJavaPeer' data-ref="NPN_GetJavaPeer" data-ref-filename="NPN_GetJavaPeer">NPN_GetJavaPeer</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col1 decl" id="251instance" title='instance' data-type='NPP' data-ref="251instance" data-ref-filename="251instance">instance</dfn>);</td></tr>
+<tr><th id="825">825</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_GetValue" title='NPN_GetValue' data-ref="NPN_GetValue" data-ref-filename="NPN_GetValue">NPN_GetValue</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col2 decl" id="252instance" title='instance' data-type='NPP' data-ref="252instance" data-ref-filename="252instance">instance</dfn>, <a class="typedef" href="#NPNVariable" title='NPNVariable' data-type='enum NPNVariable' data-ref="NPNVariable" data-ref-filename="NPNVariable">NPNVariable</a> <dfn class="local col3 decl" id="253variable" title='variable' data-type='NPNVariable' data-ref="253variable" data-ref-filename="253variable">variable</dfn>,</td></tr>
+<tr><th id="826">826</th><td>                                   <em>void</em> *<dfn class="local col4 decl" id="254value" title='value' data-type='void *' data-ref="254value" data-ref-filename="254value">value</dfn>);</td></tr>
+<tr><th id="827">827</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_SetValue" title='NPN_SetValue' data-ref="NPN_SetValue" data-ref-filename="NPN_SetValue">NPN_SetValue</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col5 decl" id="255instance" title='instance' data-type='NPP' data-ref="255instance" data-ref-filename="255instance">instance</dfn>, <a class="typedef" href="#NPPVariable" title='NPPVariable' data-type='enum NPPVariable' data-ref="NPPVariable" data-ref-filename="NPPVariable">NPPVariable</a> <dfn class="local col6 decl" id="256variable" title='variable' data-type='NPPVariable' data-ref="256variable" data-ref-filename="256variable">variable</dfn>,</td></tr>
+<tr><th id="828">828</th><td>                                   <em>void</em> *<dfn class="local col7 decl" id="257value" title='value' data-type='void *' data-ref="257value" data-ref-filename="257value">value</dfn>);</td></tr>
+<tr><th id="829">829</th><td><em>void</em>        <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_InvalidateRect" title='NPN_InvalidateRect' data-ref="NPN_InvalidateRect" data-ref-filename="NPN_InvalidateRect">NPN_InvalidateRect</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col8 decl" id="258instance" title='instance' data-type='NPP' data-ref="258instance" data-ref-filename="258instance">instance</dfn>, <a class="typedef" href="#NPRect" title='NPRect' data-type='struct _NPRect' data-ref="NPRect" data-ref-filename="NPRect">NPRect</a> *<dfn class="local col9 decl" id="259invalidRect" title='invalidRect' data-type='NPRect *' data-ref="259invalidRect" data-ref-filename="259invalidRect">invalidRect</dfn>);</td></tr>
+<tr><th id="830">830</th><td><em>void</em>        <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_InvalidateRegion" title='NPN_InvalidateRegion' data-ref="NPN_InvalidateRegion" data-ref-filename="NPN_InvalidateRegion">NPN_InvalidateRegion</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col0 decl" id="260instance" title='instance' data-type='NPP' data-ref="260instance" data-ref-filename="260instance">instance</dfn>,</td></tr>
+<tr><th id="831">831</th><td>                                           <a class="typedef" href="#NPRegion" title='NPRegion' data-type='void *' data-ref="NPRegion" data-ref-filename="NPRegion">NPRegion</a> <dfn class="local col1 decl" id="261invalidRegion" title='invalidRegion' data-type='NPRegion' data-ref="261invalidRegion" data-ref-filename="261invalidRegion">invalidRegion</dfn>);</td></tr>
+<tr><th id="832">832</th><td><em>void</em>        <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_ForceRedraw" title='NPN_ForceRedraw' data-ref="NPN_ForceRedraw" data-ref-filename="NPN_ForceRedraw">NPN_ForceRedraw</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col2 decl" id="262instance" title='instance' data-type='NPP' data-ref="262instance" data-ref-filename="262instance">instance</dfn>);</td></tr>
+<tr><th id="833">833</th><td><em>void</em>        <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_PushPopupsEnabledState" title='NPN_PushPopupsEnabledState' data-ref="NPN_PushPopupsEnabledState" data-ref-filename="NPN_PushPopupsEnabledState">NPN_PushPopupsEnabledState</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col3 decl" id="263instance" title='instance' data-type='NPP' data-ref="263instance" data-ref-filename="263instance">instance</dfn>, <a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a> <dfn class="local col4 decl" id="264enabled" title='enabled' data-type='NPBool' data-ref="264enabled" data-ref-filename="264enabled">enabled</dfn>);</td></tr>
+<tr><th id="834">834</th><td><em>void</em>        <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_PopPopupsEnabledState" title='NPN_PopPopupsEnabledState' data-ref="NPN_PopPopupsEnabledState" data-ref-filename="NPN_PopPopupsEnabledState">NPN_PopPopupsEnabledState</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col5 decl" id="265instance" title='instance' data-type='NPP' data-ref="265instance" data-ref-filename="265instance">instance</dfn>);</td></tr>
+<tr><th id="835">835</th><td><em>void</em>        <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_PluginThreadAsyncCall" title='NPN_PluginThreadAsyncCall' data-ref="NPN_PluginThreadAsyncCall" data-ref-filename="NPN_PluginThreadAsyncCall">NPN_PluginThreadAsyncCall</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col6 decl" id="266instance" title='instance' data-type='NPP' data-ref="266instance" data-ref-filename="266instance">instance</dfn>,</td></tr>
+<tr><th id="836">836</th><td>                                                <em>void</em> (*<dfn class="local col7 decl" id="267func" title='func' data-type='void (*)(void *)' data-ref="267func" data-ref-filename="267func">func</dfn>) (<em>void</em> *),</td></tr>
+<tr><th id="837">837</th><td>                                                <em>void</em> *<dfn class="local col8 decl" id="268userData" title='userData' data-type='void *' data-ref="268userData" data-ref-filename="268userData">userData</dfn>);</td></tr>
+<tr><th id="838">838</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_GetValueForURL" title='NPN_GetValueForURL' data-ref="NPN_GetValueForURL" data-ref-filename="NPN_GetValueForURL">NPN_GetValueForURL</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col9 decl" id="269instance" title='instance' data-type='NPP' data-ref="269instance" data-ref-filename="269instance">instance</dfn>, <a class="typedef" href="#NPNURLVariable" title='NPNURLVariable' data-type='enum NPNURLVariable' data-ref="NPNURLVariable" data-ref-filename="NPNURLVariable">NPNURLVariable</a> <dfn class="local col0 decl" id="270variable" title='variable' data-type='NPNURLVariable' data-ref="270variable" data-ref-filename="270variable">variable</dfn>,</td></tr>
+<tr><th id="839">839</th><td>                                         <em>const</em> <em>char</em> *<dfn class="local col1 decl" id="271url" title='url' data-type='const char *' data-ref="271url" data-ref-filename="271url">url</dfn>, <em>char</em> **<dfn class="local col2 decl" id="272value" title='value' data-type='char **' data-ref="272value" data-ref-filename="272value">value</dfn>,</td></tr>
+<tr><th id="840">840</th><td>                                         <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> *<dfn class="local col3 decl" id="273len" title='len' data-type='uint32_t *' data-ref="273len" data-ref-filename="273len">len</dfn>);</td></tr>
+<tr><th id="841">841</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_SetValueForURL" title='NPN_SetValueForURL' data-ref="NPN_SetValueForURL" data-ref-filename="NPN_SetValueForURL">NPN_SetValueForURL</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col4 decl" id="274instance" title='instance' data-type='NPP' data-ref="274instance" data-ref-filename="274instance">instance</dfn>, <a class="typedef" href="#NPNURLVariable" title='NPNURLVariable' data-type='enum NPNURLVariable' data-ref="NPNURLVariable" data-ref-filename="NPNURLVariable">NPNURLVariable</a> <dfn class="local col5 decl" id="275variable" title='variable' data-type='NPNURLVariable' data-ref="275variable" data-ref-filename="275variable">variable</dfn>,</td></tr>
+<tr><th id="842">842</th><td>                                         <em>const</em> <em>char</em> *<dfn class="local col6 decl" id="276url" title='url' data-type='const char *' data-ref="276url" data-ref-filename="276url">url</dfn>, <em>const</em> <em>char</em> *<dfn class="local col7 decl" id="277value" title='value' data-type='const char *' data-ref="277value" data-ref-filename="277value">value</dfn>,</td></tr>
+<tr><th id="843">843</th><td>                                         <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col8 decl" id="278len" title='len' data-type='uint32_t' data-ref="278len" data-ref-filename="278len">len</dfn>);</td></tr>
+<tr><th id="844">844</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_GetAuthenticationInfo" title='NPN_GetAuthenticationInfo' data-ref="NPN_GetAuthenticationInfo" data-ref-filename="NPN_GetAuthenticationInfo">NPN_GetAuthenticationInfo</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col9 decl" id="279instance" title='instance' data-type='NPP' data-ref="279instance" data-ref-filename="279instance">instance</dfn>,</td></tr>
+<tr><th id="845">845</th><td>                                                <em>const</em> <em>char</em> *<dfn class="local col0 decl" id="280protocol" title='protocol' data-type='const char *' data-ref="280protocol" data-ref-filename="280protocol">protocol</dfn>,</td></tr>
+<tr><th id="846">846</th><td>                                                <em>const</em> <em>char</em> *<dfn class="local col1 decl" id="281host" title='host' data-type='const char *' data-ref="281host" data-ref-filename="281host">host</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col2 decl" id="282port" title='port' data-type='int32_t' data-ref="282port" data-ref-filename="282port">port</dfn>,</td></tr>
+<tr><th id="847">847</th><td>                                                <em>const</em> <em>char</em> *<dfn class="local col3 decl" id="283scheme" title='scheme' data-type='const char *' data-ref="283scheme" data-ref-filename="283scheme">scheme</dfn>,</td></tr>
+<tr><th id="848">848</th><td>                                                <em>const</em> <em>char</em> *<dfn class="local col4 decl" id="284realm" title='realm' data-type='const char *' data-ref="284realm" data-ref-filename="284realm">realm</dfn>,</td></tr>
+<tr><th id="849">849</th><td>                                                <em>char</em> **<dfn class="local col5 decl" id="285username" title='username' data-type='char **' data-ref="285username" data-ref-filename="285username">username</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> *<dfn class="local col6 decl" id="286ulen" title='ulen' data-type='uint32_t *' data-ref="286ulen" data-ref-filename="286ulen">ulen</dfn>,</td></tr>
+<tr><th id="850">850</th><td>                                                <em>char</em> **<dfn class="local col7 decl" id="287password" title='password' data-type='char **' data-ref="287password" data-ref-filename="287password">password</dfn>,</td></tr>
+<tr><th id="851">851</th><td>                                                <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> *<dfn class="local col8 decl" id="288plen" title='plen' data-type='uint32_t *' data-ref="288plen" data-ref-filename="288plen">plen</dfn>);</td></tr>
+<tr><th id="852">852</th><td><span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span>    <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_ScheduleTimer" title='NPN_ScheduleTimer' data-ref="NPN_ScheduleTimer" data-ref-filename="NPN_ScheduleTimer">NPN_ScheduleTimer</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col9 decl" id="289instance" title='instance' data-type='NPP' data-ref="289instance" data-ref-filename="289instance">instance</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col0 decl" id="290interval" title='interval' data-type='uint32_t' data-ref="290interval" data-ref-filename="290interval">interval</dfn>, <a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a> <dfn class="local col1 decl" id="291repeat" title='repeat' data-type='NPBool' data-ref="291repeat" data-ref-filename="291repeat">repeat</dfn>, <em>void</em> (*<dfn class="local col2 decl" id="292timerFunc" title='timerFunc' data-type='void (*)(NPP, uint32_t)' data-ref="292timerFunc" data-ref-filename="292timerFunc">timerFunc</dfn>)(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col3 decl" id="293npp" title='npp' data-type='NPP' data-ref="293npp" data-ref-filename="293npp">npp</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col4 decl" id="294timerID" title='timerID' data-type='uint32_t' data-ref="294timerID" data-ref-filename="294timerID">timerID</dfn>));</td></tr>
+<tr><th id="853">853</th><td><em>void</em>        <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_UnscheduleTimer" title='NPN_UnscheduleTimer' data-ref="NPN_UnscheduleTimer" data-ref-filename="NPN_UnscheduleTimer">NPN_UnscheduleTimer</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col5 decl" id="295instance" title='instance' data-type='NPP' data-ref="295instance" data-ref-filename="295instance">instance</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col6 decl" id="296timerID" title='timerID' data-type='uint32_t' data-ref="296timerID" data-ref-filename="296timerID">timerID</dfn>);</td></tr>
+<tr><th id="854">854</th><td><a class="typedef" href="#NPError" title='NPError' data-type='int16_t' data-ref="NPError" data-ref-filename="NPError">NPError</a>     <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_PopUpContextMenu" title='NPN_PopUpContextMenu' data-ref="NPN_PopUpContextMenu" data-ref-filename="NPN_PopUpContextMenu">NPN_PopUpContextMenu</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col7 decl" id="297instance" title='instance' data-type='NPP' data-ref="297instance" data-ref-filename="297instance">instance</dfn>, <a class="typedef" href="#NPMenu" title='NPMenu' data-type='NPNSMenu' data-ref="NPMenu" data-ref-filename="NPMenu">NPMenu</a>* <dfn class="local col8 decl" id="298menu" title='menu' data-type='NPMenu *' data-ref="298menu" data-ref-filename="298menu">menu</dfn>);</td></tr>
+<tr><th id="855">855</th><td><a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a>      <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_ConvertPoint" title='NPN_ConvertPoint' data-ref="NPN_ConvertPoint" data-ref-filename="NPN_ConvertPoint">NPN_ConvertPoint</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col9 decl" id="299instance" title='instance' data-type='NPP' data-ref="299instance" data-ref-filename="299instance">instance</dfn>, <em>double</em> <dfn class="local col0 decl" id="300sourceX" title='sourceX' data-type='double' data-ref="300sourceX" data-ref-filename="300sourceX">sourceX</dfn>, <em>double</em> <dfn class="local col1 decl" id="301sourceY" title='sourceY' data-type='double' data-ref="301sourceY" data-ref-filename="301sourceY">sourceY</dfn>, <a class="typedef" href="#NPCoordinateSpace" title='NPCoordinateSpace' data-type='enum NPCoordinateSpace' data-ref="NPCoordinateSpace" data-ref-filename="NPCoordinateSpace">NPCoordinateSpace</a> <dfn class="local col2 decl" id="302sourceSpace" title='sourceSpace' data-type='NPCoordinateSpace' data-ref="302sourceSpace" data-ref-filename="302sourceSpace">sourceSpace</dfn>, <em>double</em> *<dfn class="local col3 decl" id="303destX" title='destX' data-type='double *' data-ref="303destX" data-ref-filename="303destX">destX</dfn>, <em>double</em> *<dfn class="local col4 decl" id="304destY" title='destY' data-type='double *' data-ref="304destY" data-ref-filename="304destY">destY</dfn>, <a class="typedef" href="#NPCoordinateSpace" title='NPCoordinateSpace' data-type='enum NPCoordinateSpace' data-ref="NPCoordinateSpace" data-ref-filename="NPCoordinateSpace">NPCoordinateSpace</a> <dfn class="local col5 decl" id="305destSpace" title='destSpace' data-type='NPCoordinateSpace' data-ref="305destSpace" data-ref-filename="305destSpace">destSpace</dfn>);</td></tr>
+<tr><th id="856">856</th><td><a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a>      <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_HandleEvent" title='NPN_HandleEvent' data-ref="NPN_HandleEvent" data-ref-filename="NPN_HandleEvent">NPN_HandleEvent</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col6 decl" id="306instance" title='instance' data-type='NPP' data-ref="306instance" data-ref-filename="306instance">instance</dfn>, <em>void</em> *<dfn class="local col7 decl" id="307event" title='event' data-type='void *' data-ref="307event" data-ref-filename="307event">event</dfn>, <a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a> <dfn class="local col8 decl" id="308handled" title='handled' data-type='NPBool' data-ref="308handled" data-ref-filename="308handled">handled</dfn>);</td></tr>
+<tr><th id="857">857</th><td><a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a>      <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_UnfocusInstance" title='NPN_UnfocusInstance' data-ref="NPN_UnfocusInstance" data-ref-filename="NPN_UnfocusInstance">NPN_UnfocusInstance</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col9 decl" id="309instance" title='instance' data-type='NPP' data-ref="309instance" data-ref-filename="309instance">instance</dfn>, <a class="typedef" href="#NPFocusDirection" title='NPFocusDirection' data-type='enum NPFocusDirection' data-ref="NPFocusDirection" data-ref-filename="NPFocusDirection">NPFocusDirection</a> <dfn class="local col0 decl" id="310direction" title='direction' data-type='NPFocusDirection' data-ref="310direction" data-ref-filename="310direction">direction</dfn>);</td></tr>
+<tr><th id="858">858</th><td><em>void</em>        <a class="macro" href="#753" title="" data-ref="_M/NP_LOADDS">NP_LOADDS</a> <dfn class="decl fn" id="NPN_URLRedirectResponse" title='NPN_URLRedirectResponse' data-ref="NPN_URLRedirectResponse" data-ref-filename="NPN_URLRedirectResponse">NPN_URLRedirectResponse</dfn>(<a class="typedef" href="#NPP" title='NPP' data-type='NPP_t *' data-ref="NPP" data-ref-filename="NPP">NPP</a> <dfn class="local col1 decl" id="311instance" title='instance' data-type='NPP' data-ref="311instance" data-ref-filename="311instance">instance</dfn>, <em>void</em>* <dfn class="local col2 decl" id="312notifyData" title='notifyData' data-type='void *' data-ref="312notifyData" data-ref-filename="312notifyData">notifyData</dfn>, <a class="typedef" href="#NPBool" title='NPBool' data-type='unsigned char' data-ref="NPBool" data-ref-filename="NPBool">NPBool</a> <dfn class="local col3 decl" id="313allow" title='allow' data-type='NPBool' data-ref="313allow" data-ref-filename="313allow">allow</dfn>);</td></tr>
+<tr><th id="859">859</th><td></td></tr>
+<tr><th id="860">860</th><td><u>#<span data-ppcond="860">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="861">861</th><td>}  <i>/* end extern "C" */</i></td></tr>
+<tr><th id="862">862</th><td><u>#<span data-ppcond="860">endif</span></u></td></tr>
+<tr><th id="863">863</th><td></td></tr>
+<tr><th id="864">864</th><td><u>#<span data-ppcond="142">endif</span> /* RC_INVOKED */</u></td></tr>
+<tr><th id="865">865</th><td><u>#<span data-ppcond="865">if</span> defined(<span class="macro" data-ref="_M/__OS2__">__OS2__</span>)</u></td></tr>
+<tr><th id="866">866</th><td><u>#pragma pack()</u></td></tr>
+<tr><th id="867">867</th><td><u>#<span data-ppcond="865">endif</span></u></td></tr>
+<tr><th id="868">868</th><td></td></tr>
+<tr><th id="869">869</th><td><u>#<span data-ppcond="38">endif</span> /* npapi_h_ */</u></td></tr>
+<tr><th id="870">870</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/WebKitLegacy/mac/History/WebHistoryItem.mm.html'>webkit/Source/WebKitLegacy/mac/History/WebHistoryItem.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

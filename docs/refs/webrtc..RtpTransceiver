@@ -1,0 +1,254 @@
+<inh f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/ref_counted_object.h' l='24' c='rtc::RefCountedObject'/>
+<inh f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/third_party/sigslot/sigslot.h' l='474' c='sigslot::has_slots'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transceiver.h' l='74' ll='285'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection_internal.h' l='40' c='_ZNK6webrtc22PeerConnectionInternal23GetTransceiversInternalEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtc_stats_collector.h' l='159'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/transceiver_list.h' l='35'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/transceiver_list.h' l='98' c='_ZNK6webrtc15TransceiverList12ListInternalEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transmission_manager.h' l='111' c='_ZN6webrtc22RtpTransmissionManager23CreateAndAddTransceiverEN3rtc13scoped_refptrINS_26RtpSenderProxyWithInternalINS_17RtpSenderInternalEEEEENS2_INS_2814914939'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transmission_manager.h' l='119' c='_ZN6webrtc22RtpTransmissionManager33FindFirstTransceiverForAddedTrackEN3rtc13scoped_refptrINS_25MediaStreamTrackInterfaceEEE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transmission_manager.h' l='134' c='_ZNK6webrtc22RtpTransmissionManager19GetAudioTransceiverEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transmission_manager.h' l='137' c='_ZNK6webrtc22RtpTransmissionManager19GetVideoTransceiverEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/stats_collector.h' l='185' c='_ZN6webrtc14StatsCollector20ExtractSessionInfo_nERKNSt3__16vectorIN3rtc13scoped_refptrINS_31RtpTransceiverProxyWithInternalINS_14RtpTransceiverEEEEENS12871469'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='314' c='_ZN6webrtc21SdpOfferAnswerHandler20AssociateTransceiverEN7cricket13ContentSourceENS_7SdpTypeEmRKNS1_11ContentInfoEPS5_S7_'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='328' c='_ZNK6webrtc21SdpOfferAnswerHandler30FindMediaSectionForTransceiverEPKNS_14RtpTransceiverEPKNS_27SessionDescriptionInterfaceE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='334' c='_ZN6webrtc21SdpOfferAnswerHandler24UpdateTransceiverChannelEN3rtc13scoped_refptrINS_31RtpTransceiverProxyWithInternalINS_14RtpTransceiverEEEEERKN7cric12102752'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='360' c='_ZNK6webrtc21SdpOfferAnswerHandler33FindAvailableTransceiverToReceiveEN7cricket9MediaTypeE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='411' c='_ZN6webrtc21SdpOfferAnswerHandler30GetReceivingTransceiversOfTypeEN7cricket9MediaTypeE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='423' c='_ZN6webrtc21SdpOfferAnswerHandler27ProcessRemovalOfRemoteTrackEN3rtc13scoped_refptrINS_31RtpTransceiverProxyWithInternalINS_14RtpTransceiverEEEEEPNSt310331263'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.h' l='518' c='_ZN6webrtc21SdpOfferAnswerHandler25DestroyTransceiverChannelEN3rtc13scoped_refptrINS_31RtpTransceiverProxyWithInternalINS_14RtpTransceiverEEEEE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='284' c='_ZNK6webrtc14PeerConnection23GetTransceiversInternalEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='466' c='_ZN6webrtc14PeerConnection23FindTransceiverBySenderEN3rtc13scoped_refptrINS_18RtpSenderInterfaceEEE'/>
+<size>344</size>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transceiver.h' l='44'>// Implementation of the public RtpTransceiverInterface.
+//
+// The RtpTransceiverInterface is only intended to be used with a PeerConnection
+// that enables Unified Plan SDP. Thus, the methods that only need to implement
+// public API features and are not used internally can assume exactly one sender
+// and receiver.
+//
+// Since the RtpTransceiver is used internally by PeerConnection for tracking
+// RtpSenders, RtpReceivers, and BaseChannels, and PeerConnection needs to be
+// backwards compatible with Plan B SDP, this implementation is more flexible
+// than that required by the WebRTC specification.
+//
+// With Plan B SDP, an RtpTransceiver can have any number of senders and
+// receivers which map to a=ssrc lines in the m= section.
+// With Unified Plan SDP, an RtpTransceiver will have exactly one sender and one
+// receiver which are encapsulated by the m= section.
+//
+// This class manages the RtpSenders, RtpReceivers, and BaseChannel associated
+// with this m= section. Since the transceiver, senders, and receivers are
+// reference counted and can be referenced from JavaScript (in Chromium), these
+// objects must be ready to live for an arbitrary amount of time. The
+// BaseChannel is not reference counted and is owned by the ChannelManager, so
+// the PeerConnection must take care of creating/deleting the BaseChannel and
+// setting the channel reference in the transceiver to null when it has been
+// deleted.
+//
+// The RtpTransceiver is specialized to either audio or video according to the
+// MediaType specified in the constructor. Audio RtpTransceivers will have
+// AudioRtpSenders, AudioRtpReceivers, and a VoiceChannel. Video RtpTransceivers
+// will have VideoRtpSenders, VideoRtpReceivers, and a VideoChannel.</doc>
+<fun r='_ZN6webrtc14RtpTransceiverC1EN7cricket9MediaTypeEPNS1_14ChannelManagerE'/>
+<fun r='_ZN6webrtc14RtpTransceiverC1EN3rtc13scoped_refptrINS_26RtpSenderProxyWithInternalINS_17RtpSenderInternalEEEEENS2_INS_28RtpReceiverProxyWithInternalINS6064111'/>
+<fun r='_ZN6webrtc14RtpTransceiverD1Ev'/>
+<fun r='_ZNK6webrtc14RtpTransceiver7channelEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver10SetChannelEPN7cricket16ChannelInterfaceE'/>
+<fun r='_ZN6webrtc14RtpTransceiver9AddSenderEN3rtc13scoped_refptrINS_26RtpSenderProxyWithInternalINS_17RtpSenderInternalEEEEE'/>
+<fun r='_ZN6webrtc14RtpTransceiver12RemoveSenderEPNS_18RtpSenderInterfaceE'/>
+<fun r='_ZNK6webrtc14RtpTransceiver7sendersEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver11AddReceiverEN3rtc13scoped_refptrINS_28RtpReceiverProxyWithInternalINS_19RtpReceiverInternalEEEEE'/>
+<fun r='_ZN6webrtc14RtpTransceiver14RemoveReceiverEPNS_20RtpReceiverInterfaceE'/>
+<fun r='_ZNK6webrtc14RtpTransceiver9receiversEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver15sender_internalEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver17receiver_internalEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver11mline_indexEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver15set_mline_indexENSt3__18optionalImEE'/>
+<fun r='_ZN6webrtc14RtpTransceiver7set_midERKNSt3__18optionalINS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEEE'/>
+<fun r='_ZN6webrtc14RtpTransceiver13set_directionENS_23RtpTransceiverDirectionE'/>
+<fun r='_ZN6webrtc14RtpTransceiver21set_current_directionENS_23RtpTransceiverDirectionE'/>
+<fun r='_ZN6webrtc14RtpTransceiver19set_fired_directionENS_23RtpTransceiverDirectionE'/>
+<fun r='_ZN6webrtc14RtpTransceiver23set_created_by_addtrackEb'/>
+<fun r='_ZN6webrtc14RtpTransceiver23set_reused_for_addtrackEb'/>
+<fun r='_ZNK6webrtc14RtpTransceiver19created_by_addtrackEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver19reused_for_addtrackEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver26has_ever_been_used_to_sendEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver23SetPeerConnectionClosedEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver24StopTransceiverProcedureEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver10media_typeEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver3midEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver6senderEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver8receiverEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver7stoppedEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver8stoppingEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver9directionEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver21SetDirectionWithErrorENS_23RtpTransceiverDirectionE'/>
+<fun r='_ZNK6webrtc14RtpTransceiver17current_directionEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver15fired_directionEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver12StopStandardEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver12StopInternalEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver19SetCodecPreferencesEN3rtc9ArrayViewINS_18RtpCodecCapabilityELln4711EEE'/>
+<fun r='_ZNK6webrtc14RtpTransceiver17codec_preferencesEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver23HeaderExtensionsToOfferEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver26HeaderExtensionsNegotiatedEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver29SetOfferedRtpHeaderExtensionsEN3rtc9ArrayViewIKNS_28RtpHeaderExtensionCapabilityELln4711EEE'/>
+<fun r='_ZN6webrtc14RtpTransceiver19OnNegotiationUpdateENS_7SdpTypeEPKN7cricket23MediaContentDescriptionE'/>
+<fun r='_ZN6webrtc14RtpTransceiver21OnFirstPacketReceivedEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver23StopSendingAndReceivingEv'/>
+<mbr r='webrtc::RtpTransceiver::thread_' o='576' t='webrtc::TaskQueueBase *const'/>
+<mbr r='webrtc::RtpTransceiver::unified_plan_' o='640' t='const bool'/>
+<mbr r='webrtc::RtpTransceiver::media_type_' o='672' t='const cricket::MediaType'/>
+<mbr r='webrtc::RtpTransceiver::signaling_thread_safety_' o='704' t='rtc::scoped_refptr&lt;PendingTaskSafetyFlag&gt;'/>
+<mbr r='webrtc::RtpTransceiver::senders_' o='768' t='std::vector&lt;rtc::scoped_refptr&lt;RtpSenderProxyWithInternal&lt;RtpSenderInternal&gt;&gt;&gt;'/>
+<mbr r='webrtc::RtpTransceiver::receivers_' o='960' t='std::vector&lt;rtc::scoped_refptr&lt;RtpReceiverProxyWithInternal&lt;RtpReceiverInternal&gt;&gt;&gt;'/>
+<mbr r='webrtc::RtpTransceiver::stopped_' o='1152' t='bool'/>
+<mbr r='webrtc::RtpTransceiver::stopping_' o='1160' t='bool'/>
+<mbr r='webrtc::RtpTransceiver::is_pc_closed_' o='1168' t='bool'/>
+<mbr r='webrtc::RtpTransceiver::direction_' o='1184' t='webrtc::RtpTransceiverDirection'/>
+<mbr r='webrtc::RtpTransceiver::current_direction_' o='1216' t='absl::optional&lt;RtpTransceiverDirection&gt;'/>
+<mbr r='webrtc::RtpTransceiver::fired_direction_' o='1280' t='absl::optional&lt;RtpTransceiverDirection&gt;'/>
+<mbr r='webrtc::RtpTransceiver::mid_' o='1344' t='absl::optional&lt;std::string&gt;'/>
+<mbr r='webrtc::RtpTransceiver::mline_index_' o='1600' t='absl::optional&lt;size_t&gt;'/>
+<mbr r='webrtc::RtpTransceiver::created_by_addtrack_' o='1728' t='bool'/>
+<mbr r='webrtc::RtpTransceiver::reused_for_addtrack_' o='1736' t='bool'/>
+<mbr r='webrtc::RtpTransceiver::has_ever_been_used_to_send_' o='1744' t='bool'/>
+<mbr r='webrtc::RtpTransceiver::channel_' o='1792' t='cricket::ChannelInterface *'/>
+<mbr r='webrtc::RtpTransceiver::channel_manager_' o='1856' t='cricket::ChannelManager *'/>
+<mbr r='webrtc::RtpTransceiver::codec_preferences_' o='1920' t='std::vector&lt;RtpCodecCapability&gt;'/>
+<mbr r='webrtc::RtpTransceiver::header_extensions_to_offer_' o='2112' t='std::vector&lt;RtpHeaderExtensionCapability&gt;'/>
+<mbr r='webrtc::RtpTransceiver::negotiated_header_extensions_' o='2304' t='cricket::RtpHeaderExtensions'/>
+<mbr r='webrtc::RtpTransceiver::on_negotiation_needed_' o='2496' t='const std::function&lt;void ()&gt;'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.cc' l='635' c='_ZN6webrtc14PeerConnection10InitializeERKNS_23PeerConnectionInterface16RTCConfigurationENS_26PeerConnectionDependenciesE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.cc' l='639' c='_ZN6webrtc14PeerConnection10InitializeERKNS_23PeerConnectionInterface16RTCConfigurationENS_26PeerConnectionDependenciesE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.cc' l='894' c='_ZN6webrtc14PeerConnection23FindTransceiverBySenderEN3rtc13scoped_refptrINS_18RtpSenderInterfaceEEE'/>
+<size>344</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtc_stats_collector.cc' l='2062' c='_ZN6webrtc17RTCStatsCollector46PrepareTransceiverStatsInfosAndCallStats_s_w_nEv'/>
+<size>344</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transmission_manager.cc' l='260' c='_ZN6webrtc22RtpTransmissionManager23CreateAndAddTransceiverEN3rtc13scoped_refptrINS_26RtpSenderProxyWithInternalINS_17RtpSenderInternalEEEEENS2_INS_2814914939'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transmission_manager.cc' l='273' c='_ZN6webrtc22RtpTransmissionManager23CreateAndAddTransceiverEN3rtc13scoped_refptrINS_26RtpSenderProxyWithInternalINS_17RtpSenderInternalEEEEENS2_INS_2814914939'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transmission_manager.cc' l='287' c='_ZN6webrtc22RtpTransmissionManager33FindFirstTransceiverForAddedTrackEN3rtc13scoped_refptrINS_25MediaStreamTrackInterfaceEEE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transmission_manager.cc' l='337' c='_ZNK6webrtc22RtpTransmissionManager19GetAudioTransceiverEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transmission_manager.cc' l='352' c='_ZNK6webrtc22RtpTransmissionManager19GetVideoTransceiverEv'/>
+<size>344</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.cc' l='263' c='_ZN6webrtc12_GLOBAL__N_123FindTransceiverMSectionEPNS_14RtpTransceiverEPKNS_27SessionDescriptionInterfaceE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.cc' l='615' c='_ZN6webrtc12_GLOBAL__N_140GetMediaDescriptionOptionsForTransceiverEPNS_14RtpTransceiverERKNSt3__112basic_stringIcNS3_11char_traitsIcEENS3_9allocatorIcEEEEb'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.cc' l='3204' c='_ZN6webrtc21SdpOfferAnswerHandler20AssociateTransceiverEN7cricket13ContentSourceENS_7SdpTypeEmRKNS1_11ContentInfoEPS5_S7_'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.cc' l='3339' c='_ZN6webrtc21SdpOfferAnswerHandler24UpdateTransceiverChannelEN3rtc13scoped_refptrINS_31RtpTransceiverProxyWithInternalINS_14RtpTransceiverEEEEERKN7cric12102752'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.cc' l='3456' c='_ZNK6webrtc21SdpOfferAnswerHandler33FindAvailableTransceiverToReceiveEN7cricket9MediaTypeE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.cc' l='3478' c='_ZNK6webrtc21SdpOfferAnswerHandler30FindMediaSectionForTransceiverEPKNS_14RtpTransceiverEPKNS_27SessionDescriptionInterfaceE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.cc' l='3970' c='_ZN6webrtc21SdpOfferAnswerHandler30GetReceivingTransceiversOfTypeEN7cricket9MediaTypeE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.cc' l='3974' c='_ZN6webrtc21SdpOfferAnswerHandler30GetReceivingTransceiversOfTypeEN7cricket9MediaTypeE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.cc' l='3986' c='_ZN6webrtc21SdpOfferAnswerHandler27ProcessRemovalOfRemoteTrackEN3rtc13scoped_refptrINS_31RtpTransceiverProxyWithInternalINS_14RtpTransceiverEEEEEPNSt310331263'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/sdp_offer_answer.cc' l='4596' c='_ZN6webrtc21SdpOfferAnswerHandler25DestroyTransceiverChannelEN3rtc13scoped_refptrINS_31RtpTransceiverProxyWithInternalINS_14RtpTransceiverEEEEE'/>
+<size>344</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/stats_collector.cc' l='870' c='_ZN6webrtc14StatsCollector20ExtractSessionInfo_nERKNSt3__16vectorIN3rtc13scoped_refptrINS_31RtpTransceiverProxyWithInternalINS_14RtpTransceiverEEEEENS12871469'/>
+<size>344</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/transceiver_list.cc' l='44' c='_ZNK6webrtc15TransceiverList12ListInternalEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/transceiver_list.cc' l='46' c='_ZNK6webrtc15TransceiverList12ListInternalEv'/>
+<size>344</size>
+<inh f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/ref_counted_object.h' l='24' c='rtc::RefCountedObject'/>
+<inh f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/third_party/sigslot/sigslot.h' l='474' c='sigslot::has_slots'/>
+<def f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/rtp_transceiver.h' l='74' ll='285'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/peer_connection_internal.h' l='40' c='_ZNK6webrtc22PeerConnectionInternal23GetTransceiversInternalEv'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/rtc_stats_collector.h' l='159'/>
+<size>344</size>
+<doc f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/rtp_transceiver.h' l='44'>// Implementation of the public RtpTransceiverInterface.
+//
+// The RtpTransceiverInterface is only intended to be used with a PeerConnection
+// that enables Unified Plan SDP. Thus, the methods that only need to implement
+// public API features and are not used internally can assume exactly one sender
+// and receiver.
+//
+// Since the RtpTransceiver is used internally by PeerConnection for tracking
+// RtpSenders, RtpReceivers, and BaseChannels, and PeerConnection needs to be
+// backwards compatible with Plan B SDP, this implementation is more flexible
+// than that required by the WebRTC specification.
+//
+// With Plan B SDP, an RtpTransceiver can have any number of senders and
+// receivers which map to a=ssrc lines in the m= section.
+// With Unified Plan SDP, an RtpTransceiver will have exactly one sender and one
+// receiver which are encapsulated by the m= section.
+//
+// This class manages the RtpSenders, RtpReceivers, and BaseChannel associated
+// with this m= section. Since the transceiver, senders, and receivers are
+// reference counted and can be referenced from JavaScript (in Chromium), these
+// objects must be ready to live for an arbitrary amount of time. The
+// BaseChannel is not reference counted and is owned by the ChannelManager, so
+// the PeerConnection must take care of creating/deleting the BaseChannel and
+// setting the channel reference in the transceiver to null when it has been
+// deleted.
+//
+// The RtpTransceiver is specialized to either audio or video according to the
+// MediaType specified in the constructor. Audio RtpTransceivers will have
+// AudioRtpSenders, AudioRtpReceivers, and a VoiceChannel. Video RtpTransceivers
+// will have VideoRtpSenders, VideoRtpReceivers, and a VideoChannel.</doc>
+<fun r='_ZN6webrtc14RtpTransceiverC1EN7cricket9MediaTypeEPNS1_14ChannelManagerE'/>
+<fun r='_ZN6webrtc14RtpTransceiverC1EN3rtc13scoped_refptrINS_26RtpSenderProxyWithInternalINS_17RtpSenderInternalEEEEENS2_INS_28RtpReceiverProxyWithInternalINS6064111'/>
+<fun r='_ZN6webrtc14RtpTransceiverD1Ev'/>
+<fun r='_ZNK6webrtc14RtpTransceiver7channelEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver10SetChannelEPN7cricket16ChannelInterfaceE'/>
+<fun r='_ZN6webrtc14RtpTransceiver9AddSenderEN3rtc13scoped_refptrINS_26RtpSenderProxyWithInternalINS_17RtpSenderInternalEEEEE'/>
+<fun r='_ZN6webrtc14RtpTransceiver12RemoveSenderEPNS_18RtpSenderInterfaceE'/>
+<fun r='_ZNK6webrtc14RtpTransceiver7sendersEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver11AddReceiverEN3rtc13scoped_refptrINS_28RtpReceiverProxyWithInternalINS_19RtpReceiverInternalEEEEE'/>
+<fun r='_ZN6webrtc14RtpTransceiver14RemoveReceiverEPNS_20RtpReceiverInterfaceE'/>
+<fun r='_ZNK6webrtc14RtpTransceiver9receiversEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver15sender_internalEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver17receiver_internalEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver11mline_indexEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver15set_mline_indexENSt3__18optionalImEE'/>
+<fun r='_ZN6webrtc14RtpTransceiver7set_midERKNSt3__18optionalINS1_12basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEEE'/>
+<fun r='_ZN6webrtc14RtpTransceiver13set_directionENS_23RtpTransceiverDirectionE'/>
+<fun r='_ZN6webrtc14RtpTransceiver21set_current_directionENS_23RtpTransceiverDirectionE'/>
+<fun r='_ZN6webrtc14RtpTransceiver19set_fired_directionENS_23RtpTransceiverDirectionE'/>
+<fun r='_ZN6webrtc14RtpTransceiver23set_created_by_addtrackEb'/>
+<fun r='_ZN6webrtc14RtpTransceiver23set_reused_for_addtrackEb'/>
+<fun r='_ZNK6webrtc14RtpTransceiver19created_by_addtrackEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver19reused_for_addtrackEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver26has_ever_been_used_to_sendEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver23SetPeerConnectionClosedEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver24StopTransceiverProcedureEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver10media_typeEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver3midEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver6senderEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver8receiverEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver7stoppedEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver8stoppingEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver9directionEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver21SetDirectionWithErrorENS_23RtpTransceiverDirectionE'/>
+<fun r='_ZNK6webrtc14RtpTransceiver17current_directionEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver15fired_directionEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver12StopStandardEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver12StopInternalEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver19SetCodecPreferencesEN3rtc9ArrayViewINS_18RtpCodecCapabilityELln4711EEE'/>
+<fun r='_ZNK6webrtc14RtpTransceiver17codec_preferencesEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver23HeaderExtensionsToOfferEv'/>
+<fun r='_ZNK6webrtc14RtpTransceiver26HeaderExtensionsNegotiatedEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver29SetOfferedRtpHeaderExtensionsEN3rtc9ArrayViewIKNS_28RtpHeaderExtensionCapabilityELln4711EEE'/>
+<fun r='_ZN6webrtc14RtpTransceiver19OnNegotiationUpdateENS_7SdpTypeEPKN7cricket23MediaContentDescriptionE'/>
+<fun r='_ZN6webrtc14RtpTransceiver21OnFirstPacketReceivedEv'/>
+<fun r='_ZN6webrtc14RtpTransceiver23StopSendingAndReceivingEv'/>
+<mbr r='webrtc::RtpTransceiver::thread_' o='576' t='webrtc::TaskQueueBase *const'/>
+<mbr r='webrtc::RtpTransceiver::unified_plan_' o='640' t='const bool'/>
+<mbr r='webrtc::RtpTransceiver::media_type_' o='672' t='const cricket::MediaType'/>
+<mbr r='webrtc::RtpTransceiver::signaling_thread_safety_' o='704' t='rtc::scoped_refptr&lt;PendingTaskSafetyFlag&gt;'/>
+<mbr r='webrtc::RtpTransceiver::senders_' o='768' t='std::vector&lt;rtc::scoped_refptr&lt;RtpSenderProxyWithInternal&lt;RtpSenderInternal&gt;&gt;&gt;'/>
+<mbr r='webrtc::RtpTransceiver::receivers_' o='960' t='std::vector&lt;rtc::scoped_refptr&lt;RtpReceiverProxyWithInternal&lt;RtpReceiverInternal&gt;&gt;&gt;'/>
+<mbr r='webrtc::RtpTransceiver::stopped_' o='1152' t='bool'/>
+<mbr r='webrtc::RtpTransceiver::stopping_' o='1160' t='bool'/>
+<mbr r='webrtc::RtpTransceiver::is_pc_closed_' o='1168' t='bool'/>
+<mbr r='webrtc::RtpTransceiver::direction_' o='1184' t='webrtc::RtpTransceiverDirection'/>
+<mbr r='webrtc::RtpTransceiver::current_direction_' o='1216' t='absl::optional&lt;RtpTransceiverDirection&gt;'/>
+<mbr r='webrtc::RtpTransceiver::fired_direction_' o='1280' t='absl::optional&lt;RtpTransceiverDirection&gt;'/>
+<mbr r='webrtc::RtpTransceiver::mid_' o='1344' t='absl::optional&lt;std::string&gt;'/>
+<mbr r='webrtc::RtpTransceiver::mline_index_' o='1600' t='absl::optional&lt;size_t&gt;'/>
+<mbr r='webrtc::RtpTransceiver::created_by_addtrack_' o='1728' t='bool'/>
+<mbr r='webrtc::RtpTransceiver::reused_for_addtrack_' o='1736' t='bool'/>
+<mbr r='webrtc::RtpTransceiver::has_ever_been_used_to_send_' o='1744' t='bool'/>
+<mbr r='webrtc::RtpTransceiver::channel_' o='1792' t='cricket::ChannelInterface *'/>
+<mbr r='webrtc::RtpTransceiver::channel_manager_' o='1856' t='cricket::ChannelManager *'/>
+<mbr r='webrtc::RtpTransceiver::codec_preferences_' o='1920' t='std::vector&lt;RtpCodecCapability&gt;'/>
+<mbr r='webrtc::RtpTransceiver::header_extensions_to_offer_' o='2112' t='std::vector&lt;RtpHeaderExtensionCapability&gt;'/>
+<mbr r='webrtc::RtpTransceiver::negotiated_header_extensions_' o='2304' t='cricket::RtpHeaderExtensions'/>
+<mbr r='webrtc::RtpTransceiver::on_negotiation_needed_' o='2496' t='const std::function&lt;void ()&gt;'/>

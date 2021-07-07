@@ -1,0 +1,53 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>EmulateGLFragColorBroadcast.h source code [webkit/Source/ThirdParty/ANGLE/src/compiler/translator/tree_ops/EmulateGLFragColorBroadcast.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/ANGLE/src/compiler/translator/tree_ops/EmulateGLFragColorBroadcast.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>ANGLE</a>/<a href='../../..'>src</a>/<a href='../..'>compiler</a>/<a href='..'>translator</a>/<a href='./'>tree_ops</a>/<a href='EmulateGLFragColorBroadcast.h.html'>EmulateGLFragColorBroadcast.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>//</i></td></tr>
+<tr><th id="2">2</th><td><i>// Copyright 2002 The ANGLE Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i>// Use of this source code is governed by a BSD-style license that can be</i></td></tr>
+<tr><th id="4">4</th><td><i>// found in the LICENSE file.</i></td></tr>
+<tr><th id="5">5</th><td><i>//</i></td></tr>
+<tr><th id="6">6</th><td><i>// Emulate gl_FragColor broadcast behaviors in ES2 where</i></td></tr>
+<tr><th id="7">7</th><td><i>// GL_EXT_draw_buffers is explicitly enabled in a fragment shader.</i></td></tr>
+<tr><th id="8">8</th><td><i>//</i></td></tr>
+<tr><th id="9">9</th><td></td></tr>
+<tr><th id="10">10</th><td><u>#<span data-ppcond="10">ifndef</span> <span class="macro" data-ref="_M/COMPILER_TRANSLATOR_TREEOPS_EMULATEGLFRAGCOLORBROADCAST_H_">COMPILER_TRANSLATOR_TREEOPS_EMULATEGLFRAGCOLORBROADCAST_H_</span></u></td></tr>
+<tr><th id="11">11</th><td><u>#define <dfn class="macro" id="_M/COMPILER_TRANSLATOR_TREEOPS_EMULATEGLFRAGCOLORBROADCAST_H_" data-ref="_M/COMPILER_TRANSLATOR_TREEOPS_EMULATEGLFRAGCOLORBROADCAST_H_">COMPILER_TRANSLATOR_TREEOPS_EMULATEGLFRAGCOLORBROADCAST_H_</dfn></u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include &lt;vector&gt;</u></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><u>#include <a href="../../../common/angleutils.h.html">"common/angleutils.h"</a></u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><b>namespace</b> <span class="namespace">sh</span></td></tr>
+<tr><th id="18">18</th><td>{</td></tr>
+<tr><th id="19">19</th><td><b>struct</b> <a class="type" href="../../../../include/GLSLANG/ShaderVars.h.html#sh::ShaderVariable" title='sh::ShaderVariable' data-ref="sh::ShaderVariable" data-ref-filename="sh..ShaderVariable" id="sh::ShaderVariable">ShaderVariable</a>;</td></tr>
+<tr><th id="20">20</th><td><b>class</b> <a class="type" href="../Compiler.h.html#sh::TCompiler" title='sh::TCompiler' data-ref="sh::TCompiler" data-ref-filename="sh..TCompiler" id="sh::TCompiler">TCompiler</a>;</td></tr>
+<tr><th id="21">21</th><td><b>class</b> <a class="type" href="../IntermNode.h.html#sh::TIntermBlock" title='sh::TIntermBlock' data-ref="sh::TIntermBlock" data-ref-filename="sh..TIntermBlock" id="sh::TIntermBlock">TIntermBlock</a>;</td></tr>
+<tr><th id="22">22</th><td><b>class</b> <a class="type" href="../SymbolTable.h.html#sh::TSymbolTable" title='sh::TSymbolTable' data-ref="sh::TSymbolTable" data-ref-filename="sh..TSymbolTable" id="sh::TSymbolTable">TSymbolTable</a>;</td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><i>// Replace all gl_FragColor with gl_FragData[0], and in the end of main() function,</i></td></tr>
+<tr><th id="25">25</th><td><i>// assign gl_FragData[1] ... gl_FragData[maxDrawBuffers - 1] with gl_FragData[0].</i></td></tr>
+<tr><th id="26">26</th><td><i>// If gl_FragColor is in outputVariables, it is replaced by gl_FragData.</i></td></tr>
+<tr><th id="27">27</th><td><a class="macro" href="../../../common/angleutils.h.html#358" title="[[nodiscard]]" data-ref="_M/ANGLE_NO_DISCARD">ANGLE_NO_DISCARD</a> <em>bool</em> <dfn class="decl fn" id="_ZN2sh27EmulateGLFragColorBroadcastEPNS_9TCompilerEPNS_12TIntermBlockEiPNSt3__16vectorINS_14ShaderVariableENS4_9allocatorIS6_EEEEPNS_12TSymbolTableEi" title='sh::EmulateGLFragColorBroadcast' data-ref="_ZN2sh27EmulateGLFragColorBroadcastEPNS_9TCompilerEPNS_12TIntermBlockEiPNSt3__16vectorINS_14ShaderVariableENS4_9allocatorIS6_EEEEPNS_12TSymbolTableEi" data-ref-filename="_ZN2sh27EmulateGLFragColorBroadcastEPNS_9TCompilerEPNS_12TIntermBlockEiPNSt3__16vectorINS_14ShaderVariableENS4_9allocatorIS6_EEEEPNS_12TSymbolTableEi">EmulateGLFragColorBroadcast</dfn>(<a class="type" href="../Compiler.h.html#sh::TCompiler" title='sh::TCompiler' data-ref="sh::TCompiler" data-ref-filename="sh..TCompiler">TCompiler</a> *<dfn class="local col6 decl" id="576compiler" title='compiler' data-type='sh::TCompiler *' data-ref="576compiler" data-ref-filename="576compiler">compiler</dfn>,</td></tr>
+<tr><th id="28">28</th><td>                                                  <a class="type" href="../IntermNode.h.html#sh::TIntermBlock" title='sh::TIntermBlock' data-ref="sh::TIntermBlock" data-ref-filename="sh..TIntermBlock">TIntermBlock</a> *<dfn class="local col7 decl" id="577root" title='root' data-type='sh::TIntermBlock *' data-ref="577root" data-ref-filename="577root">root</dfn>,</td></tr>
+<tr><th id="29">29</th><td>                                                  <em>int</em> <dfn class="local col8 decl" id="578maxDrawBuffers" title='maxDrawBuffers' data-type='int' data-ref="578maxDrawBuffers" data-ref-filename="578maxDrawBuffers">maxDrawBuffers</dfn>,</td></tr>
+<tr><th id="30">30</th><td>                                                  <span class="namespace">std::</span><span class='type' title='std::__1::vector' data-ref="std::__1::vector" data-ref-filename="std..__1..vector">vector</span>&lt;<a class="type" href="../../../../include/GLSLANG/ShaderVars.h.html#sh::ShaderVariable" title='sh::ShaderVariable' data-ref="sh::ShaderVariable" data-ref-filename="sh..ShaderVariable">ShaderVariable</a>&gt; *<dfn class="local col9 decl" id="579outputVariables" title='outputVariables' data-type='std::vector&lt;ShaderVariable&gt; *' data-ref="579outputVariables" data-ref-filename="579outputVariables">outputVariables</dfn>,</td></tr>
+<tr><th id="31">31</th><td>                                                  <a class="type" href="../SymbolTable.h.html#sh::TSymbolTable" title='sh::TSymbolTable' data-ref="sh::TSymbolTable" data-ref-filename="sh..TSymbolTable">TSymbolTable</a> *<dfn class="local col0 decl" id="580symbolTable" title='symbolTable' data-type='sh::TSymbolTable *' data-ref="580symbolTable" data-ref-filename="580symbolTable">symbolTable</dfn>,</td></tr>
+<tr><th id="32">32</th><td>                                                  <em>int</em> <dfn class="local col1 decl" id="581shaderVersion" title='shaderVersion' data-type='int' data-ref="581shaderVersion" data-ref-filename="581shaderVersion">shaderVersion</dfn>);</td></tr>
+<tr><th id="33">33</th><td>}  <i>// namespace sh</i></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><u>#<span data-ppcond="10">endif</span>  // COMPILER_TRANSLATOR_TREEOPS_EMULATEGLFRAGCOLORBROADCAST_H_</u></td></tr>
+<tr><th id="36">36</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../Compiler.cpp.html'>webkit/Source/ThirdParty/ANGLE/src/compiler/translator/Compiler.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

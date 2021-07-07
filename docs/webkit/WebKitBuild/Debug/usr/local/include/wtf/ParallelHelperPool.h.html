@@ -1,0 +1,236 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ParallelHelperPool.h source code [webkit/WebKitBuild/Debug/usr/local/include/wtf/ParallelHelperPool.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="WTF::ParallelHelperClient,WTF::ParallelHelperPool "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/wtf/ParallelHelperPool.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>wtf</a>/<a href='ParallelHelperPool.h.html'>ParallelHelperPool.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2015-2017 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="Box.h.html">&lt;wtf/Box.h&gt;</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="Condition.h.html">&lt;wtf/Condition.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="Lock.h.html">&lt;wtf/Lock.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="RefPtr.h.html">&lt;wtf/RefPtr.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="SharedTask.h.html">&lt;wtf/SharedTask.h&gt;</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#include <a href="ThreadSafeRefCounted.h.html">&lt;wtf/ThreadSafeRefCounted.h&gt;</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#include <a href="Threading.h.html">&lt;wtf/Threading.h&gt;</a></u></td></tr>
+<tr><th id="35">35</th><td><u>#include <a href="Vector.h.html">&lt;wtf/Vector.h&gt;</a></u></td></tr>
+<tr><th id="36">36</th><td><u>#include <a href="WeakRandom.h.html">&lt;wtf/WeakRandom.h&gt;</a></u></td></tr>
+<tr><th id="37">37</th><td><u>#include <a href="text/CString.h.html">&lt;wtf/text/CString.h&gt;</a></u></td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><b>class</b> <a class="type" href="AutomaticThread.h.html#WTF::AutomaticThread" title='WTF::AutomaticThread' data-ref="WTF::AutomaticThread" data-ref-filename="WTF..AutomaticThread" id="WTF::AutomaticThread">AutomaticThread</a>;</td></tr>
+<tr><th id="42">42</th><td><b>class</b> <a class="type" href="AutomaticThread.h.html#WTF::AutomaticThreadCondition" title='WTF::AutomaticThreadCondition' data-ref="WTF::AutomaticThreadCondition" data-ref-filename="WTF..AutomaticThreadCondition" id="WTF::AutomaticThreadCondition">AutomaticThreadCondition</a>;</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><i>// A ParallelHelperPool is a shared pool of threads that can be asked to help with some finite-time</i></td></tr>
+<tr><th id="45">45</th><td><i>// parallel activity. It's designed to work well when there are multiple concurrent tasks that may</i></td></tr>
+<tr><th id="46">46</th><td><i>// all want parallel help. In that case, we don't want each task to start its own thread pool. It's</i></td></tr>
+<tr><th id="47">47</th><td><i>// also designed to work well for tasks that do their own load balancing and do not wish to</i></td></tr>
+<tr><th id="48">48</th><td><i>// participate in microtask-style load balancing.</i></td></tr>
+<tr><th id="49">49</th><td><i>//</i></td></tr>
+<tr><th id="50">50</th><td><i>// A pool can have many clients, and each client may have zero or one tasks. The pool will have up</i></td></tr>
+<tr><th id="51">51</th><td><i>// to some number of threads, configurable with ParallelHelperPool::addThreads(); usually you bound</i></td></tr>
+<tr><th id="52">52</th><td><i>// this by the number of CPUs. Whenever a thread is idle and it notices that some client has a</i></td></tr>
+<tr><th id="53">53</th><td><i>// task, it will run the task. A task may be run on anywhere between zero and N threads, where N is</i></td></tr>
+<tr><th id="54">54</th><td><i>// the number of threads in the pool. Tasks run to completion. It's expected that a task will have</i></td></tr>
+<tr><th id="55">55</th><td><i>// its own custom ideas about how to participate in some parallel activity's load balancing, and it</i></td></tr>
+<tr><th id="56">56</th><td><i>// will return when the parallel activity is done. For example, a parallel marking task will return</i></td></tr>
+<tr><th id="57">57</th><td><i>// when the mark phase is done.</i></td></tr>
+<tr><th id="58">58</th><td><i>//</i></td></tr>
+<tr><th id="59">59</th><td><i>// Threads may have a choice between many tasks, since there may be many clients and each client</i></td></tr>
+<tr><th id="60">60</th><td><i>// may have a task. For the marking example, that may happen if there are multiple VM instances and</i></td></tr>
+<tr><th id="61">61</th><td><i>// each instance decides to start parallel marking at the same time. In that case, threads choose</i></td></tr>
+<tr><th id="62">62</th><td><i>// a task at random. So long as any client has a task, all threads in the pool will continue</i></td></tr>
+<tr><th id="63">63</th><td><i>// running the available tasks. Threads go idle when no client has tasks to run.</i></td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td><b>class</b> <a class="type" href="#WTF::ParallelHelperClient" title='WTF::ParallelHelperClient' data-ref="WTF::ParallelHelperClient" data-ref-filename="WTF..ParallelHelperClient">ParallelHelperClient</a>;</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><b>class</b> <dfn class="type def" id="WTF::ParallelHelperPool" title='WTF::ParallelHelperPool' data-ref="WTF::ParallelHelperPool" data-ref-filename="WTF..ParallelHelperPool">ParallelHelperPool</dfn> : <b>public</b> <a class="type" href="ThreadSafeRefCounted.h.html#WTF::ThreadSafeRefCounted" title='WTF::ThreadSafeRefCounted' data-ref="WTF::ThreadSafeRefCounted" data-ref-filename="WTF..ThreadSafeRefCounted">ThreadSafeRefCounted</a>&lt;<a class="type" href="#WTF::ParallelHelperPool" title='WTF::ParallelHelperPool' data-ref="WTF::ParallelHelperPool" data-ref-filename="WTF..ParallelHelperPool">ParallelHelperPool</a>&gt; {</td></tr>
+<tr><th id="68">68</th><td><b>public</b>:</td></tr>
+<tr><th id="69">69</th><td>    <a class="macro" href="ExportMacros.h.html#66" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WTF_EXPORT_PRIVATE">WTF_EXPORT_PRIVATE</a> <dfn class="decl fn" id="_ZN3WTF18ParallelHelperPoolC1EONS_7CStringE" title='WTF::ParallelHelperPool::ParallelHelperPool' data-ref="_ZN3WTF18ParallelHelperPoolC1EONS_7CStringE" data-ref-filename="_ZN3WTF18ParallelHelperPoolC1EONS_7CStringE">ParallelHelperPool</dfn>(<a class="type" href="text/CString.h.html#WTF::CString" title='WTF::CString' data-ref="WTF::CString" data-ref-filename="WTF..CString">CString</a>&amp;&amp; <dfn class="local col9 decl" id="1289threadName" title='threadName' data-type='WTF::CString &amp;&amp;' data-ref="1289threadName" data-ref-filename="1289threadName">threadName</dfn>);</td></tr>
+<tr><th id="70">70</th><td>    <a class="macro" href="ExportMacros.h.html#66" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WTF_EXPORT_PRIVATE">WTF_EXPORT_PRIVATE</a> <dfn class="decl fn" id="_ZN3WTF18ParallelHelperPoolD1Ev" title='WTF::ParallelHelperPool::~ParallelHelperPool' data-ref="_ZN3WTF18ParallelHelperPoolD1Ev" data-ref-filename="_ZN3WTF18ParallelHelperPoolD1Ev">~ParallelHelperPool</dfn>();</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td>    <a class="macro" href="ExportMacros.h.html#66" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WTF_EXPORT_PRIVATE">WTF_EXPORT_PRIVATE</a> <em>void</em> <dfn class="decl fn" id="_ZN3WTF18ParallelHelperPool13ensureThreadsEj" title='WTF::ParallelHelperPool::ensureThreads' data-ref="_ZN3WTF18ParallelHelperPool13ensureThreadsEj" data-ref-filename="_ZN3WTF18ParallelHelperPool13ensureThreadsEj">ensureThreads</dfn>(<em>unsigned</em> <dfn class="local col0 decl" id="1290numThreads" title='numThreads' data-type='unsigned int' data-ref="1290numThreads" data-ref-filename="1290numThreads">numThreads</dfn>);</td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td>    <em>unsigned</em> <dfn class="decl def fn" id="_ZNK3WTF18ParallelHelperPool15numberOfThreadsEv" title='WTF::ParallelHelperPool::numberOfThreads' data-ref="_ZNK3WTF18ParallelHelperPool15numberOfThreadsEv" data-ref-filename="_ZNK3WTF18ParallelHelperPool15numberOfThreadsEv">numberOfThreads</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#WTF::ParallelHelperPool::m_numThreads" title='WTF::ParallelHelperPool::m_numThreads' data-ref="WTF::ParallelHelperPool::m_numThreads" data-ref-filename="WTF..ParallelHelperPool..m_numThreads">m_numThreads</a>; }</td></tr>
+<tr><th id="75">75</th><td>    </td></tr>
+<tr><th id="76">76</th><td>    <a class="macro" href="ExportMacros.h.html#66" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WTF_EXPORT_PRIVATE">WTF_EXPORT_PRIVATE</a> <em>void</em> <dfn class="decl fn" id="_ZN3WTF18ParallelHelperPool13doSomeHelpingEv" title='WTF::ParallelHelperPool::doSomeHelping' data-ref="_ZN3WTF18ParallelHelperPool13doSomeHelpingEv" data-ref-filename="_ZN3WTF18ParallelHelperPool13doSomeHelpingEv">doSomeHelping</dfn>();</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td><b>private</b>:</td></tr>
+<tr><th id="79">79</th><td>    <b>friend</b> <b>class</b> <a class="type" href="#WTF::ParallelHelperClient" title='WTF::ParallelHelperClient' data-ref="WTF::ParallelHelperClient" data-ref-filename="WTF..ParallelHelperClient">ParallelHelperClient</a>;</td></tr>
+<tr><th id="80">80</th><td>    <b>class</b> <dfn class="type" id="WTF::ParallelHelperPool::Thread" title='WTF::ParallelHelperPool::Thread' data-ref="WTF::ParallelHelperPool::Thread" data-ref-filename="WTF..ParallelHelperPool..Thread">Thread</dfn>;</td></tr>
+<tr><th id="81">81</th><td>    <b>friend</b> <b>class</b> <a class="type" href="#WTF::ParallelHelperPool::Thread" title='WTF::ParallelHelperPool::Thread' data-ref="WTF::ParallelHelperPool::Thread" data-ref-filename="WTF..ParallelHelperPool..Thread">Thread</a>;</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN3WTF18ParallelHelperPool20didMakeWorkAvailableERKNS_14AbstractLockerE" title='WTF::ParallelHelperPool::didMakeWorkAvailable' data-ref="_ZN3WTF18ParallelHelperPool20didMakeWorkAvailableERKNS_14AbstractLockerE" data-ref-filename="_ZN3WTF18ParallelHelperPool20didMakeWorkAvailableERKNS_14AbstractLockerE">didMakeWorkAvailable</dfn>(<em>const</em> <a class="type" href="Locker.h.html#WTF::AbstractLocker" title='WTF::AbstractLocker' data-ref="WTF::AbstractLocker" data-ref-filename="WTF..AbstractLocker">AbstractLocker</a>&amp;) <a class="macro" href="ThreadSafetyAnalysis.h.html#53" title="__attribute__((requires_capability(m_lock)))" data-ref="_M/WTF_REQUIRES_LOCK">WTF_REQUIRES_LOCK</a>(<a class="member field" href="#WTF::ParallelHelperPool::m_lock" title='WTF::ParallelHelperPool::m_lock' data-ref="WTF::ParallelHelperPool::m_lock" data-ref-filename="WTF..ParallelHelperPool..m_lock">m_lock</a>);</td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td>    <em>bool</em> <dfn class="decl fn" id="_ZN3WTF18ParallelHelperPool17hasClientWithTaskEv" title='WTF::ParallelHelperPool::hasClientWithTask' data-ref="_ZN3WTF18ParallelHelperPool17hasClientWithTaskEv" data-ref-filename="_ZN3WTF18ParallelHelperPool17hasClientWithTaskEv">hasClientWithTask</dfn>() <a class="macro" href="ThreadSafetyAnalysis.h.html#53" title="__attribute__((requires_capability(m_lock)))" data-ref="_M/WTF_REQUIRES_LOCK">WTF_REQUIRES_LOCK</a>(<a class="member field" href="#WTF::ParallelHelperPool::m_lock" title='WTF::ParallelHelperPool::m_lock' data-ref="WTF::ParallelHelperPool::m_lock" data-ref-filename="WTF..ParallelHelperPool..m_lock">m_lock</a>);</td></tr>
+<tr><th id="86">86</th><td>    <a class="type" href="#WTF::ParallelHelperClient" title='WTF::ParallelHelperClient' data-ref="WTF::ParallelHelperClient" data-ref-filename="WTF..ParallelHelperClient">ParallelHelperClient</a>* <dfn class="decl fn" id="_ZN3WTF18ParallelHelperPool17getClientWithTaskEv" title='WTF::ParallelHelperPool::getClientWithTask' data-ref="_ZN3WTF18ParallelHelperPool17getClientWithTaskEv" data-ref-filename="_ZN3WTF18ParallelHelperPool17getClientWithTaskEv">getClientWithTask</dfn>() <a class="macro" href="ThreadSafetyAnalysis.h.html#53" title="__attribute__((requires_capability(m_lock)))" data-ref="_M/WTF_REQUIRES_LOCK">WTF_REQUIRES_LOCK</a>(<a class="member field" href="#WTF::ParallelHelperPool::m_lock" title='WTF::ParallelHelperPool::m_lock' data-ref="WTF::ParallelHelperPool::m_lock" data-ref-filename="WTF..ParallelHelperPool..m_lock">m_lock</a>);</td></tr>
+<tr><th id="87">87</th><td>    </td></tr>
+<tr><th id="88">88</th><td>    <a class="type" href="Box.h.html#WTF::Box" title='WTF::Box' data-ref="WTF::Box" data-ref-filename="WTF..Box">Box</a>&lt;<a class="type" href="Lock.h.html#WTF::Lock" title='WTF::Lock' data-ref="WTF::Lock" data-ref-filename="WTF..Lock">Lock</a>&gt; <dfn class="decl field" id="WTF::ParallelHelperPool::m_lock" title='WTF::ParallelHelperPool::m_lock' data-ref="WTF::ParallelHelperPool::m_lock" data-ref-filename="WTF..ParallelHelperPool..m_lock">m_lock</dfn>; <i>// AutomaticThread wants this in a box for safety.</i></td></tr>
+<tr><th id="89">89</th><td>    <a class="type" href="Forward.h.html#WTF::Ref" title='WTF::Ref' data-ref="WTF::Ref" data-ref-filename="WTF..Ref">Ref</a>&lt;<a class="type" href="AutomaticThread.h.html#WTF::AutomaticThreadCondition" title='WTF::AutomaticThreadCondition' data-ref="WTF::AutomaticThreadCondition" data-ref-filename="WTF..AutomaticThreadCondition">AutomaticThreadCondition</a>&gt; <dfn class="decl field" id="WTF::ParallelHelperPool::m_workAvailableCondition" title='WTF::ParallelHelperPool::m_workAvailableCondition' data-ref="WTF::ParallelHelperPool::m_workAvailableCondition" data-ref-filename="WTF..ParallelHelperPool..m_workAvailableCondition">m_workAvailableCondition</dfn>;</td></tr>
+<tr><th id="90">90</th><td>    <a class="type" href="Condition.h.html#WTF::Condition" title='WTF::Condition' data-ref="WTF::Condition" data-ref-filename="WTF..Condition">Condition</a> <dfn class="decl field" id="WTF::ParallelHelperPool::m_workCompleteCondition" title='WTF::ParallelHelperPool::m_workCompleteCondition' data-ref="WTF::ParallelHelperPool::m_workCompleteCondition" data-ref-filename="WTF..ParallelHelperPool..m_workCompleteCondition">m_workCompleteCondition</dfn>;</td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td>    <a class="type" href="WeakRandom.h.html#WTF::WeakRandom" title='WTF::WeakRandom' data-ref="WTF::WeakRandom" data-ref-filename="WTF..WeakRandom">WeakRandom</a> <dfn class="decl field" id="WTF::ParallelHelperPool::m_random" title='WTF::ParallelHelperPool::m_random' data-ref="WTF::ParallelHelperPool::m_random" data-ref-filename="WTF..ParallelHelperPool..m_random">m_random</dfn>;</td></tr>
+<tr><th id="93">93</th><td>    </td></tr>
+<tr><th id="94">94</th><td>    <a class="type" href="Forward.h.html#WTF::Vector" title='WTF::Vector' data-ref="WTF::Vector" data-ref-filename="WTF..Vector">Vector</a>&lt;<a class="type" href="#WTF::ParallelHelperClient" title='WTF::ParallelHelperClient' data-ref="WTF::ParallelHelperClient" data-ref-filename="WTF..ParallelHelperClient">ParallelHelperClient</a>*&gt; <dfn class="decl field" id="WTF::ParallelHelperPool::m_clients" title='WTF::ParallelHelperPool::m_clients' data-ref="WTF::ParallelHelperPool::m_clients" data-ref-filename="WTF..ParallelHelperPool..m_clients">m_clients</dfn> <a class="macro" href="ThreadSafetyAnalysis.h.html#47" title="__attribute__((guarded_by(*m_lock)))" data-ref="_M/WTF_GUARDED_BY_LOCK">WTF_GUARDED_BY_LOCK</a>(<a class="ref fn" href="Box.h.html#_ZNK3WTF3BoxdeEv" title='WTF::Box::operator*' data-ref="_ZNK3WTF3BoxdeEv" data-ref-filename="_ZNK3WTF3BoxdeEv">*</a><a class="ref field" href="#WTF::ParallelHelperPool::m_lock" title='WTF::ParallelHelperPool::m_lock' data-ref="WTF::ParallelHelperPool::m_lock" data-ref-filename="WTF..ParallelHelperPool..m_lock">m_lock</a>);</td></tr>
+<tr><th id="95">95</th><td>    <a class="type" href="Forward.h.html#WTF::Vector" title='WTF::Vector' data-ref="WTF::Vector" data-ref-filename="WTF..Vector">Vector</a>&lt;<a class="type" href="Forward.h.html#WTF::RefPtr" title='WTF::RefPtr' data-ref="WTF::RefPtr" data-ref-filename="WTF..RefPtr">RefPtr</a>&lt;<a class="type" href="AutomaticThread.h.html#WTF::AutomaticThread" title='WTF::AutomaticThread' data-ref="WTF::AutomaticThread" data-ref-filename="WTF..AutomaticThread">AutomaticThread</a>&gt;&gt; <dfn class="decl field" id="WTF::ParallelHelperPool::m_threads" title='WTF::ParallelHelperPool::m_threads' data-ref="WTF::ParallelHelperPool::m_threads" data-ref-filename="WTF..ParallelHelperPool..m_threads">m_threads</dfn>;</td></tr>
+<tr><th id="96">96</th><td>    <a class="type" href="text/CString.h.html#WTF::CString" title='WTF::CString' data-ref="WTF::CString" data-ref-filename="WTF..CString">CString</a> <dfn class="decl field" id="WTF::ParallelHelperPool::m_threadName" title='WTF::ParallelHelperPool::m_threadName' data-ref="WTF::ParallelHelperPool::m_threadName" data-ref-filename="WTF..ParallelHelperPool..m_threadName">m_threadName</dfn>;</td></tr>
+<tr><th id="97">97</th><td>    <em>unsigned</em> <dfn class="decl field" id="WTF::ParallelHelperPool::m_numThreads" title='WTF::ParallelHelperPool::m_numThreads' data-ref="WTF::ParallelHelperPool::m_numThreads" data-ref-filename="WTF..ParallelHelperPool..m_numThreads">m_numThreads</dfn> { <var>0</var> }; <i>// This can be larger than m_threads.size() because we start threads only once there is work.</i></td></tr>
+<tr><th id="98">98</th><td>    <em>bool</em> <dfn class="decl field" id="WTF::ParallelHelperPool::m_isDying" title='WTF::ParallelHelperPool::m_isDying' data-ref="WTF::ParallelHelperPool::m_isDying" data-ref-filename="WTF..ParallelHelperPool..m_isDying">m_isDying</dfn> { <b>false</b> };</td></tr>
+<tr><th id="99">99</th><td>};</td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td><i>// A client is a placeholder for a parallel algorithm. A parallel algorithm will have a task that</i></td></tr>
+<tr><th id="102">102</th><td><i>// can be run concurrently. Whenever a client has a task set (you have called setTask() or</i></td></tr>
+<tr><th id="103">103</th><td><i>// setFunction()), threads in the pool may run that task. If a task returns on any thread, the</i></td></tr>
+<tr><th id="104">104</th><td><i>// client will assume that the task is done and will clear the task. If the task is cleared (the</i></td></tr>
+<tr><th id="105">105</th><td><i>// task runs to completion on any thread or you call finish()), any threads in the pool already</i></td></tr>
+<tr><th id="106">106</th><td><i>// running the last set task(s) will continue to run them. You can wait for all of them to finish</i></td></tr>
+<tr><th id="107">107</th><td><i>// by calling finish(). That method will clear the task and wait for any threads running the last</i></td></tr>
+<tr><th id="108">108</th><td><i>// set task to finish. There are two known-good patterns for using a client:</i></td></tr>
+<tr><th id="109">109</th><td><i>//</i></td></tr>
+<tr><th id="110">110</th><td><i>// 1) Tasks intrinsically know when the algorithm reaches termination, and simply returns when</i></td></tr>
+<tr><th id="111">111</th><td><i>//    this happens. The main thread runs the task by doing:</i></td></tr>
+<tr><th id="112">112</th><td><i>//</i></td></tr>
+<tr><th id="113">113</th><td><i>//    client-&gt;setFunction(</i></td></tr>
+<tr><th id="114">114</th><td><i>//        [=] () {</i></td></tr>
+<tr><th id="115">115</th><td><i>//            do things;</i></td></tr>
+<tr><th id="116">116</th><td><i>//        });</i></td></tr>
+<tr><th id="117">117</th><td><i>//    client-&gt;doSomeHelping();</i></td></tr>
+<tr><th id="118">118</th><td><i>//    client-&gt;finish();</i></td></tr>
+<tr><th id="119">119</th><td><i>//</i></td></tr>
+<tr><th id="120">120</th><td><i>//    Calling doSomeHelping() ensures that the algorithm runs on at least one thread (this one).</i></td></tr>
+<tr><th id="121">121</th><td><i>//    Tasks will know when to complete, and will return when they are done. This will clear the</i></td></tr>
+<tr><th id="122">122</th><td><i>//    task to ensure that no new threads will run the task. Then, finish() clears the current task</i></td></tr>
+<tr><th id="123">123</th><td><i>//    and waits for any parallel tasks to finish after the main thread has finished. It's possible</i></td></tr>
+<tr><th id="124">124</th><td><i>//    for threads to still be running the last set task (i.e. the one set by setFunction()) even</i></td></tr>
+<tr><th id="125">125</th><td><i>//    after the task has been cleared. Waiting for idle ensures that no old tasks are running</i></td></tr>
+<tr><th id="126">126</th><td><i>//    anymore.</i></td></tr>
+<tr><th id="127">127</th><td><i>//</i></td></tr>
+<tr><th id="128">128</th><td><i>//    You can do this more easily by using the runFunctionInParallel() helper:</i></td></tr>
+<tr><th id="129">129</th><td><i>//</i></td></tr>
+<tr><th id="130">130</th><td><i>//    clients-&gt;runFunctionInParallel(</i></td></tr>
+<tr><th id="131">131</th><td><i>//        [=] () {</i></td></tr>
+<tr><th id="132">132</th><td><i>//            do things;</i></td></tr>
+<tr><th id="133">133</th><td><i>//        });</i></td></tr>
+<tr><th id="134">134</th><td><i>//</i></td></tr>
+<tr><th id="135">135</th><td><i>// 2) Tasks keep doing things until they are told to quit using some custom notification mechanism.</i></td></tr>
+<tr><th id="136">136</th><td><i>//    The main thread runs the task by doing:</i></td></tr>
+<tr><th id="137">137</th><td><i>//</i></td></tr>
+<tr><th id="138">138</th><td><i>//    bool keepGoing = true;</i></td></tr>
+<tr><th id="139">139</th><td><i>//    client-&gt;setFunction(</i></td></tr>
+<tr><th id="140">140</th><td><i>//        [=] () {</i></td></tr>
+<tr><th id="141">141</th><td><i>//            while (keepGoing) {</i></td></tr>
+<tr><th id="142">142</th><td><i>//                do things;</i></td></tr>
+<tr><th id="143">143</th><td><i>//            }</i></td></tr>
+<tr><th id="144">144</th><td><i>//        });</i></td></tr>
+<tr><th id="145">145</th><td><i>//</i></td></tr>
+<tr><th id="146">146</th><td><i>//    When work runs out, the main thread will inform tasks that there is no more work, and then</i></td></tr>
+<tr><th id="147">147</th><td><i>//    wait until no more tasks are running:</i></td></tr>
+<tr><th id="148">148</th><td><i>//</i></td></tr>
+<tr><th id="149">149</th><td><i>//    keepGoing = false;</i></td></tr>
+<tr><th id="150">150</th><td><i>//    client-&gt;finish();</i></td></tr>
+<tr><th id="151">151</th><td><i>//</i></td></tr>
+<tr><th id="152">152</th><td><i>//    This works best when the main thread doesn't actually want to run the task that it set in the</i></td></tr>
+<tr><th id="153">153</th><td><i>//    client. This happens for example in parallel marking. The main thread uses a somewhat</i></td></tr>
+<tr><th id="154">154</th><td><i>//    different marking algorithm than the helpers. The main thread may provide work that the</i></td></tr>
+<tr><th id="155">155</th><td><i>//    helpers steal. The main thread knows when termination is reached, and simply tells the</i></td></tr>
+<tr><th id="156">156</th><td><i>//    helpers to stop upon termination.</i></td></tr>
+<tr><th id="157">157</th><td><i>//</i></td></tr>
+<tr><th id="158">158</th><td><i>// The known-good styles of using ParallelHelperClient all involve a parallel algorithm that has</i></td></tr>
+<tr><th id="159">159</th><td><i>// its own work distribution and load balancing.</i></td></tr>
+<tr><th id="160">160</th><td><i>//</i></td></tr>
+<tr><th id="161">161</th><td><i>// Note that it is not valid to use the same ParallelHelperClient instance from multiple threads.</i></td></tr>
+<tr><th id="162">162</th><td><i>// Each thread should have its own ParallelHelperClient in that case. Failure to follow this advice</i></td></tr>
+<tr><th id="163">163</th><td><i>// will lead to RELEASE_ASSERT's or worse.</i></td></tr>
+<tr><th id="164">164</th><td><b>class</b> <dfn class="type def" id="WTF::ParallelHelperClient" title='WTF::ParallelHelperClient' data-ref="WTF::ParallelHelperClient" data-ref-filename="WTF..ParallelHelperClient">ParallelHelperClient</dfn> {</td></tr>
+<tr><th id="165">165</th><td>    <a class="macro" href="Noncopyable.h.html#23" title="ParallelHelperClient(const ParallelHelperClient&amp;) = delete; ParallelHelperClient&amp; operator=(const ParallelHelperClient&amp;) = delete;" data-ref="_M/WTF_MAKE_NONCOPYABLE">WTF_MAKE_NONCOPYABLE</a>(<dfn class="decl def fn" id="_ZN3WTF20ParallelHelperClientC1ERKS0_" title='WTF::ParallelHelperClient::ParallelHelperClient' data-ref="_ZN3WTF20ParallelHelperClientC1ERKS0_" data-ref-filename="_ZN3WTF20ParallelHelperClientC1ERKS0_"><a class="type" href="#WTF::ParallelHelperClient" title='WTF::ParallelHelperClient' data-ref="WTF::ParallelHelperClient" data-ref-filename="WTF..ParallelHelperClient"><a class="type" href="#WTF::ParallelHelperClient" title='WTF::ParallelHelperClient' data-ref="WTF::ParallelHelperClient" data-ref-filename="WTF..ParallelHelperClient"><a class="type" href="#WTF::ParallelHelperClient" title='WTF::ParallelHelperClient' data-ref="WTF::ParallelHelperClient" data-ref-filename="WTF..ParallelHelperClient">ParallelHelperClient</a></a></a></dfn>);</td></tr>
+<tr><th id="166">166</th><td>    <a class="macro" href="FastMalloc.h.html#399" title="public: void* operator new(size_t, void* p) { return p; } void* operator new[](size_t, void* p) { return p; } void* operator new(size_t size) { return ::WTF::fastMalloc(size); } void operator delete(void* p) { ::WTF::fastFree(p); } void* operator new[](size_t size) { return ::WTF::fastMalloc(size); } void operator delete[](void* p) { ::WTF::fastFree(p); } void* operator new(size_t, NotNullTag, void* location) { do { if (!(location)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/ParallelHelperPool.h&quot;, 166, __PRETTY_FUNCTION__, &quot;location&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(166, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/ParallelHelperPool.h&quot;, __PRETTY_FUNCTION__, 1040); } while (false); } } while (0); return location; } using webkitFastMalloced = int; private: using __thisIsHereToForceASemicolonAfterThisMacro __attribute__((unused)) = int" data-ref="_M/WTF_MAKE_FAST_ALLOCATED">WTF_MAKE_FAST_ALLOCATED</a>;</td></tr>
+<tr><th id="167">167</th><td><b>public</b>:</td></tr>
+<tr><th id="168">168</th><td>    <a class="macro" href="ExportMacros.h.html#66" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WTF_EXPORT_PRIVATE">WTF_EXPORT_PRIVATE</a> <dfn class="decl fn" id="_ZN3WTF20ParallelHelperClientC1EONS_6RefPtrINS_18ParallelHelperPoolENS_12RawPtrTraitsIS2_EENS_21DefaultRefDerefTraitsIS2_EEEE" title='WTF::ParallelHelperClient::ParallelHelperClient' data-ref="_ZN3WTF20ParallelHelperClientC1EONS_6RefPtrINS_18ParallelHelperPoolENS_12RawPtrTraitsIS2_EENS_21DefaultRefDerefTraitsIS2_EEEE" data-ref-filename="_ZN3WTF20ParallelHelperClientC1EONS_6RefPtrINS_18ParallelHelperPoolENS_12RawPtrTraitsIS2_EENS_21DefaultRefDerefTraitsIS2_EEEE">ParallelHelperClient</dfn>(<a class="type" href="Forward.h.html#WTF::RefPtr" title='WTF::RefPtr' data-ref="WTF::RefPtr" data-ref-filename="WTF..RefPtr">RefPtr</a>&lt;<a class="type" href="#WTF::ParallelHelperPool" title='WTF::ParallelHelperPool' data-ref="WTF::ParallelHelperPool" data-ref-filename="WTF..ParallelHelperPool">ParallelHelperPool</a>&gt;&amp;&amp;);</td></tr>
+<tr><th id="169">169</th><td>    <a class="macro" href="ExportMacros.h.html#66" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WTF_EXPORT_PRIVATE">WTF_EXPORT_PRIVATE</a> <dfn class="decl fn" id="_ZN3WTF20ParallelHelperClientD1Ev" title='WTF::ParallelHelperClient::~ParallelHelperClient' data-ref="_ZN3WTF20ParallelHelperClientD1Ev" data-ref-filename="_ZN3WTF20ParallelHelperClientD1Ev">~ParallelHelperClient</dfn>();</td></tr>
+<tr><th id="170">170</th><td></td></tr>
+<tr><th id="171">171</th><td>    <a class="macro" href="ExportMacros.h.html#66" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WTF_EXPORT_PRIVATE">WTF_EXPORT_PRIVATE</a> <em>void</em> <dfn class="decl fn" id="_ZN3WTF20ParallelHelperClient7setTaskEONS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE" title='WTF::ParallelHelperClient::setTask' data-ref="_ZN3WTF20ParallelHelperClient7setTaskEONS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE" data-ref-filename="_ZN3WTF20ParallelHelperClient7setTaskEONS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE">setTask</dfn>(<a class="type" href="Forward.h.html#WTF::RefPtr" title='WTF::RefPtr' data-ref="WTF::RefPtr" data-ref-filename="WTF..RefPtr">RefPtr</a>&lt;<a class="type" href="SharedTask.h.html#WTF::SharedTask" title='WTF::SharedTask' data-ref="WTF::SharedTask" data-ref-filename="WTF..SharedTask">SharedTask</a>&lt;<em>void</em> ()&gt;&gt;&amp;&amp;);</td></tr>
+<tr><th id="172">172</th><td></td></tr>
+<tr><th id="173">173</th><td>    <b>template</b>&lt;<b>typename</b> Functor&gt;</td></tr>
+<tr><th id="174">174</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN3WTF20ParallelHelperClient11setFunctionERKT_" title='WTF::ParallelHelperClient::setFunction' data-ref="_ZN3WTF20ParallelHelperClient11setFunctionERKT_" data-ref-filename="_ZN3WTF20ParallelHelperClient11setFunctionERKT_">setFunction</dfn>(<em>const</em> Functor&amp; <dfn class="local col1 decl" id="1291functor" title='functor' data-type='const Functor &amp;' data-ref="1291functor" data-ref-filename="1291functor">functor</dfn>)</td></tr>
+<tr><th id="175">175</th><td>    {</td></tr>
+<tr><th id="176">176</th><td>        <a class="member fn" href="#_ZN3WTF20ParallelHelperClient7setTaskEONS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE" title='WTF::ParallelHelperClient::setTask' data-ref="_ZN3WTF20ParallelHelperClient7setTaskEONS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE" data-ref-filename="_ZN3WTF20ParallelHelperClient7setTaskEONS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE">setTask</a>(createSharedTask&lt;<em>void</em> ()&gt;(<a class="local col1 ref" href="#1291functor" title='functor' data-ref="1291functor" data-ref-filename="1291functor">functor</a>));</td></tr>
+<tr><th id="177">177</th><td>    }</td></tr>
+<tr><th id="178">178</th><td></td></tr>
+<tr><th id="179">179</th><td>    <a class="macro" href="ExportMacros.h.html#66" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WTF_EXPORT_PRIVATE">WTF_EXPORT_PRIVATE</a> <em>void</em> <dfn class="decl fn" id="_ZN3WTF20ParallelHelperClient6finishEv" title='WTF::ParallelHelperClient::finish' data-ref="_ZN3WTF20ParallelHelperClient6finishEv" data-ref-filename="_ZN3WTF20ParallelHelperClient6finishEv">finish</dfn>();</td></tr>
+<tr><th id="180">180</th><td></td></tr>
+<tr><th id="181">181</th><td>    <a class="macro" href="ExportMacros.h.html#66" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WTF_EXPORT_PRIVATE">WTF_EXPORT_PRIVATE</a> <em>void</em> <dfn class="decl fn" id="_ZN3WTF20ParallelHelperClient13doSomeHelpingEv" title='WTF::ParallelHelperClient::doSomeHelping' data-ref="_ZN3WTF20ParallelHelperClient13doSomeHelpingEv" data-ref-filename="_ZN3WTF20ParallelHelperClient13doSomeHelpingEv">doSomeHelping</dfn>();</td></tr>
+<tr><th id="182">182</th><td></td></tr>
+<tr><th id="183">183</th><td>    <i>// Equivalent to:</i></td></tr>
+<tr><th id="184">184</th><td><i>    // client-&gt;setTask(task);</i></td></tr>
+<tr><th id="185">185</th><td><i>    // client-&gt;doSomeHelping();</i></td></tr>
+<tr><th id="186">186</th><td><i>    // client-&gt;finish();</i></td></tr>
+<tr><th id="187">187</th><td>    <a class="macro" href="ExportMacros.h.html#66" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WTF_EXPORT_PRIVATE">WTF_EXPORT_PRIVATE</a> <em>void</em> <dfn class="decl fn" id="_ZN3WTF20ParallelHelperClient17runTaskInParallelEONS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE" title='WTF::ParallelHelperClient::runTaskInParallel' data-ref="_ZN3WTF20ParallelHelperClient17runTaskInParallelEONS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE" data-ref-filename="_ZN3WTF20ParallelHelperClient17runTaskInParallelEONS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE">runTaskInParallel</dfn>(<a class="type" href="Forward.h.html#WTF::RefPtr" title='WTF::RefPtr' data-ref="WTF::RefPtr" data-ref-filename="WTF..RefPtr">RefPtr</a>&lt;<a class="type" href="SharedTask.h.html#WTF::SharedTask" title='WTF::SharedTask' data-ref="WTF::SharedTask" data-ref-filename="WTF..SharedTask">SharedTask</a>&lt;<em>void</em> ()&gt;&gt;&amp;&amp;);</td></tr>
+<tr><th id="188">188</th><td></td></tr>
+<tr><th id="189">189</th><td>    <i>// Equivalent to:</i></td></tr>
+<tr><th id="190">190</th><td><i>    // client-&gt;setFunction(functor);</i></td></tr>
+<tr><th id="191">191</th><td><i>    // client-&gt;doSomeHelping();</i></td></tr>
+<tr><th id="192">192</th><td><i>    // client-&gt;finish();</i></td></tr>
+<tr><th id="193">193</th><td>    <b>template</b>&lt;<b>typename</b> Functor&gt;</td></tr>
+<tr><th id="194">194</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN3WTF20ParallelHelperClient21runFunctionInParallelERKT_" title='WTF::ParallelHelperClient::runFunctionInParallel' data-ref="_ZN3WTF20ParallelHelperClient21runFunctionInParallelERKT_" data-ref-filename="_ZN3WTF20ParallelHelperClient21runFunctionInParallelERKT_">runFunctionInParallel</dfn>(<em>const</em> Functor&amp; <dfn class="local col2 decl" id="1292functor" title='functor' data-type='const Functor &amp;' data-ref="1292functor" data-ref-filename="1292functor">functor</dfn>)</td></tr>
+<tr><th id="195">195</th><td>    {</td></tr>
+<tr><th id="196">196</th><td>        <a class="member fn" href="#_ZN3WTF20ParallelHelperClient17runTaskInParallelEONS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE" title='WTF::ParallelHelperClient::runTaskInParallel' data-ref="_ZN3WTF20ParallelHelperClient17runTaskInParallelEONS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE" data-ref-filename="_ZN3WTF20ParallelHelperClient17runTaskInParallelEONS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE">runTaskInParallel</a>(createSharedTask&lt;<em>void</em> ()&gt;(<a class="local col2 ref" href="#1292functor" title='functor' data-ref="1292functor" data-ref-filename="1292functor">functor</a>));</td></tr>
+<tr><th id="197">197</th><td>    }</td></tr>
+<tr><th id="198">198</th><td></td></tr>
+<tr><th id="199">199</th><td>    <a class="type" href="#WTF::ParallelHelperPool" title='WTF::ParallelHelperPool' data-ref="WTF::ParallelHelperPool" data-ref-filename="WTF..ParallelHelperPool">ParallelHelperPool</a>&amp; <dfn class="decl def fn" id="_ZN3WTF20ParallelHelperClient4poolEv" title='WTF::ParallelHelperClient::pool' data-ref="_ZN3WTF20ParallelHelperClient4poolEv" data-ref-filename="_ZN3WTF20ParallelHelperClient4poolEv">pool</dfn>() { <b>return</b> <a class="ref fn" href="RefPtr.h.html#_ZNK3WTF6RefPtrdeEv" title='WTF::RefPtr::operator*' data-ref="_ZNK3WTF6RefPtrdeEv" data-ref-filename="_ZNK3WTF6RefPtrdeEv">*</a><a class="member field" href="#WTF::ParallelHelperClient::m_pool" title='WTF::ParallelHelperClient::m_pool' data-ref="WTF::ParallelHelperClient::m_pool" data-ref-filename="WTF..ParallelHelperClient..m_pool">m_pool</a>; }</td></tr>
+<tr><th id="200">200</th><td>    <em>unsigned</em> <dfn class="decl def fn" id="_ZNK3WTF20ParallelHelperClient21numberOfActiveThreadsEv" title='WTF::ParallelHelperClient::numberOfActiveThreads' data-ref="_ZNK3WTF20ParallelHelperClient21numberOfActiveThreadsEv" data-ref-filename="_ZNK3WTF20ParallelHelperClient21numberOfActiveThreadsEv">numberOfActiveThreads</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#WTF::ParallelHelperClient::m_numActive" title='WTF::ParallelHelperClient::m_numActive' data-ref="WTF::ParallelHelperClient::m_numActive" data-ref-filename="WTF..ParallelHelperClient..m_numActive">m_numActive</a>; }</td></tr>
+<tr><th id="201">201</th><td></td></tr>
+<tr><th id="202">202</th><td><b>private</b>:</td></tr>
+<tr><th id="203">203</th><td>    <b>friend</b> <b>class</b> <a class="type" href="#WTF::ParallelHelperPool" title='WTF::ParallelHelperPool' data-ref="WTF::ParallelHelperPool" data-ref-filename="WTF..ParallelHelperPool">ParallelHelperPool</a>;</td></tr>
+<tr><th id="204">204</th><td></td></tr>
+<tr><th id="205">205</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN3WTF20ParallelHelperClient14finishWithLockEv" title='WTF::ParallelHelperClient::finishWithLock' data-ref="_ZN3WTF20ParallelHelperClient14finishWithLockEv" data-ref-filename="_ZN3WTF20ParallelHelperClient14finishWithLockEv">finishWithLock</dfn>() <a class="macro" href="ThreadSafetyAnalysis.h.html#53" title="__attribute__((requires_capability(*m_pool-&gt;m_lock)))" data-ref="_M/WTF_REQUIRES_LOCK">WTF_REQUIRES_LOCK</a>(<a class="ref fn" href="Box.h.html#_ZNK3WTF3BoxdeEv" title='WTF::Box::operator*' data-ref="_ZNK3WTF3BoxdeEv" data-ref-filename="_ZNK3WTF3BoxdeEv">*</a><a class="member field" href="#WTF::ParallelHelperClient::m_pool" title='WTF::ParallelHelperClient::m_pool' data-ref="WTF::ParallelHelperClient::m_pool" data-ref-filename="WTF..ParallelHelperClient..m_pool">m_pool</a><a class="ref fn" href="RefPtr.h.html#_ZNK3WTF6RefPtrptEv" title='WTF::RefPtr::operator-&gt;' data-ref="_ZNK3WTF6RefPtrptEv" data-ref-filename="_ZNK3WTF6RefPtrptEv">-&gt;</a><a class="ref field" href="#WTF::ParallelHelperPool::m_lock" title='WTF::ParallelHelperPool::m_lock' data-ref="WTF::ParallelHelperPool::m_lock" data-ref-filename="WTF..ParallelHelperPool..m_lock">m_lock</a>);</td></tr>
+<tr><th id="206">206</th><td>    <a class="type" href="Forward.h.html#WTF::RefPtr" title='WTF::RefPtr' data-ref="WTF::RefPtr" data-ref-filename="WTF..RefPtr">RefPtr</a>&lt;<a class="type" href="SharedTask.h.html#WTF::SharedTask" title='WTF::SharedTask' data-ref="WTF::SharedTask" data-ref-filename="WTF..SharedTask">SharedTask</a>&lt;<em>void</em> ()&gt;&gt; <dfn class="decl fn" id="_ZN3WTF20ParallelHelperClient9claimTaskEv" title='WTF::ParallelHelperClient::claimTask' data-ref="_ZN3WTF20ParallelHelperClient9claimTaskEv" data-ref-filename="_ZN3WTF20ParallelHelperClient9claimTaskEv">claimTask</dfn>() <a class="macro" href="ThreadSafetyAnalysis.h.html#53" title="__attribute__((requires_capability(*m_pool-&gt;m_lock)))" data-ref="_M/WTF_REQUIRES_LOCK">WTF_REQUIRES_LOCK</a>(<a class="ref fn" href="Box.h.html#_ZNK3WTF3BoxdeEv" title='WTF::Box::operator*' data-ref="_ZNK3WTF3BoxdeEv" data-ref-filename="_ZNK3WTF3BoxdeEv">*</a><a class="member field" href="#WTF::ParallelHelperClient::m_pool" title='WTF::ParallelHelperClient::m_pool' data-ref="WTF::ParallelHelperClient::m_pool" data-ref-filename="WTF..ParallelHelperClient..m_pool">m_pool</a><a class="ref fn" href="RefPtr.h.html#_ZNK3WTF6RefPtrptEv" title='WTF::RefPtr::operator-&gt;' data-ref="_ZNK3WTF6RefPtrptEv" data-ref-filename="_ZNK3WTF6RefPtrptEv">-&gt;</a><a class="ref field" href="#WTF::ParallelHelperPool::m_lock" title='WTF::ParallelHelperPool::m_lock' data-ref="WTF::ParallelHelperPool::m_lock" data-ref-filename="WTF..ParallelHelperPool..m_lock">m_lock</a>);</td></tr>
+<tr><th id="207">207</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN3WTF20ParallelHelperClient7runTaskERKNS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE" title='WTF::ParallelHelperClient::runTask' data-ref="_ZN3WTF20ParallelHelperClient7runTaskERKNS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE" data-ref-filename="_ZN3WTF20ParallelHelperClient7runTaskERKNS_6RefPtrINS_10SharedTaskIFvvEEENS_12RawPtrTraitsIS4_EENS_21DefaultRefDerefTraitsIS4_EEEE">runTask</dfn>(<em>const</em> <a class="type" href="Forward.h.html#WTF::RefPtr" title='WTF::RefPtr' data-ref="WTF::RefPtr" data-ref-filename="WTF..RefPtr">RefPtr</a>&lt;<a class="type" href="SharedTask.h.html#WTF::SharedTask" title='WTF::SharedTask' data-ref="WTF::SharedTask" data-ref-filename="WTF..SharedTask">SharedTask</a>&lt;<em>void</em> ()&gt;&gt;&amp;);</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td>    <a class="type" href="Forward.h.html#WTF::RefPtr" title='WTF::RefPtr' data-ref="WTF::RefPtr" data-ref-filename="WTF..RefPtr">RefPtr</a>&lt;<a class="type" href="#WTF::ParallelHelperPool" title='WTF::ParallelHelperPool' data-ref="WTF::ParallelHelperPool" data-ref-filename="WTF..ParallelHelperPool">ParallelHelperPool</a>&gt; <dfn class="decl field" id="WTF::ParallelHelperClient::m_pool" title='WTF::ParallelHelperClient::m_pool' data-ref="WTF::ParallelHelperClient::m_pool" data-ref-filename="WTF..ParallelHelperClient..m_pool">m_pool</dfn>;</td></tr>
+<tr><th id="210">210</th><td>    <a class="type" href="Forward.h.html#WTF::RefPtr" title='WTF::RefPtr' data-ref="WTF::RefPtr" data-ref-filename="WTF..RefPtr">RefPtr</a>&lt;<a class="type" href="SharedTask.h.html#WTF::SharedTask" title='WTF::SharedTask' data-ref="WTF::SharedTask" data-ref-filename="WTF..SharedTask">SharedTask</a>&lt;<em>void</em> ()&gt;&gt; <dfn class="decl field" id="WTF::ParallelHelperClient::m_task" title='WTF::ParallelHelperClient::m_task' data-ref="WTF::ParallelHelperClient::m_task" data-ref-filename="WTF..ParallelHelperClient..m_task">m_task</dfn>;</td></tr>
+<tr><th id="211">211</th><td>    <em>unsigned</em> <dfn class="decl field" id="WTF::ParallelHelperClient::m_numActive" title='WTF::ParallelHelperClient::m_numActive' data-ref="WTF::ParallelHelperClient::m_numActive" data-ref-filename="WTF..ParallelHelperClient..m_numActive">m_numActive</dfn> { <var>0</var> };</td></tr>
+<tr><th id="212">212</th><td>};</td></tr>
+<tr><th id="213">213</th><td></td></tr>
+<tr><th id="214">214</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="215">215</th><td></td></tr>
+<tr><th id="216">216</th><td><b>using</b> <span class="namespace">WTF::</span>ParallelHelperClient;</td></tr>
+<tr><th id="217">217</th><td><b>using</b> <span class="namespace">WTF::</span>ParallelHelperPool;</td></tr>
+<tr><th id="218">218</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/JavaScriptCore/API/tests/FunctionOverridesTest.cpp.html'>webkit/Source/JavaScriptCore/API/tests/FunctionOverridesTest.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

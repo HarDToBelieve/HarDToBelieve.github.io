@@ -1,0 +1,259 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>VideoFullscreenInterfaceAVKit.h source code [webkit/Source/WebCore/platform/ios/VideoFullscreenInterfaceAVKit.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebCore/platform/ios/VideoFullscreenInterfaceAVKit.h'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebCore</a>/<a href='..'>platform</a>/<a href='./'>ios</a>/<a href='VideoFullscreenInterfaceAVKit.h.html'>VideoFullscreenInterfaceAVKit.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2014-2019 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td><u>#pragma once</u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#<span data-ppcond="29">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY) &amp;&amp; <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(VIDEO_PRESENTATION_MODE)</u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#include "EventListener.h"</u></td></tr>
+<tr><th id="32">32</th><td><u>#include "HTMLMediaElementEnums.h"</u></td></tr>
+<tr><th id="33">33</th><td><u>#include "PlatformLayer.h"</u></td></tr>
+<tr><th id="34">34</th><td><u>#include "PlaybackSessionInterfaceAVKit.h"</u></td></tr>
+<tr><th id="35">35</th><td><u>#include "VideoFullscreenModel.h"</u></td></tr>
+<tr><th id="36">36</th><td><u>#include &lt;objc/objc.h&gt;</u></td></tr>
+<tr><th id="37">37</th><td><u>#include &lt;wtf/Forward.h&gt;</u></td></tr>
+<tr><th id="38">38</th><td><u>#include &lt;wtf/Function.h&gt;</u></td></tr>
+<tr><th id="39">39</th><td><u>#include &lt;wtf/OptionSet.h&gt;</u></td></tr>
+<tr><th id="40">40</th><td><u>#include &lt;wtf/RetainPtr.h&gt;</u></td></tr>
+<tr><th id="41">41</th><td><u>#include &lt;wtf/RunLoop.h&gt;</u></td></tr>
+<tr><th id="42">42</th><td><u>#include &lt;wtf/ThreadSafeRefCounted.h&gt;</u></td></tr>
+<tr><th id="43">43</th><td><u>#include &lt;wtf/WeakPtr.h&gt;</u></td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td>OBJC_CLASS UIViewController;</td></tr>
+<tr><th id="46">46</th><td>OBJC_CLASS UIWindow;</td></tr>
+<tr><th id="47">47</th><td>OBJC_CLASS UIView;</td></tr>
+<tr><th id="48">48</th><td>OBJC_CLASS CALayer;</td></tr>
+<tr><th id="49">49</th><td>OBJC_CLASS WebAVPlayerController;</td></tr>
+<tr><th id="50">50</th><td>OBJC_CLASS WebAVPlayerLayerView;</td></tr>
+<tr><th id="51">51</th><td>OBJC_CLASS WebAVPlayerLayer;</td></tr>
+<tr><th id="52">52</th><td>OBJC_CLASS WebAVPlayerViewController;</td></tr>
+<tr><th id="53">53</th><td>OBJC_CLASS WebAVPlayerViewControllerDelegate;</td></tr>
+<tr><th id="54">54</th><td>OBJC_CLASS NSError;</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td><b>namespace</b> WebCore {</td></tr>
+<tr><th id="57">57</th><td><b>class</b> FloatRect;</td></tr>
+<tr><th id="58">58</th><td><b>class</b> FloatSize;</td></tr>
+<tr><th id="59">59</th><td><b>class</b> VideoFullscreenModel;</td></tr>
+<tr><th id="60">60</th><td><b>class</b> VideoFullscreenChangeObserver;</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><b>class</b> VideoFullscreenInterfaceAVKit final</td></tr>
+<tr><th id="63">63</th><td>    : <b>public</b> VideoFullscreenModelClient</td></tr>
+<tr><th id="64">64</th><td>    , <b>public</b> PlaybackSessionModelClient</td></tr>
+<tr><th id="65">65</th><td>    , <b>public</b> ThreadSafeRefCounted&lt;VideoFullscreenInterfaceAVKit, WTF::DestructionThread::MainRunLoop&gt;</td></tr>
+<tr><th id="66">66</th><td>    , <b>public</b> CanMakeWeakPtr&lt;VideoFullscreenInterfaceAVKit&gt; {</td></tr>
+<tr><th id="67">67</th><td><b>public</b>:</td></tr>
+<tr><th id="68">68</th><td>    WEBCORE_EXPORT <em>static</em> Ref&lt;VideoFullscreenInterfaceAVKit&gt; create(PlaybackSessionInterfaceAVKit&amp;);</td></tr>
+<tr><th id="69">69</th><td>    <b>virtual</b> ~VideoFullscreenInterfaceAVKit();</td></tr>
+<tr><th id="70">70</th><td>    WEBCORE_EXPORT <em>void</em> setVideoFullscreenModel(VideoFullscreenModel*);</td></tr>
+<tr><th id="71">71</th><td>    WEBCORE_EXPORT <em>void</em> setVideoFullscreenChangeObserver(VideoFullscreenChangeObserver*);</td></tr>
+<tr><th id="72">72</th><td>    PlaybackSessionInterfaceAVKit&amp; playbackSessionInterface() <em>const</em> { <b>return</b> m_playbackSessionInterface.get(); }</td></tr>
+<tr><th id="73">73</th><td>    PlaybackSessionModel* playbackSessionModel() <em>const</em> { <b>return</b> m_playbackSessionInterface-&gt;playbackSessionModel(); }</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td>    <i>// VideoFullscreenModelClient</i></td></tr>
+<tr><th id="76">76</th><td>    WEBCORE_EXPORT <em>void</em> hasVideoChanged(<em>bool</em>) final;</td></tr>
+<tr><th id="77">77</th><td>    WEBCORE_EXPORT <em>void</em> videoDimensionsChanged(<em>const</em> FloatSize&amp;) final;</td></tr>
+<tr><th id="78">78</th><td>    WEBCORE_EXPORT <em>void</em> modelDestroyed() final;</td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td>    <i>// PlaybackSessionModelClient</i></td></tr>
+<tr><th id="81">81</th><td>    WEBCORE_EXPORT <em>void</em> externalPlaybackChanged(<em>bool</em> enabled, PlaybackSessionModel::ExternalPlaybackTargetType, <em>const</em> String&amp; localizedDeviceName) final;</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td>    WEBCORE_EXPORT <em>void</em> setupFullscreen(UIView&amp; videoView, <em>const</em> FloatRect&amp; initialRect, <em>const</em> FloatSize&amp; videoDimensions, UIView* parentView, HTMLMediaElementEnums::VideoFullscreenMode, <em>bool</em> allowsPictureInPicturePlayback, <em>bool</em> standby, <em>bool</em> blocksReturnToFullscreenFromPictureInPicture);</td></tr>
+<tr><th id="84">84</th><td>    WEBCORE_EXPORT <em>void</em> enterFullscreen();</td></tr>
+<tr><th id="85">85</th><td>    WEBCORE_EXPORT <em>bool</em> exitFullscreen(<em>const</em> FloatRect&amp; finalRect);</td></tr>
+<tr><th id="86">86</th><td>    WEBCORE_EXPORT <em>void</em> cleanupFullscreen();</td></tr>
+<tr><th id="87">87</th><td>    WEBCORE_EXPORT <em>void</em> invalidate();</td></tr>
+<tr><th id="88">88</th><td>    WEBCORE_EXPORT <em>void</em> requestHideAndExitFullscreen();</td></tr>
+<tr><th id="89">89</th><td>    WEBCORE_EXPORT <em>void</em> preparedToReturnToInline(<em>bool</em> visible, <em>const</em> FloatRect&amp; inlineRect);</td></tr>
+<tr><th id="90">90</th><td>    WEBCORE_EXPORT <em>void</em> preparedToExitFullscreen();</td></tr>
+<tr><th id="91">91</th><td>    WEBCORE_EXPORT <em>void</em> setHasVideoContentLayer(<em>bool</em>);</td></tr>
+<tr><th id="92">92</th><td>    WEBCORE_EXPORT <em>void</em> setInlineRect(<em>const</em> FloatRect&amp;, <em>bool</em> visible);</td></tr>
+<tr><th id="93">93</th><td>    WEBCORE_EXPORT <em>void</em> preparedToReturnToStandby();</td></tr>
+<tr><th id="94">94</th><td>    <em>bool</em> changingStandbyOnly() { <b>return</b> m_changingStandbyOnly; }</td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td>    <b>enum</b> <b>class</b> ExitFullScreenReason {</td></tr>
+<tr><th id="97">97</th><td>        DoneButtonTapped,</td></tr>
+<tr><th id="98">98</th><td>        FullScreenButtonTapped,</td></tr>
+<tr><th id="99">99</th><td>        PinchGestureHandled,</td></tr>
+<tr><th id="100">100</th><td>        RemoteControlStopEventReceived,</td></tr>
+<tr><th id="101">101</th><td>        PictureInPictureStarted</td></tr>
+<tr><th id="102">102</th><td>    };</td></tr>
+<tr><th id="103">103</th><td></td></tr>
+<tr><th id="104">104</th><td>    <b>class</b> Mode {</td></tr>
+<tr><th id="105">105</th><td>        HTMLMediaElementEnums::VideoFullscreenMode m_mode { HTMLMediaElementEnums::VideoFullscreenModeNone };</td></tr>
+<tr><th id="106">106</th><td></td></tr>
+<tr><th id="107">107</th><td>    <b>public</b>:</td></tr>
+<tr><th id="108">108</th><td>        Mode() = <b>default</b>;</td></tr>
+<tr><th id="109">109</th><td>        Mode(<em>const</em> Mode&amp;) = <b>default</b>;</td></tr>
+<tr><th id="110">110</th><td>        Mode(HTMLMediaElementEnums::VideoFullscreenMode mode) : m_mode(mode) { }</td></tr>
+<tr><th id="111">111</th><td>        <em>void</em> <b>operator</b>=(HTMLMediaElementEnums::VideoFullscreenMode mode) { m_mode = mode; }</td></tr>
+<tr><th id="112">112</th><td>        HTMLMediaElementEnums::VideoFullscreenMode mode() <em>const</em> { <b>return</b> m_mode; }</td></tr>
+<tr><th id="113">113</th><td></td></tr>
+<tr><th id="114">114</th><td>        <em>void</em> setModeValue(HTMLMediaElementEnums::VideoFullscreenMode mode, <em>bool</em> value) { value ? setMode(mode) : clearMode(mode); }</td></tr>
+<tr><th id="115">115</th><td>        <em>void</em> setMode(HTMLMediaElementEnums::VideoFullscreenMode mode) { m_mode |= mode; }</td></tr>
+<tr><th id="116">116</th><td>        <em>void</em> clearMode(HTMLMediaElementEnums::VideoFullscreenMode mode) { m_mode &amp;= ~mode; }</td></tr>
+<tr><th id="117">117</th><td>        <em>bool</em> hasMode(HTMLMediaElementEnums::VideoFullscreenMode mode) <em>const</em> { <b>return</b> m_mode &amp; mode; }</td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td>        <em>bool</em> isPictureInPicture() <em>const</em> { <b>return</b> m_mode == HTMLMediaElementEnums::VideoFullscreenModePictureInPicture; }</td></tr>
+<tr><th id="120">120</th><td>        <em>bool</em> isFullscreen() <em>const</em> { <b>return</b> m_mode == HTMLMediaElementEnums::VideoFullscreenModeStandard; }</td></tr>
+<tr><th id="121">121</th><td></td></tr>
+<tr><th id="122">122</th><td>        <em>void</em> setPictureInPicture(<em>bool</em> value) { setModeValue(HTMLMediaElementEnums::VideoFullscreenModePictureInPicture, value); }</td></tr>
+<tr><th id="123">123</th><td>        <em>void</em> setFullscreen(<em>bool</em> value) { setModeValue(HTMLMediaElementEnums::VideoFullscreenModeStandard, value); }</td></tr>
+<tr><th id="124">124</th><td></td></tr>
+<tr><th id="125">125</th><td>        <em>bool</em> hasFullscreen() <em>const</em> { <b>return</b> hasMode(HTMLMediaElementEnums::VideoFullscreenModeStandard); }</td></tr>
+<tr><th id="126">126</th><td>        <em>bool</em> hasPictureInPicture() <em>const</em> { <b>return</b> hasMode(HTMLMediaElementEnums::VideoFullscreenModePictureInPicture); }</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td>        <em>bool</em> hasVideo() <em>const</em> { <b>return</b> m_mode &amp; (HTMLMediaElementEnums::VideoFullscreenModeStandard | HTMLMediaElementEnums::VideoFullscreenModePictureInPicture); }</td></tr>
+<tr><th id="129">129</th><td>    };</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td>    Mode m_currentMode;</td></tr>
+<tr><th id="132">132</th><td>    Mode m_targetMode;</td></tr>
+<tr><th id="133">133</th><td></td></tr>
+<tr><th id="134">134</th><td>    VideoFullscreenModel* videoFullscreenModel() <em>const</em> { <b>return</b> m_videoFullscreenModel; }</td></tr>
+<tr><th id="135">135</th><td>    <em>bool</em> shouldExitFullscreenWithReason(ExitFullScreenReason);</td></tr>
+<tr><th id="136">136</th><td>    HTMLMediaElementEnums::VideoFullscreenMode mode() <em>const</em> { <b>return</b> m_currentMode.mode(); }</td></tr>
+<tr><th id="137">137</th><td>    <em>bool</em> allowsPictureInPicturePlayback() <em>const</em> { <b>return</b> m_allowsPictureInPicturePlayback; }</td></tr>
+<tr><th id="138">138</th><td>    WEBCORE_EXPORT <em>bool</em> mayAutomaticallyShowVideoPictureInPicture() <em>const</em>;</td></tr>
+<tr><th id="139">139</th><td>    <em>void</em> prepareForPictureInPictureStop(WTF::Function&lt;<em>void</em>(<em>bool</em>)&gt;&amp;&amp; callback);</td></tr>
+<tr><th id="140">140</th><td>    <em>bool</em> wirelessVideoPlaybackDisabled() <em>const</em>;</td></tr>
+<tr><th id="141">141</th><td>    WEBCORE_EXPORT <em>void</em> applicationDidBecomeActive();</td></tr>
+<tr><th id="142">142</th><td>    <em>bool</em> inPictureInPicture() <em>const</em> { <b>return</b> m_enteringPictureInPicture || m_currentMode.hasPictureInPicture(); }</td></tr>
+<tr><th id="143">143</th><td>    <em>bool</em> returningToStandby() <em>const</em> { <b>return</b> m_returningToStandby; }</td></tr>
+<tr><th id="144">144</th><td></td></tr>
+<tr><th id="145">145</th><td>    <em>void</em> willStartPictureInPicture();</td></tr>
+<tr><th id="146">146</th><td>    <em>void</em> didStartPictureInPicture();</td></tr>
+<tr><th id="147">147</th><td>    <em>void</em> failedToStartPictureInPicture();</td></tr>
+<tr><th id="148">148</th><td>    <em>void</em> willStopPictureInPicture();</td></tr>
+<tr><th id="149">149</th><td>    <em>void</em> didStopPictureInPicture();</td></tr>
+<tr><th id="150">150</th><td>    <em>void</em> prepareForPictureInPictureStopWithCompletionHandler(<em>void</em> (^)(BOOL));</td></tr>
+<tr><th id="151">151</th><td>    <em>bool</em> isPlayingVideoInEnhancedFullscreen() <em>const</em>;</td></tr>
+<tr><th id="152">152</th><td></td></tr>
+<tr><th id="153">153</th><td>    WEBCORE_EXPORT <em>void</em> setMode(HTMLMediaElementEnums::VideoFullscreenMode, <em>bool</em> shouldNotifyModel);</td></tr>
+<tr><th id="154">154</th><td>    <em>void</em> clearMode(HTMLMediaElementEnums::VideoFullscreenMode, <em>bool</em> shouldNotifyModel);</td></tr>
+<tr><th id="155">155</th><td>    <em>bool</em> hasMode(HTMLMediaElementEnums::VideoFullscreenMode mode) <em>const</em> { <b>return</b> m_currentMode.hasMode(mode); }</td></tr>
+<tr><th id="156">156</th><td></td></tr>
+<tr><th id="157">157</th><td>    UIViewController *presentingViewController();</td></tr>
+<tr><th id="158">158</th><td>    UIViewController *fullscreenViewController() <em>const</em> { <b>return</b> m_viewController.get(); }</td></tr>
+<tr><th id="159">159</th><td>    WebAVPlayerLayerView* playerLayerView() <em>const</em> { <b>return</b> m_playerLayerView.get(); }</td></tr>
+<tr><th id="160">160</th><td>    WEBCORE_EXPORT <em>bool</em> pictureInPictureWasStartedWhenEnteringBackground() <em>const</em>;</td></tr>
+<tr><th id="161">161</th><td></td></tr>
+<tr><th id="162">162</th><td><b>protected</b>:</td></tr>
+<tr><th id="163">163</th><td>    WEBCORE_EXPORT VideoFullscreenInterfaceAVKit(PlaybackSessionInterfaceAVKit&amp;);</td></tr>
+<tr><th id="164">164</th><td></td></tr>
+<tr><th id="165">165</th><td>    <em>void</em> doSetup();</td></tr>
+<tr><th id="166">166</th><td>    <em>void</em> finalizeSetup();</td></tr>
+<tr><th id="167">167</th><td>    <em>void</em> doExitFullscreen();</td></tr>
+<tr><th id="168">168</th><td>    <em>void</em> returnToStandby();</td></tr>
+<tr><th id="169">169</th><td>    <em>void</em> doEnterFullscreen();</td></tr>
+<tr><th id="170">170</th><td>    <em>void</em> watchdogTimerFired();</td></tr>
+<tr><th id="171">171</th><td>    WebAVPlayerController *playerController() <em>const</em>;</td></tr>
+<tr><th id="172">172</th><td></td></tr>
+<tr><th id="173">173</th><td>    Ref&lt;PlaybackSessionInterfaceAVKit&gt; m_playbackSessionInterface;</td></tr>
+<tr><th id="174">174</th><td>    RetainPtr&lt;WebAVPlayerViewControllerDelegate&gt; m_playerViewControllerDelegate;</td></tr>
+<tr><th id="175">175</th><td>    RetainPtr&lt;WebAVPlayerViewController&gt; m_playerViewController;</td></tr>
+<tr><th id="176">176</th><td>    VideoFullscreenModel* m_videoFullscreenModel { <b>nullptr</b> };</td></tr>
+<tr><th id="177">177</th><td>    VideoFullscreenChangeObserver* m_fullscreenChangeObserver { <b>nullptr</b> };</td></tr>
+<tr><th id="178">178</th><td></td></tr>
+<tr><th id="179">179</th><td>    <i>// These are only used when fullscreen is presented in a separate window.</i></td></tr>
+<tr><th id="180">180</th><td>    RetainPtr&lt;UIWindow&gt; m_window;</td></tr>
+<tr><th id="181">181</th><td>    RetainPtr&lt;UIViewController&gt; m_viewController;</td></tr>
+<tr><th id="182">182</th><td>    RetainPtr&lt;UIView&gt; m_videoView;</td></tr>
+<tr><th id="183">183</th><td>    RetainPtr&lt;UIView&gt; m_parentView;</td></tr>
+<tr><th id="184">184</th><td>    RetainPtr&lt;UIWindow&gt; m_parentWindow;</td></tr>
+<tr><th id="185">185</th><td>    RetainPtr&lt;WebAVPlayerLayerView&gt; m_playerLayerView;</td></tr>
+<tr><th id="186">186</th><td>    WTF::Function&lt;<em>void</em>(<em>bool</em>)&gt; m_prepareToInlineCallback;</td></tr>
+<tr><th id="187">187</th><td>    RunLoop::Timer&lt;VideoFullscreenInterfaceAVKit&gt; m_watchdogTimer;</td></tr>
+<tr><th id="188">188</th><td>    FloatRect m_inlineRect;</td></tr>
+<tr><th id="189">189</th><td>    RouteSharingPolicy m_routeSharingPolicy { RouteSharingPolicy::Default };</td></tr>
+<tr><th id="190">190</th><td>    String m_routingContextUID;</td></tr>
+<tr><th id="191">191</th><td>    <em>bool</em> m_allowsPictureInPicturePlayback { <b>false</b> };</td></tr>
+<tr><th id="192">192</th><td>    <em>bool</em> m_wirelessVideoPlaybackDisabled { <b>true</b> };</td></tr>
+<tr><th id="193">193</th><td>    <em>bool</em> m_shouldReturnToFullscreenWhenStoppingPictureInPicture { <b>false</b> };</td></tr>
+<tr><th id="194">194</th><td>    <em>bool</em> m_blocksReturnToFullscreenFromPictureInPicture { <b>false</b> };</td></tr>
+<tr><th id="195">195</th><td>    <em>bool</em> m_returningToStandby { <b>false</b> };</td></tr>
+<tr><th id="196">196</th><td></td></tr>
+<tr><th id="197">197</th><td>    <em>bool</em> m_setupNeedsInlineRect { <b>false</b> };</td></tr>
+<tr><th id="198">198</th><td>    <em>bool</em> m_exitFullscreenNeedInlineRect { <b>false</b> };</td></tr>
+<tr><th id="199">199</th><td></td></tr>
+<tr><th id="200">200</th><td>    <em>bool</em> m_finalizeSetupNeedsVideoContentLayer { <b>false</b> };</td></tr>
+<tr><th id="201">201</th><td>    <em>bool</em> m_cleanupNeedsReturnVideoContentLayer { <b>false</b> };</td></tr>
+<tr><th id="202">202</th><td></td></tr>
+<tr><th id="203">203</th><td>    <em>bool</em> m_returnToStandbyNeedsReturnVideoContentLayer { <b>false</b> };</td></tr>
+<tr><th id="204">204</th><td>    <em>bool</em> m_finalizeSetupNeedsReturnVideoContentLayer { <b>false</b> };</td></tr>
+<tr><th id="205">205</th><td></td></tr>
+<tr><th id="206">206</th><td>    <em>bool</em> m_exitFullscreenNeedsExitPictureInPicture { <b>false</b> };</td></tr>
+<tr><th id="207">207</th><td>    <em>bool</em> m_exitFullscreenNeedsReturnContentLayer { <b>false</b> };</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td>    <em>bool</em> m_enterFullscreenNeedsEnterPictureInPicture { <b>false</b> };</td></tr>
+<tr><th id="210">210</th><td>    <em>bool</em> m_enterFullscreenNeedsExitPictureInPicture { <b>false</b> };</td></tr>
+<tr><th id="211">211</th><td></td></tr>
+<tr><th id="212">212</th><td>    <em>bool</em> m_hasVideoContentLayer { <b>false</b> };</td></tr>
+<tr><th id="213">213</th><td></td></tr>
+<tr><th id="214">214</th><td>    <em>bool</em> m_hasUpdatedInlineRect { <b>false</b> };</td></tr>
+<tr><th id="215">215</th><td>    <em>bool</em> m_inlineIsVisible { <b>false</b> };</td></tr>
+<tr><th id="216">216</th><td>    <em>bool</em> m_standby { <b>false</b> };</td></tr>
+<tr><th id="217">217</th><td>    <em>bool</em> m_targetStandby { <b>false</b> };</td></tr>
+<tr><th id="218">218</th><td>    <em>bool</em> m_changingStandbyOnly { <b>false</b> };</td></tr>
+<tr><th id="219">219</th><td></td></tr>
+<tr><th id="220">220</th><td><u>#if PLATFORM(WATCHOS)</u></td></tr>
+<tr><th id="221">221</th><td>    <em>bool</em> m_waitingForPreparedToExit { <b>false</b> };</td></tr>
+<tr><th id="222">222</th><td><u>#endif</u></td></tr>
+<tr><th id="223">223</th><td>    <em>bool</em> m_shouldIgnoreAVKitCallbackAboutExitFullscreenReason { <b>false</b> };</td></tr>
+<tr><th id="224">224</th><td>    <em>bool</em> m_enteringPictureInPicture { <b>false</b> };</td></tr>
+<tr><th id="225">225</th><td>    <em>bool</em> m_exitingPictureInPicture { <b>false</b> };</td></tr>
+<tr><th id="226">226</th><td></td></tr>
+<tr><th id="227">227</th><td><b>private</b>:</td></tr>
+<tr><th id="228">228</th><td>    <b>enum</b> <b>class</b> NextAction {</td></tr>
+<tr><th id="229">229</th><td>        NeedsEnterFullScreen = <var>1</var> &lt;&lt; <var>0</var>,</td></tr>
+<tr><th id="230">230</th><td>        NeedsExitFullScreen = <var>1</var> &lt;&lt; <var>1</var>,</td></tr>
+<tr><th id="231">231</th><td>    };</td></tr>
+<tr><th id="232">232</th><td>    <b>using</b> NextActions = OptionSet&lt;NextAction&gt;;</td></tr>
+<tr><th id="233">233</th><td></td></tr>
+<tr><th id="234">234</th><td>    <em>void</em> exitFullscreenHandler(BOOL success, NSError *, NextActions = NextActions());</td></tr>
+<tr><th id="235">235</th><td>    <em>void</em> enterFullscreenHandler(BOOL success, NSError *, NextActions = NextActions());</td></tr>
+<tr><th id="236">236</th><td>};</td></tr>
+<tr><th id="237">237</th><td></td></tr>
+<tr><th id="238">238</th><td>}</td></tr>
+<tr><th id="239">239</th><td></td></tr>
+<tr><th id="240">240</th><td><u>#<span data-ppcond="29">endif</span> // PLATFORM(IOS_FAMILY)</u></td></tr>
+<tr><th id="241">241</th><td></td></tr>
+<tr><th id="242">242</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='VideoFullscreenInterfaceAVKit.mm.html'>webkit/Source/WebCore/platform/ios/VideoFullscreenInterfaceAVKit.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

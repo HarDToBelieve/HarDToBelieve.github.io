@@ -1,0 +1,49 @@
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/video_coding/codecs/vp9/vp9_frame_buffer_pool.h' l='66' ll='128'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/video_coding/codecs/vp9/libvpx_vp9_decoder.h' l='53'/>
+<size>96</size>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/video_coding/codecs/vp9/vp9_frame_buffer_pool.h' l='40'>// This memory pool is used to serve buffers to libvpx for decoding purposes in
+// VP9, which is set up in InitializeVPXUsePool. After the initialization any
+// time libvpx wants to decode a frame it will use buffers provided and released
+// through VpxGetFrameBuffer and VpxReleaseFrameBuffer.
+// The benefit of owning the pool that libvpx relies on for decoding is that the
+// decoded frames returned by libvpx (from vpx_codec_get_frame) use parts of our
+// buffers for the decoded image data. By retaining ownership of this buffer
+// using scoped_refptr, the image buffer can be reused by VideoFrames and no
+// frame copy has to occur during decoding and frame delivery.
+//
+// Pseudo example usage case:
+//    Vp9FrameBufferPool pool;
+//    pool.InitializeVpxUsePool(decoder_ctx);
+//    ...
+//
+//    // During decoding, libvpx will get and release buffers from the pool.
+//    vpx_codec_decode(decoder_ctx, ...);
+//
+//    vpx_image_t* img = vpx_codec_get_frame(decoder_ctx, &amp;iter);
+//    // Important to use scoped_refptr to protect it against being recycled by
+//    // the pool.
+//    scoped_refptr&lt;Vp9FrameBuffer&gt; img_buffer = (Vp9FrameBuffer*)img-&gt;fb_priv;
+//    ...
+//
+//    // Destroying the codec will make libvpx release any buffers it was using.
+//    vpx_codec_destroy(decoder_ctx);</doc>
+<fun r='_ZN6webrtc18Vp9FrameBufferPool20InitializeVpxUsePoolEP13vpx_codec_ctx'/>
+<fun r='_ZN6webrtc18Vp9FrameBufferPool14GetFrameBufferEm'/>
+<fun r='_ZNK6webrtc18Vp9FrameBufferPool18GetNumBuffersInUseEv'/>
+<fun r='_ZN6webrtc18Vp9FrameBufferPool6ResizeEm'/>
+<fun r='_ZN6webrtc18Vp9FrameBufferPool9ClearPoolEv'/>
+<fun r='_ZN6webrtc18Vp9FrameBufferPool17VpxGetFrameBufferEPvmP22vpx_codec_frame_buffer'/>
+<fun r='_ZN6webrtc18Vp9FrameBufferPool21VpxReleaseFrameBufferEPvP22vpx_codec_frame_buffer'/>
+<mbr r='webrtc::Vp9FrameBufferPool::buffers_lock_' o='0' t='webrtc::Mutex'/>
+<mbr r='webrtc::Vp9FrameBufferPool::allocated_buffers_' o='512' t='std::vector&lt;rtc::scoped_refptr&lt;Vp9FrameBuffer&gt;&gt;'/>
+<mbr r='webrtc::Vp9FrameBufferPool::max_num_buffers_' o='704' t='size_t'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/video_coding/codecs/vp9/vp9_frame_buffer_pool.cc' l='150' c='_ZN6webrtc18Vp9FrameBufferPool17VpxGetFrameBufferEPvmP22vpx_codec_frame_buffer'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/video_coding/codecs/vp9/vp9_frame_buffer_pool.cc' l='150' c='_ZN6webrtc18Vp9FrameBufferPool17VpxGetFrameBufferEPvmP22vpx_codec_frame_buffer'/>
+<size>96</size>
+<fun r='_ZN6webrtc18Vp9FrameBufferPool20InitializeVpxUsePoolEP13vpx_codec_ctx'/>
+<fun r='_ZN6webrtc18Vp9FrameBufferPool14GetFrameBufferEm'/>
+<fun r='_ZNK6webrtc18Vp9FrameBufferPool18GetNumBuffersInUseEv'/>
+<fun r='_ZN6webrtc18Vp9FrameBufferPool6ResizeEm'/>
+<fun r='_ZN6webrtc18Vp9FrameBufferPool9ClearPoolEv'/>
+<fun r='_ZN6webrtc18Vp9FrameBufferPool17VpxGetFrameBufferEPvmP22vpx_codec_frame_buffer'/>
+<fun r='_ZN6webrtc18Vp9FrameBufferPool21VpxReleaseFrameBufferEPvP22vpx_codec_frame_buffer'/>

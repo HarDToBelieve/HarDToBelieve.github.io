@@ -1,0 +1,106 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>clock.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/system_wrappers/include/clock.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::Clock,webrtc::SimulatedClock "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/system_wrappers/include/clock.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>webrtc</a>/<a href='..'>system_wrappers</a>/<a href='./'>include</a>/<a href='clock.h.html'>clock.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2013 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/SYSTEM_WRAPPERS_INCLUDE_CLOCK_H_">SYSTEM_WRAPPERS_INCLUDE_CLOCK_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/SYSTEM_WRAPPERS_INCLUDE_CLOCK_H_" data-ref="_M/SYSTEM_WRAPPERS_INCLUDE_CLOCK_H_">SYSTEM_WRAPPERS_INCLUDE_CLOCK_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include &lt;atomic&gt;</u></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="../../api/units/timestamp.h.html">"api/units/timestamp.h"</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="../../rtc_base/system/rtc_export.h.html">"rtc_base/system/rtc_export.h"</a></u></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="ntp_time.h.html">"system_wrappers/include/ntp_time.h"</a></u></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="24">24</th><td></td></tr>
+<tr><th id="25">25</th><td><i>// January 1970, in NTP seconds.</i></td></tr>
+<tr><th id="26">26</th><td><em>const</em> <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl def" id="webrtc::kNtpJan1970" title='webrtc::kNtpJan1970' data-ref="webrtc::kNtpJan1970" data-ref-filename="webrtc..kNtpJan1970">kNtpJan1970</dfn> = <var>2208988800UL</var>;</td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><i>// Magic NTP fractional unit.</i></td></tr>
+<tr><th id="29">29</th><td><em>const</em> <em>double</em> <dfn class="decl def" id="webrtc::kMagicNtpFractionalUnit" title='webrtc::kMagicNtpFractionalUnit' data-ref="webrtc::kMagicNtpFractionalUnit" data-ref-filename="webrtc..kMagicNtpFractionalUnit">kMagicNtpFractionalUnit</dfn> = <var>4.294967296E+9</var>;</td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><i>// A clock interface that allows reading of absolute and relative timestamps.</i></td></tr>
+<tr><th id="32">32</th><td><b>class</b> <a class="macro" href="../../rtc_base/system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <dfn class="type def" id="webrtc::Clock" title='webrtc::Clock' data-ref="webrtc::Clock" data-ref-filename="webrtc..Clock">Clock</dfn> {</td></tr>
+<tr><th id="33">33</th><td> <b>public</b>:</td></tr>
+<tr><th id="34">34</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc5ClockD1Ev" title='webrtc::Clock::~Clock' data-ref="_ZN6webrtc5ClockD1Ev" data-ref-filename="_ZN6webrtc5ClockD1Ev">~Clock</dfn>() {}</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td>  <i>// Return a timestamp relative to an unspecified epoch.</i></td></tr>
+<tr><th id="37">37</th><td><i>  // TODO(bugs.webrtc.org/11327): Make this a pure virtual function.</i></td></tr>
+<tr><th id="38">38</th><td>  <b>virtual</b> <a class="type" href="../../api/units/timestamp.h.html#webrtc::Timestamp" title='webrtc::Timestamp' data-ref="webrtc::Timestamp" data-ref-filename="webrtc..Timestamp">Timestamp</a> <dfn class="virtual decl def fn" id="_ZN6webrtc5Clock11CurrentTimeEv" title='webrtc::Clock::CurrentTime' data-ref="_ZN6webrtc5Clock11CurrentTimeEv" data-ref-filename="_ZN6webrtc5Clock11CurrentTimeEv">CurrentTime</dfn>() {</td></tr>
+<tr><th id="39">39</th><td>    <b>return</b> <a class="type" href="../../api/units/timestamp.h.html#webrtc::Timestamp" title='webrtc::Timestamp' data-ref="webrtc::Timestamp" data-ref-filename="webrtc..Timestamp">Timestamp</a>::<a class="ref fn" href="../../api/units/timestamp.h.html#_ZN6webrtc9Timestamp6MicrosET_" title='webrtc::Timestamp::Micros' data-ref="_ZN6webrtc9Timestamp6MicrosET_" data-ref-filename="_ZN6webrtc9Timestamp6MicrosET_">Micros</a>(<a class="virtual member fn" href="#_ZN6webrtc5Clock18TimeInMicrosecondsEv" title='webrtc::Clock::TimeInMicroseconds' data-ref="_ZN6webrtc5Clock18TimeInMicrosecondsEv" data-ref-filename="_ZN6webrtc5Clock18TimeInMicrosecondsEv">TimeInMicroseconds</a>());</td></tr>
+<tr><th id="40">40</th><td>  }</td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td>  <i>// TODO(bugs.webrtc.org/11327): Make the following two methods non-virtual</i></td></tr>
+<tr><th id="43">43</th><td><i>  // or completely remove them.</i></td></tr>
+<tr><th id="44">44</th><td>  <b>virtual</b> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="virtual decl def fn" id="_ZN6webrtc5Clock18TimeInMillisecondsEv" title='webrtc::Clock::TimeInMilliseconds' data-ref="_ZN6webrtc5Clock18TimeInMillisecondsEv" data-ref-filename="_ZN6webrtc5Clock18TimeInMillisecondsEv">TimeInMilliseconds</dfn>() { <b>return</b> <a class="virtual member fn" href="#_ZN6webrtc5Clock11CurrentTimeEv" title='webrtc::Clock::CurrentTime' data-ref="_ZN6webrtc5Clock11CurrentTimeEv" data-ref-filename="_ZN6webrtc5Clock11CurrentTimeEv">CurrentTime</a>().<a class="ref fn" href="../../api/units/timestamp.h.html#_ZNK6webrtc9Timestamp2msEv" title='webrtc::Timestamp::ms' data-ref="_ZNK6webrtc9Timestamp2msEv" data-ref-filename="_ZNK6webrtc9Timestamp2msEv">ms</a>(); }</td></tr>
+<tr><th id="45">45</th><td>  <b>virtual</b> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="virtual decl def fn" id="_ZN6webrtc5Clock18TimeInMicrosecondsEv" title='webrtc::Clock::TimeInMicroseconds' data-ref="_ZN6webrtc5Clock18TimeInMicrosecondsEv" data-ref-filename="_ZN6webrtc5Clock18TimeInMicrosecondsEv">TimeInMicroseconds</dfn>() { <b>return</b> <a class="virtual member fn" href="#_ZN6webrtc5Clock11CurrentTimeEv" title='webrtc::Clock::CurrentTime' data-ref="_ZN6webrtc5Clock11CurrentTimeEv" data-ref-filename="_ZN6webrtc5Clock11CurrentTimeEv">CurrentTime</a>().<a class="ref fn" href="../../api/units/timestamp.h.html#_ZNK6webrtc9Timestamp2usEv" title='webrtc::Timestamp::us' data-ref="_ZNK6webrtc9Timestamp2usEv" data-ref-filename="_ZNK6webrtc9Timestamp2usEv">us</a>(); }</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td>  <i>// Retrieve an NTP absolute timestamp (with an epoch of Jan 1, 1900).</i></td></tr>
+<tr><th id="48">48</th><td>  <b>virtual</b> <a class="type" href="ntp_time.h.html#webrtc::NtpTime" title='webrtc::NtpTime' data-ref="webrtc::NtpTime" data-ref-filename="webrtc..NtpTime">NtpTime</a> <dfn class="virtual decl fn" id="_ZN6webrtc5Clock14CurrentNtpTimeEv" title='webrtc::Clock::CurrentNtpTime' data-ref="_ZN6webrtc5Clock14CurrentNtpTimeEv" data-ref-filename="_ZN6webrtc5Clock14CurrentNtpTimeEv">CurrentNtpTime</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td>  <i>// TODO(bugs.webrtc.org/11327): Make the following method non-virtual</i></td></tr>
+<tr><th id="51">51</th><td><i>  // or completely remove it.</i></td></tr>
+<tr><th id="52">52</th><td>  <b>virtual</b> <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="virtual decl def fn" id="_ZN6webrtc5Clock24CurrentNtpInMillisecondsEv" title='webrtc::Clock::CurrentNtpInMilliseconds' data-ref="_ZN6webrtc5Clock24CurrentNtpInMillisecondsEv" data-ref-filename="_ZN6webrtc5Clock24CurrentNtpInMillisecondsEv">CurrentNtpInMilliseconds</dfn>() { <b>return</b> <a class="virtual member fn" href="#_ZN6webrtc5Clock14CurrentNtpTimeEv" title='webrtc::Clock::CurrentNtpTime' data-ref="_ZN6webrtc5Clock14CurrentNtpTimeEv" data-ref-filename="_ZN6webrtc5Clock14CurrentNtpTimeEv">CurrentNtpTime</a>().<a class="ref fn" href="ntp_time.h.html#_ZNK6webrtc7NtpTime4ToMsEv" title='webrtc::NtpTime::ToMs' data-ref="_ZNK6webrtc7NtpTime4ToMsEv" data-ref-filename="_ZNK6webrtc7NtpTime4ToMsEv">ToMs</a>(); }</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td>  <i>// Returns an instance of the real-time system clock implementation.</i></td></tr>
+<tr><th id="55">55</th><td>  <em>static</em> <a class="type" href="#webrtc::Clock" title='webrtc::Clock' data-ref="webrtc::Clock" data-ref-filename="webrtc..Clock">Clock</a>* <dfn class="decl fn" id="_ZN6webrtc5Clock16GetRealTimeClockEv" title='webrtc::Clock::GetRealTimeClock' data-ref="_ZN6webrtc5Clock16GetRealTimeClockEv" data-ref-filename="_ZN6webrtc5Clock16GetRealTimeClockEv">GetRealTimeClock</dfn>();</td></tr>
+<tr><th id="56">56</th><td>};</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><b>class</b> <dfn class="type def" id="webrtc::SimulatedClock" title='webrtc::SimulatedClock' data-ref="webrtc::SimulatedClock" data-ref-filename="webrtc..SimulatedClock">SimulatedClock</dfn> : <b>public</b> <a class="type" href="#webrtc::Clock" title='webrtc::Clock' data-ref="webrtc::Clock" data-ref-filename="webrtc..Clock">Clock</a> {</td></tr>
+<tr><th id="59">59</th><td> <b>public</b>:</td></tr>
+<tr><th id="60">60</th><td>  <i>// The constructors assume an epoch of Jan 1, 1970.</i></td></tr>
+<tr><th id="61">61</th><td>  <b>explicit</b> <dfn class="decl fn" id="_ZN6webrtc14SimulatedClockC1Ex" title='webrtc::SimulatedClock::SimulatedClock' data-ref="_ZN6webrtc14SimulatedClockC1Ex" data-ref-filename="_ZN6webrtc14SimulatedClockC1Ex">SimulatedClock</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col3 decl" id="443initial_time_us" title='initial_time_us' data-type='int64_t' data-ref="443initial_time_us" data-ref-filename="443initial_time_us">initial_time_us</dfn>);</td></tr>
+<tr><th id="62">62</th><td>  <b>explicit</b> <dfn class="decl fn" id="_ZN6webrtc14SimulatedClockC1ENS_9TimestampE" title='webrtc::SimulatedClock::SimulatedClock' data-ref="_ZN6webrtc14SimulatedClockC1ENS_9TimestampE" data-ref-filename="_ZN6webrtc14SimulatedClockC1ENS_9TimestampE">SimulatedClock</dfn>(<a class="type" href="../../api/units/timestamp.h.html#webrtc::Timestamp" title='webrtc::Timestamp' data-ref="webrtc::Timestamp" data-ref-filename="webrtc..Timestamp">Timestamp</a> <dfn class="local col4 decl" id="444initial_time" title='initial_time' data-type='webrtc::Timestamp' data-ref="444initial_time" data-ref-filename="444initial_time">initial_time</dfn>);</td></tr>
+<tr><th id="63">63</th><td>  <dfn class="virtual decl fn" id="_ZN6webrtc14SimulatedClockD1Ev" title='webrtc::SimulatedClock::~SimulatedClock' data-ref="_ZN6webrtc14SimulatedClockD1Ev" data-ref-filename="_ZN6webrtc14SimulatedClockD1Ev">~SimulatedClock</dfn>() override;</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td>  <i>// Return a timestamp with an epoch of Jan 1, 1970.</i></td></tr>
+<tr><th id="66">66</th><td>  <a class="type" href="../../api/units/timestamp.h.html#webrtc::Timestamp" title='webrtc::Timestamp' data-ref="webrtc::Timestamp" data-ref-filename="webrtc..Timestamp">Timestamp</a> <dfn class="virtual decl fn" id="_ZN6webrtc14SimulatedClock11CurrentTimeEv" title='webrtc::SimulatedClock::CurrentTime' data-ref="_ZN6webrtc14SimulatedClock11CurrentTimeEv" data-ref-filename="_ZN6webrtc14SimulatedClock11CurrentTimeEv">CurrentTime</dfn>() override;</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td>  <a class="type" href="ntp_time.h.html#webrtc::NtpTime" title='webrtc::NtpTime' data-ref="webrtc::NtpTime" data-ref-filename="webrtc..NtpTime">NtpTime</a> <dfn class="virtual decl fn" id="_ZN6webrtc14SimulatedClock14CurrentNtpTimeEv" title='webrtc::SimulatedClock::CurrentNtpTime' data-ref="_ZN6webrtc14SimulatedClock14CurrentNtpTimeEv" data-ref-filename="_ZN6webrtc14SimulatedClock14CurrentNtpTimeEv">CurrentNtpTime</dfn>() override;</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td>  <i>// Advance the simulated clock with a given number of milliseconds or</i></td></tr>
+<tr><th id="71">71</th><td><i>  // microseconds.</i></td></tr>
+<tr><th id="72">72</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN6webrtc14SimulatedClock23AdvanceTimeMillisecondsEx" title='webrtc::SimulatedClock::AdvanceTimeMilliseconds' data-ref="_ZN6webrtc14SimulatedClock23AdvanceTimeMillisecondsEx" data-ref-filename="_ZN6webrtc14SimulatedClock23AdvanceTimeMillisecondsEx">AdvanceTimeMilliseconds</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col5 decl" id="445milliseconds" title='milliseconds' data-type='int64_t' data-ref="445milliseconds" data-ref-filename="445milliseconds">milliseconds</dfn>);</td></tr>
+<tr><th id="73">73</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN6webrtc14SimulatedClock23AdvanceTimeMicrosecondsEx" title='webrtc::SimulatedClock::AdvanceTimeMicroseconds' data-ref="_ZN6webrtc14SimulatedClock23AdvanceTimeMicrosecondsEx" data-ref-filename="_ZN6webrtc14SimulatedClock23AdvanceTimeMicrosecondsEx">AdvanceTimeMicroseconds</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col6 decl" id="446microseconds" title='microseconds' data-type='int64_t' data-ref="446microseconds" data-ref-filename="446microseconds">microseconds</dfn>);</td></tr>
+<tr><th id="74">74</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN6webrtc14SimulatedClock11AdvanceTimeENS_9TimeDeltaE" title='webrtc::SimulatedClock::AdvanceTime' data-ref="_ZN6webrtc14SimulatedClock11AdvanceTimeENS_9TimeDeltaE" data-ref-filename="_ZN6webrtc14SimulatedClock11AdvanceTimeENS_9TimeDeltaE">AdvanceTime</dfn>(<a class="type" href="../../api/units/time_delta.h.html#webrtc::TimeDelta" title='webrtc::TimeDelta' data-ref="webrtc::TimeDelta" data-ref-filename="webrtc..TimeDelta">TimeDelta</a> <dfn class="local col7 decl" id="447delta" title='delta' data-type='webrtc::TimeDelta' data-ref="447delta" data-ref-filename="447delta">delta</dfn>);</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td> <b>private</b>:</td></tr>
+<tr><th id="77">77</th><td>  <i>// The time is read and incremented with relaxed order. Each thread will see</i></td></tr>
+<tr><th id="78">78</th><td><i>  // monotonically increasing time, and when threads post tasks or messages to</i></td></tr>
+<tr><th id="79">79</th><td><i>  // one another, the synchronization done as part of the message passing should</i></td></tr>
+<tr><th id="80">80</th><td><i>  // ensure that any causual chain of events on multiple threads also</i></td></tr>
+<tr><th id="81">81</th><td><i>  // corresponds to monotonically increasing time.</i></td></tr>
+<tr><th id="82">82</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::atomic' data-ref="std::__1::atomic" data-ref-filename="std..__1..atomic">atomic</span>&lt;<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span>&gt; <dfn class="decl field" id="webrtc::SimulatedClock::time_us_" title='webrtc::SimulatedClock::time_us_' data-ref="webrtc::SimulatedClock::time_us_" data-ref-filename="webrtc..SimulatedClock..time_us_">time_us_</dfn>;</td></tr>
+<tr><th id="83">83</th><td>};</td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td><u>#<span data-ppcond="11">endif</span>  // SYSTEM_WRAPPERS_INCLUDE_CLOCK_H_</u></td></tr>
+<tr><th id="88">88</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../api/create_peerconnection_factory.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/create_peerconnection_factory.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

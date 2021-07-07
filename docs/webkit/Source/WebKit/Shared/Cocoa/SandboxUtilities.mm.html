@@ -1,0 +1,83 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SandboxUtilities.mm source code [webkit/Source/WebKit/Shared/Cocoa/SandboxUtilities.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKit/Shared/Cocoa/SandboxUtilities.mm'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKit</a>/<a href='..'>Shared</a>/<a href='./'>Cocoa</a>/<a href='SandboxUtilities.mm.html'>SandboxUtilities.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2014 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import <a href="../../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#import <a href="SandboxUtilities.h.html">"SandboxUtilities.h"</a></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import &lt;array&gt;</u></td></tr>
+<tr><th id="30">30</th><td><u>#import &lt;sys/param.h&gt;</u></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/OSObjectPtr.h.html">&lt;wtf/OSObjectPtr.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/spi/darwin/SandboxSPI.h.html">&lt;wtf/spi/darwin/SandboxSPI.h&gt;</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/spi/darwin/XPCSPI.h.html">&lt;wtf/spi/darwin/XPCSPI.h&gt;</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html">&lt;wtf/text/WTFString.h&gt;</a></u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><b>namespace</b> <span class="namespace">WebKit</span> {</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><em>bool</em> <dfn class="decl def fn" id="_ZN6WebKit25currentProcessIsSandboxedEv" title='WebKit::currentProcessIsSandboxed' data-ref="_ZN6WebKit25currentProcessIsSandboxedEv" data-ref-filename="_ZN6WebKit25currentProcessIsSandboxedEv">currentProcessIsSandboxed</dfn>()</td></tr>
+<tr><th id="39">39</th><td>{</td></tr>
+<tr><th id="40">40</th><td>    <b>return</b> <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/spi/darwin/SandboxSPI.h.html#sandbox_check" title='sandbox_check' data-ref="sandbox_check" data-ref-filename="sandbox_check">sandbox_check</a>(<span class='ref fn' title='getpid' data-ref="getpid" data-ref-filename="getpid">getpid</span>(), <b>nullptr</b>, <a class="enum" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/spi/darwin/SandboxSPI.h.html#SANDBOX_FILTER_NONE" title='SANDBOX_FILTER_NONE' data-ref="SANDBOX_FILTER_NONE" data-ref-filename="SANDBOX_FILTER_NONE">SANDBOX_FILTER_NONE</a>);</td></tr>
+<tr><th id="41">41</th><td>}</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><em>bool</em> <dfn class="decl def fn" id="_ZN6WebKit27connectedProcessIsSandboxedEPU24objcproto13OS_xpc_object8NSObject" title='WebKit::connectedProcessIsSandboxed' data-ref="_ZN6WebKit27connectedProcessIsSandboxedEPU24objcproto13OS_xpc_object8NSObject" data-ref-filename="_ZN6WebKit27connectedProcessIsSandboxedEPU24objcproto13OS_xpc_object8NSObject">connectedProcessIsSandboxed</dfn>(<span class='typedef' title='xpc_connection_t' data-type='xpc_object_t' data-ref="xpc_connection_t" data-ref-filename="xpc_connection_t">xpc_connection_t</span> <dfn class="local col1 decl" id="181connectionToParent" title='connectionToParent' data-type='xpc_connection_t' data-ref="181connectionToParent" data-ref-filename="181connectionToParent">connectionToParent</dfn>)</td></tr>
+<tr><th id="44">44</th><td>{</td></tr>
+<tr><th id="45">45</th><td>    <span class='typedef' title='audit_token_t' data-type='struct audit_token_t' data-ref="audit_token_t" data-ref-filename="audit_token_t">audit_token_t</span> <span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN13audit_token_tC1Ev" data-ref-filename="_ZN13audit_token_tC1Ev"></span><dfn class="local col2 decl" id="182token" title='token' data-type='audit_token_t' data-ref="182token" data-ref-filename="182token">token</dfn>;</td></tr>
+<tr><th id="46">46</th><td>    <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/spi/darwin/XPCSPI.h.html#xpc_connection_get_audit_token" title='xpc_connection_get_audit_token' data-ref="xpc_connection_get_audit_token" data-ref-filename="xpc_connection_get_audit_token">xpc_connection_get_audit_token</a>(<a class="local col1 ref" href="#181connectionToParent" title='connectionToParent' data-ref="181connectionToParent" data-ref-filename="181connectionToParent">connectionToParent</a>, &amp;<a class="local col2 ref" href="#182token" title='token' data-ref="182token" data-ref-filename="182token">token</a>);</td></tr>
+<tr><th id="47">47</th><td>    <b>return</b> <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/spi/darwin/SandboxSPI.h.html#sandbox_check_by_audit_token" title='sandbox_check_by_audit_token' data-ref="sandbox_check_by_audit_token" data-ref-filename="sandbox_check_by_audit_token">sandbox_check_by_audit_token</a>(<span class='ref fn fake' title='(anonymous struct)::' data-ref="_ZN13audit_token_tC1ERKS_" data-ref-filename="_ZN13audit_token_tC1ERKS_"></span><a class="local col2 ref" href="#182token" title='token' data-ref="182token" data-ref-filename="182token">token</a>, <b>nullptr</b>, <a class="enum" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/spi/darwin/SandboxSPI.h.html#SANDBOX_FILTER_NONE" title='SANDBOX_FILTER_NONE' data-ref="SANDBOX_FILTER_NONE" data-ref-filename="SANDBOX_FILTER_NONE">SANDBOX_FILTER_NONE</a>);</td></tr>
+<tr><th id="48">48</th><td>}</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><em>bool</em> <dfn class="decl def fn" id="_ZN6WebKit19processHasContainerEv" title='WebKit::processHasContainer' data-ref="_ZN6WebKit19processHasContainerEv" data-ref-filename="_ZN6WebKit19processHasContainerEv">processHasContainer</dfn>()</td></tr>
+<tr><th id="51">51</th><td>{</td></tr>
+<tr><th id="52">52</th><td>    <em>static</em> <em>bool</em> <dfn class="local col3 decl" id="183hasContainer" title='hasContainer' data-type='bool' data-ref="183hasContainer" data-ref-filename="183hasContainer">hasContainer</dfn> = !<a class="ref fn" href="#_ZN6WebKit23pathForProcessContainerEv" title='WebKit::pathForProcessContainer' data-ref="_ZN6WebKit23pathForProcessContainerEv" data-ref-filename="_ZN6WebKit23pathForProcessContainerEv">pathForProcessContainer</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZNK3WTF6String7isEmptyEv" title='WTF::String::isEmpty' data-ref="_ZNK3WTF6String7isEmptyEv" data-ref-filename="_ZNK3WTF6String7isEmptyEv">isEmpty</a>();</td></tr>
+<tr><th id="53">53</th><td>    <b>return</b> <a class="local col3 ref" href="#183hasContainer" title='hasContainer' data-ref="183hasContainer" data-ref-filename="183hasContainer">hasContainer</a>;</td></tr>
+<tr><th id="54">54</th><td>}</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td><a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#WTF::String" title='WTF::String' data-ref="WTF::String" data-ref-filename="WTF..String">String</a> <dfn class="decl def fn" id="_ZN6WebKit23pathForProcessContainerEv" title='WebKit::pathForProcessContainer' data-ref="_ZN6WebKit23pathForProcessContainerEv" data-ref-filename="_ZN6WebKit23pathForProcessContainerEv">pathForProcessContainer</dfn>()</td></tr>
+<tr><th id="57">57</th><td>{</td></tr>
+<tr><th id="58">58</th><td>    <span class="namespace">std::</span><span class='type' title='std::__1::array' data-ref="std::__1::array" data-ref-filename="std..__1..array">array</span>&lt;<em>char</em>, <span class="macro" title="1024" data-ref="_M/MAXPATHLEN">MAXPATHLEN</span>&gt; <span class='ref fn fake' title='std::__1::array&lt;char, 1024&gt;::array' data-ref="_ZNSt3__15arrayIcLm1024EEC1Ev" data-ref-filename="_ZNSt3__15arrayIcLm1024EEC1Ev"></span><dfn class="local col4 decl" id="184path" title='path' data-type='std::array&lt;char, 1024&gt;' data-ref="184path" data-ref-filename="184path">path</dfn>;</td></tr>
+<tr><th id="59">59</th><td>    <a class="local col4 ref" href="#184path" title='path' data-ref="184path" data-ref-filename="184path">path</a><span class='ref fn' title='std::__1::array::operator[]' data-ref="_ZNSt3__15arrayixEm" data-ref-filename="_ZNSt3__15arrayixEm">[<var>0</var>]</span> = <var>0</var>;</td></tr>
+<tr><th id="60">60</th><td>    <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/spi/darwin/SandboxSPI.h.html#sandbox_container_path_for_pid" title='sandbox_container_path_for_pid' data-ref="sandbox_container_path_for_pid" data-ref-filename="sandbox_container_path_for_pid">sandbox_container_path_for_pid</a>(<span class='ref fn' title='getpid' data-ref="getpid" data-ref-filename="getpid">getpid</span>(), <a class="local col4 ref" href="#184path" title='path' data-ref="184path" data-ref-filename="184path">path</a>.<span class='ref fn' title='std::__1::array::data' data-ref="_ZNSt3__15array4dataEv" data-ref-filename="_ZNSt3__15array4dataEv">data</span>(), <a class="local col4 ref" href="#184path" title='path' data-ref="184path" data-ref-filename="184path">path</a>.<span class='ref fn' title='std::__1::array::size' data-ref="_ZNKSt3__15array4sizeEv" data-ref-filename="_ZNKSt3__15array4sizeEv">size</span>());</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td>    <b>return</b> <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#WTF::String" title='WTF::String' data-ref="WTF::String" data-ref-filename="WTF..String">String</a>::<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZN3WTF6String8fromUTF8EPKc" title='WTF::String::fromUTF8' data-ref="_ZN3WTF6String8fromUTF8EPKc" data-ref-filename="_ZN3WTF6String8fromUTF8EPKc">fromUTF8</a>(<a class="local col4 ref" href="#184path" title='path' data-ref="184path" data-ref-filename="184path">path</a>.<span class='ref fn' title='std::__1::array::data' data-ref="_ZNSt3__15array4dataEv" data-ref-filename="_ZNSt3__15array4dataEv">data</span>());</td></tr>
+<tr><th id="63">63</th><td>}</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td>}</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource12-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource12-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,20 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.h' l='44' type='int [11]'/>
+<offset>589888</offset>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='372' u='w' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='380' u='w' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='388' u='w' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='394' u='w' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='402' u='w' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='412' u='w' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='412' u='r' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='432' u='r' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='561' u='r' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='763' u='r' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='764' u='r' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='839' u='w' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='841' u='w' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='841' u='r' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='845' u='r' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='852' u='r' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='853' u='r' c='WebRtcIsac_Fftradix'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/third_party/fft/fft.c' l='862' u='r' c='WebRtcIsac_Fftradix'/>

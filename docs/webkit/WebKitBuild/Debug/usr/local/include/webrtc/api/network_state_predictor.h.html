@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>network_state_predictor.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/network_state_predictor.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::BandwidthUsage,webrtc::NetworkStatePredictor,webrtc::NetworkStatePredictorFactoryInterface "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/network_state_predictor.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>WebKitBuild</a>/<a href='../../../../..'>Debug</a>/<a href='../../../..'>usr</a>/<a href='../../..'>local</a>/<a href='../..'>include</a>/<a href='..'>webrtc</a>/<a href='./'>api</a>/<a href='network_state_predictor.h.html'>network_state_predictor.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2019 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/API_NETWORK_STATE_PREDICTOR_H_">API_NETWORK_STATE_PREDICTOR_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/API_NETWORK_STATE_PREDICTOR_H_" data-ref="_M/API_NETWORK_STATE_PREDICTOR_H_">API_NETWORK_STATE_PREDICTOR_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;vector&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><b>enum</b> <b>class</b> <dfn class="type def" id="webrtc::BandwidthUsage" title='webrtc::BandwidthUsage' data-ref="webrtc::BandwidthUsage" data-ref-filename="webrtc..BandwidthUsage">BandwidthUsage</dfn> {</td></tr>
+<tr><th id="20">20</th><td>  <dfn class="enum" id="webrtc::BandwidthUsage::kBwNormal" title='webrtc::BandwidthUsage::kBwNormal' data-ref="webrtc::BandwidthUsage::kBwNormal" data-ref-filename="webrtc..BandwidthUsage..kBwNormal">kBwNormal</dfn> = <var>0</var>,</td></tr>
+<tr><th id="21">21</th><td>  <dfn class="enum" id="webrtc::BandwidthUsage::kBwUnderusing" title='webrtc::BandwidthUsage::kBwUnderusing' data-ref="webrtc::BandwidthUsage::kBwUnderusing" data-ref-filename="webrtc..BandwidthUsage..kBwUnderusing">kBwUnderusing</dfn> = <var>1</var>,</td></tr>
+<tr><th id="22">22</th><td>  <dfn class="enum" id="webrtc::BandwidthUsage::kBwOverusing" title='webrtc::BandwidthUsage::kBwOverusing' data-ref="webrtc::BandwidthUsage::kBwOverusing" data-ref-filename="webrtc..BandwidthUsage..kBwOverusing">kBwOverusing</dfn> = <var>2</var>,</td></tr>
+<tr><th id="23">23</th><td>  <dfn class="enum" id="webrtc::BandwidthUsage::kLast" title='webrtc::BandwidthUsage::kLast' data-ref="webrtc::BandwidthUsage::kLast" data-ref-filename="webrtc..BandwidthUsage..kLast">kLast</dfn></td></tr>
+<tr><th id="24">24</th><td>};</td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><i>// TODO(yinwa): work in progress. API in class NetworkStatePredictor should not</i></td></tr>
+<tr><th id="27">27</th><td><i>// be used by other users until this comment is removed.</i></td></tr>
+<tr><th id="28">28</th><td><i></i></td></tr>
+<tr><th id="29">29</th><td><i>// NetworkStatePredictor predict network state based on current network metrics.</i></td></tr>
+<tr><th id="30">30</th><td><i>// Usage:</i></td></tr>
+<tr><th id="31">31</th><td><i>// Setup by calling Initialize.</i></td></tr>
+<tr><th id="32">32</th><td><i>// For each update, call Update. Update returns network state</i></td></tr>
+<tr><th id="33">33</th><td><i>// prediction.</i></td></tr>
+<tr><th id="34">34</th><td><b>class</b> <dfn class="type def" id="webrtc::NetworkStatePredictor" title='webrtc::NetworkStatePredictor' data-ref="webrtc::NetworkStatePredictor" data-ref-filename="webrtc..NetworkStatePredictor">NetworkStatePredictor</dfn> {</td></tr>
+<tr><th id="35">35</th><td> <b>public</b>:</td></tr>
+<tr><th id="36">36</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc21NetworkStatePredictorD1Ev" title='webrtc::NetworkStatePredictor::~NetworkStatePredictor' data-ref="_ZN6webrtc21NetworkStatePredictorD1Ev" data-ref-filename="_ZN6webrtc21NetworkStatePredictorD1Ev">~NetworkStatePredictor</dfn>() {}</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td>  <i>// Returns current network state prediction.</i></td></tr>
+<tr><th id="39">39</th><td><i>  // Inputs:  send_time_ms - packet send time.</i></td></tr>
+<tr><th id="40">40</th><td><i>  //          arrival_time_ms - packet arrival time.</i></td></tr>
+<tr><th id="41">41</th><td><i>  //          network_state - computed network state.</i></td></tr>
+<tr><th id="42">42</th><td>  <b>virtual</b> <a class="type" href="#webrtc::BandwidthUsage" title='webrtc::BandwidthUsage' data-ref="webrtc::BandwidthUsage" data-ref-filename="webrtc..BandwidthUsage">BandwidthUsage</a> <dfn class="virtual decl fn" id="_ZN6webrtc21NetworkStatePredictor6UpdateExxNS_14BandwidthUsageE" title='webrtc::NetworkStatePredictor::Update' data-ref="_ZN6webrtc21NetworkStatePredictor6UpdateExxNS_14BandwidthUsageE" data-ref-filename="_ZN6webrtc21NetworkStatePredictor6UpdateExxNS_14BandwidthUsageE">Update</dfn>(<span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col9 decl" id="899send_time_ms" title='send_time_ms' data-type='int64_t' data-ref="899send_time_ms" data-ref-filename="899send_time_ms">send_time_ms</dfn>,</td></tr>
+<tr><th id="43">43</th><td>                                <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="local col0 decl" id="900arrival_time_ms" title='arrival_time_ms' data-type='int64_t' data-ref="900arrival_time_ms" data-ref-filename="900arrival_time_ms">arrival_time_ms</dfn>,</td></tr>
+<tr><th id="44">44</th><td>                                <a class="type" href="#webrtc::BandwidthUsage" title='webrtc::BandwidthUsage' data-ref="webrtc::BandwidthUsage" data-ref-filename="webrtc..BandwidthUsage">BandwidthUsage</a> <dfn class="local col1 decl" id="901network_state" title='network_state' data-type='webrtc::BandwidthUsage' data-ref="901network_state" data-ref-filename="901network_state">network_state</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="45">45</th><td>};</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td><b>class</b> <dfn class="type def" id="webrtc::NetworkStatePredictorFactoryInterface" title='webrtc::NetworkStatePredictorFactoryInterface' data-ref="webrtc::NetworkStatePredictorFactoryInterface" data-ref-filename="webrtc..NetworkStatePredictorFactoryInterface">NetworkStatePredictorFactoryInterface</dfn> {</td></tr>
+<tr><th id="48">48</th><td> <b>public</b>:</td></tr>
+<tr><th id="49">49</th><td>  <b>virtual</b> <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<a class="type" href="#webrtc::NetworkStatePredictor" title='webrtc::NetworkStatePredictor' data-ref="webrtc::NetworkStatePredictor" data-ref-filename="webrtc..NetworkStatePredictor">NetworkStatePredictor</a>&gt;</td></tr>
+<tr><th id="50">50</th><td>  <dfn class="virtual decl fn" id="_ZN6webrtc37NetworkStatePredictorFactoryInterface27CreateNetworkStatePredictorEv" title='webrtc::NetworkStatePredictorFactoryInterface::CreateNetworkStatePredictor' data-ref="_ZN6webrtc37NetworkStatePredictorFactoryInterface27CreateNetworkStatePredictorEv" data-ref-filename="_ZN6webrtc37NetworkStatePredictorFactoryInterface27CreateNetworkStatePredictorEv">CreateNetworkStatePredictor</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="51">51</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN6webrtc37NetworkStatePredictorFactoryInterfaceD1Ev" title='webrtc::NetworkStatePredictorFactoryInterface::~NetworkStatePredictorFactoryInterface' data-ref="_ZN6webrtc37NetworkStatePredictorFactoryInterfaceD1Ev" data-ref-filename="_ZN6webrtc37NetworkStatePredictorFactoryInterfaceD1Ev">~NetworkStatePredictorFactoryInterface</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="52">52</th><td>};</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td><u>#<span data-ppcond="11">endif</span>  // API_NETWORK_STATE_PREDICTOR_H_</u></td></tr>
+<tr><th id="57">57</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

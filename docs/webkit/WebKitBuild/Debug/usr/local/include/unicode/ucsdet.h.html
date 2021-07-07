@@ -1,0 +1,437 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ucsdet.h source code [webkit/WebKitBuild/Debug/usr/local/include/unicode/ucsdet.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/unicode/ucsdet.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>unicode</a>/<a href='ucsdet.h.html'>ucsdet.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>// © 2016 and later: Unicode, Inc. and others.</i></td></tr>
+<tr><th id="2">2</th><td><i>// License &amp; terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></i></td></tr>
+<tr><th id="3">3</th><td><i>/*</i></td></tr>
+<tr><th id="4">4</th><td><i> **********************************************************************</i></td></tr>
+<tr><th id="5">5</th><td><i> *   Copyright (C) 2005-2013, International Business Machines</i></td></tr>
+<tr><th id="6">6</th><td><i> *   Corporation and others.  All Rights Reserved.</i></td></tr>
+<tr><th id="7">7</th><td><i> **********************************************************************</i></td></tr>
+<tr><th id="8">8</th><td><i> *   file name:  ucsdet.h</i></td></tr>
+<tr><th id="9">9</th><td><i> *   encoding:   UTF-8</i></td></tr>
+<tr><th id="10">10</th><td><i> *   indentation:4</i></td></tr>
+<tr><th id="11">11</th><td><i> *</i></td></tr>
+<tr><th id="12">12</th><td><i> *   created on: 2005Aug04</i></td></tr>
+<tr><th id="13">13</th><td><i> *   created by: Andy Heninger</i></td></tr>
+<tr><th id="14">14</th><td><i> *</i></td></tr>
+<tr><th id="15">15</th><td><i> *   ICU Character Set Detection, API for C</i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> *   Draft version 18 Oct 2005</i></td></tr>
+<tr><th id="18">18</th><td><i> *</i></td></tr>
+<tr><th id="19">19</th><td><i> */</i></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><u>#<span data-ppcond="21">ifndef</span> <span class="macro" data-ref="_M/__UCSDET_H">__UCSDET_H</span></u></td></tr>
+<tr><th id="22">22</th><td><u>#define <dfn class="macro" id="_M/__UCSDET_H" data-ref="_M/__UCSDET_H">__UCSDET_H</dfn></u></td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><u>#include <a href="utypes.h.html">"unicode/utypes.h"</a></u></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="26">if</span> !<a class="macro" href="uconfig.h.html#276" title="0" data-ref="_M/UCONFIG_NO_CONVERSION">UCONFIG_NO_CONVERSION</a></u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="localpointer.h.html">"unicode/localpointer.h"</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="uenum.h.html">"unicode/uenum.h"</a></u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="32">32</th><td><i class="doc"> *<span class="command"> \file</span> </i></td></tr>
+<tr><th id="33">33</th><td><i class="doc"> * <span class="command">\brief</span> C API: Charset Detection API</i></td></tr>
+<tr><th id="34">34</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="35">35</th><td><i class="doc"> * This API provides a facility for detecting the</i></td></tr>
+<tr><th id="36">36</th><td><i class="doc"> * charset or encoding of character data in an unknown text format.</i></td></tr>
+<tr><th id="37">37</th><td><i class="doc"> * The input data can be from an array of bytes.</i></td></tr>
+<tr><th id="38">38</th><td><i class="doc"> * <span class="tag">&lt;p&gt;</span></i></td></tr>
+<tr><th id="39">39</th><td><i class="doc"> * Character set detection is at best an imprecise operation.  The detection</i></td></tr>
+<tr><th id="40">40</th><td><i class="doc"> * process will attempt to identify the charset that best matches the characteristics</i></td></tr>
+<tr><th id="41">41</th><td><i class="doc"> * of the byte data, but the process is partly statistical in nature, and</i></td></tr>
+<tr><th id="42">42</th><td><i class="doc"> * the results can not be guaranteed to always be correct.</i></td></tr>
+<tr><th id="43">43</th><td><i class="doc"> * <span class="tag">&lt;p&gt;</span></i></td></tr>
+<tr><th id="44">44</th><td><i class="doc"> * For best accuracy in charset detection, the input data should be primarily</i></td></tr>
+<tr><th id="45">45</th><td><i class="doc"> * in a single language, and a minimum of a few hundred bytes worth of plain text</i></td></tr>
+<tr><th id="46">46</th><td><i class="doc"> * in the language are needed.  The detection process will attempt to</i></td></tr>
+<tr><th id="47">47</th><td><i class="doc"> * ignore html or xml style markup that could otherwise obscure the content.</i></td></tr>
+<tr><th id="48">48</th><td><i class="doc"> * <span class="tag">&lt;p&gt;</span></i></td></tr>
+<tr><th id="49">49</th><td><i class="doc"> * An alternative to the ICU Charset Detector is the</i></td></tr>
+<tr><th id="50">50</th><td><i class="doc"> * Compact Encoding Detector, <a href="https://github.com/google/compact_enc_det">https://github.com/google/compact_enc_det</a>.</i></td></tr>
+<tr><th id="51">51</th><td><i class="doc"> * It often gives more accurate results, especially with short input samples.</i></td></tr>
+<tr><th id="52">52</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="53">53</th><td> </td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><b>struct</b> <dfn class="type" id="UCharsetDetector" title='UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</dfn>;</td></tr>
+<tr><th id="56">56</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="57">57</th><td><i class="doc">  * Structure representing a charset detector</i></td></tr>
+<tr><th id="58">58</th><td><i class="doc">  *<span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="59">59</th><td><i class="doc">  */</i></td></tr>
+<tr><th id="60">60</th><td><b>typedef</b> <b>struct</b> <a class="type" href="#UCharsetDetector" title='UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</a> <dfn class="typedef" id="UCharsetDetector" title='UCharsetDetector' data-type='struct UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</dfn>;</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><b>struct</b> <dfn class="type" id="UCharsetMatch" title='UCharsetMatch' data-ref="UCharsetMatch" data-ref-filename="UCharsetMatch">UCharsetMatch</dfn>;</td></tr>
+<tr><th id="63">63</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="64">64</th><td><i class="doc">  *  Opaque structure representing a match that was identified</i></td></tr>
+<tr><th id="65">65</th><td><i class="doc">  *  from a charset detection operation.</i></td></tr>
+<tr><th id="66">66</th><td><i class="doc">  * <span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="67">67</th><td><i class="doc">  */</i></td></tr>
+<tr><th id="68">68</th><td><b>typedef</b> <b>struct</b> <a class="type" href="#UCharsetMatch" title='UCharsetMatch' data-ref="UCharsetMatch" data-ref-filename="UCharsetMatch">UCharsetMatch</a> <dfn class="typedef" id="UCharsetMatch" title='UCharsetMatch' data-type='struct UCharsetMatch' data-ref="UCharsetMatch" data-ref-filename="UCharsetMatch">UCharsetMatch</dfn>;</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="71">71</th><td><i class="doc">  *  Open a charset detector.</i></td></tr>
+<tr><th id="72">72</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="73">73</th><td><i class="doc">  *  <span class="command">@param</span> <span class="arg">status</span> Any error conditions occurring during the open</i></td></tr>
+<tr><th id="74">74</th><td><i class="doc">  *                operation are reported back in this variable.</i></td></tr>
+<tr><th id="75">75</th><td><i class="doc">  *  <span class="command">@return</span> the newly opened charset detector.</i></td></tr>
+<tr><th id="76">76</th><td><i class="doc">  * <span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="77">77</th><td><i class="doc">  */</i></td></tr>
+<tr><th id="78">78</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <a class="typedef" href="#UCharsetDetector" title='UCharsetDetector' data-type='struct UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</a> * <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="79">79</th><td><dfn class="decl fn" id="ucsdet_open" title='ucsdet_open' data-ref="ucsdet_open" data-ref-filename="ucsdet_open">ucsdet_open</dfn>(<a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a>   *<dfn class="local col1 decl" id="21status" title='status' data-type='UErrorCode *' data-ref="21status" data-ref-filename="21status">status</dfn>);</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="82">82</th><td><i class="doc">  * Close a charset detector.  All storage and any other resources</i></td></tr>
+<tr><th id="83">83</th><td><i class="doc">  *   owned by this charset detector will be released.  Failure to</i></td></tr>
+<tr><th id="84">84</th><td><i class="doc">  *   close a charset detector when finished with it can result in</i></td></tr>
+<tr><th id="85">85</th><td><i class="doc">  *   memory leaks in the application.</i></td></tr>
+<tr><th id="86">86</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="87">87</th><td><i class="doc">  *  <span class="command">@param</span> <span class="arg">ucsd</span>  The charset detector to be closed.</i></td></tr>
+<tr><th id="88">88</th><td><i class="doc">  * <span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="89">89</th><td><i class="doc">  */</i></td></tr>
+<tr><th id="90">90</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>void</em> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="91">91</th><td><dfn class="decl fn" id="ucsdet_close" title='ucsdet_close' data-ref="ucsdet_close" data-ref-filename="ucsdet_close">ucsdet_close</dfn>(<a class="typedef" href="#UCharsetDetector" title='UCharsetDetector' data-type='struct UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</a> *<dfn class="local col2 decl" id="22ucsd" title='ucsd' data-type='UCharsetDetector *' data-ref="22ucsd" data-ref-filename="22ucsd">ucsd</dfn>);</td></tr>
+<tr><th id="92">92</th><td></td></tr>
+<tr><th id="93">93</th><td><u>#<span data-ppcond="93">if</span> <a class="macro" href="../wtf/Platform.h.html#117" title="0" data-ref="_M/U_SHOW_CPLUSPLUS_API">U_SHOW_CPLUSPLUS_API</a></u></td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td>U_NAMESPACE_BEGIN</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="98">98</th><td><i class="doc"> * <span class="command">\class</span> <span class="verb">LocalUCharsetDetectorPointer</span></i></td></tr>
+<tr><th id="99">99</th><td><i class="doc"> * "Smart pointer" class, closes a UCharsetDetector via ucsdet_close().</i></td></tr>
+<tr><th id="100">100</th><td><i class="doc"> * For most methods see the LocalPointerBase base class.</i></td></tr>
+<tr><th id="101">101</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="102">102</th><td><i class="doc"> * <span class="command">@see</span> LocalPointerBase</i></td></tr>
+<tr><th id="103">103</th><td><i class="doc"> * <span class="command">@see</span> LocalPointer</i></td></tr>
+<tr><th id="104">104</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 4.4</i></td></tr>
+<tr><th id="105">105</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="106">106</th><td>U_DEFINE_LOCAL_OPEN_POINTER(LocalUCharsetDetectorPointer, UCharsetDetector, ucsdet_close);</td></tr>
+<tr><th id="107">107</th><td></td></tr>
+<tr><th id="108">108</th><td>U_NAMESPACE_END</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td><u>#<span data-ppcond="93">endif</span></u></td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc">  * Set the input byte data whose charset is to detected.</i></td></tr>
+<tr><th id="114">114</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="115">115</th><td><i class="doc">  * Ownership of the input  text byte array remains with the caller.</i></td></tr>
+<tr><th id="116">116</th><td><i class="doc">  * The input string must not be altered or deleted until the charset</i></td></tr>
+<tr><th id="117">117</th><td><i class="doc">  * detector is either closed or reset to refer to different input text.</i></td></tr>
+<tr><th id="118">118</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="119">119</th><td><i class="doc">  * <span class="command">@param</span> <span class="arg">ucsd</span>   the charset detector to be used.</i></td></tr>
+<tr><th id="120">120</th><td><i class="doc">  * <span class="command">@param</span> <span class="arg">textIn</span> the input text of unknown encoding.   .</i></td></tr>
+<tr><th id="121">121</th><td><i class="doc">  * <span class="command">@param</span> <span class="arg">len</span>    the length of the input text, or -1 if the text</i></td></tr>
+<tr><th id="122">122</th><td><i class="doc">  *               is NUL terminated.</i></td></tr>
+<tr><th id="123">123</th><td><i class="doc">  * <span class="command">@param</span> <span class="arg">status</span> any error conditions are reported back in this variable.</i></td></tr>
+<tr><th id="124">124</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="125">125</th><td><i class="doc">  *<span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="126">126</th><td><i class="doc">  */</i></td></tr>
+<tr><th id="127">127</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>void</em> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="128">128</th><td><dfn class="decl fn" id="ucsdet_setText" title='ucsdet_setText' data-ref="ucsdet_setText" data-ref-filename="ucsdet_setText">ucsdet_setText</dfn>(<a class="typedef" href="#UCharsetDetector" title='UCharsetDetector' data-type='struct UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</a> *<dfn class="local col3 decl" id="23ucsd" title='ucsd' data-type='UCharsetDetector *' data-ref="23ucsd" data-ref-filename="23ucsd">ucsd</dfn>, <em>const</em> <em>char</em> *<dfn class="local col4 decl" id="24textIn" title='textIn' data-type='const char *' data-ref="24textIn" data-ref-filename="24textIn">textIn</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col5 decl" id="25len" title='len' data-type='int32_t' data-ref="25len" data-ref-filename="25len">len</dfn>, <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col6 decl" id="26status" title='status' data-type='UErrorCode *' data-ref="26status" data-ref-filename="26status">status</dfn>);</td></tr>
+<tr><th id="129">129</th><td></td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td><i class="doc">/** Set the declared encoding for charset detection.</i></td></tr>
+<tr><th id="132">132</th><td><i class="doc"> *  The declared encoding of an input text is an encoding obtained</i></td></tr>
+<tr><th id="133">133</th><td><i class="doc"> *  by the user from an http header or xml declaration or similar source that</i></td></tr>
+<tr><th id="134">134</th><td><i class="doc"> *  can be provided as an additional hint to the charset detector.</i></td></tr>
+<tr><th id="135">135</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="136">136</th><td><i class="doc"> *  How and whether the declared encoding will be used during the</i></td></tr>
+<tr><th id="137">137</th><td><i class="doc"> *  detection process is TBD.</i></td></tr>
+<tr><th id="138">138</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="139">139</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">ucsd</span>      the charset detector to be used.</i></td></tr>
+<tr><th id="140">140</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">encoding</span>  an encoding for the current data obtained from</i></td></tr>
+<tr><th id="141">141</th><td><i class="doc"> *                  a header or declaration or other source outside</i></td></tr>
+<tr><th id="142">142</th><td><i class="doc"> *                  of the byte data itself.</i></td></tr>
+<tr><th id="143">143</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">length</span>    the length of the encoding name, or -1 if the name string</i></td></tr>
+<tr><th id="144">144</th><td><i class="doc"> *                  is NUL terminated.</i></td></tr>
+<tr><th id="145">145</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">status</span>    any error conditions are reported back in this variable.</i></td></tr>
+<tr><th id="146">146</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="147">147</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="148">148</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="149">149</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>void</em> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="150">150</th><td><dfn class="decl fn" id="ucsdet_setDeclaredEncoding" title='ucsdet_setDeclaredEncoding' data-ref="ucsdet_setDeclaredEncoding" data-ref-filename="ucsdet_setDeclaredEncoding">ucsdet_setDeclaredEncoding</dfn>(<a class="typedef" href="#UCharsetDetector" title='UCharsetDetector' data-type='struct UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</a> *<dfn class="local col7 decl" id="27ucsd" title='ucsd' data-type='UCharsetDetector *' data-ref="27ucsd" data-ref-filename="27ucsd">ucsd</dfn>, <em>const</em> <em>char</em> *<dfn class="local col8 decl" id="28encoding" title='encoding' data-type='const char *' data-ref="28encoding" data-ref-filename="28encoding">encoding</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col9 decl" id="29length" title='length' data-type='int32_t' data-ref="29length" data-ref-filename="29length">length</dfn>, <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col0 decl" id="30status" title='status' data-type='UErrorCode *' data-ref="30status" data-ref-filename="30status">status</dfn>);</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td></td></tr>
+<tr><th id="153">153</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="154">154</th><td><i class="doc"> * Return the charset that best matches the supplied input data.</i></td></tr>
+<tr><th id="155">155</th><td><i class="doc"> * </i></td></tr>
+<tr><th id="156">156</th><td><i class="doc"> * Note though, that because the detection </i></td></tr>
+<tr><th id="157">157</th><td><i class="doc"> * only looks at the start of the input data,</i></td></tr>
+<tr><th id="158">158</th><td><i class="doc"> * there is a possibility that the returned charset will fail to handle</i></td></tr>
+<tr><th id="159">159</th><td><i class="doc"> * the full set of input data.</i></td></tr>
+<tr><th id="160">160</th><td><i class="doc"> * <span class="tag">&lt;p&gt;</span></i></td></tr>
+<tr><th id="161">161</th><td><i class="doc"> * The returned UCharsetMatch object is owned by the UCharsetDetector.</i></td></tr>
+<tr><th id="162">162</th><td><i class="doc"> * It will remain valid until the detector input is reset, or until</i></td></tr>
+<tr><th id="163">163</th><td><i class="doc"> * the detector is closed.</i></td></tr>
+<tr><th id="164">164</th><td><i class="doc"> * <span class="tag">&lt;p&gt;</span></i></td></tr>
+<tr><th id="165">165</th><td><i class="doc"> * The function will fail if</i></td></tr>
+<tr><th id="166">166</th><td><i class="doc"> *  <span class="tag">&lt;ul&gt;</span></i></td></tr>
+<tr><th id="167">167</th><td><i class="doc"> *    <span class="tag">&lt;li&gt;</span>no charset appears to match the data.<span class="tag">&lt;/li&gt;</span></i></td></tr>
+<tr><th id="168">168</th><td><i class="doc"> *    <span class="tag">&lt;li&gt;</span>no input text has been provided<span class="tag">&lt;/li&gt;</span></i></td></tr>
+<tr><th id="169">169</th><td><i class="doc"> *  <span class="tag">&lt;/ul&gt;</span></i></td></tr>
+<tr><th id="170">170</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="171">171</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">ucsd</span>      the charset detector to be used.</i></td></tr>
+<tr><th id="172">172</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">status</span>    any error conditions are reported back in this variable.</i></td></tr>
+<tr><th id="173">173</th><td><i class="doc"> * <span class="command">@return</span>          a UCharsetMatch  representing the best matching charset,</i></td></tr>
+<tr><th id="174">174</th><td><i class="doc"> *                  or NULL if no charset matches the byte data.</i></td></tr>
+<tr><th id="175">175</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="176">176</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="177">177</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="178">178</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>const</em> <a class="typedef" href="#UCharsetMatch" title='UCharsetMatch' data-type='struct UCharsetMatch' data-ref="UCharsetMatch" data-ref-filename="UCharsetMatch">UCharsetMatch</a> * <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="179">179</th><td><dfn class="decl fn" id="ucsdet_detect" title='ucsdet_detect' data-ref="ucsdet_detect" data-ref-filename="ucsdet_detect">ucsdet_detect</dfn>(<a class="typedef" href="#UCharsetDetector" title='UCharsetDetector' data-type='struct UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</a> *<dfn class="local col1 decl" id="31ucsd" title='ucsd' data-type='UCharsetDetector *' data-ref="31ucsd" data-ref-filename="31ucsd">ucsd</dfn>, <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col2 decl" id="32status" title='status' data-type='UErrorCode *' data-ref="32status" data-ref-filename="32status">status</dfn>);</td></tr>
+<tr><th id="180">180</th><td>    </td></tr>
+<tr><th id="181">181</th><td></td></tr>
+<tr><th id="182">182</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="183">183</th><td><i class="doc"> *  Find all charset matches that appear to be consistent with the input,</i></td></tr>
+<tr><th id="184">184</th><td><i class="doc"> *  returning an array of results.  The results are ordered with the</i></td></tr>
+<tr><th id="185">185</th><td><i class="doc"> *  best quality match first.</i></td></tr>
+<tr><th id="186">186</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="187">187</th><td><i class="doc"> *  Because the detection only looks at a limited amount of the</i></td></tr>
+<tr><th id="188">188</th><td><i class="doc"> *  input byte data, some of the returned charsets may fail to handle</i></td></tr>
+<tr><th id="189">189</th><td><i class="doc"> *  the all of input data.</i></td></tr>
+<tr><th id="190">190</th><td><i class="doc"> *  <span class="tag">&lt;p&gt;</span></i></td></tr>
+<tr><th id="191">191</th><td><i class="doc"> *  The returned UCharsetMatch objects are owned by the UCharsetDetector.</i></td></tr>
+<tr><th id="192">192</th><td><i class="doc"> *  They will remain valid until the detector is closed or modified</i></td></tr>
+<tr><th id="193">193</th><td><i class="doc"> *  </i></td></tr>
+<tr><th id="194">194</th><td><i class="doc"> * <span class="tag">&lt;p&gt;</span></i></td></tr>
+<tr><th id="195">195</th><td><i class="doc"> * Return an error if </i></td></tr>
+<tr><th id="196">196</th><td><i class="doc"> *  <span class="tag">&lt;ul&gt;</span></i></td></tr>
+<tr><th id="197">197</th><td><i class="doc"> *    <span class="tag">&lt;li&gt;</span>no charsets appear to match the input data.<span class="tag">&lt;/li&gt;</span></i></td></tr>
+<tr><th id="198">198</th><td><i class="doc"> *    <span class="tag">&lt;li&gt;</span>no input text has been provided<span class="tag">&lt;/li&gt;</span></i></td></tr>
+<tr><th id="199">199</th><td><i class="doc"> *  <span class="tag">&lt;/ul&gt;</span></i></td></tr>
+<tr><th id="200">200</th><td><i class="doc"> * </i></td></tr>
+<tr><th id="201">201</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">ucsd</span>          the charset detector to be used.</i></td></tr>
+<tr><th id="202">202</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">matchesFound</span>  pointer to a variable that will be set to the</i></td></tr>
+<tr><th id="203">203</th><td><i class="doc"> *                      number of charsets identified that are consistent with</i></td></tr>
+<tr><th id="204">204</th><td><i class="doc"> *                      the input data.  Output only.</i></td></tr>
+<tr><th id="205">205</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">status</span>        any error conditions are reported back in this variable.</i></td></tr>
+<tr><th id="206">206</th><td><i class="doc"> * <span class="command">@return</span>              A pointer to an array of pointers to UCharSetMatch objects.</i></td></tr>
+<tr><th id="207">207</th><td><i class="doc"> *                      This array, and the UCharSetMatch instances to which it refers,</i></td></tr>
+<tr><th id="208">208</th><td><i class="doc"> *                      are owned by the UCharsetDetector, and will remain valid until</i></td></tr>
+<tr><th id="209">209</th><td><i class="doc"> *                      the detector is closed or modified.</i></td></tr>
+<tr><th id="210">210</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="211">211</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="212">212</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>const</em> <a class="typedef" href="#UCharsetMatch" title='UCharsetMatch' data-type='struct UCharsetMatch' data-ref="UCharsetMatch" data-ref-filename="UCharsetMatch">UCharsetMatch</a> ** <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="213">213</th><td><dfn class="decl fn" id="ucsdet_detectAll" title='ucsdet_detectAll' data-ref="ucsdet_detectAll" data-ref-filename="ucsdet_detectAll">ucsdet_detectAll</dfn>(<a class="typedef" href="#UCharsetDetector" title='UCharsetDetector' data-type='struct UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</a> *<dfn class="local col3 decl" id="33ucsd" title='ucsd' data-type='UCharsetDetector *' data-ref="33ucsd" data-ref-filename="33ucsd">ucsd</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> *<dfn class="local col4 decl" id="34matchesFound" title='matchesFound' data-type='int32_t *' data-ref="34matchesFound" data-ref-filename="34matchesFound">matchesFound</dfn>, <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col5 decl" id="35status" title='status' data-type='UErrorCode *' data-ref="35status" data-ref-filename="35status">status</dfn>);</td></tr>
+<tr><th id="214">214</th><td></td></tr>
+<tr><th id="215">215</th><td></td></tr>
+<tr><th id="216">216</th><td></td></tr>
+<tr><th id="217">217</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="218">218</th><td><i class="doc"> *  Get the name of the charset represented by a UCharsetMatch.</i></td></tr>
+<tr><th id="219">219</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="220">220</th><td><i class="doc"> *  The storage for the returned name string is owned by the</i></td></tr>
+<tr><th id="221">221</th><td><i class="doc"> *  UCharsetMatch, and will remain valid while the UCharsetMatch</i></td></tr>
+<tr><th id="222">222</th><td><i class="doc"> *  is valid.</i></td></tr>
+<tr><th id="223">223</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="224">224</th><td><i class="doc"> *  The name returned is suitable for use with the ICU conversion APIs.</i></td></tr>
+<tr><th id="225">225</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="226">226</th><td><i class="doc"> *  <span class="command">@param</span> <span class="arg">ucsm</span>    The charset match object.</i></td></tr>
+<tr><th id="227">227</th><td><i class="doc"> *  <span class="command">@param</span> <span class="arg">status</span>  Any error conditions are reported back in this variable.</i></td></tr>
+<tr><th id="228">228</th><td><i class="doc"> *  <span class="command">@return</span>        The name of the matching charset.</i></td></tr>
+<tr><th id="229">229</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="230">230</th><td><i class="doc"> * <span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="231">231</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="232">232</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>const</em> <em>char</em> * <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="233">233</th><td><dfn class="decl fn" id="ucsdet_getName" title='ucsdet_getName' data-ref="ucsdet_getName" data-ref-filename="ucsdet_getName">ucsdet_getName</dfn>(<em>const</em> <a class="typedef" href="#UCharsetMatch" title='UCharsetMatch' data-type='struct UCharsetMatch' data-ref="UCharsetMatch" data-ref-filename="UCharsetMatch">UCharsetMatch</a> *<dfn class="local col6 decl" id="36ucsm" title='ucsm' data-type='const UCharsetMatch *' data-ref="36ucsm" data-ref-filename="36ucsm">ucsm</dfn>, <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col7 decl" id="37status" title='status' data-type='UErrorCode *' data-ref="37status" data-ref-filename="37status">status</dfn>);</td></tr>
+<tr><th id="234">234</th><td></td></tr>
+<tr><th id="235">235</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="236">236</th><td><i class="doc"> *  Get a confidence number for the quality of the match of the byte</i></td></tr>
+<tr><th id="237">237</th><td><i class="doc"> *  data with the charset.  Confidence numbers range from zero to 100,</i></td></tr>
+<tr><th id="238">238</th><td><i class="doc"> *  with 100 representing complete confidence and zero representing</i></td></tr>
+<tr><th id="239">239</th><td><i class="doc"> *  no confidence.</i></td></tr>
+<tr><th id="240">240</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="241">241</th><td><i class="doc"> *  The confidence values are somewhat arbitrary.  They define an</i></td></tr>
+<tr><th id="242">242</th><td><i class="doc"> *  an ordering within the results for any single detection operation</i></td></tr>
+<tr><th id="243">243</th><td><i class="doc"> *  but are not generally comparable between the results for different input.</i></td></tr>
+<tr><th id="244">244</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="245">245</th><td><i class="doc"> *  A confidence value of ten does have a general meaning - it is used</i></td></tr>
+<tr><th id="246">246</th><td><i class="doc"> *  for charsets that can represent the input data, but for which there</i></td></tr>
+<tr><th id="247">247</th><td><i class="doc"> *  is no other indication that suggests that the charset is the correct one.</i></td></tr>
+<tr><th id="248">248</th><td><i class="doc"> *  Pure 7 bit ASCII data, for example, is compatible with a</i></td></tr>
+<tr><th id="249">249</th><td><i class="doc"> *  great many charsets, most of which will appear as possible matches</i></td></tr>
+<tr><th id="250">250</th><td><i class="doc"> *  with a confidence of 10.</i></td></tr>
+<tr><th id="251">251</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="252">252</th><td><i class="doc"> *  <span class="command">@param</span> <span class="arg">ucsm</span>    The charset match object.</i></td></tr>
+<tr><th id="253">253</th><td><i class="doc"> *  <span class="command">@param</span> <span class="arg">status</span>  Any error conditions are reported back in this variable.</i></td></tr>
+<tr><th id="254">254</th><td><i class="doc"> *  <span class="command">@return</span>        A confidence number for the charset match.</i></td></tr>
+<tr><th id="255">255</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="256">256</th><td><i class="doc"> * <span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="257">257</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="258">258</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="259">259</th><td><dfn class="decl fn" id="ucsdet_getConfidence" title='ucsdet_getConfidence' data-ref="ucsdet_getConfidence" data-ref-filename="ucsdet_getConfidence">ucsdet_getConfidence</dfn>(<em>const</em> <a class="typedef" href="#UCharsetMatch" title='UCharsetMatch' data-type='struct UCharsetMatch' data-ref="UCharsetMatch" data-ref-filename="UCharsetMatch">UCharsetMatch</a> *<dfn class="local col8 decl" id="38ucsm" title='ucsm' data-type='const UCharsetMatch *' data-ref="38ucsm" data-ref-filename="38ucsm">ucsm</dfn>, <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col9 decl" id="39status" title='status' data-type='UErrorCode *' data-ref="39status" data-ref-filename="39status">status</dfn>);</td></tr>
+<tr><th id="260">260</th><td></td></tr>
+<tr><th id="261">261</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="262">262</th><td><i class="doc"> *  Get the RFC 3066 code for the language of the input data.</i></td></tr>
+<tr><th id="263">263</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="264">264</th><td><i class="doc"> *  The Charset Detection service is intended primarily for detecting</i></td></tr>
+<tr><th id="265">265</th><td><i class="doc"> *  charsets, not language.  For some, but not all, charsets, a language is</i></td></tr>
+<tr><th id="266">266</th><td><i class="doc"> *  identified as a byproduct of the detection process, and that is what</i></td></tr>
+<tr><th id="267">267</th><td><i class="doc"> *  is returned by this function.</i></td></tr>
+<tr><th id="268">268</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="269">269</th><td><i class="doc"> *  CAUTION:</i></td></tr>
+<tr><th id="270">270</th><td><i class="doc"> *    1.  Language information is not available for input data encoded in</i></td></tr>
+<tr><th id="271">271</th><td><i class="doc"> *        all charsets. In particular, no language is identified</i></td></tr>
+<tr><th id="272">272</th><td><i class="doc"> *        for UTF-8 input data.</i></td></tr>
+<tr><th id="273">273</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="274">274</th><td><i class="doc"> *    2.  Closely related languages may sometimes be confused.</i></td></tr>
+<tr><th id="275">275</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="276">276</th><td><i class="doc"> *  If more accurate language detection is required, a linguistic</i></td></tr>
+<tr><th id="277">277</th><td><i class="doc"> *  analysis package should be used.</i></td></tr>
+<tr><th id="278">278</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="279">279</th><td><i class="doc"> *  The storage for the returned name string is owned by the</i></td></tr>
+<tr><th id="280">280</th><td><i class="doc"> *  UCharsetMatch, and will remain valid while the UCharsetMatch</i></td></tr>
+<tr><th id="281">281</th><td><i class="doc"> *  is valid.</i></td></tr>
+<tr><th id="282">282</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="283">283</th><td><i class="doc"> *  <span class="command">@param</span> <span class="arg">ucsm</span>    The charset match object.</i></td></tr>
+<tr><th id="284">284</th><td><i class="doc"> *  <span class="command">@param</span> <span class="arg">status</span>  Any error conditions are reported back in this variable.</i></td></tr>
+<tr><th id="285">285</th><td><i class="doc"> *  <span class="command">@return</span>        The RFC 3066 code for the language of the input data, or</i></td></tr>
+<tr><th id="286">286</th><td><i class="doc"> *                 an empty string if the language could not be determined.</i></td></tr>
+<tr><th id="287">287</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="288">288</th><td><i class="doc"> * <span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="289">289</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="290">290</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a> <em>const</em> <em>char</em> * <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="291">291</th><td><dfn class="decl fn" id="ucsdet_getLanguage" title='ucsdet_getLanguage' data-ref="ucsdet_getLanguage" data-ref-filename="ucsdet_getLanguage">ucsdet_getLanguage</dfn>(<em>const</em> <a class="typedef" href="#UCharsetMatch" title='UCharsetMatch' data-type='struct UCharsetMatch' data-ref="UCharsetMatch" data-ref-filename="UCharsetMatch">UCharsetMatch</a> *<dfn class="local col0 decl" id="40ucsm" title='ucsm' data-type='const UCharsetMatch *' data-ref="40ucsm" data-ref-filename="40ucsm">ucsm</dfn>, <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col1 decl" id="41status" title='status' data-type='UErrorCode *' data-ref="41status" data-ref-filename="41status">status</dfn>);</td></tr>
+<tr><th id="292">292</th><td></td></tr>
+<tr><th id="293">293</th><td></td></tr>
+<tr><th id="294">294</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="295">295</th><td><i class="doc">  *  Get the entire input text as a UChar string, placing it into</i></td></tr>
+<tr><th id="296">296</th><td><i class="doc">  *  a caller-supplied buffer.  A terminating</i></td></tr>
+<tr><th id="297">297</th><td><i class="doc">  *  NUL character will be appended to the buffer if space is available.</i></td></tr>
+<tr><th id="298">298</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="299">299</th><td><i class="doc">  *  The number of UChars in the output string, not including the terminating</i></td></tr>
+<tr><th id="300">300</th><td><i class="doc">  *  NUL, is returned. </i></td></tr>
+<tr><th id="301">301</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="302">302</th><td><i class="doc">  *  If the supplied buffer is smaller than required to hold the output,</i></td></tr>
+<tr><th id="303">303</th><td><i class="doc">  *  the contents of the buffer are undefined.  The full output string length</i></td></tr>
+<tr><th id="304">304</th><td><i class="doc">  *  (in UChars) is returned as always, and can be used to allocate a buffer</i></td></tr>
+<tr><th id="305">305</th><td><i class="doc">  *  of the correct size.</i></td></tr>
+<tr><th id="306">306</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="307">307</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="308">308</th><td><i class="doc">  * <span class="command">@param</span> <span class="arg">ucsm</span>    The charset match object.</i></td></tr>
+<tr><th id="309">309</th><td><i class="doc">  * <span class="command">@param</span> <span class="arg">buf</span>     A UChar buffer to be filled with the converted text data.</i></td></tr>
+<tr><th id="310">310</th><td><i class="doc">  * <span class="command">@param</span> <span class="arg">cap</span>     The capacity of the buffer in UChars.</i></td></tr>
+<tr><th id="311">311</th><td><i class="doc">  * <span class="command">@param</span> <span class="arg">status</span>  Any error conditions are reported back in this variable.</i></td></tr>
+<tr><th id="312">312</th><td><i class="doc">  * <span class="command">@return</span>        The number of UChars in the output string.</i></td></tr>
+<tr><th id="313">313</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="314">314</th><td><i class="doc">  *<span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="315">315</th><td><i class="doc">  */</i></td></tr>
+<tr><th id="316">316</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a>  <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="317">317</th><td><dfn class="decl fn" id="ucsdet_getUChars" title='ucsdet_getUChars' data-ref="ucsdet_getUChars" data-ref-filename="ucsdet_getUChars">ucsdet_getUChars</dfn>(<em>const</em> <a class="typedef" href="#UCharsetMatch" title='UCharsetMatch' data-type='struct UCharsetMatch' data-ref="UCharsetMatch" data-ref-filename="UCharsetMatch">UCharsetMatch</a> *<dfn class="local col2 decl" id="42ucsm" title='ucsm' data-type='const UCharsetMatch *' data-ref="42ucsm" data-ref-filename="42ucsm">ucsm</dfn>,</td></tr>
+<tr><th id="318">318</th><td>                 <a class="typedef" href="umachine.h.html#UChar" title='UChar' data-type='char16_t' data-ref="UChar" data-ref-filename="UChar">UChar</a> *<dfn class="local col3 decl" id="43buf" title='buf' data-type='UChar *' data-ref="43buf" data-ref-filename="43buf">buf</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col4 decl" id="44cap" title='cap' data-type='int32_t' data-ref="44cap" data-ref-filename="44cap">cap</dfn>, <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col5 decl" id="45status" title='status' data-type='UErrorCode *' data-ref="45status" data-ref-filename="45status">status</dfn>);</td></tr>
+<tr><th id="319">319</th><td></td></tr>
+<tr><th id="320">320</th><td></td></tr>
+<tr><th id="321">321</th><td></td></tr>
+<tr><th id="322">322</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="323">323</th><td><i class="doc">  *  Get an iterator over the set of all detectable charsets - </i></td></tr>
+<tr><th id="324">324</th><td><i class="doc">  *  over the charsets that are known to the charset detection</i></td></tr>
+<tr><th id="325">325</th><td><i class="doc">  *  service.</i></td></tr>
+<tr><th id="326">326</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="327">327</th><td><i class="doc">  *  The returned UEnumeration provides access to the names of</i></td></tr>
+<tr><th id="328">328</th><td><i class="doc">  *  the charsets.</i></td></tr>
+<tr><th id="329">329</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="330">330</th><td><i class="doc">  *  <span class="tag">&lt;p&gt;</span></i></td></tr>
+<tr><th id="331">331</th><td><i class="doc">  *  The state of the Charset detector that is passed in does not</i></td></tr>
+<tr><th id="332">332</th><td><i class="doc">  *  affect the result of this function, but requiring a valid, open</i></td></tr>
+<tr><th id="333">333</th><td><i class="doc">  *  charset detector as a parameter insures that the charset detection</i></td></tr>
+<tr><th id="334">334</th><td><i class="doc">  *  service has been safely initialized and that the required detection</i></td></tr>
+<tr><th id="335">335</th><td><i class="doc">  *  data is available.</i></td></tr>
+<tr><th id="336">336</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="337">337</th><td><i class="doc">  *  <span class="tag">&lt;p&gt;</span></i></td></tr>
+<tr><th id="338">338</th><td><i class="doc">  *  <span class="tag">&lt;b&gt;</span>Note:<span class="tag">&lt;/b&gt;</span> Multiple different charset encodings in a same family may use</i></td></tr>
+<tr><th id="339">339</th><td><i class="doc">  *  a single shared name in this implementation. For example, this method returns</i></td></tr>
+<tr><th id="340">340</th><td><i class="doc">  *  an array including "ISO-8859-1" (ISO Latin 1), but not including "windows-1252"</i></td></tr>
+<tr><th id="341">341</th><td><i class="doc">  *  (Windows Latin 1). However, actual detection result could be "windows-1252"</i></td></tr>
+<tr><th id="342">342</th><td><i class="doc">  *  when the input data matches Latin 1 code points with any points only available</i></td></tr>
+<tr><th id="343">343</th><td><i class="doc">  *  in "windows-1252".</i></td></tr>
+<tr><th id="344">344</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="345">345</th><td><i class="doc">  *  <span class="command">@param</span> <span class="arg">ucsd</span> a Charset detector.</i></td></tr>
+<tr><th id="346">346</th><td><i class="doc">  *  <span class="command">@param</span> <span class="arg">status</span>  Any error conditions are reported back in this variable.</i></td></tr>
+<tr><th id="347">347</th><td><i class="doc">  *  <span class="command">@return</span> an iterator providing access to the detectable charset names.</i></td></tr>
+<tr><th id="348">348</th><td><i class="doc">  * <span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="349">349</th><td><i class="doc">  */</i></td></tr>
+<tr><th id="350">350</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a>  <a class="typedef" href="uenum.h.html#UEnumeration" title='UEnumeration' data-type='struct UEnumeration' data-ref="UEnumeration" data-ref-filename="UEnumeration">UEnumeration</a> * <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="351">351</th><td><dfn class="decl fn" id="ucsdet_getAllDetectableCharsets" title='ucsdet_getAllDetectableCharsets' data-ref="ucsdet_getAllDetectableCharsets" data-ref-filename="ucsdet_getAllDetectableCharsets">ucsdet_getAllDetectableCharsets</dfn>(<em>const</em> <a class="typedef" href="#UCharsetDetector" title='UCharsetDetector' data-type='struct UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</a> *<dfn class="local col6 decl" id="46ucsd" title='ucsd' data-type='const UCharsetDetector *' data-ref="46ucsd" data-ref-filename="46ucsd">ucsd</dfn>,  <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col7 decl" id="47status" title='status' data-type='UErrorCode *' data-ref="47status" data-ref-filename="47status">status</dfn>);</td></tr>
+<tr><th id="352">352</th><td></td></tr>
+<tr><th id="353">353</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="354">354</th><td><i class="doc">  *  Test whether input filtering is enabled for this charset detector.</i></td></tr>
+<tr><th id="355">355</th><td><i class="doc">  *  Input filtering removes text that appears to be HTML or xml</i></td></tr>
+<tr><th id="356">356</th><td><i class="doc">  *  markup from the input before applying the code page detection</i></td></tr>
+<tr><th id="357">357</th><td><i class="doc">  *  heuristics.</i></td></tr>
+<tr><th id="358">358</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="359">359</th><td><i class="doc">  *  <span class="command">@param</span> <span class="arg">ucsd</span>  The charset detector to check.</i></td></tr>
+<tr><th id="360">360</th><td><i class="doc">  *  <span class="command">@return</span> TRUE if filtering is enabled.</i></td></tr>
+<tr><th id="361">361</th><td><i class="doc">  * <span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="362">362</th><td><i class="doc">  */</i></td></tr>
+<tr><th id="363">363</th><td></td></tr>
+<tr><th id="364">364</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a>  <a class="typedef" href="umachine.h.html#UBool" title='UBool' data-type='int8_t' data-ref="UBool" data-ref-filename="UBool">UBool</a> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="365">365</th><td><dfn class="decl fn" id="ucsdet_isInputFilterEnabled" title='ucsdet_isInputFilterEnabled' data-ref="ucsdet_isInputFilterEnabled" data-ref-filename="ucsdet_isInputFilterEnabled">ucsdet_isInputFilterEnabled</dfn>(<em>const</em> <a class="typedef" href="#UCharsetDetector" title='UCharsetDetector' data-type='struct UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</a> *<dfn class="local col8 decl" id="48ucsd" title='ucsd' data-type='const UCharsetDetector *' data-ref="48ucsd" data-ref-filename="48ucsd">ucsd</dfn>);</td></tr>
+<tr><th id="366">366</th><td></td></tr>
+<tr><th id="367">367</th><td></td></tr>
+<tr><th id="368">368</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="369">369</th><td><i class="doc"> * Enable filtering of input text. If filtering is enabled,</i></td></tr>
+<tr><th id="370">370</th><td><i class="doc"> * text within angle brackets ("&lt;" and "&gt;") will be removed</i></td></tr>
+<tr><th id="371">371</th><td><i class="doc"> * before detection, which will remove most HTML or xml markup.</i></td></tr>
+<tr><th id="372">372</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="373">373</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">ucsd</span>   the charset detector to be modified.</i></td></tr>
+<tr><th id="374">374</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">filter</span> <span class="tag">&lt;code&gt;</span>true<span class="tag">&lt;/code&gt;</span> to enable input text filtering.</i></td></tr>
+<tr><th id="375">375</th><td><i class="doc"> * <span class="command">@return</span> The previous setting.</i></td></tr>
+<tr><th id="376">376</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="377">377</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 3.6</i></td></tr>
+<tr><th id="378">378</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="379">379</th><td><a class="macro" href="umachine.h.html#111" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_STABLE">U_STABLE</a>  <a class="typedef" href="umachine.h.html#UBool" title='UBool' data-type='int8_t' data-ref="UBool" data-ref-filename="UBool">UBool</a> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="380">380</th><td><dfn class="decl fn" id="ucsdet_enableInputFilter" title='ucsdet_enableInputFilter' data-ref="ucsdet_enableInputFilter" data-ref-filename="ucsdet_enableInputFilter">ucsdet_enableInputFilter</dfn>(<a class="typedef" href="#UCharsetDetector" title='UCharsetDetector' data-type='struct UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</a> *<dfn class="local col9 decl" id="49ucsd" title='ucsd' data-type='UCharsetDetector *' data-ref="49ucsd" data-ref-filename="49ucsd">ucsd</dfn>, <a class="typedef" href="umachine.h.html#UBool" title='UBool' data-type='int8_t' data-ref="UBool" data-ref-filename="UBool">UBool</a> <dfn class="local col0 decl" id="50filter" title='filter' data-type='UBool' data-ref="50filter" data-ref-filename="50filter">filter</dfn>);</td></tr>
+<tr><th id="381">381</th><td></td></tr>
+<tr><th id="382">382</th><td><u>#<span data-ppcond="382">ifndef</span> <span class="macro" data-ref="_M/U_HIDE_INTERNAL_API">U_HIDE_INTERNAL_API</span></u></td></tr>
+<tr><th id="383">383</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="384">384</th><td><i class="doc">  *  Get an iterator over the set of detectable charsets -</i></td></tr>
+<tr><th id="385">385</th><td><i class="doc">  *  over the charsets that are enabled by the specified charset detector.</i></td></tr>
+<tr><th id="386">386</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="387">387</th><td><i class="doc">  *  The returned UEnumeration provides access to the names of</i></td></tr>
+<tr><th id="388">388</th><td><i class="doc">  *  the charsets.</i></td></tr>
+<tr><th id="389">389</th><td><i class="doc">  *</i></td></tr>
+<tr><th id="390">390</th><td><i class="doc">  *  <span class="command">@param</span> <span class="arg">ucsd</span> a Charset detector.</i></td></tr>
+<tr><th id="391">391</th><td><i class="doc">  *  <span class="command">@param</span> <span class="arg">status</span>  Any error conditions are reported back in this variable.</i></td></tr>
+<tr><th id="392">392</th><td><i class="doc">  *  <span class="command">@return</span> an iterator providing access to the detectable charset names by</i></td></tr>
+<tr><th id="393">393</th><td><i class="doc">  *  the specified charset detector.</i></td></tr>
+<tr><th id="394">394</th><td><i class="doc">  * <span class="command"> @internal</span></i></td></tr>
+<tr><th id="395">395</th><td><i class="doc">  */</i></td></tr>
+<tr><th id="396">396</th><td><a class="macro" href="umachine.h.html#119" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_INTERNAL">U_INTERNAL</a> <a class="typedef" href="uenum.h.html#UEnumeration" title='UEnumeration' data-type='struct UEnumeration' data-ref="UEnumeration" data-ref-filename="UEnumeration">UEnumeration</a> * <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="397">397</th><td><dfn class="decl fn" id="ucsdet_getDetectableCharsets" title='ucsdet_getDetectableCharsets' data-ref="ucsdet_getDetectableCharsets" data-ref-filename="ucsdet_getDetectableCharsets">ucsdet_getDetectableCharsets</dfn>(<em>const</em> <a class="typedef" href="#UCharsetDetector" title='UCharsetDetector' data-type='struct UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</a> *<dfn class="local col1 decl" id="51ucsd" title='ucsd' data-type='const UCharsetDetector *' data-ref="51ucsd" data-ref-filename="51ucsd">ucsd</dfn>,  <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col2 decl" id="52status" title='status' data-type='UErrorCode *' data-ref="52status" data-ref-filename="52status">status</dfn>);</td></tr>
+<tr><th id="398">398</th><td></td></tr>
+<tr><th id="399">399</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="400">400</th><td><i class="doc">  * Enable or disable individual charset encoding.</i></td></tr>
+<tr><th id="401">401</th><td><i class="doc">  * A name of charset encoding must be included in the names returned by</i></td></tr>
+<tr><th id="402">402</th><td><i class="doc">  * {<span class="command">@link</span><span class="verb"> #ucsdet_getAllDetectableCharsets()}.</span></i></td></tr>
+<tr><th id="403">403</th><td><i class="doc"><span class="verb"></span>  *<span class="verb"></span></i></td></tr>
+<tr><th id="404">404</th><td><i class="doc"><span class="verb"></span>  *<span class="verb"> @param ucsd a Charset detector.</span></i></td></tr>
+<tr><th id="405">405</th><td><i class="doc"><span class="verb"></span>  *<span class="verb"> @param encoding encoding the name of charset encoding.</span></i></td></tr>
+<tr><th id="406">406</th><td><i class="doc"><span class="verb"></span>  *<span class="verb"> @param enabled &lt;code&gt;TRUE&lt;/code&gt; to enable, or &lt;code&gt;FALSE&lt;/code&gt; to disable the</span></i></td></tr>
+<tr><th id="407">407</th><td><i class="doc"><span class="verb"></span>  *<span class="verb">   charset encoding.</span></i></td></tr>
+<tr><th id="408">408</th><td><i class="doc"><span class="verb"></span>  *<span class="verb"> @param status receives the return status. When the name of charset encoding</span></i></td></tr>
+<tr><th id="409">409</th><td><i class="doc"><span class="verb"></span>  *<span class="verb">   is not supported, U_ILLEGAL_ARGUMENT_ERROR is set.</span></i></td></tr>
+<tr><th id="410">410</th><td><i class="doc"><span class="verb"></span>  *<span class="verb"> @internal</span></i></td></tr>
+<tr><th id="411">411</th><td><i class="doc"><span class="verb"></span><span class="verb">  *</span>/</i><span class="verb"></span></td></tr>
+<tr><th id="412">412</th><td><span class="verb"></span><a class="macro" href="umachine.h.html#119" title="extern &quot;C&quot; __attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_INTERNAL">U_INTERNAL</a> <em>void</em> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a></td></tr>
+<tr><th id="413">413</th><td><dfn class="decl fn" id="ucsdet_setDetectableCharset" title='ucsdet_setDetectableCharset' data-ref="ucsdet_setDetectableCharset" data-ref-filename="ucsdet_setDetectableCharset">ucsdet_setDetectableCharset</dfn>(<a class="typedef" href="#UCharsetDetector" title='UCharsetDetector' data-type='struct UCharsetDetector' data-ref="UCharsetDetector" data-ref-filename="UCharsetDetector">UCharsetDetector</a> *<dfn class="local col3 decl" id="53ucsd" title='ucsd' data-type='UCharsetDetector *' data-ref="53ucsd" data-ref-filename="53ucsd">ucsd</dfn>, <em>const</em> <em>char</em> *<dfn class="local col4 decl" id="54encoding" title='encoding' data-type='const char *' data-ref="54encoding" data-ref-filename="54encoding">encoding</dfn>, <a class="typedef" href="umachine.h.html#UBool" title='UBool' data-type='int8_t' data-ref="UBool" data-ref-filename="UBool">UBool</a> <dfn class="local col5 decl" id="55enabled" title='enabled' data-type='UBool' data-ref="55enabled" data-ref-filename="55enabled">enabled</dfn>, <a class="typedef" href="utypes.h.html#UErrorCode" title='UErrorCode' data-type='enum UErrorCode' data-ref="UErrorCode" data-ref-filename="UErrorCode">UErrorCode</a> *<dfn class="local col6 decl" id="56status" title='status' data-type='UErrorCode *' data-ref="56status" data-ref-filename="56status">status</dfn>);</td></tr>
+<tr><th id="414">414</th><td><u>#<span data-ppcond="382">endif</span>  /* U_HIDE_INTERNAL_API */</u></td></tr>
+<tr><th id="415">415</th><td></td></tr>
+<tr><th id="416">416</th><td><u>#<span data-ppcond="26">endif</span></u></td></tr>
+<tr><th id="417">417</th><td><u>#<span data-ppcond="21">endif</span>   /* __UCSDET_H */</u></td></tr>
+<tr><th id="418">418</th><td></td></tr>
+<tr><th id="419">419</th><td></td></tr>
+<tr><th id="420">420</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../DerivedSources/WebCore/unified-sources/UnifiedSource310.cpp.html'>webkit/WebKitBuild/Debug/DerivedSources/WebCore/unified-sources/UnifiedSource310.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

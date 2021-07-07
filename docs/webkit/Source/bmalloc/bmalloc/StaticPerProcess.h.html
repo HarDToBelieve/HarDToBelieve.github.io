@@ -1,0 +1,126 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>StaticPerProcess.h source code [webkit/Source/bmalloc/bmalloc/StaticPerProcess.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="bmalloc::StaticPerProcess "/>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/bmalloc/bmalloc/StaticPerProcess.h'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>bmalloc</a>/<a href='./'>bmalloc</a>/<a href='StaticPerProcess.h.html'>StaticPerProcess.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2014-2019 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="BExport.h.html">"BExport.h"</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="BInline.h.html">"BInline.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="Mutex.h.html">"Mutex.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="Sizes.h.html">"Sizes.h"</a></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><b>namespace</b> <span class="namespace">bmalloc</span> {</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><i>// StaticPerProcess&lt;T&gt; behaves like PerProcess&lt;T&gt;, but we need to explicitly define storage for T with EXTERN.</i></td></tr>
+<tr><th id="36">36</th><td><i>// In this way, we allocate storage for a per-process object statically instead of allocating memory at runtime.</i></td></tr>
+<tr><th id="37">37</th><td><i>// To enforce this, we have DECLARE and DEFINE macros. If you do not know about T of StaticPerProcess&lt;T&gt;, you should use PerProcess&lt;T&gt; instead.</i></td></tr>
+<tr><th id="38">38</th><td><i>//</i></td></tr>
+<tr><th id="39">39</th><td><i>// Usage:</i></td></tr>
+<tr><th id="40">40</th><td><i>//     In Object.h</i></td></tr>
+<tr><th id="41">41</th><td><i>//         class Object : public StaticPerProcess&lt;Object&gt; {</i></td></tr>
+<tr><th id="42">42</th><td><i>//             ...</i></td></tr>
+<tr><th id="43">43</th><td><i>//         };</i></td></tr>
+<tr><th id="44">44</th><td><i>//         DECLARE_STATIC_PER_PROCESS_STORAGE(Object);</i></td></tr>
+<tr><th id="45">45</th><td><i>//</i></td></tr>
+<tr><th id="46">46</th><td><i>//     In Object.cpp</i></td></tr>
+<tr><th id="47">47</th><td><i>//         DEFINE_STATIC_PER_PROCESS_STORAGE(Object);</i></td></tr>
+<tr><th id="48">48</th><td><i>//</i></td></tr>
+<tr><th id="49">49</th><td><i>//     Object* object = Object::get();</i></td></tr>
+<tr><th id="50">50</th><td><i>//     x = object-&gt;field-&gt;field;</i></td></tr>
+<tr><th id="51">51</th><td><i>//</i></td></tr>
+<tr><th id="52">52</th><td><i>// Object will be instantiated only once, even in the presence of concurrency.</i></td></tr>
+<tr><th id="53">53</th><td><i>//</i></td></tr>
+<tr><th id="54">54</th><td><b>template</b>&lt;<b>typename</b> T&gt; <b>struct</b> <dfn class="type" id="bmalloc::StaticPerProcessStorageTraits" title='bmalloc::StaticPerProcessStorageTraits' data-ref="bmalloc::StaticPerProcessStorageTraits" data-ref-filename="bmalloc..StaticPerProcessStorageTraits">StaticPerProcessStorageTraits</dfn>;</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td><b>template</b>&lt;<b>typename</b> T&gt;</td></tr>
+<tr><th id="57">57</th><td><b>class</b> <dfn class="type def" id="bmalloc::StaticPerProcess" title='bmalloc::StaticPerProcess' data-ref="bmalloc::StaticPerProcess" data-ref-filename="bmalloc..StaticPerProcess">StaticPerProcess</dfn> {</td></tr>
+<tr><th id="58">58</th><td><b>public</b>:</td></tr>
+<tr><th id="59">59</th><td>    <em>static</em> T* <dfn class="decl def fn" id="_ZN7bmalloc16StaticPerProcess3getEv" title='bmalloc::StaticPerProcess::get' data-ref="_ZN7bmalloc16StaticPerProcess3getEv" data-ref-filename="_ZN7bmalloc16StaticPerProcess3getEv">get</dfn>()</td></tr>
+<tr><th id="60">60</th><td>    {</td></tr>
+<tr><th id="61">61</th><td>        T* <dfn class="local col7 decl" id="447object" title='object' data-type='T *' data-ref="447object" data-ref-filename="447object">object</dfn> = <a class="member fn" href="#_ZN7bmalloc16StaticPerProcess11getFastCaseEv" title='bmalloc::StaticPerProcess::getFastCase' data-ref="_ZN7bmalloc16StaticPerProcess11getFastCaseEv" data-ref-filename="_ZN7bmalloc16StaticPerProcess11getFastCaseEv">getFastCase</a>();</td></tr>
+<tr><th id="62">62</th><td>        <b>if</b> (!<a class="local col7 ref" href="#447object" title='object' data-ref="447object" data-ref-filename="447object">object</a>)</td></tr>
+<tr><th id="63">63</th><td>            <b>return</b> <a class="member fn" href="#_ZN7bmalloc16StaticPerProcess11getSlowCaseEv" title='bmalloc::StaticPerProcess::getSlowCase' data-ref="_ZN7bmalloc16StaticPerProcess11getSlowCaseEv" data-ref-filename="_ZN7bmalloc16StaticPerProcess11getSlowCaseEv">getSlowCase</a>();</td></tr>
+<tr><th id="64">64</th><td>        <b>return</b> <a class="local col7 ref" href="#447object" title='object' data-ref="447object" data-ref-filename="447object">object</a>;</td></tr>
+<tr><th id="65">65</th><td>    }</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td>    <em>static</em> T* <dfn class="decl def fn" id="_ZN7bmalloc16StaticPerProcess11getFastCaseEv" title='bmalloc::StaticPerProcess::getFastCase' data-ref="_ZN7bmalloc16StaticPerProcess11getFastCaseEv" data-ref-filename="_ZN7bmalloc16StaticPerProcess11getFastCaseEv">getFastCase</dfn>()</td></tr>
+<tr><th id="68">68</th><td>    {</td></tr>
+<tr><th id="69">69</th><td>        <b>using</b> <dfn class="local col8 typedef" id="448Storage" title='Storage' data-type='typename StaticPerProcessStorageTraits&lt;T&gt;::Storage' data-ref="448Storage" data-ref-filename="448Storage">Storage</dfn> = <b>typename</b> <a class="type" href="#bmalloc::StaticPerProcessStorageTraits" title='bmalloc::StaticPerProcessStorageTraits' data-ref="bmalloc::StaticPerProcessStorageTraits" data-ref-filename="bmalloc..StaticPerProcessStorageTraits">StaticPerProcessStorageTraits</a>&lt;T&gt;::Storage;</td></tr>
+<tr><th id="70">70</th><td>        <b>return</b> (<a class="local col8 typedef" href="#448Storage" title='Storage' data-type='typename StaticPerProcessStorageTraits&lt;T&gt;::Storage' data-ref="448Storage" data-ref-filename="448Storage">Storage</a>::s_object).load(<span class="namespace">std::</span><span class='enum' title='std::__1::memory_order_relaxed' data-ref="std::__1::memory_order_relaxed" data-ref-filename="std..__1..memory_order_relaxed">memory_order_relaxed</span>);</td></tr>
+<tr><th id="71">71</th><td>    }</td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td>    <em>static</em> <a class="type" href="Mutex.h.html#bmalloc::Mutex" title='bmalloc::Mutex' data-ref="bmalloc::Mutex" data-ref-filename="bmalloc..Mutex">Mutex</a>&amp; <dfn class="decl def fn" id="_ZN7bmalloc16StaticPerProcess5mutexEv" title='bmalloc::StaticPerProcess::mutex' data-ref="_ZN7bmalloc16StaticPerProcess5mutexEv" data-ref-filename="_ZN7bmalloc16StaticPerProcess5mutexEv">mutex</dfn>()</td></tr>
+<tr><th id="74">74</th><td>    {</td></tr>
+<tr><th id="75">75</th><td>        <b>using</b> <dfn class="local col9 typedef" id="449Storage" title='Storage' data-type='typename StaticPerProcessStorageTraits&lt;T&gt;::Storage' data-ref="449Storage" data-ref-filename="449Storage">Storage</dfn> = <b>typename</b> <a class="type" href="#bmalloc::StaticPerProcessStorageTraits" title='bmalloc::StaticPerProcessStorageTraits' data-ref="bmalloc::StaticPerProcessStorageTraits" data-ref-filename="bmalloc..StaticPerProcessStorageTraits">StaticPerProcessStorageTraits</a>&lt;T&gt;::Storage;</td></tr>
+<tr><th id="76">76</th><td>        <b>return</b> <a class="local col9 typedef" href="#449Storage" title='Storage' data-type='typename StaticPerProcessStorageTraits&lt;T&gt;::Storage' data-ref="449Storage" data-ref-filename="449Storage">Storage</a>::s_mutex;</td></tr>
+<tr><th id="77">77</th><td>    }</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td><b>private</b>:</td></tr>
+<tr><th id="80">80</th><td>    <a class="macro" href="BInline.h.html#31" title="__attribute__((noinline))" data-ref="_M/BNO_INLINE">BNO_INLINE</a> <em>static</em> T* <dfn class="decl def fn" id="_ZN7bmalloc16StaticPerProcess11getSlowCaseEv" title='bmalloc::StaticPerProcess::getSlowCase' data-ref="_ZN7bmalloc16StaticPerProcess11getSlowCaseEv" data-ref-filename="_ZN7bmalloc16StaticPerProcess11getSlowCaseEv">getSlowCase</dfn>()</td></tr>
+<tr><th id="81">81</th><td>    {</td></tr>
+<tr><th id="82">82</th><td>        <b>using</b> <dfn class="local col0 typedef" id="450Storage" title='Storage' data-type='typename StaticPerProcessStorageTraits&lt;T&gt;::Storage' data-ref="450Storage" data-ref-filename="450Storage">Storage</dfn> = <b>typename</b> <a class="type" href="#bmalloc::StaticPerProcessStorageTraits" title='bmalloc::StaticPerProcessStorageTraits' data-ref="bmalloc::StaticPerProcessStorageTraits" data-ref-filename="bmalloc..StaticPerProcessStorageTraits">StaticPerProcessStorageTraits</a>&lt;T&gt;::Storage;</td></tr>
+<tr><th id="83">83</th><td>        <a class="typedef" href="Mutex.h.html#bmalloc::LockHolder" title='bmalloc::LockHolder' data-type='std::scoped_lock&lt;Mutex&gt;' data-ref="bmalloc::LockHolder" data-ref-filename="bmalloc..LockHolder">LockHolder</a> <dfn class="local col1 decl" id="451lock" title='lock' data-type='bmalloc::LockHolder' data-ref="451lock" data-ref-filename="451lock">lock</dfn>(<a class="local col0 typedef" href="#450Storage" title='Storage' data-type='typename StaticPerProcessStorageTraits&lt;T&gt;::Storage' data-ref="450Storage" data-ref-filename="450Storage">Storage</a>::s_mutex);</td></tr>
+<tr><th id="84">84</th><td>        <b>if</b> (!<a class="local col0 typedef" href="#450Storage" title='Storage' data-type='typename StaticPerProcessStorageTraits&lt;T&gt;::Storage' data-ref="450Storage" data-ref-filename="450Storage">Storage</a>::s_object.load(<span class="namespace">std::</span><span class='enum' title='std::__1::memory_order_consume' data-ref="std::__1::memory_order_consume" data-ref-filename="std..__1..memory_order_consume">memory_order_consume</span>)) {</td></tr>
+<tr><th id="85">85</th><td>            T* <dfn class="local col2 decl" id="452t" title='t' data-type='T *' data-ref="452t" data-ref-filename="452t">t</dfn> = <b>new</b> (&amp;<a class="local col0 typedef" href="#450Storage" title='Storage' data-type='typename StaticPerProcessStorageTraits&lt;T&gt;::Storage' data-ref="450Storage" data-ref-filename="450Storage">Storage</a>::s_memory) T(<a class="local col1 ref" href="#451lock" title='lock' data-ref="451lock" data-ref-filename="451lock">lock</a>);</td></tr>
+<tr><th id="86">86</th><td>            <a class="local col0 typedef" href="#450Storage" title='Storage' data-type='typename StaticPerProcessStorageTraits&lt;T&gt;::Storage' data-ref="450Storage" data-ref-filename="450Storage">Storage</a>::s_object.store(<a class="local col2 ref" href="#452t" title='t' data-ref="452t" data-ref-filename="452t">t</a>, <span class="namespace">std::</span><span class='enum' title='std::__1::memory_order_release' data-ref="std::__1::memory_order_release" data-ref-filename="std..__1..memory_order_release">memory_order_release</span>);</td></tr>
+<tr><th id="87">87</th><td>        }</td></tr>
+<tr><th id="88">88</th><td>        <b>return</b> <a class="local col0 typedef" href="#450Storage" title='Storage' data-type='typename StaticPerProcessStorageTraits&lt;T&gt;::Storage' data-ref="450Storage" data-ref-filename="450Storage">Storage</a>::s_object.load(<span class="namespace">std::</span><span class='enum' title='std::__1::memory_order_consume' data-ref="std::__1::memory_order_consume" data-ref-filename="std..__1..memory_order_consume">memory_order_consume</span>);</td></tr>
+<tr><th id="89">89</th><td>    }</td></tr>
+<tr><th id="90">90</th><td>};</td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td><u>#define <dfn class="macro" id="_M/DECLARE_STATIC_PER_PROCESS_STORAGE" data-ref="_M/DECLARE_STATIC_PER_PROCESS_STORAGE">DECLARE_STATIC_PER_PROCESS_STORAGE</dfn>(Type) \</u></td></tr>
+<tr><th id="93">93</th><td><u>template&lt;&gt; struct StaticPerProcessStorageTraits&lt;Type&gt; { \</u></td></tr>
+<tr><th id="94">94</th><td><u>    using Memory = typename std::aligned_storage&lt;sizeof(Type), std::alignment_of&lt;Type&gt;::value&gt;::type; \</u></td></tr>
+<tr><th id="95">95</th><td><u>    struct BEXPORT Storage { \</u></td></tr>
+<tr><th id="96">96</th><td><u>        static std::atomic&lt;Type*&gt; s_object; \</u></td></tr>
+<tr><th id="97">97</th><td><u>        static Mutex s_mutex; \</u></td></tr>
+<tr><th id="98">98</th><td><u>        static Memory s_memory; \</u></td></tr>
+<tr><th id="99">99</th><td><u>    }; \</u></td></tr>
+<tr><th id="100">100</th><td><u>};</u></td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td><u>#define <dfn class="macro" id="_M/DEFINE_STATIC_PER_PROCESS_STORAGE" data-ref="_M/DEFINE_STATIC_PER_PROCESS_STORAGE">DEFINE_STATIC_PER_PROCESS_STORAGE</dfn>(Type) \</u></td></tr>
+<tr><th id="103">103</th><td><u>    std::atomic&lt;Type*&gt; StaticPerProcessStorageTraits&lt;Type&gt;::Storage::s_object { nullptr }; \</u></td></tr>
+<tr><th id="104">104</th><td><u>    Mutex StaticPerProcessStorageTraits&lt;Type&gt;::Storage::s_mutex { }; \</u></td></tr>
+<tr><th id="105">105</th><td><u>    StaticPerProcessStorageTraits&lt;Type&gt;::Memory StaticPerProcessStorageTraits&lt;Type&gt;::Storage::s_memory { };</u></td></tr>
+<tr><th id="106">106</th><td></td></tr>
+<tr><th id="107">107</th><td>} <i>// namespace bmalloc</i></td></tr>
+<tr><th id="108">108</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='AllIsoHeaps.cpp.html'>webkit/Source/bmalloc/bmalloc/AllIsoHeaps.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,136 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>endian_inl.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_util/endian_inl.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_util/endian_inl.h'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>third_party</a>/<a href='../../..'>libvpx</a>/<a href='../..'>source</a>/<a href='..'>libvpx</a>/<a href='./'>vpx_util</a>/<a href='endian_inl.h.html'>endian_inl.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>// Copyright 2014 Google Inc. All Rights Reserved.</i></td></tr>
+<tr><th id="2">2</th><td><i>//</i></td></tr>
+<tr><th id="3">3</th><td><i>// Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="4">4</th><td><i>// that can be found in the COPYING file in the root of the source</i></td></tr>
+<tr><th id="5">5</th><td><i>// tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="6">6</th><td><i>// in the file PATENTS. All contributing project authors may</i></td></tr>
+<tr><th id="7">7</th><td><i>// be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="8">8</th><td><i>// -----------------------------------------------------------------------------</i></td></tr>
+<tr><th id="9">9</th><td><i>//</i></td></tr>
+<tr><th id="10">10</th><td><i>// Endian related functions.</i></td></tr>
+<tr><th id="11">11</th><td></td></tr>
+<tr><th id="12">12</th><td><u>#<span data-ppcond="12">ifndef</span> <span class="macro" data-ref="_M/VPX_VPX_UTIL_ENDIAN_INL_H_">VPX_VPX_UTIL_ENDIAN_INL_H_</span></u></td></tr>
+<tr><th id="13">13</th><td><u>#define <dfn class="macro" id="_M/VPX_VPX_UTIL_ENDIAN_INL_H_" data-ref="_M/VPX_VPX_UTIL_ENDIAN_INL_H_">VPX_VPX_UTIL_ENDIAN_INL_H_</dfn></u></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;stdlib.h&gt;</u></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="../../config/ios/arm64/vpx_config.h.html">"./vpx_config.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../vpx/vpx_integer.h.html">"vpx/vpx_integer.h"</a></u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#<span data-ppcond="19">if</span> defined(<span class="macro" data-ref="_M/__GNUC__">__GNUC__</span>)</u></td></tr>
+<tr><th id="20">20</th><td><u>#define <dfn class="macro" id="_M/LOCAL_GCC_VERSION" data-ref="_M/LOCAL_GCC_VERSION">LOCAL_GCC_VERSION</dfn> ((__GNUC__ &lt;&lt; 8) | __GNUC_MINOR__)</u></td></tr>
+<tr><th id="21">21</th><td><u>#define <dfn class="macro" id="_M/LOCAL_GCC_PREREQ" data-ref="_M/LOCAL_GCC_PREREQ">LOCAL_GCC_PREREQ</dfn>(maj, min) (LOCAL_GCC_VERSION &gt;= (((maj) &lt;&lt; 8) | (min)))</u></td></tr>
+<tr><th id="22">22</th><td><u>#<span data-ppcond="19">else</span></u></td></tr>
+<tr><th id="23">23</th><td><u>#define LOCAL_GCC_VERSION 0</u></td></tr>
+<tr><th id="24">24</th><td><u>#define LOCAL_GCC_PREREQ(maj, min) 0</u></td></tr>
+<tr><th id="25">25</th><td><u>#<span data-ppcond="19">endif</span></u></td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td><i>// handle clang compatibility</i></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="28">ifndef</span> <span class="macro" data-ref="_M/__has_builtin">__has_builtin</span></u></td></tr>
+<tr><th id="29">29</th><td><u>#define __has_builtin(x) 0</u></td></tr>
+<tr><th id="30">30</th><td><u>#<span data-ppcond="28">endif</span></u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><i>// some endian fix (e.g.: mips-gcc doesn't define __BIG_ENDIAN__)</i></td></tr>
+<tr><th id="33">33</th><td><u>#<span data-ppcond="33">if</span> !defined(<span class="macro" data-ref="_M/WORDS_BIGENDIAN">WORDS_BIGENDIAN</span>) &amp;&amp;                   \</u></td></tr>
+<tr><th id="34">34</th><td><u>    (defined(<span class="macro" data-ref="_M/__BIG_ENDIAN__">__BIG_ENDIAN__</span>) || defined(<span class="macro" data-ref="_M/_M_PPC">_M_PPC</span>) || \</u></td></tr>
+<tr><th id="35">35</th><td><u>     (defined(<span class="macro" data-ref="_M/__BYTE_ORDER__">__BYTE_ORDER__</span>) &amp;&amp; (<span class="macro" title="1234" data-ref="_M/__BYTE_ORDER__">__BYTE_ORDER__</span> == <span class="macro" title="4321" data-ref="_M/__ORDER_BIG_ENDIAN__">__ORDER_BIG_ENDIAN__</span>)))</u></td></tr>
+<tr><th id="36">36</th><td><u>#define WORDS_BIGENDIAN</u></td></tr>
+<tr><th id="37">37</th><td><u>#<span data-ppcond="33">endif</span></u></td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><u>#<span data-ppcond="39">if</span> defined(<span class="macro" data-ref="_M/WORDS_BIGENDIAN">WORDS_BIGENDIAN</span>)</u></td></tr>
+<tr><th id="40">40</th><td><u>#define HToLE32 BSwap32</u></td></tr>
+<tr><th id="41">41</th><td><u>#define HToLE16 BSwap16</u></td></tr>
+<tr><th id="42">42</th><td><u>#define HToBE64(x) (x)</u></td></tr>
+<tr><th id="43">43</th><td><u>#define HToBE32(x) (x)</u></td></tr>
+<tr><th id="44">44</th><td><u>#<span data-ppcond="39">else</span></u></td></tr>
+<tr><th id="45">45</th><td><u>#define <dfn class="macro" id="_M/HToLE32" data-ref="_M/HToLE32">HToLE32</dfn>(x) (x)</u></td></tr>
+<tr><th id="46">46</th><td><u>#define <dfn class="macro" id="_M/HToLE16" data-ref="_M/HToLE16">HToLE16</dfn>(x) (x)</u></td></tr>
+<tr><th id="47">47</th><td><u>#define <dfn class="macro" id="_M/HToBE64" data-ref="_M/HToBE64">HToBE64</dfn>(X) BSwap64(X)</u></td></tr>
+<tr><th id="48">48</th><td><u>#define <dfn class="macro" id="_M/HToBE32" data-ref="_M/HToBE32">HToBE32</dfn>(X) BSwap32(X)</u></td></tr>
+<tr><th id="49">49</th><td><u>#<span data-ppcond="39">endif</span></u></td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><u>#<span data-ppcond="51">if</span> <a class="macro" href="#21" title="(((4 &lt;&lt; 8) | 2) &gt;= (((4) &lt;&lt; 8) | (8)))" data-ref="_M/LOCAL_GCC_PREREQ">LOCAL_GCC_PREREQ</a>(4, 8) || <span class="macro" title="" data-ref="_M/__has_builtin">__has_builtin</span>(__builtin_bswap16)</u></td></tr>
+<tr><th id="52">52</th><td><u>#define <dfn class="macro" id="_M/HAVE_BUILTIN_BSWAP16" data-ref="_M/HAVE_BUILTIN_BSWAP16">HAVE_BUILTIN_BSWAP16</dfn></u></td></tr>
+<tr><th id="53">53</th><td><u>#<span data-ppcond="51">endif</span></u></td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><u>#<span data-ppcond="55">if</span> <a class="macro" href="#21" title="(((4 &lt;&lt; 8) | 2) &gt;= (((4) &lt;&lt; 8) | (3)))" data-ref="_M/LOCAL_GCC_PREREQ">LOCAL_GCC_PREREQ</a>(4, 3) || <span class="macro" title="" data-ref="_M/__has_builtin">__has_builtin</span>(__builtin_bswap32)</u></td></tr>
+<tr><th id="56">56</th><td><u>#define <dfn class="macro" id="_M/HAVE_BUILTIN_BSWAP32" data-ref="_M/HAVE_BUILTIN_BSWAP32">HAVE_BUILTIN_BSWAP32</dfn></u></td></tr>
+<tr><th id="57">57</th><td><u>#<span data-ppcond="55">endif</span></u></td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><u>#<span data-ppcond="59">if</span> <a class="macro" href="#21" title="(((4 &lt;&lt; 8) | 2) &gt;= (((4) &lt;&lt; 8) | (3)))" data-ref="_M/LOCAL_GCC_PREREQ">LOCAL_GCC_PREREQ</a>(4, 3) || <span class="macro" title="" data-ref="_M/__has_builtin">__has_builtin</span>(__builtin_bswap64)</u></td></tr>
+<tr><th id="60">60</th><td><u>#define <dfn class="macro" id="_M/HAVE_BUILTIN_BSWAP64" data-ref="_M/HAVE_BUILTIN_BSWAP64">HAVE_BUILTIN_BSWAP64</dfn></u></td></tr>
+<tr><th id="61">61</th><td><u>#<span data-ppcond="59">endif</span></u></td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><u>#<span data-ppcond="63">if</span> <a class="macro" href="../../config/ios/arm64/vpx_config.h.html#25" title="0" data-ref="_M/HAVE_MIPS32">HAVE_MIPS32</a> &amp;&amp; defined(<span class="macro" data-ref="_M/__mips__">__mips__</span>) &amp;&amp; !defined(<span class="macro" data-ref="_M/__mips64">__mips64</span>) &amp;&amp; \</u></td></tr>
+<tr><th id="64">64</th><td><u>    defined(<span class="macro" data-ref="_M/__mips_isa_rev">__mips_isa_rev</span>) &amp;&amp; (__mips_isa_rev &gt;= 2) &amp;&amp; (__mips_isa_rev &lt; 6)</u></td></tr>
+<tr><th id="65">65</th><td><u>#define VPX_USE_MIPS32_R2</u></td></tr>
+<tr><th id="66">66</th><td><u>#<span data-ppcond="63">endif</span></u></td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td><em>static</em> <a class="macro" href="../../config/ios/arm64/vpx_config.h.html#12" title="inline" data-ref="_M/INLINE">INLINE</a> <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="decl def fn" id="BSwap16" title='BSwap16' data-ref="BSwap16" data-ref-filename="BSwap16">BSwap16</dfn>(<span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="local col1 decl" id="1x" title='x' data-type='uint16_t' data-ref="1x" data-ref-filename="1x">x</dfn>) {</td></tr>
+<tr><th id="69">69</th><td><u>#<span data-ppcond="69">if</span> defined(<a class="macro" href="#52" data-ref="_M/HAVE_BUILTIN_BSWAP16">HAVE_BUILTIN_BSWAP16</a>)</u></td></tr>
+<tr><th id="70">70</th><td>  <b>return</b> <a class="ref fn" href="#70" title='__builtin_bswap16' data-ref="__builtin_bswap16" data-ref-filename="__builtin_bswap16">__builtin_bswap16</a>(<a class="local col1 ref" href="#1x" title='x' data-ref="1x" data-ref-filename="1x">x</a>);</td></tr>
+<tr><th id="71">71</th><td><u>#<span data-ppcond="69">elif</span> defined(_MSC_VER)</u></td></tr>
+<tr><th id="72">72</th><td>  <b>return</b> _byteswap_ushort(x);</td></tr>
+<tr><th id="73">73</th><td><u>#else</u></td></tr>
+<tr><th id="74">74</th><td>  <i>// gcc will recognize a 'rorw $8, ...' here:</i></td></tr>
+<tr><th id="75">75</th><td>  <b>return</b> (x &gt;&gt; <var>8</var>) | ((x &amp; <var>0xff</var>) &lt;&lt; <var>8</var>);</td></tr>
+<tr><th id="76">76</th><td><u>#<span data-ppcond="69">endif</span>  // HAVE_BUILTIN_BSWAP16</u></td></tr>
+<tr><th id="77">77</th><td>}</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td><em>static</em> <a class="macro" href="../../config/ios/arm64/vpx_config.h.html#12" title="inline" data-ref="_M/INLINE">INLINE</a> <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="decl def fn" id="BSwap32" title='BSwap32' data-ref="BSwap32" data-ref-filename="BSwap32">BSwap32</dfn>(<span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col2 decl" id="2x" title='x' data-type='uint32_t' data-ref="2x" data-ref-filename="2x">x</dfn>) {</td></tr>
+<tr><th id="80">80</th><td><u>#<span data-ppcond="80">if</span> defined(<span class="macro" data-ref="_M/VPX_USE_MIPS32_R2">VPX_USE_MIPS32_R2</span>)</u></td></tr>
+<tr><th id="81">81</th><td>  uint32_t ret;</td></tr>
+<tr><th id="82">82</th><td>  <b>__asm__</b> <em>volatile</em>(</td></tr>
+<tr><th id="83">83</th><td>      <q>"wsbh   %[ret], %[x]          \n\t"</q></td></tr>
+<tr><th id="84">84</th><td>      <q>"rotr   %[ret], %[ret],  16   \n\t"</q></td></tr>
+<tr><th id="85">85</th><td>      : [ret] <q>"=r"</q>(ret)</td></tr>
+<tr><th id="86">86</th><td>      : [x] <q>"r"</q>(x));</td></tr>
+<tr><th id="87">87</th><td>  <b>return</b> ret;</td></tr>
+<tr><th id="88">88</th><td><u>#<span data-ppcond="80">elif</span> defined(<a class="macro" href="#56" data-ref="_M/HAVE_BUILTIN_BSWAP32">HAVE_BUILTIN_BSWAP32</a>)</u></td></tr>
+<tr><th id="89">89</th><td>  <b>return</b> <a class="ref fn" href="#89" title='__builtin_bswap32' data-ref="__builtin_bswap32" data-ref-filename="__builtin_bswap32">__builtin_bswap32</a>(<a class="local col2 ref" href="#2x" title='x' data-ref="2x" data-ref-filename="2x">x</a>);</td></tr>
+<tr><th id="90">90</th><td><u>#<span data-ppcond="80">elif</span> defined(__i386__) || defined(__x86_64__)</u></td></tr>
+<tr><th id="91">91</th><td>  uint32_t swapped_bytes;</td></tr>
+<tr><th id="92">92</th><td>  <b>__asm__</b> <em>volatile</em>(<q>"bswap %0"</q> : <q>"=r"</q>(swapped_bytes) : <q>"0"</q>(x));</td></tr>
+<tr><th id="93">93</th><td>  <b>return</b> swapped_bytes;</td></tr>
+<tr><th id="94">94</th><td><u>#elif defined(_MSC_VER)</u></td></tr>
+<tr><th id="95">95</th><td>  <b>return</b> (uint32_t)_byteswap_ulong(x);</td></tr>
+<tr><th id="96">96</th><td><u>#else</u></td></tr>
+<tr><th id="97">97</th><td>  <b>return</b> (x &gt;&gt; <var>24</var>) | ((x &gt;&gt; <var>8</var>) &amp; <var>0xff00</var>) | ((x &lt;&lt; <var>8</var>) &amp; <var>0xff0000</var>) | (x &lt;&lt; <var>24</var>);</td></tr>
+<tr><th id="98">98</th><td><u>#<span data-ppcond="80">endif</span>  // HAVE_BUILTIN_BSWAP32</u></td></tr>
+<tr><th id="99">99</th><td>}</td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td><em>static</em> <a class="macro" href="../../config/ios/arm64/vpx_config.h.html#12" title="inline" data-ref="_M/INLINE">INLINE</a> <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="decl def fn" id="BSwap64" title='BSwap64' data-ref="BSwap64" data-ref-filename="BSwap64">BSwap64</dfn>(<span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col3 decl" id="3x" title='x' data-type='uint64_t' data-ref="3x" data-ref-filename="3x">x</dfn>) {</td></tr>
+<tr><th id="102">102</th><td><u>#<span data-ppcond="102">if</span> defined(<a class="macro" href="#60" data-ref="_M/HAVE_BUILTIN_BSWAP64">HAVE_BUILTIN_BSWAP64</a>)</u></td></tr>
+<tr><th id="103">103</th><td>  <b>return</b> <a class="ref fn" href="#103" title='__builtin_bswap64' data-ref="__builtin_bswap64" data-ref-filename="__builtin_bswap64">__builtin_bswap64</a>(<a class="local col3 ref" href="#3x" title='x' data-ref="3x" data-ref-filename="3x">x</a>);</td></tr>
+<tr><th id="104">104</th><td><u>#<span data-ppcond="102">elif</span> defined(__x86_64__)</u></td></tr>
+<tr><th id="105">105</th><td>  uint64_t swapped_bytes;</td></tr>
+<tr><th id="106">106</th><td>  <b>__asm__</b> <em>volatile</em>(<q>"bswapq %0"</q> : <q>"=r"</q>(swapped_bytes) : <q>"0"</q>(x));</td></tr>
+<tr><th id="107">107</th><td>  <b>return</b> swapped_bytes;</td></tr>
+<tr><th id="108">108</th><td><u>#elif defined(_MSC_VER)</u></td></tr>
+<tr><th id="109">109</th><td>  <b>return</b> (uint64_t)_byteswap_uint64(x);</td></tr>
+<tr><th id="110">110</th><td><u>#else   // generic code for swapping 64-bit values (suggested by bdb@)</u></td></tr>
+<tr><th id="111">111</th><td>  x = ((x &amp; <var>0xffffffff00000000ull</var>) &gt;&gt; <var>32</var>) | ((x &amp; <var>0x00000000ffffffffull</var>) &lt;&lt; <var>32</var>);</td></tr>
+<tr><th id="112">112</th><td>  x = ((x &amp; <var>0xffff0000ffff0000ull</var>) &gt;&gt; <var>16</var>) | ((x &amp; <var>0x0000ffff0000ffffull</var>) &lt;&lt; <var>16</var>);</td></tr>
+<tr><th id="113">113</th><td>  x = ((x &amp; <var>0xff00ff00ff00ff00ull</var>) &gt;&gt; <var>8</var>) | ((x &amp; <var>0x00ff00ff00ff00ffull</var>) &lt;&lt; <var>8</var>);</td></tr>
+<tr><th id="114">114</th><td>  <b>return</b> x;</td></tr>
+<tr><th id="115">115</th><td><u>#<span data-ppcond="102">endif</span>  // HAVE_BUILTIN_BSWAP64</u></td></tr>
+<tr><th id="116">116</th><td>}</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td><u>#<span data-ppcond="12">endif</span>  // VPX_VPX_UTIL_ENDIAN_INL_H_</u></td></tr>
+<tr><th id="119">119</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../vpx_dsp/bitreader.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_dsp/bitreader.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,73 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>pitch_internal.cc source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/vad/pitch_internal.cc] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/vad/pitch_internal.cc'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>audio_processing</a>/<a href='./'>vad</a>/<a href='pitch_internal.cc.html'>pitch_internal.cc</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#include <a href="pitch_internal.h.html">"modules/audio_processing/vad/pitch_internal.h"</a></u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include &lt;cmath&gt;</u></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><i  data-doc="_ZN6webrtcL18PitchInterpolationEdPKdPd">// A 4-to-3 linear interpolation.</i></td></tr>
+<tr><th id="18">18</th><td><i  data-doc="_ZN6webrtcL18PitchInterpolationEdPKdPd">// The interpolation constants are derived as following:</i></td></tr>
+<tr><th id="19">19</th><td><i  data-doc="_ZN6webrtcL18PitchInterpolationEdPKdPd">// Input pitch parameters are updated every 7.5 ms. Within a 30-ms interval</i></td></tr>
+<tr><th id="20">20</th><td><i  data-doc="_ZN6webrtcL18PitchInterpolationEdPKdPd">// we are interested in pitch parameters of 0-5 ms, 10-15ms and 20-25ms. This is</i></td></tr>
+<tr><th id="21">21</th><td><i  data-doc="_ZN6webrtcL18PitchInterpolationEdPKdPd">// like interpolating 4-to-6 and keep the odd samples.</i></td></tr>
+<tr><th id="22">22</th><td><i  data-doc="_ZN6webrtcL18PitchInterpolationEdPKdPd">// The reason behind this is that LPC coefficients are computed for the first</i></td></tr>
+<tr><th id="23">23</th><td><i  data-doc="_ZN6webrtcL18PitchInterpolationEdPKdPd">// half of each 10ms interval.</i></td></tr>
+<tr><th id="24">24</th><td><em>static</em> <em>void</em> <dfn class="tu decl def fn" id="_ZN6webrtcL18PitchInterpolationEdPKdPd" title='webrtc::PitchInterpolation' data-type='void webrtc::PitchInterpolation(double old_val, const double * in, double * out)' data-ref="_ZN6webrtcL18PitchInterpolationEdPKdPd" data-ref-filename="_ZN6webrtcL18PitchInterpolationEdPKdPd">PitchInterpolation</dfn>(<em>double</em> <dfn class="local col0 decl" id="10old_val" title='old_val' data-type='double' data-ref="10old_val" data-ref-filename="10old_val">old_val</dfn>, <em>const</em> <em>double</em>* <dfn class="local col1 decl" id="11in" title='in' data-type='const double *' data-ref="11in" data-ref-filename="11in">in</dfn>, <em>double</em>* <dfn class="local col2 decl" id="12out" title='out' data-type='double *' data-ref="12out" data-ref-filename="12out">out</dfn>) {</td></tr>
+<tr><th id="25">25</th><td>  <a class="local col2 ref" href="#12out" title='out' data-ref="12out" data-ref-filename="12out">out</a>[<var>0</var>] = <var>1.</var> / <var>6.</var> * <a class="local col0 ref" href="#10old_val" title='old_val' data-ref="10old_val" data-ref-filename="10old_val">old_val</a> + <var>5.</var> / <var>6.</var> * <a class="local col1 ref" href="#11in" title='in' data-ref="11in" data-ref-filename="11in">in</a>[<var>0</var>];</td></tr>
+<tr><th id="26">26</th><td>  <a class="local col2 ref" href="#12out" title='out' data-ref="12out" data-ref-filename="12out">out</a>[<var>1</var>] = <var>5.</var> / <var>6.</var> * <a class="local col1 ref" href="#11in" title='in' data-ref="11in" data-ref-filename="11in">in</a>[<var>1</var>] + <var>1.</var> / <var>6.</var> * <a class="local col1 ref" href="#11in" title='in' data-ref="11in" data-ref-filename="11in">in</a>[<var>2</var>];</td></tr>
+<tr><th id="27">27</th><td>  <a class="local col2 ref" href="#12out" title='out' data-ref="12out" data-ref-filename="12out">out</a>[<var>2</var>] = <var>0.5</var> * <a class="local col1 ref" href="#11in" title='in' data-ref="11in" data-ref-filename="11in">in</a>[<var>2</var>] + <var>0.5</var> * <a class="local col1 ref" href="#11in" title='in' data-ref="11in" data-ref-filename="11in">in</a>[<var>3</var>];</td></tr>
+<tr><th id="28">28</th><td>}</td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><em>void</em> <dfn class="decl def fn" id="_ZN6webrtc27GetSubframesPitchParametersEiPdS0_iiS0_S0_S0_S0_" title='webrtc::GetSubframesPitchParameters' data-ref="_ZN6webrtc27GetSubframesPitchParametersEiPdS0_iiS0_S0_S0_S0_" data-ref-filename="_ZN6webrtc27GetSubframesPitchParametersEiPdS0_iiS0_S0_S0_S0_">GetSubframesPitchParameters</dfn>(<em>int</em> <dfn class="local col3 decl" id="13sampling_rate_hz" title='sampling_rate_hz' data-type='int' data-ref="13sampling_rate_hz" data-ref-filename="13sampling_rate_hz">sampling_rate_hz</dfn>,</td></tr>
+<tr><th id="31">31</th><td>                                 <em>double</em>* <dfn class="local col4 decl" id="14gains" title='gains' data-type='double *' data-ref="14gains" data-ref-filename="14gains">gains</dfn>,</td></tr>
+<tr><th id="32">32</th><td>                                 <em>double</em>* <dfn class="local col5 decl" id="15lags" title='lags' data-type='double *' data-ref="15lags" data-ref-filename="15lags">lags</dfn>,</td></tr>
+<tr><th id="33">33</th><td>                                 <em>int</em> <dfn class="local col6 decl" id="16num_in_frames" title='num_in_frames' data-type='int' data-ref="16num_in_frames" data-ref-filename="16num_in_frames">num_in_frames</dfn>,</td></tr>
+<tr><th id="34">34</th><td>                                 <em>int</em> <dfn class="local col7 decl" id="17num_out_frames" title='num_out_frames' data-type='int' data-ref="17num_out_frames" data-ref-filename="17num_out_frames">num_out_frames</dfn>,</td></tr>
+<tr><th id="35">35</th><td>                                 <em>double</em>* <dfn class="local col8 decl" id="18log_old_gain" title='log_old_gain' data-type='double *' data-ref="18log_old_gain" data-ref-filename="18log_old_gain">log_old_gain</dfn>,</td></tr>
+<tr><th id="36">36</th><td>                                 <em>double</em>* <dfn class="local col9 decl" id="19old_lag" title='old_lag' data-type='double *' data-ref="19old_lag" data-ref-filename="19old_lag">old_lag</dfn>,</td></tr>
+<tr><th id="37">37</th><td>                                 <em>double</em>* <dfn class="local col0 decl" id="20log_pitch_gain" title='log_pitch_gain' data-type='double *' data-ref="20log_pitch_gain" data-ref-filename="20log_pitch_gain">log_pitch_gain</dfn>,</td></tr>
+<tr><th id="38">38</th><td>                                 <em>double</em>* <dfn class="local col1 decl" id="21pitch_lag_hz" title='pitch_lag_hz' data-type='double *' data-ref="21pitch_lag_hz" data-ref-filename="21pitch_lag_hz">pitch_lag_hz</dfn>) {</td></tr>
+<tr><th id="39">39</th><td>  <i>// Gain interpolation is in log-domain, also returned in log-domain.</i></td></tr>
+<tr><th id="40">40</th><td>  <b>for</b> (<em>int</em> <dfn class="local col2 decl" id="22n" title='n' data-type='int' data-ref="22n" data-ref-filename="22n">n</dfn> = <var>0</var>; <a class="local col2 ref" href="#22n" title='n' data-ref="22n" data-ref-filename="22n">n</a> &lt; <a class="local col6 ref" href="#16num_in_frames" title='num_in_frames' data-ref="16num_in_frames" data-ref-filename="16num_in_frames">num_in_frames</a>; <a class="local col2 ref" href="#22n" title='n' data-ref="22n" data-ref-filename="22n">n</a>++)</td></tr>
+<tr><th id="41">41</th><td>    <a class="local col4 ref" href="#14gains" title='gains' data-ref="14gains" data-ref-filename="14gains">gains</a>[<a class="local col2 ref" href="#22n" title='n' data-ref="22n" data-ref-filename="22n">n</a>] = <span class='ref fn' title='log' data-ref="log" data-ref-filename="log">log</span>(<a class="local col4 ref" href="#14gains" title='gains' data-ref="14gains" data-ref-filename="14gains">gains</a>[<a class="local col2 ref" href="#22n" title='n' data-ref="22n" data-ref-filename="22n">n</a>] + <var>1e-12</var>);</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td>  <i>// Interpolate lags and gains.</i></td></tr>
+<tr><th id="44">44</th><td>  <a class="tu ref fn" href="#_ZN6webrtcL18PitchInterpolationEdPKdPd" title='webrtc::PitchInterpolation' data-use='c' data-ref="_ZN6webrtcL18PitchInterpolationEdPKdPd" data-ref-filename="_ZN6webrtcL18PitchInterpolationEdPKdPd">PitchInterpolation</a>(*<a class="local col8 ref" href="#18log_old_gain" title='log_old_gain' data-ref="18log_old_gain" data-ref-filename="18log_old_gain">log_old_gain</a>, <a class="local col4 ref" href="#14gains" title='gains' data-ref="14gains" data-ref-filename="14gains">gains</a>, <a class="local col0 ref" href="#20log_pitch_gain" title='log_pitch_gain' data-ref="20log_pitch_gain" data-ref-filename="20log_pitch_gain">log_pitch_gain</a>);</td></tr>
+<tr><th id="45">45</th><td>  *<a class="local col8 ref" href="#18log_old_gain" title='log_old_gain' data-ref="18log_old_gain" data-ref-filename="18log_old_gain">log_old_gain</a> = <a class="local col4 ref" href="#14gains" title='gains' data-ref="14gains" data-ref-filename="14gains">gains</a>[<a class="local col6 ref" href="#16num_in_frames" title='num_in_frames' data-ref="16num_in_frames" data-ref-filename="16num_in_frames">num_in_frames</a> - <var>1</var>];</td></tr>
+<tr><th id="46">46</th><td>  <a class="tu ref fn" href="#_ZN6webrtcL18PitchInterpolationEdPKdPd" title='webrtc::PitchInterpolation' data-use='c' data-ref="_ZN6webrtcL18PitchInterpolationEdPKdPd" data-ref-filename="_ZN6webrtcL18PitchInterpolationEdPKdPd">PitchInterpolation</a>(*<a class="local col9 ref" href="#19old_lag" title='old_lag' data-ref="19old_lag" data-ref-filename="19old_lag">old_lag</a>, <a class="local col5 ref" href="#15lags" title='lags' data-ref="15lags" data-ref-filename="15lags">lags</a>, <a class="local col1 ref" href="#21pitch_lag_hz" title='pitch_lag_hz' data-ref="21pitch_lag_hz" data-ref-filename="21pitch_lag_hz">pitch_lag_hz</a>);</td></tr>
+<tr><th id="47">47</th><td>  *<a class="local col9 ref" href="#19old_lag" title='old_lag' data-ref="19old_lag" data-ref-filename="19old_lag">old_lag</a> = <a class="local col5 ref" href="#15lags" title='lags' data-ref="15lags" data-ref-filename="15lags">lags</a>[<a class="local col6 ref" href="#16num_in_frames" title='num_in_frames' data-ref="16num_in_frames" data-ref-filename="16num_in_frames">num_in_frames</a> - <var>1</var>];</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td>  <i>// Convert pitch-lags to Hertz.</i></td></tr>
+<tr><th id="50">50</th><td>  <b>for</b> (<em>int</em> <dfn class="local col3 decl" id="23n" title='n' data-type='int' data-ref="23n" data-ref-filename="23n">n</dfn> = <var>0</var>; <a class="local col3 ref" href="#23n" title='n' data-ref="23n" data-ref-filename="23n">n</a> &lt; <a class="local col7 ref" href="#17num_out_frames" title='num_out_frames' data-ref="17num_out_frames" data-ref-filename="17num_out_frames">num_out_frames</a>; <a class="local col3 ref" href="#23n" title='n' data-ref="23n" data-ref-filename="23n">n</a>++) {</td></tr>
+<tr><th id="51">51</th><td>    <a class="local col1 ref" href="#21pitch_lag_hz" title='pitch_lag_hz' data-ref="21pitch_lag_hz" data-ref-filename="21pitch_lag_hz">pitch_lag_hz</a>[<a class="local col3 ref" href="#23n" title='n' data-ref="23n" data-ref-filename="23n">n</a>] = (<a class="local col3 ref" href="#13sampling_rate_hz" title='sampling_rate_hz' data-ref="13sampling_rate_hz" data-ref-filename="13sampling_rate_hz">sampling_rate_hz</a>) / (<a class="local col1 ref" href="#21pitch_lag_hz" title='pitch_lag_hz' data-ref="21pitch_lag_hz" data-ref-filename="21pitch_lag_hz">pitch_lag_hz</a>[<a class="local col3 ref" href="#23n" title='n' data-ref="23n" data-ref-filename="23n">n</a>]);</td></tr>
+<tr><th id="52">52</th><td>  }</td></tr>
+<tr><th id="53">53</th><td>}</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="56">56</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

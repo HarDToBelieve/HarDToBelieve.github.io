@@ -1,0 +1,133 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>pitch_search_internal.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/agc2/rnn_vad/pitch_search_internal.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::rnn_vad::CandidatePitchPeriods,webrtc::rnn_vad::PitchInfo "/>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/agc2/rnn_vad/pitch_search_internal.h'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>webrtc</a>/<a href='../../..'>modules</a>/<a href='../..'>audio_processing</a>/<a href='..'>agc2</a>/<a href='./'>rnn_vad</a>/<a href='pitch_search_internal.h.html'>pitch_search_internal.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2018 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/MODULES_AUDIO_PROCESSING_AGC2_RNN_VAD_PITCH_SEARCH_INTERNAL_H_">MODULES_AUDIO_PROCESSING_AGC2_RNN_VAD_PITCH_SEARCH_INTERNAL_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/MODULES_AUDIO_PROCESSING_AGC2_RNN_VAD_PITCH_SEARCH_INTERNAL_H_" data-ref="_M/MODULES_AUDIO_PROCESSING_AGC2_RNN_VAD_PITCH_SEARCH_INTERNAL_H_">MODULES_AUDIO_PROCESSING_AGC2_RNN_VAD_PITCH_SEARCH_INTERNAL_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include &lt;array&gt;</u></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;utility&gt;</u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="../../../../api/array_view.h.html">"api/array_view.h"</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="../cpu_features.h.html">"modules/audio_processing/agc2/cpu_features.h"</a></u></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="common.h.html">"modules/audio_processing/agc2/rnn_vad/common.h"</a></u></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="24">24</th><td><b>namespace</b> <span class="namespace">rnn_vad</span> {</td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><i>// Performs 2x decimation without any anti-aliasing filter.</i></td></tr>
+<tr><th id="27">27</th><td><em>void</em> <dfn class="decl fn" id="_ZN6webrtc7rnn_vad10Decimate2xEN3rtc9ArrayViewIKfLl864EEENS2_IfLl432EEE" title='webrtc::rnn_vad::Decimate2x' data-ref="_ZN6webrtc7rnn_vad10Decimate2xEN3rtc9ArrayViewIKfLl864EEENS2_IfLl432EEE" data-ref-filename="_ZN6webrtc7rnn_vad10Decimate2xEN3rtc9ArrayViewIKfLl864EEENS2_IfLl432EEE">Decimate2x</dfn>(<span class="namespace">rtc::</span><a class="type" href="../../../../api/array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<em>const</em> <em>float</em>, <a class="ref" href="common.h.html#webrtc::rnn_vad::kBufSize24kHz" title='webrtc::rnn_vad::kBufSize24kHz' data-ref="webrtc::rnn_vad::kBufSize24kHz" data-ref-filename="webrtc..rnn_vad..kBufSize24kHz">kBufSize24kHz</a>&gt; <dfn class="local col1 decl" id="1src" title='src' data-type='rtc::ArrayView&lt;const float, kBufSize24kHz&gt;' data-ref="1src" data-ref-filename="1src">src</dfn>,</td></tr>
+<tr><th id="28">28</th><td>                <span class="namespace">rtc::</span><a class="type" href="../../../../api/array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<em>float</em>, <a class="ref" href="common.h.html#webrtc::rnn_vad::kBufSize12kHz" title='webrtc::rnn_vad::kBufSize12kHz' data-ref="webrtc::rnn_vad::kBufSize12kHz" data-ref-filename="webrtc..rnn_vad..kBufSize12kHz">kBufSize12kHz</a>&gt; <dfn class="local col2 decl" id="2dst" title='dst' data-type='rtc::ArrayView&lt;float, kBufSize12kHz&gt;' data-ref="2dst" data-ref-filename="2dst">dst</dfn>);</td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><i>// Key concepts and keywords used below in this file.</i></td></tr>
+<tr><th id="31">31</th><td><i>//</i></td></tr>
+<tr><th id="32">32</th><td><i>// The pitch estimation relies on a pitch buffer, which is an array-like data</i></td></tr>
+<tr><th id="33">33</th><td><i>// structured designed as follows:</i></td></tr>
+<tr><th id="34">34</th><td><i>//</i></td></tr>
+<tr><th id="35">35</th><td><i>// |....A....|.....B.....|</i></td></tr>
+<tr><th id="36">36</th><td><i>//</i></td></tr>
+<tr><th id="37">37</th><td><i>// The part on the left, named `A` contains the oldest samples, whereas `B`</i></td></tr>
+<tr><th id="38">38</th><td><i>// contains the most recent ones. The size of `A` corresponds to the maximum</i></td></tr>
+<tr><th id="39">39</th><td><i>// pitch period, that of `B` to the analysis frame size (e.g., 16 ms and 20 ms</i></td></tr>
+<tr><th id="40">40</th><td><i>// respectively).</i></td></tr>
+<tr><th id="41">41</th><td><i>//</i></td></tr>
+<tr><th id="42">42</th><td><i>// Pitch estimation is essentially based on the analysis of two 20 ms frames</i></td></tr>
+<tr><th id="43">43</th><td><i>// extracted from the pitch buffer. One frame, called `x`, is kept fixed and</i></td></tr>
+<tr><th id="44">44</th><td><i>// corresponds to `B` - i.e., the most recent 20 ms. The other frame, called</i></td></tr>
+<tr><th id="45">45</th><td><i>// `y`, is extracted from different parts of the buffer instead.</i></td></tr>
+<tr><th id="46">46</th><td><i>//</i></td></tr>
+<tr><th id="47">47</th><td><i>// The offset between `x` and `y` corresponds to a specific pitch period.</i></td></tr>
+<tr><th id="48">48</th><td><i>// For instance, if `y` is positioned at the beginning of the pitch buffer, then</i></td></tr>
+<tr><th id="49">49</th><td><i>// the cross-correlation between `x` and `y` can be used as an indication of the</i></td></tr>
+<tr><th id="50">50</th><td><i>// strength for the maximum pitch.</i></td></tr>
+<tr><th id="51">51</th><td><i>//</i></td></tr>
+<tr><th id="52">52</th><td><i>// Such an offset can be encoded in two ways:</i></td></tr>
+<tr><th id="53">53</th><td><i>// - As a lag, which is the index in the pitch buffer for the first item in `y`</i></td></tr>
+<tr><th id="54">54</th><td><i>// - As an inverted lag, which is the number of samples from the beginning of</i></td></tr>
+<tr><th id="55">55</th><td><i>//   `x` and the end of `y`</i></td></tr>
+<tr><th id="56">56</th><td><i>//</i></td></tr>
+<tr><th id="57">57</th><td><i>// |----&gt;| lag</i></td></tr>
+<tr><th id="58">58</th><td><i>// |....A....|.....B.....|</i></td></tr>
+<tr><th id="59">59</th><td><i>//       |&lt;--| inverted lag</i></td></tr>
+<tr><th id="60">60</th><td><i>//       |.....y.....| `y` 20 ms frame</i></td></tr>
+<tr><th id="61">61</th><td><i>//</i></td></tr>
+<tr><th id="62">62</th><td><i>// The inverted lag has the advantage of being directly proportional to the</i></td></tr>
+<tr><th id="63">63</th><td><i>// corresponding pitch period.</i></td></tr>
+<tr><th id="64">64</th><td><i></i></td></tr>
+<tr><th id="65">65</th><td><i>// Computes the sum of squared samples for every sliding frame `y` in the pitch</i></td></tr>
+<tr><th id="66">66</th><td><i>// buffer. The indexes of `y_energy` are inverted lags.</i></td></tr>
+<tr><th id="67">67</th><td><em>void</em> <dfn class="decl fn" id="_ZN6webrtc7rnn_vad38ComputeSlidingFrameSquareEnergies24kHzEN3rtc9ArrayViewIKfLl864EEENS2_IfLl385EEENS_20AvailableCpuFeaturesE" title='webrtc::rnn_vad::ComputeSlidingFrameSquareEnergies24kHz' data-ref="_ZN6webrtc7rnn_vad38ComputeSlidingFrameSquareEnergies24kHzEN3rtc9ArrayViewIKfLl864EEENS2_IfLl385EEENS_20AvailableCpuFeaturesE" data-ref-filename="_ZN6webrtc7rnn_vad38ComputeSlidingFrameSquareEnergies24kHzEN3rtc9ArrayViewIKfLl864EEENS2_IfLl385EEENS_20AvailableCpuFeaturesE">ComputeSlidingFrameSquareEnergies24kHz</dfn>(</td></tr>
+<tr><th id="68">68</th><td>    <span class="namespace">rtc::</span><a class="type" href="../../../../api/array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<em>const</em> <em>float</em>, <a class="ref" href="common.h.html#webrtc::rnn_vad::kBufSize24kHz" title='webrtc::rnn_vad::kBufSize24kHz' data-ref="webrtc::rnn_vad::kBufSize24kHz" data-ref-filename="webrtc..rnn_vad..kBufSize24kHz">kBufSize24kHz</a>&gt; <dfn class="local col3 decl" id="3pitch_buffer" title='pitch_buffer' data-type='rtc::ArrayView&lt;const float, kBufSize24kHz&gt;' data-ref="3pitch_buffer" data-ref-filename="3pitch_buffer">pitch_buffer</dfn>,</td></tr>
+<tr><th id="69">69</th><td>    <span class="namespace">rtc::</span><a class="type" href="../../../../api/array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<em>float</em>, <a class="ref" href="common.h.html#webrtc::rnn_vad::kRefineNumLags24kHz" title='webrtc::rnn_vad::kRefineNumLags24kHz' data-ref="webrtc::rnn_vad::kRefineNumLags24kHz" data-ref-filename="webrtc..rnn_vad..kRefineNumLags24kHz">kRefineNumLags24kHz</a>&gt; <dfn class="local col4 decl" id="4y_energy" title='y_energy' data-type='rtc::ArrayView&lt;float, kRefineNumLags24kHz&gt;' data-ref="4y_energy" data-ref-filename="4y_energy">y_energy</dfn>,</td></tr>
+<tr><th id="70">70</th><td>    <a class="type" href="../cpu_features.h.html#webrtc::AvailableCpuFeatures" title='webrtc::AvailableCpuFeatures' data-ref="webrtc::AvailableCpuFeatures" data-ref-filename="webrtc..AvailableCpuFeatures">AvailableCpuFeatures</a> <dfn class="local col5 decl" id="5cpu_features" title='cpu_features' data-type='webrtc::AvailableCpuFeatures' data-ref="5cpu_features" data-ref-filename="5cpu_features">cpu_features</dfn>);</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td><i>// Top-2 pitch period candidates. Unit: number of samples - i.e., inverted lags.</i></td></tr>
+<tr><th id="73">73</th><td><b>struct</b> <dfn class="type def" id="webrtc::rnn_vad::CandidatePitchPeriods" title='webrtc::rnn_vad::CandidatePitchPeriods' data-ref="webrtc::rnn_vad::CandidatePitchPeriods" data-ref-filename="webrtc..rnn_vad..CandidatePitchPeriods">CandidatePitchPeriods</dfn> {</td></tr>
+<tr><th id="74">74</th><td>  <em>int</em> <dfn class="decl field" id="webrtc::rnn_vad::CandidatePitchPeriods::best" title='webrtc::rnn_vad::CandidatePitchPeriods::best' data-ref="webrtc::rnn_vad::CandidatePitchPeriods::best" data-ref-filename="webrtc..rnn_vad..CandidatePitchPeriods..best">best</dfn>;</td></tr>
+<tr><th id="75">75</th><td>  <em>int</em> <dfn class="decl field" id="webrtc::rnn_vad::CandidatePitchPeriods::second_best" title='webrtc::rnn_vad::CandidatePitchPeriods::second_best' data-ref="webrtc::rnn_vad::CandidatePitchPeriods::second_best" data-ref-filename="webrtc..rnn_vad..CandidatePitchPeriods..second_best">second_best</dfn>;</td></tr>
+<tr><th id="76">76</th><td>};</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td><i>// Computes the candidate pitch periods at 12 kHz given a view on the 12 kHz</i></td></tr>
+<tr><th id="79">79</th><td><i>// pitch buffer and the auto-correlation values (having inverted lags as</i></td></tr>
+<tr><th id="80">80</th><td><i>// indexes).</i></td></tr>
+<tr><th id="81">81</th><td><a class="type" href="#webrtc::rnn_vad::CandidatePitchPeriods" title='webrtc::rnn_vad::CandidatePitchPeriods' data-ref="webrtc::rnn_vad::CandidatePitchPeriods" data-ref-filename="webrtc..rnn_vad..CandidatePitchPeriods">CandidatePitchPeriods</a> <dfn class="decl fn" id="_ZN6webrtc7rnn_vad23ComputePitchPeriod12kHzEN3rtc9ArrayViewIKfLl432EEENS2_IS3_Ll147EEENS_20AvailableCpuFeaturesE" title='webrtc::rnn_vad::ComputePitchPeriod12kHz' data-ref="_ZN6webrtc7rnn_vad23ComputePitchPeriod12kHzEN3rtc9ArrayViewIKfLl432EEENS2_IS3_Ll147EEENS_20AvailableCpuFeaturesE" data-ref-filename="_ZN6webrtc7rnn_vad23ComputePitchPeriod12kHzEN3rtc9ArrayViewIKfLl432EEENS2_IS3_Ll147EEENS_20AvailableCpuFeaturesE">ComputePitchPeriod12kHz</dfn>(</td></tr>
+<tr><th id="82">82</th><td>    <span class="namespace">rtc::</span><a class="type" href="../../../../api/array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<em>const</em> <em>float</em>, <a class="ref" href="common.h.html#webrtc::rnn_vad::kBufSize12kHz" title='webrtc::rnn_vad::kBufSize12kHz' data-ref="webrtc::rnn_vad::kBufSize12kHz" data-ref-filename="webrtc..rnn_vad..kBufSize12kHz">kBufSize12kHz</a>&gt; <dfn class="local col6 decl" id="6pitch_buffer" title='pitch_buffer' data-type='rtc::ArrayView&lt;const float, kBufSize12kHz&gt;' data-ref="6pitch_buffer" data-ref-filename="6pitch_buffer">pitch_buffer</dfn>,</td></tr>
+<tr><th id="83">83</th><td>    <span class="namespace">rtc::</span><a class="type" href="../../../../api/array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<em>const</em> <em>float</em>, <a class="ref" href="common.h.html#webrtc::rnn_vad::kNumLags12kHz" title='webrtc::rnn_vad::kNumLags12kHz' data-ref="webrtc::rnn_vad::kNumLags12kHz" data-ref-filename="webrtc..rnn_vad..kNumLags12kHz">kNumLags12kHz</a>&gt; <dfn class="local col7 decl" id="7auto_correlation" title='auto_correlation' data-type='rtc::ArrayView&lt;const float, kNumLags12kHz&gt;' data-ref="7auto_correlation" data-ref-filename="7auto_correlation">auto_correlation</dfn>,</td></tr>
+<tr><th id="84">84</th><td>    <a class="type" href="../cpu_features.h.html#webrtc::AvailableCpuFeatures" title='webrtc::AvailableCpuFeatures' data-ref="webrtc::AvailableCpuFeatures" data-ref-filename="webrtc..AvailableCpuFeatures">AvailableCpuFeatures</a> <dfn class="local col8 decl" id="8cpu_features" title='cpu_features' data-type='webrtc::AvailableCpuFeatures' data-ref="8cpu_features" data-ref-filename="8cpu_features">cpu_features</dfn>);</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td><i>// Computes the pitch period at 48 kHz given a view on the 24 kHz pitch buffer,</i></td></tr>
+<tr><th id="87">87</th><td><i>// the energies for the sliding frames `y` at 24 kHz and the pitch period</i></td></tr>
+<tr><th id="88">88</th><td><i>// candidates at 24 kHz (encoded as inverted lag).</i></td></tr>
+<tr><th id="89">89</th><td><em>int</em> <dfn class="decl fn" id="_ZN6webrtc7rnn_vad23ComputePitchPeriod48kHzEN3rtc9ArrayViewIKfLl864EEENS2_IS3_Ll385EEENS0_21CandidatePitchPeriodsENS_20AvailableCpuFeaturesE" title='webrtc::rnn_vad::ComputePitchPeriod48kHz' data-ref="_ZN6webrtc7rnn_vad23ComputePitchPeriod48kHzEN3rtc9ArrayViewIKfLl864EEENS2_IS3_Ll385EEENS0_21CandidatePitchPeriodsENS_20AvailableCpuFeaturesE" data-ref-filename="_ZN6webrtc7rnn_vad23ComputePitchPeriod48kHzEN3rtc9ArrayViewIKfLl864EEENS2_IS3_Ll385EEENS0_21CandidatePitchPeriodsENS_20AvailableCpuFeaturesE">ComputePitchPeriod48kHz</dfn>(</td></tr>
+<tr><th id="90">90</th><td>    <span class="namespace">rtc::</span><a class="type" href="../../../../api/array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<em>const</em> <em>float</em>, <a class="ref" href="common.h.html#webrtc::rnn_vad::kBufSize24kHz" title='webrtc::rnn_vad::kBufSize24kHz' data-ref="webrtc::rnn_vad::kBufSize24kHz" data-ref-filename="webrtc..rnn_vad..kBufSize24kHz">kBufSize24kHz</a>&gt; <dfn class="local col9 decl" id="9pitch_buffer" title='pitch_buffer' data-type='rtc::ArrayView&lt;const float, kBufSize24kHz&gt;' data-ref="9pitch_buffer" data-ref-filename="9pitch_buffer">pitch_buffer</dfn>,</td></tr>
+<tr><th id="91">91</th><td>    <span class="namespace">rtc::</span><a class="type" href="../../../../api/array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<em>const</em> <em>float</em>, <a class="ref" href="common.h.html#webrtc::rnn_vad::kRefineNumLags24kHz" title='webrtc::rnn_vad::kRefineNumLags24kHz' data-ref="webrtc::rnn_vad::kRefineNumLags24kHz" data-ref-filename="webrtc..rnn_vad..kRefineNumLags24kHz">kRefineNumLags24kHz</a>&gt; <dfn class="local col0 decl" id="10y_energy" title='y_energy' data-type='rtc::ArrayView&lt;const float, kRefineNumLags24kHz&gt;' data-ref="10y_energy" data-ref-filename="10y_energy">y_energy</dfn>,</td></tr>
+<tr><th id="92">92</th><td>    <a class="type" href="#webrtc::rnn_vad::CandidatePitchPeriods" title='webrtc::rnn_vad::CandidatePitchPeriods' data-ref="webrtc::rnn_vad::CandidatePitchPeriods" data-ref-filename="webrtc..rnn_vad..CandidatePitchPeriods">CandidatePitchPeriods</a> <dfn class="local col1 decl" id="11pitch_candidates_24kHz" title='pitch_candidates_24kHz' data-type='webrtc::rnn_vad::CandidatePitchPeriods' data-ref="11pitch_candidates_24kHz" data-ref-filename="11pitch_candidates_24kHz">pitch_candidates_24kHz</dfn>,</td></tr>
+<tr><th id="93">93</th><td>    <a class="type" href="../cpu_features.h.html#webrtc::AvailableCpuFeatures" title='webrtc::AvailableCpuFeatures' data-ref="webrtc::AvailableCpuFeatures" data-ref-filename="webrtc..AvailableCpuFeatures">AvailableCpuFeatures</a> <dfn class="local col2 decl" id="12cpu_features" title='cpu_features' data-type='webrtc::AvailableCpuFeatures' data-ref="12cpu_features" data-ref-filename="12cpu_features">cpu_features</dfn>);</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td><b>struct</b> <dfn class="type def" id="webrtc::rnn_vad::PitchInfo" title='webrtc::rnn_vad::PitchInfo' data-ref="webrtc::rnn_vad::PitchInfo" data-ref-filename="webrtc..rnn_vad..PitchInfo">PitchInfo</dfn> {</td></tr>
+<tr><th id="96">96</th><td>  <em>int</em> <dfn class="decl field" id="webrtc::rnn_vad::PitchInfo::period" title='webrtc::rnn_vad::PitchInfo::period' data-ref="webrtc::rnn_vad::PitchInfo::period" data-ref-filename="webrtc..rnn_vad..PitchInfo..period">period</dfn>;</td></tr>
+<tr><th id="97">97</th><td>  <em>float</em> <dfn class="decl field" id="webrtc::rnn_vad::PitchInfo::strength" title='webrtc::rnn_vad::PitchInfo::strength' data-ref="webrtc::rnn_vad::PitchInfo::strength" data-ref-filename="webrtc..rnn_vad..PitchInfo..strength">strength</dfn>;</td></tr>
+<tr><th id="98">98</th><td>};</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td><i>// Computes the pitch period at 48 kHz searching in an extended pitch range</i></td></tr>
+<tr><th id="101">101</th><td><i>// given a view on the 24 kHz pitch buffer, the energies for the sliding frames</i></td></tr>
+<tr><th id="102">102</th><td><i>// `y` at 24 kHz, the initial 48 kHz estimation (computed by</i></td></tr>
+<tr><th id="103">103</th><td><i>// `ComputePitchPeriod48kHz()`) and the last estimated pitch.</i></td></tr>
+<tr><th id="104">104</th><td><a class="type" href="#webrtc::rnn_vad::PitchInfo" title='webrtc::rnn_vad::PitchInfo' data-ref="webrtc::rnn_vad::PitchInfo" data-ref-filename="webrtc..rnn_vad..PitchInfo">PitchInfo</a> <dfn class="decl fn" id="_ZN6webrtc7rnn_vad31ComputeExtendedPitchPeriod48kHzEN3rtc9ArrayViewIKfLl864EEENS2_IS3_Ll385EEEiNS0_9PitchInfoENS_20AvailableCpuFeaturesE" title='webrtc::rnn_vad::ComputeExtendedPitchPeriod48kHz' data-ref="_ZN6webrtc7rnn_vad31ComputeExtendedPitchPeriod48kHzEN3rtc9ArrayViewIKfLl864EEENS2_IS3_Ll385EEEiNS0_9PitchInfoENS_20AvailableCpuFeaturesE" data-ref-filename="_ZN6webrtc7rnn_vad31ComputeExtendedPitchPeriod48kHzEN3rtc9ArrayViewIKfLl864EEENS2_IS3_Ll385EEEiNS0_9PitchInfoENS_20AvailableCpuFeaturesE">ComputeExtendedPitchPeriod48kHz</dfn>(</td></tr>
+<tr><th id="105">105</th><td>    <span class="namespace">rtc::</span><a class="type" href="../../../../api/array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<em>const</em> <em>float</em>, <a class="ref" href="common.h.html#webrtc::rnn_vad::kBufSize24kHz" title='webrtc::rnn_vad::kBufSize24kHz' data-ref="webrtc::rnn_vad::kBufSize24kHz" data-ref-filename="webrtc..rnn_vad..kBufSize24kHz">kBufSize24kHz</a>&gt; <dfn class="local col3 decl" id="13pitch_buffer" title='pitch_buffer' data-type='rtc::ArrayView&lt;const float, kBufSize24kHz&gt;' data-ref="13pitch_buffer" data-ref-filename="13pitch_buffer">pitch_buffer</dfn>,</td></tr>
+<tr><th id="106">106</th><td>    <span class="namespace">rtc::</span><a class="type" href="../../../../api/array_view.h.html#rtc::ArrayView" title='rtc::ArrayView' data-ref="rtc::ArrayView" data-ref-filename="rtc..ArrayView">ArrayView</a>&lt;<em>const</em> <em>float</em>, <a class="ref" href="common.h.html#webrtc::rnn_vad::kRefineNumLags24kHz" title='webrtc::rnn_vad::kRefineNumLags24kHz' data-ref="webrtc::rnn_vad::kRefineNumLags24kHz" data-ref-filename="webrtc..rnn_vad..kRefineNumLags24kHz">kRefineNumLags24kHz</a>&gt; <dfn class="local col4 decl" id="14y_energy" title='y_energy' data-type='rtc::ArrayView&lt;const float, kRefineNumLags24kHz&gt;' data-ref="14y_energy" data-ref-filename="14y_energy">y_energy</dfn>,</td></tr>
+<tr><th id="107">107</th><td>    <em>int</em> <dfn class="local col5 decl" id="15initial_pitch_period_48kHz" title='initial_pitch_period_48kHz' data-type='int' data-ref="15initial_pitch_period_48kHz" data-ref-filename="15initial_pitch_period_48kHz">initial_pitch_period_48kHz</dfn>,</td></tr>
+<tr><th id="108">108</th><td>    <a class="type" href="#webrtc::rnn_vad::PitchInfo" title='webrtc::rnn_vad::PitchInfo' data-ref="webrtc::rnn_vad::PitchInfo" data-ref-filename="webrtc..rnn_vad..PitchInfo">PitchInfo</a> <dfn class="local col6 decl" id="16last_pitch_48kHz" title='last_pitch_48kHz' data-type='webrtc::rnn_vad::PitchInfo' data-ref="16last_pitch_48kHz" data-ref-filename="16last_pitch_48kHz">last_pitch_48kHz</dfn>,</td></tr>
+<tr><th id="109">109</th><td>    <a class="type" href="../cpu_features.h.html#webrtc::AvailableCpuFeatures" title='webrtc::AvailableCpuFeatures' data-ref="webrtc::AvailableCpuFeatures" data-ref-filename="webrtc..AvailableCpuFeatures">AvailableCpuFeatures</a> <dfn class="local col7 decl" id="17cpu_features" title='cpu_features' data-type='webrtc::AvailableCpuFeatures' data-ref="17cpu_features" data-ref-filename="17cpu_features">cpu_features</dfn>);</td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td>}  <i>// namespace rnn_vad</i></td></tr>
+<tr><th id="112">112</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="113">113</th><td></td></tr>
+<tr><th id="114">114</th><td><u>#<span data-ppcond="11">endif</span>  // MODULES_AUDIO_PROCESSING_AGC2_RNN_VAD_PITCH_SEARCH_INTERNAL_H_</u></td></tr>
+<tr><th id="115">115</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='features_extraction.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/agc2/rnn_vad/features_extraction.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

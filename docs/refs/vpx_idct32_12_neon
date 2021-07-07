@@ -1,0 +1,31 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_dsp/arm/idct_neon.h' l='911' type='void vpx_idct32_12_neon(const tran_low_t *const input, int16_t * output)'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_dsp/arm/idct32x32_135_add_neon.c' l='91' ll='373' type='void vpx_idct32_12_neon(const tran_low_t *const input, int16_t * output)'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_dsp/arm/idct32x32_135_add_neon.c' l='666' u='c' c='vpx_idct32x32_135_add_neon'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_dsp/arm/idct32x32_135_add_neon.c' l='667' u='c' c='vpx_idct32x32_135_add_neon'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vpx_dsp/arm/idct32x32_135_add_neon.c' l='64'>// Only for the first pass of the  _135_ variant. Since it only uses values from
+// the top left 16x16 it can safely assume all the remaining values are 0 and
+// skip an awful lot of calculations. In fact, only the first 12 columns make
+// the cut. None of the elements in the 13th, 14th, 15th or 16th columns are
+// used so it skips any calls to input[12|13|14|15] too.
+// In C this does a single row of 32 for each call. Here it transposes the top
+// left 12x8 to allow using SIMD.
+
+// vp9/common/vp9_scan.c:vp9_default_iscan_32x32 arranges the first 135 non-zero
+// coefficients as follows:
+//      0   1   2   3   4   5   6   7   8   9  10  11  12  13  14  15
+//  0   0   2   5  10  17  25  38  47  62  83 101 121
+//  1   1   4   8  15  22  30  45  58  74  92 112 133
+//  2   3   7  12  18  28  36  52  64  82 102 118
+//  3   6  11  16  23  31  43  60  73  90 109 126
+//  4   9  14  19  29  37  50  65  78  98 116 134
+//  5  13  20  26  35  44  54  72  85 105 123
+//  6  21  27  33  42  53  63  80  94 113 132
+//  7  24  32  39  48  57  71  88 104 120
+//  8  34  40  46  56  68  81  96 111 130
+//  9  41  49  55  67  77  91 107 124
+// 10  51  59  66  76  89  99 119 131
+// 11  61  69  75  87 100 114 129
+// 12  70  79  86  97 108 122
+// 13  84  93 103 110 125
+// 14  98 106 115 127
+// 15 117 128</doc>

@@ -1,0 +1,26 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/rsa.h' l='405' type='int RSA_verify_raw(RSA * rsa, size_t * out_len, uint8_t * out, size_t max_out, const uint8_t * in, size_t in_len, int padding)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/rsa.h' l='387'>// RSA_verify_raw performs the public key portion of verifying |in_len| bytes of
+// signature from |in| using the public key from |rsa|. On success, it returns
+// one and writes, at most, |max_out| bytes of output to |out|. The |max_out|
+// argument must be, at least, |RSA_size| in order to ensure the output fits. On
+// failure or invalid input, it returns zero.
+//
+// If |padding| is |RSA_PKCS1_PADDING|, this function checks the padding portion
+// of RSASSA-PKCS1-v1_5 and outputs the remainder of the encoded digest. The
+// caller is responsible for checking the output is a DigestInfo-wrapped digest
+// of the message.
+//
+// If |padding| is |RSA_NO_PADDING|, this function only performs the raw public
+// key operation. The caller is responsible for checking the output is a valid
+// result for the signature scheme being implemented.
+//
+// WARNING: This function is a building block for a signature scheme, not a
+// complete one. Checking for arbitary strings in |out| will not result in a
+// secure signature scheme.</doc>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/evp/p_rsa.c' l='232' u='c' c='pkey_rsa_verify'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/evp/p_rsa.c' l='260' u='c' c='pkey_rsa_verify_recover'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/evp/p_rsa.c' l='283' u='c' c='pkey_rsa_verify_recover'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/rsa/rsa.c' l='352' u='c' c='RSA_public_decrypt'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/rsa/rsa.c' l='599' u='c' c='RSA_verify'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/rsa/rsa.c' l='643' u='c' c='RSA_verify_pss_mgf1'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/rsa/rsa_impl.c' l='596' ll='687' type='int RSA_verify_raw(RSA * rsa, size_t * out_len, uint8_t * out, size_t max_out, const uint8_t * in, size_t in_len, int padding)'/>

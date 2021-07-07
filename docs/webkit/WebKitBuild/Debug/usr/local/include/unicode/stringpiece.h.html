@@ -1,0 +1,243 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>stringpiece.h source code [webkit/WebKitBuild/Debug/usr/local/include/unicode/stringpiece.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="icu::StringPiece "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/unicode/stringpiece.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>unicode</a>/<a href='stringpiece.h.html'>stringpiece.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>// © 2016 and later: Unicode, Inc. and others.</i></td></tr>
+<tr><th id="2">2</th><td><i>// License &amp; terms of use: <a href="http://www.unicode.org/copyright.html">http://www.unicode.org/copyright.html</a></i></td></tr>
+<tr><th id="3">3</th><td><i>// Copyright (C) 2009-2013, International Business Machines</i></td></tr>
+<tr><th id="4">4</th><td><i>// Corporation and others. All Rights Reserved.</i></td></tr>
+<tr><th id="5">5</th><td><i>//</i></td></tr>
+<tr><th id="6">6</th><td><i>// Copyright 2001 and onwards Google Inc.</i></td></tr>
+<tr><th id="7">7</th><td><i>// Author: Sanjay Ghemawat</i></td></tr>
+<tr><th id="8">8</th><td><i></i></td></tr>
+<tr><th id="9">9</th><td><i>// This code is a contribution of Google code, and the style used here is</i></td></tr>
+<tr><th id="10">10</th><td><i>// a compromise between the original Google code and the ICU coding guidelines.</i></td></tr>
+<tr><th id="11">11</th><td><i>// For example, data types are ICU-ified (size_t,int-&gt;int32_t),</i></td></tr>
+<tr><th id="12">12</th><td><i>// and API comments doxygen-ified, but function names and behavior are</i></td></tr>
+<tr><th id="13">13</th><td><i>// as in the original, if possible.</i></td></tr>
+<tr><th id="14">14</th><td><i>// Assertion-style error handling, not available in ICU, was changed to</i></td></tr>
+<tr><th id="15">15</th><td><i>// parameter "pinning" similar to UnicodeString.</i></td></tr>
+<tr><th id="16">16</th><td><i>//</i></td></tr>
+<tr><th id="17">17</th><td><i>// In addition, this is only a partial port of the original Google code,</i></td></tr>
+<tr><th id="18">18</th><td><i>// limited to what was needed so far. The (nearly) complete original code</i></td></tr>
+<tr><th id="19">19</th><td><i>// is in the ICU svn repository at icuhtml/trunk/design/strings/contrib</i></td></tr>
+<tr><th id="20">20</th><td><i>// (see ICU ticket 6765, r25517).</i></td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><u>#<span data-ppcond="22">ifndef</span> <span class="macro" data-ref="_M/__STRINGPIECE_H__">__STRINGPIECE_H__</span></u></td></tr>
+<tr><th id="23">23</th><td><u>#define <dfn class="macro" id="_M/__STRINGPIECE_H__" data-ref="_M/__STRINGPIECE_H__">__STRINGPIECE_H__</dfn></u></td></tr>
+<tr><th id="24">24</th><td></td></tr>
+<tr><th id="25">25</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="26">26</th><td><i class="doc"> *<span class="command"> \file</span> </i></td></tr>
+<tr><th id="27">27</th><td><i class="doc"> * <span class="command">\brief</span> C++ API: StringPiece: Read-only byte string wrapper class.</i></td></tr>
+<tr><th id="28">28</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="utypes.h.html">"unicode/utypes.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="uobject.h.html">"unicode/uobject.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="std_string.h.html">"unicode/std_string.h"</a></u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><i>// Arghh!  I wish C++ literals were "string".</i></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><a class="macro" href="uversion.h.html#119" title="extern &quot;C++&quot; { namespace icu {" data-ref="_M/U_NAMESPACE_BEGIN">U_NAMESPACE_BEGIN</a></td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="39">39</th><td><i class="doc"> * A string-like object that points to a sized piece of memory.</i></td></tr>
+<tr><th id="40">40</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="41">41</th><td><i class="doc"> * We provide non-explicit singleton constructors so users can pass</i></td></tr>
+<tr><th id="42">42</th><td><i class="doc"> * in a "const char*" or a "string" wherever a "StringPiece" is</i></td></tr>
+<tr><th id="43">43</th><td><i class="doc"> * expected.</i></td></tr>
+<tr><th id="44">44</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="45">45</th><td><i class="doc"> * Functions or methods may use StringPiece parameters to accept either a</i></td></tr>
+<tr><th id="46">46</th><td><i class="doc"> * "const char*" or a "string" value that will be implicitly converted to a</i></td></tr>
+<tr><th id="47">47</th><td><i class="doc"> * StringPiece.</i></td></tr>
+<tr><th id="48">48</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="49">49</th><td><i class="doc"> * Systematic usage of StringPiece is encouraged as it will reduce unnecessary</i></td></tr>
+<tr><th id="50">50</th><td><i class="doc"> * conversions from "const char*" to "string" and back again.</i></td></tr>
+<tr><th id="51">51</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="52">52</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="53">53</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="54">54</th><td><b>class</b> <a class="macro" href="utypes.h.html#359" title="" data-ref="_M/U_COMMON_API">U_COMMON_API</a> <dfn class="type def" id="icu::StringPiece" title='icu::StringPiece' data-ref="icu::StringPiece" data-ref-filename="icu..StringPiece">StringPiece</dfn> : <b>public</b> <a class="type" href="uobject.h.html#icu::UMemory" title='icu::UMemory' data-ref="icu::UMemory" data-ref-filename="icu..UMemory">UMemory</a> {</td></tr>
+<tr><th id="55">55</th><td> <b>private</b>:</td></tr>
+<tr><th id="56">56</th><td>  <em>const</em> <em>char</em>*   <dfn class="decl field" id="icu::StringPiece::ptr_" title='icu::StringPiece::ptr_' data-ref="icu::StringPiece::ptr_" data-ref-filename="icu..StringPiece..ptr_">ptr_</dfn>;</td></tr>
+<tr><th id="57">57</th><td>  <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>       <dfn class="decl field" id="icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</dfn>;</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td> <b>public</b>:</td></tr>
+<tr><th id="60">60</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="61">61</th><td><i class="doc">   * Default constructor, creates an empty StringPiece.</i></td></tr>
+<tr><th id="62">62</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="63">63</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="64">64</th><td>  <dfn class="decl def fn" id="_ZN3icu11StringPieceC1Ev" title='icu::StringPiece::StringPiece' data-ref="_ZN3icu11StringPieceC1Ev" data-ref-filename="_ZN3icu11StringPieceC1Ev">StringPiece</dfn>() : <a class="member field" href="#icu::StringPiece::ptr_" title='icu::StringPiece::ptr_' data-ref="icu::StringPiece::ptr_" data-ref-filename="icu..StringPiece..ptr_">ptr_</a>(<span class="macro" title="__null" data-ref="_M/NULL">NULL</span>), <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a>(<var>0</var>) { }</td></tr>
+<tr><th id="65">65</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="66">66</th><td><i class="doc">   * Constructs from a NUL-terminated const char * pointer.</i></td></tr>
+<tr><th id="67">67</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">str</span> a NUL-terminated const char * pointer</i></td></tr>
+<tr><th id="68">68</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="69">69</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="70">70</th><td>  <dfn class="decl fn" id="_ZN3icu11StringPieceC1EPKc" title='icu::StringPiece::StringPiece' data-ref="_ZN3icu11StringPieceC1EPKc" data-ref-filename="_ZN3icu11StringPieceC1EPKc">StringPiece</dfn>(<em>const</em> <em>char</em>* <dfn class="local col9 decl" id="39str" title='str' data-type='const char *' data-ref="39str" data-ref-filename="39str">str</dfn>);</td></tr>
+<tr><th id="71">71</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="72">72</th><td><i class="doc">   * Constructs from a std::string.</i></td></tr>
+<tr><th id="73">73</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="74">74</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="75">75</th><td>  <dfn class="decl def fn" id="_ZN3icu11StringPieceC1ERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEE" title='icu::StringPiece::StringPiece' data-ref="_ZN3icu11StringPieceC1ERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEE" data-ref-filename="_ZN3icu11StringPieceC1ERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEE">StringPiece</dfn>(<em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col0 decl" id="40str" title='str' data-type='const std::string &amp;' data-ref="40str" data-ref-filename="40str">str</dfn>)</td></tr>
+<tr><th id="76">76</th><td>    : <a class="member field" href="#icu::StringPiece::ptr_" title='icu::StringPiece::ptr_' data-ref="icu::StringPiece::ptr_" data-ref-filename="icu..StringPiece..ptr_">ptr_</a>(<a class="local col0 ref" href="#40str" title='str' data-ref="40str" data-ref-filename="40str">str</a>.<span class='ref fn' title='std::__1::basic_string::data' data-ref="_ZNKSt3__112basic_string4dataEv" data-ref-filename="_ZNKSt3__112basic_string4dataEv">data</span>()), <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a>(<b>static_cast</b>&lt;<span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span>&gt;(<a class="local col0 ref" href="#40str" title='str' data-ref="40str" data-ref-filename="40str">str</a>.<span class='ref fn' title='std::__1::basic_string::size' data-ref="_ZNKSt3__112basic_string4sizeEv" data-ref-filename="_ZNKSt3__112basic_string4sizeEv">size</span>())) { }</td></tr>
+<tr><th id="77">77</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="78">78</th><td><i class="doc">   * Constructs from a const char * pointer and a specified length.</i></td></tr>
+<tr><th id="79">79</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">offset</span> a const char * pointer (need not be terminated)</i></td></tr>
+<tr><th id="80">80</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">len</span> the length of the string; must be non-negative</i></td></tr>
+<tr><th id="81">81</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="82">82</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="83">83</th><td>  <dfn class="decl def fn" id="_ZN3icu11StringPieceC1EPKci" title='icu::StringPiece::StringPiece' data-ref="_ZN3icu11StringPieceC1EPKci" data-ref-filename="_ZN3icu11StringPieceC1EPKci">StringPiece</dfn>(<em>const</em> <em>char</em>* <dfn class="local col1 decl" id="41offset" title='offset' data-type='const char *' data-ref="41offset" data-ref-filename="41offset">offset</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col2 decl" id="42len" title='len' data-type='int32_t' data-ref="42len" data-ref-filename="42len">len</dfn>) : <a class="member field" href="#icu::StringPiece::ptr_" title='icu::StringPiece::ptr_' data-ref="icu::StringPiece::ptr_" data-ref-filename="icu..StringPiece..ptr_">ptr_</a>(<a class="local col1 ref" href="#41offset" title='offset' data-ref="41offset" data-ref-filename="41offset">offset</a>), <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a>(<a class="local col2 ref" href="#42len" title='len' data-ref="42len" data-ref-filename="42len">len</a>) { }</td></tr>
+<tr><th id="84">84</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="85">85</th><td><i class="doc">   * Substring of another StringPiece.</i></td></tr>
+<tr><th id="86">86</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">x</span> the other StringPiece</i></td></tr>
+<tr><th id="87">87</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">pos</span> start position in x; must be non-negative and &lt;= x.length().</i></td></tr>
+<tr><th id="88">88</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="89">89</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="90">90</th><td>  <dfn class="decl fn" id="_ZN3icu11StringPieceC1ERKS0_i" title='icu::StringPiece::StringPiece' data-ref="_ZN3icu11StringPieceC1ERKS0_i" data-ref-filename="_ZN3icu11StringPieceC1ERKS0_i">StringPiece</dfn>(<em>const</em> <a class="type" href="#icu::StringPiece" title='icu::StringPiece' data-ref="icu::StringPiece" data-ref-filename="icu..StringPiece">StringPiece</a>&amp; <dfn class="local col3 decl" id="43x" title='x' data-type='const icu::StringPiece &amp;' data-ref="43x" data-ref-filename="43x">x</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col4 decl" id="44pos" title='pos' data-type='int32_t' data-ref="44pos" data-ref-filename="44pos">pos</dfn>);</td></tr>
+<tr><th id="91">91</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="92">92</th><td><i class="doc">   * Substring of another StringPiece.</i></td></tr>
+<tr><th id="93">93</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">x</span> the other StringPiece</i></td></tr>
+<tr><th id="94">94</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">pos</span> start position in x; must be non-negative and &lt;= x.length().</i></td></tr>
+<tr><th id="95">95</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">len</span> length of the substring;</i></td></tr>
+<tr><th id="96">96</th><td><i class="doc">   *            must be non-negative and will be pinned to at most x.length() - pos.</i></td></tr>
+<tr><th id="97">97</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="98">98</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="99">99</th><td>  <dfn class="decl fn" id="_ZN3icu11StringPieceC1ERKS0_ii" title='icu::StringPiece::StringPiece' data-ref="_ZN3icu11StringPieceC1ERKS0_ii" data-ref-filename="_ZN3icu11StringPieceC1ERKS0_ii">StringPiece</dfn>(<em>const</em> <a class="type" href="#icu::StringPiece" title='icu::StringPiece' data-ref="icu::StringPiece" data-ref-filename="icu..StringPiece">StringPiece</a>&amp; <dfn class="local col5 decl" id="45x" title='x' data-type='const icu::StringPiece &amp;' data-ref="45x" data-ref-filename="45x">x</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col6 decl" id="46pos" title='pos' data-type='int32_t' data-ref="46pos" data-ref-filename="46pos">pos</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col7 decl" id="47len" title='len' data-type='int32_t' data-ref="47len" data-ref-filename="47len">len</dfn>);</td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="102">102</th><td><i class="doc">   * Returns the string pointer. May be NULL if it is empty.</i></td></tr>
+<tr><th id="103">103</th><td><i class="doc">   *</i></td></tr>
+<tr><th id="104">104</th><td><i class="doc">   * data() may return a pointer to a buffer with embedded NULs, and the</i></td></tr>
+<tr><th id="105">105</th><td><i class="doc">   * returned buffer may or may not be null terminated.  Therefore it is</i></td></tr>
+<tr><th id="106">106</th><td><i class="doc">   * typically a mistake to pass data() to a routine that expects a NUL</i></td></tr>
+<tr><th id="107">107</th><td><i class="doc">   * terminated string.</i></td></tr>
+<tr><th id="108">108</th><td><i class="doc">   * <span class="command">@return</span> the string pointer</i></td></tr>
+<tr><th id="109">109</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="110">110</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="111">111</th><td>  <em>const</em> <em>char</em>* <dfn class="decl def fn" id="_ZNK3icu11StringPiece4dataEv" title='icu::StringPiece::data' data-ref="_ZNK3icu11StringPiece4dataEv" data-ref-filename="_ZNK3icu11StringPiece4dataEv">data</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#icu::StringPiece::ptr_" title='icu::StringPiece::ptr_' data-ref="icu::StringPiece::ptr_" data-ref-filename="icu..StringPiece..ptr_">ptr_</a>; }</td></tr>
+<tr><th id="112">112</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc">   * Returns the string length. Same as length().</i></td></tr>
+<tr><th id="114">114</th><td><i class="doc">   * <span class="command">@return</span> the string length</i></td></tr>
+<tr><th id="115">115</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="116">116</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="117">117</th><td>  <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl def fn" id="_ZNK3icu11StringPiece4sizeEv" title='icu::StringPiece::size' data-ref="_ZNK3icu11StringPiece4sizeEv" data-ref-filename="_ZNK3icu11StringPiece4sizeEv">size</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a>; }</td></tr>
+<tr><th id="118">118</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="119">119</th><td><i class="doc">   * Returns the string length. Same as size().</i></td></tr>
+<tr><th id="120">120</th><td><i class="doc">   * <span class="command">@return</span> the string length</i></td></tr>
+<tr><th id="121">121</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="122">122</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="123">123</th><td>  <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl def fn" id="_ZNK3icu11StringPiece6lengthEv" title='icu::StringPiece::length' data-ref="_ZNK3icu11StringPiece6lengthEv" data-ref-filename="_ZNK3icu11StringPiece6lengthEv">length</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a>; }</td></tr>
+<tr><th id="124">124</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="125">125</th><td><i class="doc">   * Returns whether the string is empty.</i></td></tr>
+<tr><th id="126">126</th><td><i class="doc">   * <span class="command">@return</span> TRUE if the string is empty</i></td></tr>
+<tr><th id="127">127</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="128">128</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="129">129</th><td>  <a class="typedef" href="umachine.h.html#UBool" title='UBool' data-type='int8_t' data-ref="UBool" data-ref-filename="UBool">UBool</a> <dfn class="decl def fn" id="_ZNK3icu11StringPiece5emptyEv" title='icu::StringPiece::empty' data-ref="_ZNK3icu11StringPiece5emptyEv" data-ref-filename="_ZNK3icu11StringPiece5emptyEv">empty</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a> == <var>0</var>; }</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="132">132</th><td><i class="doc">   * Sets to an empty string.</i></td></tr>
+<tr><th id="133">133</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="134">134</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="135">135</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN3icu11StringPiece5clearEv" title='icu::StringPiece::clear' data-ref="_ZN3icu11StringPiece5clearEv" data-ref-filename="_ZN3icu11StringPiece5clearEv">clear</dfn>() { <a class="member field" href="#icu::StringPiece::ptr_" title='icu::StringPiece::ptr_' data-ref="icu::StringPiece::ptr_" data-ref-filename="icu..StringPiece..ptr_">ptr_</a> = <span class="macro" title="__null" data-ref="_M/NULL">NULL</span>; <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a> = <var>0</var>; }</td></tr>
+<tr><th id="136">136</th><td></td></tr>
+<tr><th id="137">137</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="138">138</th><td><i class="doc">   * Reset the stringpiece to refer to new data.</i></td></tr>
+<tr><th id="139">139</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">xdata</span> pointer the new string data.  Need not be nul terminated.</i></td></tr>
+<tr><th id="140">140</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">len</span> the length of the new data</i></td></tr>
+<tr><th id="141">141</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.8</i></td></tr>
+<tr><th id="142">142</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="143">143</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN3icu11StringPiece3setEPKci" title='icu::StringPiece::set' data-ref="_ZN3icu11StringPiece3setEPKci" data-ref-filename="_ZN3icu11StringPiece3setEPKci">set</dfn>(<em>const</em> <em>char</em>* <dfn class="local col8 decl" id="48xdata" title='xdata' data-type='const char *' data-ref="48xdata" data-ref-filename="48xdata">xdata</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col9 decl" id="49len" title='len' data-type='int32_t' data-ref="49len" data-ref-filename="49len">len</dfn>) { <a class="member field" href="#icu::StringPiece::ptr_" title='icu::StringPiece::ptr_' data-ref="icu::StringPiece::ptr_" data-ref-filename="icu..StringPiece..ptr_">ptr_</a> = <a class="local col8 ref" href="#48xdata" title='xdata' data-ref="48xdata" data-ref-filename="48xdata">xdata</a>; <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a> = <a class="local col9 ref" href="#49len" title='len' data-ref="49len" data-ref-filename="49len">len</a>; }</td></tr>
+<tr><th id="144">144</th><td></td></tr>
+<tr><th id="145">145</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="146">146</th><td><i class="doc">   * Reset the stringpiece to refer to new data.</i></td></tr>
+<tr><th id="147">147</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">str</span> a pointer to a NUL-terminated string. </i></td></tr>
+<tr><th id="148">148</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.8</i></td></tr>
+<tr><th id="149">149</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="150">150</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN3icu11StringPiece3setEPKc" title='icu::StringPiece::set' data-ref="_ZN3icu11StringPiece3setEPKc" data-ref-filename="_ZN3icu11StringPiece3setEPKc">set</dfn>(<em>const</em> <em>char</em>* <dfn class="local col0 decl" id="50str" title='str' data-type='const char *' data-ref="50str" data-ref-filename="50str">str</dfn>);</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="153">153</th><td><i class="doc">   * Removes the first n string units.</i></td></tr>
+<tr><th id="154">154</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">n</span> prefix length, must be non-negative and &lt;=length()</i></td></tr>
+<tr><th id="155">155</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="156">156</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="157">157</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN3icu11StringPiece13remove_prefixEi" title='icu::StringPiece::remove_prefix' data-ref="_ZN3icu11StringPiece13remove_prefixEi" data-ref-filename="_ZN3icu11StringPiece13remove_prefixEi">remove_prefix</dfn>(<span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col1 decl" id="51n" title='n' data-type='int32_t' data-ref="51n" data-ref-filename="51n">n</dfn>) {</td></tr>
+<tr><th id="158">158</th><td>    <b>if</b> (<a class="local col1 ref" href="#51n" title='n' data-ref="51n" data-ref-filename="51n">n</a> &gt;= <var>0</var>) {</td></tr>
+<tr><th id="159">159</th><td>      <b>if</b> (<a class="local col1 ref" href="#51n" title='n' data-ref="51n" data-ref-filename="51n">n</a> &gt; <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a>) {</td></tr>
+<tr><th id="160">160</th><td>        <a class="local col1 ref" href="#51n" title='n' data-ref="51n" data-ref-filename="51n">n</a> = <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a>;</td></tr>
+<tr><th id="161">161</th><td>      }</td></tr>
+<tr><th id="162">162</th><td>      <a class="member field" href="#icu::StringPiece::ptr_" title='icu::StringPiece::ptr_' data-ref="icu::StringPiece::ptr_" data-ref-filename="icu..StringPiece..ptr_">ptr_</a> += <a class="local col1 ref" href="#51n" title='n' data-ref="51n" data-ref-filename="51n">n</a>;</td></tr>
+<tr><th id="163">163</th><td>      <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a> -= <a class="local col1 ref" href="#51n" title='n' data-ref="51n" data-ref-filename="51n">n</a>;</td></tr>
+<tr><th id="164">164</th><td>    }</td></tr>
+<tr><th id="165">165</th><td>  }</td></tr>
+<tr><th id="166">166</th><td></td></tr>
+<tr><th id="167">167</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="168">168</th><td><i class="doc">   * Removes the last n string units.</i></td></tr>
+<tr><th id="169">169</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">n</span> suffix length, must be non-negative and &lt;=length()</i></td></tr>
+<tr><th id="170">170</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="171">171</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="172">172</th><td>  <em>void</em> <dfn class="decl def fn" id="_ZN3icu11StringPiece13remove_suffixEi" title='icu::StringPiece::remove_suffix' data-ref="_ZN3icu11StringPiece13remove_suffixEi" data-ref-filename="_ZN3icu11StringPiece13remove_suffixEi">remove_suffix</dfn>(<span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col2 decl" id="52n" title='n' data-type='int32_t' data-ref="52n" data-ref-filename="52n">n</dfn>) {</td></tr>
+<tr><th id="173">173</th><td>    <b>if</b> (<a class="local col2 ref" href="#52n" title='n' data-ref="52n" data-ref-filename="52n">n</a> &gt;= <var>0</var>) {</td></tr>
+<tr><th id="174">174</th><td>      <b>if</b> (<a class="local col2 ref" href="#52n" title='n' data-ref="52n" data-ref-filename="52n">n</a> &lt;= <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a>) {</td></tr>
+<tr><th id="175">175</th><td>        <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a> -= <a class="local col2 ref" href="#52n" title='n' data-ref="52n" data-ref-filename="52n">n</a>;</td></tr>
+<tr><th id="176">176</th><td>      } <b>else</b> {</td></tr>
+<tr><th id="177">177</th><td>        <a class="member field" href="#icu::StringPiece::length_" title='icu::StringPiece::length_' data-ref="icu::StringPiece::length_" data-ref-filename="icu..StringPiece..length_">length_</a> = <var>0</var>;</td></tr>
+<tr><th id="178">178</th><td>      }</td></tr>
+<tr><th id="179">179</th><td>    }</td></tr>
+<tr><th id="180">180</th><td>  }</td></tr>
+<tr><th id="181">181</th><td></td></tr>
+<tr><th id="182">182</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="183">183</th><td><i class="doc">   * Maximum integer, used as a default value for substring methods.</i></td></tr>
+<tr><th id="184">184</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="185">185</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="186">186</th><td>  <em>static</em> <em>const</em> <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl" id="icu::StringPiece::npos" title='icu::StringPiece::npos' data-ref="icu::StringPiece::npos" data-ref-filename="icu..StringPiece..npos">npos</dfn>; <i>// = 0x7fffffff;</i></td></tr>
+<tr><th id="187">187</th><td></td></tr>
+<tr><th id="188">188</th><td>  <i class="doc">/**</i></td></tr>
+<tr><th id="189">189</th><td><i class="doc">   * Returns a substring of this StringPiece.</i></td></tr>
+<tr><th id="190">190</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">pos</span> start position; must be non-negative and &lt;= length().</i></td></tr>
+<tr><th id="191">191</th><td><i class="doc">   * <span class="command">@param</span> <span class="arg">len</span> length of the substring;</i></td></tr>
+<tr><th id="192">192</th><td><i class="doc">   *            must be non-negative and will be pinned to at most length() - pos.</i></td></tr>
+<tr><th id="193">193</th><td><i class="doc">   * <span class="command">@return</span> the substring StringPiece</i></td></tr>
+<tr><th id="194">194</th><td><i class="doc">   *<span class="command"> @stable</span> ICU 4.2</i></td></tr>
+<tr><th id="195">195</th><td><i class="doc">   */</i></td></tr>
+<tr><th id="196">196</th><td>  <a class="type" href="#icu::StringPiece" title='icu::StringPiece' data-ref="icu::StringPiece" data-ref-filename="icu..StringPiece">StringPiece</a> <dfn class="decl def fn" id="_ZNK3icu11StringPiece6substrEii" title='icu::StringPiece::substr' data-ref="_ZNK3icu11StringPiece6substrEii" data-ref-filename="_ZNK3icu11StringPiece6substrEii">substr</dfn>(<span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col3 decl" id="53pos" title='pos' data-type='int32_t' data-ref="53pos" data-ref-filename="53pos">pos</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col4 decl" id="54len" title='len' data-type='int32_t' data-ref="54len" data-ref-filename="54len">len</dfn> = <a class="member" href="#icu::StringPiece::npos" title='icu::StringPiece::npos' data-ref="icu::StringPiece::npos" data-ref-filename="icu..StringPiece..npos">npos</a>) <em>const</em> {</td></tr>
+<tr><th id="197">197</th><td>    <b>return</b> <a class="type" href="#icu::StringPiece" title='icu::StringPiece' data-ref="icu::StringPiece" data-ref-filename="icu..StringPiece">StringPiece</a><a class="ref fn" href="#_ZN3icu11StringPieceC1ERKS0_ii" title='icu::StringPiece::StringPiece' data-ref="_ZN3icu11StringPieceC1ERKS0_ii" data-ref-filename="_ZN3icu11StringPieceC1ERKS0_ii">(</a>*<b>this</b>, <a class="local col3 ref" href="#53pos" title='pos' data-ref="53pos" data-ref-filename="53pos">pos</a>, <a class="local col4 ref" href="#54len" title='len' data-ref="54len" data-ref-filename="54len">len</a>);</td></tr>
+<tr><th id="198">198</th><td>  }</td></tr>
+<tr><th id="199">199</th><td>};</td></tr>
+<tr><th id="200">200</th><td></td></tr>
+<tr><th id="201">201</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="202">202</th><td><i class="doc"> * Global operator == for StringPiece</i></td></tr>
+<tr><th id="203">203</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">x</span> The first StringPiece to compare.</i></td></tr>
+<tr><th id="204">204</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">y</span> The second StringPiece to compare.</i></td></tr>
+<tr><th id="205">205</th><td><i class="doc"> * <span class="command">@return</span> TRUE if the string data is equal</i></td></tr>
+<tr><th id="206">206</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 4.8</i></td></tr>
+<tr><th id="207">207</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="208">208</th><td><a class="macro" href="platform.h.html#786" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/U_EXPORT">U_EXPORT</a> <a class="typedef" href="umachine.h.html#UBool" title='UBool' data-type='int8_t' data-ref="UBool" data-ref-filename="UBool">UBool</a> <a class="macro" href="platform.h.html#804" title="" data-ref="_M/U_EXPORT2">U_EXPORT2</a> </td></tr>
+<tr><th id="209">209</th><td><dfn class="decl fn" id="_ZN3icueqERKNS_11StringPieceES2_" title='icu::operator==' data-ref="_ZN3icueqERKNS_11StringPieceES2_" data-ref-filename="_ZN3icueqERKNS_11StringPieceES2_"><b>operator</b>==</dfn>(<em>const</em> <a class="type" href="#icu::StringPiece" title='icu::StringPiece' data-ref="icu::StringPiece" data-ref-filename="icu..StringPiece">StringPiece</a>&amp; <dfn class="local col5 decl" id="55x" title='x' data-type='const icu::StringPiece &amp;' data-ref="55x" data-ref-filename="55x">x</dfn>, <em>const</em> <a class="type" href="#icu::StringPiece" title='icu::StringPiece' data-ref="icu::StringPiece" data-ref-filename="icu..StringPiece">StringPiece</a>&amp; <dfn class="local col6 decl" id="56y" title='y' data-type='const icu::StringPiece &amp;' data-ref="56y" data-ref-filename="56y">y</dfn>);</td></tr>
+<tr><th id="210">210</th><td></td></tr>
+<tr><th id="211">211</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="212">212</th><td><i class="doc"> * Global operator != for StringPiece</i></td></tr>
+<tr><th id="213">213</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">x</span> The first StringPiece to compare.</i></td></tr>
+<tr><th id="214">214</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">y</span> The second StringPiece to compare.</i></td></tr>
+<tr><th id="215">215</th><td><i class="doc"> * <span class="command">@return</span> TRUE if the string data is not equal</i></td></tr>
+<tr><th id="216">216</th><td><i class="doc"> *<span class="command"> @stable</span> ICU 4.8</i></td></tr>
+<tr><th id="217">217</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="218">218</th><td><b>inline</b> <a class="typedef" href="umachine.h.html#UBool" title='UBool' data-type='int8_t' data-ref="UBool" data-ref-filename="UBool">UBool</a> <dfn class="decl def fn" id="_ZN3icuneERKNS_11StringPieceES2_" title='icu::operator!=' data-ref="_ZN3icuneERKNS_11StringPieceES2_" data-ref-filename="_ZN3icuneERKNS_11StringPieceES2_"><b>operator</b>!=</dfn>(<em>const</em> <a class="type" href="#icu::StringPiece" title='icu::StringPiece' data-ref="icu::StringPiece" data-ref-filename="icu..StringPiece">StringPiece</a>&amp; <dfn class="local col7 decl" id="57x" title='x' data-type='const icu::StringPiece &amp;' data-ref="57x" data-ref-filename="57x">x</dfn>, <em>const</em> <a class="type" href="#icu::StringPiece" title='icu::StringPiece' data-ref="icu::StringPiece" data-ref-filename="icu..StringPiece">StringPiece</a>&amp; <dfn class="local col8 decl" id="58y" title='y' data-type='const icu::StringPiece &amp;' data-ref="58y" data-ref-filename="58y">y</dfn>) {</td></tr>
+<tr><th id="219">219</th><td>  <b>return</b> !(<a class="local col7 ref" href="#57x" title='x' data-ref="57x" data-ref-filename="57x">x</a> <a class="ref fn" href="#_ZN3icueqERKNS_11StringPieceES2_" title='icu::operator==' data-ref="_ZN3icueqERKNS_11StringPieceES2_" data-ref-filename="_ZN3icueqERKNS_11StringPieceES2_">==</a> <a class="local col8 ref" href="#58y" title='y' data-ref="58y" data-ref-filename="58y">y</a>);</td></tr>
+<tr><th id="220">220</th><td>}</td></tr>
+<tr><th id="221">221</th><td></td></tr>
+<tr><th id="222">222</th><td><a class="macro" href="uversion.h.html#120" title="} }" data-ref="_M/U_NAMESPACE_END">U_NAMESPACE_END</a></td></tr>
+<tr><th id="223">223</th><td></td></tr>
+<tr><th id="224">224</th><td><u>#<span data-ppcond="22">endif</span>  // __STRINGPIECE_H__</u></td></tr>
+<tr><th id="225">225</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/JavaScriptCore/runtime/JSDateMath.cpp.html'>webkit/Source/JavaScriptCore/runtime/JSDateMath.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

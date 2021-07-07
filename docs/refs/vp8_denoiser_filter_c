@@ -1,0 +1,30 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/config/ios/arm64/vp8_rtcd.h' l='168' type='int vp8_denoiser_filter_c(unsigned char * mc_running_avg_y, int mc_avg_y_stride, unsigned char * running_avg_y, int avg_y_stride, unsigned char * sig, int sig_stride, unsigned int motion_magnitude, int increase_denoising)'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp8/encoder/denoising.c' l='57' ll='214' type='int vp8_denoiser_filter_c(unsigned char * mc_running_avg_y, int mc_avg_y_stride, unsigned char * running_avg_y, int avg_y_stride, unsigned char * sig, int sig_stride, unsigned int motion_magnitude, int increase_denoising)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp8/encoder/denoising.c' l='28'>/*
+ * The filter function was modified to reduce the computational complexity.
+ * Step 1:
+ * Instead of applying tap coefficients for each pixel, we calculated the
+ * pixel adjustments vs. pixel diff value ahead of time.
+ *     adjustment = filtered_value - current_raw
+ *                = (filter_coefficient * diff + 128) &gt;&gt; 8
+ * where
+ *     filter_coefficient = (255 &lt;&lt; 8) / (256 + ((absdiff * 330) &gt;&gt; 3));
+ *     filter_coefficient += filter_coefficient /
+ *                           (3 + motion_magnitude_adjustment);
+ *     filter_coefficient is clamped to 0 ~ 255.
+ *
+ * Step 2:
+ * The adjustment vs. diff curve becomes flat very quick when diff increases.
+ * This allowed us to use only several levels to approximate the curve without
+ * changing the filtering algorithm too much.
+ * The adjustments were further corrected by checking the motion magnitude.
+ * The levels used are:
+ * diff       adjustment w/o motion correction   adjustment w/ motion correction
+ * [-255, -16]           -6                                   -7
+ * [-15, -8]             -4                                   -5
+ * [-7, -4]              -3                                   -4
+ * [-3, 3]               diff                                 diff
+ * [4, 7]                 3                                    4
+ * [8, 15]                4                                    5
+ * [16, 255]              6                                    7
+ */</doc>

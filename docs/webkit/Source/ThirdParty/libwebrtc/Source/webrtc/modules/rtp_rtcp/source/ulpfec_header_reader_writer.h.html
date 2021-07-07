@@ -1,0 +1,88 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ulpfec_header_reader_writer.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/rtp_rtcp/source/ulpfec_header_reader_writer.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::UlpfecHeaderReader,webrtc::UlpfecHeaderWriter "/>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/rtp_rtcp/source/ulpfec_header_reader_writer.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>rtp_rtcp</a>/<a href='./'>source</a>/<a href='ulpfec_header_reader_writer.h.html'>ulpfec_header_reader_writer.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2016 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/MODULES_RTP_RTCP_SOURCE_ULPFEC_HEADER_READER_WRITER_H_">MODULES_RTP_RTCP_SOURCE_ULPFEC_HEADER_READER_WRITER_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/MODULES_RTP_RTCP_SOURCE_ULPFEC_HEADER_READER_WRITER_H_" data-ref="_M/MODULES_RTP_RTCP_SOURCE_ULPFEC_HEADER_READER_WRITER_H_">MODULES_RTP_RTCP_SOURCE_ULPFEC_HEADER_READER_WRITER_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="forward_error_correction.h.html">"modules/rtp_rtcp/source/forward_error_correction.h"</a></u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><i>// FEC Level 0 Header, 10 bytes.</i></td></tr>
+<tr><th id="22">22</th><td><i>//    0                   1                   2                   3</i></td></tr>
+<tr><th id="23">23</th><td><i>//    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1</i></td></tr>
+<tr><th id="24">24</th><td><i>//   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</i></td></tr>
+<tr><th id="25">25</th><td><i>//   |E|L|P|X|  CC   |M| PT recovery |            SN base            |</i></td></tr>
+<tr><th id="26">26</th><td><i>//   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</i></td></tr>
+<tr><th id="27">27</th><td><i>//   |                          TS recovery                          |</i></td></tr>
+<tr><th id="28">28</th><td><i>//   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</i></td></tr>
+<tr><th id="29">29</th><td><i>//   |        length recovery        |</i></td></tr>
+<tr><th id="30">30</th><td><i>//   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</i></td></tr>
+<tr><th id="31">31</th><td><i>//</i></td></tr>
+<tr><th id="32">32</th><td><i>// FEC Level 1 Header, 4 bytes (L = 0) or 8 bytes (L = 1).</i></td></tr>
+<tr><th id="33">33</th><td><i>//    0                   1                   2                   3</i></td></tr>
+<tr><th id="34">34</th><td><i>//    0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1</i></td></tr>
+<tr><th id="35">35</th><td><i>//   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</i></td></tr>
+<tr><th id="36">36</th><td><i>//   |       Protection Length       |             mask              |</i></td></tr>
+<tr><th id="37">37</th><td><i>//   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</i></td></tr>
+<tr><th id="38">38</th><td><i>//   |              mask cont. (present only when L = 1)             |</i></td></tr>
+<tr><th id="39">39</th><td><i>//   +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+</i></td></tr>
+<tr><th id="40">40</th><td><b>class</b> <dfn class="type def" id="webrtc::UlpfecHeaderReader" title='webrtc::UlpfecHeaderReader' data-ref="webrtc::UlpfecHeaderReader" data-ref-filename="webrtc..UlpfecHeaderReader">UlpfecHeaderReader</dfn> : <b>public</b> <a class="type" href="forward_error_correction.h.html#webrtc::FecHeaderReader" title='webrtc::FecHeaderReader' data-ref="webrtc::FecHeaderReader" data-ref-filename="webrtc..FecHeaderReader">FecHeaderReader</a> {</td></tr>
+<tr><th id="41">41</th><td> <b>public</b>:</td></tr>
+<tr><th id="42">42</th><td>  <dfn class="decl fn" id="_ZN6webrtc18UlpfecHeaderReaderC1Ev" title='webrtc::UlpfecHeaderReader::UlpfecHeaderReader' data-ref="_ZN6webrtc18UlpfecHeaderReaderC1Ev" data-ref-filename="_ZN6webrtc18UlpfecHeaderReaderC1Ev">UlpfecHeaderReader</dfn>();</td></tr>
+<tr><th id="43">43</th><td>  <dfn class="virtual decl fn" id="_ZN6webrtc18UlpfecHeaderReaderD1Ev" title='webrtc::UlpfecHeaderReader::~UlpfecHeaderReader' data-ref="_ZN6webrtc18UlpfecHeaderReaderD1Ev" data-ref-filename="_ZN6webrtc18UlpfecHeaderReaderD1Ev">~UlpfecHeaderReader</dfn>() override;</td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td>  <em>bool</em> <dfn class="virtual decl fn" id="_ZNK6webrtc18UlpfecHeaderReader13ReadFecHeaderEPNS_22ForwardErrorCorrection17ReceivedFecPacketE" title='webrtc::UlpfecHeaderReader::ReadFecHeader' data-ref="_ZNK6webrtc18UlpfecHeaderReader13ReadFecHeaderEPNS_22ForwardErrorCorrection17ReceivedFecPacketE" data-ref-filename="_ZNK6webrtc18UlpfecHeaderReader13ReadFecHeaderEPNS_22ForwardErrorCorrection17ReceivedFecPacketE">ReadFecHeader</dfn>(</td></tr>
+<tr><th id="46">46</th><td>      <a class="type" href="forward_error_correction.h.html#webrtc::ForwardErrorCorrection" title='webrtc::ForwardErrorCorrection' data-ref="webrtc::ForwardErrorCorrection" data-ref-filename="webrtc..ForwardErrorCorrection">ForwardErrorCorrection</a>::<a class="type" href="forward_error_correction.h.html#webrtc::ForwardErrorCorrection::ReceivedFecPacket" title='webrtc::ForwardErrorCorrection::ReceivedFecPacket' data-ref="webrtc::ForwardErrorCorrection::ReceivedFecPacket" data-ref-filename="webrtc..ForwardErrorCorrection..ReceivedFecPacket">ReceivedFecPacket</a>* <dfn class="local col1 decl" id="1fec_packet" title='fec_packet' data-type='ForwardErrorCorrection::ReceivedFecPacket *' data-ref="1fec_packet" data-ref-filename="1fec_packet">fec_packet</dfn>) <em>const</em> override;</td></tr>
+<tr><th id="47">47</th><td>};</td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td><b>class</b> <dfn class="type def" id="webrtc::UlpfecHeaderWriter" title='webrtc::UlpfecHeaderWriter' data-ref="webrtc::UlpfecHeaderWriter" data-ref-filename="webrtc..UlpfecHeaderWriter">UlpfecHeaderWriter</dfn> : <b>public</b> <a class="type" href="forward_error_correction.h.html#webrtc::FecHeaderWriter" title='webrtc::FecHeaderWriter' data-ref="webrtc::FecHeaderWriter" data-ref-filename="webrtc..FecHeaderWriter">FecHeaderWriter</a> {</td></tr>
+<tr><th id="50">50</th><td> <b>public</b>:</td></tr>
+<tr><th id="51">51</th><td>  <dfn class="decl fn" id="_ZN6webrtc18UlpfecHeaderWriterC1Ev" title='webrtc::UlpfecHeaderWriter::UlpfecHeaderWriter' data-ref="_ZN6webrtc18UlpfecHeaderWriterC1Ev" data-ref-filename="_ZN6webrtc18UlpfecHeaderWriterC1Ev">UlpfecHeaderWriter</dfn>();</td></tr>
+<tr><th id="52">52</th><td>  <dfn class="virtual decl fn" id="_ZN6webrtc18UlpfecHeaderWriterD1Ev" title='webrtc::UlpfecHeaderWriter::~UlpfecHeaderWriter' data-ref="_ZN6webrtc18UlpfecHeaderWriterD1Ev" data-ref-filename="_ZN6webrtc18UlpfecHeaderWriterD1Ev">~UlpfecHeaderWriter</dfn>() override;</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td>  <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="virtual decl fn" id="_ZNK6webrtc18UlpfecHeaderWriter17MinPacketMaskSizeEPKhm" title='webrtc::UlpfecHeaderWriter::MinPacketMaskSize' data-ref="_ZNK6webrtc18UlpfecHeaderWriter17MinPacketMaskSizeEPKhm" data-ref-filename="_ZNK6webrtc18UlpfecHeaderWriter17MinPacketMaskSizeEPKhm">MinPacketMaskSize</dfn>(<em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col2 decl" id="2packet_mask" title='packet_mask' data-type='const uint8_t *' data-ref="2packet_mask" data-ref-filename="2packet_mask">packet_mask</dfn>,</td></tr>
+<tr><th id="55">55</th><td>                           <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="3packet_mask_size" title='packet_mask_size' data-type='size_t' data-ref="3packet_mask_size" data-ref-filename="3packet_mask_size">packet_mask_size</dfn>) <em>const</em> override;</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td>  <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="virtual decl fn" id="_ZNK6webrtc18UlpfecHeaderWriter13FecHeaderSizeEm" title='webrtc::UlpfecHeaderWriter::FecHeaderSize' data-ref="_ZNK6webrtc18UlpfecHeaderWriter13FecHeaderSizeEm" data-ref-filename="_ZNK6webrtc18UlpfecHeaderWriter13FecHeaderSizeEm">FecHeaderSize</dfn>(<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="4packet_mask_row_size" title='packet_mask_row_size' data-type='size_t' data-ref="4packet_mask_row_size" data-ref-filename="4packet_mask_row_size">packet_mask_row_size</dfn>) <em>const</em> override;</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td>  <em>void</em> <dfn class="virtual decl fn" id="_ZNK6webrtc18UlpfecHeaderWriter17FinalizeFecHeaderEjtPKhmPNS_22ForwardErrorCorrection6PacketE" title='webrtc::UlpfecHeaderWriter::FinalizeFecHeader' data-ref="_ZNK6webrtc18UlpfecHeaderWriter17FinalizeFecHeaderEjtPKhmPNS_22ForwardErrorCorrection6PacketE" data-ref-filename="_ZNK6webrtc18UlpfecHeaderWriter17FinalizeFecHeaderEjtPKhmPNS_22ForwardErrorCorrection6PacketE">FinalizeFecHeader</dfn>(</td></tr>
+<tr><th id="60">60</th><td>      <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col5 decl" id="5media_ssrc" title='media_ssrc' data-type='uint32_t' data-ref="5media_ssrc" data-ref-filename="5media_ssrc">media_ssrc</dfn>,  <i>// Unused by ULPFEC.</i></td></tr>
+<tr><th id="61">61</th><td>      <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> <dfn class="local col6 decl" id="6seq_num_base" title='seq_num_base' data-type='uint16_t' data-ref="6seq_num_base" data-ref-filename="6seq_num_base">seq_num_base</dfn>,</td></tr>
+<tr><th id="62">62</th><td>      <em>const</em> <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>* <dfn class="local col7 decl" id="7packet_mask" title='packet_mask' data-type='const uint8_t *' data-ref="7packet_mask" data-ref-filename="7packet_mask">packet_mask</dfn>,</td></tr>
+<tr><th id="63">63</th><td>      <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="8packet_mask_size" title='packet_mask_size' data-type='size_t' data-ref="8packet_mask_size" data-ref-filename="8packet_mask_size">packet_mask_size</dfn>,</td></tr>
+<tr><th id="64">64</th><td>      <a class="type" href="forward_error_correction.h.html#webrtc::ForwardErrorCorrection" title='webrtc::ForwardErrorCorrection' data-ref="webrtc::ForwardErrorCorrection" data-ref-filename="webrtc..ForwardErrorCorrection">ForwardErrorCorrection</a>::<a class="type" href="forward_error_correction.h.html#webrtc::ForwardErrorCorrection::Packet" title='webrtc::ForwardErrorCorrection::Packet' data-ref="webrtc::ForwardErrorCorrection::Packet" data-ref-filename="webrtc..ForwardErrorCorrection..Packet">Packet</a>* <dfn class="local col9 decl" id="9fec_packet" title='fec_packet' data-type='ForwardErrorCorrection::Packet *' data-ref="9fec_packet" data-ref-filename="9fec_packet">fec_packet</dfn>) <em>const</em> override;</td></tr>
+<tr><th id="65">65</th><td>};</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td><u>#<span data-ppcond="11">endif</span>  // MODULES_RTP_RTCP_SOURCE_ULPFEC_HEADER_READER_WRITER_H_</u></td></tr>
+<tr><th id="70">70</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='forward_error_correction.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/rtp_rtcp/source/forward_error_correction.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

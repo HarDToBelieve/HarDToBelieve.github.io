@@ -1,0 +1,676 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WKWebView.h source code [webkit/WebKitBuild/Debug/WebKit.framework/Versions/A/Headers/WKWebView.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/WebKit.framework/Versions/A/Headers/WKWebView.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>WebKit.framework</a>/<a href='../..'>Versions</a>/<a href='..'>A</a>/<a href='./'>Headers</a>/<a href='WKWebView.h.html'>WKWebView.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2014-2021 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import <a href="WKFoundation.h.html">&lt;WebKit/WKFoundation.h&gt;</a></u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="28">if</span> <span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="29">29</th><td><u>#import &lt;UIKit/UIKit.h&gt;</u></td></tr>
+<tr><th id="30">30</th><td><u>#<span data-ppcond="28">else</span></u></td></tr>
+<tr><th id="31">31</th><td><u>#import &lt;AppKit/AppKit.h&gt;</u></td></tr>
+<tr><th id="32">32</th><td><u>#<span data-ppcond="28">endif</span></u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_BEGIN">NS_ASSUME_NONNULL_BEGIN</span></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td>@class WKBackForwardList;</td></tr>
+<tr><th id="37">37</th><td>@class WKBackForwardListItem;</td></tr>
+<tr><th id="38">38</th><td>@class WKContentWorld;</td></tr>
+<tr><th id="39">39</th><td>@class WKDownload;</td></tr>
+<tr><th id="40">40</th><td>@class WKFindConfiguration;</td></tr>
+<tr><th id="41">41</th><td>@class WKFindResult;</td></tr>
+<tr><th id="42">42</th><td>@class WKFrameInfo;</td></tr>
+<tr><th id="43">43</th><td>@class WKNavigation;</td></tr>
+<tr><th id="44">44</th><td>@class WKPDFConfiguration;</td></tr>
+<tr><th id="45">45</th><td>@class WKSnapshotConfiguration;</td></tr>
+<tr><th id="46">46</th><td>@class WKWebViewConfiguration;</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td>@protocol WKNavigationDelegate;</td></tr>
+<tr><th id="49">49</th><td>@protocol WKUIDelegate;</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="52">52</th><td><i class="doc"> A WKWebView object displays interactive Web content.</i></td></tr>
+<tr><th id="53">53</th><td><i class="doc"> <span class="command">@helperclass</span> <span class="command">@link</span><span class="verb"> WKWebViewConfiguration @</span>/link</i></td></tr>
+<tr><th id="54">54</th><td><i class="doc"> Used to configure <span class="command">@link</span><span class="verb"> WKWebView @</span>/link instances.</i></td></tr>
+<tr><th id="55">55</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="56">56</th><td><u>#<span data-ppcond="56">if</span> <span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="57">57</th><td>WK_CLASS_AVAILABLE(macos(<var>10.10</var>), ios(<var>8.0</var>))</td></tr>
+<tr><th id="58">58</th><td>@interface WKWebView : UIView</td></tr>
+<tr><th id="59">59</th><td><u>#<span data-ppcond="56">else</span></u></td></tr>
+<tr><th id="60">60</th><td><a class="macro" href="WKFoundation.h.html#49" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WK_CLASS_AVAILABLE">WK_CLASS_AVAILABLE</a>(macos(<var>10.10</var>), ios(<var>8.0</var>))</td></tr>
+<tr><th id="61">61</th><td>@interface WKWebView : NSView</td></tr>
+<tr><th id="62">62</th><td><u>#<span data-ppcond="56">endif</span></u></td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td><b>typedef</b> <span class="macro" title="enum __attribute__((enum_extensibility(open))) WKMediaPlaybackState : NSInteger WKMediaPlaybackState; enum WKMediaPlaybackState : NSInteger" data-ref="_M/NS_ENUM">NS_ENUM</span>(NSInteger, <dfn class="type" id="WKMediaPlaybackState" title='WKMediaPlaybackState' data-ref="WKMediaPlaybackState" data-ref-filename="WKMediaPlaybackState"><dfn class="typedef" id="WKMediaPlaybackState" title='WKMediaPlaybackState' data-type='enum WKMediaPlaybackState' data-ref="WKMediaPlaybackState" data-ref-filename="WKMediaPlaybackState"><a class="type" href="#64" title='WKMediaPlaybackState' data-ref="WKMediaPlaybackState" data-ref-filename="WKMediaPlaybackState"><dfn class="type def" id="WKMediaPlaybackState" title='WKMediaPlaybackState' data-ref="WKMediaPlaybackState" data-ref-filename="WKMediaPlaybackState">WKMediaPlaybackState</dfn></a></dfn></dfn>) {</td></tr>
+<tr><th id="65">65</th><td>    <dfn class="enum" id="WKMediaPlaybackStateNone" title='WKMediaPlaybackStateNone' data-ref="WKMediaPlaybackStateNone" data-ref-filename="WKMediaPlaybackStateNone">WKMediaPlaybackStateNone</dfn>,</td></tr>
+<tr><th id="66">66</th><td>    <dfn class="enum" id="WKMediaPlaybackStatePlaying" title='WKMediaPlaybackStatePlaying' data-ref="WKMediaPlaybackStatePlaying" data-ref-filename="WKMediaPlaybackStatePlaying">WKMediaPlaybackStatePlaying</dfn>,</td></tr>
+<tr><th id="67">67</th><td>    <dfn class="enum" id="WKMediaPlaybackStatePaused" title='WKMediaPlaybackStatePaused' data-ref="WKMediaPlaybackStatePaused" data-ref-filename="WKMediaPlaybackStatePaused">WKMediaPlaybackStatePaused</dfn>,</td></tr>
+<tr><th id="68">68</th><td>    <dfn class="enum" id="WKMediaPlaybackStateSuspended" title='WKMediaPlaybackStateSuspended' data-ref="WKMediaPlaybackStateSuspended" data-ref-filename="WKMediaPlaybackStateSuspended">WKMediaPlaybackStateSuspended</dfn></td></tr>
+<tr><th id="69">69</th><td>} <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><b>typedef</b> <span class="macro" title="enum __attribute__((enum_extensibility(open))) WKMediaCaptureState : NSInteger WKMediaCaptureState; enum WKMediaCaptureState : NSInteger" data-ref="_M/NS_ENUM">NS_ENUM</span>(NSInteger, <dfn class="type" id="WKMediaCaptureState" title='WKMediaCaptureState' data-ref="WKMediaCaptureState" data-ref-filename="WKMediaCaptureState"><dfn class="typedef" id="WKMediaCaptureState" title='WKMediaCaptureState' data-type='enum WKMediaCaptureState' data-ref="WKMediaCaptureState" data-ref-filename="WKMediaCaptureState"><a class="type" href="#71" title='WKMediaCaptureState' data-ref="WKMediaCaptureState" data-ref-filename="WKMediaCaptureState"><dfn class="type def" id="WKMediaCaptureState" title='WKMediaCaptureState' data-ref="WKMediaCaptureState" data-ref-filename="WKMediaCaptureState">WKMediaCaptureState</dfn></a></dfn></dfn>) {</td></tr>
+<tr><th id="72">72</th><td>    <dfn class="enum" id="WKMediaCaptureStateNone" title='WKMediaCaptureStateNone' data-ref="WKMediaCaptureStateNone" data-ref-filename="WKMediaCaptureStateNone">WKMediaCaptureStateNone</dfn>,</td></tr>
+<tr><th id="73">73</th><td>    <dfn class="enum" id="WKMediaCaptureStateActive" title='WKMediaCaptureStateActive' data-ref="WKMediaCaptureStateActive" data-ref-filename="WKMediaCaptureStateActive">WKMediaCaptureStateActive</dfn>,</td></tr>
+<tr><th id="74">74</th><td>    <dfn class="enum" id="WKMediaCaptureStateMuted" title='WKMediaCaptureStateMuted' data-ref="WKMediaCaptureStateMuted" data-ref-filename="WKMediaCaptureStateMuted">WKMediaCaptureStateMuted</dfn>,</td></tr>
+<tr><th id="75">75</th><td>} <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td><i class="doc">/*! <span class="command">@abstract</span> A copy of the configuration with which the web view was</i></td></tr>
+<tr><th id="78">78</th><td><i class="doc"> initialized. */</i></td></tr>
+<tr><th id="79">79</th><td>@property (nonatomic, readonly, copy) WKWebViewConfiguration *configuration;</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td><i class="doc">/*! <span class="command">@abstract</span> The web view's navigation delegate. */</i></td></tr>
+<tr><th id="82">82</th><td>@property (nullable, nonatomic, weak) id &lt;WKNavigationDelegate&gt; navigationDelegate;</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td><i class="doc">/*! <span class="command">@abstract</span> The web view's user interface delegate. */</i></td></tr>
+<tr><th id="85">85</th><td>@property (nullable, nonatomic, weak) id &lt;WKUIDelegate&gt; UIDelegate;</td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td><i class="doc">/*! <span class="command">@abstract</span> The web view's back-forward list. */</i></td></tr>
+<tr><th id="88">88</th><td>@property (nonatomic, readonly, strong) WKBackForwardList *backForwardList;</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td><i class="doc">/*! <span class="command">@abstract</span> Returns a web view initialized with a specified frame and</i></td></tr>
+<tr><th id="91">91</th><td><i class="doc"> configuration.</i></td></tr>
+<tr><th id="92">92</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">frame</span> The frame for the new web view.</i></td></tr>
+<tr><th id="93">93</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">configuration</span> The configuration for the new web view.</i></td></tr>
+<tr><th id="94">94</th><td><i class="doc"> <span class="command">@result</span> An initialized web view, or nil if the object could not be</i></td></tr>
+<tr><th id="95">95</th><td><i class="doc"> initialized.</i></td></tr>
+<tr><th id="96">96</th><td><i class="doc"> <span class="command">@discussion</span> This is a designated initializer. You can use</i></td></tr>
+<tr><th id="97">97</th><td><i class="doc"> <span class="command">@link</span><span class="verb"> -initWithFrame: @</span>/link to initialize an instance with the default</i></td></tr>
+<tr><th id="98">98</th><td><i class="doc"> configuration. The initializer copies the specified configuration, so</i></td></tr>
+<tr><th id="99">99</th><td><i class="doc"> mutating the configuration after invoking the initializer has no effect</i></td></tr>
+<tr><th id="100">100</th><td><i class="doc"> on the web view.</i></td></tr>
+<tr><th id="101">101</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="102">102</th><td>- (<span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)initWithFrame:(<span class='typedef' title='CGRect' data-type='struct CGRect' data-ref="CGRect" data-ref-filename="CGRect">CGRect</span>)<dfn class="local col2 decl" id="42frame" title='frame' data-type='CGRect' data-ref="42frame" data-ref-filename="42frame">frame</dfn> configuration:(WKWebViewConfiguration *)<dfn class="local col3 decl" id="43configuration" title='configuration' data-type='WKWebViewConfiguration * _Nonnull' data-ref="43configuration" data-ref-filename="43configuration">configuration</dfn> <span class="macro" title="__attribute__((objc_designated_initializer))" data-ref="_M/NS_DESIGNATED_INITIALIZER">NS_DESIGNATED_INITIALIZER</span>;</td></tr>
+<tr><th id="103">103</th><td></td></tr>
+<tr><th id="104">104</th><td>- (nullable <span class='typedef' title='instancetype' data-type='id' data-ref="instancetype" data-ref-filename="instancetype">instancetype</span>)initWithCoder:(NSCoder *)<dfn class="local col4 decl" id="44coder" title='coder' data-type='NSCoder * _Nonnull' data-ref="44coder" data-ref-filename="44coder">coder</dfn> <span class="macro" title="__attribute__((objc_designated_initializer))" data-ref="_M/NS_DESIGNATED_INITIALIZER">NS_DESIGNATED_INITIALIZER</span>;</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td><i class="doc">/*! <span class="command">@abstract</span> Navigates to a requested URL.</i></td></tr>
+<tr><th id="107">107</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">request</span> The request specifying the URL to which to navigate.</i></td></tr>
+<tr><th id="108">108</th><td><i class="doc"> <span class="command">@result</span> A new navigation for the given request.</i></td></tr>
+<tr><th id="109">109</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="110">110</th><td>- (nullable WKNavigation *)loadRequest:(NSURLRequest *)<dfn class="local col5 decl" id="45request" title='request' data-type='NSURLRequest * _Nonnull' data-ref="45request" data-ref-filename="45request">request</dfn>;</td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td><i class="doc">/*! <span class="command">@abstract</span> Navigates to the requested file URL on the filesystem.</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">URL</span> The file URL to which to navigate.</i></td></tr>
+<tr><th id="114">114</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">readAccessURL</span> The URL to allow read access to.</i></td></tr>
+<tr><th id="115">115</th><td><i class="doc"> <span class="command">@discussion</span> If readAccessURL references a single file, only that file may be loaded by WebKit.</i></td></tr>
+<tr><th id="116">116</th><td><i class="doc"> If readAccessURL references a directory, files inside that file may be loaded by WebKit.</i></td></tr>
+<tr><th id="117">117</th><td><i class="doc"> <span class="command">@result</span> A new navigation for the given file URL.</i></td></tr>
+<tr><th id="118">118</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="119">119</th><td>- (nullable WKNavigation *)loadFileURL:(NSURL *)<dfn class="local col6 decl" id="46URL" title='URL' data-type='NSURL * _Nonnull' data-ref="46URL" data-ref-filename="46URL">URL</dfn> allowingReadAccessToURL:(NSURL *)<dfn class="local col7 decl" id="47readAccessURL" title='readAccessURL' data-type='NSURL * _Nonnull' data-ref="47readAccessURL" data-ref-filename="47readAccessURL">readAccessURL</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.11</var>), ios(<var>9.0</var>));</td></tr>
+<tr><th id="120">120</th><td></td></tr>
+<tr><th id="121">121</th><td><i class="doc">/*! <span class="command">@abstract</span> Sets the webpage contents and base URL.</i></td></tr>
+<tr><th id="122">122</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">string</span> The string to use as the contents of the webpage.</i></td></tr>
+<tr><th id="123">123</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">baseURL</span> A URL that is used to resolve relative URLs within the document.</i></td></tr>
+<tr><th id="124">124</th><td><i class="doc"> <span class="command">@result</span> A new navigation.</i></td></tr>
+<tr><th id="125">125</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="126">126</th><td>- (nullable WKNavigation *)loadHTMLString:(NSString *)<dfn class="local col8 decl" id="48string" title='string' data-type='NSString * _Nonnull' data-ref="48string" data-ref-filename="48string">string</dfn> baseURL:(nullable NSURL *)<dfn class="local col9 decl" id="49baseURL" title='baseURL' data-type='NSURL * _Nullable' data-ref="49baseURL" data-ref-filename="49baseURL">baseURL</dfn>;</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td><i class="doc">/*! <span class="command">@abstract</span> Sets the webpage contents and base URL.</i></td></tr>
+<tr><th id="129">129</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">data</span> The data to use as the contents of the webpage.</i></td></tr>
+<tr><th id="130">130</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">MIMEType</span> The MIME type of the data.</i></td></tr>
+<tr><th id="131">131</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">characterEncodingName</span> The data's character encoding name.</i></td></tr>
+<tr><th id="132">132</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">baseURL</span> A URL that is used to resolve relative URLs within the document.</i></td></tr>
+<tr><th id="133">133</th><td><i class="doc"> <span class="command">@result</span> A new navigation.</i></td></tr>
+<tr><th id="134">134</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="135">135</th><td>- (nullable WKNavigation *)loadData:(NSData *)<dfn class="local col0 decl" id="50data" title='data' data-type='NSData * _Nonnull' data-ref="50data" data-ref-filename="50data">data</dfn> MIMEType:(NSString *)<dfn class="local col1 decl" id="51MIMEType" title='MIMEType' data-type='NSString * _Nonnull' data-ref="51MIMEType" data-ref-filename="51MIMEType">MIMEType</dfn> characterEncodingName:(NSString *)<dfn class="local col2 decl" id="52characterEncodingName" title='characterEncodingName' data-type='NSString * _Nonnull' data-ref="52characterEncodingName" data-ref-filename="52characterEncodingName">characterEncodingName</dfn> baseURL:(NSURL *)<dfn class="local col3 decl" id="53baseURL" title='baseURL' data-type='NSURL * _Nonnull' data-ref="53baseURL" data-ref-filename="53baseURL">baseURL</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.11</var>), ios(<var>9.0</var>));</td></tr>
+<tr><th id="136">136</th><td></td></tr>
+<tr><th id="137">137</th><td><i class="doc">/*! <span class="command">@abstract</span> Navigates to an item from the back-forward list and sets it</i></td></tr>
+<tr><th id="138">138</th><td><i class="doc"> as the current item.</i></td></tr>
+<tr><th id="139">139</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">item</span> The item to which to navigate. Must be one of the items in the</i></td></tr>
+<tr><th id="140">140</th><td><i class="doc"> web view's back-forward list.</i></td></tr>
+<tr><th id="141">141</th><td><i class="doc"> <span class="command">@result</span> A new navigation to the requested item, or nil if it is already</i></td></tr>
+<tr><th id="142">142</th><td><i class="doc"> the current item or is not part of the web view's back-forward list.</i></td></tr>
+<tr><th id="143">143</th><td><i class="doc"> <span class="command">@seealso</span> backForwardList</i></td></tr>
+<tr><th id="144">144</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="145">145</th><td>- (nullable WKNavigation *)goToBackForwardListItem:(WKBackForwardListItem *)<dfn class="local col4 decl" id="54item" title='item' data-type='WKBackForwardListItem * _Nonnull' data-ref="54item" data-ref-filename="54item">item</dfn>;</td></tr>
+<tr><th id="146">146</th><td></td></tr>
+<tr><th id="147">147</th><td><i class="doc">/*! <span class="command">@abstract</span> The page title.</i></td></tr>
+<tr><th id="148">148</th><td><i class="doc"> <span class="command">@discussion</span> <span class="command">@link</span><span class="verb"> WKWebView @</span>/link is key-value observing (KVO) compliant</i></td></tr>
+<tr><th id="149">149</th><td><i class="doc"> for this property.</i></td></tr>
+<tr><th id="150">150</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="151">151</th><td>@property (nullable, nonatomic, readonly, copy) NSString *title;</td></tr>
+<tr><th id="152">152</th><td></td></tr>
+<tr><th id="153">153</th><td><i class="doc">/*! <span class="command">@abstract</span> The active URL.</i></td></tr>
+<tr><th id="154">154</th><td><i class="doc"> <span class="command">@discussion</span> This is the URL that should be reflected in the user</i></td></tr>
+<tr><th id="155">155</th><td><i class="doc"> interface.</i></td></tr>
+<tr><th id="156">156</th><td><i class="doc"> <span class="command">@link</span><span class="verb"> WKWebView @</span>/link is key-value observing (KVO) compliant for this</i></td></tr>
+<tr><th id="157">157</th><td><i class="doc"> property.</i></td></tr>
+<tr><th id="158">158</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="159">159</th><td>@property (nullable, nonatomic, readonly, copy) NSURL *URL;</td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td><i class="doc">/*! <span class="command">@abstract</span> A Boolean value indicating whether the view is currently</i></td></tr>
+<tr><th id="162">162</th><td><i class="doc"> loading content.</i></td></tr>
+<tr><th id="163">163</th><td><i class="doc"> <span class="command">@discussion</span> <span class="command">@link</span><span class="verb"> WKWebView @</span>/link is key-value observing (KVO) compliant</i></td></tr>
+<tr><th id="164">164</th><td><i class="doc"> for this property.</i></td></tr>
+<tr><th id="165">165</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="166">166</th><td>@property (nonatomic, readonly, getter=isLoading) <span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> loading;</td></tr>
+<tr><th id="167">167</th><td></td></tr>
+<tr><th id="168">168</th><td><i class="doc">/*! <span class="command">@abstract</span> An estimate of what fraction of the current navigation has been completed.</i></td></tr>
+<tr><th id="169">169</th><td><i class="doc"> <span class="command">@discussion</span> This value ranges from 0.0 to 1.0 based on the total number of</i></td></tr>
+<tr><th id="170">170</th><td><i class="doc"> bytes expected to be received, including the main document and all of its</i></td></tr>
+<tr><th id="171">171</th><td><i class="doc"> potential subresources. After a navigation completes, the value remains at 1.0</i></td></tr>
+<tr><th id="172">172</th><td><i class="doc"> until a new navigation starts, at which point it is reset to 0.0.</i></td></tr>
+<tr><th id="173">173</th><td><i class="doc"> <span class="command">@link</span><span class="verb"> WKWebView @</span>/link is key-value observing (KVO) compliant for this</i></td></tr>
+<tr><th id="174">174</th><td><i class="doc"> property.</i></td></tr>
+<tr><th id="175">175</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="176">176</th><td>@property (nonatomic, readonly) <em>double</em> estimatedProgress;</td></tr>
+<tr><th id="177">177</th><td></td></tr>
+<tr><th id="178">178</th><td><i class="doc">/*! <span class="command">@abstract</span> A Boolean value indicating whether all resources on the page</i></td></tr>
+<tr><th id="179">179</th><td><i class="doc"> have been loaded over securely encrypted connections.</i></td></tr>
+<tr><th id="180">180</th><td><i class="doc"> <span class="command">@discussion</span> <span class="command">@link</span><span class="verb"> WKWebView @</span>/link is key-value observing (KVO) compliant</i></td></tr>
+<tr><th id="181">181</th><td><i class="doc"> for this property.</i></td></tr>
+<tr><th id="182">182</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="183">183</th><td>@property (nonatomic, readonly) <span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> hasOnlySecureContent;</td></tr>
+<tr><th id="184">184</th><td></td></tr>
+<tr><th id="185">185</th><td><i class="doc">/*! <span class="command">@abstract</span> A SecTrustRef for the currently committed navigation.</i></td></tr>
+<tr><th id="186">186</th><td><i class="doc"> <span class="command">@discussion</span> <span class="command">@link</span><span class="verb"> WKWebView @</span>/link is key-value observing (KVO) compliant </i></td></tr>
+<tr><th id="187">187</th><td><i class="doc"> for this property.</i></td></tr>
+<tr><th id="188">188</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="189">189</th><td>@property (nonatomic, readonly, nullable) <span class='typedef' title='SecTrustRef' data-type='struct __SecTrust *' data-ref="SecTrustRef" data-ref-filename="SecTrustRef">SecTrustRef</span> serverTrust <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.12</var>), ios(<var>10.0</var>));</td></tr>
+<tr><th id="190">190</th><td></td></tr>
+<tr><th id="191">191</th><td><i class="doc">/*! <span class="command">@abstract</span> A Boolean value indicating whether there is a back item in</i></td></tr>
+<tr><th id="192">192</th><td><i class="doc"> the back-forward list that can be navigated to.</i></td></tr>
+<tr><th id="193">193</th><td><i class="doc"> <span class="command">@discussion</span> <span class="command">@link</span><span class="verb"> WKWebView @</span>/link is key-value observing (KVO) compliant</i></td></tr>
+<tr><th id="194">194</th><td><i class="doc"> for this property.</i></td></tr>
+<tr><th id="195">195</th><td><i class="doc"> <span class="command">@seealso</span> backForwardList.</i></td></tr>
+<tr><th id="196">196</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="197">197</th><td>@property (nonatomic, readonly) <span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> canGoBack;</td></tr>
+<tr><th id="198">198</th><td></td></tr>
+<tr><th id="199">199</th><td><i class="doc">/*! <span class="command">@abstract</span> A Boolean value indicating whether there is a forward item in</i></td></tr>
+<tr><th id="200">200</th><td><i class="doc"> the back-forward list that can be navigated to.</i></td></tr>
+<tr><th id="201">201</th><td><i class="doc"> <span class="command">@discussion</span> <span class="command">@link</span><span class="verb"> WKWebView @</span>/link is key-value observing (KVO) compliant</i></td></tr>
+<tr><th id="202">202</th><td><i class="doc"> for this property.</i></td></tr>
+<tr><th id="203">203</th><td><i class="doc"> <span class="command">@seealso</span> backForwardList.</i></td></tr>
+<tr><th id="204">204</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="205">205</th><td>@property (nonatomic, readonly) <span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> canGoForward;</td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td><i class="doc">/*! <span class="command">@abstract</span> Navigates to the back item in the back-forward list.</i></td></tr>
+<tr><th id="208">208</th><td><i class="doc"> <span class="command">@result</span> A new navigation to the requested item, or nil if there is no back</i></td></tr>
+<tr><th id="209">209</th><td><i class="doc"> item in the back-forward list.</i></td></tr>
+<tr><th id="210">210</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="211">211</th><td>- (nullable WKNavigation *)goBack;</td></tr>
+<tr><th id="212">212</th><td></td></tr>
+<tr><th id="213">213</th><td><i class="doc">/*! <span class="command">@abstract</span> Navigates to the forward item in the back-forward list.</i></td></tr>
+<tr><th id="214">214</th><td><i class="doc"> <span class="command">@result</span> A new navigation to the requested item, or nil if there is no</i></td></tr>
+<tr><th id="215">215</th><td><i class="doc"> forward item in the back-forward list.</i></td></tr>
+<tr><th id="216">216</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="217">217</th><td>- (nullable WKNavigation *)goForward;</td></tr>
+<tr><th id="218">218</th><td></td></tr>
+<tr><th id="219">219</th><td><i class="doc">/*! <span class="command">@abstract</span> Reloads the current page.</i></td></tr>
+<tr><th id="220">220</th><td><i class="doc"> <span class="command">@result</span> A new navigation representing the reload.</i></td></tr>
+<tr><th id="221">221</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="222">222</th><td>- (nullable WKNavigation *)reload;</td></tr>
+<tr><th id="223">223</th><td></td></tr>
+<tr><th id="224">224</th><td><i class="doc">/*! <span class="command">@abstract</span> Reloads the current page, performing end-to-end revalidation</i></td></tr>
+<tr><th id="225">225</th><td><i class="doc"> using cache-validating conditionals if possible.</i></td></tr>
+<tr><th id="226">226</th><td><i class="doc"> <span class="command">@result</span> A new navigation representing the reload.</i></td></tr>
+<tr><th id="227">227</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="228">228</th><td>- (nullable WKNavigation *)reloadFromOrigin;</td></tr>
+<tr><th id="229">229</th><td></td></tr>
+<tr><th id="230">230</th><td><i class="doc">/*! <span class="command">@abstract</span> Stops loading all resources on the current page.</i></td></tr>
+<tr><th id="231">231</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="232">232</th><td>- (<em>void</em>)stopLoading;</td></tr>
+<tr><th id="233">233</th><td></td></tr>
+<tr><th id="234">234</th><td><i>/* @abstract Evaluates the given JavaScript string.</i></td></tr>
+<tr><th id="235">235</th><td><i> @param javaScriptString The JavaScript string to evaluate.</i></td></tr>
+<tr><th id="236">236</th><td><i> @param completionHandler A block to invoke when script evaluation completes or fails.</i></td></tr>
+<tr><th id="237">237</th><td><i> @discussion The completionHandler is passed the result of the script evaluation or an error.</i></td></tr>
+<tr><th id="238">238</th><td><i> Calling this method is equivalent to calling `evaluateJavaScript:inFrame:inContentWorld:completionHandler:` with:</i></td></tr>
+<tr><th id="239">239</th><td><i>   - A `frame` value of `nil` to represent the main frame</i></td></tr>
+<tr><th id="240">240</th><td><i>   - A `contentWorld` value of `WKContentWorld.pageWorld`</i></td></tr>
+<tr><th id="241">241</th><td><i>*/</i></td></tr>
+<tr><th id="242">242</th><td>- (<em>void</em>)evaluateJavaScript:(NSString *)<dfn class="local col5 decl" id="55javaScriptString" title='javaScriptString' data-type='NSString * _Nonnull' data-ref="55javaScriptString" data-ref-filename="55javaScriptString">javaScriptString</dfn> completionHandler:(<em>void</em> (^ <b>_Nullable</b>)(<b>_Nullable</b> <span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>, NSError * <b>_Nullable</b> <dfn class="local col7 decl" id="57error" title='error' data-type='NSError * _Nullable' data-ref="57error" data-ref-filename="57error">error</dfn>))<dfn class="local col6 decl" id="56completionHandler" title='completionHandler' data-type='void (^ _Nullable)(id _Nullable, NSError * _Nullable)' data-ref="56completionHandler" data-ref-filename="56completionHandler">completionHandler</dfn>;</td></tr>
+<tr><th id="243">243</th><td></td></tr>
+<tr><th id="244">244</th><td><i>/* @abstract Evaluates the given JavaScript string.</i></td></tr>
+<tr><th id="245">245</th><td><i> @param javaScriptString The JavaScript string to evaluate.</i></td></tr>
+<tr><th id="246">246</th><td><i> @param frame A WKFrameInfo identifying the frame in which to evaluate the JavaScript string.</i></td></tr>
+<tr><th id="247">247</th><td><i> @param contentWorld The WKContentWorld in which to evaluate the JavaScript string.</i></td></tr>
+<tr><th id="248">248</th><td><i> @param completionHandler A block to invoke when script evaluation completes or fails.</i></td></tr>
+<tr><th id="249">249</th><td><i> @discussion The completionHandler is passed the result of the script evaluation or an error.</i></td></tr>
+<tr><th id="250">250</th><td><i></i></td></tr>
+<tr><th id="251">251</th><td><i> Passing nil is equivalent to targeting the main frame.</i></td></tr>
+<tr><th id="252">252</th><td><i> If the frame argument no longer represents a valid frame by the time WebKit attempts to call the JavaScript function your completion handler will be called with a WKErrorJavaScriptInvalidFrameTarget error.</i></td></tr>
+<tr><th id="253">253</th><td><i> This might happen for a number of reasons, including but not limited to:</i></td></tr>
+<tr><th id="254">254</th><td><i>     - The target frame has been removed from the DOM via JavaScript</i></td></tr>
+<tr><th id="255">255</th><td><i>     - A parent frame has navigated, destroying all of its previous child frames</i></td></tr>
+<tr><th id="256">256</th><td><i></i></td></tr>
+<tr><th id="257">257</th><td><i> No matter which WKContentWorld you use to evaluate your JavaScript string, you can make changes to the underlying web content. (e.g. the Document and its DOM structure)</i></td></tr>
+<tr><th id="258">258</th><td><i> Such changes will be visible to script executing in all WKContentWorlds.</i></td></tr>
+<tr><th id="259">259</th><td><i> Evaluating your JavaScript string can leave behind other changes to global state visibile to JavaScript. (e.g. `window.myVariable = 1;`)</i></td></tr>
+<tr><th id="260">260</th><td><i> Those changes will only be visibile to scripts executed in the same WKContentWorld.</i></td></tr>
+<tr><th id="261">261</th><td><i> evaluateJavaScript: is a great way to set up global state for future JavaScript execution in a given world. (e.g. Importing libraries/utilities that future JavaScript execution will rely on)</i></td></tr>
+<tr><th id="262">262</th><td><i> Once your global state is set up, consider using callAsyncJavaScript: for more flexible interaction with the JavaScript programming model.</i></td></tr>
+<tr><th id="263">263</th><td><i>*/</i></td></tr>
+<tr><th id="264">264</th><td>- (<em>void</em>)evaluateJavaScript:(NSString *)<dfn class="local col8 decl" id="58javaScriptString" title='javaScriptString' data-type='NSString * _Nonnull' data-ref="58javaScriptString" data-ref-filename="58javaScriptString">javaScriptString</dfn> inFrame:(nullable WKFrameInfo *)<dfn class="local col9 decl" id="59frame" title='frame' data-type='WKFrameInfo * _Nullable' data-ref="59frame" data-ref-filename="59frame">frame</dfn> inContentWorld:(WKContentWorld *)<dfn class="local col0 decl" id="60contentWorld" title='contentWorld' data-type='WKContentWorld * _Nonnull' data-ref="60contentWorld" data-ref-filename="60contentWorld">contentWorld</dfn> completionHandler:(<em>void</em> (^ <b>_Nullable</b>)(<b>_Nullable</b> <span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>, NSError * <b>_Nullable</b> <dfn class="local col2 decl" id="62error" title='error' data-type='NSError * _Nullable' data-ref="62error" data-ref-filename="62error">error</dfn>))<dfn class="local col1 decl" id="61completionHandler" title='completionHandler' data-type='void (^ _Nullable)(id _Nullable, NSError * _Nullable)' data-ref="61completionHandler" data-ref-filename="61completionHandler">completionHandler</dfn> <span class="macro" title="" data-ref="_M/NS_REFINED_FOR_SWIFT">NS_REFINED_FOR_SWIFT</span> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>11.0</var>), ios(<var>14.0</var>));</td></tr>
+<tr><th id="265">265</th><td></td></tr>
+<tr><th id="266">266</th><td><i>/* @abstract Calls the given JavaScript string as an async JavaScript function, passing the given named arguments to that function.</i></td></tr>
+<tr><th id="267">267</th><td><i> @param functionBody The JavaScript string to use as the function body.</i></td></tr>
+<tr><th id="268">268</th><td><i> @param arguments A dictionary representing the arguments to be passed to the function call.</i></td></tr>
+<tr><th id="269">269</th><td><i> @param frame A WKFrameInfo identifying the frame in which to call the JavaScript function.</i></td></tr>
+<tr><th id="270">270</th><td><i> @param contentWorld The WKContentWorld in which to call the JavaScript function.</i></td></tr>
+<tr><th id="271">271</th><td><i> @param completionHandler A block to invoke with the return value of the function call, or with the asynchronous resolution of the function's return value.</i></td></tr>
+<tr><th id="272">272</th><td><i> @discussion The functionBody string is treated as an anonymous JavaScript function body that can be called with named arguments.</i></td></tr>
+<tr><th id="273">273</th><td><i> Do not format your functionBody string as a function-like callable object as you would in pure JavaScript.</i></td></tr>
+<tr><th id="274">274</th><td><i> Your functionBody string should contain only the function body you want executed.</i></td></tr>
+<tr><th id="275">275</th><td><i></i></td></tr>
+<tr><th id="276">276</th><td><i> For example do not pass in the string:</i></td></tr>
+<tr><th id="277">277</th><td><i> @textblock</i></td></tr>
+<tr><th id="278">278</th><td><i>     function(x, y, z)</i></td></tr>
+<tr><th id="279">279</th><td><i>     {</i></td></tr>
+<tr><th id="280">280</th><td><i>         return x ? y : z;</i></td></tr>
+<tr><th id="281">281</th><td><i>     }</i></td></tr>
+<tr><th id="282">282</th><td><i> @/textblock</i></td></tr>
+<tr><th id="283">283</th><td><i></i></td></tr>
+<tr><th id="284">284</th><td><i> Instead pass in the string:</i></td></tr>
+<tr><th id="285">285</th><td><i> @textblock</i></td></tr>
+<tr><th id="286">286</th><td><i>     return x ? y : z;</i></td></tr>
+<tr><th id="287">287</th><td><i> @/textblock</i></td></tr>
+<tr><th id="288">288</th><td><i></i></td></tr>
+<tr><th id="289">289</th><td><i> The arguments dictionary supplies the values for those arguments which are serialized into JavaScript equivalents.</i></td></tr>
+<tr><th id="290">290</th><td><i> For example:</i></td></tr>
+<tr><th id="291">291</th><td><i> @textblock</i></td></tr>
+<tr><th id="292">292</th><td><i>     @{ @"x" : @YES, @"y" : @1, @"z" : @"hello world" };</i></td></tr>
+<tr><th id="293">293</th><td><i> @/textblock</i></td></tr>
+<tr><th id="294">294</th><td><i></i></td></tr>
+<tr><th id="295">295</th><td><i> Combining the above arguments dictionary with the above functionBody string, a function with the arguments named "x", "y", and "z" is called with values true, 1, and "hello world" respectively.</i></td></tr>
+<tr><th id="296">296</th><td><i></i></td></tr>
+<tr><th id="297">297</th><td><i> Allowed argument types are:</i></td></tr>
+<tr><th id="298">298</th><td><i> NSNumber, NSString, NSDate, NSArray, NSDictionary, and NSNull.</i></td></tr>
+<tr><th id="299">299</th><td><i> Any NSArray or NSDictionary containers can only contain objects of those types.</i></td></tr>
+<tr><th id="300">300</th><td><i></i></td></tr>
+<tr><th id="301">301</th><td><i> Passing nil is equivalent to targeting the main frame.</i></td></tr>
+<tr><th id="302">302</th><td><i> If the frame argument no longer represents a valid frame by the time WebKit attempts to call the JavaScript function your completion handler will be called with a WKErrorJavaScriptInvalidFrameTarget error.</i></td></tr>
+<tr><th id="303">303</th><td><i> This might happen for a number of reasons, including but not limited to:</i></td></tr>
+<tr><th id="304">304</th><td><i>     - The target frame has been removed from the DOM via JavaScript</i></td></tr>
+<tr><th id="305">305</th><td><i>     - A parent frame has navigated, destroying all of its previous child frames</i></td></tr>
+<tr><th id="306">306</th><td><i></i></td></tr>
+<tr><th id="307">307</th><td><i> No matter which WKContentWorld you use to call your JavaScript function, you can make changes to the underlying web content. (e.g. the Document and its DOM structure)</i></td></tr>
+<tr><th id="308">308</th><td><i> Such changes will be visible to script executing in all WKContentWorlds.</i></td></tr>
+<tr><th id="309">309</th><td><i> Calling your JavaScript function can leave behind other changes to global state visibile to JavaScript. (e.g. `window.myVariable = 1;`)</i></td></tr>
+<tr><th id="310">310</th><td><i> Those changes will only be visibile to scripts executed in the same WKContentWorld.</i></td></tr>
+<tr><th id="311">311</th><td><i></i></td></tr>
+<tr><th id="312">312</th><td><i> Your completion handler will be called with the explicit return value of your JavaScript function.</i></td></tr>
+<tr><th id="313">313</th><td><i> If your JavaScript does not explicitly return any value, that undefined result manifests as nil being passed to your completion handler.</i></td></tr>
+<tr><th id="314">314</th><td><i> If your JavaScript returns null, that result manifests as NSNull being passed to your completion handler.</i></td></tr>
+<tr><th id="315">315</th><td><i></i></td></tr>
+<tr><th id="316">316</th><td><i> JavaScript has the concept of a "thenable" object, which is any JavaScript object that has a callable "then" property.</i></td></tr>
+<tr><th id="317">317</th><td><i> The most well known example of a "thenable" object is a JavaScript promise.</i></td></tr>
+<tr><th id="318">318</th><td><i> If your JavaScript returns a "thenable" object WebKit will call "then" on the resulting object and wait for it to be resolved.</i></td></tr>
+<tr><th id="319">319</th><td><i></i></td></tr>
+<tr><th id="320">320</th><td><i> If the object resolves successfully (e.g. Calls the "fulfill" function) your completion handler will be called with the result.</i></td></tr>
+<tr><th id="321">321</th><td><i> If the object rejects (e.g. Calls the "reject" function) your completion handler will be called with a WKErrorJavaScriptAsyncFunctionResultRejected error containing the reject reason in the userInfo dictionary.</i></td></tr>
+<tr><th id="322">322</th><td><i> If the object is garbage collected before it is resolved, your completion handler will be called with a WKErrorJavaScriptAsyncFunctionResultUnreachable error indicating that it will never be resolved.</i></td></tr>
+<tr><th id="323">323</th><td><i></i></td></tr>
+<tr><th id="324">324</th><td><i> Since the function is a JavaScript "async" function you can use JavaScript "await" on thenable objects inside your function body.</i></td></tr>
+<tr><th id="325">325</th><td><i> For example:</i></td></tr>
+<tr><th id="326">326</th><td><i> @textblock</i></td></tr>
+<tr><th id="327">327</th><td><i>     var p = new Promise(function (f) {</i></td></tr>
+<tr><th id="328">328</th><td><i>         window.setTimeout("f(42)", 1000);</i></td></tr>
+<tr><th id="329">329</th><td><i>     });</i></td></tr>
+<tr><th id="330">330</th><td><i>     await p;</i></td></tr>
+<tr><th id="331">331</th><td><i>     return p;</i></td></tr>
+<tr><th id="332">332</th><td><i> @/textblock</i></td></tr>
+<tr><th id="333">333</th><td><i></i></td></tr>
+<tr><th id="334">334</th><td><i> The above function text will create a promise that will fulfull with the value 42 after a one second delay, wait for it to resolve, then return the fulfillment value of 42.</i></td></tr>
+<tr><th id="335">335</th><td><i>*/</i></td></tr>
+<tr><th id="336">336</th><td><u>#<span data-ppcond="336">ifdef</span> <span class="macro" data-ref="_M/NS_SWIFT_ASYNC_NAME">NS_SWIFT_ASYNC_NAME</span></u></td></tr>
+<tr><th id="337">337</th><td>- (<em>void</em>)callAsyncJavaScript:(NSString *)functionBody arguments:(nullable NSDictionary&lt;NSString *, id&gt; *)arguments inFrame:(nullable WKFrameInfo *)frame inContentWorld:(WKContentWorld *)contentWorld completionHandler:(<em>void</em> (^ <b>_Nullable</b>)(_Nullable_result id, NSError * <b>_Nullable</b> error))completionHandler NS_REFINED_FOR_SWIFT WK_API_AVAILABLE(macos(<var>11.0</var>), ios(<var>14.0</var>));</td></tr>
+<tr><th id="338">338</th><td><u>#<span data-ppcond="336">else</span></u></td></tr>
+<tr><th id="339">339</th><td>- (<em>void</em>)callAsyncJavaScript:(NSString *)<dfn class="local col3 decl" id="63functionBody" title='functionBody' data-type='NSString * _Nonnull' data-ref="63functionBody" data-ref-filename="63functionBody">functionBody</dfn> arguments:(nullable NSDictionary&lt;NSString *, <span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>&gt; *)<dfn class="local col4 decl" id="64arguments" title='arguments' data-type='NSDictionary&lt;NSString *,id&gt; * _Nullable' data-ref="64arguments" data-ref-filename="64arguments">arguments</dfn> inFrame:(nullable WKFrameInfo *)<dfn class="local col5 decl" id="65frame" title='frame' data-type='WKFrameInfo * _Nullable' data-ref="65frame" data-ref-filename="65frame">frame</dfn> inContentWorld:(WKContentWorld *)<dfn class="local col6 decl" id="66contentWorld" title='contentWorld' data-type='WKContentWorld * _Nonnull' data-ref="66contentWorld" data-ref-filename="66contentWorld">contentWorld</dfn> completionHandler:(<em>void</em> (^ <b>_Nullable</b>)(<b>_Nullable</b> <span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>, NSError * <b>_Nullable</b> <dfn class="local col8 decl" id="68error" title='error' data-type='NSError * _Nullable' data-ref="68error" data-ref-filename="68error">error</dfn>))<dfn class="local col7 decl" id="67completionHandler" title='completionHandler' data-type='void (^ _Nullable)(id _Nullable, NSError * _Nullable)' data-ref="67completionHandler" data-ref-filename="67completionHandler">completionHandler</dfn> <span class="macro" title="" data-ref="_M/NS_REFINED_FOR_SWIFT">NS_REFINED_FOR_SWIFT</span> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>11.0</var>), ios(<var>14.0</var>));</td></tr>
+<tr><th id="340">340</th><td><u>#<span data-ppcond="336">endif</span></u></td></tr>
+<tr><th id="341">341</th><td></td></tr>
+<tr><th id="342">342</th><td><i class="doc">/*! <span class="command">@abstract</span> Closes all out-of-window media presentations in a WKWebView.</i></td></tr>
+<tr><th id="343">343</th><td><i class="doc"> <span class="command">@discussion</span> Includes picture-in-picture and fullscreen.</i></td></tr>
+<tr><th id="344">344</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="345">345</th><td>- (<em>void</em>)closeAllMediaPresentationsWithCompletionHandler:(<em>void</em> (^<b>_Nullable</b>)(<em>void</em>))<dfn class="local col9 decl" id="69completionHandler" title='completionHandler' data-type='void (^ _Nullable)(void)' data-ref="69completionHandler" data-ref-filename="69completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="346">346</th><td><u>#<span data-ppcond="346">ifndef</span> <span class="macro" data-ref="_M/__swift__">__swift__</span></u></td></tr>
+<tr><th id="347">347</th><td>- (<em>void</em>)closeAllMediaPresentations:(<em>void</em> (^<b>_Nullable</b>)(<em>void</em>))<dfn class="local col0 decl" id="70completionHandler" title='completionHandler' data-type='void (^ _Nullable)(void)' data-ref="70completionHandler" data-ref-filename="70completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#51" title="__attribute__((deprecated(&quot;use &quot; &quot;\&quot;closeAllMediaPresentationsWithCompletionHandler:\&quot;&quot;)))" data-ref="_M/WK_API_DEPRECATED_WITH_REPLACEMENT">WK_API_DEPRECATED_WITH_REPLACEMENT</a>(<q>"closeAllMediaPresentationsWithCompletionHandler:"</q>, macos(<var>11.3</var>, <var>12.0</var>), ios(<var>14.5</var>, <var>15.0</var>));</td></tr>
+<tr><th id="348">348</th><td><u>#<span data-ppcond="346">endif</span></u></td></tr>
+<tr><th id="349">349</th><td></td></tr>
+<tr><th id="350">350</th><td><i class="doc">/*! <span class="command">@abstract</span> Pauses media playback in WKWebView.</i></td></tr>
+<tr><th id="351">351</th><td><i class="doc"> <span class="command">@discussion</span> Pauses media playback. Media in the page can be restarted by calling play() on a media element or resume() on an AudioContext in JavaScript. A user can also use media controls to play media content after it has been paused.</i></td></tr>
+<tr><th id="352">352</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="353">353</th><td>- (<em>void</em>)pauseAllMediaPlaybackWithCompletionHandler:(<em>void</em> (^<b>_Nullable</b>)(<em>void</em>))<dfn class="local col1 decl" id="71completionHandler" title='completionHandler' data-type='void (^ _Nullable)(void)' data-ref="71completionHandler" data-ref-filename="71completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="354">354</th><td><u>#<span data-ppcond="354">ifndef</span> <span class="macro" data-ref="_M/__swift__">__swift__</span></u></td></tr>
+<tr><th id="355">355</th><td>- (<em>void</em>)pauseAllMediaPlayback:(<em>void</em> (^<b>_Nullable</b>)(<em>void</em>))<dfn class="local col2 decl" id="72completionHandler" title='completionHandler' data-type='void (^ _Nullable)(void)' data-ref="72completionHandler" data-ref-filename="72completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#51" title="__attribute__((deprecated(&quot;use &quot; &quot;\&quot;pauseAllMediaPlaybackWithCompletionHandler:\&quot;&quot;)))" data-ref="_M/WK_API_DEPRECATED_WITH_REPLACEMENT">WK_API_DEPRECATED_WITH_REPLACEMENT</a>(<q>"pauseAllMediaPlaybackWithCompletionHandler:"</q>, macos(<var>11.3</var>, <var>12.0</var>), ios(<var>14.5</var>, <var>15.0</var>));</td></tr>
+<tr><th id="356">356</th><td><u>#<span data-ppcond="354">endif</span></u></td></tr>
+<tr><th id="357">357</th><td></td></tr>
+<tr><th id="358">358</th><td><i class="doc">/*! <span class="command">@abstract</span> Suspends or resumes all media playback in WKWebView.</i></td></tr>
+<tr><th id="359">359</th><td><i class="doc">  <span class="command">@param</span> <span class="arg">suspended</span> Whether media playback should be suspended or resumed.</i></td></tr>
+<tr><th id="360">360</th><td><i class="doc">  <span class="command">@discussion</span> If suspended is true, this pauses media playback and blocks all attempts by the page or the user to resume until setAllMediaPlaybackSuspended is called again with suspended set to false. Media playback should always be suspended and resumed in pairs.</i></td></tr>
+<tr><th id="361">361</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="362">362</th><td>- (<em>void</em>)setAllMediaPlaybackSuspended:(<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col3 decl" id="73suspended" title='suspended' data-type='BOOL' data-ref="73suspended" data-ref-filename="73suspended">suspended</dfn> completionHandler:(<em>void</em> (^<b>_Nullable</b>)(<em>void</em>))<dfn class="local col4 decl" id="74completionHandler" title='completionHandler' data-type='void (^ _Nullable)(void)' data-ref="74completionHandler" data-ref-filename="74completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="363">363</th><td><u>#<span data-ppcond="363">ifndef</span> <span class="macro" data-ref="_M/__swift__">__swift__</span></u></td></tr>
+<tr><th id="364">364</th><td>- (<em>void</em>)resumeAllMediaPlayback:(<em>void</em> (^ <b>_Nullable</b>)(<em>void</em>))<dfn class="local col5 decl" id="75completionHandler" title='completionHandler' data-type='void (^ _Nullable)(void)' data-ref="75completionHandler" data-ref-filename="75completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#51" title="__attribute__((deprecated(&quot;use &quot; &quot;\&quot;setAllMediaPlaybackSuspended:completionHandler:\&quot;&quot;)))" data-ref="_M/WK_API_DEPRECATED_WITH_REPLACEMENT">WK_API_DEPRECATED_WITH_REPLACEMENT</a>(<q>"setAllMediaPlaybackSuspended:completionHandler:"</q>, macos(<var>11.3</var>, <var>12.0</var>), ios(<var>14.5</var>, <var>15.0</var>));</td></tr>
+<tr><th id="365">365</th><td>- (<em>void</em>)suspendAllMediaPlayback:(<em>void</em> (^<b>_Nullable</b>)(<em>void</em>))<dfn class="local col6 decl" id="76completionHandler" title='completionHandler' data-type='void (^ _Nullable)(void)' data-ref="76completionHandler" data-ref-filename="76completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#51" title="__attribute__((deprecated(&quot;use &quot; &quot;\&quot;setAllMediaPlaybackSuspended:completionHandler:\&quot;&quot;)))" data-ref="_M/WK_API_DEPRECATED_WITH_REPLACEMENT">WK_API_DEPRECATED_WITH_REPLACEMENT</a>(<q>"setAllMediaPlaybackSuspended:completionHandler:"</q>, macos(<var>11.3</var>, <var>12.0</var>), ios(<var>14.5</var>, <var>15.0</var>));</td></tr>
+<tr><th id="366">366</th><td><u>#<span data-ppcond="363">endif</span></u></td></tr>
+<tr><th id="367">367</th><td></td></tr>
+<tr><th id="368">368</th><td><i class="doc">/*! <span class="command">@abstract</span> Get the current media playback state of a WKWebView.</i></td></tr>
+<tr><th id="369">369</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">completionHandler</span> A block to invoke with the return value of the function call.</i></td></tr>
+<tr><th id="370">370</th><td><i class="doc"> <span class="command">@discussion</span> If media playback exists, WKMediaPlaybackState will be one of three</i></td></tr>
+<tr><th id="371">371</th><td><i class="doc"> values: WKMediaPlaybackPaused, WKMediaPlaybackSuspended, or WKMediaPlaybackPlaying.</i></td></tr>
+<tr><th id="372">372</th><td><i class="doc"> If no media playback exists in the current WKWebView, WKMediaPlaybackState will equal</i></td></tr>
+<tr><th id="373">373</th><td><i class="doc"> WKMediaPlaybackStateNone.</i></td></tr>
+<tr><th id="374">374</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="375">375</th><td>- (<em>void</em>)requestMediaPlaybackStateWithCompletionHandler:(<em>void</em> (^)(<a class="typedef" href="#64" title='WKMediaPlaybackState' data-type='enum WKMediaPlaybackState' data-ref="WKMediaPlaybackState" data-ref-filename="WKMediaPlaybackState">WKMediaPlaybackState</a>))<dfn class="local col7 decl" id="77completionHandler" title='completionHandler' data-type='void (^ _Nonnull)(WKMediaPlaybackState)' data-ref="77completionHandler" data-ref-filename="77completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="376">376</th><td><u>#<span data-ppcond="376">ifndef</span> <span class="macro" data-ref="_M/__swift__">__swift__</span></u></td></tr>
+<tr><th id="377">377</th><td>- (<em>void</em>)requestMediaPlaybackState:(<em>void</em> (^)(<a class="typedef" href="#64" title='WKMediaPlaybackState' data-type='enum WKMediaPlaybackState' data-ref="WKMediaPlaybackState" data-ref-filename="WKMediaPlaybackState">WKMediaPlaybackState</a>))<dfn class="local col8 decl" id="78completionHandler" title='completionHandler' data-type='void (^ _Nonnull)(WKMediaPlaybackState)' data-ref="78completionHandler" data-ref-filename="78completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#51" title="__attribute__((deprecated(&quot;use &quot; &quot;\&quot;requestMediaPlaybackStateWithCompletionHandler:\&quot;&quot;)))" data-ref="_M/WK_API_DEPRECATED_WITH_REPLACEMENT">WK_API_DEPRECATED_WITH_REPLACEMENT</a>(<q>"requestMediaPlaybackStateWithCompletionHandler:"</q>, macos(<var>11.3</var>, <var>12.0</var>), ios(<var>14.5</var>, <var>15.0</var>));</td></tr>
+<tr><th id="378">378</th><td><u>#<span data-ppcond="376">endif</span></u></td></tr>
+<tr><th id="379">379</th><td></td></tr>
+<tr><th id="380">380</th><td><i class="doc">/*! <span class="command">@abstract</span> The state of camera capture on a web page.</i></td></tr>
+<tr><th id="381">381</th><td><i class="doc"> <span class="command">@discussion</span> <span class="command">@link</span><span class="verb"> WKWebView @</span>/link is key-value observing (KVO) compliant</i></td></tr>
+<tr><th id="382">382</th><td><i class="doc"> for this property.</i></td></tr>
+<tr><th id="383">383</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="384">384</th><td>@property (nonatomic, readonly) <a class="typedef" href="#71" title='WKMediaCaptureState' data-type='enum WKMediaCaptureState' data-ref="WKMediaCaptureState" data-ref-filename="WKMediaCaptureState">WKMediaCaptureState</a> cameraCaptureState <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="385">385</th><td></td></tr>
+<tr><th id="386">386</th><td><i class="doc">/*! <span class="command">@abstract</span> The state of microphone capture on a web page.</i></td></tr>
+<tr><th id="387">387</th><td><i class="doc"> <span class="command">@discussion</span> <span class="command">@link</span><span class="verb"> WKWebView @</span>/link is key-value observing (KVO) compliant</i></td></tr>
+<tr><th id="388">388</th><td><i class="doc"> for this property.</i></td></tr>
+<tr><th id="389">389</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="390">390</th><td>@property (nonatomic, readonly) <a class="typedef" href="#71" title='WKMediaCaptureState' data-type='enum WKMediaCaptureState' data-ref="WKMediaCaptureState" data-ref-filename="WKMediaCaptureState">WKMediaCaptureState</a> microphoneCaptureState <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="391">391</th><td></td></tr>
+<tr><th id="392">392</th><td><i class="doc">/*! <span class="command">@abstract</span> Set camera capture state of a WKWebView.</i></td></tr>
+<tr><th id="393">393</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">state</span> State to apply for capture.</i></td></tr>
+<tr><th id="394">394</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">completionHandler</span> A block to invoke after the camera state has been changed.</i></td></tr>
+<tr><th id="395">395</th><td><i class="doc"> <span class="command">@discussion</span></i></td></tr>
+<tr><th id="396">396</th><td><i class="doc"> If value is WKMediaCaptureStateNone, this will stop any camera capture.</i></td></tr>
+<tr><th id="397">397</th><td><i class="doc"> If value is WKMediaCaptureStateMuted, any active camera capture will become muted.</i></td></tr>
+<tr><th id="398">398</th><td><i class="doc"> If value is WKMediaCaptureStateActive, any muted camera capture will become active.</i></td></tr>
+<tr><th id="399">399</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="400">400</th><td>- (<em>void</em>)setCameraCaptureState:(<a class="typedef" href="#71" title='WKMediaCaptureState' data-type='enum WKMediaCaptureState' data-ref="WKMediaCaptureState" data-ref-filename="WKMediaCaptureState">WKMediaCaptureState</a>)<dfn class="local col9 decl" id="79state" title='state' data-type='WKMediaCaptureState' data-ref="79state" data-ref-filename="79state">state</dfn> completionHandler:(<em>void</em> (^<b>_Nullable</b>)(<em>void</em>))<dfn class="local col0 decl" id="80completionHandler" title='completionHandler' data-type='void (^ _Nullable)(void)' data-ref="80completionHandler" data-ref-filename="80completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="401">401</th><td></td></tr>
+<tr><th id="402">402</th><td><i class="doc">/*! <span class="command">@abstract</span> Set microphone capture state of a WKWebView.</i></td></tr>
+<tr><th id="403">403</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">state</span> state to apply for capture.</i></td></tr>
+<tr><th id="404">404</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">completionHandler</span> A block to invoke after the camera state has been changed.</i></td></tr>
+<tr><th id="405">405</th><td><i class="doc"> <span class="command">@discussion</span></i></td></tr>
+<tr><th id="406">406</th><td><i class="doc"> If value is WKMediaCaptureStateNone, this will stop any microphone capture.</i></td></tr>
+<tr><th id="407">407</th><td><i class="doc"> If value is WKMediaCaptureStateMuted, any active microphone capture will become muted.</i></td></tr>
+<tr><th id="408">408</th><td><i class="doc"> If value is WKMediaCaptureStateActive, any muted microphone capture will become active.</i></td></tr>
+<tr><th id="409">409</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="410">410</th><td>- (<em>void</em>)setMicrophoneCaptureState:(<a class="typedef" href="#71" title='WKMediaCaptureState' data-type='enum WKMediaCaptureState' data-ref="WKMediaCaptureState" data-ref-filename="WKMediaCaptureState">WKMediaCaptureState</a>)<dfn class="local col1 decl" id="81state" title='state' data-type='WKMediaCaptureState' data-ref="81state" data-ref-filename="81state">state</dfn> completionHandler:(<em>void</em> (^<b>_Nullable</b>)(<em>void</em>))<dfn class="local col2 decl" id="82completionHandler" title='completionHandler' data-type='void (^ _Nullable)(void)' data-ref="82completionHandler" data-ref-filename="82completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="411">411</th><td></td></tr>
+<tr><th id="412">412</th><td><i class="doc">/*! <span class="command">@abstract</span> Get a snapshot for the visible viewport of WKWebView.</i></td></tr>
+<tr><th id="413">413</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">snapshotConfiguration</span> An object that specifies how the snapshot is configured.</i></td></tr>
+<tr><th id="414">414</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">completionHandler</span> A block to invoke when the snapshot is ready.</i></td></tr>
+<tr><th id="415">415</th><td><i class="doc"> <span class="command">@discussion</span> If the WKSnapshotConfiguration is nil, the method will snapshot the bounds of the </i></td></tr>
+<tr><th id="416">416</th><td><i class="doc"> WKWebView and create an image that is the width of the bounds of the WKWebView and scaled to the </i></td></tr>
+<tr><th id="417">417</th><td><i class="doc"> device scale. The completionHandler is passed the image of the viewport contents or an error.</i></td></tr>
+<tr><th id="418">418</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="419">419</th><td><u>#<span data-ppcond="419">if</span> <span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="420">420</th><td>- (<em>void</em>)takeSnapshotWithConfiguration:(nullable WKSnapshotConfiguration *)snapshotConfiguration completionHandler:(<em>void</em> (^)(UIImage * <b>_Nullable</b> snapshotImage, NSError * <b>_Nullable</b> error))completionHandler WK_SWIFT_ASYNC_NAME(takeSnapshot(configuration:)) WK_API_AVAILABLE(ios(<var>11.0</var>));</td></tr>
+<tr><th id="421">421</th><td><u>#<span data-ppcond="419">else</span></u></td></tr>
+<tr><th id="422">422</th><td>- (<em>void</em>)takeSnapshotWithConfiguration:(nullable WKSnapshotConfiguration *)<dfn class="local col3 decl" id="83snapshotConfiguration" title='snapshotConfiguration' data-type='WKSnapshotConfiguration * _Nullable' data-ref="83snapshotConfiguration" data-ref-filename="83snapshotConfiguration">snapshotConfiguration</dfn> completionHandler:(<em>void</em> (^)(NSImage * <b>_Nullable</b> <dfn class="local col5 decl" id="85snapshotImage" title='snapshotImage' data-type='NSImage * _Nullable' data-ref="85snapshotImage" data-ref-filename="85snapshotImage">snapshotImage</dfn>, NSError * <b>_Nullable</b> <dfn class="local col6 decl" id="86error" title='error' data-type='NSError * _Nullable' data-ref="86error" data-ref-filename="86error">error</dfn>))<dfn class="local col4 decl" id="84completionHandler" title='completionHandler' data-type='void (^ _Nonnull)(NSImage * _Nullable, NSError * _Nullable)' data-ref="84completionHandler" data-ref-filename="84completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#38" title="" data-ref="_M/WK_SWIFT_ASYNC_NAME">WK_SWIFT_ASYNC_NAME</a>(takeSnapshot(configuration:)) <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.13</var>));</td></tr>
+<tr><th id="423">423</th><td><u>#<span data-ppcond="419">endif</span></u></td></tr>
+<tr><th id="424">424</th><td></td></tr>
+<tr><th id="425">425</th><td><i class="doc">/*! <span class="command">@abstract</span> Create a PDF document representation from the web page currently displayed in the WKWebView</i></td></tr>
+<tr><th id="426">426</th><td><i class="doc"><span class="command">@param</span> <span class="arg">pdfConfiguration</span> An object that specifies how the PDF capture is configured.</i></td></tr>
+<tr><th id="427">427</th><td><i class="doc"><span class="command">@param</span> <span class="arg">completionHandler</span> A block to invoke when the pdf document data is ready.</i></td></tr>
+<tr><th id="428">428</th><td><i class="doc"><span class="command">@discussion</span> If the WKPDFConfiguration is nil, the method will create a PDF document representing the bounds of the currently displayed web page.</i></td></tr>
+<tr><th id="429">429</th><td><i class="doc">The completionHandler is passed the resulting PDF document data or an error.</i></td></tr>
+<tr><th id="430">430</th><td><i class="doc">The data can be used to create a PDFDocument object.</i></td></tr>
+<tr><th id="431">431</th><td><i class="doc">If the data is written to a file the resulting file is a valid PDF document.</i></td></tr>
+<tr><th id="432">432</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="433">433</th><td>- (<em>void</em>)createPDFWithConfiguration:(nullable WKPDFConfiguration *)<dfn class="local col7 decl" id="87pdfConfiguration" title='pdfConfiguration' data-type='WKPDFConfiguration * _Nullable' data-ref="87pdfConfiguration" data-ref-filename="87pdfConfiguration">pdfConfiguration</dfn> completionHandler:(<em>void</em> (^)(NSData * <b>_Nullable</b> <dfn class="local col9 decl" id="89pdfDocumentData" title='pdfDocumentData' data-type='NSData * _Nullable' data-ref="89pdfDocumentData" data-ref-filename="89pdfDocumentData">pdfDocumentData</dfn>, NSError * <b>_Nullable</b> <dfn class="local col0 decl" id="90error" title='error' data-type='NSError * _Nullable' data-ref="90error" data-ref-filename="90error">error</dfn>))<dfn class="local col8 decl" id="88completionHandler" title='completionHandler' data-type='void (^ _Nonnull)(NSData * _Nullable, NSError * _Nullable)' data-ref="88completionHandler" data-ref-filename="88completionHandler">completionHandler</dfn> <span class="macro" title="" data-ref="_M/NS_REFINED_FOR_SWIFT">NS_REFINED_FOR_SWIFT</span> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>11.0</var>), ios(<var>14.0</var>));</td></tr>
+<tr><th id="434">434</th><td></td></tr>
+<tr><th id="435">435</th><td><i>/* @abstract Create WebKit web archive data representing the current web content of the WKWebView</i></td></tr>
+<tr><th id="436">436</th><td><i>@param completionHandler A block to invoke when the web archive data is ready.</i></td></tr>
+<tr><th id="437">437</th><td><i>@discussion WebKit web archive data represents a snapshot of web content.</i></td></tr>
+<tr><th id="438">438</th><td><i>It can be used to represent web content on a pasteboard, loaded into a WKWebView directly, and saved to a file for later use.</i></td></tr>
+<tr><th id="439">439</th><td><i>The uniform type identifier kUTTypeWebArchive can be used get the related pasteboard type and MIME type.</i></td></tr>
+<tr><th id="440">440</th><td><i>*/</i></td></tr>
+<tr><th id="441">441</th><td>- (<em>void</em>)createWebArchiveDataWithCompletionHandler:(<em>void</em> (^)(NSData *, NSError *))<dfn class="local col1 decl" id="91completionHandler" title='completionHandler' data-type='void (^ _Nonnull)(NSData * _Nonnull, NSError * _Nonnull)' data-ref="91completionHandler" data-ref-filename="91completionHandler">completionHandler</dfn> <span class="macro" title="" data-ref="_M/NS_REFINED_FOR_SWIFT">NS_REFINED_FOR_SWIFT</span> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>11.0</var>), ios(<var>14.0</var>));</td></tr>
+<tr><th id="442">442</th><td></td></tr>
+<tr><th id="443">443</th><td><i class="doc">/*! <span class="command">@abstract</span> A Boolean value indicating whether horizontal swipe gestures</i></td></tr>
+<tr><th id="444">444</th><td><i class="doc"> will trigger back-forward list navigations.</i></td></tr>
+<tr><th id="445">445</th><td><i class="doc"> <span class="command">@discussion</span> The default value is NO.</i></td></tr>
+<tr><th id="446">446</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="447">447</th><td>@property (nonatomic) <span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> allowsBackForwardNavigationGestures;</td></tr>
+<tr><th id="448">448</th><td></td></tr>
+<tr><th id="449">449</th><td><i class="doc">/*! <span class="command">@abstract</span> The custom user agent string or nil if no custom user agent string has been set.</i></td></tr>
+<tr><th id="450">450</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="451">451</th><td>@property (nullable, nonatomic, copy) NSString *customUserAgent <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.11</var>), ios(<var>9.0</var>));</td></tr>
+<tr><th id="452">452</th><td></td></tr>
+<tr><th id="453">453</th><td><i class="doc">/*! <span class="command">@abstract</span> A Boolean value indicating whether link preview is allowed for any</i></td></tr>
+<tr><th id="454">454</th><td><i class="doc"> links inside this WKWebView.</i></td></tr>
+<tr><th id="455">455</th><td><i class="doc"> <span class="command">@discussion</span> The default value is YES on Mac and iOS.</i></td></tr>
+<tr><th id="456">456</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="457">457</th><td>@property (nonatomic) <span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> allowsLinkPreview <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.11</var>), ios(<var>9.0</var>));</td></tr>
+<tr><th id="458">458</th><td></td></tr>
+<tr><th id="459">459</th><td><u>#<span data-ppcond="459">if</span> <span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="460">460</th><td><i class="doc">/*! <span class="command">@abstract</span> The scroll view associated with the web view.</i></td></tr>
+<tr><th id="461">461</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="462">462</th><td>@property (nonatomic, readonly, strong) UIScrollView *scrollView;</td></tr>
+<tr><th id="463">463</th><td><u>#<span data-ppcond="459">endif</span></u></td></tr>
+<tr><th id="464">464</th><td></td></tr>
+<tr><th id="465">465</th><td><u>#<span data-ppcond="465">if</span> !<span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="466">466</th><td><i>/* @abstract A Boolean value indicating whether magnify gestures will</i></td></tr>
+<tr><th id="467">467</th><td><i> change the web view's magnification.</i></td></tr>
+<tr><th id="468">468</th><td><i> @discussion It is possible to set the magnification property even if</i></td></tr>
+<tr><th id="469">469</th><td><i> allowsMagnification is set to NO.</i></td></tr>
+<tr><th id="470">470</th><td><i> The default value is NO.</i></td></tr>
+<tr><th id="471">471</th><td><i> */</i></td></tr>
+<tr><th id="472">472</th><td>@property (nonatomic) <span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> allowsMagnification;</td></tr>
+<tr><th id="473">473</th><td></td></tr>
+<tr><th id="474">474</th><td><i>/* @abstract The factor by which the viewport of the page is currently scaled.</i></td></tr>
+<tr><th id="475">475</th><td><i> @discussion The default value is 1.0.</i></td></tr>
+<tr><th id="476">476</th><td><i> */</i></td></tr>
+<tr><th id="477">477</th><td>@property (nonatomic) <span class='typedef' title='CGFloat' data-type='double' data-ref="CGFloat" data-ref-filename="CGFloat">CGFloat</span> magnification;</td></tr>
+<tr><th id="478">478</th><td></td></tr>
+<tr><th id="479">479</th><td><i>/* @abstract Scales the page content by a specified factor and centers the</i></td></tr>
+<tr><th id="480">480</th><td><i> result on a specified point.</i></td></tr>
+<tr><th id="481">481</th><td><i> * @param magnification The factor by which to scale the content.</i></td></tr>
+<tr><th id="482">482</th><td><i> * @param point The point (in view space) on which to center magnification.</i></td></tr>
+<tr><th id="483">483</th><td><i> */</i></td></tr>
+<tr><th id="484">484</th><td>- (<em>void</em>)setMagnification:(<span class='typedef' title='CGFloat' data-type='double' data-ref="CGFloat" data-ref-filename="CGFloat">CGFloat</span>)<dfn class="local col2 decl" id="92magnification" title='magnification' data-type='CGFloat' data-ref="92magnification" data-ref-filename="92magnification">magnification</dfn> centeredAtPoint:(<span class='typedef' title='CGPoint' data-type='struct CGPoint' data-ref="CGPoint" data-ref-filename="CGPoint">CGPoint</span>)<dfn class="local col3 decl" id="93point" title='point' data-type='CGPoint' data-ref="93point" data-ref-filename="93point">point</dfn>;</td></tr>
+<tr><th id="485">485</th><td></td></tr>
+<tr><th id="486">486</th><td><u>#<span data-ppcond="465">endif</span></u></td></tr>
+<tr><th id="487">487</th><td></td></tr>
+<tr><th id="488">488</th><td><i>/* @abstract The factor by which page content is scaled relative to the viewport.</i></td></tr>
+<tr><th id="489">489</th><td><i>@discussion The default value is 1.0.</i></td></tr>
+<tr><th id="490">490</th><td><i> Changing this value is equivalent to web content setting the CSS "zoom"</i></td></tr>
+<tr><th id="491">491</th><td><i> property on all page content.</i></td></tr>
+<tr><th id="492">492</th><td><i>*/</i></td></tr>
+<tr><th id="493">493</th><td>@property (nonatomic) <span class='typedef' title='CGFloat' data-type='double' data-ref="CGFloat" data-ref-filename="CGFloat">CGFloat</span> pageZoom <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>11.0</var>), ios(<var>14.0</var>));</td></tr>
+<tr><th id="494">494</th><td></td></tr>
+<tr><th id="495">495</th><td><i>/* @abstract Searches the page contents for the given string.</i></td></tr>
+<tr><th id="496">496</th><td><i> @param string The string to search for.</i></td></tr>
+<tr><th id="497">497</th><td><i> @param configuration A set of options configuring the search.</i></td></tr>
+<tr><th id="498">498</th><td><i> @param completionHandler A block to invoke when the search completes.</i></td></tr>
+<tr><th id="499">499</th><td><i> @discussion If the WKFindConfiguration is nil, all of the default WKFindConfiguration values will be used.</i></td></tr>
+<tr><th id="500">500</th><td><i>  A match found by the search is selected and the page is scrolled to reveal the selection.</i></td></tr>
+<tr><th id="501">501</th><td><i>  The completion handler is called after the search completes.</i></td></tr>
+<tr><th id="502">502</th><td><i>*/</i></td></tr>
+<tr><th id="503">503</th><td>- (<em>void</em>)findString:(NSString *)<dfn class="local col4 decl" id="94string" title='string' data-type='NSString * _Nonnull' data-ref="94string" data-ref-filename="94string">string</dfn> withConfiguration:(nullable WKFindConfiguration *)<dfn class="local col5 decl" id="95configuration" title='configuration' data-type='WKFindConfiguration * _Nullable' data-ref="95configuration" data-ref-filename="95configuration">configuration</dfn> completionHandler:(<em>void</em> (^)(WKFindResult *<dfn class="local col7 decl" id="97result" title='result' data-type='WKFindResult * _Nonnull' data-ref="97result" data-ref-filename="97result">result</dfn>))<dfn class="local col6 decl" id="96completionHandler" title='completionHandler' data-type='void (^ _Nonnull)(WKFindResult * _Nonnull)' data-ref="96completionHandler" data-ref-filename="96completionHandler">completionHandler</dfn> <span class="macro" title="" data-ref="_M/NS_REFINED_FOR_SWIFT">NS_REFINED_FOR_SWIFT</span> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>11.0</var>), ios(<var>14.0</var>));</td></tr>
+<tr><th id="504">504</th><td></td></tr>
+<tr><th id="505">505</th><td><i>/* @abstract Checks whether or not WKWebViews handle the given URL scheme by default.</i></td></tr>
+<tr><th id="506">506</th><td><i> @param scheme The URL scheme to check.</i></td></tr>
+<tr><th id="507">507</th><td><i> */</i></td></tr>
+<tr><th id="508">508</th><td>+ (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)handlesURLScheme:(NSString *)<dfn class="local col8 decl" id="98urlScheme" title='urlScheme' data-type='NSString * _Nonnull' data-ref="98urlScheme" data-ref-filename="98urlScheme">urlScheme</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.13</var>), ios(<var>11.0</var>));</td></tr>
+<tr><th id="509">509</th><td></td></tr>
+<tr><th id="510">510</th><td><i>/* @abstract Begins a download in the context of the currently displayed webpage as if the WKNavigationDelegate turned a navigation into a download instead</i></td></tr>
+<tr><th id="511">511</th><td><i> @param request The request specifying the URL to download.</i></td></tr>
+<tr><th id="512">512</th><td><i> @param completionHandler A block called when the download has started.</i></td></tr>
+<tr><th id="513">513</th><td><i> @discussion The download needs its delegate to be set in the completionHandler to receive updates about its progress.</i></td></tr>
+<tr><th id="514">514</th><td><i> */</i></td></tr>
+<tr><th id="515">515</th><td>- (<em>void</em>)startDownloadUsingRequest:(NSURLRequest *)<dfn class="local col9 decl" id="99request" title='request' data-type='NSURLRequest * _Nonnull' data-ref="99request" data-ref-filename="99request">request</dfn> completionHandler:(<em>void</em>(^)(WKDownload *))<dfn class="local col0 decl" id="100completionHandler" title='completionHandler' data-type='void (^ _Nonnull)(WKDownload * _Nonnull)' data-ref="100completionHandler" data-ref-filename="100completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="516">516</th><td></td></tr>
+<tr><th id="517">517</th><td><i>/* @abstract Resumes a download that failed or was canceled.</i></td></tr>
+<tr><th id="518">518</th><td><i> @param resumeData Data from a WKDownloadDelegate's didFailWithError or a WKDownload's cancel completionHandler.</i></td></tr>
+<tr><th id="519">519</th><td><i> @param completionHandler A block called when the download has resumed.</i></td></tr>
+<tr><th id="520">520</th><td><i> @discussion The download needs its delegate to be set in the completionHandler to receive updates about its progress.</i></td></tr>
+<tr><th id="521">521</th><td><i> */</i></td></tr>
+<tr><th id="522">522</th><td>- (<em>void</em>)resumeDownloadFromResumeData:(NSData *)<dfn class="local col1 decl" id="101resumeData" title='resumeData' data-type='NSData * _Nonnull' data-ref="101resumeData" data-ref-filename="101resumeData">resumeData</dfn> completionHandler:(<em>void</em>(^)(WKDownload *))<dfn class="local col2 decl" id="102completionHandler" title='completionHandler' data-type='void (^ _Nonnull)(WKDownload * _Nonnull)' data-ref="102completionHandler" data-ref-filename="102completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="523">523</th><td></td></tr>
+<tr><th id="524">524</th><td><i>/* @abstract The media type for the WKWebView</i></td></tr>
+<tr><th id="525">525</th><td><i> @discussion The value of mediaType will override the normal value of the CSS media property.</i></td></tr>
+<tr><th id="526">526</th><td><i> Setting the value to nil will restore the normal value.</i></td></tr>
+<tr><th id="527">527</th><td><i> The default value is nil.</i></td></tr>
+<tr><th id="528">528</th><td><i>*/</i></td></tr>
+<tr><th id="529">529</th><td>@property (nonatomic, nullable, copy) NSString *mediaType <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>11.0</var>), ios(<var>14.0</var>));</td></tr>
+<tr><th id="530">530</th><td></td></tr>
+<tr><th id="531">531</th><td><i>/* @abstract The interaction state for the WKWebView</i></td></tr>
+<tr><th id="532">532</th><td><i> @discussion The interaction state (back-forward list, currently loaded page, scroll position, form data...) for the WKWebView, which</i></td></tr>
+<tr><th id="533">533</th><td><i> can be retrieved and set on another WKWebView to restore state.</i></td></tr>
+<tr><th id="534">534</th><td><i>*/</i></td></tr>
+<tr><th id="535">535</th><td>@property (nonatomic, nullable, copy) <span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span> interactionState <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="536">536</th><td></td></tr>
+<tr><th id="537">537</th><td><i class="doc">/*! <span class="command">@abstract</span> Sets the webpage contents from the passed data as if it was the</i></td></tr>
+<tr><th id="538">538</th><td><i class="doc"> response to the supplied request. The request is never actually sent to the</i></td></tr>
+<tr><th id="539">539</th><td><i class="doc"> supplied URL, though loads of resources defined in the NSData object would</i></td></tr>
+<tr><th id="540">540</th><td><i class="doc"> be performed.</i></td></tr>
+<tr><th id="541">541</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">request</span> The request specifying the base URL and other loading details</i></td></tr>
+<tr><th id="542">542</th><td><i class="doc"> to be used while interpreting the supplied data object.</i></td></tr>
+<tr><th id="543">543</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">response</span> A response that is used to interpret the supplied data object.</i></td></tr>
+<tr><th id="544">544</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">data</span> The data to use as the contents of the webpage.</i></td></tr>
+<tr><th id="545">545</th><td><i class="doc"> <span class="command">@result</span> A new navigation.</i></td></tr>
+<tr><th id="546">546</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="547">547</th><td>- (WKNavigation *)loadSimulatedRequest:(NSURLRequest *)<dfn class="local col3 decl" id="103request" title='request' data-type='NSURLRequest * _Nonnull' data-ref="103request" data-ref-filename="103request">request</dfn> response:(NSURLResponse *)<dfn class="local col4 decl" id="104response" title='response' data-type='NSURLResponse * _Nonnull' data-ref="104response" data-ref-filename="104response">response</dfn> responseData:(NSData *)<dfn class="local col5 decl" id="105data" title='data' data-type='NSData * _Nonnull' data-ref="105data" data-ref-filename="105data">data</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="548">548</th><td>- (WKNavigation *)loadSimulatedRequest:(NSURLRequest *)<dfn class="local col6 decl" id="106request" title='request' data-type='NSURLRequest * _Nonnull' data-ref="106request" data-ref-filename="106request">request</dfn> withResponse:(NSURLResponse *)<dfn class="local col7 decl" id="107response" title='response' data-type='NSURLResponse * _Nonnull' data-ref="107response" data-ref-filename="107response">response</dfn> responseData:(NSData *)<dfn class="local col8 decl" id="108data" title='data' data-type='NSData * _Nonnull' data-ref="108data" data-ref-filename="108data">data</dfn> <a class="macro" href="WKFoundation.h.html#51" title="__attribute__((deprecated(&quot;use &quot; &quot;\&quot;loadSimulatedRequest:response:responseData:\&quot;&quot;)))" data-ref="_M/WK_API_DEPRECATED_WITH_REPLACEMENT">WK_API_DEPRECATED_WITH_REPLACEMENT</a>(<q>"loadSimulatedRequest:response:responseData:"</q>, macos(<var>12.0</var>, <var>12.0</var>), ios(<var>15.0</var>, <var>15.0</var>));</td></tr>
+<tr><th id="549">549</th><td></td></tr>
+<tr><th id="550">550</th><td><i class="doc">/*! <span class="command">@abstract</span> Navigates to the requested file URL on the filesystem.</i></td></tr>
+<tr><th id="551">551</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">request</span> The request specifying the file URL to which to navigate.</i></td></tr>
+<tr><th id="552">552</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">readAccessURL</span> The URL to allow read access to.</i></td></tr>
+<tr><th id="553">553</th><td><i class="doc"> <span class="command">@discussion</span> If readAccessURL references a single file, only that file may be</i></td></tr>
+<tr><th id="554">554</th><td><i class="doc"> loaded by WebKit.</i></td></tr>
+<tr><th id="555">555</th><td><i class="doc"> If readAccessURL references a directory, files inside that file may be loaded by WebKit.</i></td></tr>
+<tr><th id="556">556</th><td><i class="doc"> <span class="command">@result</span> A new navigation for the given file URL.</i></td></tr>
+<tr><th id="557">557</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="558">558</th><td>- (WKNavigation *)loadFileRequest:(NSURLRequest *)<dfn class="local col9 decl" id="109request" title='request' data-type='NSURLRequest * _Nonnull' data-ref="109request" data-ref-filename="109request">request</dfn> allowingReadAccessToURL:(NSURL *)<dfn class="local col0 decl" id="110readAccessURL" title='readAccessURL' data-type='NSURL * _Nonnull' data-ref="110readAccessURL" data-ref-filename="110readAccessURL">readAccessURL</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="559">559</th><td></td></tr>
+<tr><th id="560">560</th><td><i class="doc">/*! <span class="command">@abstract</span> Sets the webpage contents from the passed HTML string as if it was</i></td></tr>
+<tr><th id="561">561</th><td><i class="doc"> the response to the supplied request. The request is never actually sent to the</i></td></tr>
+<tr><th id="562">562</th><td><i class="doc"> supplied URL, though loads of resources defined in the HTML string would be</i></td></tr>
+<tr><th id="563">563</th><td><i class="doc"> performed.</i></td></tr>
+<tr><th id="564">564</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">request</span> The request specifying the base URL and other loading details</i></td></tr>
+<tr><th id="565">565</th><td><i class="doc"> to be used while interpreting the supplied data object.</i></td></tr>
+<tr><th id="566">566</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">string</span> The data to use as the contents of the webpage.</i></td></tr>
+<tr><th id="567">567</th><td><i class="doc"> <span class="command">@result</span> A new navigation.</i></td></tr>
+<tr><th id="568">568</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="569">569</th><td>- (WKNavigation *)loadSimulatedRequest:(NSURLRequest *)<dfn class="local col1 decl" id="111request" title='request' data-type='NSURLRequest * _Nonnull' data-ref="111request" data-ref-filename="111request">request</dfn> responseHTMLString:(NSString *)<dfn class="local col2 decl" id="112string" title='string' data-type='NSString * _Nonnull' data-ref="112string" data-ref-filename="112string">string</dfn> <span class="macro" title="" data-ref="_M/NS_SWIFT_NAME">NS_SWIFT_NAME</span>(loadSimulatedRequest(_:responseHTML:)) <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="570">570</th><td>- (WKNavigation *)loadSimulatedRequest:(NSURLRequest *)<dfn class="local col3 decl" id="113request" title='request' data-type='NSURLRequest * _Nonnull' data-ref="113request" data-ref-filename="113request">request</dfn> withResponseHTMLString:(NSString *)<dfn class="local col4 decl" id="114string" title='string' data-type='NSString * _Nonnull' data-ref="114string" data-ref-filename="114string">string</dfn> <span class="macro" title="" data-ref="_M/NS_SWIFT_NAME">NS_SWIFT_NAME</span>(loadSimulatedRequest(_:withResponseHTML:)) <a class="macro" href="WKFoundation.h.html#51" title="__attribute__((deprecated(&quot;use &quot; &quot;\&quot;loadSimulatedRequest:responseHTMLString:\&quot;&quot;)))" data-ref="_M/WK_API_DEPRECATED_WITH_REPLACEMENT">WK_API_DEPRECATED_WITH_REPLACEMENT</a>(<q>"loadSimulatedRequest:responseHTMLString:"</q>, macos(<var>12.0</var>, <var>12.0</var>), ios(<var>15.0</var>, <var>15.0</var>));</td></tr>
+<tr><th id="571">571</th><td></td></tr>
+<tr><th id="572">572</th><td><u>#<span data-ppcond="572">if</span> !<span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="573">573</th><td><i>/* @abstract Returns an NSPrintOperation object configured to print the contents of this WKWebView</i></td></tr>
+<tr><th id="574">574</th><td><i>@param printInfo The print info object used to configure the resulting print operation.</i></td></tr>
+<tr><th id="575">575</th><td><i>*/</i></td></tr>
+<tr><th id="576">576</th><td>- (NSPrintOperation *)printOperationWithPrintInfo:(NSPrintInfo *)<dfn class="local col5 decl" id="115printInfo" title='printInfo' data-type='NSPrintInfo * _Nonnull' data-ref="115printInfo" data-ref-filename="115printInfo">printInfo</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>11.0</var>));</td></tr>
+<tr><th id="577">577</th><td><u>#<span data-ppcond="572">endif</span></u></td></tr>
+<tr><th id="578">578</th><td></td></tr>
+<tr><th id="579">579</th><td><i class="doc">/*! <span class="command">@abstract</span> The theme color of the active page.</i></td></tr>
+<tr><th id="580">580</th><td><i class="doc"> <span class="command">@discussion</span> This is the CSS color parsed value of the `contents`</i></td></tr>
+<tr><th id="581">581</th><td><i class="doc"> attribute of the first valid</i></td></tr>
+<tr><th id="582">582</th><td><i class="doc"> <span class="command">@textblock</span></i></td></tr>
+<tr><th id="583">583</th><td><i class="doc"><span class="verb">    &lt;meta name="theme-color" contents="..."&gt;</span></i></td></tr>
+<tr><th id="584">584</th><td><i class="doc"><span class="verb"></span> @/textblock</i></td></tr>
+<tr><th id="585">585</th><td><i class="doc"> element in the current main document.</i></td></tr>
+<tr><th id="586">586</th><td><i class="doc"> <span class="command">@link</span><span class="verb"> WKWebView @</span>/link is key-value observing (KVO) compliant for this</i></td></tr>
+<tr><th id="587">587</th><td><i class="doc"> property.</i></td></tr>
+<tr><th id="588">588</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="589">589</th><td><u>#<span data-ppcond="589">if</span> <span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="590">590</th><td>@property (nonatomic, readonly, nullable) UIColor *themeColor WK_API_AVAILABLE(ios(<var>15.0</var>));</td></tr>
+<tr><th id="591">591</th><td><u>#<span data-ppcond="589">else</span></u></td></tr>
+<tr><th id="592">592</th><td>@property (nonatomic, readonly, nullable) NSColor *themeColor <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>));</td></tr>
+<tr><th id="593">593</th><td><u>#<span data-ppcond="589">endif</span></u></td></tr>
+<tr><th id="594">594</th><td></td></tr>
+<tr><th id="595">595</th><td><i class="doc">/*! <span class="command">@abstract</span> The color drawn behind the active page.</i></td></tr>
+<tr><th id="596">596</th><td><i class="doc"> <span class="command">@discussion</span> A color derived from the content of the active page, such as by blending the background color of</i></td></tr>
+<tr><th id="597">597</th><td><i class="doc"> the &lt;html&gt; and &lt;body&gt; elements with the <span class="command">@link</span><span class="verb"> backgroundColor @</span>/link of this <span class="command">@link</span><span class="verb"> WKWebView @</span>/link. Used as</i></td></tr>
+<tr><th id="598">598</th><td><i class="doc"> the background color under the page's content, such as for scroll bouncing areas. Can be overridden by the</i></td></tr>
+<tr><th id="599">599</th><td><i class="doc"> owner application for custom styling without having to modify the page's style.</i></td></tr>
+<tr><th id="600">600</th><td><i class="doc"> the background of scroll bouncing areas.</i></td></tr>
+<tr><th id="601">601</th><td><i class="doc"> <span class="command">@link</span><span class="verb"> WKWebView @</span>/link is key-value observing (KVO) compliant for this property.</i></td></tr>
+<tr><th id="602">602</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="603">603</th><td><u>#<span data-ppcond="603">if</span> <span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="604">604</th><td>@property (nonatomic, null_resettable, copy) UIColor *underPageBackgroundColor WK_API_AVAILABLE(ios(<var>15.0</var>));</td></tr>
+<tr><th id="605">605</th><td><u>#<span data-ppcond="603">else</span></u></td></tr>
+<tr><th id="606">606</th><td>@property (nonatomic, null_resettable, copy) NSColor *underPageBackgroundColor <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>));</td></tr>
+<tr><th id="607">607</th><td><u>#<span data-ppcond="603">endif</span></u></td></tr>
+<tr><th id="608">608</th><td></td></tr>
+<tr><th id="609">609</th><td>@end</td></tr>
+<tr><th id="610">610</th><td></td></tr>
+<tr><th id="611">611</th><td><u>#<span data-ppcond="611">if</span> !<span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="612">612</th><td></td></tr>
+<tr><th id="613">613</th><td>@interface WKWebView (WKIBActions) &lt;NSUserInterfaceValidations&gt;</td></tr>
+<tr><th id="614">614</th><td></td></tr>
+<tr><th id="615">615</th><td><i class="doc">/*! <span class="command">@abstract</span> Action method that navigates to the back item in the</i></td></tr>
+<tr><th id="616">616</th><td><i class="doc"> back-forward list.</i></td></tr>
+<tr><th id="617">617</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">sender</span> The object that sent this message.</i></td></tr>
+<tr><th id="618">618</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="619">619</th><td>- (<span class="macro" title="void)__attribute__((ibaction)" data-ref="_M/IBAction">IBAction</span>)goBack:(nullable <span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col6 decl" id="116sender" title='sender' data-type='id _Nullable' data-ref="116sender" data-ref-filename="116sender">sender</dfn>;</td></tr>
+<tr><th id="620">620</th><td></td></tr>
+<tr><th id="621">621</th><td><i class="doc">/*! <span class="command">@abstract</span> Action method that navigates to the forward item in the</i></td></tr>
+<tr><th id="622">622</th><td><i class="doc"> back-forward list.</i></td></tr>
+<tr><th id="623">623</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">sender</span> The object that sent this message.</i></td></tr>
+<tr><th id="624">624</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="625">625</th><td>- (<span class="macro" title="void)__attribute__((ibaction)" data-ref="_M/IBAction">IBAction</span>)goForward:(nullable <span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col7 decl" id="117sender" title='sender' data-type='id _Nullable' data-ref="117sender" data-ref-filename="117sender">sender</dfn>;</td></tr>
+<tr><th id="626">626</th><td></td></tr>
+<tr><th id="627">627</th><td><i class="doc">/*! <span class="command">@abstract</span> Action method that reloads the current page.</i></td></tr>
+<tr><th id="628">628</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">sender</span> The object that sent this message.</i></td></tr>
+<tr><th id="629">629</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="630">630</th><td>- (<span class="macro" title="void)__attribute__((ibaction)" data-ref="_M/IBAction">IBAction</span>)reload:(nullable <span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col8 decl" id="118sender" title='sender' data-type='id _Nullable' data-ref="118sender" data-ref-filename="118sender">sender</dfn>;</td></tr>
+<tr><th id="631">631</th><td></td></tr>
+<tr><th id="632">632</th><td><i class="doc">/*! <span class="command">@abstract</span> Action method that reloads the current page, performing</i></td></tr>
+<tr><th id="633">633</th><td><i class="doc"> end-to-end revalidation using cache-validating conditionals if possible.</i></td></tr>
+<tr><th id="634">634</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">sender</span> The object that sent this message.</i></td></tr>
+<tr><th id="635">635</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="636">636</th><td>- (<span class="macro" title="void)__attribute__((ibaction)" data-ref="_M/IBAction">IBAction</span>)reloadFromOrigin:(nullable <span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col9 decl" id="119sender" title='sender' data-type='id _Nullable' data-ref="119sender" data-ref-filename="119sender">sender</dfn>;</td></tr>
+<tr><th id="637">637</th><td></td></tr>
+<tr><th id="638">638</th><td><i class="doc">/*! <span class="command">@abstract</span> Action method that stops loading all resources on the current</i></td></tr>
+<tr><th id="639">639</th><td><i class="doc"> page.</i></td></tr>
+<tr><th id="640">640</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">sender</span> The object that sent this message.</i></td></tr>
+<tr><th id="641">641</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="642">642</th><td>- (<span class="macro" title="void)__attribute__((ibaction)" data-ref="_M/IBAction">IBAction</span>)stopLoading:(nullable <span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col0 decl" id="120sender" title='sender' data-type='id _Nullable' data-ref="120sender" data-ref-filename="120sender">sender</dfn>;</td></tr>
+<tr><th id="643">643</th><td></td></tr>
+<tr><th id="644">644</th><td>@end</td></tr>
+<tr><th id="645">645</th><td></td></tr>
+<tr><th id="646">646</th><td><a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.15.4</var>))</td></tr>
+<tr><th id="647">647</th><td>@interface WKWebView (WKNSTextFinderClient) &lt;NSTextFinderClient&gt;</td></tr>
+<tr><th id="648">648</th><td>@end</td></tr>
+<tr><th id="649">649</th><td></td></tr>
+<tr><th id="650">650</th><td><u>#<span data-ppcond="611">endif</span></u></td></tr>
+<tr><th id="651">651</th><td></td></tr>
+<tr><th id="652">652</th><td>@interface WKWebView (WKDeprecated)</td></tr>
+<tr><th id="653">653</th><td></td></tr>
+<tr><th id="654">654</th><td>@property (nonatomic, readonly, copy) NSArray *certificateChain <a class="macro" href="WKFoundation.h.html#51" title="__attribute__((deprecated(&quot;use &quot; &quot;\&quot;serverTrust\&quot;&quot;)))" data-ref="_M/WK_API_DEPRECATED_WITH_REPLACEMENT">WK_API_DEPRECATED_WITH_REPLACEMENT</a>(<q>"serverTrust"</q>, macos(<var>10.11</var>, <var>10.12</var>), ios(<var>9.0</var>, <var>10.0</var>));</td></tr>
+<tr><th id="655">655</th><td></td></tr>
+<tr><th id="656">656</th><td>@end</td></tr>
+<tr><th id="657">657</th><td></td></tr>
+<tr><th id="658">658</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_END">NS_ASSUME_NONNULL_END</span></td></tr>
+<tr><th id="659">659</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Tools/MiniBrowser/mac/AppDelegate.m.html'>webkit/Tools/MiniBrowser/mac/AppDelegate.m</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,137 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>CBORWriter.h source code [webkit/WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CBORWriter.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="cbor::CBORWriter "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CBORWriter.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>WebCore.framework</a>/<a href='../..'>Versions</a>/<a href='..'>A</a>/<a href='./'>PrivateHeaders</a>/<a href='CBORWriter.h.html'>CBORWriter.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>// Copyright 2017 The Chromium Authors. All rights reserved.</i></td></tr>
+<tr><th id="2">2</th><td><i>// Copyright (C) 2018 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i>//</i></td></tr>
+<tr><th id="4">4</th><td><i>// Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i>// modification, are permitted provided that the following conditions are</i></td></tr>
+<tr><th id="6">6</th><td><i>// met:</i></td></tr>
+<tr><th id="7">7</th><td><i>//</i></td></tr>
+<tr><th id="8">8</th><td><i>//    * Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="9">9</th><td><i>// notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="10">10</th><td><i>//    * Redistributions in binary form must reproduce the above</i></td></tr>
+<tr><th id="11">11</th><td><i>// copyright notice, this list of conditions and the following disclaimer</i></td></tr>
+<tr><th id="12">12</th><td><i>// in the documentation and/or other materials provided with the</i></td></tr>
+<tr><th id="13">13</th><td><i>// distribution.</i></td></tr>
+<tr><th id="14">14</th><td><i>//    * Neither the name of Google Inc. nor the names of its</i></td></tr>
+<tr><th id="15">15</th><td><i>// contributors may be used to endorse or promote products derived from</i></td></tr>
+<tr><th id="16">16</th><td><i>// this software without specific prior written permission.</i></td></tr>
+<tr><th id="17">17</th><td><i>//</i></td></tr>
+<tr><th id="18">18</th><td><i>// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</i></td></tr>
+<tr><th id="19">19</th><td><i>// "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT</i></td></tr>
+<tr><th id="20">20</th><td><i>// LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR</i></td></tr>
+<tr><th id="21">21</th><td><i>// A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT</i></td></tr>
+<tr><th id="22">22</th><td><i>// OWNER OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL,</i></td></tr>
+<tr><th id="23">23</th><td><i>// SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT</i></td></tr>
+<tr><th id="24">24</th><td><i>// LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE,</i></td></tr>
+<tr><th id="25">25</th><td><i>// DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY</i></td></tr>
+<tr><th id="26">26</th><td><i>// THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="27">27</th><td><i>// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="28">28</th><td><i>// OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#pragma once</u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><u>#<span data-ppcond="32">if</span> <a class="macro" href="../../../../usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(WEB_AUTHN)</u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><u>#include <a href="CBORValue.h.html">"CBORValue.h"</a></u></td></tr>
+<tr><th id="35">35</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><i>// A basic Concise Binary Object Representation (CBOR) encoder as defined by</i></td></tr>
+<tr><th id="38">38</th><td><i>// <a href="https://tools.ietf.org/html/rfc7049">https://tools.ietf.org/html/rfc7049</a>. This is a generic encoder that supplies</i></td></tr>
+<tr><th id="39">39</th><td><i>// canonical, well-formed CBOR values but does not guarantee their validity</i></td></tr>
+<tr><th id="40">40</th><td><i>// (see <a href="https://tools.ietf.org/html/rfc7049#section-3.2">https://tools.ietf.org/html/rfc7049#section-3.2</a>).</i></td></tr>
+<tr><th id="41">41</th><td><i>// Supported:</i></td></tr>
+<tr><th id="42">42</th><td><i>//  * Major types:</i></td></tr>
+<tr><th id="43">43</th><td><i>//     * 0: Unsigned integers, up to INT64_MAX.</i></td></tr>
+<tr><th id="44">44</th><td><i>//     * 1: Negative integers, to INT64_MIN.</i></td></tr>
+<tr><th id="45">45</th><td><i>//     * 2: Byte strings.</i></td></tr>
+<tr><th id="46">46</th><td><i>//     * 3: UTF-8 strings.</i></td></tr>
+<tr><th id="47">47</th><td><i>//     * 4: Arrays, with the number of elements known at the start.</i></td></tr>
+<tr><th id="48">48</th><td><i>//     * 5: Maps, with the number of elements known at the start</i></td></tr>
+<tr><th id="49">49</th><td><i>//              of the container.</i></td></tr>
+<tr><th id="50">50</th><td><i>//     * 7: Simple values.</i></td></tr>
+<tr><th id="51">51</th><td><i>//</i></td></tr>
+<tr><th id="52">52</th><td><i>// Unsupported:</i></td></tr>
+<tr><th id="53">53</th><td><i>//  * Floating-point numbers.</i></td></tr>
+<tr><th id="54">54</th><td><i>//  * Indefinite-length encodings.</i></td></tr>
+<tr><th id="55">55</th><td><i>//  * Parsing.</i></td></tr>
+<tr><th id="56">56</th><td><i>//</i></td></tr>
+<tr><th id="57">57</th><td><i>// Requirements for canonical CBOR as suggested by RFC 7049 are:</i></td></tr>
+<tr><th id="58">58</th><td><i>//  1) All major data types for the CBOR values must be as short as possible.</i></td></tr>
+<tr><th id="59">59</th><td><i>//      * Unsigned integer between 0 to 23 must be expressed in same byte as</i></td></tr>
+<tr><th id="60">60</th><td><i>//            the major type.</i></td></tr>
+<tr><th id="61">61</th><td><i>//      * 24 to 255 must be expressed only with an additional uint8_t.</i></td></tr>
+<tr><th id="62">62</th><td><i>//      * 256 to 65535 must be expressed only with an additional uint16_t.</i></td></tr>
+<tr><th id="63">63</th><td><i>//      * 65536 to 4294967295 must be expressed only with an additional</i></td></tr>
+<tr><th id="64">64</th><td><i>//            uint32_t. * The rules for expression of length in major types</i></td></tr>
+<tr><th id="65">65</th><td><i>//            2 to 5 follow the above rule for integers.</i></td></tr>
+<tr><th id="66">66</th><td><i>//  2) Keys in every map must be sorted (first by major type, then by key</i></td></tr>
+<tr><th id="67">67</th><td><i>//         length, then by value in byte-wise lexical order).</i></td></tr>
+<tr><th id="68">68</th><td><i>//  3) Indefinite length items must be converted to definite length items.</i></td></tr>
+<tr><th id="69">69</th><td><i>//  4) All maps must not have duplicate keys.</i></td></tr>
+<tr><th id="70">70</th><td><i>//</i></td></tr>
+<tr><th id="71">71</th><td><i>// Current implementation of CBORWriter encoder meets all the requirements of</i></td></tr>
+<tr><th id="72">72</th><td><i>// canonical CBOR.</i></td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td><b>namespace</b> <span class="namespace">cbor</span> {</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td><b>class</b> <dfn class="type def" id="cbor::CBORWriter" title='cbor::CBORWriter' data-ref="cbor::CBORWriter" data-ref-filename="cbor..CBORWriter">CBORWriter</dfn> {</td></tr>
+<tr><th id="77">77</th><td>    <a class="macro" href="../../../../usr/local/include/wtf/Noncopyable.h.html#23" title="CBORWriter(const CBORWriter&amp;) = delete; CBORWriter&amp; operator=(const CBORWriter&amp;) = delete;" data-ref="_M/WTF_MAKE_NONCOPYABLE">WTF_MAKE_NONCOPYABLE</a>(<dfn class="decl def fn" id="_ZN4cbor10CBORWriterC1ERKS0_" title='cbor::CBORWriter::CBORWriter' data-ref="_ZN4cbor10CBORWriterC1ERKS0_" data-ref-filename="_ZN4cbor10CBORWriterC1ERKS0_"><a class="type" href="#cbor::CBORWriter" title='cbor::CBORWriter' data-ref="cbor::CBORWriter" data-ref-filename="cbor..CBORWriter"><a class="type" href="#cbor::CBORWriter" title='cbor::CBORWriter' data-ref="cbor::CBORWriter" data-ref-filename="cbor..CBORWriter"><a class="type" href="#cbor::CBORWriter" title='cbor::CBORWriter' data-ref="cbor::CBORWriter" data-ref-filename="cbor..CBORWriter">CBORWriter</a></a></a></dfn>);</td></tr>
+<tr><th id="78">78</th><td><b>public</b>:</td></tr>
+<tr><th id="79">79</th><td>    <i>// Default that should be sufficiently large for most use cases.</i></td></tr>
+<tr><th id="80">80</th><td>    <em>static</em> <b>constexpr</b> <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl def" id="cbor::CBORWriter::kDefaultMaxNestingDepth" title='cbor::CBORWriter::kDefaultMaxNestingDepth' data-ref="cbor::CBORWriter::kDefaultMaxNestingDepth" data-ref-filename="cbor..CBORWriter..kDefaultMaxNestingDepth">kDefaultMaxNestingDepth</dfn> = <var>16</var>;</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td>    <dfn class="decl fn" id="_ZN4cbor10CBORWriterD1Ev" title='cbor::CBORWriter::~CBORWriter' data-ref="_ZN4cbor10CBORWriterD1Ev" data-ref-filename="_ZN4cbor10CBORWriterD1Ev">~CBORWriter</dfn>();</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td>    <i>// Returns the CBOR byte string representation of |node|, unless its nesting</i></td></tr>
+<tr><th id="85">85</th><td><i>    // depth is greater than |max_nesting_depth|, in which case an empty optional</i></td></tr>
+<tr><th id="86">86</th><td><i>    // value is returned. The nesting depth of |node| is defined as the number of</i></td></tr>
+<tr><th id="87">87</th><td><i>    // arrays/maps that has to be traversed to reach the most nested CBORValue</i></td></tr>
+<tr><th id="88">88</th><td><i>    // contained in |node|. Primitive values and empty containers have nesting</i></td></tr>
+<tr><th id="89">89</th><td><i>    // depths of 0.</i></td></tr>
+<tr><th id="90">90</th><td>    <a class="macro" href="PlatformExportMacros.h.html#39" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WEBCORE_EXPORT">WEBCORE_EXPORT</a> <em>static</em> <span class="namespace">std::</span><span class='type' title='std::__1::optional' data-ref="std::__1::optional" data-ref-filename="std..__1..optional">optional</span>&lt;<a class="type" href="../../../../usr/local/include/wtf/Forward.h.html#WTF::Vector" title='WTF::Vector' data-ref="WTF::Vector" data-ref-filename="WTF..Vector">Vector</a>&lt;<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>&gt;&gt; <dfn class="decl fn" id="_ZN4cbor10CBORWriter5writeERKNS_9CBORValueEm" title='cbor::CBORWriter::write' data-ref="_ZN4cbor10CBORWriter5writeERKNS_9CBORValueEm" data-ref-filename="_ZN4cbor10CBORWriter5writeERKNS_9CBORValueEm">write</dfn>(<em>const</em> <a class="type" href="CBORValue.h.html#cbor::CBORValue" title='cbor::CBORValue' data-ref="cbor::CBORValue" data-ref-filename="cbor..CBORValue">CBORValue</a>&amp;, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="5maxNestingLevel" title='maxNestingLevel' data-type='size_t' data-ref="5maxNestingLevel" data-ref-filename="5maxNestingLevel">maxNestingLevel</dfn> = <a class="member" href="#cbor::CBORWriter::kDefaultMaxNestingDepth" title='cbor::CBORWriter::kDefaultMaxNestingDepth' data-ref="cbor::CBORWriter::kDefaultMaxNestingDepth" data-ref-filename="cbor..CBORWriter..kDefaultMaxNestingDepth">kDefaultMaxNestingDepth</a>);</td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td><b>private</b>:</td></tr>
+<tr><th id="93">93</th><td>    <b>explicit</b> <dfn class="decl fn" id="_ZN4cbor10CBORWriterC1EPN3WTF6VectorIhLm0ENS1_15CrashOnOverflowELm16ENS1_10FastMallocEEE" title='cbor::CBORWriter::CBORWriter' data-ref="_ZN4cbor10CBORWriterC1EPN3WTF6VectorIhLm0ENS1_15CrashOnOverflowELm16ENS1_10FastMallocEEE" data-ref-filename="_ZN4cbor10CBORWriterC1EPN3WTF6VectorIhLm0ENS1_15CrashOnOverflowELm16ENS1_10FastMallocEEE">CBORWriter</dfn>(<a class="type" href="../../../../usr/local/include/wtf/Forward.h.html#WTF::Vector" title='WTF::Vector' data-ref="WTF::Vector" data-ref-filename="WTF..Vector">Vector</a>&lt;<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>&gt;*);</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td>    <i>// Called recursively to build the CBOR bytestring. When completed,</i></td></tr>
+<tr><th id="96">96</th><td><i>    // |m_encodedCBOR| will contain the CBOR.</i></td></tr>
+<tr><th id="97">97</th><td>    <em>bool</em> <dfn class="decl fn" id="_ZN4cbor10CBORWriter10encodeCBORERKNS_9CBORValueEi" title='cbor::CBORWriter::encodeCBOR' data-ref="_ZN4cbor10CBORWriter10encodeCBORERKNS_9CBORValueEi" data-ref-filename="_ZN4cbor10CBORWriter10encodeCBORERKNS_9CBORValueEi">encodeCBOR</dfn>(<em>const</em> <a class="type" href="CBORValue.h.html#cbor::CBORValue" title='cbor::CBORValue' data-ref="cbor::CBORValue" data-ref-filename="cbor..CBORValue">CBORValue</a>&amp;, <em>int</em> <dfn class="local col6 decl" id="6maxNestingLevel" title='maxNestingLevel' data-type='int' data-ref="6maxNestingLevel" data-ref-filename="6maxNestingLevel">maxNestingLevel</dfn>);</td></tr>
+<tr><th id="98">98</th><td></td></tr>
+<tr><th id="99">99</th><td>    <i>// Encodes the type and size of the data being added.</i></td></tr>
+<tr><th id="100">100</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN4cbor10CBORWriter9startItemENS_9CBORValue4TypeEy" title='cbor::CBORWriter::startItem' data-ref="_ZN4cbor10CBORWriter9startItemENS_9CBORValue4TypeEy" data-ref-filename="_ZN4cbor10CBORWriter9startItemENS_9CBORValue4TypeEy">startItem</dfn>(<a class="type" href="CBORValue.h.html#cbor::CBORValue" title='cbor::CBORValue' data-ref="cbor::CBORValue" data-ref-filename="cbor..CBORValue">CBORValue</a>::<a class="type" href="CBORValue.h.html#cbor::CBORValue::Type" title='cbor::CBORValue::Type' data-ref="cbor::CBORValue::Type" data-ref-filename="cbor..CBORValue..Type">Type</a>, <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col7 decl" id="7size" title='size' data-type='uint64_t' data-ref="7size" data-ref-filename="7size">size</dfn>);</td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td>    <i>// Encodes the additional information for the data.</i></td></tr>
+<tr><th id="103">103</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN4cbor10CBORWriter24setAdditionalInformationEh" title='cbor::CBORWriter::setAdditionalInformation' data-ref="_ZN4cbor10CBORWriter24setAdditionalInformationEh" data-ref-filename="_ZN4cbor10CBORWriter24setAdditionalInformationEh">setAdditionalInformation</dfn>(<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>);</td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td>    <i>// Encodes an unsigned integer value. This is used to both write</i></td></tr>
+<tr><th id="106">106</th><td><i>    // unsigned integers and to encode the lengths of other major types.</i></td></tr>
+<tr><th id="107">107</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN4cbor10CBORWriter7setUintEy" title='cbor::CBORWriter::setUint' data-ref="_ZN4cbor10CBORWriter7setUintEy" data-ref-filename="_ZN4cbor10CBORWriter7setUintEy">setUint</dfn>(<span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col8 decl" id="8value" title='value' data-type='uint64_t' data-ref="8value" data-ref-filename="8value">value</dfn>);</td></tr>
+<tr><th id="108">108</th><td></td></tr>
+<tr><th id="109">109</th><td>    <i>// Get the number of bytes needed to store the unsigned integer.</i></td></tr>
+<tr><th id="110">110</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl fn" id="_ZN4cbor10CBORWriter15getNumUintBytesEy" title='cbor::CBORWriter::getNumUintBytes' data-ref="_ZN4cbor10CBORWriter15getNumUintBytesEy" data-ref-filename="_ZN4cbor10CBORWriter15getNumUintBytesEy">getNumUintBytes</dfn>(<span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col9 decl" id="9value" title='value' data-type='uint64_t' data-ref="9value" data-ref-filename="9value">value</dfn>);</td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td>    <i>// Holds the encoded CBOR data.</i></td></tr>
+<tr><th id="113">113</th><td>    <a class="type" href="../../../../usr/local/include/wtf/Forward.h.html#WTF::Vector" title='WTF::Vector' data-ref="WTF::Vector" data-ref-filename="WTF..Vector">Vector</a>&lt;<span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>&gt;* <dfn class="decl field" id="cbor::CBORWriter::m_encodedCBOR" title='cbor::CBORWriter::m_encodedCBOR' data-ref="cbor::CBORWriter::m_encodedCBOR" data-ref-filename="cbor..CBORWriter..m_encodedCBOR">m_encodedCBOR</dfn>;</td></tr>
+<tr><th id="114">114</th><td>};</td></tr>
+<tr><th id="115">115</th><td></td></tr>
+<tr><th id="116">116</th><td>} <i>// namespace cbor</i></td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td><u>#<span data-ppcond="32">endif</span> // ENABLE(WEB_AUTHN)</u></td></tr>
+<tr><th id="119">119</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../DerivedSources/WebKit2/unified-sources/UnifiedSource44-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource44-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

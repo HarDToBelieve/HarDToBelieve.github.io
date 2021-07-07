@@ -1,0 +1,123 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>NativeWebMouseEvent.h source code [webkit/Source/WebKit/Shared/NativeWebMouseEvent.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="WebKit::NativeWebMouseEvent "/>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKit/Shared/NativeWebMouseEvent.h'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>WebKit</a>/<a href='./'>Shared</a>/<a href='NativeWebMouseEvent.h.html'>NativeWebMouseEvent.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2011 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="WebMouseEvent.h.html">"WebMouseEvent.h"</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/PointerID.h.html">&lt;WebCore/PointerID.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#<span data-ppcond="31">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformUse.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/USE">USE</a>(APPKIT)</u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html">&lt;wtf/RetainPtr.h&gt;</a></u></td></tr>
+<tr><th id="33">33</th><td><a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#306" title="@class" data-ref="_M/OBJC_CLASS">OBJC_CLASS</a> NSView;</td></tr>
+<tr><th id="34">34</th><td><u>#<span data-ppcond="31">endif</span></u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><u>#<span data-ppcond="36">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_GTK &amp;&amp; WTF_PLATFORM_GTK)" data-ref="_M/PLATFORM">PLATFORM</a>(GTK)</u></td></tr>
+<tr><th id="37">37</th><td><u>#include &lt;WebCore/GUniquePtrGtk.h&gt;</u></td></tr>
+<tr><th id="38">38</th><td><u>#if USE(GTK4)</u></td></tr>
+<tr><th id="39">39</th><td><b>typedef</b> <b>struct</b> _GdkEvent GdkEvent;</td></tr>
+<tr><th id="40">40</th><td><u>#else</u></td></tr>
+<tr><th id="41">41</th><td><b>typedef</b> <b>union</b> _GdkEvent GdkEvent;</td></tr>
+<tr><th id="42">42</th><td><u>#endif</u></td></tr>
+<tr><th id="43">43</th><td><u>#<span data-ppcond="36">endif</span></u></td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td><u>#<span data-ppcond="45">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="46">46</th><td><u>#include &lt;wtf/RetainPtr.h&gt;</u></td></tr>
+<tr><th id="47">47</th><td>OBJC_CLASS WebEvent;</td></tr>
+<tr><th id="48">48</th><td><u>#<span data-ppcond="45">endif</span></u></td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><u>#<span data-ppcond="50">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformUse.h.html#36" title="(defined USE_LIBWPE &amp;&amp; USE_LIBWPE)" data-ref="_M/USE">USE</a>(LIBWPE)</u></td></tr>
+<tr><th id="51">51</th><td><b>struct</b> wpe_input_pointer_event;</td></tr>
+<tr><th id="52">52</th><td><u>#<span data-ppcond="50">endif</span></u></td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td><u>#<span data-ppcond="54">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_WIN &amp;&amp; WTF_PLATFORM_WIN)" data-ref="_M/PLATFORM">PLATFORM</a>(WIN)</u></td></tr>
+<tr><th id="55">55</th><td><u>#include &lt;windows.h&gt;</u></td></tr>
+<tr><th id="56">56</th><td><u>#<span data-ppcond="54">endif</span></u></td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><b>namespace</b> <span class="namespace">WebKit</span> {</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td><b>class</b> <dfn class="type def" id="WebKit::NativeWebMouseEvent" title='WebKit::NativeWebMouseEvent' data-ref="WebKit::NativeWebMouseEvent" data-ref-filename="WebKit..NativeWebMouseEvent">NativeWebMouseEvent</dfn> : <b>public</b> <a class="type" href="WebMouseEvent.h.html#WebKit::WebMouseEvent" title='WebKit::WebMouseEvent' data-ref="WebKit::WebMouseEvent" data-ref-filename="WebKit..WebMouseEvent">WebMouseEvent</a> {</td></tr>
+<tr><th id="62">62</th><td><b>public</b>:</td></tr>
+<tr><th id="63">63</th><td><u>#<span data-ppcond="63">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformUse.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/USE">USE</a>(APPKIT)</u></td></tr>
+<tr><th id="64">64</th><td>    <dfn class="decl fn" id="_ZN6WebKit19NativeWebMouseEventC1EP7NSEventS2_P6NSView" title='WebKit::NativeWebMouseEvent::NativeWebMouseEvent' data-ref="_ZN6WebKit19NativeWebMouseEventC1EP7NSEventS2_P6NSView" data-ref-filename="_ZN6WebKit19NativeWebMouseEventC1EP7NSEventS2_P6NSView">NativeWebMouseEvent</dfn>(NSEvent *, NSEvent *<dfn class="local col8 decl" id="118lastPressureEvent" title='lastPressureEvent' data-type='NSEvent *' data-ref="118lastPressureEvent" data-ref-filename="118lastPressureEvent">lastPressureEvent</dfn>, NSView *);</td></tr>
+<tr><th id="65">65</th><td><u>#<span data-ppcond="63">elif</span> PLATFORM(GTK)</u></td></tr>
+<tr><th id="66">66</th><td>    NativeWebMouseEvent(<em>const</em> NativeWebMouseEvent&amp;);</td></tr>
+<tr><th id="67">67</th><td>    NativeWebMouseEvent(GdkEvent*, <em>int</em>, std::optional&lt;WebCore::FloatSize&gt;);</td></tr>
+<tr><th id="68">68</th><td>    NativeWebMouseEvent(GdkEvent*, <em>const</em> WebCore::IntPoint&amp;, <em>int</em>, std::optional&lt;WebCore::FloatSize&gt;);</td></tr>
+<tr><th id="69">69</th><td>    NativeWebMouseEvent(Type, Button, <em>unsigned</em> <em>short</em> buttons, <em>const</em> WebCore::IntPoint&amp; position, <em>const</em> WebCore::IntPoint&amp; globalPosition, <em>int</em> clickCount, OptionSet&lt;Modifier&gt; modifiers, std::optional&lt;WebCore::FloatSize&gt;, WebCore::PointerID, <em>const</em> String&amp; pointerType);</td></tr>
+<tr><th id="70">70</th><td>    <b>explicit</b> NativeWebMouseEvent(<em>const</em> WebCore::IntPoint&amp;);</td></tr>
+<tr><th id="71">71</th><td><u>#elif PLATFORM(IOS_FAMILY)</u></td></tr>
+<tr><th id="72">72</th><td>    NativeWebMouseEvent(::WebEvent *);</td></tr>
+<tr><th id="73">73</th><td>    NativeWebMouseEvent(Type, Button, <em>unsigned</em> <em>short</em> buttons, <em>const</em> WebCore::IntPoint&amp; position, <em>const</em> WebCore::IntPoint&amp; globalPosition, <em>float</em> deltaX, <em>float</em> deltaY, <em>float</em> deltaZ, <em>int</em> clickCount, OptionSet&lt;Modifier&gt;, WallTime timestamp, <em>double</em> force, GestureWasCancelled);</td></tr>
+<tr><th id="74">74</th><td><u>#elif USE(LIBWPE)</u></td></tr>
+<tr><th id="75">75</th><td>    NativeWebMouseEvent(<b>struct</b> wpe_input_pointer_event*, <em>float</em> deviceScaleFactor);</td></tr>
+<tr><th id="76">76</th><td><u>#elif PLATFORM(WIN)</u></td></tr>
+<tr><th id="77">77</th><td>    NativeWebMouseEvent(HWND, UINT message, WPARAM, LPARAM, <em>bool</em>);</td></tr>
+<tr><th id="78">78</th><td><u>#<span data-ppcond="63">endif</span></u></td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td><u>#<span data-ppcond="80">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformUse.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/USE">USE</a>(APPKIT)</u></td></tr>
+<tr><th id="81">81</th><td>    NSEvent* <dfn class="decl def fn" id="_ZNK6WebKit19NativeWebMouseEvent11nativeEventEv" title='WebKit::NativeWebMouseEvent::nativeEvent' data-ref="_ZNK6WebKit19NativeWebMouseEvent11nativeEventEv" data-ref-filename="_ZNK6WebKit19NativeWebMouseEvent11nativeEventEv">nativeEvent</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#WebKit::NativeWebMouseEvent::m_nativeEvent" title='WebKit::NativeWebMouseEvent::m_nativeEvent' data-ref="WebKit::NativeWebMouseEvent::m_nativeEvent" data-ref-filename="WebKit..NativeWebMouseEvent..m_nativeEvent">m_nativeEvent</a>.<a class="ref fn" href="../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZNK3WTF9RetainPtr3getEv" title='WTF::RetainPtr::get' data-ref="_ZNK3WTF9RetainPtr3getEv" data-ref-filename="_ZNK3WTF9RetainPtr3getEv">get</a>(); }</td></tr>
+<tr><th id="82">82</th><td><u>#<span data-ppcond="80">elif</span> PLATFORM(GTK)</u></td></tr>
+<tr><th id="83">83</th><td>    <em>const</em> GdkEvent* nativeEvent() <em>const</em> { <b>return</b> m_nativeEvent.get(); }</td></tr>
+<tr><th id="84">84</th><td><u>#elif PLATFORM(IOS_FAMILY)</u></td></tr>
+<tr><th id="85">85</th><td>    ::WebEvent* nativeEvent() <em>const</em> { <b>return</b> m_nativeEvent.get(); }</td></tr>
+<tr><th id="86">86</th><td><u>#elif PLATFORM(WIN)</u></td></tr>
+<tr><th id="87">87</th><td>    <em>const</em> MSG* nativeEvent() <em>const</em> { <b>return</b> &amp;m_nativeEvent; }</td></tr>
+<tr><th id="88">88</th><td><u>#else</u></td></tr>
+<tr><th id="89">89</th><td>    <em>const</em> <em>void</em>* nativeEvent() <em>const</em> { <b>return</b> <b>nullptr</b>; }</td></tr>
+<tr><th id="90">90</th><td><u>#<span data-ppcond="80">endif</span></u></td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td><b>private</b>:</td></tr>
+<tr><th id="93">93</th><td><u>#<span data-ppcond="93">if</span> <a class="macro" href="../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformUse.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/USE">USE</a>(APPKIT)</u></td></tr>
+<tr><th id="94">94</th><td>    <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RetainPtr" title='WTF::RetainPtr' data-ref="WTF::RetainPtr" data-ref-filename="WTF..RetainPtr">RetainPtr</a>&lt;NSEvent&gt; <dfn class="decl field" id="WebKit::NativeWebMouseEvent::m_nativeEvent" title='WebKit::NativeWebMouseEvent::m_nativeEvent' data-ref="WebKit::NativeWebMouseEvent::m_nativeEvent" data-ref-filename="WebKit..NativeWebMouseEvent..m_nativeEvent">m_nativeEvent</dfn>;</td></tr>
+<tr><th id="95">95</th><td><u>#<span data-ppcond="93">elif</span> PLATFORM(GTK)</u></td></tr>
+<tr><th id="96">96</th><td>    GUniquePtr&lt;GdkEvent&gt; m_nativeEvent;</td></tr>
+<tr><th id="97">97</th><td><u>#elif PLATFORM(IOS_FAMILY)</u></td></tr>
+<tr><th id="98">98</th><td>    RetainPtr&lt;::WebEvent&gt; m_nativeEvent;</td></tr>
+<tr><th id="99">99</th><td><u>#elif PLATFORM(WIN)</u></td></tr>
+<tr><th id="100">100</th><td>    MSG m_nativeEvent;</td></tr>
+<tr><th id="101">101</th><td><u>#<span data-ppcond="93">endif</span></u></td></tr>
+<tr><th id="102">102</th><td>};</td></tr>
+<tr><th id="103">103</th><td></td></tr>
+<tr><th id="104">104</th><td>} <i>// namespace WebKit</i></td></tr>
+<tr><th id="105">105</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource16-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource16-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

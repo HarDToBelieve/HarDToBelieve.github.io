@@ -1,0 +1,109 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebPlaybackControlsManager.h source code [webkit/Source/WebCore/platform/mac/WebPlaybackControlsManager.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebCore/platform/mac/WebPlaybackControlsManager.h'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebCore</a>/<a href='..'>platform</a>/<a href='./'>mac</a>/<a href='WebPlaybackControlsManager.h.html'>WebPlaybackControlsManager.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2016-2021 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="26">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined 1 &amp;&amp; 1)" data-ref="_M/PLATFORM">PLATFORM</a>(MAC) &amp;&amp; <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(VIDEO_PRESENTATION_MODE)</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#import <a href="../../PAL/pal/spi/cocoa/AVKitSPI.h.html">&lt;pal/spi/cocoa/AVKitSPI.h&gt;</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html">&lt;wtf/RetainPtr.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Vector.h.html">&lt;wtf/Vector.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><b>namespace</b> <span class="namespace">WebCore</span> {</td></tr>
+<tr><th id="33">33</th><td><b>class</b> <a class="type" href="PlaybackSessionInterfaceMac.h.html#WebCore::PlaybackSessionInterfaceMac" title='WebCore::PlaybackSessionInterfaceMac' data-ref="WebCore::PlaybackSessionInterfaceMac" data-ref-filename="WebCore..PlaybackSessionInterfaceMac" id="WebCore::PlaybackSessionInterfaceMac">PlaybackSessionInterfaceMac</a>;</td></tr>
+<tr><th id="34">34</th><td><b>struct</b> <a class="type" href="../MediaSelectionOption.h.html#WebCore::MediaSelectionOption" title='WebCore::MediaSelectionOption' data-ref="WebCore::MediaSelectionOption" data-ref-filename="WebCore..MediaSelectionOption" id="WebCore::MediaSelectionOption">MediaSelectionOption</a>;</td></tr>
+<tr><th id="35">35</th><td>}</td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><u>#<span data-ppcond="37">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(WEB_PLAYBACK_CONTROLS_MANAGER)</u></td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><a class="macro" href="../PlatformExportMacros.h.html#39" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/WEBCORE_EXPORT">WEBCORE_EXPORT</a></td></tr>
+<tr><th id="40">40</th><td>@interface WebPlaybackControlsManager : NSObject</td></tr>
+<tr><th id="41">41</th><td>    &lt;AVTouchBarPlaybackControlsControlling&gt;</td></tr>
+<tr><th id="42">42</th><td>{</td></tr>
+<tr><th id="43">43</th><td>@<b>private</b></td></tr>
+<tr><th id="44">44</th><td>    <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col5 decl field" id="5_contentDuration" title='_contentDuration' data-type='NSTimeInterval' data-ref="5_contentDuration" data-ref-filename="5_contentDuration">_contentDuration</dfn>;</td></tr>
+<tr><th id="45">45</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RetainPtr" title='WTF::RetainPtr' data-ref="WTF::RetainPtr" data-ref-filename="WTF..RetainPtr">RetainPtr</a>&lt;AVValueTiming&gt; <dfn class="local col6 decl field" id="6_timing" title='_timing' data-type='RetainPtr&lt;AVValueTiming&gt;' data-ref="6_timing" data-ref-filename="6_timing">_timing</dfn>;</td></tr>
+<tr><th id="46">46</th><td>    <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> <dfn class="local col7 decl field" id="7_seekToTime" title='_seekToTime' data-type='NSTimeInterval' data-ref="7_seekToTime" data-ref-filename="7_seekToTime">_seekToTime</dfn>;</td></tr>
+<tr><th id="47">47</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RetainPtr" title='WTF::RetainPtr' data-ref="WTF::RetainPtr" data-ref-filename="WTF..RetainPtr">RetainPtr</a>&lt;NSArray&gt; <dfn class="local col8 decl field" id="8_seekableTimeRanges" title='_seekableTimeRanges' data-type='RetainPtr&lt;NSArray&gt;' data-ref="8_seekableTimeRanges" data-ref-filename="8_seekableTimeRanges">_seekableTimeRanges</dfn>;</td></tr>
+<tr><th id="48">48</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RetainPtr" title='WTF::RetainPtr' data-ref="WTF::RetainPtr" data-ref-filename="WTF..RetainPtr">RetainPtr</a>&lt;NSArray&lt;AVTouchBarMediaSelectionOption *&gt;&gt; <dfn class="local col9 decl field" id="9_audioTouchBarMediaSelectionOptions" title='_audioTouchBarMediaSelectionOptions' data-type='RetainPtr&lt;NSArray&lt;AVTouchBarMediaSelectionOption *&gt;&gt;' data-ref="9_audioTouchBarMediaSelectionOptions" data-ref-filename="9_audioTouchBarMediaSelectionOptions">_audioTouchBarMediaSelectionOptions</dfn>;</td></tr>
+<tr><th id="49">49</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RetainPtr" title='WTF::RetainPtr' data-ref="WTF::RetainPtr" data-ref-filename="WTF..RetainPtr">RetainPtr</a>&lt;AVTouchBarMediaSelectionOption&gt; <dfn class="local col0 decl field" id="10_currentAudioTouchBarMediaSelectionOption" title='_currentAudioTouchBarMediaSelectionOption' data-type='RetainPtr&lt;AVTouchBarMediaSelectionOption&gt;' data-ref="10_currentAudioTouchBarMediaSelectionOption" data-ref-filename="10_currentAudioTouchBarMediaSelectionOption">_currentAudioTouchBarMediaSelectionOption</dfn>;</td></tr>
+<tr><th id="50">50</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RetainPtr" title='WTF::RetainPtr' data-ref="WTF::RetainPtr" data-ref-filename="WTF..RetainPtr">RetainPtr</a>&lt;NSArray&lt;AVTouchBarMediaSelectionOption *&gt;&gt; <dfn class="local col1 decl field" id="11_legibleTouchBarMediaSelectionOptions" title='_legibleTouchBarMediaSelectionOptions' data-type='RetainPtr&lt;NSArray&lt;AVTouchBarMediaSelectionOption *&gt;&gt;' data-ref="11_legibleTouchBarMediaSelectionOptions" data-ref-filename="11_legibleTouchBarMediaSelectionOptions">_legibleTouchBarMediaSelectionOptions</dfn>;</td></tr>
+<tr><th id="51">51</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RetainPtr" title='WTF::RetainPtr' data-ref="WTF::RetainPtr" data-ref-filename="WTF..RetainPtr">RetainPtr</a>&lt;AVTouchBarMediaSelectionOption&gt; <dfn class="local col2 decl field" id="12_currentLegibleTouchBarMediaSelectionOption" title='_currentLegibleTouchBarMediaSelectionOption' data-type='RetainPtr&lt;AVTouchBarMediaSelectionOption&gt;' data-ref="12_currentLegibleTouchBarMediaSelectionOption" data-ref-filename="12_currentLegibleTouchBarMediaSelectionOption">_currentLegibleTouchBarMediaSelectionOption</dfn>;</td></tr>
+<tr><th id="52">52</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RefPtr" title='WTF::RefPtr' data-ref="WTF::RefPtr" data-ref-filename="WTF..RefPtr">RefPtr</a>&lt;<span class="namespace">WebCore::</span><a class="type" href="PlaybackSessionInterfaceMac.h.html#WebCore::PlaybackSessionInterfaceMac" title='WebCore::PlaybackSessionInterfaceMac' data-ref="WebCore::PlaybackSessionInterfaceMac" data-ref-filename="WebCore..PlaybackSessionInterfaceMac">PlaybackSessionInterfaceMac</a>&gt; <dfn class="local col3 decl field" id="13_playbackSessionInterfaceMac" title='_playbackSessionInterfaceMac' data-type='RefPtr&lt;WebCore::PlaybackSessionInterfaceMac&gt;' data-ref="13_playbackSessionInterfaceMac" data-ref-filename="13_playbackSessionInterfaceMac">_playbackSessionInterfaceMac</dfn>;</td></tr>
+<tr><th id="53">53</th><td>    <em>double</em> <dfn class="local col4 decl field" id="14_defaultPlaybackRate" title='_defaultPlaybackRate' data-type='double' data-ref="14_defaultPlaybackRate" data-ref-filename="14_defaultPlaybackRate">_defaultPlaybackRate</dfn>;</td></tr>
+<tr><th id="54">54</th><td>    <em>float</em> <dfn class="local col5 decl field" id="15_rate" title='_rate' data-type='float' data-ref="15_rate" data-ref-filename="15_rate">_rate</dfn>;</td></tr>
+<tr><th id="55">55</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col6 decl field" id="16_playing" title='_playing' data-type='BOOL' data-ref="16_playing" data-ref-filename="16_playing">_playing</dfn>;</td></tr>
+<tr><th id="56">56</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col7 decl field" id="17_hasEnabledAudio" title='_hasEnabledAudio' data-type='BOOL' data-ref="17_hasEnabledAudio" data-ref-filename="17_hasEnabledAudio">_hasEnabledAudio</dfn>;</td></tr>
+<tr><th id="57">57</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col8 decl field" id="18_hasEnabledVideo" title='_hasEnabledVideo' data-type='BOOL' data-ref="18_hasEnabledVideo" data-ref-filename="18_hasEnabledVideo">_hasEnabledVideo</dfn>;</td></tr>
+<tr><th id="58">58</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col9 decl field" id="19_canTogglePlayback" title='_canTogglePlayback' data-type='BOOL' data-ref="19_canTogglePlayback" data-ref-filename="19_canTogglePlayback">_canTogglePlayback</dfn>;</td></tr>
+<tr><th id="59">59</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col0 decl field" id="20_canSeek" title='_canSeek' data-type='BOOL' data-ref="20_canSeek" data-ref-filename="20_canSeek">_canSeek</dfn>;</td></tr>
+<tr><th id="60">60</th><td>}</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td>@property (assign) <span class="namespace">WebCore::</span><a class="type" href="PlaybackSessionInterfaceMac.h.html#WebCore::PlaybackSessionInterfaceMac" title='WebCore::PlaybackSessionInterfaceMac' data-ref="WebCore::PlaybackSessionInterfaceMac" data-ref-filename="WebCore..PlaybackSessionInterfaceMac">PlaybackSessionInterfaceMac</a>* playbackSessionInterfaceMac;</td></tr>
+<tr><th id="63">63</th><td>@property (readwrite) <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> contentDuration;</td></tr>
+<tr><th id="64">64</th><td>@property (nonatomic, retain, readwrite) AVValueTiming *timing;</td></tr>
+<tr><th id="65">65</th><td>@property (nonatomic) <span class='typedef' title='NSTimeInterval' data-type='double' data-ref="NSTimeInterval" data-ref-filename="NSTimeInterval">NSTimeInterval</span> seekToTime;</td></tr>
+<tr><th id="66">66</th><td>@property (nonatomic, retain, readwrite) NSArray *seekableTimeRanges;</td></tr>
+<tr><th id="67">67</th><td>@property (nonatomic) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> hasEnabledAudio;</td></tr>
+<tr><th id="68">68</th><td>@property (nonatomic) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> hasEnabledVideo;</td></tr>
+<tr><th id="69">69</th><td>@property (getter=isPlaying) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> playing;</td></tr>
+<tr><th id="70">70</th><td>@property <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> canTogglePlayback;</td></tr>
+<tr><th id="71">71</th><td>@property <em>double</em> defaultPlaybackRate;</td></tr>
+<tr><th id="72">72</th><td>@property (nonatomic) <em>float</em> rate;</td></tr>
+<tr><th id="73">73</th><td>@property <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> allowsPictureInPicturePlayback;</td></tr>
+<tr><th id="74">74</th><td>@property (getter=isPictureInPictureActive) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> pictureInPictureActive;</td></tr>
+<tr><th id="75">75</th><td>@property <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> canTogglePictureInPicture;</td></tr>
+<tr><th id="76">76</th><td>- (<em>void</em>)togglePictureInPicture;</td></tr>
+<tr><th id="77">77</th><td>@property (nonatomic, readonly) <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> canSeek;</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td>- (AVTouchBarMediaSelectionOption *)currentAudioTouchBarMediaSelectionOption;</td></tr>
+<tr><th id="80">80</th><td>- (<em>void</em>)setCurrentAudioTouchBarMediaSelectionOption:(AVTouchBarMediaSelectionOption *)<dfn class="local col1 decl" id="21option" title='option' data-type='AVTouchBarMediaSelectionOption *' data-ref="21option" data-ref-filename="21option">option</dfn>;</td></tr>
+<tr><th id="81">81</th><td>- (AVTouchBarMediaSelectionOption *)currentLegibleTouchBarMediaSelectionOption;</td></tr>
+<tr><th id="82">82</th><td>- (<em>void</em>)setCurrentLegibleTouchBarMediaSelectionOption:(AVTouchBarMediaSelectionOption *)<dfn class="local col2 decl" id="22option" title='option' data-type='AVTouchBarMediaSelectionOption *' data-ref="22option" data-ref-filename="22option">option</dfn>;</td></tr>
+<tr><th id="83">83</th><td>- (<em>void</em>)setAudioMediaSelectionOptions:(<em>const</em> <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::Vector" title='WTF::Vector' data-ref="WTF::Vector" data-ref-filename="WTF..Vector">Vector</a>&lt;<span class="namespace">WebCore::</span><a class="type" href="../MediaSelectionOption.h.html#WebCore::MediaSelectionOption" title='WebCore::MediaSelectionOption' data-ref="WebCore::MediaSelectionOption" data-ref-filename="WebCore..MediaSelectionOption">MediaSelectionOption</a>&gt;&amp;)<dfn class="local col3 decl" id="23options" title='options' data-type='const Vector&lt;WebCore::MediaSelectionOption&gt; &amp;' data-ref="23options" data-ref-filename="23options">options</dfn> withSelectedIndex:(<span class='typedef' title='NSUInteger' data-type='unsigned long' data-ref="NSUInteger" data-ref-filename="NSUInteger">NSUInteger</span>)<dfn class="local col4 decl" id="24selectedIndex" title='selectedIndex' data-type='NSUInteger' data-ref="24selectedIndex" data-ref-filename="24selectedIndex">selectedIndex</dfn>;</td></tr>
+<tr><th id="84">84</th><td>- (<em>void</em>)setLegibleMediaSelectionOptions:(<em>const</em> <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::Vector" title='WTF::Vector' data-ref="WTF::Vector" data-ref-filename="WTF..Vector">Vector</a>&lt;<span class="namespace">WebCore::</span><a class="type" href="../MediaSelectionOption.h.html#WebCore::MediaSelectionOption" title='WebCore::MediaSelectionOption' data-ref="WebCore::MediaSelectionOption" data-ref-filename="WebCore..MediaSelectionOption">MediaSelectionOption</a>&gt;&amp;)<dfn class="local col5 decl" id="25options" title='options' data-type='const Vector&lt;WebCore::MediaSelectionOption&gt; &amp;' data-ref="25options" data-ref-filename="25options">options</dfn> withSelectedIndex:(<span class='typedef' title='NSUInteger' data-type='unsigned long' data-ref="NSUInteger" data-ref-filename="NSUInteger">NSUInteger</span>)<dfn class="local col6 decl" id="26selectedIndex" title='selectedIndex' data-type='NSUInteger' data-ref="26selectedIndex" data-ref-filename="26selectedIndex">selectedIndex</dfn>;</td></tr>
+<tr><th id="85">85</th><td>- (<em>void</em>)setAudioMediaSelectionIndex:(<span class='typedef' title='NSUInteger' data-type='unsigned long' data-ref="NSUInteger" data-ref-filename="NSUInteger">NSUInteger</span>)<dfn class="local col7 decl" id="27selectedIndex" title='selectedIndex' data-type='NSUInteger' data-ref="27selectedIndex" data-ref-filename="27selectedIndex">selectedIndex</dfn>;</td></tr>
+<tr><th id="86">86</th><td>- (<em>void</em>)setLegibleMediaSelectionIndex:(<span class='typedef' title='NSUInteger' data-type='unsigned long' data-ref="NSUInteger" data-ref-filename="NSUInteger">NSUInteger</span>)<dfn class="local col8 decl" id="28selectedIndex" title='selectedIndex' data-type='NSUInteger' data-ref="28selectedIndex" data-ref-filename="28selectedIndex">selectedIndex</dfn>;</td></tr>
+<tr><th id="87">87</th><td>@end</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td><u>#<span data-ppcond="37">endif</span> // ENABLE(WEB_PLAYBACK_CONTROLS_MANAGER)</u></td></tr>
+<tr><th id="90">90</th><td></td></tr>
+<tr><th id="91">91</th><td><u>#<span data-ppcond="26">endif</span> // PLATFORM(MAC) &amp;&amp; ENABLE(VIDEO_PRESENTATION_MODE)</u></td></tr>
+<tr><th id="92">92</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='PlaybackSessionInterfaceMac.mm.html'>webkit/Source/WebCore/platform/mac/PlaybackSessionInterfaceMac.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,35 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='89' type='void webrtc::PendingTaskSafetyFlag::SetAlive()'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='74'>// The SetAlive method is intended to support Start/Stop/Restart usecases.
+  // When a class has called SetNotAlive on a flag used for posted tasks, and
+  // decides it wants to post new tasks and have them run, there are two
+  // reasonable ways to do that:
+  //
+  // (i) Use the below SetAlive method. One subtlety is that any task posted
+  //     prior to SetNotAlive, and still in the queue, is resurrected and will
+  //     run.
+  //
+  // (ii) Create a fresh flag, and just drop the reference to the old one. This
+  //      avoids the above problem, and ensures that tasks poster prior to
+  //      SetNotAlive stay cancelled. Instead, there&apos;s a potential data race on
+  //      the flag pointer itself. Some synchronization is required between the
+  //      thread overwriting the flag pointer, and the threads that want to post
+  //      tasks and therefore read that same pointer.</doc>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/media/base/media_channel.cc' l='46' u='c' c='_ZN7cricket12MediaChannel12SetInterfaceEPNS0_16NetworkInterfaceE'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/audio_rtp_receiver.cc' l='344' u='c' c='_ZN6webrtc16AudioRtpReceiver17SetMediaChannel_wEPN7cricket12MediaChannelE'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.cc' l='41' ll='44' type='void webrtc::PendingTaskSafetyFlag::SetAlive()'/>
+<dec f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='89' type='void webrtc::PendingTaskSafetyFlag::SetAlive()'/>
+<doc f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='74'>// The SetAlive method is intended to support Start/Stop/Restart usecases.
+  // When a class has called SetNotAlive on a flag used for posted tasks, and
+  // decides it wants to post new tasks and have them run, there are two
+  // reasonable ways to do that:
+  //
+  // (i) Use the below SetAlive method. One subtlety is that any task posted
+  //     prior to SetNotAlive, and still in the queue, is resurrected and will
+  //     run.
+  //
+  // (ii) Create a fresh flag, and just drop the reference to the old one. This
+  //      avoids the above problem, and ensures that tasks poster prior to
+  //      SetNotAlive stay cancelled. Instead, there&apos;s a potential data race on
+  //      the flag pointer itself. Some synchronization is required between the
+  //      thread overwriting the flag pointer, and the threads that want to post
+  //      tasks and therefore read that same pointer.</doc>

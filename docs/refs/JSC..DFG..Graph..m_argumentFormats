@@ -1,0 +1,29 @@
+<dec f='webkit/Source/JavaScriptCore/dfg/DFGGraph.h' l='1131' type='Vector&lt;Vector&lt;JSC::DFG::FlushFormat&gt;&gt;'/>
+<use f='webkit/Source/JavaScriptCore/dfg/DFGAbstractInterpreterInlines.h' l='444' u='m' c='_ZN3JSC3DFG19AbstractInterpreter14executeEffectsEjPNS0_4NodeE'/>
+<offset>3712</offset>
+<doc f='webkit/Source/JavaScriptCore/dfg/DFGGraph.h' l='1107'>// In SSA, this is the argument speculation that we&apos;ve locked in for an entrypoint block.
+    //
+    // We must speculate on the argument types at each entrypoint even if operations involving
+    // arguments get killed. For example:
+    //
+    //     function foo(x) {
+    //        var tmp = x + 1;
+    //     }
+    //
+    // Assume that x is always int during profiling. The ArithAdd for &quot;x + 1&quot; will be dead and will
+    // have a proven check for the edge to &quot;x&quot;. So, we will not insert a Check node and we will
+    // kill the GetStack for &quot;x&quot;. But, we must do the int check in the progolue, because that&apos;s the
+    // thing we used to allow DCE of ArithAdd. Otherwise the add could be impure:
+    //
+    //     var o = {
+    //         valueOf: function() { do side effects; }
+    //     };
+    //     foo(o);
+    //
+    // If we DCE the ArithAdd and we remove the int check on x, then this won&apos;t do the side
+    // effects.
+    //
+    // By convention, entrypoint index 0 is used for the CodeBlock&apos;s op_enter entrypoint.
+    // So argumentFormats[0] are the argument formats for the normal call entrypoint.</doc>
+<use f='webkit/Source/JavaScriptCore/ftl/FTLLowerDFGToB3.cpp' l='367' u='m' c='_ZN3JSC3FTL12_GLOBAL__N_112LowerDFGToB35lowerEv'/>
+<use f='webkit/Source/JavaScriptCore/ftl/FTLLowerDFGToB3.cpp' l='375' u='m' c='_ZN3JSC3FTL12_GLOBAL__N_112LowerDFGToB35lowerEv'/>

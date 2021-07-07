@@ -1,0 +1,152 @@
+<inh f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/ref_counted_base.h' l='60' c='rtc::RefCountedNonVirtual'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='58' ll='98'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='59'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='61' c='_ZN6webrtc21PendingTaskSafetyFlag6CreateEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='65' c='_ZN6webrtc21PendingTaskSafetyFlag14CreateDetachedEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='69' c='_ZN6webrtc21PendingTaskSafetyFlag22CreateDetachedInactiveEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='123' c='_ZNK6webrtc16ScopedTaskSafety4flagEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='126'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='138' c='_ZNK6webrtc24ScopedTaskSafetyDetached4flagEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='141'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/to_queued_task.h' l='42' c='_ZN6webrtc23webrtc_new_closure_impl17SafetyClosureTaskC1EN3rtc13scoped_refptrINS_21PendingTaskSafetyFlagEEEOT_'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/to_queued_task.h' l='55'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/to_queued_task.h' l='85' c='_ZN6webrtc12ToQueuedTaskEN3rtc13scoped_refptrINS_21PendingTaskSafetyFlagEEEOT_'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/media/base/media_channel.h' l='285' c='_ZN7cricket12MediaChannel14network_safetyEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/media/base/media_channel.h' l='305'/>
+<size>104</size>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='22'>// The PendingTaskSafetyFlag and the ScopedTaskSafety are designed to address
+// the issue where you have a task to be executed later that has references,
+// but cannot guarantee that the referenced object is alive when the task is
+// executed.
+
+// This mechanism can be used with tasks that are created and destroyed
+// on a single thread / task queue, and with tasks posted to the same
+// thread/task queue, but tasks can be posted from any thread/TQ.
+
+// Typical usage:
+// When posting a task, post a copy (capture by-value in a lambda) of the flag
+// reference and before performing the work, check the |alive()| state. Abort if
+// alive() returns |false|:
+//
+// class ExampleClass {
+// ....
+//    my_task_queue_-&gt;PostTask(ToQueuedTask(
+//        [safety = pending_task_safety_flag_, this]() {
+//          // Now running on the main thread.
+//          if (!safety-&gt;alive())
+//            return;
+//          MyMethod();
+//        }));
+//   ....
+//   ~ExampleClass() {
+//     pending_task_safety_flag_-&gt;SetNotAlive();
+//   }
+//   scoped_refptr&lt;PendingTaskSafetyFlag&gt; pending_task_safety_flag_
+//        = PendingTaskSafetyFlag::Create();
+// }
+//
+// ToQueuedTask has an overload that makes this check automatic:
+//
+//    my_task_queue_-&gt;PostTask(ToQueuedTask(pending_task_safety_flag_,
+//        [this]() { MyMethod(); }));
+//</doc>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag6CreateEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag14CreateDetachedEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag22CreateDetachedInactiveEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlagD1Ev'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag11SetNotAliveEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag8SetAliveEv'/>
+<fun r='_ZNK6webrtc21PendingTaskSafetyFlag5aliveEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlagC1Eb'/>
+<mbr r='webrtc::PendingTaskSafetyFlag::alive_' o='32' t='bool'/>
+<mbr r='webrtc::PendingTaskSafetyFlag::main_sequence_' o='64' t='webrtc::SequenceChecker'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/media/base/media_channel.cc' l='143' c='_ZN7cricket12MediaChannel14network_safetyEv'/>
+<size>104</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/channel.h' l='303'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/audio_rtp_receiver.h' l='151'/>
+<size>104</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/dtmf_sender.h' l='97'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/rtp_transceiver.h' l='254'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='646'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/pc/peer_connection.h' l='647'/>
+<size>104</size>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.cc' l='16' c='_ZN6webrtc21PendingTaskSafetyFlag6CreateEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.cc' l='17' c='_ZN6webrtc21PendingTaskSafetyFlag6CreateEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.cc' l='20' c='_ZN6webrtc21PendingTaskSafetyFlag14CreateDetachedEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.cc' l='22' c='_ZN6webrtc21PendingTaskSafetyFlag14CreateDetachedEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.cc' l='23' c='_ZN6webrtc21PendingTaskSafetyFlag14CreateDetachedEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.cc' l='28' c='_ZN6webrtc21PendingTaskSafetyFlag22CreateDetachedInactiveEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.cc' l='30' c='_ZN6webrtc21PendingTaskSafetyFlag22CreateDetachedInactiveEv'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/task_utils/pending_task_safety_flag.cc' l='31' c='_ZN6webrtc21PendingTaskSafetyFlag22CreateDetachedInactiveEv'/>
+<size>104</size>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag6CreateEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag14CreateDetachedEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag22CreateDetachedInactiveEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag11SetNotAliveEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag8SetAliveEv'/>
+<fun r='_ZNK6webrtc21PendingTaskSafetyFlag5aliveEv'/>
+<inh f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/api/ref_counted_base.h' l='60' c='rtc::RefCountedNonVirtual'/>
+<def f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='58' ll='98'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='59'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='61' c='_ZN6webrtc21PendingTaskSafetyFlag6CreateEv'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='65' c='_ZN6webrtc21PendingTaskSafetyFlag14CreateDetachedEv'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='69' c='_ZN6webrtc21PendingTaskSafetyFlag22CreateDetachedInactiveEv'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='123' c='_ZNK6webrtc16ScopedTaskSafety4flagEv'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='126'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='138' c='_ZNK6webrtc24ScopedTaskSafetyDetached4flagEv'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='141'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/to_queued_task.h' l='42' c='_ZN6webrtc23webrtc_new_closure_impl17SafetyClosureTaskC1EN3rtc13scoped_refptrINS_21PendingTaskSafetyFlagEEEOT_'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/to_queued_task.h' l='55'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/to_queued_task.h' l='85' c='_ZN6webrtc12ToQueuedTaskEN3rtc13scoped_refptrINS_21PendingTaskSafetyFlagEEEOT_'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/media/base/media_channel.h' l='285' c='_ZN7cricket12MediaChannel14network_safetyEv'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/media/base/media_channel.h' l='305'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/channel.h' l='303'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/dtmf_sender.h' l='97'/>
+<use f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/pc/rtp_transceiver.h' l='254'/>
+<size>104</size>
+<doc f='webkit/WebKitBuild/Debug/usr/local/include/webrtc/rtc_base/task_utils/pending_task_safety_flag.h' l='22'>// The PendingTaskSafetyFlag and the ScopedTaskSafety are designed to address
+// the issue where you have a task to be executed later that has references,
+// but cannot guarantee that the referenced object is alive when the task is
+// executed.
+
+// This mechanism can be used with tasks that are created and destroyed
+// on a single thread / task queue, and with tasks posted to the same
+// thread/task queue, but tasks can be posted from any thread/TQ.
+
+// Typical usage:
+// When posting a task, post a copy (capture by-value in a lambda) of the flag
+// reference and before performing the work, check the |alive()| state. Abort if
+// alive() returns |false|:
+//
+// class ExampleClass {
+// ....
+//    my_task_queue_-&gt;PostTask(ToQueuedTask(
+//        [safety = pending_task_safety_flag_, this]() {
+//          // Now running on the main thread.
+//          if (!safety-&gt;alive())
+//            return;
+//          MyMethod();
+//        }));
+//   ....
+//   ~ExampleClass() {
+//     pending_task_safety_flag_-&gt;SetNotAlive();
+//   }
+//   scoped_refptr&lt;PendingTaskSafetyFlag&gt; pending_task_safety_flag_
+//        = PendingTaskSafetyFlag::Create();
+// }
+//
+// ToQueuedTask has an overload that makes this check automatic:
+//
+//    my_task_queue_-&gt;PostTask(ToQueuedTask(pending_task_safety_flag_,
+//        [this]() { MyMethod(); }));
+//</doc>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag6CreateEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag14CreateDetachedEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag22CreateDetachedInactiveEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlagD1Ev'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag11SetNotAliveEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlag8SetAliveEv'/>
+<fun r='_ZNK6webrtc21PendingTaskSafetyFlag5aliveEv'/>
+<fun r='_ZN6webrtc21PendingTaskSafetyFlagC1Eb'/>
+<mbr r='webrtc::PendingTaskSafetyFlag::alive_' o='32' t='bool'/>
+<mbr r='webrtc::PendingTaskSafetyFlag::main_sequence_' o='64' t='webrtc::SequenceChecker'/>

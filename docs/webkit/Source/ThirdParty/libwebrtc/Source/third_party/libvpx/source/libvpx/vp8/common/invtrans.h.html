@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>invtrans.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp8/common/invtrans.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp8/common/invtrans.h'; var root_path = '../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../..'>Source</a>/<a href='../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../..'>libwebrtc</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>third_party</a>/<a href='../../../..'>libvpx</a>/<a href='../../..'>source</a>/<a href='../..'>libvpx</a>/<a href='..'>vp8</a>/<a href='./'>common</a>/<a href='invtrans.h.html'>invtrans.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2010 The WebM project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/VPX_VP8_COMMON_INVTRANS_H_">VPX_VP8_COMMON_INVTRANS_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/VPX_VP8_COMMON_INVTRANS_H_" data-ref="_M/VPX_VP8_COMMON_INVTRANS_H_">VPX_VP8_COMMON_INVTRANS_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="../../../config/ios/arm64/vpx_config.h.html">"./vpx_config.h"</a></u></td></tr>
+<tr><th id="15">15</th><td><u>#include <a href="../../../config/ios/arm64/vp8_rtcd.h.html">"vp8_rtcd.h"</a></u></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="blockd.h.html">"blockd.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="onyxc_int.h.html">"onyxc_int.h"</a></u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#<span data-ppcond="19">if</span> <a class="macro" href="../../../config/ios/arm64/vpx_config.h.html#64" title="1" data-ref="_M/CONFIG_MULTITHREAD">CONFIG_MULTITHREAD</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="../../vpx_mem/vpx_mem.h.html">"vpx_mem/vpx_mem.h"</a></u></td></tr>
+<tr><th id="21">21</th><td><u>#<span data-ppcond="19">endif</span></u></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><u>#<span data-ppcond="23">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="24">24</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="25">25</th><td><u>#<span data-ppcond="23">endif</span></u></td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td><em>static</em> <em>void</em> <dfn class="decl def fn" id="eob_adjust" title='eob_adjust' data-ref="eob_adjust" data-ref-filename="eob_adjust">eob_adjust</dfn>(<em>char</em> *<dfn class="local col4 decl" id="34eobs" title='eobs' data-type='char *' data-ref="34eobs" data-ref-filename="34eobs">eobs</dfn>, <em>short</em> *<dfn class="local col5 decl" id="35diff" title='diff' data-type='short *' data-ref="35diff" data-ref-filename="35diff">diff</dfn>) {</td></tr>
+<tr><th id="28">28</th><td>  <i>/* eob adjust.... the idct can only skip if both the dc and eob are zero */</i></td></tr>
+<tr><th id="29">29</th><td>  <em>int</em> <dfn class="local col6 decl" id="36js" title='js' data-type='int' data-ref="36js" data-ref-filename="36js">js</dfn>;</td></tr>
+<tr><th id="30">30</th><td>  <b>for</b> (<a class="local col6 ref" href="#36js" title='js' data-ref="36js" data-ref-filename="36js">js</a> = <var>0</var>; <a class="local col6 ref" href="#36js" title='js' data-ref="36js" data-ref-filename="36js">js</a> &lt; <var>16</var>; ++<a class="local col6 ref" href="#36js" title='js' data-ref="36js" data-ref-filename="36js">js</a>) {</td></tr>
+<tr><th id="31">31</th><td>    <b>if</b> ((<a class="local col4 ref" href="#34eobs" title='eobs' data-ref="34eobs" data-ref-filename="34eobs">eobs</a>[<a class="local col6 ref" href="#36js" title='js' data-ref="36js" data-ref-filename="36js">js</a>] == <var>0</var>) &amp;&amp; (<a class="local col5 ref" href="#35diff" title='diff' data-ref="35diff" data-ref-filename="35diff">diff</a>[<var>0</var>] != <var>0</var>)) <a class="local col4 ref" href="#34eobs" title='eobs' data-ref="34eobs" data-ref-filename="34eobs">eobs</a>[<a class="local col6 ref" href="#36js" title='js' data-ref="36js" data-ref-filename="36js">js</a>]++;</td></tr>
+<tr><th id="32">32</th><td>    <a class="local col5 ref" href="#35diff" title='diff' data-ref="35diff" data-ref-filename="35diff">diff</a> += <var>16</var>;</td></tr>
+<tr><th id="33">33</th><td>  }</td></tr>
+<tr><th id="34">34</th><td>}</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><em>static</em> <a class="macro" href="../../../config/ios/arm64/vpx_config.h.html#12" title="inline" data-ref="_M/INLINE">INLINE</a> <em>void</em> <dfn class="decl def fn" id="vp8_inverse_transform_mby" title='vp8_inverse_transform_mby' data-ref="vp8_inverse_transform_mby" data-ref-filename="vp8_inverse_transform_mby">vp8_inverse_transform_mby</dfn>(<a class="typedef" href="blockd.h.html#MACROBLOCKD" title='MACROBLOCKD' data-type='struct macroblockd' data-ref="MACROBLOCKD" data-ref-filename="MACROBLOCKD">MACROBLOCKD</a> *<dfn class="local col7 decl" id="37xd" title='xd' data-type='MACROBLOCKD *' data-ref="37xd" data-ref-filename="37xd">xd</dfn>) {</td></tr>
+<tr><th id="37">37</th><td>  <em>short</em> *<dfn class="local col8 decl" id="38DQC" title='DQC' data-type='short *' data-ref="38DQC" data-ref-filename="38DQC">DQC</dfn> = <a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#215" title='macroblockd::dequant_y1' data-ref="macroblockd::dequant_y1" data-ref-filename="macroblockd..dequant_y1">dequant_y1</a>;</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td>  <b>if</b> (<a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#macroblockd::mode_info_context" title='macroblockd::mode_info_context' data-ref="macroblockd::mode_info_context" data-ref-filename="macroblockd..mode_info_context">mode_info_context</a>-&gt;<a class="ref field" href="blockd.h.html#modeinfo::mbmi" title='modeinfo::mbmi' data-ref="modeinfo::mbmi" data-ref-filename="modeinfo..mbmi">mbmi</a>.<a class="ref field" href="blockd.h.html#(anonymous)::mode" title='(anonymous struct)::mode' data-ref="(anonymous)::mode" data-ref-filename="(anonymous)..mode">mode</a> != <a class="enum" href="blockd.h.html#SPLITMV" title='SPLITMV' data-ref="SPLITMV" data-ref-filename="SPLITMV">SPLITMV</a>) {</td></tr>
+<tr><th id="40">40</th><td>    <i>/* do 2nd order transform on the dc block */</i></td></tr>
+<tr><th id="41">41</th><td>    <b>if</b> (<a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#213" title='macroblockd::eobs' data-ref="macroblockd::eobs" data-ref-filename="macroblockd..eobs">eobs</a>[<var>24</var>] &gt; <var>1</var>) {</td></tr>
+<tr><th id="42">42</th><td>      <a class="macro" href="../../../config/ios/arm64/vp8_rtcd.h.html#423" title="vp8_short_inv_walsh4x4_neon" data-ref="_M/vp8_short_inv_walsh4x4">vp8_short_inv_walsh4x4</a>(&amp;<a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#macroblockd::block" title='macroblockd::block' data-ref="macroblockd::block" data-ref-filename="macroblockd..block">block</a>[<var>24</var>].<a class="ref field" href="blockd.h.html#blockd::dqcoeff" title='blockd::dqcoeff' data-ref="blockd::dqcoeff" data-ref-filename="blockd..dqcoeff">dqcoeff</a>[<var>0</var>], <a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#211" title='macroblockd::qcoeff' data-ref="macroblockd::qcoeff" data-ref-filename="macroblockd..qcoeff">qcoeff</a>);</td></tr>
+<tr><th id="43">43</th><td>    } <b>else</b> {</td></tr>
+<tr><th id="44">44</th><td>      <a class="macro" href="../../../config/ios/arm64/vp8_rtcd.h.html#426" title="vp8_short_inv_walsh4x4_1_c" data-ref="_M/vp8_short_inv_walsh4x4_1">vp8_short_inv_walsh4x4_1</a>(&amp;<a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#macroblockd::block" title='macroblockd::block' data-ref="macroblockd::block" data-ref-filename="macroblockd..block">block</a>[<var>24</var>].<a class="ref field" href="blockd.h.html#blockd::dqcoeff" title='blockd::dqcoeff' data-ref="blockd::dqcoeff" data-ref-filename="blockd..dqcoeff">dqcoeff</a>[<var>0</var>], <a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#211" title='macroblockd::qcoeff' data-ref="macroblockd::qcoeff" data-ref-filename="macroblockd..qcoeff">qcoeff</a>);</td></tr>
+<tr><th id="45">45</th><td>    }</td></tr>
+<tr><th id="46">46</th><td>    <a class="ref fn" href="#eob_adjust" title='eob_adjust' data-ref="eob_adjust" data-ref-filename="eob_adjust">eob_adjust</a>(<a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#213" title='macroblockd::eobs' data-ref="macroblockd::eobs" data-ref-filename="macroblockd..eobs">eobs</a>, <a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#211" title='macroblockd::qcoeff' data-ref="macroblockd::qcoeff" data-ref-filename="macroblockd..qcoeff">qcoeff</a>);</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td>    <a class="local col8 ref" href="#38DQC" title='DQC' data-ref="38DQC" data-ref-filename="38DQC">DQC</a> = <a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#216" title='macroblockd::dequant_y1_dc' data-ref="macroblockd::dequant_y1_dc" data-ref-filename="macroblockd..dequant_y1_dc">dequant_y1_dc</a>;</td></tr>
+<tr><th id="49">49</th><td>  }</td></tr>
+<tr><th id="50">50</th><td>  <a class="macro" href="../../../config/ios/arm64/vp8_rtcd.h.html#238" title="vp8_dequant_idct_add_y_block_neon" data-ref="_M/vp8_dequant_idct_add_y_block">vp8_dequant_idct_add_y_block</a>(<a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#211" title='macroblockd::qcoeff' data-ref="macroblockd::qcoeff" data-ref-filename="macroblockd..qcoeff">qcoeff</a>, <a class="local col8 ref" href="#38DQC" title='DQC' data-ref="38DQC" data-ref-filename="38DQC">DQC</a>, <a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#macroblockd::dst" title='macroblockd::dst' data-ref="macroblockd::dst" data-ref-filename="macroblockd..dst">dst</a>.<a class="ref field" href="../../vpx_scale/yv12config.h.html#yv12_buffer_config::y_buffer" title='yv12_buffer_config::y_buffer' data-ref="yv12_buffer_config::y_buffer" data-ref-filename="yv12_buffer_config..y_buffer">y_buffer</a>,</td></tr>
+<tr><th id="51">51</th><td>                               <a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#macroblockd::dst" title='macroblockd::dst' data-ref="macroblockd::dst" data-ref-filename="macroblockd..dst">dst</a>.<a class="ref field" href="../../vpx_scale/yv12config.h.html#yv12_buffer_config::y_stride" title='yv12_buffer_config::y_stride' data-ref="yv12_buffer_config::y_stride" data-ref-filename="yv12_buffer_config..y_stride">y_stride</a>, <a class="local col7 ref" href="#37xd" title='xd' data-ref="37xd" data-ref-filename="37xd">xd</a>-&gt;<a class="ref field" href="blockd.h.html#213" title='macroblockd::eobs' data-ref="macroblockd::eobs" data-ref-filename="macroblockd..eobs">eobs</a>);</td></tr>
+<tr><th id="52">52</th><td>}</td></tr>
+<tr><th id="53">53</th><td><u>#<span data-ppcond="53">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="54">54</th><td>}  <i>// extern "C"</i></td></tr>
+<tr><th id="55">55</th><td><u>#<span data-ppcond="53">endif</span></u></td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td><u>#<span data-ppcond="11">endif</span>  // VPX_VP8_COMMON_INVTRANS_H_</u></td></tr>
+<tr><th id="58">58</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../decoder/decodeframe.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/libvpx/source/libvpx/vp8/decoder/decodeframe.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

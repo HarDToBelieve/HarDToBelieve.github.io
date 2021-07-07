@@ -1,0 +1,81 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>h265_globals.h source code [webkit/WebKitBuild/Debug/usr/local/include/webrtc/modules/video_coding/codecs/h265/include/h265_globals.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::H265NaluInfo,webrtc::H265PacketizationMode,webrtc::H265PacketizationTypes,webrtc::RTPVideoHeaderH265 "/>
+<link rel="stylesheet" href="../../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/webrtc/modules/video_coding/codecs/h265/include/h265_globals.h'; var root_path = '../../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../../..'>WebKitBuild</a>/<a href='../../../../../../../../..'>Debug</a>/<a href='../../../../../../../..'>usr</a>/<a href='../../../../../../..'>local</a>/<a href='../../../../../..'>include</a>/<a href='../../../../..'>webrtc</a>/<a href='../../../..'>modules</a>/<a href='../../..'>video_coding</a>/<a href='../..'>codecs</a>/<a href='..'>h265</a>/<a href='./'>include</a>/<a href='h265_globals.h.html'>h265_globals.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2018 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td><i></i></td></tr>
+<tr><th id="11">11</th><td><i>// This file contains codec dependent definitions that are needed in</i></td></tr>
+<tr><th id="12">12</th><td><i>// order to compile the WebRTC codebase, even if this codec is not used.</i></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#<span data-ppcond="14">ifndef</span> <span class="macro" data-ref="_M/MODULES_VIDEO_CODING_CODECS_H265_INCLUDE_H265_GLOBALS_H_">MODULES_VIDEO_CODING_CODECS_H265_INCLUDE_H265_GLOBALS_H_</span></u></td></tr>
+<tr><th id="15">15</th><td><u>#define <dfn class="macro" id="_M/MODULES_VIDEO_CODING_CODECS_H265_INCLUDE_H265_GLOBALS_H_" data-ref="_M/MODULES_VIDEO_CODING_CODECS_H265_INCLUDE_H265_GLOBALS_H_">MODULES_VIDEO_CODING_CODECS_H265_INCLUDE_H265_GLOBALS_H_</dfn></u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#<span data-ppcond="17">ifndef</span> <span class="macro" data-ref="_M/DISABLE_H265">DISABLE_H265</span></u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="../../h264/include/h264_globals.h.html">"modules/video_coding/codecs/h264/include/h264_globals.h"</a></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><i>// The packetization types that we support: single, aggregated, and fragmented.</i></td></tr>
+<tr><th id="24">24</th><td><b>enum</b> <dfn class="type def" id="webrtc::H265PacketizationTypes" title='webrtc::H265PacketizationTypes' data-ref="webrtc::H265PacketizationTypes" data-ref-filename="webrtc..H265PacketizationTypes">H265PacketizationTypes</dfn> {</td></tr>
+<tr><th id="25">25</th><td>  <dfn class="enum" id="webrtc::kH265SingleNalu" title='webrtc::kH265SingleNalu' data-ref="webrtc::kH265SingleNalu" data-ref-filename="webrtc..kH265SingleNalu">kH265SingleNalu</dfn>,  <i>// This packet contains a single NAL unit.</i></td></tr>
+<tr><th id="26">26</th><td>  <dfn class="enum" id="webrtc::kH265AP" title='webrtc::kH265AP' data-ref="webrtc::kH265AP" data-ref-filename="webrtc..kH265AP">kH265AP</dfn>,          <i>// This packet contains aggregation Packet.</i></td></tr>
+<tr><th id="27">27</th><td>                    <i>// If this packet has an associated NAL unit type,</i></td></tr>
+<tr><th id="28">28</th><td><i>                    // it'll be for the first such aggregated packet.</i></td></tr>
+<tr><th id="29">29</th><td>  <dfn class="enum" id="webrtc::kH265FU" title='webrtc::kH265FU' data-ref="webrtc::kH265FU" data-ref-filename="webrtc..kH265FU">kH265FU</dfn>,          <i>// This packet contains a FU (fragmentation</i></td></tr>
+<tr><th id="30">30</th><td>                    <i>// unit) packet, meaning it is a part of a frame</i></td></tr>
+<tr><th id="31">31</th><td><i>                    // that was too large to fit into a single packet.</i></td></tr>
+<tr><th id="32">32</th><td>};</td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><b>struct</b> <dfn class="type def" id="webrtc::H265NaluInfo" title='webrtc::H265NaluInfo' data-ref="webrtc::H265NaluInfo" data-ref-filename="webrtc..H265NaluInfo">H265NaluInfo</dfn> {</td></tr>
+<tr><th id="35">35</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="webrtc::H265NaluInfo::type" title='webrtc::H265NaluInfo::type' data-ref="webrtc::H265NaluInfo::type" data-ref-filename="webrtc..H265NaluInfo..type">type</dfn>;</td></tr>
+<tr><th id="36">36</th><td>  <em>int</em> <dfn class="decl field" id="webrtc::H265NaluInfo::vps_id" title='webrtc::H265NaluInfo::vps_id' data-ref="webrtc::H265NaluInfo::vps_id" data-ref-filename="webrtc..H265NaluInfo..vps_id">vps_id</dfn>;</td></tr>
+<tr><th id="37">37</th><td>  <em>int</em> <dfn class="decl field" id="webrtc::H265NaluInfo::sps_id" title='webrtc::H265NaluInfo::sps_id' data-ref="webrtc::H265NaluInfo::sps_id" data-ref-filename="webrtc..H265NaluInfo..sps_id">sps_id</dfn>;</td></tr>
+<tr><th id="38">38</th><td>  <em>int</em> <dfn class="decl field" id="webrtc::H265NaluInfo::pps_id" title='webrtc::H265NaluInfo::pps_id' data-ref="webrtc::H265NaluInfo::pps_id" data-ref-filename="webrtc..H265NaluInfo..pps_id">pps_id</dfn>;</td></tr>
+<tr><th id="39">39</th><td>};</td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><b>enum</b> <b>class</b> <dfn class="type def" id="webrtc::H265PacketizationMode" title='webrtc::H265PacketizationMode' data-ref="webrtc::H265PacketizationMode" data-ref-filename="webrtc..H265PacketizationMode">H265PacketizationMode</dfn> {</td></tr>
+<tr><th id="42">42</th><td>  <dfn class="enum" id="webrtc::H265PacketizationMode::NonInterleaved" title='webrtc::H265PacketizationMode::NonInterleaved' data-ref="webrtc::H265PacketizationMode::NonInterleaved" data-ref-filename="webrtc..H265PacketizationMode..NonInterleaved">NonInterleaved</dfn> = <var>0</var>,  <i>// Mode 1 - STAP-A, FU-A is allowed</i></td></tr>
+<tr><th id="43">43</th><td>  <dfn class="enum" id="webrtc::H265PacketizationMode::SingleNalUnit" title='webrtc::H265PacketizationMode::SingleNalUnit' data-ref="webrtc::H265PacketizationMode::SingleNalUnit" data-ref-filename="webrtc..H265PacketizationMode..SingleNalUnit">SingleNalUnit</dfn>        <i>// Mode 0 - only single NALU allowed</i></td></tr>
+<tr><th id="44">44</th><td>};</td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td><b>struct</b> <dfn class="type def" id="webrtc::RTPVideoHeaderH265" title='webrtc::RTPVideoHeaderH265' data-ref="webrtc::RTPVideoHeaderH265" data-ref-filename="webrtc..RTPVideoHeaderH265">RTPVideoHeaderH265</dfn> {</td></tr>
+<tr><th id="47">47</th><td>  <i>// The NAL unit type. If this is a header for a fragmented packet, it's the</i></td></tr>
+<tr><th id="48">48</th><td><i>  // NAL unit type of the original data. If this is the header for an aggregated</i></td></tr>
+<tr><th id="49">49</th><td><i>  // packet, it's the NAL unit type of the first NAL unit in the packet.</i></td></tr>
+<tr><th id="50">50</th><td>  <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span> <dfn class="decl field" id="webrtc::RTPVideoHeaderH265::nalu_type" title='webrtc::RTPVideoHeaderH265::nalu_type' data-ref="webrtc::RTPVideoHeaderH265::nalu_type" data-ref-filename="webrtc..RTPVideoHeaderH265..nalu_type">nalu_type</dfn>;</td></tr>
+<tr><th id="51">51</th><td>  <a class="type" href="#webrtc::H265PacketizationTypes" title='webrtc::H265PacketizationTypes' data-ref="webrtc::H265PacketizationTypes" data-ref-filename="webrtc..H265PacketizationTypes">H265PacketizationTypes</a> <dfn class="decl field" id="webrtc::RTPVideoHeaderH265::packetization_type" title='webrtc::RTPVideoHeaderH265::packetization_type' data-ref="webrtc::RTPVideoHeaderH265::packetization_type" data-ref-filename="webrtc..RTPVideoHeaderH265..packetization_type">packetization_type</dfn>;</td></tr>
+<tr><th id="52">52</th><td>  <a class="type" href="#webrtc::H265NaluInfo" title='webrtc::H265NaluInfo' data-ref="webrtc::H265NaluInfo" data-ref-filename="webrtc..H265NaluInfo">H265NaluInfo</a> <dfn class="decl field" id="webrtc::RTPVideoHeaderH265::nalus" title='webrtc::RTPVideoHeaderH265::nalus' data-ref="webrtc::RTPVideoHeaderH265::nalus" data-ref-filename="webrtc..RTPVideoHeaderH265..nalus">nalus</dfn>[<a class="ref" href="../../h264/include/h264_globals.h.html#webrtc::kMaxNalusPerPacket" title='webrtc::kMaxNalusPerPacket' data-ref="webrtc::kMaxNalusPerPacket" data-ref-filename="webrtc..kMaxNalusPerPacket">kMaxNalusPerPacket</a>];</td></tr>
+<tr><th id="53">53</th><td>  <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="webrtc::RTPVideoHeaderH265::nalus_length" title='webrtc::RTPVideoHeaderH265::nalus_length' data-ref="webrtc::RTPVideoHeaderH265::nalus_length" data-ref-filename="webrtc..RTPVideoHeaderH265..nalus_length">nalus_length</dfn>;</td></tr>
+<tr><th id="54">54</th><td>  <i>// The packetization type of this buffer - single, aggregated or fragmented.</i></td></tr>
+<tr><th id="55">55</th><td>  <a class="type" href="#webrtc::H265PacketizationMode" title='webrtc::H265PacketizationMode' data-ref="webrtc::H265PacketizationMode" data-ref-filename="webrtc..H265PacketizationMode">H265PacketizationMode</a> <dfn class="decl field" id="webrtc::RTPVideoHeaderH265::packetization_mode" title='webrtc::RTPVideoHeaderH265::packetization_mode' data-ref="webrtc::RTPVideoHeaderH265::packetization_mode" data-ref-filename="webrtc..RTPVideoHeaderH265..packetization_mode">packetization_mode</dfn>;</td></tr>
+<tr><th id="56">56</th><td>};</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><u>#<span data-ppcond="17">endif</span></u></td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><u>#<span data-ppcond="14">endif</span>  // MODULES_VIDEO_CODING_CODECS_H265_INCLUDE_H265_GLOBALS_H_</u></td></tr>
+<tr><th id="63">63</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../../../../../../Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp.html'>webkit/Source/WebCore/Modules/mediastream/libwebrtc/LibWebRTCMediaEndpoint.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

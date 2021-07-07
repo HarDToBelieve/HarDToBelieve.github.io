@@ -1,0 +1,39 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/neteq/dtmf_buffer.h' l='59' type='static int webrtc::DtmfBuffer::ParseEvent(uint32_t rtp_timestamp, const uint8_t * payload, size_t payload_length_bytes, webrtc::DtmfEvent * event)'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/neteq/dtmf_buffer.cc' l='68' ll='85' type='static int webrtc::DtmfBuffer::ParseEvent(uint32_t rtp_timestamp, const uint8_t * payload, size_t payload_length_bytes, webrtc::DtmfEvent * event)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/neteq/dtmf_buffer.cc' l='35'>// The ParseEvent method parses 4 bytes from |payload| according to this format
+// from RFC 4733:
+//
+//  0                   1                   2                   3
+//  0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1 2 3 4 5 6 7 8 9 0 1
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+// |     event     |E|R| volume    |          duration             |
+// +-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+-+
+//
+// Legend (adapted from RFC 4733)
+// - event:    The event field is a number between 0 and 255 identifying a
+//             specific telephony event. The buffer will not accept any event
+//             numbers larger than 15.
+// - E:        If set to a value of one, the &quot;end&quot; bit indicates that this
+//             packet contains the end of the event.  For long-lasting events
+//             that have to be split into segments, only the final packet for
+//             the final segment will have the E bit set.
+// - R:        Reserved.
+// - volume:   For DTMF digits and other events representable as tones, this
+//             field describes the power level of the tone, expressed in dBm0
+//             after dropping the sign.  Power levels range from 0 to -63 dBm0.
+//             Thus, larger values denote lower volume. The buffer discards
+//             values larger than 36 (i.e., lower than -36 dBm0).
+// - duration: The duration field indicates the duration of the event or segment
+//             being reported, in timestamp units, expressed as an unsigned
+//             integer in network byte order.  For a non-zero value, the event
+//             or segment began at the instant identified by the RTP timestamp
+//             and has so far lasted as long as indicated by this parameter.
+//             The event may or may not have ended.  If the event duration
+//             exceeds the maximum representable by the duration field, the
+//             event is split into several contiguous segments. The buffer will
+//             discard zero-duration events.
+//</doc>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/neteq/dtmf_buffer.h' l='56'>// Static method to parse 4 bytes from |payload| as a DTMF event (RFC 4733)
+  // and write the parsed information into the struct |event|. Input variable
+  // |rtp_timestamp| is simply copied into the struct.</doc>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_coding/neteq/neteq_impl.cc' l='667' u='c' c='_ZN6webrtc9NetEqImpl20InsertPacketInternalERKNS_9RTPHeaderEN3rtc9ArrayViewIKhLln4711EEE'/>

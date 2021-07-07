@@ -1,0 +1,92 @@
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='336'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='337'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='338'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='339'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='340'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='341'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='342'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='343'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='344'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='345'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='346'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='347'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='348'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='349'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='350'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/base.h' l='351'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/asn1.h' l='231' ll='236'/>
+<size>24</size>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/asn1.h' l='161'>// Strings.
+//
+// ASN.1 contains a myriad of string types, as well as types that contain data
+// that may be encoded into a string. This library uses a single type,
+// |ASN1_STRING|, to represent most values.
+
+// An asn1_string_st (aka |ASN1_STRING|) represents a value of a string-like
+// ASN.1 type. It contains a type field, and a byte string data field with a
+// type-specific representation.
+//
+// When representing a string value, the type field is one of
+// |V_ASN1_OCTET_STRING|, |V_ASN1_UTF8STRING|, |V_ASN1_NUMERICSTRING|,
+// |V_ASN1_PRINTABLESTRING|, |V_ASN1_T61STRING|, |V_ASN1_VIDEOTEXSTRING|,
+// |V_ASN1_IA5STRING|, |V_ASN1_GRAPHICSTRING|, |V_ASN1_ISO64STRING|,
+// |V_ASN1_VISIBLESTRING|, |V_ASN1_GENERALSTRING|, |V_ASN1_UNIVERSALSTRING|, or
+// |V_ASN1_BMPSTRING|. The data contains the byte representation of of the
+// string.
+//
+// When representing a BIT STRING value, the type field is |V_ASN1_BIT_STRING|.
+// The data contains the encoded form of the BIT STRING, including any padding
+// bits added to round to a whole number of bytes, but excluding the leading
+// byte containing the number of padding bits. The number of padding bits is
+// encoded in the flags field. See |ASN1_STRING_FLAG_BITS_LEFT| for details. For
+// example, DER encodes the BIT STRING {1, 0} as {0x06, 0x80 = 0b10_000000}. The
+// |ASN1_STRING| representation has data of {0x80} and flags of
+// ASN1_STRING_FLAG_BITS_LEFT | 6.
+//
+// When representing an INTEGER or ENUMERATED value, the data contains the
+// big-endian encoding of the absolute value of the integer. The sign bit is
+// encoded in the type: non-negative values have a type of |V_ASN1_INTEGER| or
+// |V_ASN1_ENUMERATED|, while negative values have a type of
+// |V_ASN1_NEG_INTEGER| or |V_ASN1_NEG_ENUMERATED|. Note this differs from DER&apos;s
+// two&apos;s complement representation.
+//
+// When representing a GeneralizedTime or UTCTime value, the type field is
+// |V_ASN1_GENERALIZEDTIME| or |V_ASN1_UTCTIME|, respectively. The data contains
+// the DER encoding of the value. For example, the UNIX epoch would be
+// &quot;19700101000000Z&quot; for a GeneralizedTime and &quot;700101000000Z&quot; for a UTCTime.
+//
+// |ASN1_STRING|, when stored in an |ASN1_TYPE|, may also represent an element
+// with tag not directly supported by this library. See |ASN1_TYPE| for details.
+//
+// |ASN1_STRING| additionally has the following typedefs: |ASN1_BIT_STRING|,
+// |ASN1_BMPSTRING|, |ASN1_ENUMERATED|, |ASN1_GENERALIZEDTIME|,
+// |ASN1_GENERALSTRING|, |ASN1_IA5STRING|, |ASN1_INTEGER|, |ASN1_OCTET_STRING|,
+// |ASN1_PRINTABLESTRING|, |ASN1_T61STRING|, |ASN1_TIME|,
+// |ASN1_UNIVERSALSTRING|, |ASN1_UTCTIME|, |ASN1_UTF8STRING|, and
+// |ASN1_VISIBLESTRING|. Other than |ASN1_TIME|, these correspond to universal
+// ASN.1 types. |ASN1_TIME| represents a CHOICE of UTCTime and GeneralizedTime,
+// with a cutoff of 2049, as used in Section 4.1.2.5 of RFC 5280.
+//
+// For clarity, callers are encouraged to use the appropriate typedef when
+// available. They are the same type as |ASN1_STRING|, so a caller may freely
+// pass them into functions expecting |ASN1_STRING|, such as
+// |ASN1_STRING_length|.
+//
+// If a function returns an |ASN1_STRING| where the typedef or ASN.1 structure
+// implies constraints on the type field, callers may assume that the type field
+// is correct. However, if a function takes an |ASN1_STRING| as input, callers
+// must ensure the type field matches. These invariants are not captured by the
+// C type system and may not be checked at runtime. For example, callers may
+// assume the output of |X509_get0_serialNumber| has type |V_ASN1_INTEGER| or
+// |V_ASN1_NEG_INTEGER|. Callers must not pass a string of type
+// |V_ASN1_OCTET_STRING| to |X509_set_serialNumber|. Doing so may break
+// invariants on the |X509| object and break the |X509_get0_serialNumber|
+// invariant.
+//
+// TODO(davidben): This is very unfriendly. Getting the type field wrong should
+// not cause memory errors, but it may do strange things. We should add runtime
+// checks to anything that consumes |ASN1_STRING|s from the caller.</doc>
+<mbr r='asn1_string_st::length' o='0' t='int'/>
+<mbr r='asn1_string_st::type' o='32' t='int'/>
+<mbr r='asn1_string_st::data' o='64' t='unsigned char *'/>
+<mbr r='asn1_string_st::flags' o='128' t='long'/>

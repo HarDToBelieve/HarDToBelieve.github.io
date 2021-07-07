@@ -1,0 +1,27 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='2838' type='int SSL_add_application_settings(SSL * ssl, const uint8_t * proto, size_t proto_len, const uint8_t * settings, size_t settings_len)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='2813'>// Application-layer protocol settings
+//
+// The ALPS extension (draft-vvv-tls-alps) allows exchanging application-layer
+// settings in the TLS handshake for applications negotiated with ALPN. Note
+// that, when ALPS is negotiated, the client and server each advertise their own
+// settings, so there are functions to both configure setting to send and query
+// received settings.
+
+// SSL_add_application_settings configures |ssl| to enable ALPS with ALPN
+// protocol |proto|, sending an ALPS value of |settings|. It returns one on
+// success and zero on error. If |proto| is negotiated via ALPN and the peer
+// supports ALPS, |settings| will be sent to the peer. The peer&apos;s ALPS value can
+// be retrieved with |SSL_get0_peer_application_settings|.
+//
+// On the client, this function should be called before the handshake, once for
+// each supported ALPN protocol which uses ALPS. |proto| must be included in the
+// client&apos;s ALPN configuration (see |SSL_CTX_set_alpn_protos| and
+// |SSL_set_alpn_protos|). On the server, ALPS can be preconfigured for each
+// protocol as in the client, or configuration can be deferred to the ALPN
+// callback (see |SSL_CTX_set_alpn_select_cb|), in which case only the selected
+// protocol needs to be configured.
+//
+// ALPS can be independently configured from 0-RTT, however changes in protocol
+// settings will fallback to 1-RTT to negotiate the new value, so it is
+// recommended for |settings| to be relatively stable.</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_lib.cc' l='2357' ll='2370' type='int SSL_add_application_settings(SSL * ssl, const uint8_t * proto, size_t proto_len, const uint8_t * settings, size_t settings_len)'/>

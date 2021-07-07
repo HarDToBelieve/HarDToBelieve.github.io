@@ -1,0 +1,1351 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>DOMCSS.mm source code [webkit/Source/WebKitLegacy/mac/DOM/DOMCSS.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/DOM/DOMCSS.mm'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>DOM</a>/<a href='DOMCSS.mm.html'>DOMCSS.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2004, 2005, 2006, 2009 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> * Copyright (C) 2006 James G. Speth (speth@end.com)</i></td></tr>
+<tr><th id="4">4</th><td><i> * Copyright (C) 2006 Samuel Weinig (sam.weinig@gmail.com)</i></td></tr>
+<tr><th id="5">5</th><td><i> *</i></td></tr>
+<tr><th id="6">6</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="7">7</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="8">8</th><td><i> * are met:</i></td></tr>
+<tr><th id="9">9</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="11">11</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="12">12</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="13">13</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="14">14</th><td><i> *</i></td></tr>
+<tr><th id="15">15</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="16">16</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="17">17</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="18">18</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="19">19</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="20">20</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="21">21</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="22">22</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="24">24</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="25">25</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="26">26</th><td><i> */</i></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html">&lt;WebCore/CSSRule.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSStyleSheet.h.html">&lt;WebCore/CSSStyleSheet.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DeprecatedCSSOMValue.h.html">&lt;WebCore/DeprecatedCSSOMValue.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#import <a href="DOMCSSCharsetRule.h.html">"DOMCSSCharsetRule.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#import <a href="DOMCSSFontFaceRule.h.html">"DOMCSSFontFaceRule.h"</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#import <a href="DOMCSSImportRule.h.html">"DOMCSSImportRule.h"</a></u></td></tr>
+<tr><th id="35">35</th><td><u>#import <a href="DOMCSSMediaRule.h.html">"DOMCSSMediaRule.h"</a></u></td></tr>
+<tr><th id="36">36</th><td><u>#import <a href="DOMCSSPageRule.h.html">"DOMCSSPageRule.h"</a></u></td></tr>
+<tr><th id="37">37</th><td><u>#import <a href="DOMCSSPrimitiveValue.h.html">"DOMCSSPrimitiveValue.h"</a></u></td></tr>
+<tr><th id="38">38</th><td><u>#import <a href="DOMCSSRuleInternal.h.html">"DOMCSSRuleInternal.h"</a></u></td></tr>
+<tr><th id="39">39</th><td><u>#import <a href="DOMCSSStyleDeclaration.h.html">"DOMCSSStyleDeclaration.h"</a></u></td></tr>
+<tr><th id="40">40</th><td><u>#import <a href="DOMCSSStyleRule.h.html">"DOMCSSStyleRule.h"</a></u></td></tr>
+<tr><th id="41">41</th><td><u>#import <a href="DOMCSSStyleSheet.h.html">"DOMCSSStyleSheet.h"</a></u></td></tr>
+<tr><th id="42">42</th><td><u>#import <a href="DOMCSSUnknownRule.h.html">"DOMCSSUnknownRule.h"</a></u></td></tr>
+<tr><th id="43">43</th><td><u>#import <a href="DOMCSSValueInternal.h.html">"DOMCSSValueInternal.h"</a></u></td></tr>
+<tr><th id="44">44</th><td><u>#import <a href="DOMCSSValueList.h.html">"DOMCSSValueList.h"</a></u></td></tr>
+<tr><th id="45">45</th><td><u>#import <a href="DOMInternal.h.html">"DOMInternal.h"</a></u></td></tr>
+<tr><th id="46">46</th><td><u>#import <a href="DOMStyleSheetInternal.h.html">"DOMStyleSheetInternal.h"</a></u></td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td><i>//------------------------------------------------------------------------------------------</i></td></tr>
+<tr><th id="49">49</th><td><i>// DOMStyleSheet</i></td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><span class='typedef' title='Class' data-type='Class' data-ref="Class" data-ref-filename="Class">Class</span> <dfn class="decl def fn" id="_Z8kitClassPN7WebCore10StyleSheetE" title='kitClass' data-ref="_Z8kitClassPN7WebCore10StyleSheetE" data-ref-filename="_Z8kitClassPN7WebCore10StyleSheetE">kitClass</dfn>(<span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/StyleSheet.h.html#WebCore::StyleSheet" title='WebCore::StyleSheet' data-ref="WebCore::StyleSheet" data-ref-filename="WebCore..StyleSheet">StyleSheet</a>* <dfn class="local col8 decl" id="78impl" title='impl' data-type='WebCore::StyleSheet *' data-ref="78impl" data-ref-filename="78impl">impl</dfn>)</td></tr>
+<tr><th id="52">52</th><td>{</td></tr>
+<tr><th id="53">53</th><td>    <b>if</b> (<a class="local col8 ref" href="#78impl" title='impl' data-ref="78impl" data-ref-filename="78impl">impl</a>-&gt;<a class="virtual ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/StyleSheet.h.html#_ZNK7WebCore10StyleSheet15isCSSStyleSheetEv" title='WebCore::StyleSheet::isCSSStyleSheet' data-ref="_ZNK7WebCore10StyleSheet15isCSSStyleSheetEv" data-ref-filename="_ZNK7WebCore10StyleSheet15isCSSStyleSheetEv">isCSSStyleSheet</a>())</td></tr>
+<tr><th id="54">54</th><td>        <b>return</b> [DOMCSSStyleSheet <b>class</b>];</td></tr>
+<tr><th id="55">55</th><td>    <b>return</b> [DOMStyleSheet <b>class</b>];</td></tr>
+<tr><th id="56">56</th><td>}</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><i>//------------------------------------------------------------------------------------------</i></td></tr>
+<tr><th id="59">59</th><td><i>// DOMCSSRule</i></td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td><span class='typedef' title='Class' data-type='Class' data-ref="Class" data-ref-filename="Class">Class</span> <dfn class="decl def fn" id="_Z8kitClassPN7WebCore7CSSRuleE" title='kitClass' data-ref="_Z8kitClassPN7WebCore7CSSRuleE" data-ref-filename="_Z8kitClassPN7WebCore7CSSRuleE">kitClass</dfn>(<span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule" title='WebCore::CSSRule' data-ref="WebCore::CSSRule" data-ref-filename="WebCore..CSSRule">CSSRule</a>* <dfn class="local col9 decl" id="79impl" title='impl' data-type='WebCore::CSSRule *' data-ref="79impl" data-ref-filename="79impl">impl</dfn>)</td></tr>
+<tr><th id="62">62</th><td>{</td></tr>
+<tr><th id="63">63</th><td>    <b>switch</b> (<a class="local col9 ref" href="#79impl" title='impl' data-ref="79impl" data-ref-filename="79impl">impl</a>-&gt;<a class="virtual ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#_ZNK7WebCore7CSSRule4typeEv" title='WebCore::CSSRule::type' data-ref="_ZNK7WebCore7CSSRule4typeEv" data-ref-filename="_ZNK7WebCore7CSSRule4typeEv">type</a>()) {</td></tr>
+<tr><th id="64">64</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule" title='WebCore::CSSRule' data-ref="WebCore::CSSRule" data-ref-filename="WebCore..CSSRule">CSSRule</a>::<a class="enum" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule::UNKNOWN_RULE" title='WebCore::CSSRule::UNKNOWN_RULE' data-ref="WebCore::CSSRule::UNKNOWN_RULE" data-ref-filename="WebCore..CSSRule..UNKNOWN_RULE">UNKNOWN_RULE</a>:</td></tr>
+<tr><th id="65">65</th><td>        <b>return</b> [DOMCSSUnknownRule <b>class</b>];</td></tr>
+<tr><th id="66">66</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule" title='WebCore::CSSRule' data-ref="WebCore::CSSRule" data-ref-filename="WebCore..CSSRule">CSSRule</a>::<a class="enum" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule::STYLE_RULE" title='WebCore::CSSRule::STYLE_RULE' data-ref="WebCore::CSSRule::STYLE_RULE" data-ref-filename="WebCore..CSSRule..STYLE_RULE">STYLE_RULE</a>:</td></tr>
+<tr><th id="67">67</th><td>        <b>return</b> [DOMCSSStyleRule <b>class</b>];</td></tr>
+<tr><th id="68">68</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule" title='WebCore::CSSRule' data-ref="WebCore::CSSRule" data-ref-filename="WebCore..CSSRule">CSSRule</a>::<a class="enum" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule::CHARSET_RULE" title='WebCore::CSSRule::CHARSET_RULE' data-ref="WebCore::CSSRule::CHARSET_RULE" data-ref-filename="WebCore..CSSRule..CHARSET_RULE">CHARSET_RULE</a>:</td></tr>
+<tr><th id="69">69</th><td>        <b>return</b> [DOMCSSCharsetRule <b>class</b>];</td></tr>
+<tr><th id="70">70</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule" title='WebCore::CSSRule' data-ref="WebCore::CSSRule" data-ref-filename="WebCore..CSSRule">CSSRule</a>::<a class="enum" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule::IMPORT_RULE" title='WebCore::CSSRule::IMPORT_RULE' data-ref="WebCore::CSSRule::IMPORT_RULE" data-ref-filename="WebCore..CSSRule..IMPORT_RULE">IMPORT_RULE</a>:</td></tr>
+<tr><th id="71">71</th><td>        <b>return</b> [DOMCSSImportRule <b>class</b>];</td></tr>
+<tr><th id="72">72</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule" title='WebCore::CSSRule' data-ref="WebCore::CSSRule" data-ref-filename="WebCore..CSSRule">CSSRule</a>::<a class="enum" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule::MEDIA_RULE" title='WebCore::CSSRule::MEDIA_RULE' data-ref="WebCore::CSSRule::MEDIA_RULE" data-ref-filename="WebCore..CSSRule..MEDIA_RULE">MEDIA_RULE</a>:</td></tr>
+<tr><th id="73">73</th><td>        <b>return</b> [DOMCSSMediaRule <b>class</b>];</td></tr>
+<tr><th id="74">74</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule" title='WebCore::CSSRule' data-ref="WebCore::CSSRule" data-ref-filename="WebCore..CSSRule">CSSRule</a>::<a class="enum" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule::FONT_FACE_RULE" title='WebCore::CSSRule::FONT_FACE_RULE' data-ref="WebCore::CSSRule::FONT_FACE_RULE" data-ref-filename="WebCore..CSSRule..FONT_FACE_RULE">FONT_FACE_RULE</a>:</td></tr>
+<tr><th id="75">75</th><td>        <b>return</b> [DOMCSSFontFaceRule <b>class</b>];</td></tr>
+<tr><th id="76">76</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule" title='WebCore::CSSRule' data-ref="WebCore::CSSRule" data-ref-filename="WebCore..CSSRule">CSSRule</a>::<a class="enum" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CSSRule.h.html#WebCore::CSSRule::PAGE_RULE" title='WebCore::CSSRule::PAGE_RULE' data-ref="WebCore::CSSRule::PAGE_RULE" data-ref-filename="WebCore..CSSRule..PAGE_RULE">PAGE_RULE</a>:</td></tr>
+<tr><th id="77">77</th><td>        <b>return</b> [DOMCSSPageRule <b>class</b>];</td></tr>
+<tr><th id="78">78</th><td>    <b>default</b>:</td></tr>
+<tr><th id="79">79</th><td>        <b>return</b> [DOMCSSRule <b>class</b>];</td></tr>
+<tr><th id="80">80</th><td>    }</td></tr>
+<tr><th id="81">81</th><td>}</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td><i>//------------------------------------------------------------------------------------------</i></td></tr>
+<tr><th id="84">84</th><td><i>// DOMCSSValue</i></td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td><span class='typedef' title='Class' data-type='Class' data-ref="Class" data-ref-filename="Class">Class</span> <dfn class="decl def fn" id="_Z8kitClassPN7WebCore20DeprecatedCSSOMValueE" title='kitClass' data-ref="_Z8kitClassPN7WebCore20DeprecatedCSSOMValueE" data-ref-filename="_Z8kitClassPN7WebCore20DeprecatedCSSOMValueE">kitClass</dfn>(<span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DeprecatedCSSOMValue.h.html#WebCore::DeprecatedCSSOMValue" title='WebCore::DeprecatedCSSOMValue' data-ref="WebCore::DeprecatedCSSOMValue" data-ref-filename="WebCore..DeprecatedCSSOMValue">DeprecatedCSSOMValue</a>* <dfn class="local col0 decl" id="80impl" title='impl' data-type='WebCore::DeprecatedCSSOMValue *' data-ref="80impl" data-ref-filename="80impl">impl</dfn>)</td></tr>
+<tr><th id="87">87</th><td>{</td></tr>
+<tr><th id="88">88</th><td>    <b>switch</b> (<a class="local col0 ref" href="#80impl" title='impl' data-ref="80impl" data-ref-filename="80impl">impl</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DeprecatedCSSOMValue.h.html#_ZNK7WebCore20DeprecatedCSSOMValue12cssValueTypeEv" title='WebCore::DeprecatedCSSOMValue::cssValueType' data-ref="_ZNK7WebCore20DeprecatedCSSOMValue12cssValueTypeEv" data-ref-filename="_ZNK7WebCore20DeprecatedCSSOMValue12cssValueTypeEv">cssValueType</a>()) {</td></tr>
+<tr><th id="89">89</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DeprecatedCSSOMValue.h.html#WebCore::DeprecatedCSSOMValue" title='WebCore::DeprecatedCSSOMValue' data-ref="WebCore::DeprecatedCSSOMValue" data-ref-filename="WebCore..DeprecatedCSSOMValue">DeprecatedCSSOMValue</a>::<a class="enum" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DeprecatedCSSOMValue.h.html#WebCore::DeprecatedCSSOMValue::CSS_PRIMITIVE_VALUE" title='WebCore::DeprecatedCSSOMValue::CSS_PRIMITIVE_VALUE' data-ref="WebCore::DeprecatedCSSOMValue::CSS_PRIMITIVE_VALUE" data-ref-filename="WebCore..DeprecatedCSSOMValue..CSS_PRIMITIVE_VALUE">CSS_PRIMITIVE_VALUE</a>:</td></tr>
+<tr><th id="90">90</th><td>        <b>return</b> [DOMCSSPrimitiveValue <b>class</b>];</td></tr>
+<tr><th id="91">91</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DeprecatedCSSOMValue.h.html#WebCore::DeprecatedCSSOMValue" title='WebCore::DeprecatedCSSOMValue' data-ref="WebCore::DeprecatedCSSOMValue" data-ref-filename="WebCore..DeprecatedCSSOMValue">DeprecatedCSSOMValue</a>::<a class="enum" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DeprecatedCSSOMValue.h.html#WebCore::DeprecatedCSSOMValue::CSS_VALUE_LIST" title='WebCore::DeprecatedCSSOMValue::CSS_VALUE_LIST' data-ref="WebCore::DeprecatedCSSOMValue::CSS_VALUE_LIST" data-ref-filename="WebCore..DeprecatedCSSOMValue..CSS_VALUE_LIST">CSS_VALUE_LIST</a>:</td></tr>
+<tr><th id="92">92</th><td>        <b>return</b> [DOMCSSValueList <b>class</b>];</td></tr>
+<tr><th id="93">93</th><td>    <b>default</b>:</td></tr>
+<tr><th id="94">94</th><td>        <b>return</b> [DOMCSSValue <b>class</b>];</td></tr>
+<tr><th id="95">95</th><td>    }</td></tr>
+<tr><th id="96">96</th><td>}</td></tr>
+<tr><th id="97">97</th><td></td></tr>
+<tr><th id="98">98</th><td><i>//------------------------------------------------------------------------------------------</i></td></tr>
+<tr><th id="99">99</th><td><i>// DOMCSSStyleDeclaration CSS2 Properties</i></td></tr>
+<tr><th id="100">100</th><td></td></tr>
+<tr><th id="101">101</th><td>@implementation DOMCSSStyleDeclaration (DOMCSS2Properties)</td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td>- (NSString *)azimuth</td></tr>
+<tr><th id="104">104</th><td>{</td></tr>
+<tr><th id="105">105</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"azimuth"</q>];</td></tr>
+<tr><th id="106">106</th><td>}</td></tr>
+<tr><th id="107">107</th><td></td></tr>
+<tr><th id="108">108</th><td>- (<em>void</em>)setAzimuth:(NSString *)<dfn class="local col1 decl" id="81azimuth" title='azimuth' data-type='NSString *' data-ref="81azimuth" data-ref-filename="81azimuth">azimuth</dfn></td></tr>
+<tr><th id="109">109</th><td>{</td></tr>
+<tr><th id="110">110</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"azimuth"</q> value:<a class="local col1 ref" href="#81azimuth" title='azimuth' data-ref="81azimuth" data-ref-filename="81azimuth">azimuth</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="111">111</th><td>}</td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td>- (NSString *)background</td></tr>
+<tr><th id="114">114</th><td>{</td></tr>
+<tr><th id="115">115</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"background"</q>];</td></tr>
+<tr><th id="116">116</th><td>}</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td>- (<em>void</em>)setBackground:(NSString *)<dfn class="local col2 decl" id="82background" title='background' data-type='NSString *' data-ref="82background" data-ref-filename="82background">background</dfn></td></tr>
+<tr><th id="119">119</th><td>{</td></tr>
+<tr><th id="120">120</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"background"</q> value:<a class="local col2 ref" href="#82background" title='background' data-ref="82background" data-ref-filename="82background">background</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="121">121</th><td>}</td></tr>
+<tr><th id="122">122</th><td></td></tr>
+<tr><th id="123">123</th><td>- (NSString *)backgroundAttachment</td></tr>
+<tr><th id="124">124</th><td>{</td></tr>
+<tr><th id="125">125</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"background-attachment"</q>];</td></tr>
+<tr><th id="126">126</th><td>}</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td>- (<em>void</em>)setBackgroundAttachment:(NSString *)<dfn class="local col3 decl" id="83backgroundAttachment" title='backgroundAttachment' data-type='NSString *' data-ref="83backgroundAttachment" data-ref-filename="83backgroundAttachment">backgroundAttachment</dfn></td></tr>
+<tr><th id="129">129</th><td>{</td></tr>
+<tr><th id="130">130</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"background-attachment"</q> value:<a class="local col3 ref" href="#83backgroundAttachment" title='backgroundAttachment' data-ref="83backgroundAttachment" data-ref-filename="83backgroundAttachment">backgroundAttachment</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="131">131</th><td>}</td></tr>
+<tr><th id="132">132</th><td></td></tr>
+<tr><th id="133">133</th><td>- (NSString *)backgroundColor</td></tr>
+<tr><th id="134">134</th><td>{</td></tr>
+<tr><th id="135">135</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"background-color"</q>];</td></tr>
+<tr><th id="136">136</th><td>}</td></tr>
+<tr><th id="137">137</th><td></td></tr>
+<tr><th id="138">138</th><td>- (<em>void</em>)setBackgroundColor:(NSString *)<dfn class="local col4 decl" id="84backgroundColor" title='backgroundColor' data-type='NSString *' data-ref="84backgroundColor" data-ref-filename="84backgroundColor">backgroundColor</dfn></td></tr>
+<tr><th id="139">139</th><td>{</td></tr>
+<tr><th id="140">140</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"background-color"</q> value:<a class="local col4 ref" href="#84backgroundColor" title='backgroundColor' data-ref="84backgroundColor" data-ref-filename="84backgroundColor">backgroundColor</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="141">141</th><td>}</td></tr>
+<tr><th id="142">142</th><td></td></tr>
+<tr><th id="143">143</th><td>- (NSString *)backgroundImage</td></tr>
+<tr><th id="144">144</th><td>{</td></tr>
+<tr><th id="145">145</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"background-image"</q>];</td></tr>
+<tr><th id="146">146</th><td>}</td></tr>
+<tr><th id="147">147</th><td></td></tr>
+<tr><th id="148">148</th><td>- (<em>void</em>)setBackgroundImage:(NSString *)<dfn class="local col5 decl" id="85backgroundImage" title='backgroundImage' data-type='NSString *' data-ref="85backgroundImage" data-ref-filename="85backgroundImage">backgroundImage</dfn></td></tr>
+<tr><th id="149">149</th><td>{</td></tr>
+<tr><th id="150">150</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"background-image"</q> value:<a class="local col5 ref" href="#85backgroundImage" title='backgroundImage' data-ref="85backgroundImage" data-ref-filename="85backgroundImage">backgroundImage</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="151">151</th><td>}</td></tr>
+<tr><th id="152">152</th><td></td></tr>
+<tr><th id="153">153</th><td>- (NSString *)backgroundPosition</td></tr>
+<tr><th id="154">154</th><td>{</td></tr>
+<tr><th id="155">155</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"background-position"</q>];</td></tr>
+<tr><th id="156">156</th><td>}</td></tr>
+<tr><th id="157">157</th><td></td></tr>
+<tr><th id="158">158</th><td>- (<em>void</em>)setBackgroundPosition:(NSString *)<dfn class="local col6 decl" id="86backgroundPosition" title='backgroundPosition' data-type='NSString *' data-ref="86backgroundPosition" data-ref-filename="86backgroundPosition">backgroundPosition</dfn></td></tr>
+<tr><th id="159">159</th><td>{</td></tr>
+<tr><th id="160">160</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"background-position"</q> value:<a class="local col6 ref" href="#86backgroundPosition" title='backgroundPosition' data-ref="86backgroundPosition" data-ref-filename="86backgroundPosition">backgroundPosition</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="161">161</th><td>}</td></tr>
+<tr><th id="162">162</th><td></td></tr>
+<tr><th id="163">163</th><td>- (NSString *)backgroundRepeat</td></tr>
+<tr><th id="164">164</th><td>{</td></tr>
+<tr><th id="165">165</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"background-repeat"</q>];</td></tr>
+<tr><th id="166">166</th><td>}</td></tr>
+<tr><th id="167">167</th><td></td></tr>
+<tr><th id="168">168</th><td>- (<em>void</em>)setBackgroundRepeat:(NSString *)<dfn class="local col7 decl" id="87backgroundRepeat" title='backgroundRepeat' data-type='NSString *' data-ref="87backgroundRepeat" data-ref-filename="87backgroundRepeat">backgroundRepeat</dfn></td></tr>
+<tr><th id="169">169</th><td>{</td></tr>
+<tr><th id="170">170</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"background-repeat"</q> value:<a class="local col7 ref" href="#87backgroundRepeat" title='backgroundRepeat' data-ref="87backgroundRepeat" data-ref-filename="87backgroundRepeat">backgroundRepeat</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="171">171</th><td>}</td></tr>
+<tr><th id="172">172</th><td></td></tr>
+<tr><th id="173">173</th><td>- (NSString *)border</td></tr>
+<tr><th id="174">174</th><td>{</td></tr>
+<tr><th id="175">175</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border"</q>];</td></tr>
+<tr><th id="176">176</th><td>}</td></tr>
+<tr><th id="177">177</th><td></td></tr>
+<tr><th id="178">178</th><td>- (<em>void</em>)setBorder:(NSString *)<dfn class="local col8 decl" id="88border" title='border' data-type='NSString *' data-ref="88border" data-ref-filename="88border">border</dfn></td></tr>
+<tr><th id="179">179</th><td>{</td></tr>
+<tr><th id="180">180</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border"</q> value:<a class="local col8 ref" href="#88border" title='border' data-ref="88border" data-ref-filename="88border">border</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="181">181</th><td>}</td></tr>
+<tr><th id="182">182</th><td></td></tr>
+<tr><th id="183">183</th><td>- (NSString *)borderCollapse</td></tr>
+<tr><th id="184">184</th><td>{</td></tr>
+<tr><th id="185">185</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-collapse"</q>];</td></tr>
+<tr><th id="186">186</th><td>}</td></tr>
+<tr><th id="187">187</th><td></td></tr>
+<tr><th id="188">188</th><td>- (<em>void</em>)setBorderCollapse:(NSString *)<dfn class="local col9 decl" id="89borderCollapse" title='borderCollapse' data-type='NSString *' data-ref="89borderCollapse" data-ref-filename="89borderCollapse">borderCollapse</dfn></td></tr>
+<tr><th id="189">189</th><td>{</td></tr>
+<tr><th id="190">190</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-collapse"</q> value:<a class="local col9 ref" href="#89borderCollapse" title='borderCollapse' data-ref="89borderCollapse" data-ref-filename="89borderCollapse">borderCollapse</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="191">191</th><td>}</td></tr>
+<tr><th id="192">192</th><td></td></tr>
+<tr><th id="193">193</th><td>- (NSString *)borderColor</td></tr>
+<tr><th id="194">194</th><td>{</td></tr>
+<tr><th id="195">195</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-color"</q>];</td></tr>
+<tr><th id="196">196</th><td>}</td></tr>
+<tr><th id="197">197</th><td></td></tr>
+<tr><th id="198">198</th><td>- (<em>void</em>)setBorderColor:(NSString *)<dfn class="local col0 decl" id="90borderColor" title='borderColor' data-type='NSString *' data-ref="90borderColor" data-ref-filename="90borderColor">borderColor</dfn></td></tr>
+<tr><th id="199">199</th><td>{</td></tr>
+<tr><th id="200">200</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-color"</q> value:<a class="local col0 ref" href="#90borderColor" title='borderColor' data-ref="90borderColor" data-ref-filename="90borderColor">borderColor</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="201">201</th><td>}</td></tr>
+<tr><th id="202">202</th><td></td></tr>
+<tr><th id="203">203</th><td>- (NSString *)borderSpacing</td></tr>
+<tr><th id="204">204</th><td>{</td></tr>
+<tr><th id="205">205</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-spacing"</q>];</td></tr>
+<tr><th id="206">206</th><td>}</td></tr>
+<tr><th id="207">207</th><td></td></tr>
+<tr><th id="208">208</th><td>- (<em>void</em>)setBorderSpacing:(NSString *)<dfn class="local col1 decl" id="91borderSpacing" title='borderSpacing' data-type='NSString *' data-ref="91borderSpacing" data-ref-filename="91borderSpacing">borderSpacing</dfn></td></tr>
+<tr><th id="209">209</th><td>{</td></tr>
+<tr><th id="210">210</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-spacing"</q> value:<a class="local col1 ref" href="#91borderSpacing" title='borderSpacing' data-ref="91borderSpacing" data-ref-filename="91borderSpacing">borderSpacing</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="211">211</th><td>}</td></tr>
+<tr><th id="212">212</th><td></td></tr>
+<tr><th id="213">213</th><td>- (NSString *)borderStyle</td></tr>
+<tr><th id="214">214</th><td>{</td></tr>
+<tr><th id="215">215</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-style"</q>];</td></tr>
+<tr><th id="216">216</th><td>}</td></tr>
+<tr><th id="217">217</th><td></td></tr>
+<tr><th id="218">218</th><td>- (<em>void</em>)setBorderStyle:(NSString *)<dfn class="local col2 decl" id="92borderStyle" title='borderStyle' data-type='NSString *' data-ref="92borderStyle" data-ref-filename="92borderStyle">borderStyle</dfn></td></tr>
+<tr><th id="219">219</th><td>{</td></tr>
+<tr><th id="220">220</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-style"</q> value:<a class="local col2 ref" href="#92borderStyle" title='borderStyle' data-ref="92borderStyle" data-ref-filename="92borderStyle">borderStyle</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="221">221</th><td>}</td></tr>
+<tr><th id="222">222</th><td></td></tr>
+<tr><th id="223">223</th><td>- (NSString *)borderTop</td></tr>
+<tr><th id="224">224</th><td>{</td></tr>
+<tr><th id="225">225</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-top"</q>];</td></tr>
+<tr><th id="226">226</th><td>}</td></tr>
+<tr><th id="227">227</th><td></td></tr>
+<tr><th id="228">228</th><td>- (<em>void</em>)setBorderTop:(NSString *)<dfn class="local col3 decl" id="93borderTop" title='borderTop' data-type='NSString *' data-ref="93borderTop" data-ref-filename="93borderTop">borderTop</dfn></td></tr>
+<tr><th id="229">229</th><td>{</td></tr>
+<tr><th id="230">230</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-top"</q> value:<a class="local col3 ref" href="#93borderTop" title='borderTop' data-ref="93borderTop" data-ref-filename="93borderTop">borderTop</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="231">231</th><td>}</td></tr>
+<tr><th id="232">232</th><td></td></tr>
+<tr><th id="233">233</th><td>- (NSString *)borderRight</td></tr>
+<tr><th id="234">234</th><td>{</td></tr>
+<tr><th id="235">235</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-right"</q>];</td></tr>
+<tr><th id="236">236</th><td>}</td></tr>
+<tr><th id="237">237</th><td></td></tr>
+<tr><th id="238">238</th><td>- (<em>void</em>)setBorderRight:(NSString *)<dfn class="local col4 decl" id="94borderRight" title='borderRight' data-type='NSString *' data-ref="94borderRight" data-ref-filename="94borderRight">borderRight</dfn></td></tr>
+<tr><th id="239">239</th><td>{</td></tr>
+<tr><th id="240">240</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-right"</q> value:<a class="local col4 ref" href="#94borderRight" title='borderRight' data-ref="94borderRight" data-ref-filename="94borderRight">borderRight</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="241">241</th><td>}</td></tr>
+<tr><th id="242">242</th><td></td></tr>
+<tr><th id="243">243</th><td>- (NSString *)borderBottom</td></tr>
+<tr><th id="244">244</th><td>{</td></tr>
+<tr><th id="245">245</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-bottom"</q>];</td></tr>
+<tr><th id="246">246</th><td>}</td></tr>
+<tr><th id="247">247</th><td></td></tr>
+<tr><th id="248">248</th><td>- (<em>void</em>)setBorderBottom:(NSString *)<dfn class="local col5 decl" id="95borderBottom" title='borderBottom' data-type='NSString *' data-ref="95borderBottom" data-ref-filename="95borderBottom">borderBottom</dfn></td></tr>
+<tr><th id="249">249</th><td>{</td></tr>
+<tr><th id="250">250</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-bottom"</q> value:<a class="local col5 ref" href="#95borderBottom" title='borderBottom' data-ref="95borderBottom" data-ref-filename="95borderBottom">borderBottom</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="251">251</th><td>}</td></tr>
+<tr><th id="252">252</th><td></td></tr>
+<tr><th id="253">253</th><td>- (NSString *)borderLeft</td></tr>
+<tr><th id="254">254</th><td>{</td></tr>
+<tr><th id="255">255</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-left"</q>];</td></tr>
+<tr><th id="256">256</th><td>}</td></tr>
+<tr><th id="257">257</th><td></td></tr>
+<tr><th id="258">258</th><td>- (<em>void</em>)setBorderLeft:(NSString *)<dfn class="local col6 decl" id="96borderLeft" title='borderLeft' data-type='NSString *' data-ref="96borderLeft" data-ref-filename="96borderLeft">borderLeft</dfn></td></tr>
+<tr><th id="259">259</th><td>{</td></tr>
+<tr><th id="260">260</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-left"</q> value:<a class="local col6 ref" href="#96borderLeft" title='borderLeft' data-ref="96borderLeft" data-ref-filename="96borderLeft">borderLeft</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="261">261</th><td>}</td></tr>
+<tr><th id="262">262</th><td></td></tr>
+<tr><th id="263">263</th><td>- (NSString *)borderTopColor</td></tr>
+<tr><th id="264">264</th><td>{</td></tr>
+<tr><th id="265">265</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-top-color"</q>];</td></tr>
+<tr><th id="266">266</th><td>}</td></tr>
+<tr><th id="267">267</th><td></td></tr>
+<tr><th id="268">268</th><td>- (<em>void</em>)setBorderTopColor:(NSString *)<dfn class="local col7 decl" id="97borderTopColor" title='borderTopColor' data-type='NSString *' data-ref="97borderTopColor" data-ref-filename="97borderTopColor">borderTopColor</dfn></td></tr>
+<tr><th id="269">269</th><td>{</td></tr>
+<tr><th id="270">270</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-top-color"</q> value:<a class="local col7 ref" href="#97borderTopColor" title='borderTopColor' data-ref="97borderTopColor" data-ref-filename="97borderTopColor">borderTopColor</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="271">271</th><td>}</td></tr>
+<tr><th id="272">272</th><td></td></tr>
+<tr><th id="273">273</th><td>- (NSString *)borderRightColor</td></tr>
+<tr><th id="274">274</th><td>{</td></tr>
+<tr><th id="275">275</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-right-color"</q>];</td></tr>
+<tr><th id="276">276</th><td>}</td></tr>
+<tr><th id="277">277</th><td></td></tr>
+<tr><th id="278">278</th><td>- (<em>void</em>)setBorderRightColor:(NSString *)<dfn class="local col8 decl" id="98borderRightColor" title='borderRightColor' data-type='NSString *' data-ref="98borderRightColor" data-ref-filename="98borderRightColor">borderRightColor</dfn></td></tr>
+<tr><th id="279">279</th><td>{</td></tr>
+<tr><th id="280">280</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-right-color"</q> value:<a class="local col8 ref" href="#98borderRightColor" title='borderRightColor' data-ref="98borderRightColor" data-ref-filename="98borderRightColor">borderRightColor</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="281">281</th><td>}</td></tr>
+<tr><th id="282">282</th><td></td></tr>
+<tr><th id="283">283</th><td>- (NSString *)borderBottomColor</td></tr>
+<tr><th id="284">284</th><td>{</td></tr>
+<tr><th id="285">285</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-bottom-color"</q>];</td></tr>
+<tr><th id="286">286</th><td>}</td></tr>
+<tr><th id="287">287</th><td></td></tr>
+<tr><th id="288">288</th><td>- (<em>void</em>)setBorderBottomColor:(NSString *)<dfn class="local col9 decl" id="99borderBottomColor" title='borderBottomColor' data-type='NSString *' data-ref="99borderBottomColor" data-ref-filename="99borderBottomColor">borderBottomColor</dfn></td></tr>
+<tr><th id="289">289</th><td>{</td></tr>
+<tr><th id="290">290</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-bottom-color"</q> value:<a class="local col9 ref" href="#99borderBottomColor" title='borderBottomColor' data-ref="99borderBottomColor" data-ref-filename="99borderBottomColor">borderBottomColor</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="291">291</th><td>}</td></tr>
+<tr><th id="292">292</th><td></td></tr>
+<tr><th id="293">293</th><td>- (NSString *)borderLeftColor</td></tr>
+<tr><th id="294">294</th><td>{</td></tr>
+<tr><th id="295">295</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-left-color"</q>];</td></tr>
+<tr><th id="296">296</th><td>}</td></tr>
+<tr><th id="297">297</th><td></td></tr>
+<tr><th id="298">298</th><td>- (<em>void</em>)setBorderLeftColor:(NSString *)<dfn class="local col0 decl" id="100borderLeftColor" title='borderLeftColor' data-type='NSString *' data-ref="100borderLeftColor" data-ref-filename="100borderLeftColor">borderLeftColor</dfn></td></tr>
+<tr><th id="299">299</th><td>{</td></tr>
+<tr><th id="300">300</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-left-color"</q> value:<a class="local col0 ref" href="#100borderLeftColor" title='borderLeftColor' data-ref="100borderLeftColor" data-ref-filename="100borderLeftColor">borderLeftColor</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="301">301</th><td>}</td></tr>
+<tr><th id="302">302</th><td></td></tr>
+<tr><th id="303">303</th><td>- (NSString *)borderTopStyle</td></tr>
+<tr><th id="304">304</th><td>{</td></tr>
+<tr><th id="305">305</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-top-style"</q>];</td></tr>
+<tr><th id="306">306</th><td>}</td></tr>
+<tr><th id="307">307</th><td></td></tr>
+<tr><th id="308">308</th><td>- (<em>void</em>)setBorderTopStyle:(NSString *)<dfn class="local col1 decl" id="101borderTopStyle" title='borderTopStyle' data-type='NSString *' data-ref="101borderTopStyle" data-ref-filename="101borderTopStyle">borderTopStyle</dfn></td></tr>
+<tr><th id="309">309</th><td>{</td></tr>
+<tr><th id="310">310</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-top-style"</q> value:<a class="local col1 ref" href="#101borderTopStyle" title='borderTopStyle' data-ref="101borderTopStyle" data-ref-filename="101borderTopStyle">borderTopStyle</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="311">311</th><td>}</td></tr>
+<tr><th id="312">312</th><td></td></tr>
+<tr><th id="313">313</th><td>- (NSString *)borderRightStyle</td></tr>
+<tr><th id="314">314</th><td>{</td></tr>
+<tr><th id="315">315</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-right-style"</q>];</td></tr>
+<tr><th id="316">316</th><td>}</td></tr>
+<tr><th id="317">317</th><td></td></tr>
+<tr><th id="318">318</th><td>- (<em>void</em>)setBorderRightStyle:(NSString *)<dfn class="local col2 decl" id="102borderRightStyle" title='borderRightStyle' data-type='NSString *' data-ref="102borderRightStyle" data-ref-filename="102borderRightStyle">borderRightStyle</dfn></td></tr>
+<tr><th id="319">319</th><td>{</td></tr>
+<tr><th id="320">320</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-right-style"</q> value:<a class="local col2 ref" href="#102borderRightStyle" title='borderRightStyle' data-ref="102borderRightStyle" data-ref-filename="102borderRightStyle">borderRightStyle</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="321">321</th><td>}</td></tr>
+<tr><th id="322">322</th><td></td></tr>
+<tr><th id="323">323</th><td>- (NSString *)borderBottomStyle</td></tr>
+<tr><th id="324">324</th><td>{</td></tr>
+<tr><th id="325">325</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-bottom-style"</q>];</td></tr>
+<tr><th id="326">326</th><td>}</td></tr>
+<tr><th id="327">327</th><td></td></tr>
+<tr><th id="328">328</th><td>- (<em>void</em>)setBorderBottomStyle:(NSString *)<dfn class="local col3 decl" id="103borderBottomStyle" title='borderBottomStyle' data-type='NSString *' data-ref="103borderBottomStyle" data-ref-filename="103borderBottomStyle">borderBottomStyle</dfn></td></tr>
+<tr><th id="329">329</th><td>{</td></tr>
+<tr><th id="330">330</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-bottom-style"</q> value:<a class="local col3 ref" href="#103borderBottomStyle" title='borderBottomStyle' data-ref="103borderBottomStyle" data-ref-filename="103borderBottomStyle">borderBottomStyle</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="331">331</th><td>}</td></tr>
+<tr><th id="332">332</th><td></td></tr>
+<tr><th id="333">333</th><td>- (NSString *)borderLeftStyle</td></tr>
+<tr><th id="334">334</th><td>{</td></tr>
+<tr><th id="335">335</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-left-style"</q>];</td></tr>
+<tr><th id="336">336</th><td>}</td></tr>
+<tr><th id="337">337</th><td></td></tr>
+<tr><th id="338">338</th><td>- (<em>void</em>)setBorderLeftStyle:(NSString *)<dfn class="local col4 decl" id="104borderLeftStyle" title='borderLeftStyle' data-type='NSString *' data-ref="104borderLeftStyle" data-ref-filename="104borderLeftStyle">borderLeftStyle</dfn></td></tr>
+<tr><th id="339">339</th><td>{</td></tr>
+<tr><th id="340">340</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-left-style"</q> value:<a class="local col4 ref" href="#104borderLeftStyle" title='borderLeftStyle' data-ref="104borderLeftStyle" data-ref-filename="104borderLeftStyle">borderLeftStyle</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="341">341</th><td>}</td></tr>
+<tr><th id="342">342</th><td></td></tr>
+<tr><th id="343">343</th><td>- (NSString *)borderTopWidth</td></tr>
+<tr><th id="344">344</th><td>{</td></tr>
+<tr><th id="345">345</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-top-width"</q>];</td></tr>
+<tr><th id="346">346</th><td>}</td></tr>
+<tr><th id="347">347</th><td></td></tr>
+<tr><th id="348">348</th><td>- (<em>void</em>)setBorderTopWidth:(NSString *)<dfn class="local col5 decl" id="105borderTopWidth" title='borderTopWidth' data-type='NSString *' data-ref="105borderTopWidth" data-ref-filename="105borderTopWidth">borderTopWidth</dfn></td></tr>
+<tr><th id="349">349</th><td>{</td></tr>
+<tr><th id="350">350</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-top-width"</q> value:<a class="local col5 ref" href="#105borderTopWidth" title='borderTopWidth' data-ref="105borderTopWidth" data-ref-filename="105borderTopWidth">borderTopWidth</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="351">351</th><td>}</td></tr>
+<tr><th id="352">352</th><td></td></tr>
+<tr><th id="353">353</th><td>- (NSString *)borderRightWidth</td></tr>
+<tr><th id="354">354</th><td>{</td></tr>
+<tr><th id="355">355</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-right-width"</q>];</td></tr>
+<tr><th id="356">356</th><td>}</td></tr>
+<tr><th id="357">357</th><td></td></tr>
+<tr><th id="358">358</th><td>- (<em>void</em>)setBorderRightWidth:(NSString *)<dfn class="local col6 decl" id="106borderRightWidth" title='borderRightWidth' data-type='NSString *' data-ref="106borderRightWidth" data-ref-filename="106borderRightWidth">borderRightWidth</dfn></td></tr>
+<tr><th id="359">359</th><td>{</td></tr>
+<tr><th id="360">360</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-right-width"</q> value:<a class="local col6 ref" href="#106borderRightWidth" title='borderRightWidth' data-ref="106borderRightWidth" data-ref-filename="106borderRightWidth">borderRightWidth</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="361">361</th><td>}</td></tr>
+<tr><th id="362">362</th><td></td></tr>
+<tr><th id="363">363</th><td>- (NSString *)borderBottomWidth</td></tr>
+<tr><th id="364">364</th><td>{</td></tr>
+<tr><th id="365">365</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-bottom-width"</q>];</td></tr>
+<tr><th id="366">366</th><td>}</td></tr>
+<tr><th id="367">367</th><td></td></tr>
+<tr><th id="368">368</th><td>- (<em>void</em>)setBorderBottomWidth:(NSString *)<dfn class="local col7 decl" id="107borderBottomWidth" title='borderBottomWidth' data-type='NSString *' data-ref="107borderBottomWidth" data-ref-filename="107borderBottomWidth">borderBottomWidth</dfn></td></tr>
+<tr><th id="369">369</th><td>{</td></tr>
+<tr><th id="370">370</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-bottom-width"</q> value:<a class="local col7 ref" href="#107borderBottomWidth" title='borderBottomWidth' data-ref="107borderBottomWidth" data-ref-filename="107borderBottomWidth">borderBottomWidth</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="371">371</th><td>}</td></tr>
+<tr><th id="372">372</th><td></td></tr>
+<tr><th id="373">373</th><td>- (NSString *)borderLeftWidth</td></tr>
+<tr><th id="374">374</th><td>{</td></tr>
+<tr><th id="375">375</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-left-width"</q>];</td></tr>
+<tr><th id="376">376</th><td>}</td></tr>
+<tr><th id="377">377</th><td></td></tr>
+<tr><th id="378">378</th><td>- (<em>void</em>)setBorderLeftWidth:(NSString *)<dfn class="local col8 decl" id="108borderLeftWidth" title='borderLeftWidth' data-type='NSString *' data-ref="108borderLeftWidth" data-ref-filename="108borderLeftWidth">borderLeftWidth</dfn></td></tr>
+<tr><th id="379">379</th><td>{</td></tr>
+<tr><th id="380">380</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-left-width"</q> value:<a class="local col8 ref" href="#108borderLeftWidth" title='borderLeftWidth' data-ref="108borderLeftWidth" data-ref-filename="108borderLeftWidth">borderLeftWidth</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="381">381</th><td>}</td></tr>
+<tr><th id="382">382</th><td></td></tr>
+<tr><th id="383">383</th><td>- (NSString *)borderWidth</td></tr>
+<tr><th id="384">384</th><td>{</td></tr>
+<tr><th id="385">385</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"border-width"</q>];</td></tr>
+<tr><th id="386">386</th><td>}</td></tr>
+<tr><th id="387">387</th><td></td></tr>
+<tr><th id="388">388</th><td>- (<em>void</em>)setBorderWidth:(NSString *)<dfn class="local col9 decl" id="109borderWidth" title='borderWidth' data-type='NSString *' data-ref="109borderWidth" data-ref-filename="109borderWidth">borderWidth</dfn></td></tr>
+<tr><th id="389">389</th><td>{</td></tr>
+<tr><th id="390">390</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"border-width"</q> value:<a class="local col9 ref" href="#109borderWidth" title='borderWidth' data-ref="109borderWidth" data-ref-filename="109borderWidth">borderWidth</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="391">391</th><td>}</td></tr>
+<tr><th id="392">392</th><td></td></tr>
+<tr><th id="393">393</th><td>- (NSString *)bottom</td></tr>
+<tr><th id="394">394</th><td>{</td></tr>
+<tr><th id="395">395</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"bottom"</q>];</td></tr>
+<tr><th id="396">396</th><td>}</td></tr>
+<tr><th id="397">397</th><td></td></tr>
+<tr><th id="398">398</th><td>- (<em>void</em>)setBottom:(NSString *)<dfn class="local col0 decl" id="110bottom" title='bottom' data-type='NSString *' data-ref="110bottom" data-ref-filename="110bottom">bottom</dfn></td></tr>
+<tr><th id="399">399</th><td>{</td></tr>
+<tr><th id="400">400</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"bottom"</q> value:<a class="local col0 ref" href="#110bottom" title='bottom' data-ref="110bottom" data-ref-filename="110bottom">bottom</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="401">401</th><td>}</td></tr>
+<tr><th id="402">402</th><td></td></tr>
+<tr><th id="403">403</th><td>- (NSString *)captionSide</td></tr>
+<tr><th id="404">404</th><td>{</td></tr>
+<tr><th id="405">405</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"caption-side"</q>];</td></tr>
+<tr><th id="406">406</th><td>}</td></tr>
+<tr><th id="407">407</th><td></td></tr>
+<tr><th id="408">408</th><td>- (<em>void</em>)setCaptionSide:(NSString *)<dfn class="local col1 decl" id="111captionSide" title='captionSide' data-type='NSString *' data-ref="111captionSide" data-ref-filename="111captionSide">captionSide</dfn></td></tr>
+<tr><th id="409">409</th><td>{</td></tr>
+<tr><th id="410">410</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"caption-side"</q> value:<a class="local col1 ref" href="#111captionSide" title='captionSide' data-ref="111captionSide" data-ref-filename="111captionSide">captionSide</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="411">411</th><td>}</td></tr>
+<tr><th id="412">412</th><td></td></tr>
+<tr><th id="413">413</th><td>- (NSString *)clear</td></tr>
+<tr><th id="414">414</th><td>{</td></tr>
+<tr><th id="415">415</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"clear"</q>];</td></tr>
+<tr><th id="416">416</th><td>}</td></tr>
+<tr><th id="417">417</th><td></td></tr>
+<tr><th id="418">418</th><td>- (<em>void</em>)setClear:(NSString *)<dfn class="local col2 decl" id="112clear" title='clear' data-type='NSString *' data-ref="112clear" data-ref-filename="112clear">clear</dfn></td></tr>
+<tr><th id="419">419</th><td>{</td></tr>
+<tr><th id="420">420</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"clear"</q> value:<a class="local col2 ref" href="#112clear" title='clear' data-ref="112clear" data-ref-filename="112clear">clear</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="421">421</th><td>}</td></tr>
+<tr><th id="422">422</th><td></td></tr>
+<tr><th id="423">423</th><td>- (NSString *)clip</td></tr>
+<tr><th id="424">424</th><td>{</td></tr>
+<tr><th id="425">425</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"clip"</q>];</td></tr>
+<tr><th id="426">426</th><td>}</td></tr>
+<tr><th id="427">427</th><td></td></tr>
+<tr><th id="428">428</th><td>- (<em>void</em>)setClip:(NSString *)<dfn class="local col3 decl" id="113clip" title='clip' data-type='NSString *' data-ref="113clip" data-ref-filename="113clip">clip</dfn></td></tr>
+<tr><th id="429">429</th><td>{</td></tr>
+<tr><th id="430">430</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"clip"</q> value:<a class="local col3 ref" href="#113clip" title='clip' data-ref="113clip" data-ref-filename="113clip">clip</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="431">431</th><td>}</td></tr>
+<tr><th id="432">432</th><td></td></tr>
+<tr><th id="433">433</th><td>- (NSString *)color</td></tr>
+<tr><th id="434">434</th><td>{</td></tr>
+<tr><th id="435">435</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"color"</q>];</td></tr>
+<tr><th id="436">436</th><td>}</td></tr>
+<tr><th id="437">437</th><td></td></tr>
+<tr><th id="438">438</th><td>- (<em>void</em>)setColor:(NSString *)<dfn class="local col4 decl" id="114color" title='color' data-type='NSString *' data-ref="114color" data-ref-filename="114color">color</dfn></td></tr>
+<tr><th id="439">439</th><td>{</td></tr>
+<tr><th id="440">440</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"color"</q> value:<a class="local col4 ref" href="#114color" title='color' data-ref="114color" data-ref-filename="114color">color</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="441">441</th><td>}</td></tr>
+<tr><th id="442">442</th><td></td></tr>
+<tr><th id="443">443</th><td>- (NSString *)content</td></tr>
+<tr><th id="444">444</th><td>{</td></tr>
+<tr><th id="445">445</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"content"</q>];</td></tr>
+<tr><th id="446">446</th><td>}</td></tr>
+<tr><th id="447">447</th><td></td></tr>
+<tr><th id="448">448</th><td>- (<em>void</em>)setContent:(NSString *)<dfn class="local col5 decl" id="115content" title='content' data-type='NSString *' data-ref="115content" data-ref-filename="115content">content</dfn></td></tr>
+<tr><th id="449">449</th><td>{</td></tr>
+<tr><th id="450">450</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"content"</q> value:<a class="local col5 ref" href="#115content" title='content' data-ref="115content" data-ref-filename="115content">content</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="451">451</th><td>}</td></tr>
+<tr><th id="452">452</th><td></td></tr>
+<tr><th id="453">453</th><td>- (NSString *)counterIncrement</td></tr>
+<tr><th id="454">454</th><td>{</td></tr>
+<tr><th id="455">455</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"counter-increment"</q>];</td></tr>
+<tr><th id="456">456</th><td>}</td></tr>
+<tr><th id="457">457</th><td></td></tr>
+<tr><th id="458">458</th><td>- (<em>void</em>)setCounterIncrement:(NSString *)<dfn class="local col6 decl" id="116counterIncrement" title='counterIncrement' data-type='NSString *' data-ref="116counterIncrement" data-ref-filename="116counterIncrement">counterIncrement</dfn></td></tr>
+<tr><th id="459">459</th><td>{</td></tr>
+<tr><th id="460">460</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"counter-increment"</q> value:<a class="local col6 ref" href="#116counterIncrement" title='counterIncrement' data-ref="116counterIncrement" data-ref-filename="116counterIncrement">counterIncrement</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="461">461</th><td>}</td></tr>
+<tr><th id="462">462</th><td></td></tr>
+<tr><th id="463">463</th><td>- (NSString *)counterReset</td></tr>
+<tr><th id="464">464</th><td>{</td></tr>
+<tr><th id="465">465</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"counter-reset"</q>];</td></tr>
+<tr><th id="466">466</th><td>}</td></tr>
+<tr><th id="467">467</th><td></td></tr>
+<tr><th id="468">468</th><td>- (<em>void</em>)setCounterReset:(NSString *)<dfn class="local col7 decl" id="117counterReset" title='counterReset' data-type='NSString *' data-ref="117counterReset" data-ref-filename="117counterReset">counterReset</dfn></td></tr>
+<tr><th id="469">469</th><td>{</td></tr>
+<tr><th id="470">470</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"counter-reset"</q> value:<a class="local col7 ref" href="#117counterReset" title='counterReset' data-ref="117counterReset" data-ref-filename="117counterReset">counterReset</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="471">471</th><td>}</td></tr>
+<tr><th id="472">472</th><td></td></tr>
+<tr><th id="473">473</th><td>- (NSString *)cue</td></tr>
+<tr><th id="474">474</th><td>{</td></tr>
+<tr><th id="475">475</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"cue"</q>];</td></tr>
+<tr><th id="476">476</th><td>}</td></tr>
+<tr><th id="477">477</th><td></td></tr>
+<tr><th id="478">478</th><td>- (<em>void</em>)setCue:(NSString *)<dfn class="local col8 decl" id="118cue" title='cue' data-type='NSString *' data-ref="118cue" data-ref-filename="118cue">cue</dfn></td></tr>
+<tr><th id="479">479</th><td>{</td></tr>
+<tr><th id="480">480</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"cue"</q> value:<a class="local col8 ref" href="#118cue" title='cue' data-ref="118cue" data-ref-filename="118cue">cue</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="481">481</th><td>}</td></tr>
+<tr><th id="482">482</th><td></td></tr>
+<tr><th id="483">483</th><td>- (NSString *)cueAfter</td></tr>
+<tr><th id="484">484</th><td>{</td></tr>
+<tr><th id="485">485</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"cue-after"</q>];</td></tr>
+<tr><th id="486">486</th><td>}</td></tr>
+<tr><th id="487">487</th><td></td></tr>
+<tr><th id="488">488</th><td>- (<em>void</em>)setCueAfter:(NSString *)<dfn class="local col9 decl" id="119cueAfter" title='cueAfter' data-type='NSString *' data-ref="119cueAfter" data-ref-filename="119cueAfter">cueAfter</dfn></td></tr>
+<tr><th id="489">489</th><td>{</td></tr>
+<tr><th id="490">490</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"cue-after"</q> value:<a class="local col9 ref" href="#119cueAfter" title='cueAfter' data-ref="119cueAfter" data-ref-filename="119cueAfter">cueAfter</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="491">491</th><td>}</td></tr>
+<tr><th id="492">492</th><td></td></tr>
+<tr><th id="493">493</th><td>- (NSString *)cueBefore</td></tr>
+<tr><th id="494">494</th><td>{</td></tr>
+<tr><th id="495">495</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"cue-before"</q>];</td></tr>
+<tr><th id="496">496</th><td>}</td></tr>
+<tr><th id="497">497</th><td></td></tr>
+<tr><th id="498">498</th><td>- (<em>void</em>)setCueBefore:(NSString *)<dfn class="local col0 decl" id="120cueBefore" title='cueBefore' data-type='NSString *' data-ref="120cueBefore" data-ref-filename="120cueBefore">cueBefore</dfn></td></tr>
+<tr><th id="499">499</th><td>{</td></tr>
+<tr><th id="500">500</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"cue-before"</q> value:<a class="local col0 ref" href="#120cueBefore" title='cueBefore' data-ref="120cueBefore" data-ref-filename="120cueBefore">cueBefore</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="501">501</th><td>}</td></tr>
+<tr><th id="502">502</th><td></td></tr>
+<tr><th id="503">503</th><td>- (NSString *)cursor</td></tr>
+<tr><th id="504">504</th><td>{</td></tr>
+<tr><th id="505">505</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"cursor"</q>];</td></tr>
+<tr><th id="506">506</th><td>}</td></tr>
+<tr><th id="507">507</th><td></td></tr>
+<tr><th id="508">508</th><td>- (<em>void</em>)setCursor:(NSString *)<dfn class="local col1 decl" id="121cursor" title='cursor' data-type='NSString *' data-ref="121cursor" data-ref-filename="121cursor">cursor</dfn></td></tr>
+<tr><th id="509">509</th><td>{</td></tr>
+<tr><th id="510">510</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"cursor"</q> value:<a class="local col1 ref" href="#121cursor" title='cursor' data-ref="121cursor" data-ref-filename="121cursor">cursor</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="511">511</th><td>}</td></tr>
+<tr><th id="512">512</th><td></td></tr>
+<tr><th id="513">513</th><td>- (NSString *)direction</td></tr>
+<tr><th id="514">514</th><td>{</td></tr>
+<tr><th id="515">515</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"direction"</q>];</td></tr>
+<tr><th id="516">516</th><td>}</td></tr>
+<tr><th id="517">517</th><td></td></tr>
+<tr><th id="518">518</th><td>- (<em>void</em>)setDirection:(NSString *)<dfn class="local col2 decl" id="122direction" title='direction' data-type='NSString *' data-ref="122direction" data-ref-filename="122direction">direction</dfn></td></tr>
+<tr><th id="519">519</th><td>{</td></tr>
+<tr><th id="520">520</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"direction"</q> value:<a class="local col2 ref" href="#122direction" title='direction' data-ref="122direction" data-ref-filename="122direction">direction</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="521">521</th><td>}</td></tr>
+<tr><th id="522">522</th><td></td></tr>
+<tr><th id="523">523</th><td>- (NSString *)display</td></tr>
+<tr><th id="524">524</th><td>{</td></tr>
+<tr><th id="525">525</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"display"</q>];</td></tr>
+<tr><th id="526">526</th><td>}</td></tr>
+<tr><th id="527">527</th><td></td></tr>
+<tr><th id="528">528</th><td>- (<em>void</em>)setDisplay:(NSString *)<dfn class="local col3 decl" id="123display" title='display' data-type='NSString *' data-ref="123display" data-ref-filename="123display">display</dfn></td></tr>
+<tr><th id="529">529</th><td>{</td></tr>
+<tr><th id="530">530</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"display"</q> value:<a class="local col3 ref" href="#123display" title='display' data-ref="123display" data-ref-filename="123display">display</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="531">531</th><td>}</td></tr>
+<tr><th id="532">532</th><td></td></tr>
+<tr><th id="533">533</th><td>- (NSString *)elevation</td></tr>
+<tr><th id="534">534</th><td>{</td></tr>
+<tr><th id="535">535</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"elevation"</q>];</td></tr>
+<tr><th id="536">536</th><td>}</td></tr>
+<tr><th id="537">537</th><td></td></tr>
+<tr><th id="538">538</th><td>- (<em>void</em>)setElevation:(NSString *)<dfn class="local col4 decl" id="124elevation" title='elevation' data-type='NSString *' data-ref="124elevation" data-ref-filename="124elevation">elevation</dfn></td></tr>
+<tr><th id="539">539</th><td>{</td></tr>
+<tr><th id="540">540</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"elevation"</q> value:<a class="local col4 ref" href="#124elevation" title='elevation' data-ref="124elevation" data-ref-filename="124elevation">elevation</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="541">541</th><td>}</td></tr>
+<tr><th id="542">542</th><td></td></tr>
+<tr><th id="543">543</th><td>- (NSString *)emptyCells</td></tr>
+<tr><th id="544">544</th><td>{</td></tr>
+<tr><th id="545">545</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"empty-cells"</q>];</td></tr>
+<tr><th id="546">546</th><td>}</td></tr>
+<tr><th id="547">547</th><td></td></tr>
+<tr><th id="548">548</th><td>- (<em>void</em>)setEmptyCells:(NSString *)<dfn class="local col5 decl" id="125emptyCells" title='emptyCells' data-type='NSString *' data-ref="125emptyCells" data-ref-filename="125emptyCells">emptyCells</dfn></td></tr>
+<tr><th id="549">549</th><td>{</td></tr>
+<tr><th id="550">550</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"empty-cells"</q> value:<a class="local col5 ref" href="#125emptyCells" title='emptyCells' data-ref="125emptyCells" data-ref-filename="125emptyCells">emptyCells</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="551">551</th><td>}</td></tr>
+<tr><th id="552">552</th><td></td></tr>
+<tr><th id="553">553</th><td>- (NSString *)cssFloat</td></tr>
+<tr><th id="554">554</th><td>{</td></tr>
+<tr><th id="555">555</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"css-float"</q>];</td></tr>
+<tr><th id="556">556</th><td>}</td></tr>
+<tr><th id="557">557</th><td></td></tr>
+<tr><th id="558">558</th><td>- (<em>void</em>)setCssFloat:(NSString *)<dfn class="local col6 decl" id="126cssFloat" title='cssFloat' data-type='NSString *' data-ref="126cssFloat" data-ref-filename="126cssFloat">cssFloat</dfn></td></tr>
+<tr><th id="559">559</th><td>{</td></tr>
+<tr><th id="560">560</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"css-float"</q> value:<a class="local col6 ref" href="#126cssFloat" title='cssFloat' data-ref="126cssFloat" data-ref-filename="126cssFloat">cssFloat</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="561">561</th><td>}</td></tr>
+<tr><th id="562">562</th><td></td></tr>
+<tr><th id="563">563</th><td>- (NSString *)font</td></tr>
+<tr><th id="564">564</th><td>{</td></tr>
+<tr><th id="565">565</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"font"</q>];</td></tr>
+<tr><th id="566">566</th><td>}</td></tr>
+<tr><th id="567">567</th><td></td></tr>
+<tr><th id="568">568</th><td>- (<em>void</em>)setFont:(NSString *)<dfn class="local col7 decl" id="127font" title='font' data-type='NSString *' data-ref="127font" data-ref-filename="127font">font</dfn></td></tr>
+<tr><th id="569">569</th><td>{</td></tr>
+<tr><th id="570">570</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"font"</q> value:<a class="local col7 ref" href="#127font" title='font' data-ref="127font" data-ref-filename="127font">font</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="571">571</th><td>}</td></tr>
+<tr><th id="572">572</th><td></td></tr>
+<tr><th id="573">573</th><td>- (NSString *)fontFamily</td></tr>
+<tr><th id="574">574</th><td>{</td></tr>
+<tr><th id="575">575</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"font-family"</q>];</td></tr>
+<tr><th id="576">576</th><td>}</td></tr>
+<tr><th id="577">577</th><td></td></tr>
+<tr><th id="578">578</th><td>- (<em>void</em>)setFontFamily:(NSString *)<dfn class="local col8 decl" id="128fontFamily" title='fontFamily' data-type='NSString *' data-ref="128fontFamily" data-ref-filename="128fontFamily">fontFamily</dfn></td></tr>
+<tr><th id="579">579</th><td>{</td></tr>
+<tr><th id="580">580</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"font-family"</q> value:<a class="local col8 ref" href="#128fontFamily" title='fontFamily' data-ref="128fontFamily" data-ref-filename="128fontFamily">fontFamily</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="581">581</th><td>}</td></tr>
+<tr><th id="582">582</th><td></td></tr>
+<tr><th id="583">583</th><td>- (NSString *)fontSize</td></tr>
+<tr><th id="584">584</th><td>{</td></tr>
+<tr><th id="585">585</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"font-size"</q>];</td></tr>
+<tr><th id="586">586</th><td>}</td></tr>
+<tr><th id="587">587</th><td></td></tr>
+<tr><th id="588">588</th><td>- (<em>void</em>)setFontSize:(NSString *)<dfn class="local col9 decl" id="129fontSize" title='fontSize' data-type='NSString *' data-ref="129fontSize" data-ref-filename="129fontSize">fontSize</dfn></td></tr>
+<tr><th id="589">589</th><td>{</td></tr>
+<tr><th id="590">590</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"font-size"</q> value:<a class="local col9 ref" href="#129fontSize" title='fontSize' data-ref="129fontSize" data-ref-filename="129fontSize">fontSize</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="591">591</th><td>}</td></tr>
+<tr><th id="592">592</th><td></td></tr>
+<tr><th id="593">593</th><td>- (NSString *)fontSizeAdjust</td></tr>
+<tr><th id="594">594</th><td>{</td></tr>
+<tr><th id="595">595</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"font-size-adjust"</q>];</td></tr>
+<tr><th id="596">596</th><td>}</td></tr>
+<tr><th id="597">597</th><td></td></tr>
+<tr><th id="598">598</th><td>- (<em>void</em>)setFontSizeAdjust:(NSString *)<dfn class="local col0 decl" id="130fontSizeAdjust" title='fontSizeAdjust' data-type='NSString *' data-ref="130fontSizeAdjust" data-ref-filename="130fontSizeAdjust">fontSizeAdjust</dfn></td></tr>
+<tr><th id="599">599</th><td>{</td></tr>
+<tr><th id="600">600</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"font-size-adjust"</q> value:<a class="local col0 ref" href="#130fontSizeAdjust" title='fontSizeAdjust' data-ref="130fontSizeAdjust" data-ref-filename="130fontSizeAdjust">fontSizeAdjust</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="601">601</th><td>}</td></tr>
+<tr><th id="602">602</th><td></td></tr>
+<tr><th id="603">603</th><td>- (NSString *)_fontSizeDelta</td></tr>
+<tr><th id="604">604</th><td>{</td></tr>
+<tr><th id="605">605</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"-webkit-font-size-delta"</q>];</td></tr>
+<tr><th id="606">606</th><td>}</td></tr>
+<tr><th id="607">607</th><td></td></tr>
+<tr><th id="608">608</th><td>- (<em>void</em>)_setFontSizeDelta:(NSString *)<dfn class="local col1 decl" id="131fontSizeDelta" title='fontSizeDelta' data-type='NSString *' data-ref="131fontSizeDelta" data-ref-filename="131fontSizeDelta">fontSizeDelta</dfn></td></tr>
+<tr><th id="609">609</th><td>{</td></tr>
+<tr><th id="610">610</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"-webkit-font-size-delta"</q> value:<a class="local col1 ref" href="#131fontSizeDelta" title='fontSizeDelta' data-ref="131fontSizeDelta" data-ref-filename="131fontSizeDelta">fontSizeDelta</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="611">611</th><td>}</td></tr>
+<tr><th id="612">612</th><td></td></tr>
+<tr><th id="613">613</th><td>- (NSString *)fontStretch</td></tr>
+<tr><th id="614">614</th><td>{</td></tr>
+<tr><th id="615">615</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"font-stretch"</q>];</td></tr>
+<tr><th id="616">616</th><td>}</td></tr>
+<tr><th id="617">617</th><td></td></tr>
+<tr><th id="618">618</th><td>- (<em>void</em>)setFontStretch:(NSString *)<dfn class="local col2 decl" id="132fontStretch" title='fontStretch' data-type='NSString *' data-ref="132fontStretch" data-ref-filename="132fontStretch">fontStretch</dfn></td></tr>
+<tr><th id="619">619</th><td>{</td></tr>
+<tr><th id="620">620</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"font-stretch"</q> value:<a class="local col2 ref" href="#132fontStretch" title='fontStretch' data-ref="132fontStretch" data-ref-filename="132fontStretch">fontStretch</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="621">621</th><td>}</td></tr>
+<tr><th id="622">622</th><td></td></tr>
+<tr><th id="623">623</th><td>- (NSString *)fontStyle</td></tr>
+<tr><th id="624">624</th><td>{</td></tr>
+<tr><th id="625">625</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"font-style"</q>];</td></tr>
+<tr><th id="626">626</th><td>}</td></tr>
+<tr><th id="627">627</th><td></td></tr>
+<tr><th id="628">628</th><td>- (<em>void</em>)setFontStyle:(NSString *)<dfn class="local col3 decl" id="133fontStyle" title='fontStyle' data-type='NSString *' data-ref="133fontStyle" data-ref-filename="133fontStyle">fontStyle</dfn></td></tr>
+<tr><th id="629">629</th><td>{</td></tr>
+<tr><th id="630">630</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"font-style"</q> value:<a class="local col3 ref" href="#133fontStyle" title='fontStyle' data-ref="133fontStyle" data-ref-filename="133fontStyle">fontStyle</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="631">631</th><td>}</td></tr>
+<tr><th id="632">632</th><td></td></tr>
+<tr><th id="633">633</th><td>- (NSString *)fontVariant</td></tr>
+<tr><th id="634">634</th><td>{</td></tr>
+<tr><th id="635">635</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"font-variant"</q>];</td></tr>
+<tr><th id="636">636</th><td>}</td></tr>
+<tr><th id="637">637</th><td></td></tr>
+<tr><th id="638">638</th><td>- (<em>void</em>)setFontVariant:(NSString *)<dfn class="local col4 decl" id="134fontVariant" title='fontVariant' data-type='NSString *' data-ref="134fontVariant" data-ref-filename="134fontVariant">fontVariant</dfn></td></tr>
+<tr><th id="639">639</th><td>{</td></tr>
+<tr><th id="640">640</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"font-variant"</q> value:<a class="local col4 ref" href="#134fontVariant" title='fontVariant' data-ref="134fontVariant" data-ref-filename="134fontVariant">fontVariant</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="641">641</th><td>}</td></tr>
+<tr><th id="642">642</th><td></td></tr>
+<tr><th id="643">643</th><td>- (NSString *)fontWeight</td></tr>
+<tr><th id="644">644</th><td>{</td></tr>
+<tr><th id="645">645</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"font-weight"</q>];</td></tr>
+<tr><th id="646">646</th><td>}</td></tr>
+<tr><th id="647">647</th><td></td></tr>
+<tr><th id="648">648</th><td>- (<em>void</em>)setFontWeight:(NSString *)<dfn class="local col5 decl" id="135fontWeight" title='fontWeight' data-type='NSString *' data-ref="135fontWeight" data-ref-filename="135fontWeight">fontWeight</dfn></td></tr>
+<tr><th id="649">649</th><td>{</td></tr>
+<tr><th id="650">650</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"font-weight"</q> value:<a class="local col5 ref" href="#135fontWeight" title='fontWeight' data-ref="135fontWeight" data-ref-filename="135fontWeight">fontWeight</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="651">651</th><td>}</td></tr>
+<tr><th id="652">652</th><td></td></tr>
+<tr><th id="653">653</th><td>- (NSString *)height</td></tr>
+<tr><th id="654">654</th><td>{</td></tr>
+<tr><th id="655">655</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"height"</q>];</td></tr>
+<tr><th id="656">656</th><td>}</td></tr>
+<tr><th id="657">657</th><td></td></tr>
+<tr><th id="658">658</th><td>- (<em>void</em>)setHeight:(NSString *)<dfn class="local col6 decl" id="136height" title='height' data-type='NSString *' data-ref="136height" data-ref-filename="136height">height</dfn></td></tr>
+<tr><th id="659">659</th><td>{</td></tr>
+<tr><th id="660">660</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"height"</q> value:<a class="local col6 ref" href="#136height" title='height' data-ref="136height" data-ref-filename="136height">height</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="661">661</th><td>}</td></tr>
+<tr><th id="662">662</th><td></td></tr>
+<tr><th id="663">663</th><td>- (NSString *)left</td></tr>
+<tr><th id="664">664</th><td>{</td></tr>
+<tr><th id="665">665</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"left"</q>];</td></tr>
+<tr><th id="666">666</th><td>}</td></tr>
+<tr><th id="667">667</th><td></td></tr>
+<tr><th id="668">668</th><td>- (<em>void</em>)setLeft:(NSString *)<dfn class="local col7 decl" id="137left" title='left' data-type='NSString *' data-ref="137left" data-ref-filename="137left">left</dfn></td></tr>
+<tr><th id="669">669</th><td>{</td></tr>
+<tr><th id="670">670</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"left"</q> value:<a class="local col7 ref" href="#137left" title='left' data-ref="137left" data-ref-filename="137left">left</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="671">671</th><td>}</td></tr>
+<tr><th id="672">672</th><td></td></tr>
+<tr><th id="673">673</th><td>- (NSString *)letterSpacing</td></tr>
+<tr><th id="674">674</th><td>{</td></tr>
+<tr><th id="675">675</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"letter-spacing"</q>];</td></tr>
+<tr><th id="676">676</th><td>}</td></tr>
+<tr><th id="677">677</th><td></td></tr>
+<tr><th id="678">678</th><td>- (<em>void</em>)setLetterSpacing:(NSString *)<dfn class="local col8 decl" id="138letterSpacing" title='letterSpacing' data-type='NSString *' data-ref="138letterSpacing" data-ref-filename="138letterSpacing">letterSpacing</dfn></td></tr>
+<tr><th id="679">679</th><td>{</td></tr>
+<tr><th id="680">680</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"letter-spacing"</q> value:<a class="local col8 ref" href="#138letterSpacing" title='letterSpacing' data-ref="138letterSpacing" data-ref-filename="138letterSpacing">letterSpacing</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="681">681</th><td>}</td></tr>
+<tr><th id="682">682</th><td></td></tr>
+<tr><th id="683">683</th><td>- (NSString *)lineHeight</td></tr>
+<tr><th id="684">684</th><td>{</td></tr>
+<tr><th id="685">685</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"line-height"</q>];</td></tr>
+<tr><th id="686">686</th><td>}</td></tr>
+<tr><th id="687">687</th><td></td></tr>
+<tr><th id="688">688</th><td>- (<em>void</em>)setLineHeight:(NSString *)<dfn class="local col9 decl" id="139lineHeight" title='lineHeight' data-type='NSString *' data-ref="139lineHeight" data-ref-filename="139lineHeight">lineHeight</dfn></td></tr>
+<tr><th id="689">689</th><td>{</td></tr>
+<tr><th id="690">690</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"line-height"</q> value:<a class="local col9 ref" href="#139lineHeight" title='lineHeight' data-ref="139lineHeight" data-ref-filename="139lineHeight">lineHeight</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="691">691</th><td>}</td></tr>
+<tr><th id="692">692</th><td></td></tr>
+<tr><th id="693">693</th><td>- (NSString *)listStyle</td></tr>
+<tr><th id="694">694</th><td>{</td></tr>
+<tr><th id="695">695</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"list-style"</q>];</td></tr>
+<tr><th id="696">696</th><td>}</td></tr>
+<tr><th id="697">697</th><td></td></tr>
+<tr><th id="698">698</th><td>- (<em>void</em>)setListStyle:(NSString *)<dfn class="local col0 decl" id="140listStyle" title='listStyle' data-type='NSString *' data-ref="140listStyle" data-ref-filename="140listStyle">listStyle</dfn></td></tr>
+<tr><th id="699">699</th><td>{</td></tr>
+<tr><th id="700">700</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"list-style"</q> value:<a class="local col0 ref" href="#140listStyle" title='listStyle' data-ref="140listStyle" data-ref-filename="140listStyle">listStyle</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="701">701</th><td>}</td></tr>
+<tr><th id="702">702</th><td></td></tr>
+<tr><th id="703">703</th><td>- (NSString *)listStyleImage</td></tr>
+<tr><th id="704">704</th><td>{</td></tr>
+<tr><th id="705">705</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"list-style-image"</q>];</td></tr>
+<tr><th id="706">706</th><td>}</td></tr>
+<tr><th id="707">707</th><td></td></tr>
+<tr><th id="708">708</th><td>- (<em>void</em>)setListStyleImage:(NSString *)<dfn class="local col1 decl" id="141listStyleImage" title='listStyleImage' data-type='NSString *' data-ref="141listStyleImage" data-ref-filename="141listStyleImage">listStyleImage</dfn></td></tr>
+<tr><th id="709">709</th><td>{</td></tr>
+<tr><th id="710">710</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"list-style-image"</q> value:<a class="local col1 ref" href="#141listStyleImage" title='listStyleImage' data-ref="141listStyleImage" data-ref-filename="141listStyleImage">listStyleImage</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="711">711</th><td>}</td></tr>
+<tr><th id="712">712</th><td></td></tr>
+<tr><th id="713">713</th><td>- (NSString *)listStylePosition</td></tr>
+<tr><th id="714">714</th><td>{</td></tr>
+<tr><th id="715">715</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"list-style-position"</q>];</td></tr>
+<tr><th id="716">716</th><td>}</td></tr>
+<tr><th id="717">717</th><td></td></tr>
+<tr><th id="718">718</th><td>- (<em>void</em>)setListStylePosition:(NSString *)<dfn class="local col2 decl" id="142listStylePosition" title='listStylePosition' data-type='NSString *' data-ref="142listStylePosition" data-ref-filename="142listStylePosition">listStylePosition</dfn></td></tr>
+<tr><th id="719">719</th><td>{</td></tr>
+<tr><th id="720">720</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"list-style-position"</q> value:<a class="local col2 ref" href="#142listStylePosition" title='listStylePosition' data-ref="142listStylePosition" data-ref-filename="142listStylePosition">listStylePosition</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="721">721</th><td>}</td></tr>
+<tr><th id="722">722</th><td></td></tr>
+<tr><th id="723">723</th><td>- (NSString *)listStyleType</td></tr>
+<tr><th id="724">724</th><td>{</td></tr>
+<tr><th id="725">725</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"list-style-type"</q>];</td></tr>
+<tr><th id="726">726</th><td>}</td></tr>
+<tr><th id="727">727</th><td></td></tr>
+<tr><th id="728">728</th><td>- (<em>void</em>)setListStyleType:(NSString *)<dfn class="local col3 decl" id="143listStyleType" title='listStyleType' data-type='NSString *' data-ref="143listStyleType" data-ref-filename="143listStyleType">listStyleType</dfn></td></tr>
+<tr><th id="729">729</th><td>{</td></tr>
+<tr><th id="730">730</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"list-style-type"</q> value:<a class="local col3 ref" href="#143listStyleType" title='listStyleType' data-ref="143listStyleType" data-ref-filename="143listStyleType">listStyleType</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="731">731</th><td>}</td></tr>
+<tr><th id="732">732</th><td></td></tr>
+<tr><th id="733">733</th><td>- (NSString *)margin</td></tr>
+<tr><th id="734">734</th><td>{</td></tr>
+<tr><th id="735">735</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"margin"</q>];</td></tr>
+<tr><th id="736">736</th><td>}</td></tr>
+<tr><th id="737">737</th><td></td></tr>
+<tr><th id="738">738</th><td>- (<em>void</em>)setMargin:(NSString *)<dfn class="local col4 decl" id="144margin" title='margin' data-type='NSString *' data-ref="144margin" data-ref-filename="144margin">margin</dfn></td></tr>
+<tr><th id="739">739</th><td>{</td></tr>
+<tr><th id="740">740</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"margin"</q> value:<a class="local col4 ref" href="#144margin" title='margin' data-ref="144margin" data-ref-filename="144margin">margin</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="741">741</th><td>}</td></tr>
+<tr><th id="742">742</th><td></td></tr>
+<tr><th id="743">743</th><td>- (NSString *)marginTop</td></tr>
+<tr><th id="744">744</th><td>{</td></tr>
+<tr><th id="745">745</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"margin-top"</q>];</td></tr>
+<tr><th id="746">746</th><td>}</td></tr>
+<tr><th id="747">747</th><td></td></tr>
+<tr><th id="748">748</th><td>- (<em>void</em>)setMarginTop:(NSString *)<dfn class="local col5 decl" id="145marginTop" title='marginTop' data-type='NSString *' data-ref="145marginTop" data-ref-filename="145marginTop">marginTop</dfn></td></tr>
+<tr><th id="749">749</th><td>{</td></tr>
+<tr><th id="750">750</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"margin-top"</q> value:<a class="local col5 ref" href="#145marginTop" title='marginTop' data-ref="145marginTop" data-ref-filename="145marginTop">marginTop</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="751">751</th><td>}</td></tr>
+<tr><th id="752">752</th><td></td></tr>
+<tr><th id="753">753</th><td>- (NSString *)marginRight</td></tr>
+<tr><th id="754">754</th><td>{</td></tr>
+<tr><th id="755">755</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"margin-right"</q>];</td></tr>
+<tr><th id="756">756</th><td>}</td></tr>
+<tr><th id="757">757</th><td></td></tr>
+<tr><th id="758">758</th><td>- (<em>void</em>)setMarginRight:(NSString *)<dfn class="local col6 decl" id="146marginRight" title='marginRight' data-type='NSString *' data-ref="146marginRight" data-ref-filename="146marginRight">marginRight</dfn></td></tr>
+<tr><th id="759">759</th><td>{</td></tr>
+<tr><th id="760">760</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"margin-right"</q> value:<a class="local col6 ref" href="#146marginRight" title='marginRight' data-ref="146marginRight" data-ref-filename="146marginRight">marginRight</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="761">761</th><td>}</td></tr>
+<tr><th id="762">762</th><td></td></tr>
+<tr><th id="763">763</th><td>- (NSString *)marginBottom</td></tr>
+<tr><th id="764">764</th><td>{</td></tr>
+<tr><th id="765">765</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"margin-bottom"</q>];</td></tr>
+<tr><th id="766">766</th><td>}</td></tr>
+<tr><th id="767">767</th><td></td></tr>
+<tr><th id="768">768</th><td>- (<em>void</em>)setMarginBottom:(NSString *)<dfn class="local col7 decl" id="147marginBottom" title='marginBottom' data-type='NSString *' data-ref="147marginBottom" data-ref-filename="147marginBottom">marginBottom</dfn></td></tr>
+<tr><th id="769">769</th><td>{</td></tr>
+<tr><th id="770">770</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"margin-bottom"</q> value:<a class="local col7 ref" href="#147marginBottom" title='marginBottom' data-ref="147marginBottom" data-ref-filename="147marginBottom">marginBottom</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="771">771</th><td>}</td></tr>
+<tr><th id="772">772</th><td></td></tr>
+<tr><th id="773">773</th><td>- (NSString *)marginLeft</td></tr>
+<tr><th id="774">774</th><td>{</td></tr>
+<tr><th id="775">775</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"margin-left"</q>];</td></tr>
+<tr><th id="776">776</th><td>}</td></tr>
+<tr><th id="777">777</th><td></td></tr>
+<tr><th id="778">778</th><td>- (<em>void</em>)setMarginLeft:(NSString *)<dfn class="local col8 decl" id="148marginLeft" title='marginLeft' data-type='NSString *' data-ref="148marginLeft" data-ref-filename="148marginLeft">marginLeft</dfn></td></tr>
+<tr><th id="779">779</th><td>{</td></tr>
+<tr><th id="780">780</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"margin-left"</q> value:<a class="local col8 ref" href="#148marginLeft" title='marginLeft' data-ref="148marginLeft" data-ref-filename="148marginLeft">marginLeft</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="781">781</th><td>}</td></tr>
+<tr><th id="782">782</th><td></td></tr>
+<tr><th id="783">783</th><td>- (NSString *)markerOffset</td></tr>
+<tr><th id="784">784</th><td>{</td></tr>
+<tr><th id="785">785</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"marker-offset"</q>];</td></tr>
+<tr><th id="786">786</th><td>}</td></tr>
+<tr><th id="787">787</th><td></td></tr>
+<tr><th id="788">788</th><td>- (<em>void</em>)setMarkerOffset:(NSString *)<dfn class="local col9 decl" id="149markerOffset" title='markerOffset' data-type='NSString *' data-ref="149markerOffset" data-ref-filename="149markerOffset">markerOffset</dfn></td></tr>
+<tr><th id="789">789</th><td>{</td></tr>
+<tr><th id="790">790</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"marker-offset"</q> value:<a class="local col9 ref" href="#149markerOffset" title='markerOffset' data-ref="149markerOffset" data-ref-filename="149markerOffset">markerOffset</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="791">791</th><td>}</td></tr>
+<tr><th id="792">792</th><td></td></tr>
+<tr><th id="793">793</th><td>- (NSString *)marks</td></tr>
+<tr><th id="794">794</th><td>{</td></tr>
+<tr><th id="795">795</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"marks"</q>];</td></tr>
+<tr><th id="796">796</th><td>}</td></tr>
+<tr><th id="797">797</th><td></td></tr>
+<tr><th id="798">798</th><td>- (<em>void</em>)setMarks:(NSString *)<dfn class="local col0 decl" id="150marks" title='marks' data-type='NSString *' data-ref="150marks" data-ref-filename="150marks">marks</dfn></td></tr>
+<tr><th id="799">799</th><td>{</td></tr>
+<tr><th id="800">800</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"marks"</q> value:<a class="local col0 ref" href="#150marks" title='marks' data-ref="150marks" data-ref-filename="150marks">marks</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="801">801</th><td>}</td></tr>
+<tr><th id="802">802</th><td></td></tr>
+<tr><th id="803">803</th><td>- (NSString *)maxHeight</td></tr>
+<tr><th id="804">804</th><td>{</td></tr>
+<tr><th id="805">805</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"max-height"</q>];</td></tr>
+<tr><th id="806">806</th><td>}</td></tr>
+<tr><th id="807">807</th><td></td></tr>
+<tr><th id="808">808</th><td>- (<em>void</em>)setMaxHeight:(NSString *)<dfn class="local col1 decl" id="151maxHeight" title='maxHeight' data-type='NSString *' data-ref="151maxHeight" data-ref-filename="151maxHeight">maxHeight</dfn></td></tr>
+<tr><th id="809">809</th><td>{</td></tr>
+<tr><th id="810">810</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"max-height"</q> value:<a class="local col1 ref" href="#151maxHeight" title='maxHeight' data-ref="151maxHeight" data-ref-filename="151maxHeight">maxHeight</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="811">811</th><td>}</td></tr>
+<tr><th id="812">812</th><td></td></tr>
+<tr><th id="813">813</th><td>- (NSString *)maxWidth</td></tr>
+<tr><th id="814">814</th><td>{</td></tr>
+<tr><th id="815">815</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"max-width"</q>];</td></tr>
+<tr><th id="816">816</th><td>}</td></tr>
+<tr><th id="817">817</th><td></td></tr>
+<tr><th id="818">818</th><td>- (<em>void</em>)setMaxWidth:(NSString *)<dfn class="local col2 decl" id="152maxWidth" title='maxWidth' data-type='NSString *' data-ref="152maxWidth" data-ref-filename="152maxWidth">maxWidth</dfn></td></tr>
+<tr><th id="819">819</th><td>{</td></tr>
+<tr><th id="820">820</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"max-width"</q> value:<a class="local col2 ref" href="#152maxWidth" title='maxWidth' data-ref="152maxWidth" data-ref-filename="152maxWidth">maxWidth</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="821">821</th><td>}</td></tr>
+<tr><th id="822">822</th><td></td></tr>
+<tr><th id="823">823</th><td>- (NSString *)minHeight</td></tr>
+<tr><th id="824">824</th><td>{</td></tr>
+<tr><th id="825">825</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"min-height"</q>];</td></tr>
+<tr><th id="826">826</th><td>}</td></tr>
+<tr><th id="827">827</th><td></td></tr>
+<tr><th id="828">828</th><td>- (<em>void</em>)setMinHeight:(NSString *)<dfn class="local col3 decl" id="153minHeight" title='minHeight' data-type='NSString *' data-ref="153minHeight" data-ref-filename="153minHeight">minHeight</dfn></td></tr>
+<tr><th id="829">829</th><td>{</td></tr>
+<tr><th id="830">830</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"min-height"</q> value:<a class="local col3 ref" href="#153minHeight" title='minHeight' data-ref="153minHeight" data-ref-filename="153minHeight">minHeight</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="831">831</th><td>}</td></tr>
+<tr><th id="832">832</th><td></td></tr>
+<tr><th id="833">833</th><td>- (NSString *)minWidth</td></tr>
+<tr><th id="834">834</th><td>{</td></tr>
+<tr><th id="835">835</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"min-width"</q>];</td></tr>
+<tr><th id="836">836</th><td>}</td></tr>
+<tr><th id="837">837</th><td></td></tr>
+<tr><th id="838">838</th><td>- (<em>void</em>)setMinWidth:(NSString *)<dfn class="local col4 decl" id="154minWidth" title='minWidth' data-type='NSString *' data-ref="154minWidth" data-ref-filename="154minWidth">minWidth</dfn></td></tr>
+<tr><th id="839">839</th><td>{</td></tr>
+<tr><th id="840">840</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"min-width"</q> value:<a class="local col4 ref" href="#154minWidth" title='minWidth' data-ref="154minWidth" data-ref-filename="154minWidth">minWidth</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="841">841</th><td>}</td></tr>
+<tr><th id="842">842</th><td></td></tr>
+<tr><th id="843">843</th><td>- (NSString *)orphans</td></tr>
+<tr><th id="844">844</th><td>{</td></tr>
+<tr><th id="845">845</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"orphans"</q>];</td></tr>
+<tr><th id="846">846</th><td>}</td></tr>
+<tr><th id="847">847</th><td></td></tr>
+<tr><th id="848">848</th><td>- (<em>void</em>)setOrphans:(NSString *)<dfn class="local col5 decl" id="155orphans" title='orphans' data-type='NSString *' data-ref="155orphans" data-ref-filename="155orphans">orphans</dfn></td></tr>
+<tr><th id="849">849</th><td>{</td></tr>
+<tr><th id="850">850</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"orphans"</q> value:<a class="local col5 ref" href="#155orphans" title='orphans' data-ref="155orphans" data-ref-filename="155orphans">orphans</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="851">851</th><td>}</td></tr>
+<tr><th id="852">852</th><td></td></tr>
+<tr><th id="853">853</th><td>- (NSString *)outline</td></tr>
+<tr><th id="854">854</th><td>{</td></tr>
+<tr><th id="855">855</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"outline"</q>];</td></tr>
+<tr><th id="856">856</th><td>}</td></tr>
+<tr><th id="857">857</th><td></td></tr>
+<tr><th id="858">858</th><td>- (<em>void</em>)setOutline:(NSString *)<dfn class="local col6 decl" id="156outline" title='outline' data-type='NSString *' data-ref="156outline" data-ref-filename="156outline">outline</dfn></td></tr>
+<tr><th id="859">859</th><td>{</td></tr>
+<tr><th id="860">860</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"outline"</q> value:<a class="local col6 ref" href="#156outline" title='outline' data-ref="156outline" data-ref-filename="156outline">outline</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="861">861</th><td>}</td></tr>
+<tr><th id="862">862</th><td></td></tr>
+<tr><th id="863">863</th><td>- (NSString *)outlineColor</td></tr>
+<tr><th id="864">864</th><td>{</td></tr>
+<tr><th id="865">865</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"outline-color"</q>];</td></tr>
+<tr><th id="866">866</th><td>}</td></tr>
+<tr><th id="867">867</th><td></td></tr>
+<tr><th id="868">868</th><td>- (<em>void</em>)setOutlineColor:(NSString *)<dfn class="local col7 decl" id="157outlineColor" title='outlineColor' data-type='NSString *' data-ref="157outlineColor" data-ref-filename="157outlineColor">outlineColor</dfn></td></tr>
+<tr><th id="869">869</th><td>{</td></tr>
+<tr><th id="870">870</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"outline-color"</q> value:<a class="local col7 ref" href="#157outlineColor" title='outlineColor' data-ref="157outlineColor" data-ref-filename="157outlineColor">outlineColor</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="871">871</th><td>}</td></tr>
+<tr><th id="872">872</th><td></td></tr>
+<tr><th id="873">873</th><td>- (NSString *)outlineStyle</td></tr>
+<tr><th id="874">874</th><td>{</td></tr>
+<tr><th id="875">875</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"outline-style"</q>];</td></tr>
+<tr><th id="876">876</th><td>}</td></tr>
+<tr><th id="877">877</th><td></td></tr>
+<tr><th id="878">878</th><td>- (<em>void</em>)setOutlineStyle:(NSString *)<dfn class="local col8 decl" id="158outlineStyle" title='outlineStyle' data-type='NSString *' data-ref="158outlineStyle" data-ref-filename="158outlineStyle">outlineStyle</dfn></td></tr>
+<tr><th id="879">879</th><td>{</td></tr>
+<tr><th id="880">880</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"outline-style"</q> value:<a class="local col8 ref" href="#158outlineStyle" title='outlineStyle' data-ref="158outlineStyle" data-ref-filename="158outlineStyle">outlineStyle</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="881">881</th><td>}</td></tr>
+<tr><th id="882">882</th><td></td></tr>
+<tr><th id="883">883</th><td>- (NSString *)outlineWidth</td></tr>
+<tr><th id="884">884</th><td>{</td></tr>
+<tr><th id="885">885</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"outline-width"</q>];</td></tr>
+<tr><th id="886">886</th><td>}</td></tr>
+<tr><th id="887">887</th><td></td></tr>
+<tr><th id="888">888</th><td>- (<em>void</em>)setOutlineWidth:(NSString *)<dfn class="local col9 decl" id="159outlineWidth" title='outlineWidth' data-type='NSString *' data-ref="159outlineWidth" data-ref-filename="159outlineWidth">outlineWidth</dfn></td></tr>
+<tr><th id="889">889</th><td>{</td></tr>
+<tr><th id="890">890</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"outline-width"</q> value:<a class="local col9 ref" href="#159outlineWidth" title='outlineWidth' data-ref="159outlineWidth" data-ref-filename="159outlineWidth">outlineWidth</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="891">891</th><td>}</td></tr>
+<tr><th id="892">892</th><td></td></tr>
+<tr><th id="893">893</th><td>- (NSString *)overflow</td></tr>
+<tr><th id="894">894</th><td>{</td></tr>
+<tr><th id="895">895</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"overflow"</q>];</td></tr>
+<tr><th id="896">896</th><td>}</td></tr>
+<tr><th id="897">897</th><td></td></tr>
+<tr><th id="898">898</th><td>- (<em>void</em>)setOverflow:(NSString *)<dfn class="local col0 decl" id="160overflow" title='overflow' data-type='NSString *' data-ref="160overflow" data-ref-filename="160overflow">overflow</dfn></td></tr>
+<tr><th id="899">899</th><td>{</td></tr>
+<tr><th id="900">900</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"overflow"</q> value:<a class="local col0 ref" href="#160overflow" title='overflow' data-ref="160overflow" data-ref-filename="160overflow">overflow</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="901">901</th><td>}</td></tr>
+<tr><th id="902">902</th><td></td></tr>
+<tr><th id="903">903</th><td>- (NSString *)padding</td></tr>
+<tr><th id="904">904</th><td>{</td></tr>
+<tr><th id="905">905</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"padding"</q>];</td></tr>
+<tr><th id="906">906</th><td>}</td></tr>
+<tr><th id="907">907</th><td></td></tr>
+<tr><th id="908">908</th><td>- (<em>void</em>)setPadding:(NSString *)<dfn class="local col1 decl" id="161padding" title='padding' data-type='NSString *' data-ref="161padding" data-ref-filename="161padding">padding</dfn></td></tr>
+<tr><th id="909">909</th><td>{</td></tr>
+<tr><th id="910">910</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"padding"</q> value:<a class="local col1 ref" href="#161padding" title='padding' data-ref="161padding" data-ref-filename="161padding">padding</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="911">911</th><td>}</td></tr>
+<tr><th id="912">912</th><td></td></tr>
+<tr><th id="913">913</th><td>- (NSString *)paddingTop</td></tr>
+<tr><th id="914">914</th><td>{</td></tr>
+<tr><th id="915">915</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"padding-top"</q>];</td></tr>
+<tr><th id="916">916</th><td>}</td></tr>
+<tr><th id="917">917</th><td></td></tr>
+<tr><th id="918">918</th><td>- (<em>void</em>)setPaddingTop:(NSString *)<dfn class="local col2 decl" id="162paddingTop" title='paddingTop' data-type='NSString *' data-ref="162paddingTop" data-ref-filename="162paddingTop">paddingTop</dfn></td></tr>
+<tr><th id="919">919</th><td>{</td></tr>
+<tr><th id="920">920</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"padding-top"</q> value:<a class="local col2 ref" href="#162paddingTop" title='paddingTop' data-ref="162paddingTop" data-ref-filename="162paddingTop">paddingTop</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="921">921</th><td>}</td></tr>
+<tr><th id="922">922</th><td></td></tr>
+<tr><th id="923">923</th><td>- (NSString *)paddingRight</td></tr>
+<tr><th id="924">924</th><td>{</td></tr>
+<tr><th id="925">925</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"padding-right"</q>];</td></tr>
+<tr><th id="926">926</th><td>}</td></tr>
+<tr><th id="927">927</th><td></td></tr>
+<tr><th id="928">928</th><td>- (<em>void</em>)setPaddingRight:(NSString *)<dfn class="local col3 decl" id="163paddingRight" title='paddingRight' data-type='NSString *' data-ref="163paddingRight" data-ref-filename="163paddingRight">paddingRight</dfn></td></tr>
+<tr><th id="929">929</th><td>{</td></tr>
+<tr><th id="930">930</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"padding-right"</q> value:<a class="local col3 ref" href="#163paddingRight" title='paddingRight' data-ref="163paddingRight" data-ref-filename="163paddingRight">paddingRight</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="931">931</th><td>}</td></tr>
+<tr><th id="932">932</th><td></td></tr>
+<tr><th id="933">933</th><td>- (NSString *)paddingBottom</td></tr>
+<tr><th id="934">934</th><td>{</td></tr>
+<tr><th id="935">935</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"padding-bottom"</q>];</td></tr>
+<tr><th id="936">936</th><td>}</td></tr>
+<tr><th id="937">937</th><td></td></tr>
+<tr><th id="938">938</th><td>- (<em>void</em>)setPaddingBottom:(NSString *)<dfn class="local col4 decl" id="164paddingBottom" title='paddingBottom' data-type='NSString *' data-ref="164paddingBottom" data-ref-filename="164paddingBottom">paddingBottom</dfn></td></tr>
+<tr><th id="939">939</th><td>{</td></tr>
+<tr><th id="940">940</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"padding-bottom"</q> value:<a class="local col4 ref" href="#164paddingBottom" title='paddingBottom' data-ref="164paddingBottom" data-ref-filename="164paddingBottom">paddingBottom</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="941">941</th><td>}</td></tr>
+<tr><th id="942">942</th><td></td></tr>
+<tr><th id="943">943</th><td>- (NSString *)paddingLeft</td></tr>
+<tr><th id="944">944</th><td>{</td></tr>
+<tr><th id="945">945</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"padding-left"</q>];</td></tr>
+<tr><th id="946">946</th><td>}</td></tr>
+<tr><th id="947">947</th><td></td></tr>
+<tr><th id="948">948</th><td>- (<em>void</em>)setPaddingLeft:(NSString *)<dfn class="local col5 decl" id="165paddingLeft" title='paddingLeft' data-type='NSString *' data-ref="165paddingLeft" data-ref-filename="165paddingLeft">paddingLeft</dfn></td></tr>
+<tr><th id="949">949</th><td>{</td></tr>
+<tr><th id="950">950</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"padding-left"</q> value:<a class="local col5 ref" href="#165paddingLeft" title='paddingLeft' data-ref="165paddingLeft" data-ref-filename="165paddingLeft">paddingLeft</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="951">951</th><td>}</td></tr>
+<tr><th id="952">952</th><td></td></tr>
+<tr><th id="953">953</th><td>- (NSString *)page</td></tr>
+<tr><th id="954">954</th><td>{</td></tr>
+<tr><th id="955">955</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"page"</q>];</td></tr>
+<tr><th id="956">956</th><td>}</td></tr>
+<tr><th id="957">957</th><td></td></tr>
+<tr><th id="958">958</th><td>- (<em>void</em>)setPage:(NSString *)<dfn class="local col6 decl" id="166page" title='page' data-type='NSString *' data-ref="166page" data-ref-filename="166page">page</dfn></td></tr>
+<tr><th id="959">959</th><td>{</td></tr>
+<tr><th id="960">960</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"page"</q> value:<a class="local col6 ref" href="#166page" title='page' data-ref="166page" data-ref-filename="166page">page</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="961">961</th><td>}</td></tr>
+<tr><th id="962">962</th><td></td></tr>
+<tr><th id="963">963</th><td>- (NSString *)pageBreakAfter</td></tr>
+<tr><th id="964">964</th><td>{</td></tr>
+<tr><th id="965">965</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"page-break-after"</q>];</td></tr>
+<tr><th id="966">966</th><td>}</td></tr>
+<tr><th id="967">967</th><td></td></tr>
+<tr><th id="968">968</th><td>- (<em>void</em>)setPageBreakAfter:(NSString *)<dfn class="local col7 decl" id="167pageBreakAfter" title='pageBreakAfter' data-type='NSString *' data-ref="167pageBreakAfter" data-ref-filename="167pageBreakAfter">pageBreakAfter</dfn></td></tr>
+<tr><th id="969">969</th><td>{</td></tr>
+<tr><th id="970">970</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"page-break-after"</q> value:<a class="local col7 ref" href="#167pageBreakAfter" title='pageBreakAfter' data-ref="167pageBreakAfter" data-ref-filename="167pageBreakAfter">pageBreakAfter</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="971">971</th><td>}</td></tr>
+<tr><th id="972">972</th><td></td></tr>
+<tr><th id="973">973</th><td>- (NSString *)pageBreakBefore</td></tr>
+<tr><th id="974">974</th><td>{</td></tr>
+<tr><th id="975">975</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"page-break-before"</q>];</td></tr>
+<tr><th id="976">976</th><td>}</td></tr>
+<tr><th id="977">977</th><td></td></tr>
+<tr><th id="978">978</th><td>- (<em>void</em>)setPageBreakBefore:(NSString *)<dfn class="local col8 decl" id="168pageBreakBefore" title='pageBreakBefore' data-type='NSString *' data-ref="168pageBreakBefore" data-ref-filename="168pageBreakBefore">pageBreakBefore</dfn></td></tr>
+<tr><th id="979">979</th><td>{</td></tr>
+<tr><th id="980">980</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"page-break-before"</q> value:<a class="local col8 ref" href="#168pageBreakBefore" title='pageBreakBefore' data-ref="168pageBreakBefore" data-ref-filename="168pageBreakBefore">pageBreakBefore</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="981">981</th><td>}</td></tr>
+<tr><th id="982">982</th><td></td></tr>
+<tr><th id="983">983</th><td>- (NSString *)pageBreakInside</td></tr>
+<tr><th id="984">984</th><td>{</td></tr>
+<tr><th id="985">985</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"page-break-inside"</q>];</td></tr>
+<tr><th id="986">986</th><td>}</td></tr>
+<tr><th id="987">987</th><td></td></tr>
+<tr><th id="988">988</th><td>- (<em>void</em>)setPageBreakInside:(NSString *)<dfn class="local col9 decl" id="169pageBreakInside" title='pageBreakInside' data-type='NSString *' data-ref="169pageBreakInside" data-ref-filename="169pageBreakInside">pageBreakInside</dfn></td></tr>
+<tr><th id="989">989</th><td>{</td></tr>
+<tr><th id="990">990</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"page-break-inside"</q> value:<a class="local col9 ref" href="#169pageBreakInside" title='pageBreakInside' data-ref="169pageBreakInside" data-ref-filename="169pageBreakInside">pageBreakInside</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="991">991</th><td>}</td></tr>
+<tr><th id="992">992</th><td></td></tr>
+<tr><th id="993">993</th><td>- (NSString *)pause</td></tr>
+<tr><th id="994">994</th><td>{</td></tr>
+<tr><th id="995">995</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"pause"</q>];</td></tr>
+<tr><th id="996">996</th><td>}</td></tr>
+<tr><th id="997">997</th><td></td></tr>
+<tr><th id="998">998</th><td>- (<em>void</em>)setPause:(NSString *)<dfn class="local col0 decl" id="170pause" title='pause' data-type='NSString *' data-ref="170pause" data-ref-filename="170pause">pause</dfn></td></tr>
+<tr><th id="999">999</th><td>{</td></tr>
+<tr><th id="1000">1000</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"pause"</q> value:<a class="local col0 ref" href="#170pause" title='pause' data-ref="170pause" data-ref-filename="170pause">pause</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1001">1001</th><td>}</td></tr>
+<tr><th id="1002">1002</th><td></td></tr>
+<tr><th id="1003">1003</th><td>- (NSString *)pauseAfter</td></tr>
+<tr><th id="1004">1004</th><td>{</td></tr>
+<tr><th id="1005">1005</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"pause-after"</q>];</td></tr>
+<tr><th id="1006">1006</th><td>}</td></tr>
+<tr><th id="1007">1007</th><td></td></tr>
+<tr><th id="1008">1008</th><td>- (<em>void</em>)setPauseAfter:(NSString *)<dfn class="local col1 decl" id="171pauseAfter" title='pauseAfter' data-type='NSString *' data-ref="171pauseAfter" data-ref-filename="171pauseAfter">pauseAfter</dfn></td></tr>
+<tr><th id="1009">1009</th><td>{</td></tr>
+<tr><th id="1010">1010</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"pause-after"</q> value:<a class="local col1 ref" href="#171pauseAfter" title='pauseAfter' data-ref="171pauseAfter" data-ref-filename="171pauseAfter">pauseAfter</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1011">1011</th><td>}</td></tr>
+<tr><th id="1012">1012</th><td></td></tr>
+<tr><th id="1013">1013</th><td>- (NSString *)pauseBefore</td></tr>
+<tr><th id="1014">1014</th><td>{</td></tr>
+<tr><th id="1015">1015</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"pause-before"</q>];</td></tr>
+<tr><th id="1016">1016</th><td>}</td></tr>
+<tr><th id="1017">1017</th><td></td></tr>
+<tr><th id="1018">1018</th><td>- (<em>void</em>)setPauseBefore:(NSString *)<dfn class="local col2 decl" id="172pauseBefore" title='pauseBefore' data-type='NSString *' data-ref="172pauseBefore" data-ref-filename="172pauseBefore">pauseBefore</dfn></td></tr>
+<tr><th id="1019">1019</th><td>{</td></tr>
+<tr><th id="1020">1020</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"pause-before"</q> value:<a class="local col2 ref" href="#172pauseBefore" title='pauseBefore' data-ref="172pauseBefore" data-ref-filename="172pauseBefore">pauseBefore</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1021">1021</th><td>}</td></tr>
+<tr><th id="1022">1022</th><td></td></tr>
+<tr><th id="1023">1023</th><td>- (NSString *)pitch</td></tr>
+<tr><th id="1024">1024</th><td>{</td></tr>
+<tr><th id="1025">1025</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"pitch"</q>];</td></tr>
+<tr><th id="1026">1026</th><td>}</td></tr>
+<tr><th id="1027">1027</th><td></td></tr>
+<tr><th id="1028">1028</th><td>- (<em>void</em>)setPitch:(NSString *)<dfn class="local col3 decl" id="173pitch" title='pitch' data-type='NSString *' data-ref="173pitch" data-ref-filename="173pitch">pitch</dfn></td></tr>
+<tr><th id="1029">1029</th><td>{</td></tr>
+<tr><th id="1030">1030</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"pitch"</q> value:<a class="local col3 ref" href="#173pitch" title='pitch' data-ref="173pitch" data-ref-filename="173pitch">pitch</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1031">1031</th><td>}</td></tr>
+<tr><th id="1032">1032</th><td></td></tr>
+<tr><th id="1033">1033</th><td>- (NSString *)pitchRange</td></tr>
+<tr><th id="1034">1034</th><td>{</td></tr>
+<tr><th id="1035">1035</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"pitch-range"</q>];</td></tr>
+<tr><th id="1036">1036</th><td>}</td></tr>
+<tr><th id="1037">1037</th><td></td></tr>
+<tr><th id="1038">1038</th><td>- (<em>void</em>)setPitchRange:(NSString *)<dfn class="local col4 decl" id="174pitchRange" title='pitchRange' data-type='NSString *' data-ref="174pitchRange" data-ref-filename="174pitchRange">pitchRange</dfn></td></tr>
+<tr><th id="1039">1039</th><td>{</td></tr>
+<tr><th id="1040">1040</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"pitch-range"</q> value:<a class="local col4 ref" href="#174pitchRange" title='pitchRange' data-ref="174pitchRange" data-ref-filename="174pitchRange">pitchRange</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1041">1041</th><td>}</td></tr>
+<tr><th id="1042">1042</th><td></td></tr>
+<tr><th id="1043">1043</th><td>- (NSString *)playDuring</td></tr>
+<tr><th id="1044">1044</th><td>{</td></tr>
+<tr><th id="1045">1045</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"play-during"</q>];</td></tr>
+<tr><th id="1046">1046</th><td>}</td></tr>
+<tr><th id="1047">1047</th><td></td></tr>
+<tr><th id="1048">1048</th><td>- (<em>void</em>)setPlayDuring:(NSString *)<dfn class="local col5 decl" id="175playDuring" title='playDuring' data-type='NSString *' data-ref="175playDuring" data-ref-filename="175playDuring">playDuring</dfn></td></tr>
+<tr><th id="1049">1049</th><td>{</td></tr>
+<tr><th id="1050">1050</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"play-during"</q> value:<a class="local col5 ref" href="#175playDuring" title='playDuring' data-ref="175playDuring" data-ref-filename="175playDuring">playDuring</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1051">1051</th><td>}</td></tr>
+<tr><th id="1052">1052</th><td></td></tr>
+<tr><th id="1053">1053</th><td>- (NSString *)position</td></tr>
+<tr><th id="1054">1054</th><td>{</td></tr>
+<tr><th id="1055">1055</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"position"</q>];</td></tr>
+<tr><th id="1056">1056</th><td>}</td></tr>
+<tr><th id="1057">1057</th><td></td></tr>
+<tr><th id="1058">1058</th><td>- (<em>void</em>)setPosition:(NSString *)<dfn class="local col6 decl" id="176position" title='position' data-type='NSString *' data-ref="176position" data-ref-filename="176position">position</dfn></td></tr>
+<tr><th id="1059">1059</th><td>{</td></tr>
+<tr><th id="1060">1060</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"position"</q> value:<a class="local col6 ref" href="#176position" title='position' data-ref="176position" data-ref-filename="176position">position</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1061">1061</th><td>}</td></tr>
+<tr><th id="1062">1062</th><td></td></tr>
+<tr><th id="1063">1063</th><td>- (NSString *)quotes</td></tr>
+<tr><th id="1064">1064</th><td>{</td></tr>
+<tr><th id="1065">1065</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"quotes"</q>];</td></tr>
+<tr><th id="1066">1066</th><td>}</td></tr>
+<tr><th id="1067">1067</th><td></td></tr>
+<tr><th id="1068">1068</th><td>- (<em>void</em>)setQuotes:(NSString *)<dfn class="local col7 decl" id="177quotes" title='quotes' data-type='NSString *' data-ref="177quotes" data-ref-filename="177quotes">quotes</dfn></td></tr>
+<tr><th id="1069">1069</th><td>{</td></tr>
+<tr><th id="1070">1070</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"quotes"</q> value:<a class="local col7 ref" href="#177quotes" title='quotes' data-ref="177quotes" data-ref-filename="177quotes">quotes</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1071">1071</th><td>}</td></tr>
+<tr><th id="1072">1072</th><td></td></tr>
+<tr><th id="1073">1073</th><td>- (NSString *)richness</td></tr>
+<tr><th id="1074">1074</th><td>{</td></tr>
+<tr><th id="1075">1075</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"richness"</q>];</td></tr>
+<tr><th id="1076">1076</th><td>}</td></tr>
+<tr><th id="1077">1077</th><td></td></tr>
+<tr><th id="1078">1078</th><td>- (<em>void</em>)setRichness:(NSString *)<dfn class="local col8 decl" id="178richness" title='richness' data-type='NSString *' data-ref="178richness" data-ref-filename="178richness">richness</dfn></td></tr>
+<tr><th id="1079">1079</th><td>{</td></tr>
+<tr><th id="1080">1080</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"richness"</q> value:<a class="local col8 ref" href="#178richness" title='richness' data-ref="178richness" data-ref-filename="178richness">richness</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1081">1081</th><td>}</td></tr>
+<tr><th id="1082">1082</th><td></td></tr>
+<tr><th id="1083">1083</th><td>- (NSString *)right</td></tr>
+<tr><th id="1084">1084</th><td>{</td></tr>
+<tr><th id="1085">1085</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"right"</q>];</td></tr>
+<tr><th id="1086">1086</th><td>}</td></tr>
+<tr><th id="1087">1087</th><td></td></tr>
+<tr><th id="1088">1088</th><td>- (<em>void</em>)setRight:(NSString *)<dfn class="local col9 decl" id="179right" title='right' data-type='NSString *' data-ref="179right" data-ref-filename="179right">right</dfn></td></tr>
+<tr><th id="1089">1089</th><td>{</td></tr>
+<tr><th id="1090">1090</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"right"</q> value:<a class="local col9 ref" href="#179right" title='right' data-ref="179right" data-ref-filename="179right">right</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1091">1091</th><td>}</td></tr>
+<tr><th id="1092">1092</th><td></td></tr>
+<tr><th id="1093">1093</th><td>- (NSString *)size</td></tr>
+<tr><th id="1094">1094</th><td>{</td></tr>
+<tr><th id="1095">1095</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"size"</q>];</td></tr>
+<tr><th id="1096">1096</th><td>}</td></tr>
+<tr><th id="1097">1097</th><td></td></tr>
+<tr><th id="1098">1098</th><td>- (<em>void</em>)setSize:(NSString *)<dfn class="local col0 decl" id="180size" title='size' data-type='NSString *' data-ref="180size" data-ref-filename="180size">size</dfn></td></tr>
+<tr><th id="1099">1099</th><td>{</td></tr>
+<tr><th id="1100">1100</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"size"</q> value:<a class="local col0 ref" href="#180size" title='size' data-ref="180size" data-ref-filename="180size">size</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1101">1101</th><td>}</td></tr>
+<tr><th id="1102">1102</th><td></td></tr>
+<tr><th id="1103">1103</th><td>- (NSString *)speak</td></tr>
+<tr><th id="1104">1104</th><td>{</td></tr>
+<tr><th id="1105">1105</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"speak"</q>];</td></tr>
+<tr><th id="1106">1106</th><td>}</td></tr>
+<tr><th id="1107">1107</th><td></td></tr>
+<tr><th id="1108">1108</th><td>- (<em>void</em>)setSpeak:(NSString *)<dfn class="local col1 decl" id="181speak" title='speak' data-type='NSString *' data-ref="181speak" data-ref-filename="181speak">speak</dfn></td></tr>
+<tr><th id="1109">1109</th><td>{</td></tr>
+<tr><th id="1110">1110</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"speak"</q> value:<a class="local col1 ref" href="#181speak" title='speak' data-ref="181speak" data-ref-filename="181speak">speak</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1111">1111</th><td>}</td></tr>
+<tr><th id="1112">1112</th><td></td></tr>
+<tr><th id="1113">1113</th><td>- (NSString *)speakHeader</td></tr>
+<tr><th id="1114">1114</th><td>{</td></tr>
+<tr><th id="1115">1115</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"speak-header"</q>];</td></tr>
+<tr><th id="1116">1116</th><td>}</td></tr>
+<tr><th id="1117">1117</th><td></td></tr>
+<tr><th id="1118">1118</th><td>- (<em>void</em>)setSpeakHeader:(NSString *)<dfn class="local col2 decl" id="182speakHeader" title='speakHeader' data-type='NSString *' data-ref="182speakHeader" data-ref-filename="182speakHeader">speakHeader</dfn></td></tr>
+<tr><th id="1119">1119</th><td>{</td></tr>
+<tr><th id="1120">1120</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"speak-header"</q> value:<a class="local col2 ref" href="#182speakHeader" title='speakHeader' data-ref="182speakHeader" data-ref-filename="182speakHeader">speakHeader</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1121">1121</th><td>}</td></tr>
+<tr><th id="1122">1122</th><td></td></tr>
+<tr><th id="1123">1123</th><td>- (NSString *)speakNumeral</td></tr>
+<tr><th id="1124">1124</th><td>{</td></tr>
+<tr><th id="1125">1125</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"speak-numeral"</q>];</td></tr>
+<tr><th id="1126">1126</th><td>}</td></tr>
+<tr><th id="1127">1127</th><td></td></tr>
+<tr><th id="1128">1128</th><td>- (<em>void</em>)setSpeakNumeral:(NSString *)<dfn class="local col3 decl" id="183speakNumeral" title='speakNumeral' data-type='NSString *' data-ref="183speakNumeral" data-ref-filename="183speakNumeral">speakNumeral</dfn></td></tr>
+<tr><th id="1129">1129</th><td>{</td></tr>
+<tr><th id="1130">1130</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"speak-numeral"</q> value:<a class="local col3 ref" href="#183speakNumeral" title='speakNumeral' data-ref="183speakNumeral" data-ref-filename="183speakNumeral">speakNumeral</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1131">1131</th><td>}</td></tr>
+<tr><th id="1132">1132</th><td></td></tr>
+<tr><th id="1133">1133</th><td>- (NSString *)speakPunctuation</td></tr>
+<tr><th id="1134">1134</th><td>{</td></tr>
+<tr><th id="1135">1135</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"speak-punctuation"</q>];</td></tr>
+<tr><th id="1136">1136</th><td>}</td></tr>
+<tr><th id="1137">1137</th><td></td></tr>
+<tr><th id="1138">1138</th><td>- (<em>void</em>)setSpeakPunctuation:(NSString *)<dfn class="local col4 decl" id="184speakPunctuation" title='speakPunctuation' data-type='NSString *' data-ref="184speakPunctuation" data-ref-filename="184speakPunctuation">speakPunctuation</dfn></td></tr>
+<tr><th id="1139">1139</th><td>{</td></tr>
+<tr><th id="1140">1140</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"speak-punctuation"</q> value:<a class="local col4 ref" href="#184speakPunctuation" title='speakPunctuation' data-ref="184speakPunctuation" data-ref-filename="184speakPunctuation">speakPunctuation</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1141">1141</th><td>}</td></tr>
+<tr><th id="1142">1142</th><td></td></tr>
+<tr><th id="1143">1143</th><td>- (NSString *)speechRate</td></tr>
+<tr><th id="1144">1144</th><td>{</td></tr>
+<tr><th id="1145">1145</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"speech-rate"</q>];</td></tr>
+<tr><th id="1146">1146</th><td>}</td></tr>
+<tr><th id="1147">1147</th><td></td></tr>
+<tr><th id="1148">1148</th><td>- (<em>void</em>)setSpeechRate:(NSString *)<dfn class="local col5 decl" id="185speechRate" title='speechRate' data-type='NSString *' data-ref="185speechRate" data-ref-filename="185speechRate">speechRate</dfn></td></tr>
+<tr><th id="1149">1149</th><td>{</td></tr>
+<tr><th id="1150">1150</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"speech-rate"</q> value:<a class="local col5 ref" href="#185speechRate" title='speechRate' data-ref="185speechRate" data-ref-filename="185speechRate">speechRate</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1151">1151</th><td>}</td></tr>
+<tr><th id="1152">1152</th><td></td></tr>
+<tr><th id="1153">1153</th><td>- (NSString *)stress</td></tr>
+<tr><th id="1154">1154</th><td>{</td></tr>
+<tr><th id="1155">1155</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"stress"</q>];</td></tr>
+<tr><th id="1156">1156</th><td>}</td></tr>
+<tr><th id="1157">1157</th><td></td></tr>
+<tr><th id="1158">1158</th><td>- (<em>void</em>)setStress:(NSString *)<dfn class="local col6 decl" id="186stress" title='stress' data-type='NSString *' data-ref="186stress" data-ref-filename="186stress">stress</dfn></td></tr>
+<tr><th id="1159">1159</th><td>{</td></tr>
+<tr><th id="1160">1160</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"stress"</q> value:<a class="local col6 ref" href="#186stress" title='stress' data-ref="186stress" data-ref-filename="186stress">stress</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1161">1161</th><td>}</td></tr>
+<tr><th id="1162">1162</th><td></td></tr>
+<tr><th id="1163">1163</th><td>- (NSString *)tableLayout</td></tr>
+<tr><th id="1164">1164</th><td>{</td></tr>
+<tr><th id="1165">1165</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"table-layout"</q>];</td></tr>
+<tr><th id="1166">1166</th><td>}</td></tr>
+<tr><th id="1167">1167</th><td></td></tr>
+<tr><th id="1168">1168</th><td>- (<em>void</em>)setTableLayout:(NSString *)<dfn class="local col7 decl" id="187tableLayout" title='tableLayout' data-type='NSString *' data-ref="187tableLayout" data-ref-filename="187tableLayout">tableLayout</dfn></td></tr>
+<tr><th id="1169">1169</th><td>{</td></tr>
+<tr><th id="1170">1170</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"table-layout"</q> value:<a class="local col7 ref" href="#187tableLayout" title='tableLayout' data-ref="187tableLayout" data-ref-filename="187tableLayout">tableLayout</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1171">1171</th><td>}</td></tr>
+<tr><th id="1172">1172</th><td></td></tr>
+<tr><th id="1173">1173</th><td>- (NSString *)textAlign</td></tr>
+<tr><th id="1174">1174</th><td>{</td></tr>
+<tr><th id="1175">1175</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"text-align"</q>];</td></tr>
+<tr><th id="1176">1176</th><td>}</td></tr>
+<tr><th id="1177">1177</th><td></td></tr>
+<tr><th id="1178">1178</th><td>- (<em>void</em>)setTextAlign:(NSString *)<dfn class="local col8 decl" id="188textAlign" title='textAlign' data-type='NSString *' data-ref="188textAlign" data-ref-filename="188textAlign">textAlign</dfn></td></tr>
+<tr><th id="1179">1179</th><td>{</td></tr>
+<tr><th id="1180">1180</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"text-align"</q> value:<a class="local col8 ref" href="#188textAlign" title='textAlign' data-ref="188textAlign" data-ref-filename="188textAlign">textAlign</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1181">1181</th><td>}</td></tr>
+<tr><th id="1182">1182</th><td></td></tr>
+<tr><th id="1183">1183</th><td>- (NSString *)textDecoration</td></tr>
+<tr><th id="1184">1184</th><td>{</td></tr>
+<tr><th id="1185">1185</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"text-decoration"</q>];</td></tr>
+<tr><th id="1186">1186</th><td>}</td></tr>
+<tr><th id="1187">1187</th><td></td></tr>
+<tr><th id="1188">1188</th><td>- (<em>void</em>)setTextDecoration:(NSString *)<dfn class="local col9 decl" id="189textDecoration" title='textDecoration' data-type='NSString *' data-ref="189textDecoration" data-ref-filename="189textDecoration">textDecoration</dfn></td></tr>
+<tr><th id="1189">1189</th><td>{</td></tr>
+<tr><th id="1190">1190</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"text-decoration"</q> value:<a class="local col9 ref" href="#189textDecoration" title='textDecoration' data-ref="189textDecoration" data-ref-filename="189textDecoration">textDecoration</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1191">1191</th><td>}</td></tr>
+<tr><th id="1192">1192</th><td></td></tr>
+<tr><th id="1193">1193</th><td>- (NSString *)textIndent</td></tr>
+<tr><th id="1194">1194</th><td>{</td></tr>
+<tr><th id="1195">1195</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"text-indent"</q>];</td></tr>
+<tr><th id="1196">1196</th><td>}</td></tr>
+<tr><th id="1197">1197</th><td></td></tr>
+<tr><th id="1198">1198</th><td>- (<em>void</em>)setTextIndent:(NSString *)<dfn class="local col0 decl" id="190textIndent" title='textIndent' data-type='NSString *' data-ref="190textIndent" data-ref-filename="190textIndent">textIndent</dfn></td></tr>
+<tr><th id="1199">1199</th><td>{</td></tr>
+<tr><th id="1200">1200</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"text-indent"</q> value:<a class="local col0 ref" href="#190textIndent" title='textIndent' data-ref="190textIndent" data-ref-filename="190textIndent">textIndent</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1201">1201</th><td>}</td></tr>
+<tr><th id="1202">1202</th><td></td></tr>
+<tr><th id="1203">1203</th><td>- (NSString *)textShadow</td></tr>
+<tr><th id="1204">1204</th><td>{</td></tr>
+<tr><th id="1205">1205</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"text-shadow"</q>];</td></tr>
+<tr><th id="1206">1206</th><td>}</td></tr>
+<tr><th id="1207">1207</th><td></td></tr>
+<tr><th id="1208">1208</th><td>- (<em>void</em>)setTextShadow:(NSString *)<dfn class="local col1 decl" id="191textShadow" title='textShadow' data-type='NSString *' data-ref="191textShadow" data-ref-filename="191textShadow">textShadow</dfn></td></tr>
+<tr><th id="1209">1209</th><td>{</td></tr>
+<tr><th id="1210">1210</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"text-shadow"</q> value:<a class="local col1 ref" href="#191textShadow" title='textShadow' data-ref="191textShadow" data-ref-filename="191textShadow">textShadow</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1211">1211</th><td>}</td></tr>
+<tr><th id="1212">1212</th><td></td></tr>
+<tr><th id="1213">1213</th><td>- (NSString *)textTransform</td></tr>
+<tr><th id="1214">1214</th><td>{</td></tr>
+<tr><th id="1215">1215</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"text-transform"</q>];</td></tr>
+<tr><th id="1216">1216</th><td>}</td></tr>
+<tr><th id="1217">1217</th><td></td></tr>
+<tr><th id="1218">1218</th><td>- (<em>void</em>)setTextTransform:(NSString *)<dfn class="local col2 decl" id="192textTransform" title='textTransform' data-type='NSString *' data-ref="192textTransform" data-ref-filename="192textTransform">textTransform</dfn></td></tr>
+<tr><th id="1219">1219</th><td>{</td></tr>
+<tr><th id="1220">1220</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"text-transform"</q> value:<a class="local col2 ref" href="#192textTransform" title='textTransform' data-ref="192textTransform" data-ref-filename="192textTransform">textTransform</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1221">1221</th><td>}</td></tr>
+<tr><th id="1222">1222</th><td></td></tr>
+<tr><th id="1223">1223</th><td>- (NSString *)top</td></tr>
+<tr><th id="1224">1224</th><td>{</td></tr>
+<tr><th id="1225">1225</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"top"</q>];</td></tr>
+<tr><th id="1226">1226</th><td>}</td></tr>
+<tr><th id="1227">1227</th><td></td></tr>
+<tr><th id="1228">1228</th><td>- (<em>void</em>)setTop:(NSString *)<dfn class="local col3 decl" id="193top" title='top' data-type='NSString *' data-ref="193top" data-ref-filename="193top">top</dfn></td></tr>
+<tr><th id="1229">1229</th><td>{</td></tr>
+<tr><th id="1230">1230</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"top"</q> value:<a class="local col3 ref" href="#193top" title='top' data-ref="193top" data-ref-filename="193top">top</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1231">1231</th><td>}</td></tr>
+<tr><th id="1232">1232</th><td></td></tr>
+<tr><th id="1233">1233</th><td>- (NSString *)unicodeBidi</td></tr>
+<tr><th id="1234">1234</th><td>{</td></tr>
+<tr><th id="1235">1235</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"unicode-bidi"</q>];</td></tr>
+<tr><th id="1236">1236</th><td>}</td></tr>
+<tr><th id="1237">1237</th><td></td></tr>
+<tr><th id="1238">1238</th><td>- (<em>void</em>)setUnicodeBidi:(NSString *)<dfn class="local col4 decl" id="194unicodeBidi" title='unicodeBidi' data-type='NSString *' data-ref="194unicodeBidi" data-ref-filename="194unicodeBidi">unicodeBidi</dfn></td></tr>
+<tr><th id="1239">1239</th><td>{</td></tr>
+<tr><th id="1240">1240</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"unicode-bidi"</q> value:<a class="local col4 ref" href="#194unicodeBidi" title='unicodeBidi' data-ref="194unicodeBidi" data-ref-filename="194unicodeBidi">unicodeBidi</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1241">1241</th><td>}</td></tr>
+<tr><th id="1242">1242</th><td></td></tr>
+<tr><th id="1243">1243</th><td>- (NSString *)verticalAlign</td></tr>
+<tr><th id="1244">1244</th><td>{</td></tr>
+<tr><th id="1245">1245</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"vertical-align"</q>];</td></tr>
+<tr><th id="1246">1246</th><td>}</td></tr>
+<tr><th id="1247">1247</th><td></td></tr>
+<tr><th id="1248">1248</th><td>- (<em>void</em>)setVerticalAlign:(NSString *)<dfn class="local col5 decl" id="195verticalAlign" title='verticalAlign' data-type='NSString *' data-ref="195verticalAlign" data-ref-filename="195verticalAlign">verticalAlign</dfn></td></tr>
+<tr><th id="1249">1249</th><td>{</td></tr>
+<tr><th id="1250">1250</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"vertical-align"</q> value:<a class="local col5 ref" href="#195verticalAlign" title='verticalAlign' data-ref="195verticalAlign" data-ref-filename="195verticalAlign">verticalAlign</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1251">1251</th><td>}</td></tr>
+<tr><th id="1252">1252</th><td></td></tr>
+<tr><th id="1253">1253</th><td>- (NSString *)visibility</td></tr>
+<tr><th id="1254">1254</th><td>{</td></tr>
+<tr><th id="1255">1255</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"visibility"</q>];</td></tr>
+<tr><th id="1256">1256</th><td>}</td></tr>
+<tr><th id="1257">1257</th><td></td></tr>
+<tr><th id="1258">1258</th><td>- (<em>void</em>)setVisibility:(NSString *)<dfn class="local col6 decl" id="196visibility" title='visibility' data-type='NSString *' data-ref="196visibility" data-ref-filename="196visibility">visibility</dfn></td></tr>
+<tr><th id="1259">1259</th><td>{</td></tr>
+<tr><th id="1260">1260</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"visibility"</q> value:<a class="local col6 ref" href="#196visibility" title='visibility' data-ref="196visibility" data-ref-filename="196visibility">visibility</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1261">1261</th><td>}</td></tr>
+<tr><th id="1262">1262</th><td></td></tr>
+<tr><th id="1263">1263</th><td>- (NSString *)voiceFamily</td></tr>
+<tr><th id="1264">1264</th><td>{</td></tr>
+<tr><th id="1265">1265</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"voice-family"</q>];</td></tr>
+<tr><th id="1266">1266</th><td>}</td></tr>
+<tr><th id="1267">1267</th><td></td></tr>
+<tr><th id="1268">1268</th><td>- (<em>void</em>)setVoiceFamily:(NSString *)<dfn class="local col7 decl" id="197voiceFamily" title='voiceFamily' data-type='NSString *' data-ref="197voiceFamily" data-ref-filename="197voiceFamily">voiceFamily</dfn></td></tr>
+<tr><th id="1269">1269</th><td>{</td></tr>
+<tr><th id="1270">1270</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"voice-family"</q> value:<a class="local col7 ref" href="#197voiceFamily" title='voiceFamily' data-ref="197voiceFamily" data-ref-filename="197voiceFamily">voiceFamily</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1271">1271</th><td>}</td></tr>
+<tr><th id="1272">1272</th><td></td></tr>
+<tr><th id="1273">1273</th><td>- (NSString *)volume</td></tr>
+<tr><th id="1274">1274</th><td>{</td></tr>
+<tr><th id="1275">1275</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"volume"</q>];</td></tr>
+<tr><th id="1276">1276</th><td>}</td></tr>
+<tr><th id="1277">1277</th><td></td></tr>
+<tr><th id="1278">1278</th><td>- (<em>void</em>)setVolume:(NSString *)<dfn class="local col8 decl" id="198volume" title='volume' data-type='NSString *' data-ref="198volume" data-ref-filename="198volume">volume</dfn></td></tr>
+<tr><th id="1279">1279</th><td>{</td></tr>
+<tr><th id="1280">1280</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"volume"</q> value:<a class="local col8 ref" href="#198volume" title='volume' data-ref="198volume" data-ref-filename="198volume">volume</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1281">1281</th><td>}</td></tr>
+<tr><th id="1282">1282</th><td></td></tr>
+<tr><th id="1283">1283</th><td>- (NSString *)whiteSpace</td></tr>
+<tr><th id="1284">1284</th><td>{</td></tr>
+<tr><th id="1285">1285</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"white-space"</q>];</td></tr>
+<tr><th id="1286">1286</th><td>}</td></tr>
+<tr><th id="1287">1287</th><td></td></tr>
+<tr><th id="1288">1288</th><td>- (<em>void</em>)setWhiteSpace:(NSString *)<dfn class="local col9 decl" id="199whiteSpace" title='whiteSpace' data-type='NSString *' data-ref="199whiteSpace" data-ref-filename="199whiteSpace">whiteSpace</dfn></td></tr>
+<tr><th id="1289">1289</th><td>{</td></tr>
+<tr><th id="1290">1290</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"white-space"</q> value:<a class="local col9 ref" href="#199whiteSpace" title='whiteSpace' data-ref="199whiteSpace" data-ref-filename="199whiteSpace">whiteSpace</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1291">1291</th><td>}</td></tr>
+<tr><th id="1292">1292</th><td></td></tr>
+<tr><th id="1293">1293</th><td>- (NSString *)widows</td></tr>
+<tr><th id="1294">1294</th><td>{</td></tr>
+<tr><th id="1295">1295</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"widows"</q>];</td></tr>
+<tr><th id="1296">1296</th><td>}</td></tr>
+<tr><th id="1297">1297</th><td></td></tr>
+<tr><th id="1298">1298</th><td>- (<em>void</em>)setWidows:(NSString *)<dfn class="local col0 decl" id="200widows" title='widows' data-type='NSString *' data-ref="200widows" data-ref-filename="200widows">widows</dfn></td></tr>
+<tr><th id="1299">1299</th><td>{</td></tr>
+<tr><th id="1300">1300</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"widows"</q> value:<a class="local col0 ref" href="#200widows" title='widows' data-ref="200widows" data-ref-filename="200widows">widows</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1301">1301</th><td>}</td></tr>
+<tr><th id="1302">1302</th><td></td></tr>
+<tr><th id="1303">1303</th><td>- (NSString *)width</td></tr>
+<tr><th id="1304">1304</th><td>{</td></tr>
+<tr><th id="1305">1305</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"width"</q>];</td></tr>
+<tr><th id="1306">1306</th><td>}</td></tr>
+<tr><th id="1307">1307</th><td></td></tr>
+<tr><th id="1308">1308</th><td>- (<em>void</em>)setWidth:(NSString *)<dfn class="local col1 decl" id="201width" title='width' data-type='NSString *' data-ref="201width" data-ref-filename="201width">width</dfn></td></tr>
+<tr><th id="1309">1309</th><td>{</td></tr>
+<tr><th id="1310">1310</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"width"</q> value:<a class="local col1 ref" href="#201width" title='width' data-ref="201width" data-ref-filename="201width">width</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1311">1311</th><td>}</td></tr>
+<tr><th id="1312">1312</th><td></td></tr>
+<tr><th id="1313">1313</th><td>- (NSString *)wordSpacing</td></tr>
+<tr><th id="1314">1314</th><td>{</td></tr>
+<tr><th id="1315">1315</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"word-spacing"</q>];</td></tr>
+<tr><th id="1316">1316</th><td>}</td></tr>
+<tr><th id="1317">1317</th><td></td></tr>
+<tr><th id="1318">1318</th><td>- (<em>void</em>)setWordSpacing:(NSString *)<dfn class="local col2 decl" id="202wordSpacing" title='wordSpacing' data-type='NSString *' data-ref="202wordSpacing" data-ref-filename="202wordSpacing">wordSpacing</dfn></td></tr>
+<tr><th id="1319">1319</th><td>{</td></tr>
+<tr><th id="1320">1320</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"word-spacing"</q> value:<a class="local col2 ref" href="#202wordSpacing" title='wordSpacing' data-ref="202wordSpacing" data-ref-filename="202wordSpacing">wordSpacing</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1321">1321</th><td>}</td></tr>
+<tr><th id="1322">1322</th><td></td></tr>
+<tr><th id="1323">1323</th><td>- (NSString *)zIndex</td></tr>
+<tr><th id="1324">1324</th><td>{</td></tr>
+<tr><th id="1325">1325</th><td>    <b>return</b> [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> getPropertyValue:@<q>"z-index"</q>];</td></tr>
+<tr><th id="1326">1326</th><td>}</td></tr>
+<tr><th id="1327">1327</th><td></td></tr>
+<tr><th id="1328">1328</th><td>- (<em>void</em>)setZIndex:(NSString *)<dfn class="local col3 decl" id="203zIndex" title='zIndex' data-type='NSString *' data-ref="203zIndex" data-ref-filename="203zIndex">zIndex</dfn></td></tr>
+<tr><th id="1329">1329</th><td>{</td></tr>
+<tr><th id="1330">1330</th><td>    [<span class='local col7 ref' title='self' data-ref="7self" data-ref-filename="7self">self</span> setProperty:@<q>"z-index"</q> value:<a class="local col3 ref" href="#203zIndex" title='zIndex' data-ref="203zIndex" data-ref-filename="203zIndex">zIndex</a> priority:@<q>""</q>];</td></tr>
+<tr><th id="1331">1331</th><td>}</td></tr>
+<tr><th id="1332">1332</th><td></td></tr>
+<tr><th id="1333">1333</th><td>@end</td></tr>
+<tr><th id="1334">1334</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../WebKitBuild/Debug/DerivedSources/WebKitLegacy/unified-sources/UnifiedSource2-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKitLegacy/unified-sources/UnifiedSource2-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,238 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>ThreadSpecific.h source code [webkit/WebKitBuild/Debug/usr/local/include/wtf/ThreadSpecific.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="WTF::CanBeGCThread,WTF::ThreadSpecific "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/wtf/ThreadSpecific.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>wtf</a>/<a href='ThreadSpecific.h.html'>ThreadSpecific.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2008, 2016 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> * Copyright (C) 2009 Jian Li &lt;jianli@chromium.org&gt;</i></td></tr>
+<tr><th id="4">4</th><td><i> * Copyright (C) 2012 Patrick Gansterer &lt;paroga@paroga.com&gt;</i></td></tr>
+<tr><th id="5">5</th><td><i> *</i></td></tr>
+<tr><th id="6">6</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="7">7</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="8">8</th><td><i> * are met:</i></td></tr>
+<tr><th id="9">9</th><td><i> *</i></td></tr>
+<tr><th id="10">10</th><td><i> * 1.  Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="11">11</th><td><i> *     notice, this list of conditions and the following disclaimer. </i></td></tr>
+<tr><th id="12">12</th><td><i> * 2.  Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="13">13</th><td><i> *     notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="14">14</th><td><i> *     documentation and/or other materials provided with the distribution. </i></td></tr>
+<tr><th id="15">15</th><td><i> * 3.  Neither the name of Apple Inc. ("Apple") nor the names of</i></td></tr>
+<tr><th id="16">16</th><td><i> *     its contributors may be used to endorse or promote products derived</i></td></tr>
+<tr><th id="17">17</th><td><i> *     from this software without specific prior written permission. </i></td></tr>
+<tr><th id="18">18</th><td><i> *</i></td></tr>
+<tr><th id="19">19</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY</i></td></tr>
+<tr><th id="20">20</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</i></td></tr>
+<tr><th id="21">21</th><td><i> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</i></td></tr>
+<tr><th id="22">22</th><td><i> * DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="23">23</th><td><i> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</i></td></tr>
+<tr><th id="24">24</th><td><i> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</i></td></tr>
+<tr><th id="25">25</th><td><i> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</i></td></tr>
+<tr><th id="26">26</th><td><i> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="27">27</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF</i></td></tr>
+<tr><th id="28">28</th><td><i> * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="29">29</th><td><i> */</i></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><i>/* Thread local storage is implemented by using either pthread API or Windows</i></td></tr>
+<tr><th id="32">32</th><td><i> * native API. There is subtle semantic discrepancy for the cleanup function</i></td></tr>
+<tr><th id="33">33</th><td><i> * implementation as noted below:</i></td></tr>
+<tr><th id="34">34</th><td><i> *   @ In pthread implementation, the destructor function will be called</i></td></tr>
+<tr><th id="35">35</th><td><i> *     repeatedly if there is still non-NULL value associated with the function.</i></td></tr>
+<tr><th id="36">36</th><td><i> *   @ In Windows native implementation, the destructor function will be called</i></td></tr>
+<tr><th id="37">37</th><td><i> *     only once.</i></td></tr>
+<tr><th id="38">38</th><td><i> * This semantic discrepancy does not impose any problem because nowhere in</i></td></tr>
+<tr><th id="39">39</th><td><i> * WebKit the repeated call bahavior is utilized.</i></td></tr>
+<tr><th id="40">40</th><td><i> */</i></td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td><u>#pragma once</u></td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><u>#include <a href="MainThread.h.html">&lt;wtf/MainThread.h&gt;</a></u></td></tr>
+<tr><th id="45">45</th><td><u>#include <a href="Noncopyable.h.html">&lt;wtf/Noncopyable.h&gt;</a></u></td></tr>
+<tr><th id="46">46</th><td><u>#include <a href="StdLibExtras.h.html">&lt;wtf/StdLibExtras.h&gt;</a></u></td></tr>
+<tr><th id="47">47</th><td><u>#include <a href="Threading.h.html">&lt;wtf/Threading.h&gt;</a></u></td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td><b>namespace</b> <span class="namespace">WTF</span> {</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><b>enum</b> <b>class</b> <dfn class="type def" id="WTF::CanBeGCThread" title='WTF::CanBeGCThread' data-ref="WTF::CanBeGCThread" data-ref-filename="WTF..CanBeGCThread">CanBeGCThread</dfn> {</td></tr>
+<tr><th id="52">52</th><td>    <dfn class="enum" id="WTF::CanBeGCThread::False" title='WTF::CanBeGCThread::False' data-ref="WTF::CanBeGCThread::False" data-ref-filename="WTF..CanBeGCThread..False">False</dfn>,</td></tr>
+<tr><th id="53">53</th><td>    <dfn class="enum" id="WTF::CanBeGCThread::True" title='WTF::CanBeGCThread::True' data-ref="WTF::CanBeGCThread::True" data-ref-filename="WTF..CanBeGCThread..True">True</dfn></td></tr>
+<tr><th id="54">54</th><td>};</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td><b>template</b>&lt;<b>typename</b> T, <a class="type" href="#WTF::CanBeGCThread" title='WTF::CanBeGCThread' data-ref="WTF::CanBeGCThread" data-ref-filename="WTF..CanBeGCThread">CanBeGCThread</a> canBeGCThread = <a class="type" href="#WTF::CanBeGCThread" title='WTF::CanBeGCThread' data-ref="WTF::CanBeGCThread" data-ref-filename="WTF..CanBeGCThread">CanBeGCThread</a>::<a class="enum" href="#WTF::CanBeGCThread::False" title='WTF::CanBeGCThread::False' data-ref="WTF::CanBeGCThread::False" data-ref-filename="WTF..CanBeGCThread..False">False</a>&gt; <b>class</b> <dfn class="type def" id="WTF::ThreadSpecific" title='WTF::ThreadSpecific' data-ref="WTF::ThreadSpecific" data-ref-filename="WTF..ThreadSpecific">ThreadSpecific</dfn> {</td></tr>
+<tr><th id="57">57</th><td>    <a class="macro" href="Noncopyable.h.html#23" title="ThreadSpecific(const ThreadSpecific&amp;) = delete; ThreadSpecific&amp; operator=(const ThreadSpecific&amp;) = delete;" data-ref="_M/WTF_MAKE_NONCOPYABLE">WTF_MAKE_NONCOPYABLE</a>(<dfn class="decl def fn" id="_ZN3WTF14ThreadSpecificC1ERKNS_14ThreadSpecificIT_XT0_EEE" title='WTF::ThreadSpecific::ThreadSpecific&lt;T, canBeGCThread&gt;' data-ref="_ZN3WTF14ThreadSpecificC1ERKNS_14ThreadSpecificIT_XT0_EEE" data-ref-filename="_ZN3WTF14ThreadSpecificC1ERKNS_14ThreadSpecificIT_XT0_EEE">ThreadSpecific</dfn>);</td></tr>
+<tr><th id="58">58</th><td>    <a class="macro" href="FastMalloc.h.html#399" title="public: void* operator new(size_t, void* p) { return p; } void* operator new[](size_t, void* p) { return p; } void* operator new(size_t size) { return ::WTF::fastMalloc(size); } void operator delete(void* p) { ::WTF::fastFree(p); } void* operator new[](size_t size) { return ::WTF::fastMalloc(size); } void operator delete[](void* p) { ::WTF::fastFree(p); } void* operator new(size_t, NotNullTag, void* location) { do { if (!(location)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/ThreadSpecific.h&quot;, 58, __PRETTY_FUNCTION__, &quot;location&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(58, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/ThreadSpecific.h&quot;, __PRETTY_FUNCTION__, 1042); } while (false); } } while (0); return location; } using webkitFastMalloced = int; private: using __thisIsHereToForceASemicolonAfterThisMacro __attribute__((unused)) = int" data-ref="_M/WTF_MAKE_FAST_ALLOCATED">WTF_MAKE_FAST_ALLOCATED</a>;</td></tr>
+<tr><th id="59">59</th><td><b>public</b>:</td></tr>
+<tr><th id="60">60</th><td>    <a class="decl fn" href="#_ZN3WTF14ThreadSpecificC1Ev" title='WTF::ThreadSpecific::ThreadSpecific&lt;T, canBeGCThread&gt;' data-ref="_ZN3WTF14ThreadSpecificC1Ev" data-ref-filename="_ZN3WTF14ThreadSpecificC1Ev">ThreadSpecific</a>();</td></tr>
+<tr><th id="61">61</th><td>    <em>bool</em> <a class="decl fn" href="#_ZN3WTF14ThreadSpecific5isSetEv" title='WTF::ThreadSpecific::isSet' data-ref="_ZN3WTF14ThreadSpecific5isSetEv" data-ref-filename="_ZN3WTF14ThreadSpecific5isSetEv">isSet</a>(); <i>// Useful as a fast check to see if this thread has set this value.</i></td></tr>
+<tr><th id="62">62</th><td>    T* <a class="decl fn" href="#_ZN3WTF14ThreadSpecificptEv" title='WTF::ThreadSpecific::operator-&gt;' data-ref="_ZN3WTF14ThreadSpecificptEv" data-ref-filename="_ZN3WTF14ThreadSpecificptEv"><b>operator</b>-&gt;</a>();</td></tr>
+<tr><th id="63">63</th><td>    <a class="decl fn" href="#_ZN3WTF14ThreadSpecificcvPT_Ev" title='WTF::ThreadSpecific::operator type-parameter-0-0 *' data-ref="_ZN3WTF14ThreadSpecificcvPT_Ev" data-ref-filename="_ZN3WTF14ThreadSpecificcvPT_Ev"><b>operator</b> T*</a>();</td></tr>
+<tr><th id="64">64</th><td>    T&amp; <a class="decl fn" href="#_ZN3WTF14ThreadSpecificdeEv" title='WTF::ThreadSpecific::operator*' data-ref="_ZN3WTF14ThreadSpecificdeEv" data-ref-filename="_ZN3WTF14ThreadSpecificdeEv"><b>operator</b>*</a>();</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td><b>private</b>:</td></tr>
+<tr><th id="67">67</th><td>    <i>// Not implemented. It's technically possible to destroy a thread specific key, but one would need</i></td></tr>
+<tr><th id="68">68</th><td><i>    // to make sure that all values have been destroyed already (usually, that all threads that used it</i></td></tr>
+<tr><th id="69">69</th><td><i>    // have exited). It's unlikely that any user of this call will be in that situation - and having</i></td></tr>
+<tr><th id="70">70</th><td><i>    // a destructor defined can be confusing, given that it has such strong pre-requisites to work correctly.</i></td></tr>
+<tr><th id="71">71</th><td>    <dfn class="decl fn" id="_ZN3WTF14ThreadSpecificD1Ev" title='WTF::ThreadSpecific::~ThreadSpecific&lt;T, canBeGCThread&gt;' data-ref="_ZN3WTF14ThreadSpecificD1Ev" data-ref-filename="_ZN3WTF14ThreadSpecificD1Ev">~ThreadSpecific</dfn>();</td></tr>
+<tr><th id="72">72</th><td></td></tr>
+<tr><th id="73">73</th><td>    <b>struct</b> <dfn class="type def" id="WTF::ThreadSpecific::Data" title='WTF::ThreadSpecific::Data' data-ref="WTF::ThreadSpecific::Data" data-ref-filename="WTF..ThreadSpecific..Data">Data</dfn> {</td></tr>
+<tr><th id="74">74</th><td>        <a class="macro" href="Noncopyable.h.html#23" title="Data(const Data&amp;) = delete; Data&amp; operator=(const Data&amp;) = delete;" data-ref="_M/WTF_MAKE_NONCOPYABLE">WTF_MAKE_NONCOPYABLE</a>(<dfn class="decl def fn" id="_ZN3WTF14ThreadSpecific4DataC1ERKS1_" title='WTF::ThreadSpecific::Data::Data' data-ref="_ZN3WTF14ThreadSpecific4DataC1ERKS1_" data-ref-filename="_ZN3WTF14ThreadSpecific4DataC1ERKS1_"><a class="type" href="#WTF::ThreadSpecific::Data" title='WTF::ThreadSpecific::Data' data-ref="WTF::ThreadSpecific::Data" data-ref-filename="WTF..ThreadSpecific..Data"><a class="type" href="#WTF::ThreadSpecific::Data" title='WTF::ThreadSpecific::Data' data-ref="WTF::ThreadSpecific::Data" data-ref-filename="WTF..ThreadSpecific..Data"><a class="type" href="#WTF::ThreadSpecific::Data" title='WTF::ThreadSpecific::Data' data-ref="WTF::ThreadSpecific::Data" data-ref-filename="WTF..ThreadSpecific..Data">Data</a></a></a></dfn>);</td></tr>
+<tr><th id="75">75</th><td>        <a class="macro" href="FastMalloc.h.html#399" title="public: void* operator new(size_t, void* p) { return p; } void* operator new[](size_t, void* p) { return p; } void* operator new(size_t size) { return ::WTF::fastMalloc(size); } void operator delete(void* p) { ::WTF::fastFree(p); } void* operator new[](size_t size) { return ::WTF::fastMalloc(size); } void operator delete[](void* p) { ::WTF::fastFree(p); } void* operator new(size_t, NotNullTag, void* location) { do { if (!(location)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/ThreadSpecific.h&quot;, 75, __PRETTY_FUNCTION__, &quot;location&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(75, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/ThreadSpecific.h&quot;, __PRETTY_FUNCTION__, 1044); } while (false); } } while (0); return location; } using webkitFastMalloced = int; private: using __thisIsHereToForceASemicolonAfterThisMacro __attribute__((unused)) = int" data-ref="_M/WTF_MAKE_FAST_ALLOCATED">WTF_MAKE_FAST_ALLOCATED</a>;</td></tr>
+<tr><th id="76">76</th><td>    <b>public</b>:</td></tr>
+<tr><th id="77">77</th><td>        <b>using</b> <dfn class="typedef" id="WTF::ThreadSpecific::Data::PointerType" title='WTF::ThreadSpecific::Data::PointerType' data-type='typename std::remove_const&lt;T&gt;::type *' data-ref="WTF::ThreadSpecific::Data::PointerType" data-ref-filename="WTF..ThreadSpecific..Data..PointerType">PointerType</dfn> = <b>typename</b> <span class="namespace">std::</span><span class='type' title='std::__1::remove_const' data-ref="std::__1::remove_const" data-ref-filename="std..__1..remove_const">remove_const</span>&lt;T&gt;::type*;</td></tr>
+<tr><th id="78">78</th><td></td></tr>
+<tr><th id="79">79</th><td>        <dfn class="decl def fn" id="_ZN3WTF14ThreadSpecific4DataC1EPNS_14ThreadSpecificIT_XT0_EEE" title='WTF::ThreadSpecific::Data::Data' data-ref="_ZN3WTF14ThreadSpecific4DataC1EPNS_14ThreadSpecificIT_XT0_EEE" data-ref-filename="_ZN3WTF14ThreadSpecific4DataC1EPNS_14ThreadSpecificIT_XT0_EEE">Data</dfn>(<a class="type" href="#WTF::ThreadSpecific" title='WTF::ThreadSpecific' data-ref="WTF::ThreadSpecific" data-ref-filename="WTF..ThreadSpecific">ThreadSpecific</a>&lt;T, <a class="tu ref" href="#WTF::ThreadSpecific::canBeGCThread" title='WTF::ThreadSpecific::canBeGCThread' data-ref="WTF::ThreadSpecific::canBeGCThread" data-ref-filename="WTF..ThreadSpecific..canBeGCThread">canBeGCThread</a>&gt;* <dfn class="local col0 decl" id="1320owner" title='owner' data-type='ThreadSpecific&lt;T, canBeGCThread&gt; *' data-ref="1320owner" data-ref-filename="1320owner">owner</dfn>)</td></tr>
+<tr><th id="80">80</th><td>            : <a class="member field" href="#WTF::ThreadSpecific::Data::owner" title='WTF::ThreadSpecific::Data::owner' data-ref="WTF::ThreadSpecific::Data::owner" data-ref-filename="WTF..ThreadSpecific..Data..owner">owner</a>(<a class="local col0 ref" href="#1320owner" title='owner' data-ref="1320owner" data-ref-filename="1320owner">owner</a>)</td></tr>
+<tr><th id="81">81</th><td>        {</td></tr>
+<tr><th id="82">82</th><td>            <i>// Set up thread-specific value's memory pointer before invoking constructor, in case any function it calls</i></td></tr>
+<tr><th id="83">83</th><td><i>            // needs to access the value, to avoid recursion.</i></td></tr>
+<tr><th id="84">84</th><td>            <a class="local col0 ref" href="#1320owner" title='owner' data-ref="1320owner" data-ref-filename="1320owner">owner</a>-&gt;setInTLS(<b>this</b>);</td></tr>
+<tr><th id="85">85</th><td>            <b>new</b> (<a class="enum" href="StdLibExtras.h.html#NotNull" title='NotNull' data-ref="NotNull" data-ref-filename="NotNull">NotNull</a>, <a class="member fn" href="#_ZNK3WTF14ThreadSpecific4Data14storagePointerEv" title='WTF::ThreadSpecific::Data::storagePointer' data-ref="_ZNK3WTF14ThreadSpecific4Data14storagePointerEv" data-ref-filename="_ZNK3WTF14ThreadSpecific4Data14storagePointerEv">storagePointer</a>()) T();</td></tr>
+<tr><th id="86">86</th><td>        }</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td>        <dfn class="decl def fn" id="_ZN3WTF14ThreadSpecific4DataD1Ev" title='WTF::ThreadSpecific::Data::~Data' data-ref="_ZN3WTF14ThreadSpecific4DataD1Ev" data-ref-filename="_ZN3WTF14ThreadSpecific4DataD1Ev">~Data</dfn>()</td></tr>
+<tr><th id="89">89</th><td>        {</td></tr>
+<tr><th id="90">90</th><td>            <a class="member fn" href="#_ZNK3WTF14ThreadSpecific4Data14storagePointerEv" title='WTF::ThreadSpecific::Data::storagePointer' data-ref="_ZNK3WTF14ThreadSpecific4Data14storagePointerEv" data-ref-filename="_ZNK3WTF14ThreadSpecific4Data14storagePointerEv">storagePointer</a>()-&gt;~T();</td></tr>
+<tr><th id="91">91</th><td>            <a class="member field" href="#WTF::ThreadSpecific::Data::owner" title='WTF::ThreadSpecific::Data::owner' data-ref="WTF::ThreadSpecific::Data::owner" data-ref-filename="WTF..ThreadSpecific..Data..owner">owner</a>-&gt;setInTLS(<b>nullptr</b>);</td></tr>
+<tr><th id="92">92</th><td>        }</td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td>        <a class="typedef" href="#WTF::ThreadSpecific::Data::PointerType" title='WTF::ThreadSpecific::Data::PointerType' data-type='typename std::remove_const&lt;T&gt;::type *' data-ref="WTF::ThreadSpecific::Data::PointerType" data-ref-filename="WTF..ThreadSpecific..Data..PointerType">PointerType</a> <dfn class="decl def fn" id="_ZNK3WTF14ThreadSpecific4Data14storagePointerEv" title='WTF::ThreadSpecific::Data::storagePointer' data-ref="_ZNK3WTF14ThreadSpecific4Data14storagePointerEv" data-ref-filename="_ZNK3WTF14ThreadSpecific4Data14storagePointerEv">storagePointer</dfn>() <em>const</em> { <b>return</b> <b>const_cast</b>&lt;<a class="typedef" href="#WTF::ThreadSpecific::Data::PointerType" title='WTF::ThreadSpecific::Data::PointerType' data-type='typename std::remove_const&lt;T&gt;::type *' data-ref="WTF::ThreadSpecific::Data::PointerType" data-ref-filename="WTF..ThreadSpecific..Data..PointerType">PointerType</a>&gt;(<b>reinterpret_cast</b>&lt;<em>const</em> T*&gt;(&amp;<a class="member field" href="#WTF::ThreadSpecific::Data::m_storage" title='WTF::ThreadSpecific::Data::m_storage' data-ref="WTF::ThreadSpecific::Data::m_storage" data-ref-filename="WTF..ThreadSpecific..Data..m_storage">m_storage</a>)); }</td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td>        <b>typename</b> <span class="namespace">std::</span><span class='type' title='std::__1::aligned_storage' data-ref="std::__1::aligned_storage" data-ref-filename="std..__1..aligned_storage">aligned_storage</span>&lt;<b>sizeof</b>(T), <span class="namespace">std::</span><span class='type' title='std::__1::alignment_of' data-ref="std::__1::alignment_of" data-ref-filename="std..__1..alignment_of">alignment_of</span>&lt;T&gt;::value&gt;::type <dfn class="decl field" id="WTF::ThreadSpecific::Data::m_storage" title='WTF::ThreadSpecific::Data::m_storage' data-ref="WTF::ThreadSpecific::Data::m_storage" data-ref-filename="WTF..ThreadSpecific..Data..m_storage">m_storage</dfn>;</td></tr>
+<tr><th id="97">97</th><td>        <a class="type" href="#WTF::ThreadSpecific" title='WTF::ThreadSpecific' data-ref="WTF::ThreadSpecific" data-ref-filename="WTF..ThreadSpecific">ThreadSpecific</a>&lt;T, <a class="tu member" href="#WTF::ThreadSpecific::canBeGCThread" title='WTF::ThreadSpecific::canBeGCThread' data-ref="WTF::ThreadSpecific::canBeGCThread" data-ref-filename="WTF..ThreadSpecific..canBeGCThread">canBeGCThread</a>&gt;* <dfn class="decl field" id="WTF::ThreadSpecific::Data::owner" title='WTF::ThreadSpecific::Data::owner' data-ref="WTF::ThreadSpecific::Data::owner" data-ref-filename="WTF..ThreadSpecific..Data..owner">owner</dfn>;</td></tr>
+<tr><th id="98">98</th><td>    };</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td>    T* <a class="decl fn" href="#_ZN3WTF14ThreadSpecific3getEv" title='WTF::ThreadSpecific::get' data-ref="_ZN3WTF14ThreadSpecific3getEv" data-ref-filename="_ZN3WTF14ThreadSpecific3getEv">get</a>();</td></tr>
+<tr><th id="101">101</th><td>    T* <a class="decl fn" href="#_ZN3WTF14ThreadSpecific3setEv" title='WTF::ThreadSpecific::set' data-ref="_ZN3WTF14ThreadSpecific3setEv" data-ref-filename="_ZN3WTF14ThreadSpecific3setEv">set</a>();</td></tr>
+<tr><th id="102">102</th><td>    <em>void</em> <a class="decl fn" href="#_ZN3WTF14ThreadSpecific8setInTLSEPNS0_4DataE" title='WTF::ThreadSpecific::setInTLS' data-ref="_ZN3WTF14ThreadSpecific8setInTLSEPNS0_4DataE" data-ref-filename="_ZN3WTF14ThreadSpecific8setInTLSEPNS0_4DataE">setInTLS</a>(<a class="type" href="#WTF::ThreadSpecific::Data" title='WTF::ThreadSpecific::Data' data-ref="WTF::ThreadSpecific::Data" data-ref-filename="WTF..ThreadSpecific..Data">Data</a>*);</td></tr>
+<tr><th id="103">103</th><td>    <em>void</em> <em>static</em> <a class="decl fn" href="#_ZN3WTF14ThreadSpecific7destroyEPv" title='WTF::ThreadSpecific::destroy' data-ref="_ZN3WTF14ThreadSpecific7destroyEPv" data-ref-filename="_ZN3WTF14ThreadSpecific7destroyEPv">destroy</a>(<em>void</em>* <dfn class="local col1 decl" id="1321ptr" title='ptr' data-type='void *' data-ref="1321ptr" data-ref-filename="1321ptr">ptr</dfn>);</td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td><u>#<span data-ppcond="105">if</span> <a class="macro" href="PlatformUse.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/USE">USE</a>(PTHREADS)</u></td></tr>
+<tr><th id="106">106</th><td>    <span class='typedef' title='pthread_key_t' data-type='__darwin_pthread_key_t' data-ref="pthread_key_t" data-ref-filename="pthread_key_t">pthread_key_t</span> <dfn class="decl field" id="WTF::ThreadSpecific::m_key" title='WTF::ThreadSpecific::m_key' data-ref="WTF::ThreadSpecific::m_key" data-ref-filename="WTF..ThreadSpecific..m_key">m_key</dfn> { };</td></tr>
+<tr><th id="107">107</th><td><u>#<span data-ppcond="105">elif</span> OS(WINDOWS)</u></td></tr>
+<tr><th id="108">108</th><td>    <em>int</em> m_key;</td></tr>
+<tr><th id="109">109</th><td><u>#<span data-ppcond="105">endif</span></u></td></tr>
+<tr><th id="110">110</th><td>};</td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td><u>#<span data-ppcond="112">if</span> <a class="macro" href="PlatformUse.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/USE">USE</a>(PTHREADS)</u></td></tr>
+<tr><th id="113">113</th><td></td></tr>
+<tr><th id="114">114</th><td><b>template</b>&lt;<b>typename</b> T, <a class="type" href="#WTF::CanBeGCThread" title='WTF::CanBeGCThread' data-ref="WTF::CanBeGCThread" data-ref-filename="WTF..CanBeGCThread">CanBeGCThread</a> canBeGCThread&gt;</td></tr>
+<tr><th id="115">115</th><td><b>inline</b> <a class="type" href="#WTF::ThreadSpecific" title='WTF::ThreadSpecific' data-ref="WTF::ThreadSpecific" data-ref-filename="WTF..ThreadSpecific">ThreadSpecific</a>&lt;T, <a class="tu ref" href="#canBeGCThread" title='canBeGCThread' data-ref="canBeGCThread" data-ref-filename="canBeGCThread">canBeGCThread</a>&gt;::<dfn class="decl def fn" id="_ZN3WTF14ThreadSpecificC1Ev" title='WTF::ThreadSpecific::ThreadSpecific&lt;T, canBeGCThread&gt;' data-ref="_ZN3WTF14ThreadSpecificC1Ev" data-ref-filename="_ZN3WTF14ThreadSpecificC1Ev">ThreadSpecific</dfn>()</td></tr>
+<tr><th id="116">116</th><td>{</td></tr>
+<tr><th id="117">117</th><td>    <em>int</em> <dfn class="local col2 decl" id="1322error" title='error' data-type='int' data-ref="1322error" data-ref-filename="1322error">error</dfn> = <span class='ref fn' title='pthread_key_create' data-ref="pthread_key_create" data-ref-filename="pthread_key_create">pthread_key_create</span>(&amp;<a class="member field" href="#WTF::ThreadSpecific::m_key" title='WTF::ThreadSpecific::m_key' data-ref="WTF::ThreadSpecific::m_key" data-ref-filename="WTF..ThreadSpecific..m_key">m_key</a>, <a class="member fn" href="#_ZN3WTF14ThreadSpecific7destroyEPv" title='WTF::ThreadSpecific::destroy' data-ref="_ZN3WTF14ThreadSpecific7destroyEPv" data-ref-filename="_ZN3WTF14ThreadSpecific7destroyEPv">destroy</a>);</td></tr>
+<tr><th id="118">118</th><td>    <b>if</b> (<a class="local col2 ref" href="#1322error" title='error' data-ref="1322error" data-ref-filename="1322error">error</a>)</td></tr>
+<tr><th id="119">119</th><td>        <a class="macro" href="Assertions.h.html#274" title="WTFCrash()" data-ref="_M/CRASH">CRASH</a>();</td></tr>
+<tr><th id="120">120</th><td>}</td></tr>
+<tr><th id="121">121</th><td></td></tr>
+<tr><th id="122">122</th><td><b>template</b>&lt;<b>typename</b> T, <a class="type" href="#WTF::CanBeGCThread" title='WTF::CanBeGCThread' data-ref="WTF::CanBeGCThread" data-ref-filename="WTF..CanBeGCThread">CanBeGCThread</a> canBeGCThread&gt;</td></tr>
+<tr><th id="123">123</th><td><b>inline</b> T* <a class="type" href="#WTF::ThreadSpecific" title='WTF::ThreadSpecific' data-ref="WTF::ThreadSpecific" data-ref-filename="WTF..ThreadSpecific">ThreadSpecific</a>&lt;T, <a class="tu ref" href="#canBeGCThread" title='canBeGCThread' data-ref="canBeGCThread" data-ref-filename="canBeGCThread">canBeGCThread</a>&gt;::<dfn class="decl def fn" id="_ZN3WTF14ThreadSpecific3getEv" title='WTF::ThreadSpecific::get' data-ref="_ZN3WTF14ThreadSpecific3getEv" data-ref-filename="_ZN3WTF14ThreadSpecific3getEv">get</dfn>()</td></tr>
+<tr><th id="124">124</th><td>{</td></tr>
+<tr><th id="125">125</th><td>    <a class="type" href="#WTF::ThreadSpecific::Data" title='WTF::ThreadSpecific::Data' data-ref="WTF::ThreadSpecific::Data" data-ref-filename="WTF..ThreadSpecific..Data">Data</a>* <dfn class="local col3 decl" id="1323data" title='data' data-type='WTF::ThreadSpecific::Data *' data-ref="1323data" data-ref-filename="1323data">data</dfn> = <b>static_cast</b>&lt;<a class="type" href="#WTF::ThreadSpecific::Data" title='WTF::ThreadSpecific::Data' data-ref="WTF::ThreadSpecific::Data" data-ref-filename="WTF..ThreadSpecific..Data">Data</a>*&gt;(<span class='ref fn' title='pthread_getspecific' data-ref="pthread_getspecific" data-ref-filename="pthread_getspecific">pthread_getspecific</span>(<a class="member field" href="#WTF::ThreadSpecific::m_key" title='WTF::ThreadSpecific::m_key' data-ref="WTF::ThreadSpecific::m_key" data-ref-filename="WTF..ThreadSpecific..m_key">m_key</a>));</td></tr>
+<tr><th id="126">126</th><td>    <b>if</b> (<a class="local col3 ref" href="#1323data" title='data' data-ref="1323data" data-ref-filename="1323data">data</a>)</td></tr>
+<tr><th id="127">127</th><td>        <b>return</b> <a class="local col3 ref" href="#1323data" title='data' data-ref="1323data" data-ref-filename="1323data">data</a>-&gt;storagePointer();</td></tr>
+<tr><th id="128">128</th><td>    <b>return</b> <b>nullptr</b>;</td></tr>
+<tr><th id="129">129</th><td>}</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td><b>template</b>&lt;<b>typename</b> T, <a class="type" href="#WTF::CanBeGCThread" title='WTF::CanBeGCThread' data-ref="WTF::CanBeGCThread" data-ref-filename="WTF..CanBeGCThread">CanBeGCThread</a> canBeGCThread&gt;</td></tr>
+<tr><th id="132">132</th><td><b>inline</b> <em>void</em> <a class="type" href="#WTF::ThreadSpecific" title='WTF::ThreadSpecific' data-ref="WTF::ThreadSpecific" data-ref-filename="WTF..ThreadSpecific">ThreadSpecific</a>&lt;T, <a class="tu ref" href="#canBeGCThread" title='canBeGCThread' data-ref="canBeGCThread" data-ref-filename="canBeGCThread">canBeGCThread</a>&gt;::<dfn class="decl def fn" id="_ZN3WTF14ThreadSpecific8setInTLSEPNS0_4DataE" title='WTF::ThreadSpecific::setInTLS' data-ref="_ZN3WTF14ThreadSpecific8setInTLSEPNS0_4DataE" data-ref-filename="_ZN3WTF14ThreadSpecific8setInTLSEPNS0_4DataE">setInTLS</dfn>(<a class="type" href="#WTF::ThreadSpecific::Data" title='WTF::ThreadSpecific::Data' data-ref="WTF::ThreadSpecific::Data" data-ref-filename="WTF..ThreadSpecific..Data">Data</a>* <dfn class="local col4 decl" id="1324data" title='data' data-type='WTF::ThreadSpecific::Data *' data-ref="1324data" data-ref-filename="1324data">data</dfn>)</td></tr>
+<tr><th id="133">133</th><td>{</td></tr>
+<tr><th id="134">134</th><td>    pthread_setspecific(<a class="member field" href="#WTF::ThreadSpecific::m_key" title='WTF::ThreadSpecific::m_key' data-ref="WTF::ThreadSpecific::m_key" data-ref-filename="WTF..ThreadSpecific..m_key">m_key</a>, <a class="local col4 ref" href="#1324data" title='data' data-ref="1324data" data-ref-filename="1324data">data</a>);</td></tr>
+<tr><th id="135">135</th><td>}</td></tr>
+<tr><th id="136">136</th><td></td></tr>
+<tr><th id="137">137</th><td><u>#<span data-ppcond="112">elif</span> OS(WINDOWS)</u></td></tr>
+<tr><th id="138">138</th><td></td></tr>
+<tr><th id="139">139</th><td><b>template</b>&lt;<b>typename</b> T, CanBeGCThread canBeGCThread&gt;</td></tr>
+<tr><th id="140">140</th><td><b>inline</b> ThreadSpecific&lt;T, canBeGCThread&gt;::ThreadSpecific()</td></tr>
+<tr><th id="141">141</th><td>    : m_key(-<var>1</var>)</td></tr>
+<tr><th id="142">142</th><td>{</td></tr>
+<tr><th id="143">143</th><td>    <em>bool</em> ok = Thread::SpecificStorage::allocateKey(m_key, destroy);</td></tr>
+<tr><th id="144">144</th><td>    <b>if</b> (!ok)</td></tr>
+<tr><th id="145">145</th><td>        CRASH();</td></tr>
+<tr><th id="146">146</th><td>}</td></tr>
+<tr><th id="147">147</th><td></td></tr>
+<tr><th id="148">148</th><td><b>template</b>&lt;<b>typename</b> T, CanBeGCThread canBeGCThread&gt;</td></tr>
+<tr><th id="149">149</th><td><b>inline</b> T* ThreadSpecific&lt;T, canBeGCThread&gt;::get()</td></tr>
+<tr><th id="150">150</th><td>{</td></tr>
+<tr><th id="151">151</th><td>    <em>auto</em> data = <b>static_cast</b>&lt;Data*&gt;(Thread::current().specificStorage().get(m_key));</td></tr>
+<tr><th id="152">152</th><td>    <b>if</b> (!data)</td></tr>
+<tr><th id="153">153</th><td>        <b>return</b> <b>nullptr</b>;</td></tr>
+<tr><th id="154">154</th><td>    <b>return</b> data-&gt;storagePointer();</td></tr>
+<tr><th id="155">155</th><td>}</td></tr>
+<tr><th id="156">156</th><td></td></tr>
+<tr><th id="157">157</th><td><b>template</b>&lt;<b>typename</b> T, CanBeGCThread canBeGCThread&gt;</td></tr>
+<tr><th id="158">158</th><td><b>inline</b> <em>void</em> ThreadSpecific&lt;T, canBeGCThread&gt;::setInTLS(Data* data)</td></tr>
+<tr><th id="159">159</th><td>{</td></tr>
+<tr><th id="160">160</th><td>    <b>return</b> Thread::current().specificStorage().set(m_key, data);</td></tr>
+<tr><th id="161">161</th><td>}</td></tr>
+<tr><th id="162">162</th><td></td></tr>
+<tr><th id="163">163</th><td><u>#else</u></td></tr>
+<tr><th id="164">164</th><td><u>#error ThreadSpecific is not implemented for this platform.</u></td></tr>
+<tr><th id="165">165</th><td><u>#<span data-ppcond="112">endif</span></u></td></tr>
+<tr><th id="166">166</th><td></td></tr>
+<tr><th id="167">167</th><td><b>template</b>&lt;<b>typename</b> T, <a class="type" href="#WTF::CanBeGCThread" title='WTF::CanBeGCThread' data-ref="WTF::CanBeGCThread" data-ref-filename="WTF..CanBeGCThread">CanBeGCThread</a> canBeGCThread&gt;</td></tr>
+<tr><th id="168">168</th><td><b>inline</b> <em>void</em> <a class="type" href="#WTF::ThreadSpecific" title='WTF::ThreadSpecific' data-ref="WTF::ThreadSpecific" data-ref-filename="WTF..ThreadSpecific">ThreadSpecific</a>&lt;T, <a class="tu ref" href="#canBeGCThread" title='canBeGCThread' data-ref="canBeGCThread" data-ref-filename="canBeGCThread">canBeGCThread</a>&gt;::<dfn class="decl def fn" id="_ZN3WTF14ThreadSpecific7destroyEPv" title='WTF::ThreadSpecific::destroy' data-ref="_ZN3WTF14ThreadSpecific7destroyEPv" data-ref-filename="_ZN3WTF14ThreadSpecific7destroyEPv">destroy</dfn>(<em>void</em>* <dfn class="local col5 decl" id="1325ptr" title='ptr' data-type='void *' data-ref="1325ptr" data-ref-filename="1325ptr">ptr</dfn>)</td></tr>
+<tr><th id="169">169</th><td>{</td></tr>
+<tr><th id="170">170</th><td>    <a class="type" href="#WTF::ThreadSpecific::Data" title='WTF::ThreadSpecific::Data' data-ref="WTF::ThreadSpecific::Data" data-ref-filename="WTF..ThreadSpecific..Data">Data</a>* <dfn class="local col6 decl" id="1326data" title='data' data-type='WTF::ThreadSpecific::Data *' data-ref="1326data" data-ref-filename="1326data">data</dfn> = <b>static_cast</b>&lt;<a class="type" href="#WTF::ThreadSpecific::Data" title='WTF::ThreadSpecific::Data' data-ref="WTF::ThreadSpecific::Data" data-ref-filename="WTF..ThreadSpecific..Data">Data</a>*&gt;(<a class="local col5 ref" href="#1325ptr" title='ptr' data-ref="1325ptr" data-ref-filename="1325ptr">ptr</a>);</td></tr>
+<tr><th id="171">171</th><td></td></tr>
+<tr><th id="172">172</th><td><u>#<span data-ppcond="172">if</span> <a class="macro" href="PlatformUse.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/USE">USE</a>(PTHREADS)</u></td></tr>
+<tr><th id="173">173</th><td>    <i>// We want get() to keep working while data destructor works, because it can be called indirectly by the destructor.</i></td></tr>
+<tr><th id="174">174</th><td><i>    // Some pthreads implementations zero out the pointer before calling destroy(), so we temporarily reset it.</i></td></tr>
+<tr><th id="175">175</th><td>    pthread_setspecific(<a class="local col6 ref" href="#1326data" title='data' data-ref="1326data" data-ref-filename="1326data">data</a>-&gt;owner-&gt;m_key, <a class="local col5 ref" href="#1325ptr" title='ptr' data-ref="1325ptr" data-ref-filename="1325ptr">ptr</a>);</td></tr>
+<tr><th id="176">176</th><td><u>#<span data-ppcond="172">endif</span></u></td></tr>
+<tr><th id="177">177</th><td></td></tr>
+<tr><th id="178">178</th><td>    <b>delete</b> <a class="local col6 ref" href="#1326data" title='data' data-ref="1326data" data-ref-filename="1326data">data</a>;</td></tr>
+<tr><th id="179">179</th><td>}</td></tr>
+<tr><th id="180">180</th><td></td></tr>
+<tr><th id="181">181</th><td><b>template</b>&lt;<b>typename</b> T, <a class="type" href="#WTF::CanBeGCThread" title='WTF::CanBeGCThread' data-ref="WTF::CanBeGCThread" data-ref-filename="WTF..CanBeGCThread">CanBeGCThread</a> canBeGCThread&gt;</td></tr>
+<tr><th id="182">182</th><td><b>inline</b> T* <a class="type" href="#WTF::ThreadSpecific" title='WTF::ThreadSpecific' data-ref="WTF::ThreadSpecific" data-ref-filename="WTF..ThreadSpecific">ThreadSpecific</a>&lt;T, <a class="tu ref" href="#canBeGCThread" title='canBeGCThread' data-ref="canBeGCThread" data-ref-filename="canBeGCThread">canBeGCThread</a>&gt;::<dfn class="decl def fn" id="_ZN3WTF14ThreadSpecific3setEv" title='WTF::ThreadSpecific::set' data-ref="_ZN3WTF14ThreadSpecific3setEv" data-ref-filename="_ZN3WTF14ThreadSpecific3setEv">set</dfn>()</td></tr>
+<tr><th id="183">183</th><td>{</td></tr>
+<tr><th id="184">184</th><td>    <a class="macro" href="Assertions.h.html#622" title="do { if (!(canBeGCThread == CanBeGCThread::True || !Thread::mayBeGCThread())) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/ThreadSpecific.h&quot;, 184, __PRETTY_FUNCTION__, &quot;canBeGCThread == CanBeGCThread::True || !Thread::mayBeGCThread()&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(184, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/ThreadSpecific.h&quot;, __PRETTY_FUNCTION__, 1046); } while (false); } } while (0)" data-ref="_M/RELEASE_ASSERT">RELEASE_ASSERT</a>(<a class="tu ref" href="#canBeGCThread" title='canBeGCThread' data-use='r' data-ref="canBeGCThread" data-ref-filename="canBeGCThread">canBeGCThread</a> == <a class="type" href="#WTF::CanBeGCThread" title='WTF::CanBeGCThread' data-ref="WTF::CanBeGCThread" data-ref-filename="WTF..CanBeGCThread">CanBeGCThread</a>::<a class="enum" href="#WTF::CanBeGCThread::True" title='WTF::CanBeGCThread::True' data-ref="WTF::CanBeGCThread::True" data-ref-filename="WTF..CanBeGCThread..True">True</a> || !<a class="type" href="Threading.h.html#WTF::Thread" title='WTF::Thread' data-ref="WTF::Thread" data-ref-filename="WTF..Thread">Thread</a>::<a class="ref fn" href="Threading.h.html#_ZN3WTF6Thread13mayBeGCThreadEv" title='WTF::Thread::mayBeGCThread' data-ref="_ZN3WTF6Thread13mayBeGCThreadEv" data-ref-filename="_ZN3WTF6Thread13mayBeGCThreadEv">mayBeGCThread</a>());</td></tr>
+<tr><th id="185">185</th><td>    <a class="macro" href="Assertions.h.html#347" title="do { if (!(!get())) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/ThreadSpecific.h&quot;, 185, __PRETTY_FUNCTION__, &quot;!get()&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(185, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/ThreadSpecific.h&quot;, __PRETTY_FUNCTION__, 1048); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(!<a class="member fn" href="#_ZN3WTF14ThreadSpecific3getEv" title='WTF::ThreadSpecific::get' data-ref="_ZN3WTF14ThreadSpecific3getEv" data-ref-filename="_ZN3WTF14ThreadSpecific3getEv">get</a>());</td></tr>
+<tr><th id="186">186</th><td>    <a class="type" href="#WTF::ThreadSpecific::Data" title='WTF::ThreadSpecific::Data' data-ref="WTF::ThreadSpecific::Data" data-ref-filename="WTF..ThreadSpecific..Data">Data</a>* <dfn class="local col7 decl" id="1327data" title='data' data-type='WTF::ThreadSpecific::Data *' data-ref="1327data" data-ref-filename="1327data">data</dfn> = <b>new</b> <a class="type" href="#WTF::ThreadSpecific::Data" title='WTF::ThreadSpecific::Data' data-ref="WTF::ThreadSpecific::Data" data-ref-filename="WTF..ThreadSpecific..Data">Data</a>(<b>this</b>); <i>// Data will set itself into TLS.</i></td></tr>
+<tr><th id="187">187</th><td>    <a class="macro" href="Assertions.h.html#347" title="do { if (!(get() == data-&gt;storagePointer())) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/ThreadSpecific.h&quot;, 187, __PRETTY_FUNCTION__, &quot;get() == data-&gt;storagePointer()&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(187, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/WebKitBuild/Debug/usr/local/include/wtf/ThreadSpecific.h&quot;, __PRETTY_FUNCTION__, 1050); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(<a class="member fn" href="#_ZN3WTF14ThreadSpecific3getEv" title='WTF::ThreadSpecific::get' data-ref="_ZN3WTF14ThreadSpecific3getEv" data-ref-filename="_ZN3WTF14ThreadSpecific3getEv">get</a>() == <a class="local col7 ref" href="#1327data" title='data' data-ref="1327data" data-ref-filename="1327data">data</a>-&gt;storagePointer());</td></tr>
+<tr><th id="188">188</th><td>    <b>return</b> <a class="local col7 ref" href="#1327data" title='data' data-ref="1327data" data-ref-filename="1327data">data</a>-&gt;storagePointer();</td></tr>
+<tr><th id="189">189</th><td>}</td></tr>
+<tr><th id="190">190</th><td></td></tr>
+<tr><th id="191">191</th><td><b>template</b>&lt;<b>typename</b> T, <a class="type" href="#WTF::CanBeGCThread" title='WTF::CanBeGCThread' data-ref="WTF::CanBeGCThread" data-ref-filename="WTF..CanBeGCThread">CanBeGCThread</a> canBeGCThread&gt;</td></tr>
+<tr><th id="192">192</th><td><b>inline</b> <em>bool</em> <a class="type" href="#WTF::ThreadSpecific" title='WTF::ThreadSpecific' data-ref="WTF::ThreadSpecific" data-ref-filename="WTF..ThreadSpecific">ThreadSpecific</a>&lt;T, <a class="tu ref" href="#canBeGCThread" title='canBeGCThread' data-ref="canBeGCThread" data-ref-filename="canBeGCThread">canBeGCThread</a>&gt;::<dfn class="decl def fn" id="_ZN3WTF14ThreadSpecific5isSetEv" title='WTF::ThreadSpecific::isSet' data-ref="_ZN3WTF14ThreadSpecific5isSetEv" data-ref-filename="_ZN3WTF14ThreadSpecific5isSetEv">isSet</dfn>()</td></tr>
+<tr><th id="193">193</th><td>{</td></tr>
+<tr><th id="194">194</th><td>    <b>return</b> !!<a class="member fn" href="#_ZN3WTF14ThreadSpecific3getEv" title='WTF::ThreadSpecific::get' data-ref="_ZN3WTF14ThreadSpecific3getEv" data-ref-filename="_ZN3WTF14ThreadSpecific3getEv">get</a>();</td></tr>
+<tr><th id="195">195</th><td>}</td></tr>
+<tr><th id="196">196</th><td></td></tr>
+<tr><th id="197">197</th><td><b>template</b>&lt;<b>typename</b> T, <a class="type" href="#WTF::CanBeGCThread" title='WTF::CanBeGCThread' data-ref="WTF::CanBeGCThread" data-ref-filename="WTF..CanBeGCThread">CanBeGCThread</a> canBeGCThread&gt;</td></tr>
+<tr><th id="198">198</th><td><b>inline</b> <a class="type" href="#WTF::ThreadSpecific" title='WTF::ThreadSpecific' data-ref="WTF::ThreadSpecific" data-ref-filename="WTF..ThreadSpecific">ThreadSpecific</a>&lt;T, <a class="tu ref" href="#canBeGCThread" title='canBeGCThread' data-ref="canBeGCThread" data-ref-filename="canBeGCThread">canBeGCThread</a>&gt;::<dfn class="decl def fn" id="_ZN3WTF14ThreadSpecificcvPT_Ev" title='WTF::ThreadSpecific::operator type-parameter-0-0 *' data-ref="_ZN3WTF14ThreadSpecificcvPT_Ev" data-ref-filename="_ZN3WTF14ThreadSpecificcvPT_Ev"><b>operator</b> T*</dfn>()</td></tr>
+<tr><th id="199">199</th><td>{</td></tr>
+<tr><th id="200">200</th><td>    <b>if</b> (T* <dfn class="local col8 decl" id="1328ptr" title='ptr' data-type='T *' data-ref="1328ptr" data-ref-filename="1328ptr"><a class="local col8 ref" href="#1328ptr" title='ptr' data-ref="1328ptr" data-ref-filename="1328ptr">ptr</a></dfn> = <a class="member fn" href="#_ZN3WTF14ThreadSpecific3getEv" title='WTF::ThreadSpecific::get' data-ref="_ZN3WTF14ThreadSpecific3getEv" data-ref-filename="_ZN3WTF14ThreadSpecific3getEv">get</a>())</td></tr>
+<tr><th id="201">201</th><td>        <b>return</b> <a class="local col8 ref" href="#1328ptr" title='ptr' data-ref="1328ptr" data-ref-filename="1328ptr">ptr</a>;</td></tr>
+<tr><th id="202">202</th><td>    <b>return</b> <a class="member fn" href="#_ZN3WTF14ThreadSpecific3setEv" title='WTF::ThreadSpecific::set' data-ref="_ZN3WTF14ThreadSpecific3setEv" data-ref-filename="_ZN3WTF14ThreadSpecific3setEv">set</a>();</td></tr>
+<tr><th id="203">203</th><td>}</td></tr>
+<tr><th id="204">204</th><td></td></tr>
+<tr><th id="205">205</th><td><b>template</b>&lt;<b>typename</b> T, <a class="type" href="#WTF::CanBeGCThread" title='WTF::CanBeGCThread' data-ref="WTF::CanBeGCThread" data-ref-filename="WTF..CanBeGCThread">CanBeGCThread</a> canBeGCThread&gt;</td></tr>
+<tr><th id="206">206</th><td><b>inline</b> T* <a class="type" href="#WTF::ThreadSpecific" title='WTF::ThreadSpecific' data-ref="WTF::ThreadSpecific" data-ref-filename="WTF..ThreadSpecific">ThreadSpecific</a>&lt;T, <a class="tu ref" href="#canBeGCThread" title='canBeGCThread' data-ref="canBeGCThread" data-ref-filename="canBeGCThread">canBeGCThread</a>&gt;::<dfn class="decl def fn" id="_ZN3WTF14ThreadSpecificptEv" title='WTF::ThreadSpecific::operator-&gt;' data-ref="_ZN3WTF14ThreadSpecificptEv" data-ref-filename="_ZN3WTF14ThreadSpecificptEv"><b>operator</b>-&gt;</dfn>()</td></tr>
+<tr><th id="207">207</th><td>{</td></tr>
+<tr><th id="208">208</th><td>    <b>return</b> <b>operator</b> T*();</td></tr>
+<tr><th id="209">209</th><td>}</td></tr>
+<tr><th id="210">210</th><td></td></tr>
+<tr><th id="211">211</th><td><b>template</b>&lt;<b>typename</b> T, <a class="type" href="#WTF::CanBeGCThread" title='WTF::CanBeGCThread' data-ref="WTF::CanBeGCThread" data-ref-filename="WTF..CanBeGCThread">CanBeGCThread</a> canBeGCThread&gt;</td></tr>
+<tr><th id="212">212</th><td><b>inline</b> T&amp; <a class="type" href="#WTF::ThreadSpecific" title='WTF::ThreadSpecific' data-ref="WTF::ThreadSpecific" data-ref-filename="WTF..ThreadSpecific">ThreadSpecific</a>&lt;T, <a class="tu ref" href="#canBeGCThread" title='canBeGCThread' data-ref="canBeGCThread" data-ref-filename="canBeGCThread">canBeGCThread</a>&gt;::<dfn class="decl def fn" id="_ZN3WTF14ThreadSpecificdeEv" title='WTF::ThreadSpecific::operator*' data-ref="_ZN3WTF14ThreadSpecificdeEv" data-ref-filename="_ZN3WTF14ThreadSpecificdeEv"><b>operator</b>*</dfn>()</td></tr>
+<tr><th id="213">213</th><td>{</td></tr>
+<tr><th id="214">214</th><td>    <b>return</b> *<b>operator</b> T*();</td></tr>
+<tr><th id="215">215</th><td>}</td></tr>
+<tr><th id="216">216</th><td></td></tr>
+<tr><th id="217">217</th><td>} <i>// namespace WTF</i></td></tr>
+<tr><th id="218">218</th><td></td></tr>
+<tr><th id="219">219</th><td><b>using</b> <span class="namespace">WTF::</span>ThreadSpecific;</td></tr>
+<tr><th id="220">220</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/JavaScriptCore/API/tests/FunctionOverridesTest.cpp.html'>webkit/Source/JavaScriptCore/API/tests/FunctionOverridesTest.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

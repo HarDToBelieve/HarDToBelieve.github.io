@@ -1,0 +1,4 @@
+<dec f='webkit/WebKitBuild/Debug/DerivedSources/WebKit2/AutomationProtocolObjects.h' l='430' type='27'/>
+<use f='webkit/Source/WebKit/UIProcess/Automation/SimulatedInputDispatcher.cpp' l='308' u='r' c='_ZN6WebKit24SimulatedInputDispatcher28transitionInputSourceToStateERNS_20SimulatedInputSourceERNS_25SimulatedInputSourceStateEON3WTF17CompletionHandle348048'/>
+<use f='webkit/WebKitBuild/Debug/DerivedSources/WebKit2/AutomationProtocolObjects.cpp' l='243' u='r' c='_ZN9Inspector8Protocol17AutomationHelpers24parseEnumValueFromStringERKN3WTF6StringE'/>
+<use f='webkit/Source/WebKit/UIProcess/Automation/mac/WebAutomationSessionMac.mm' l='193' c='_ZN6WebKit20WebAutomationSession32platformSimulateMouseInteractionERNS_12WebPageProxyEN9Inspector8Protocol10Automation16MouseInteractionENS5_11MouseBu2839063'/>

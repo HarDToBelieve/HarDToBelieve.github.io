@@ -1,0 +1,102 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>fake_clock.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/fake_clock.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::FakeClock,rtc::ScopedBaseFakeClock,rtc::ScopedFakeClock,rtc::ThreadProcessingFakeClock "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/fake_clock.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='fake_clock.h.html'>fake_clock.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2016 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_FAKE_CLOCK_H_">RTC_BASE_FAKE_CLOCK_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_FAKE_CLOCK_H_" data-ref="_M/RTC_BASE_FAKE_CLOCK_H_">RTC_BASE_FAKE_CLOCK_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="../api/units/time_delta.h.html">"api/units/time_delta.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="../api/units/timestamp.h.html">"api/units/timestamp.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="synchronization/mutex.h.html">"rtc_base/synchronization/mutex.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="thread_annotations.h.html">"rtc_base/thread_annotations.h"</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="time_utils.h.html">"rtc_base/time_utils.h"</a></u></td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><i>// Fake clock for use with unit tests, which does not tick on its own.</i></td></tr>
+<tr><th id="25">25</th><td><i>// Starts at time 0.</i></td></tr>
+<tr><th id="26">26</th><td><i>//</i></td></tr>
+<tr><th id="27">27</th><td><i>// TODO(deadbeef): Unify with webrtc::SimulatedClock.</i></td></tr>
+<tr><th id="28">28</th><td><b>class</b> <dfn class="type def" id="rtc::FakeClock" title='rtc::FakeClock' data-ref="rtc::FakeClock" data-ref-filename="rtc..FakeClock">FakeClock</dfn> : <b>public</b> <a class="type" href="time_utils.h.html#rtc::ClockInterface" title='rtc::ClockInterface' data-ref="rtc::ClockInterface" data-ref-filename="rtc..ClockInterface">ClockInterface</a> {</td></tr>
+<tr><th id="29">29</th><td> <b>public</b>:</td></tr>
+<tr><th id="30">30</th><td>  <dfn class="decl def fn" id="_ZN3rtc9FakeClockC1Ev" title='rtc::FakeClock::FakeClock' data-ref="_ZN3rtc9FakeClockC1Ev" data-ref-filename="_ZN3rtc9FakeClockC1Ev">FakeClock</dfn>() = <b>default</b>;</td></tr>
+<tr><th id="31">31</th><td>  <dfn class="decl def fn" id="_ZN3rtc9FakeClockC1ERKS0_" title='rtc::FakeClock::FakeClock' data-ref="_ZN3rtc9FakeClockC1ERKS0_" data-ref-filename="_ZN3rtc9FakeClockC1ERKS0_">FakeClock</dfn>(<em>const</em> <a class="type" href="#rtc::FakeClock" title='rtc::FakeClock' data-ref="rtc::FakeClock" data-ref-filename="rtc..FakeClock">FakeClock</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="32">32</th><td>  <a class="type" href="#rtc::FakeClock" title='rtc::FakeClock' data-ref="rtc::FakeClock" data-ref-filename="rtc..FakeClock">FakeClock</a>&amp; <dfn class="decl def fn" id="_ZN3rtc9FakeClockaSERKS0_" title='rtc::FakeClock::operator=' data-ref="_ZN3rtc9FakeClockaSERKS0_" data-ref-filename="_ZN3rtc9FakeClockaSERKS0_"><b>operator</b>=</dfn>(<em>const</em> <a class="type" href="#rtc::FakeClock" title='rtc::FakeClock' data-ref="rtc::FakeClock" data-ref-filename="rtc..FakeClock">FakeClock</a>&amp;) = <b>delete</b>;</td></tr>
+<tr><th id="33">33</th><td>  <dfn class="virtual decl def fn" id="_ZN3rtc9FakeClockD1Ev" title='rtc::FakeClock::~FakeClock' data-ref="_ZN3rtc9FakeClockD1Ev" data-ref-filename="_ZN3rtc9FakeClockD1Ev">~FakeClock</dfn>() override = <b>default</b>;</td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td>  <i>// ClockInterface implementation.</i></td></tr>
+<tr><th id="36">36</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <a class="virtual decl fn" href="fake_clock.cc.html#_ZNK3rtc9FakeClock9TimeNanosEv" title='rtc::FakeClock::TimeNanos' data-ref="_ZNK3rtc9FakeClock9TimeNanosEv" data-ref-filename="_ZNK3rtc9FakeClock9TimeNanosEv" id="_ZNK3rtc9FakeClock9TimeNanosEv">TimeNanos</a>() <em>const</em> override;</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td>  <i>// Methods that can be used by the test to control the time.</i></td></tr>
+<tr><th id="39">39</th><td><i></i></td></tr>
+<tr><th id="40">40</th><td><i>  // Should only be used to set a time in the future.</i></td></tr>
+<tr><th id="41">41</th><td>  <em>void</em> <a class="decl fn" href="fake_clock.cc.html#_ZN3rtc9FakeClock7SetTimeEN6webrtc9TimestampE" title='rtc::FakeClock::SetTime' data-ref="_ZN3rtc9FakeClock7SetTimeEN6webrtc9TimestampE" data-ref-filename="_ZN3rtc9FakeClock7SetTimeEN6webrtc9TimestampE" id="_ZN3rtc9FakeClock7SetTimeEN6webrtc9TimestampE">SetTime</a>(<span class="namespace">webrtc::</span><a class="type" href="../api/units/timestamp.h.html#webrtc::Timestamp" title='webrtc::Timestamp' data-ref="webrtc::Timestamp" data-ref-filename="webrtc..Timestamp">Timestamp</a> <dfn class="local col1 decl" id="1new_time" title='new_time' data-type='webrtc::Timestamp' data-ref="1new_time" data-ref-filename="1new_time">new_time</dfn>);</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td>  <em>void</em> <a class="decl fn" href="fake_clock.cc.html#_ZN3rtc9FakeClock11AdvanceTimeEN6webrtc9TimeDeltaE" title='rtc::FakeClock::AdvanceTime' data-ref="_ZN3rtc9FakeClock11AdvanceTimeEN6webrtc9TimeDeltaE" data-ref-filename="_ZN3rtc9FakeClock11AdvanceTimeEN6webrtc9TimeDeltaE" id="_ZN3rtc9FakeClock11AdvanceTimeEN6webrtc9TimeDeltaE">AdvanceTime</a>(<span class="namespace">webrtc::</span><a class="type" href="../api/units/time_delta.h.html#webrtc::TimeDelta" title='webrtc::TimeDelta' data-ref="webrtc::TimeDelta" data-ref-filename="webrtc..TimeDelta">TimeDelta</a> <dfn class="local col2 decl" id="2delta" title='delta' data-type='webrtc::TimeDelta' data-ref="2delta" data-ref-filename="2delta">delta</dfn>);</td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td> <b>private</b>:</td></tr>
+<tr><th id="46">46</th><td>  <em>mutable</em> <span class="namespace">webrtc::</span><a class="type" href="synchronization/mutex.h.html#webrtc::Mutex" title='webrtc::Mutex' data-ref="webrtc::Mutex" data-ref-filename="webrtc..Mutex">Mutex</a> <dfn class="decl field" id="rtc::FakeClock::lock_" title='rtc::FakeClock::lock_' data-ref="rtc::FakeClock::lock_" data-ref-filename="rtc..FakeClock..lock_">lock_</dfn>;</td></tr>
+<tr><th id="47">47</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl field" id="rtc::FakeClock::time_ns_" title='rtc::FakeClock::time_ns_' data-ref="rtc::FakeClock::time_ns_" data-ref-filename="rtc..FakeClock..time_ns_">time_ns_</dfn> <a class="macro" href="thread_annotations.h.html#31" title="__attribute__((guarded_by(lock_)))" data-ref="_M/RTC_GUARDED_BY">RTC_GUARDED_BY</a>(<a class="ref field" href="#rtc::FakeClock::lock_" title='rtc::FakeClock::lock_' data-ref="rtc::FakeClock::lock_" data-ref-filename="rtc..FakeClock..lock_">lock_</a>) = <var>0</var>;</td></tr>
+<tr><th id="48">48</th><td>};</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><b>class</b> <dfn class="type def" id="rtc::ThreadProcessingFakeClock" title='rtc::ThreadProcessingFakeClock' data-ref="rtc::ThreadProcessingFakeClock" data-ref-filename="rtc..ThreadProcessingFakeClock">ThreadProcessingFakeClock</dfn> : <b>public</b> <a class="type" href="time_utils.h.html#rtc::ClockInterface" title='rtc::ClockInterface' data-ref="rtc::ClockInterface" data-ref-filename="rtc..ClockInterface">ClockInterface</a> {</td></tr>
+<tr><th id="51">51</th><td> <b>public</b>:</td></tr>
+<tr><th id="52">52</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="virtual decl def fn" id="_ZNK3rtc25ThreadProcessingFakeClock9TimeNanosEv" title='rtc::ThreadProcessingFakeClock::TimeNanos' data-ref="_ZNK3rtc25ThreadProcessingFakeClock9TimeNanosEv" data-ref-filename="_ZNK3rtc25ThreadProcessingFakeClock9TimeNanosEv">TimeNanos</dfn>() <em>const</em> override { <b>return</b> <a class="member field" href="#rtc::ThreadProcessingFakeClock::clock_" title='rtc::ThreadProcessingFakeClock::clock_' data-ref="rtc::ThreadProcessingFakeClock::clock_" data-ref-filename="rtc..ThreadProcessingFakeClock..clock_">clock_</a>.<a class="virtual ref fn" href="fake_clock.cc.html#_ZNK3rtc9FakeClock9TimeNanosEv" title='rtc::FakeClock::TimeNanos' data-ref="_ZNK3rtc9FakeClock9TimeNanosEv" data-ref-filename="_ZNK3rtc9FakeClock9TimeNanosEv">TimeNanos</a>(); }</td></tr>
+<tr><th id="53">53</th><td>  <em>void</em> <a class="decl fn" href="fake_clock.cc.html#_ZN3rtc25ThreadProcessingFakeClock7SetTimeEN6webrtc9TimestampE" title='rtc::ThreadProcessingFakeClock::SetTime' data-ref="_ZN3rtc25ThreadProcessingFakeClock7SetTimeEN6webrtc9TimestampE" data-ref-filename="_ZN3rtc25ThreadProcessingFakeClock7SetTimeEN6webrtc9TimestampE" id="_ZN3rtc25ThreadProcessingFakeClock7SetTimeEN6webrtc9TimestampE">SetTime</a>(<span class="namespace">webrtc::</span><a class="type" href="../api/units/timestamp.h.html#webrtc::Timestamp" title='webrtc::Timestamp' data-ref="webrtc::Timestamp" data-ref-filename="webrtc..Timestamp">Timestamp</a> <dfn class="local col3 decl" id="3time" title='time' data-type='webrtc::Timestamp' data-ref="3time" data-ref-filename="3time">time</dfn>);</td></tr>
+<tr><th id="54">54</th><td>  <em>void</em> <a class="decl fn" href="fake_clock.cc.html#_ZN3rtc25ThreadProcessingFakeClock11AdvanceTimeEN6webrtc9TimeDeltaE" title='rtc::ThreadProcessingFakeClock::AdvanceTime' data-ref="_ZN3rtc25ThreadProcessingFakeClock11AdvanceTimeEN6webrtc9TimeDeltaE" data-ref-filename="_ZN3rtc25ThreadProcessingFakeClock11AdvanceTimeEN6webrtc9TimeDeltaE" id="_ZN3rtc25ThreadProcessingFakeClock11AdvanceTimeEN6webrtc9TimeDeltaE">AdvanceTime</a>(<span class="namespace">webrtc::</span><a class="type" href="../api/units/time_delta.h.html#webrtc::TimeDelta" title='webrtc::TimeDelta' data-ref="webrtc::TimeDelta" data-ref-filename="webrtc..TimeDelta">TimeDelta</a> <dfn class="local col4 decl" id="4delta" title='delta' data-type='webrtc::TimeDelta' data-ref="4delta" data-ref-filename="4delta">delta</dfn>);</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td> <b>private</b>:</td></tr>
+<tr><th id="57">57</th><td>  <a class="type" href="#rtc::FakeClock" title='rtc::FakeClock' data-ref="rtc::FakeClock" data-ref-filename="rtc..FakeClock">FakeClock</a> <dfn class="decl field" id="rtc::ThreadProcessingFakeClock::clock_" title='rtc::ThreadProcessingFakeClock::clock_' data-ref="rtc::ThreadProcessingFakeClock::clock_" data-ref-filename="rtc..ThreadProcessingFakeClock..clock_">clock_</dfn>;</td></tr>
+<tr><th id="58">58</th><td>};</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><i>// Helper class that sets itself as the global clock in its constructor and</i></td></tr>
+<tr><th id="61">61</th><td><i>// unsets it in its destructor.</i></td></tr>
+<tr><th id="62">62</th><td><b>class</b> <dfn class="type def" id="rtc::ScopedBaseFakeClock" title='rtc::ScopedBaseFakeClock' data-ref="rtc::ScopedBaseFakeClock" data-ref-filename="rtc..ScopedBaseFakeClock">ScopedBaseFakeClock</dfn> : <b>public</b> <a class="type" href="#rtc::FakeClock" title='rtc::FakeClock' data-ref="rtc::FakeClock" data-ref-filename="rtc..FakeClock">FakeClock</a> {</td></tr>
+<tr><th id="63">63</th><td> <b>public</b>:</td></tr>
+<tr><th id="64">64</th><td>  <a class="decl fn" href="fake_clock.cc.html#_ZN3rtc19ScopedBaseFakeClockC1Ev" title='rtc::ScopedBaseFakeClock::ScopedBaseFakeClock' data-ref="_ZN3rtc19ScopedBaseFakeClockC1Ev" data-ref-filename="_ZN3rtc19ScopedBaseFakeClockC1Ev" id="_ZN3rtc19ScopedBaseFakeClockC1Ev">ScopedBaseFakeClock</a>();</td></tr>
+<tr><th id="65">65</th><td>  <a class="virtual decl fn" href="fake_clock.cc.html#_ZN3rtc19ScopedBaseFakeClockD1Ev" title='rtc::ScopedBaseFakeClock::~ScopedBaseFakeClock' data-ref="_ZN3rtc19ScopedBaseFakeClockD1Ev" data-ref-filename="_ZN3rtc19ScopedBaseFakeClockD1Ev" id="_ZN3rtc19ScopedBaseFakeClockD1Ev">~ScopedBaseFakeClock</a>() override;</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td> <b>private</b>:</td></tr>
+<tr><th id="68">68</th><td>  <a class="type" href="time_utils.h.html#rtc::ClockInterface" title='rtc::ClockInterface' data-ref="rtc::ClockInterface" data-ref-filename="rtc..ClockInterface">ClockInterface</a>* <dfn class="decl field" id="rtc::ScopedBaseFakeClock::prev_clock_" title='rtc::ScopedBaseFakeClock::prev_clock_' data-ref="rtc::ScopedBaseFakeClock::prev_clock_" data-ref-filename="rtc..ScopedBaseFakeClock..prev_clock_">prev_clock_</dfn>;</td></tr>
+<tr><th id="69">69</th><td>};</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><i>// TODO(srte): Rename this to reflect that it also does thread processing.</i></td></tr>
+<tr><th id="72">72</th><td><b>class</b> <dfn class="type def" id="rtc::ScopedFakeClock" title='rtc::ScopedFakeClock' data-ref="rtc::ScopedFakeClock" data-ref-filename="rtc..ScopedFakeClock">ScopedFakeClock</dfn> : <b>public</b> <a class="type" href="#rtc::ThreadProcessingFakeClock" title='rtc::ThreadProcessingFakeClock' data-ref="rtc::ThreadProcessingFakeClock" data-ref-filename="rtc..ThreadProcessingFakeClock">ThreadProcessingFakeClock</a> {</td></tr>
+<tr><th id="73">73</th><td> <b>public</b>:</td></tr>
+<tr><th id="74">74</th><td>  <a class="decl fn" href="fake_clock.cc.html#_ZN3rtc15ScopedFakeClockC1Ev" title='rtc::ScopedFakeClock::ScopedFakeClock' data-ref="_ZN3rtc15ScopedFakeClockC1Ev" data-ref-filename="_ZN3rtc15ScopedFakeClockC1Ev" id="_ZN3rtc15ScopedFakeClockC1Ev">ScopedFakeClock</a>();</td></tr>
+<tr><th id="75">75</th><td>  <a class="virtual decl fn" href="fake_clock.cc.html#_ZN3rtc15ScopedFakeClockD1Ev" title='rtc::ScopedFakeClock::~ScopedFakeClock' data-ref="_ZN3rtc15ScopedFakeClockD1Ev" data-ref-filename="_ZN3rtc15ScopedFakeClockD1Ev" id="_ZN3rtc15ScopedFakeClockD1Ev">~ScopedFakeClock</a>() override;</td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td> <b>private</b>:</td></tr>
+<tr><th id="78">78</th><td>  <a class="type" href="time_utils.h.html#rtc::ClockInterface" title='rtc::ClockInterface' data-ref="rtc::ClockInterface" data-ref-filename="rtc..ClockInterface">ClockInterface</a>* <dfn class="decl field" id="rtc::ScopedFakeClock::prev_clock_" title='rtc::ScopedFakeClock::prev_clock_' data-ref="rtc::ScopedFakeClock::prev_clock_" data-ref-filename="rtc..ScopedFakeClock..prev_clock_">prev_clock_</dfn>;</td></tr>
+<tr><th id="79">79</th><td>};</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_FAKE_CLOCK_H_</u></td></tr>
+<tr><th id="84">84</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='fake_clock.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/fake_clock.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

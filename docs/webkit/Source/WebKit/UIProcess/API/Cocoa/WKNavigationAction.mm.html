@@ -1,0 +1,240 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WKNavigationAction.mm source code [webkit/Source/WebKit/UIProcess/API/Cocoa/WKNavigationAction.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKit/UIProcess/API/Cocoa/WKNavigationAction.mm'; var root_path = '../../../../../..'; var data_path = '../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../..'>webkit</a>/<a href='../../../..'>Source</a>/<a href='../../..'>WebKit</a>/<a href='../..'>UIProcess</a>/<a href='..'>API</a>/<a href='./'>Cocoa</a>/<a href='WKNavigationAction.mm.html'>WKNavigationAction.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2014 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import <a href="../../../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#import <a href="WKNavigationActionInternal.h.html">"WKNavigationActionInternal.h"</a></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="../../../Shared/NavigationActionData.h.html">"NavigationActionData.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="WKFrameInfoInternal.h.html">"WKFrameInfoInternal.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="WKNavigationInternal.h.html">"WKNavigationInternal.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#import <a href="../../../Shared/mac/WebEventFactory.h.html">"WebEventFactory.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#import <a href="_WKUserInitiatedActionInternal.h.html">"_WKUserInitiatedActionInternal.h"</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#import <a href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FloatPoint.h.html">&lt;WebCore/FloatPoint.h&gt;</a></u></td></tr>
+<tr><th id="35">35</th><td><u>#import <a href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/WebCoreObjCExtras.h.html">&lt;WebCore/WebCoreObjCExtras.h&gt;</a></u></td></tr>
+<tr><th id="36">36</th><td><u>#import <a href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html">&lt;wtf/RetainPtr.h&gt;</a></u></td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><u>#<span data-ppcond="38">if</span> <a class="macro" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="39">39</th><td><u>#import "WebIOSEventFactory.h"</u></td></tr>
+<tr><th id="40">40</th><td><u>#<span data-ppcond="38">endif</span></u></td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td>@implementation WKNavigationAction</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><em>static</em> <a class="typedef" href="WKNavigationAction.h.html#47" title='WKNavigationType' data-type='enum WKNavigationType' data-ref="WKNavigationType" data-ref-filename="WKNavigationType">WKNavigationType</a> <dfn class="decl def fn" id="_ZL18toWKNavigationTypeN7WebCore14NavigationTypeE" title='toWKNavigationType' data-ref="_ZL18toWKNavigationTypeN7WebCore14NavigationTypeE" data-ref-filename="_ZL18toWKNavigationTypeN7WebCore14NavigationTypeE">toWKNavigationType</dfn>(<span class="namespace">WebCore::</span><a class="type" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoaderTypes.h.html#WebCore::NavigationType" title='WebCore::NavigationType' data-ref="WebCore::NavigationType" data-ref-filename="WebCore..NavigationType">NavigationType</a> <dfn class="local col7 decl" id="57navigationType" title='navigationType' data-type='WebCore::NavigationType' data-ref="57navigationType" data-ref-filename="57navigationType">navigationType</dfn>)</td></tr>
+<tr><th id="45">45</th><td>{</td></tr>
+<tr><th id="46">46</th><td>    <b>switch</b> (<a class="local col7 ref" href="#57navigationType" title='navigationType' data-ref="57navigationType" data-ref-filename="57navigationType">navigationType</a>) {</td></tr>
+<tr><th id="47">47</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoaderTypes.h.html#WebCore::NavigationType" title='WebCore::NavigationType' data-ref="WebCore::NavigationType" data-ref-filename="WebCore..NavigationType">NavigationType</a>::<a class="enum" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoaderTypes.h.html#WebCore::NavigationType::LinkClicked" title='WebCore::NavigationType::LinkClicked' data-ref="WebCore::NavigationType::LinkClicked" data-ref-filename="WebCore..NavigationType..LinkClicked">LinkClicked</a>:</td></tr>
+<tr><th id="48">48</th><td>        <b>return</b> <a class="enum" href="WKNavigationAction.h.html#WKNavigationTypeLinkActivated" title='WKNavigationTypeLinkActivated' data-ref="WKNavigationTypeLinkActivated" data-ref-filename="WKNavigationTypeLinkActivated">WKNavigationTypeLinkActivated</a>;</td></tr>
+<tr><th id="49">49</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoaderTypes.h.html#WebCore::NavigationType" title='WebCore::NavigationType' data-ref="WebCore::NavigationType" data-ref-filename="WebCore..NavigationType">NavigationType</a>::<a class="enum" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoaderTypes.h.html#WebCore::NavigationType::FormSubmitted" title='WebCore::NavigationType::FormSubmitted' data-ref="WebCore::NavigationType::FormSubmitted" data-ref-filename="WebCore..NavigationType..FormSubmitted">FormSubmitted</a>:</td></tr>
+<tr><th id="50">50</th><td>        <b>return</b> <a class="enum" href="WKNavigationAction.h.html#WKNavigationTypeFormSubmitted" title='WKNavigationTypeFormSubmitted' data-ref="WKNavigationTypeFormSubmitted" data-ref-filename="WKNavigationTypeFormSubmitted">WKNavigationTypeFormSubmitted</a>;</td></tr>
+<tr><th id="51">51</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoaderTypes.h.html#WebCore::NavigationType" title='WebCore::NavigationType' data-ref="WebCore::NavigationType" data-ref-filename="WebCore..NavigationType">NavigationType</a>::<a class="enum" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoaderTypes.h.html#WebCore::NavigationType::BackForward" title='WebCore::NavigationType::BackForward' data-ref="WebCore::NavigationType::BackForward" data-ref-filename="WebCore..NavigationType..BackForward">BackForward</a>:</td></tr>
+<tr><th id="52">52</th><td>        <b>return</b> <a class="enum" href="WKNavigationAction.h.html#WKNavigationTypeBackForward" title='WKNavigationTypeBackForward' data-ref="WKNavigationTypeBackForward" data-ref-filename="WKNavigationTypeBackForward">WKNavigationTypeBackForward</a>;</td></tr>
+<tr><th id="53">53</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoaderTypes.h.html#WebCore::NavigationType" title='WebCore::NavigationType' data-ref="WebCore::NavigationType" data-ref-filename="WebCore..NavigationType">NavigationType</a>::<a class="enum" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoaderTypes.h.html#WebCore::NavigationType::Reload" title='WebCore::NavigationType::Reload' data-ref="WebCore::NavigationType::Reload" data-ref-filename="WebCore..NavigationType..Reload">Reload</a>:</td></tr>
+<tr><th id="54">54</th><td>        <b>return</b> <a class="enum" href="WKNavigationAction.h.html#WKNavigationTypeReload" title='WKNavigationTypeReload' data-ref="WKNavigationTypeReload" data-ref-filename="WKNavigationTypeReload">WKNavigationTypeReload</a>;</td></tr>
+<tr><th id="55">55</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoaderTypes.h.html#WebCore::NavigationType" title='WebCore::NavigationType' data-ref="WebCore::NavigationType" data-ref-filename="WebCore..NavigationType">NavigationType</a>::<a class="enum" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoaderTypes.h.html#WebCore::NavigationType::FormResubmitted" title='WebCore::NavigationType::FormResubmitted' data-ref="WebCore::NavigationType::FormResubmitted" data-ref-filename="WebCore..NavigationType..FormResubmitted">FormResubmitted</a>:</td></tr>
+<tr><th id="56">56</th><td>        <b>return</b> <a class="enum" href="WKNavigationAction.h.html#WKNavigationTypeFormResubmitted" title='WKNavigationTypeFormResubmitted' data-ref="WKNavigationTypeFormResubmitted" data-ref-filename="WKNavigationTypeFormResubmitted">WKNavigationTypeFormResubmitted</a>;</td></tr>
+<tr><th id="57">57</th><td>    <b>case</b> <span class="namespace">WebCore::</span><a class="type" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoaderTypes.h.html#WebCore::NavigationType" title='WebCore::NavigationType' data-ref="WebCore::NavigationType" data-ref-filename="WebCore..NavigationType">NavigationType</a>::<a class="enum" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoaderTypes.h.html#WebCore::NavigationType::Other" title='WebCore::NavigationType::Other' data-ref="WebCore::NavigationType::Other" data-ref-filename="WebCore..NavigationType..Other">Other</a>:</td></tr>
+<tr><th id="58">58</th><td>        <b>return</b> <a class="enum" href="WKNavigationAction.h.html#WKNavigationTypeOther" title='WKNavigationTypeOther' data-ref="WKNavigationTypeOther" data-ref-filename="WKNavigationTypeOther">WKNavigationTypeOther</a>;</td></tr>
+<tr><th id="59">59</th><td>    }</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td>    <a class="macro" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#368" title="do { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKit/UIProcess/API/Cocoa/WKNavigationAction.mm&quot;, 61, __PRETTY_FUNCTION__, 0); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(61, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKit/UIProcess/API/Cocoa/WKNavigationAction.mm&quot;, __PRETTY_FUNCTION__, 2013); } while (false); } while (0)" data-ref="_M/ASSERT_NOT_REACHED">ASSERT_NOT_REACHED</a>();</td></tr>
+<tr><th id="62">62</th><td>    <b>return</b> <a class="enum" href="WKNavigationAction.h.html#WKNavigationTypeOther" title='WKNavigationTypeOther' data-ref="WKNavigationTypeOther" data-ref-filename="WKNavigationTypeOther">WKNavigationTypeOther</a>;</td></tr>
+<tr><th id="63">63</th><td>}</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td><u>#<span data-ppcond="65">if</span> <a class="macro" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="66">66</th><td><em>static</em> WKSyntheticClickType toWKSyntheticClickType(WebKit::WebMouseEvent::SyntheticClickType syntheticClickType)</td></tr>
+<tr><th id="67">67</th><td>{</td></tr>
+<tr><th id="68">68</th><td>    <b>switch</b> (syntheticClickType) {</td></tr>
+<tr><th id="69">69</th><td>    <b>case</b> WebKit::WebMouseEvent::NoTap:</td></tr>
+<tr><th id="70">70</th><td>        <b>return</b> WKSyntheticClickTypeNoTap;</td></tr>
+<tr><th id="71">71</th><td>    <b>case</b> WebKit::WebMouseEvent::OneFingerTap:</td></tr>
+<tr><th id="72">72</th><td>        <b>return</b> WKSyntheticClickTypeOneFingerTap;</td></tr>
+<tr><th id="73">73</th><td>    <b>case</b> WebKit::WebMouseEvent::TwoFingerTap:</td></tr>
+<tr><th id="74">74</th><td>        <b>return</b> WKSyntheticClickTypeTwoFingerTap;</td></tr>
+<tr><th id="75">75</th><td>    }</td></tr>
+<tr><th id="76">76</th><td>    ASSERT_NOT_REACHED();</td></tr>
+<tr><th id="77">77</th><td>    <b>return</b> WKSyntheticClickTypeNoTap;</td></tr>
+<tr><th id="78">78</th><td>}</td></tr>
+<tr><th id="79">79</th><td><u>#<span data-ppcond="65">endif</span></u></td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>- (<em>void</em>)dealloc</td></tr>
+<tr><th id="82">82</th><td>{</td></tr>
+<tr><th id="83">83</th><td>    <b>if</b> (<a class="ref fn" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/WebCoreObjCExtras.h.html#_Z42WebCoreObjCScheduleDeallocateOnMainRunLoopP10objc_classP11objc_object" title='WebCoreObjCScheduleDeallocateOnMainRunLoop' data-ref="_Z42WebCoreObjCScheduleDeallocateOnMainRunLoopP10objc_classP11objc_object" data-ref-filename="_Z42WebCoreObjCScheduleDeallocateOnMainRunLoopP10objc_classP11objc_object">WebCoreObjCScheduleDeallocateOnMainRunLoop</a>(WKNavigationAction.<b>class</b>, <span class='local col1 ref' title='self' data-ref="1self" data-ref-filename="1self">self</span>))</td></tr>
+<tr><th id="84">84</th><td>        <b>return</b>;</td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td>    _navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="virtual ref fn" href="../APINavigationAction.h.html#38" title='API::NavigationAction::~NavigationAction' data-ref="_ZN3API16NavigationActionD1Ev" data-ref-filename="_ZN3API16NavigationActionD1Ev">~NavigationAction</a>();</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td>    [super dealloc];</td></tr>
+<tr><th id="89">89</th><td>}</td></tr>
+<tr><th id="90">90</th><td></td></tr>
+<tr><th id="91">91</th><td>- (NSString *)description</td></tr>
+<tr><th id="92">92</th><td>{</td></tr>
+<tr><th id="93">93</th><td>    <b>return</b> [NSString stringWithFormat:@<q>"&lt;%@: %p; navigationType = %ld; syntheticClickType = %ld; position x = %.2f y = %.2f request = %@; sourceFrame = %@; targetFrame = %@&gt;"</q>, <span class='ref fn' title='NSStringFromClass' data-ref="NSStringFromClass" data-ref-filename="NSStringFromClass">NSStringFromClass</span>(<span class='local col1 ref' title='self' data-ref="1self" data-ref-filename="1self">self</span>.<b>class</b>), <span class='local col1 ref' title='self' data-ref="1self" data-ref-filename="1self">self</span>,</td></tr>
+<tr><th id="94">94</th><td>        (<em>long</em>)<span class='local col1 ref' title='self' data-ref="1self" data-ref-filename="1self">self</span>.navigationType,</td></tr>
+<tr><th id="95">95</th><td><u>#<span data-ppcond="95">if</span> <a class="macro" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="96">96</th><td>        (<em>long</em>)self._syntheticClickType, self._clickLocationInRootViewCoordinates.x, self._clickLocationInRootViewCoordinates.y,</td></tr>
+<tr><th id="97">97</th><td><u>#<span data-ppcond="95">else</span></u></td></tr>
+<tr><th id="98">98</th><td>        <var>0L</var>, <var>0.0</var>, <var>0.0</var>,</td></tr>
+<tr><th id="99">99</th><td><u>#<span data-ppcond="95">endif</span></u></td></tr>
+<tr><th id="100">100</th><td>        <span class='local col1 ref' title='self' data-ref="1self" data-ref-filename="1self">self</span>.request, <span class='local col1 ref' title='self' data-ref="1self" data-ref-filename="1self">self</span>.sourceFrame, <span class='local col1 ref' title='self' data-ref="1self" data-ref-filename="1self">self</span>.targetFrame];</td></tr>
+<tr><th id="101">101</th><td>}</td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td>- (WKFrameInfo *)sourceFrame</td></tr>
+<tr><th id="104">104</th><td>{</td></tr>
+<tr><th id="105">105</th><td>    <b>return</b> <a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN6WebKit7wrapperEPT_" title='WebKit::wrapper' data-ref="_ZN6WebKit7wrapperEPT_" data-ref-filename="_ZN6WebKit7wrapperEPT_">wrapper</a>(_navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction11sourceFrameEv" title='API::NavigationAction::sourceFrame' data-ref="_ZNK3API16NavigationAction11sourceFrameEv" data-ref-filename="_ZNK3API16NavigationAction11sourceFrameEv">sourceFrame</a>());</td></tr>
+<tr><th id="106">106</th><td>}</td></tr>
+<tr><th id="107">107</th><td></td></tr>
+<tr><th id="108">108</th><td>- (WKFrameInfo *)targetFrame</td></tr>
+<tr><th id="109">109</th><td>{</td></tr>
+<tr><th id="110">110</th><td>    <b>return</b> <a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN6WebKit7wrapperEPT_" title='WebKit::wrapper' data-ref="_ZN6WebKit7wrapperEPT_" data-ref-filename="_ZN6WebKit7wrapperEPT_">wrapper</a>(_navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction11targetFrameEv" title='API::NavigationAction::targetFrame' data-ref="_ZNK3API16NavigationAction11targetFrameEv" data-ref-filename="_ZNK3API16NavigationAction11targetFrameEv">targetFrame</a>());</td></tr>
+<tr><th id="111">111</th><td>}</td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td>- (<a class="typedef" href="WKNavigationAction.h.html#47" title='WKNavigationType' data-type='enum WKNavigationType' data-ref="WKNavigationType" data-ref-filename="WKNavigationType">WKNavigationType</a>)navigationType</td></tr>
+<tr><th id="114">114</th><td>{</td></tr>
+<tr><th id="115">115</th><td>    <b>return</b> <a class="ref fn" href="#_ZL18toWKNavigationTypeN7WebCore14NavigationTypeE" title='toWKNavigationType' data-ref="_ZL18toWKNavigationTypeN7WebCore14NavigationTypeE" data-ref-filename="_ZL18toWKNavigationTypeN7WebCore14NavigationTypeE">toWKNavigationType</a>(_navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction14navigationTypeEv" title='API::NavigationAction::navigationType' data-ref="_ZNK3API16NavigationAction14navigationTypeEv" data-ref-filename="_ZNK3API16NavigationAction14navigationTypeEv">navigationType</a>());</td></tr>
+<tr><th id="116">116</th><td>}</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td>- (NSURLRequest *)request</td></tr>
+<tr><th id="119">119</th><td>{</td></tr>
+<tr><th id="120">120</th><td>    <b>return</b> _navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction7requestEv" title='API::NavigationAction::request' data-ref="_ZNK3API16NavigationAction7requestEv" data-ref-filename="_ZNK3API16NavigationAction7requestEv">request</a>().<a class="ref fn" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ResourceRequest.h.html#_ZNK7WebCore15ResourceRequest12nsURLRequestENS_20HTTPBodyUpdatePolicyE" title='WebCore::ResourceRequest::nsURLRequest' data-ref="_ZNK7WebCore15ResourceRequest12nsURLRequestENS_20HTTPBodyUpdatePolicyE" data-ref-filename="_ZNK7WebCore15ResourceRequest12nsURLRequestENS_20HTTPBodyUpdatePolicyE">nsURLRequest</a>(<span class="namespace">WebCore::</span><a class="type" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ResourceRequestBase.h.html#WebCore::HTTPBodyUpdatePolicy" title='WebCore::HTTPBodyUpdatePolicy' data-ref="WebCore::HTTPBodyUpdatePolicy" data-ref-filename="WebCore..HTTPBodyUpdatePolicy">HTTPBodyUpdatePolicy</a>::<a class="enum" href="../../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ResourceRequestBase.h.html#WebCore::UpdateHTTPBody" title='WebCore::UpdateHTTPBody' data-ref="WebCore::UpdateHTTPBody" data-ref-filename="WebCore..UpdateHTTPBody">UpdateHTTPBody</a>);</td></tr>
+<tr><th id="121">121</th><td>}</td></tr>
+<tr><th id="122">122</th><td></td></tr>
+<tr><th id="123">123</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)shouldPerformDownload</td></tr>
+<tr><th id="124">124</th><td>{</td></tr>
+<tr><th id="125">125</th><td>    <b>return</b> _navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction21shouldPerformDownloadEv" title='API::NavigationAction::shouldPerformDownload' data-ref="_ZNK3API16NavigationAction21shouldPerformDownloadEv" data-ref-filename="_ZNK3API16NavigationAction21shouldPerformDownloadEv">shouldPerformDownload</a>();</td></tr>
+<tr><th id="126">126</th><td>}</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td><u>#<span data-ppcond="128">if</span> <a class="macro" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="129">129</th><td>- (WKSyntheticClickType)_syntheticClickType</td></tr>
+<tr><th id="130">130</th><td>{</td></tr>
+<tr><th id="131">131</th><td>    <b>return</b> toWKSyntheticClickType(_navigationAction-&gt;syntheticClickType());</td></tr>
+<tr><th id="132">132</th><td>}</td></tr>
+<tr><th id="133">133</th><td></td></tr>
+<tr><th id="134">134</th><td>- (CGPoint)_clickLocationInRootViewCoordinates</td></tr>
+<tr><th id="135">135</th><td>{</td></tr>
+<tr><th id="136">136</th><td>    <b>return</b> _navigationAction-&gt;clickLocationInRootViewCoordinates();</td></tr>
+<tr><th id="137">137</th><td>}</td></tr>
+<tr><th id="138">138</th><td><u>#<span data-ppcond="128">endif</span></u></td></tr>
+<tr><th id="139">139</th><td></td></tr>
+<tr><th id="140">140</th><td><u>#<span data-ppcond="140">if</span> <a class="macro" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined 1 &amp;&amp; 1)" data-ref="_M/PLATFORM">PLATFORM</a>(MAC)</u></td></tr>
+<tr><th id="141">141</th><td></td></tr>
+<tr><th id="142">142</th><td>- (<span class='typedef' title='NSEventModifierFlags' data-type='NSUInteger' data-ref="NSEventModifierFlags" data-ref-filename="NSEventModifierFlags">NSEventModifierFlags</span>)modifierFlags</td></tr>
+<tr><th id="143">143</th><td>{</td></tr>
+<tr><th id="144">144</th><td>    <b>return</b> <span class="namespace">WebKit::</span><a class="type" href="../../../Shared/mac/WebEventFactory.h.html#WebKit::WebEventFactory" title='WebKit::WebEventFactory' data-ref="WebKit::WebEventFactory" data-ref-filename="WebKit..WebEventFactory">WebEventFactory</a>::<a class="ref fn" href="../../../Shared/mac/WebEventFactory.h.html#_ZN6WebKit15WebEventFactory22toNSEventModifierFlagsEN3WTF9OptionSetINS_8WebEvent8ModifierEEE" title='WebKit::WebEventFactory::toNSEventModifierFlags' data-ref="_ZN6WebKit15WebEventFactory22toNSEventModifierFlagsEN3WTF9OptionSetINS_8WebEvent8ModifierEEE" data-ref-filename="_ZN6WebKit15WebEventFactory22toNSEventModifierFlagsEN3WTF9OptionSetINS_8WebEvent8ModifierEEE">toNSEventModifierFlags</a>(_navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction9modifiersEv" title='API::NavigationAction::modifiers' data-ref="_ZNK3API16NavigationAction9modifiersEv" data-ref-filename="_ZNK3API16NavigationAction9modifiersEv">modifiers</a>());</td></tr>
+<tr><th id="145">145</th><td>}</td></tr>
+<tr><th id="146">146</th><td></td></tr>
+<tr><th id="147">147</th><td>- (<span class='typedef' title='NSInteger' data-type='long' data-ref="NSInteger" data-ref-filename="NSInteger">NSInteger</span>)buttonNumber</td></tr>
+<tr><th id="148">148</th><td>{</td></tr>
+<tr><th id="149">149</th><td>    <b>return</b> <span class="namespace">WebKit::</span><a class="type" href="../../../Shared/mac/WebEventFactory.h.html#WebKit::WebEventFactory" title='WebKit::WebEventFactory' data-ref="WebKit::WebEventFactory" data-ref-filename="WebKit..WebEventFactory">WebEventFactory</a>::<a class="ref fn" href="../../../Shared/mac/WebEventFactory.h.html#_ZN6WebKit15WebEventFactory16toNSButtonNumberENS_13WebMouseEvent6ButtonE" title='WebKit::WebEventFactory::toNSButtonNumber' data-ref="_ZN6WebKit15WebEventFactory16toNSButtonNumberENS_13WebMouseEvent6ButtonE" data-ref-filename="_ZN6WebKit15WebEventFactory16toNSButtonNumberENS_13WebMouseEvent6ButtonE">toNSButtonNumber</a>(_navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction11mouseButtonEv" title='API::NavigationAction::mouseButton' data-ref="_ZNK3API16NavigationAction11mouseButtonEv" data-ref-filename="_ZNK3API16NavigationAction11mouseButtonEv">mouseButton</a>());</td></tr>
+<tr><th id="150">150</th><td>}</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td><u>#<span data-ppcond="140">else</span></u></td></tr>
+<tr><th id="153">153</th><td></td></tr>
+<tr><th id="154">154</th><td>- (UIKeyModifierFlags)modifierFlags</td></tr>
+<tr><th id="155">155</th><td>{</td></tr>
+<tr><th id="156">156</th><td>    <b>return</b> WebIOSEventFactory::toUIKeyModifierFlags(_navigationAction-&gt;modifiers());</td></tr>
+<tr><th id="157">157</th><td>}</td></tr>
+<tr><th id="158">158</th><td></td></tr>
+<tr><th id="159">159</th><td><u>#<span data-ppcond="140">endif</span></u></td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td><u>#pragma mark WKObject protocol implementation</u></td></tr>
+<tr><th id="162">162</th><td></td></tr>
+<tr><th id="163">163</th><td>- (<span class="namespace">API::</span><a class="type" href="../../../Shared/API/APIObject.h.html#API::Object" title='API::Object' data-ref="API::Object" data-ref-filename="API..Object">Object</a>&amp;)_apiObject</td></tr>
+<tr><th id="164">164</th><td>{</td></tr>
+<tr><th id="165">165</th><td>    <b>return</b> <a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStoragedeEv" title='API::ObjectStorage::operator*' data-ref="_ZN3API13ObjectStoragedeEv" data-ref-filename="_ZN3API13ObjectStoragedeEv">*</a>_navigationAction;</td></tr>
+<tr><th id="166">166</th><td>}</td></tr>
+<tr><th id="167">167</th><td></td></tr>
+<tr><th id="168">168</th><td>@end</td></tr>
+<tr><th id="169">169</th><td></td></tr>
+<tr><th id="170">170</th><td>@implementation WKNavigationAction (WKPrivate)</td></tr>
+<tr><th id="171">171</th><td></td></tr>
+<tr><th id="172">172</th><td>- (NSURL *)_originalURL</td></tr>
+<tr><th id="173">173</th><td>{</td></tr>
+<tr><th id="174">174</th><td>    <b>return</b> <a class="ref fn fake" href="../../../../../WebKitBuild/Debug/usr/local/include/wtf/URL.h.html#_ZNK3WTF3URLcvP5NSURLEv" title='WTF::URL::operator NSURL *' data-ref="_ZNK3WTF3URLcvP5NSURLEv" data-ref-filename="_ZNK3WTF3URLcvP5NSURLEv"></a>_navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction11originalURLEv" title='API::NavigationAction::originalURL' data-ref="_ZNK3API16NavigationAction11originalURLEv" data-ref-filename="_ZNK3API16NavigationAction11originalURLEv">originalURL</a>();</td></tr>
+<tr><th id="175">175</th><td>}</td></tr>
+<tr><th id="176">176</th><td></td></tr>
+<tr><th id="177">177</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)_isUserInitiated</td></tr>
+<tr><th id="178">178</th><td>{</td></tr>
+<tr><th id="179">179</th><td>    <b>return</b> _navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction23isProcessingUserGestureEv" title='API::NavigationAction::isProcessingUserGesture' data-ref="_ZNK3API16NavigationAction23isProcessingUserGestureEv" data-ref-filename="_ZNK3API16NavigationAction23isProcessingUserGestureEv">isProcessingUserGesture</a>();</td></tr>
+<tr><th id="180">180</th><td>}</td></tr>
+<tr><th id="181">181</th><td></td></tr>
+<tr><th id="182">182</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)_canHandleRequest</td></tr>
+<tr><th id="183">183</th><td>{</td></tr>
+<tr><th id="184">184</th><td>    <b>return</b> _navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction16canHandleRequestEv" title='API::NavigationAction::canHandleRequest' data-ref="_ZNK3API16NavigationAction16canHandleRequestEv" data-ref-filename="_ZNK3API16NavigationAction16canHandleRequestEv">canHandleRequest</a>();</td></tr>
+<tr><th id="185">185</th><td>}</td></tr>
+<tr><th id="186">186</th><td></td></tr>
+<tr><th id="187">187</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)_shouldOpenExternalSchemes</td></tr>
+<tr><th id="188">188</th><td>{</td></tr>
+<tr><th id="189">189</th><td>    <b>return</b> _navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction25shouldOpenExternalSchemesEv" title='API::NavigationAction::shouldOpenExternalSchemes' data-ref="_ZNK3API16NavigationAction25shouldOpenExternalSchemesEv" data-ref-filename="_ZNK3API16NavigationAction25shouldOpenExternalSchemesEv">shouldOpenExternalSchemes</a>();</td></tr>
+<tr><th id="190">190</th><td>}</td></tr>
+<tr><th id="191">191</th><td></td></tr>
+<tr><th id="192">192</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)_shouldOpenAppLinks</td></tr>
+<tr><th id="193">193</th><td>{</td></tr>
+<tr><th id="194">194</th><td>    <b>return</b> _navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction18shouldOpenAppLinksEv" title='API::NavigationAction::shouldOpenAppLinks' data-ref="_ZNK3API16NavigationAction18shouldOpenAppLinksEv" data-ref-filename="_ZNK3API16NavigationAction18shouldOpenAppLinksEv">shouldOpenAppLinks</a>();</td></tr>
+<tr><th id="195">195</th><td>}</td></tr>
+<tr><th id="196">196</th><td></td></tr>
+<tr><th id="197">197</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)_shouldPerformDownload</td></tr>
+<tr><th id="198">198</th><td>{</td></tr>
+<tr><th id="199">199</th><td>    <b>return</b> _navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction21shouldPerformDownloadEv" title='API::NavigationAction::shouldPerformDownload' data-ref="_ZNK3API16NavigationAction21shouldPerformDownloadEv" data-ref-filename="_ZNK3API16NavigationAction21shouldPerformDownloadEv">shouldPerformDownload</a>();</td></tr>
+<tr><th id="200">200</th><td>}</td></tr>
+<tr><th id="201">201</th><td></td></tr>
+<tr><th id="202">202</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)_shouldOpenExternalURLs</td></tr>
+<tr><th id="203">203</th><td>{</td></tr>
+<tr><th id="204">204</th><td>    <b>return</b> [<span class='local col1 ref' title='self' data-ref="1self" data-ref-filename="1self">self</span> _shouldOpenExternalSchemes];</td></tr>
+<tr><th id="205">205</th><td>}</td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td>- (_WKUserInitiatedAction *)_userInitiatedAction</td></tr>
+<tr><th id="208">208</th><td>{</td></tr>
+<tr><th id="209">209</th><td>    <b>return</b> <a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN6WebKit7wrapperEPT_" title='WebKit::wrapper' data-ref="_ZN6WebKit7wrapperEPT_" data-ref-filename="_ZN6WebKit7wrapperEPT_">wrapper</a>(_navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction19userInitiatedActionEv" title='API::NavigationAction::userInitiatedAction' data-ref="_ZNK3API16NavigationAction19userInitiatedActionEv" data-ref-filename="_ZNK3API16NavigationAction19userInitiatedActionEv">userInitiatedAction</a>());</td></tr>
+<tr><th id="210">210</th><td>}</td></tr>
+<tr><th id="211">211</th><td></td></tr>
+<tr><th id="212">212</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)_isRedirect</td></tr>
+<tr><th id="213">213</th><td>{</td></tr>
+<tr><th id="214">214</th><td>    <b>return</b> _navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction10isRedirectEv" title='API::NavigationAction::isRedirect' data-ref="_ZNK3API16NavigationAction10isRedirectEv" data-ref-filename="_ZNK3API16NavigationAction10isRedirectEv">isRedirect</a>();</td></tr>
+<tr><th id="215">215</th><td>}</td></tr>
+<tr><th id="216">216</th><td></td></tr>
+<tr><th id="217">217</th><td>- (WKNavigation *)_mainFrameNavigation</td></tr>
+<tr><th id="218">218</th><td>{</td></tr>
+<tr><th id="219">219</th><td>    <b>return</b> <a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN6WebKit7wrapperEPT_" title='WebKit::wrapper' data-ref="_ZN6WebKit7wrapperEPT_" data-ref-filename="_ZN6WebKit7wrapperEPT_">wrapper</a>(_navigationAction<a class="ref fn" href="../../../Shared/Cocoa/WKObject.h.html#_ZN3API13ObjectStorageptEv" title='API::ObjectStorage::operator-&gt;' data-ref="_ZN3API13ObjectStorageptEv" data-ref-filename="_ZN3API13ObjectStorageptEv">-&gt;</a><a class="ref fn" href="../APINavigationAction.h.html#_ZNK3API16NavigationAction19mainFrameNavigationEv" title='API::NavigationAction::mainFrameNavigation' data-ref="_ZNK3API16NavigationAction19mainFrameNavigationEv" data-ref-filename="_ZNK3API16NavigationAction19mainFrameNavigationEv">mainFrameNavigation</a>());</td></tr>
+<tr><th id="220">220</th><td>}</td></tr>
+<tr><th id="221">221</th><td></td></tr>
+<tr><th id="222">222</th><td>@end</td></tr>
+<tr><th id="223">223</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource23-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource23-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

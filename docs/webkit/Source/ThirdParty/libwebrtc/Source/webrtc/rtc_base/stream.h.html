@@ -1,0 +1,139 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>stream.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/stream.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::StreamEvent,rtc::StreamInterface,rtc::StreamResult,rtc::StreamState "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/stream.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='stream.h.html'>stream.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2004 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_STREAM_H_">RTC_BASE_STREAM_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_STREAM_H_" data-ref="_M/RTC_BASE_STREAM_H_">RTC_BASE_STREAM_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;memory&gt;</u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include <a href="buffer.h.html">"rtc_base/buffer.h"</a></u></td></tr>
+<tr><th id="17">17</th><td><u>#include <a href="constructor_magic.h.html">"rtc_base/constructor_magic.h"</a></u></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="message_handler.h.html">"rtc_base/message_handler.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="system/rtc_export.h.html">"rtc_base/system/rtc_export.h"</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="third_party/sigslot/sigslot.h.html">"rtc_base/third_party/sigslot/sigslot.h"</a></u></td></tr>
+<tr><th id="21">21</th><td><u>#include <a href="thread.h.html">"rtc_base/thread.h"</a></u></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="24">24</th><td></td></tr>
+<tr><th id="25">25</th><td><i>///////////////////////////////////////////////////////////////////////////////</i></td></tr>
+<tr><th id="26">26</th><td><i>// StreamInterface is a generic asynchronous stream interface, supporting read,</i></td></tr>
+<tr><th id="27">27</th><td><i>// write, and close operations, and asynchronous signalling of state changes.</i></td></tr>
+<tr><th id="28">28</th><td><i>// The interface is designed with file, memory, and socket implementations in</i></td></tr>
+<tr><th id="29">29</th><td><i>// mind.  Some implementations offer extended operations, such as seeking.</i></td></tr>
+<tr><th id="30">30</th><td><i>///////////////////////////////////////////////////////////////////////////////</i></td></tr>
+<tr><th id="31">31</th><td><i></i></td></tr>
+<tr><th id="32">32</th><td><i>// The following enumerations are declared outside of the StreamInterface</i></td></tr>
+<tr><th id="33">33</th><td><i>// class for brevity in use.</i></td></tr>
+<tr><th id="34">34</th><td><i></i></td></tr>
+<tr><th id="35">35</th><td><i>// The SS_OPENING state indicates that the stream will signal open or closed</i></td></tr>
+<tr><th id="36">36</th><td><i>// in the future.</i></td></tr>
+<tr><th id="37">37</th><td><b>enum</b> <dfn class="type def" id="rtc::StreamState" title='rtc::StreamState' data-ref="rtc::StreamState" data-ref-filename="rtc..StreamState">StreamState</dfn> { <dfn class="enum" id="rtc::SS_CLOSED" title='rtc::SS_CLOSED' data-ref="rtc::SS_CLOSED" data-ref-filename="rtc..SS_CLOSED">SS_CLOSED</dfn>, <dfn class="enum" id="rtc::SS_OPENING" title='rtc::SS_OPENING' data-ref="rtc::SS_OPENING" data-ref-filename="rtc..SS_OPENING">SS_OPENING</dfn>, <dfn class="enum" id="rtc::SS_OPEN" title='rtc::SS_OPEN' data-ref="rtc::SS_OPEN" data-ref-filename="rtc..SS_OPEN">SS_OPEN</dfn> };</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><i>// Stream read/write methods return this value to indicate various success</i></td></tr>
+<tr><th id="40">40</th><td><i>// and failure conditions described below.</i></td></tr>
+<tr><th id="41">41</th><td><b>enum</b> <dfn class="type def" id="rtc::StreamResult" title='rtc::StreamResult' data-ref="rtc::StreamResult" data-ref-filename="rtc..StreamResult">StreamResult</dfn> { <dfn class="enum" id="rtc::SR_ERROR" title='rtc::SR_ERROR' data-ref="rtc::SR_ERROR" data-ref-filename="rtc..SR_ERROR">SR_ERROR</dfn>, <dfn class="enum" id="rtc::SR_SUCCESS" title='rtc::SR_SUCCESS' data-ref="rtc::SR_SUCCESS" data-ref-filename="rtc..SR_SUCCESS">SR_SUCCESS</dfn>, <dfn class="enum" id="rtc::SR_BLOCK" title='rtc::SR_BLOCK' data-ref="rtc::SR_BLOCK" data-ref-filename="rtc..SR_BLOCK">SR_BLOCK</dfn>, <dfn class="enum" id="rtc::SR_EOS" title='rtc::SR_EOS' data-ref="rtc::SR_EOS" data-ref-filename="rtc..SR_EOS">SR_EOS</dfn> };</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><i>// StreamEvents are used to asynchronously signal state transitionss.  The flags</i></td></tr>
+<tr><th id="44">44</th><td><i>// may be combined.</i></td></tr>
+<tr><th id="45">45</th><td><i>//  SE_OPEN: The stream has transitioned to the SS_OPEN state</i></td></tr>
+<tr><th id="46">46</th><td><i>//  SE_CLOSE: The stream has transitioned to the SS_CLOSED state</i></td></tr>
+<tr><th id="47">47</th><td><i>//  SE_READ: Data is available, so Read is likely to not return SR_BLOCK</i></td></tr>
+<tr><th id="48">48</th><td><i>//  SE_WRITE: Data can be written, so Write is likely to not return SR_BLOCK</i></td></tr>
+<tr><th id="49">49</th><td><b>enum</b> <dfn class="type def" id="rtc::StreamEvent" title='rtc::StreamEvent' data-ref="rtc::StreamEvent" data-ref-filename="rtc..StreamEvent">StreamEvent</dfn> { <dfn class="enum" id="rtc::SE_OPEN" title='rtc::SE_OPEN' data-ref="rtc::SE_OPEN" data-ref-filename="rtc..SE_OPEN">SE_OPEN</dfn> = <var>1</var>, <dfn class="enum" id="rtc::SE_READ" title='rtc::SE_READ' data-ref="rtc::SE_READ" data-ref-filename="rtc..SE_READ">SE_READ</dfn> = <var>2</var>, <dfn class="enum" id="rtc::SE_WRITE" title='rtc::SE_WRITE' data-ref="rtc::SE_WRITE" data-ref-filename="rtc..SE_WRITE">SE_WRITE</dfn> = <var>4</var>, <dfn class="enum" id="rtc::SE_CLOSE" title='rtc::SE_CLOSE' data-ref="rtc::SE_CLOSE" data-ref-filename="rtc..SE_CLOSE">SE_CLOSE</dfn> = <var>8</var> };</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td><b>class</b> <a class="macro" href="system/rtc_export.h.html#40" title="" data-ref="_M/RTC_EXPORT">RTC_EXPORT</a> <dfn class="type def" id="rtc::StreamInterface" title='rtc::StreamInterface' data-ref="rtc::StreamInterface" data-ref-filename="rtc..StreamInterface">StreamInterface</dfn> {</td></tr>
+<tr><th id="52">52</th><td> <b>public</b>:</td></tr>
+<tr><th id="53">53</th><td>  <b>virtual</b> <dfn class="virtual decl def fn" id="_ZN3rtc15StreamInterfaceD1Ev" title='rtc::StreamInterface::~StreamInterface' data-ref="_ZN3rtc15StreamInterfaceD1Ev" data-ref-filename="_ZN3rtc15StreamInterfaceD1Ev">~StreamInterface</dfn>() {}</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td>  <b>virtual</b> <a class="type" href="#rtc::StreamState" title='rtc::StreamState' data-ref="rtc::StreamState" data-ref-filename="rtc..StreamState">StreamState</a> <dfn class="virtual decl fn" id="_ZNK3rtc15StreamInterface8GetStateEv" title='rtc::StreamInterface::GetState' data-ref="_ZNK3rtc15StreamInterface8GetStateEv" data-ref-filename="_ZNK3rtc15StreamInterface8GetStateEv">GetState</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td>  <i>// Read attempts to fill buffer of size buffer_len.  Write attempts to send</i></td></tr>
+<tr><th id="58">58</th><td><i>  // data_len bytes stored in data.  The variables read and write are set only</i></td></tr>
+<tr><th id="59">59</th><td><i>  // on SR_SUCCESS (see below).  Likewise, error is only set on SR_ERROR.</i></td></tr>
+<tr><th id="60">60</th><td><i>  // Read and Write return a value indicating:</i></td></tr>
+<tr><th id="61">61</th><td><i>  //  SR_ERROR: an error occurred, which is returned in a non-null error</i></td></tr>
+<tr><th id="62">62</th><td><i>  //    argument.  Interpretation of the error requires knowledge of the</i></td></tr>
+<tr><th id="63">63</th><td><i>  //    stream's concrete type, which limits its usefulness.</i></td></tr>
+<tr><th id="64">64</th><td><i>  //  SR_SUCCESS: some number of bytes were successfully written, which is</i></td></tr>
+<tr><th id="65">65</th><td><i>  //    returned in a non-null read/write argument.</i></td></tr>
+<tr><th id="66">66</th><td><i>  //  SR_BLOCK: the stream is in non-blocking mode, and the operation would</i></td></tr>
+<tr><th id="67">67</th><td><i>  //    block, or the stream is in SS_OPENING state.</i></td></tr>
+<tr><th id="68">68</th><td><i>  //  SR_EOS: the end-of-stream has been reached, or the stream is in the</i></td></tr>
+<tr><th id="69">69</th><td><i>  //    SS_CLOSED state.</i></td></tr>
+<tr><th id="70">70</th><td>  <b>virtual</b> <a class="type" href="#rtc::StreamResult" title='rtc::StreamResult' data-ref="rtc::StreamResult" data-ref-filename="rtc..StreamResult">StreamResult</a> <dfn class="virtual decl fn" id="_ZN3rtc15StreamInterface4ReadEPvmPmPi" title='rtc::StreamInterface::Read' data-ref="_ZN3rtc15StreamInterface4ReadEPvmPmPi" data-ref-filename="_ZN3rtc15StreamInterface4ReadEPvmPmPi">Read</dfn>(<em>void</em>* <dfn class="local col0 decl" id="3200buffer" title='buffer' data-type='void *' data-ref="3200buffer" data-ref-filename="3200buffer">buffer</dfn>,</td></tr>
+<tr><th id="71">71</th><td>                            <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col1 decl" id="3201buffer_len" title='buffer_len' data-type='size_t' data-ref="3201buffer_len" data-ref-filename="3201buffer_len">buffer_len</dfn>,</td></tr>
+<tr><th id="72">72</th><td>                            <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span>* <dfn class="local col2 decl" id="3202read" title='read' data-type='size_t *' data-ref="3202read" data-ref-filename="3202read">read</dfn>,</td></tr>
+<tr><th id="73">73</th><td>                            <em>int</em>* <dfn class="local col3 decl" id="3203error" title='error' data-type='int *' data-ref="3203error" data-ref-filename="3203error">error</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="74">74</th><td>  <b>virtual</b> <a class="type" href="#rtc::StreamResult" title='rtc::StreamResult' data-ref="rtc::StreamResult" data-ref-filename="rtc..StreamResult">StreamResult</a> <dfn class="virtual decl fn" id="_ZN3rtc15StreamInterface5WriteEPKvmPmPi" title='rtc::StreamInterface::Write' data-ref="_ZN3rtc15StreamInterface5WriteEPKvmPmPi" data-ref-filename="_ZN3rtc15StreamInterface5WriteEPKvmPmPi">Write</dfn>(<em>const</em> <em>void</em>* <dfn class="local col4 decl" id="3204data" title='data' data-type='const void *' data-ref="3204data" data-ref-filename="3204data">data</dfn>,</td></tr>
+<tr><th id="75">75</th><td>                             <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="3205data_len" title='data_len' data-type='size_t' data-ref="3205data_len" data-ref-filename="3205data_len">data_len</dfn>,</td></tr>
+<tr><th id="76">76</th><td>                             <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span>* <dfn class="local col6 decl" id="3206written" title='written' data-type='size_t *' data-ref="3206written" data-ref-filename="3206written">written</dfn>,</td></tr>
+<tr><th id="77">77</th><td>                             <em>int</em>* <dfn class="local col7 decl" id="3207error" title='error' data-type='int *' data-ref="3207error" data-ref-filename="3207error">error</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="78">78</th><td>  <i>// Attempt to transition to the SS_CLOSED state.  SE_CLOSE will not be</i></td></tr>
+<tr><th id="79">79</th><td><i>  // signalled as a result of this call.</i></td></tr>
+<tr><th id="80">80</th><td>  <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN3rtc15StreamInterface5CloseEv" title='rtc::StreamInterface::Close' data-ref="_ZN3rtc15StreamInterface5CloseEv" data-ref-filename="_ZN3rtc15StreamInterface5CloseEv">Close</dfn>() = <var>0</var>;</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td>  <i>// Streams may signal one or more StreamEvents to indicate state changes.</i></td></tr>
+<tr><th id="83">83</th><td><i>  // The first argument identifies the stream on which the state change occured.</i></td></tr>
+<tr><th id="84">84</th><td><i>  // The second argument is a bit-wise combination of StreamEvents.</i></td></tr>
+<tr><th id="85">85</th><td><i>  // If SE_CLOSE is signalled, then the third argument is the associated error</i></td></tr>
+<tr><th id="86">86</th><td><i>  // code.  Otherwise, the value is undefined.</i></td></tr>
+<tr><th id="87">87</th><td><i>  // Note: Not all streams will support asynchronous event signalling.  However,</i></td></tr>
+<tr><th id="88">88</th><td><i>  // SS_OPENING and SR_BLOCK returned from stream member functions imply that</i></td></tr>
+<tr><th id="89">89</th><td><i>  // certain events will be raised in the future.</i></td></tr>
+<tr><th id="90">90</th><td>  <span class="namespace">sigslot::</span><a class="type" href="third_party/sigslot/sigslot.h.html#sigslot::signal3" title='sigslot::signal3' data-ref="sigslot::signal3" data-ref-filename="sigslot..signal3">signal3</a>&lt;<a class="type" href="#rtc::StreamInterface" title='rtc::StreamInterface' data-ref="rtc::StreamInterface" data-ref-filename="rtc..StreamInterface">StreamInterface</a>*, <em>int</em>, <em>int</em>&gt; <dfn class="decl field" id="rtc::StreamInterface::SignalEvent" title='rtc::StreamInterface::SignalEvent' data-ref="rtc::StreamInterface::SignalEvent" data-ref-filename="rtc..StreamInterface..SignalEvent">SignalEvent</dfn>;</td></tr>
+<tr><th id="91">91</th><td></td></tr>
+<tr><th id="92">92</th><td>  <i>// Return true if flush is successful.</i></td></tr>
+<tr><th id="93">93</th><td>  <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZN3rtc15StreamInterface5FlushEv" title='rtc::StreamInterface::Flush' data-ref="_ZN3rtc15StreamInterface5FlushEv" data-ref-filename="_ZN3rtc15StreamInterface5FlushEv">Flush</dfn>();</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td>  <i>//</i></td></tr>
+<tr><th id="96">96</th><td><i>  // CONVENIENCE METHODS</i></td></tr>
+<tr><th id="97">97</th><td><i>  //</i></td></tr>
+<tr><th id="98">98</th><td><i>  // These methods are implemented in terms of other methods, for convenience.</i></td></tr>
+<tr><th id="99">99</th><td><i>  //</i></td></tr>
+<tr><th id="100">100</th><td><i></i></td></tr>
+<tr><th id="101">101</th><td><i>  // WriteAll is a helper function which repeatedly calls Write until all the</i></td></tr>
+<tr><th id="102">102</th><td><i>  // data is written, or something other than SR_SUCCESS is returned.  Note that</i></td></tr>
+<tr><th id="103">103</th><td><i>  // unlike Write, the argument 'written' is always set, and may be non-zero</i></td></tr>
+<tr><th id="104">104</th><td><i>  // on results other than SR_SUCCESS.  The remaining arguments have the</i></td></tr>
+<tr><th id="105">105</th><td><i>  // same semantics as Write.</i></td></tr>
+<tr><th id="106">106</th><td>  <a class="type" href="#rtc::StreamResult" title='rtc::StreamResult' data-ref="rtc::StreamResult" data-ref-filename="rtc..StreamResult">StreamResult</a> <dfn class="decl fn" id="_ZN3rtc15StreamInterface8WriteAllEPKvmPmPi" title='rtc::StreamInterface::WriteAll' data-ref="_ZN3rtc15StreamInterface8WriteAllEPKvmPmPi" data-ref-filename="_ZN3rtc15StreamInterface8WriteAllEPKvmPmPi">WriteAll</dfn>(<em>const</em> <em>void</em>* <dfn class="local col8 decl" id="3208data" title='data' data-type='const void *' data-ref="3208data" data-ref-filename="3208data">data</dfn>,</td></tr>
+<tr><th id="107">107</th><td>                        <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="3209data_len" title='data_len' data-type='size_t' data-ref="3209data_len" data-ref-filename="3209data_len">data_len</dfn>,</td></tr>
+<tr><th id="108">108</th><td>                        <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span>* <dfn class="local col0 decl" id="3210written" title='written' data-type='size_t *' data-ref="3210written" data-ref-filename="3210written">written</dfn>,</td></tr>
+<tr><th id="109">109</th><td>                        <em>int</em>* <dfn class="local col1 decl" id="3211error" title='error' data-type='int *' data-ref="3211error" data-ref-filename="3211error">error</dfn>);</td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td> <b>protected</b>:</td></tr>
+<tr><th id="112">112</th><td>  <dfn class="decl fn" id="_ZN3rtc15StreamInterfaceC1Ev" title='rtc::StreamInterface::StreamInterface' data-ref="_ZN3rtc15StreamInterfaceC1Ev" data-ref-filename="_ZN3rtc15StreamInterfaceC1Ev">StreamInterface</dfn>();</td></tr>
+<tr><th id="113">113</th><td></td></tr>
+<tr><th id="114">114</th><td> <b>private</b>:</td></tr>
+<tr><th id="115">115</th><td>  <a class="macro" href="constructor_magic.h.html#16" title="StreamInterface(const StreamInterface&amp;) = delete; StreamInterface&amp; operator=(const StreamInterface&amp;) = delete" data-ref="_M/RTC_DISALLOW_COPY_AND_ASSIGN">RTC_DISALLOW_COPY_AND_ASSIGN</a>(<dfn class="decl def fn" id="_ZN3rtc15StreamInterfaceC1ERKS0_" title='rtc::StreamInterface::StreamInterface' data-ref="_ZN3rtc15StreamInterfaceC1ERKS0_" data-ref-filename="_ZN3rtc15StreamInterfaceC1ERKS0_"><a class="type" href="#rtc::StreamInterface" title='rtc::StreamInterface' data-ref="rtc::StreamInterface" data-ref-filename="rtc..StreamInterface"><a class="type" href="#rtc::StreamInterface" title='rtc::StreamInterface' data-ref="rtc::StreamInterface" data-ref-filename="rtc..StreamInterface"><a class="type" href="#rtc::StreamInterface" title='rtc::StreamInterface' data-ref="rtc::StreamInterface" data-ref-filename="rtc..StreamInterface">StreamInterface</a></a></a></dfn>);</td></tr>
+<tr><th id="116">116</th><td>};</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_STREAM_H_</u></td></tr>
+<tr><th id="121">121</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../api/create_peerconnection_factory.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/create_peerconnection_factory.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

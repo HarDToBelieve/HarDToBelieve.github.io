@@ -1,0 +1,87 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>openssl_session_cache.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/openssl_session_cache.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="rtc::OpenSSLSessionCache "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/openssl_session_cache.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>ThirdParty</a>/<a href='../../..'>libwebrtc</a>/<a href='../..'>Source</a>/<a href='..'>webrtc</a>/<a href='./'>rtc_base</a>/<a href='openssl_session_cache.h.html'>openssl_session_cache.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2018 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_OPENSSL_SESSION_CACHE_H_">RTC_BASE_OPENSSL_SESSION_CACHE_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_OPENSSL_SESSION_CACHE_H_" data-ref="_M/RTC_BASE_OPENSSL_SESSION_CACHE_H_">RTC_BASE_OPENSSL_SESSION_CACHE_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="../../third_party/boringssl/src/include/openssl/ossl_typ.h.html">&lt;openssl/ossl_typ.h&gt;</a></u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include &lt;map&gt;</u></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;string&gt;</u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="constructor_magic.h.html">"rtc_base/constructor_magic.h"</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="ssl_stream_adapter.h.html">"rtc_base/ssl_stream_adapter.h"</a></u></td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><u>#<span data-ppcond="22">ifndef</span> <a class="macro" href="../../third_party/boringssl/src/include/openssl/base.h.html#186" data-ref="_M/OPENSSL_IS_BORINGSSL">OPENSSL_IS_BORINGSSL</a></u></td></tr>
+<tr><th id="23">23</th><td><b>typedef</b> <b>struct</b> ssl_session_st SSL_SESSION;</td></tr>
+<tr><th id="24">24</th><td><u>#<span data-ppcond="22">endif</span></u></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><i>// The OpenSSLSessionCache maps hostnames to SSL_SESSIONS. This cache is</i></td></tr>
+<tr><th id="29">29</th><td><i>// owned by the OpenSSLAdapterFactory and is passed down to each OpenSSLAdapter</i></td></tr>
+<tr><th id="30">30</th><td><i>// created with the factory.</i></td></tr>
+<tr><th id="31">31</th><td><b>class</b> <dfn class="type def" id="rtc::OpenSSLSessionCache" title='rtc::OpenSSLSessionCache' data-ref="rtc::OpenSSLSessionCache" data-ref-filename="rtc..OpenSSLSessionCache">OpenSSLSessionCache</dfn> final {</td></tr>
+<tr><th id="32">32</th><td> <b>public</b>:</td></tr>
+<tr><th id="33">33</th><td>  <i>// Creates a new OpenSSLSessionCache using the provided the SSL_CTX and</i></td></tr>
+<tr><th id="34">34</th><td><i>  // the ssl_mode. The SSL_CTX will be up_refed. ssl_ctx cannot be nullptr,</i></td></tr>
+<tr><th id="35">35</th><td><i>  // the constructor immediately dchecks this.</i></td></tr>
+<tr><th id="36">36</th><td>  <dfn class="decl fn" id="_ZN3rtc19OpenSSLSessionCacheC1ENS_7SSLModeEP10ssl_ctx_st" title='rtc::OpenSSLSessionCache::OpenSSLSessionCache' data-ref="_ZN3rtc19OpenSSLSessionCacheC1ENS_7SSLModeEP10ssl_ctx_st" data-ref-filename="_ZN3rtc19OpenSSLSessionCacheC1ENS_7SSLModeEP10ssl_ctx_st">OpenSSLSessionCache</dfn>(<a class="type" href="ssl_stream_adapter.h.html#rtc::SSLMode" title='rtc::SSLMode' data-ref="rtc::SSLMode" data-ref-filename="rtc..SSLMode">SSLMode</a> <dfn class="local col1 decl" id="1ssl_mode" title='ssl_mode' data-type='rtc::SSLMode' data-ref="1ssl_mode" data-ref-filename="1ssl_mode">ssl_mode</dfn>, <a class="typedef" href="../../third_party/boringssl/src/include/openssl/base.h.html#SSL_CTX" title='SSL_CTX' data-type='struct ssl_ctx_st' data-ref="SSL_CTX" data-ref-filename="SSL_CTX">SSL_CTX</a>* <dfn class="local col2 decl" id="2ssl_ctx" title='ssl_ctx' data-type='SSL_CTX *' data-ref="2ssl_ctx" data-ref-filename="2ssl_ctx">ssl_ctx</dfn>);</td></tr>
+<tr><th id="37">37</th><td>  <i>// Frees the cached SSL_SESSIONS and then frees the SSL_CTX.</i></td></tr>
+<tr><th id="38">38</th><td>  <dfn class="decl fn" id="_ZN3rtc19OpenSSLSessionCacheD1Ev" title='rtc::OpenSSLSessionCache::~OpenSSLSessionCache' data-ref="_ZN3rtc19OpenSSLSessionCacheD1Ev" data-ref-filename="_ZN3rtc19OpenSSLSessionCacheD1Ev">~OpenSSLSessionCache</dfn>();</td></tr>
+<tr><th id="39">39</th><td>  <i>// Looks up a session by hostname. The returned SSL_SESSION is not up_refed.</i></td></tr>
+<tr><th id="40">40</th><td>  <a class="typedef" href="../../third_party/boringssl/src/include/openssl/base.h.html#SSL_SESSION" title='SSL_SESSION' data-type='struct ssl_session_st' data-ref="SSL_SESSION" data-ref-filename="SSL_SESSION">SSL_SESSION</a>* <dfn class="decl fn" id="_ZNK3rtc19OpenSSLSessionCache13LookupSessionERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEE" title='rtc::OpenSSLSessionCache::LookupSession' data-ref="_ZNK3rtc19OpenSSLSessionCache13LookupSessionERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEE" data-ref-filename="_ZNK3rtc19OpenSSLSessionCache13LookupSessionERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEE">LookupSession</dfn>(<em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col3 decl" id="3hostname" title='hostname' data-type='const std::string &amp;' data-ref="3hostname" data-ref-filename="3hostname">hostname</dfn>) <em>const</em>;</td></tr>
+<tr><th id="41">41</th><td>  <i>// Adds a session to the cache, and up_refs it. Any existing session with the</i></td></tr>
+<tr><th id="42">42</th><td><i>  // same hostname is replaced.</i></td></tr>
+<tr><th id="43">43</th><td>  <em>void</em> <dfn class="decl fn" id="_ZN3rtc19OpenSSLSessionCache10AddSessionERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEP14ssl_session_st" title='rtc::OpenSSLSessionCache::AddSession' data-ref="_ZN3rtc19OpenSSLSessionCache10AddSessionERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEP14ssl_session_st" data-ref-filename="_ZN3rtc19OpenSSLSessionCache10AddSessionERKNSt3__112basic_stringIcNS1_11char_traitsIcEENS1_9allocatorIcEEEEP14ssl_session_st">AddSession</dfn>(<em>const</em> <span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>&amp; <dfn class="local col4 decl" id="4hostname" title='hostname' data-type='const std::string &amp;' data-ref="4hostname" data-ref-filename="4hostname">hostname</dfn>, <a class="typedef" href="../../third_party/boringssl/src/include/openssl/base.h.html#SSL_SESSION" title='SSL_SESSION' data-type='struct ssl_session_st' data-ref="SSL_SESSION" data-ref-filename="SSL_SESSION">SSL_SESSION</a>* <dfn class="local col5 decl" id="5session" title='session' data-type='SSL_SESSION *' data-ref="5session" data-ref-filename="5session">session</dfn>);</td></tr>
+<tr><th id="44">44</th><td>  <i>// Returns the true underlying SSL Context that holds these cached sessions.</i></td></tr>
+<tr><th id="45">45</th><td>  <a class="typedef" href="../../third_party/boringssl/src/include/openssl/base.h.html#SSL_CTX" title='SSL_CTX' data-type='struct ssl_ctx_st' data-ref="SSL_CTX" data-ref-filename="SSL_CTX">SSL_CTX</a>* <dfn class="decl fn" id="_ZNK3rtc19OpenSSLSessionCache13GetSSLContextEv" title='rtc::OpenSSLSessionCache::GetSSLContext' data-ref="_ZNK3rtc19OpenSSLSessionCache13GetSSLContextEv" data-ref-filename="_ZNK3rtc19OpenSSLSessionCache13GetSSLContextEv">GetSSLContext</dfn>() <em>const</em>;</td></tr>
+<tr><th id="46">46</th><td>  <i>// The SSL Mode tht the OpenSSLSessionCache was constructed with. This cannot</i></td></tr>
+<tr><th id="47">47</th><td><i>  // be changed after launch.</i></td></tr>
+<tr><th id="48">48</th><td>  <a class="type" href="ssl_stream_adapter.h.html#rtc::SSLMode" title='rtc::SSLMode' data-ref="rtc::SSLMode" data-ref-filename="rtc..SSLMode">SSLMode</a> <dfn class="decl fn" id="_ZNK3rtc19OpenSSLSessionCache10GetSSLModeEv" title='rtc::OpenSSLSessionCache::GetSSLMode' data-ref="_ZNK3rtc19OpenSSLSessionCache10GetSSLModeEv" data-ref-filename="_ZNK3rtc19OpenSSLSessionCache10GetSSLModeEv">GetSSLMode</dfn>() <em>const</em>;</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td> <b>private</b>:</td></tr>
+<tr><th id="51">51</th><td>  <i>// Holds the SSL Mode that the OpenSSLCache was initialized with. This is</i></td></tr>
+<tr><th id="52">52</th><td><i>  // immutable after creation and cannot change.</i></td></tr>
+<tr><th id="53">53</th><td>  <em>const</em> <a class="type" href="ssl_stream_adapter.h.html#rtc::SSLMode" title='rtc::SSLMode' data-ref="rtc::SSLMode" data-ref-filename="rtc..SSLMode">SSLMode</a> <dfn class="decl field" id="rtc::OpenSSLSessionCache::ssl_mode_" title='rtc::OpenSSLSessionCache::ssl_mode_' data-ref="rtc::OpenSSLSessionCache::ssl_mode_" data-ref-filename="rtc..OpenSSLSessionCache..ssl_mode_">ssl_mode_</dfn>;</td></tr>
+<tr><th id="54">54</th><td>  <i class="doc">/// SSL Context for all shared cached sessions. This SSL_CTX is initialized</i></td></tr>
+<tr><th id="55">55</th><td><i class="doc">  //  with SSL_CTX_set_session_cache_mode(ctx, SSL_SESS_CACHE_CLIENT); Meaning</i></td></tr>
+<tr><th id="56">56</th><td><i class="doc">  //  all client sessions will be added to the cache internal to the context.</i></td></tr>
+<tr><th id="57">57</th><td>  <a class="typedef" href="../../third_party/boringssl/src/include/openssl/base.h.html#SSL_CTX" title='SSL_CTX' data-type='struct ssl_ctx_st' data-ref="SSL_CTX" data-ref-filename="SSL_CTX">SSL_CTX</a>* <dfn class="decl field" id="rtc::OpenSSLSessionCache::ssl_ctx_" title='rtc::OpenSSLSessionCache::ssl_ctx_' data-ref="rtc::OpenSSLSessionCache::ssl_ctx_" data-ref-filename="rtc..OpenSSLSessionCache..ssl_ctx_">ssl_ctx_</dfn> = <b>nullptr</b>;</td></tr>
+<tr><th id="58">58</th><td>  <i>// Map of hostnames to SSL_SESSIONs; holds references to the SSL_SESSIONs,</i></td></tr>
+<tr><th id="59">59</th><td><i>  // which are cleaned up when the factory is destroyed.</i></td></tr>
+<tr><th id="60">60</th><td><i>  // TODO(juberti): Add LRU eviction to keep the cache from growing forever.</i></td></tr>
+<tr><th id="61">61</th><td>  <span class="namespace">std::</span><span class='type' title='std::__1::map' data-ref="std::__1::map" data-ref-filename="std..__1..map">map</span>&lt;<span class="namespace">std::</span><span class='typedef' title='std::__1::string' data-type='basic_string&lt;char, char_traits&lt;char&gt;, allocator&lt;char&gt;&gt;' data-ref="std::__1::string" data-ref-filename="std..__1..string">string</span>, <a class="typedef" href="../../third_party/boringssl/src/include/openssl/base.h.html#SSL_SESSION" title='SSL_SESSION' data-type='struct ssl_session_st' data-ref="SSL_SESSION" data-ref-filename="SSL_SESSION">SSL_SESSION</a>*&gt; <dfn class="decl field" id="rtc::OpenSSLSessionCache::sessions_" title='rtc::OpenSSLSessionCache::sessions_' data-ref="rtc::OpenSSLSessionCache::sessions_" data-ref-filename="rtc..OpenSSLSessionCache..sessions_">sessions_</dfn>;</td></tr>
+<tr><th id="62">62</th><td>  <i>// The cache should never be copied or assigned directly.</i></td></tr>
+<tr><th id="63">63</th><td>  <a class="macro" href="constructor_magic.h.html#16" title="OpenSSLSessionCache(const OpenSSLSessionCache&amp;) = delete; OpenSSLSessionCache&amp; operator=(const OpenSSLSessionCache&amp;) = delete" data-ref="_M/RTC_DISALLOW_COPY_AND_ASSIGN">RTC_DISALLOW_COPY_AND_ASSIGN</a>(<dfn class="decl def fn" id="_ZN3rtc19OpenSSLSessionCacheC1ERKS0_" title='rtc::OpenSSLSessionCache::OpenSSLSessionCache' data-ref="_ZN3rtc19OpenSSLSessionCacheC1ERKS0_" data-ref-filename="_ZN3rtc19OpenSSLSessionCacheC1ERKS0_"><a class="type" href="#rtc::OpenSSLSessionCache" title='rtc::OpenSSLSessionCache' data-ref="rtc::OpenSSLSessionCache" data-ref-filename="rtc..OpenSSLSessionCache"><a class="type" href="#rtc::OpenSSLSessionCache" title='rtc::OpenSSLSessionCache' data-ref="rtc::OpenSSLSessionCache" data-ref-filename="rtc..OpenSSLSessionCache"><a class="type" href="#rtc::OpenSSLSessionCache" title='rtc::OpenSSLSessionCache' data-ref="rtc::OpenSSLSessionCache" data-ref-filename="rtc..OpenSSLSessionCache">OpenSSLSessionCache</a></a></a></dfn>);</td></tr>
+<tr><th id="64">64</th><td>};</td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td><u>#<span data-ppcond="11">endif</span>  // RTC_BASE_OPENSSL_SESSION_CACHE_H_</u></td></tr>
+<tr><th id="69">69</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='openssl_adapter.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/openssl_adapter.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

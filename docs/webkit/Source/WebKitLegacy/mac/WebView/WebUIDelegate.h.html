@@ -1,0 +1,606 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebUIDelegate.h source code [webkit/Source/WebKitLegacy/mac/WebView/WebUIDelegate.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/WebView/WebUIDelegate.h'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>WebView</a>/<a href='WebUIDelegate.h.html'>WebUIDelegate.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2003, 2004, 2005, 2006 Apple Inc.  All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * 1.  Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="9">9</th><td><i> *     notice, this list of conditions and the following disclaimer. </i></td></tr>
+<tr><th id="10">10</th><td><i> * 2.  Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="11">11</th><td><i> *     notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="12">12</th><td><i> *     documentation and/or other materials provided with the distribution. </i></td></tr>
+<tr><th id="13">13</th><td><i> * 3.  Neither the name of Apple Inc. ("Apple") nor the names of</i></td></tr>
+<tr><th id="14">14</th><td><i> *     its contributors may be used to endorse or promote products derived</i></td></tr>
+<tr><th id="15">15</th><td><i> *     from this software without specific prior written permission. </i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</i></td></tr>
+<tr><th id="19">19</th><td><i> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</i></td></tr>
+<tr><th id="20">20</th><td><i> * DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="21">21</th><td><i> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</i></td></tr>
+<tr><th id="23">23</th><td><i> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</i></td></tr>
+<tr><th id="24">24</th><td><i> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="25">25</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF</i></td></tr>
+<tr><th id="26">26</th><td><i> * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="27">27</th><td><i> */</i></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import &lt;Foundation/Foundation.h&gt;</u></td></tr>
+<tr><th id="30">30</th><td><u>#import &lt;Foundation/NSURLRequest.h&gt;</u></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html">&lt;WebKitLegacy/WebKitAvailability.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><u>#<span data-ppcond="33">if</span> !<span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="34">34</th><td><u>#import &lt;AppKit/AppKit.h&gt;</u></td></tr>
+<tr><th id="35">35</th><td><u>#<span data-ppcond="33">else</span></u></td></tr>
+<tr><th id="36">36</th><td><u>#import &lt;WebKitLegacy/WAKAppKitStubs.h&gt;</u></td></tr>
+<tr><th id="37">37</th><td><u>#import &lt;WebKitLegacy/WAKView.h&gt;</u></td></tr>
+<tr><th id="38">38</th><td><u>#<span data-ppcond="33">endif</span></u></td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="41">41</th><td><i class="doc">    <span class="command">@enum</span> <span class="verb">WebMenuItemTag</span></i></td></tr>
+<tr><th id="42">42</th><td><i class="doc">    <span class="command">@discussion</span> Each menu item in the default menu items array passed in</i></td></tr>
+<tr><th id="43">43</th><td><i class="doc">    contextMenuItemsForElement:defaultMenuItems: has its tag set to one of the WebMenuItemTags.</i></td></tr>
+<tr><th id="44">44</th><td><i class="doc">    When iterating through the default menu items array, use the tag to differentiate between them.</i></td></tr>
+<tr><th id="45">45</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td><b>enum</b> {</td></tr>
+<tr><th id="48">48</th><td>    <dfn class="enum" id="WebMenuItemTagOpenLinkInNewWindow" title='WebMenuItemTagOpenLinkInNewWindow' data-ref="WebMenuItemTagOpenLinkInNewWindow" data-ref-filename="WebMenuItemTagOpenLinkInNewWindow">WebMenuItemTagOpenLinkInNewWindow</dfn>=<var>1</var>,</td></tr>
+<tr><th id="49">49</th><td>    <dfn class="enum" id="WebMenuItemTagDownloadLinkToDisk" title='WebMenuItemTagDownloadLinkToDisk' data-ref="WebMenuItemTagDownloadLinkToDisk" data-ref-filename="WebMenuItemTagDownloadLinkToDisk">WebMenuItemTagDownloadLinkToDisk</dfn>,</td></tr>
+<tr><th id="50">50</th><td>    <dfn class="enum" id="WebMenuItemTagCopyLinkToClipboard" title='WebMenuItemTagCopyLinkToClipboard' data-ref="WebMenuItemTagCopyLinkToClipboard" data-ref-filename="WebMenuItemTagCopyLinkToClipboard">WebMenuItemTagCopyLinkToClipboard</dfn>,</td></tr>
+<tr><th id="51">51</th><td>    <dfn class="enum" id="WebMenuItemTagOpenImageInNewWindow" title='WebMenuItemTagOpenImageInNewWindow' data-ref="WebMenuItemTagOpenImageInNewWindow" data-ref-filename="WebMenuItemTagOpenImageInNewWindow">WebMenuItemTagOpenImageInNewWindow</dfn>,</td></tr>
+<tr><th id="52">52</th><td>    <dfn class="enum" id="WebMenuItemTagDownloadImageToDisk" title='WebMenuItemTagDownloadImageToDisk' data-ref="WebMenuItemTagDownloadImageToDisk" data-ref-filename="WebMenuItemTagDownloadImageToDisk">WebMenuItemTagDownloadImageToDisk</dfn>,</td></tr>
+<tr><th id="53">53</th><td>    <dfn class="enum" id="WebMenuItemTagCopyImageToClipboard" title='WebMenuItemTagCopyImageToClipboard' data-ref="WebMenuItemTagCopyImageToClipboard" data-ref-filename="WebMenuItemTagCopyImageToClipboard">WebMenuItemTagCopyImageToClipboard</dfn>,</td></tr>
+<tr><th id="54">54</th><td>    <dfn class="enum" id="WebMenuItemTagOpenFrameInNewWindow" title='WebMenuItemTagOpenFrameInNewWindow' data-ref="WebMenuItemTagOpenFrameInNewWindow" data-ref-filename="WebMenuItemTagOpenFrameInNewWindow">WebMenuItemTagOpenFrameInNewWindow</dfn>,</td></tr>
+<tr><th id="55">55</th><td>    <dfn class="enum" id="WebMenuItemTagCopy" title='WebMenuItemTagCopy' data-ref="WebMenuItemTagCopy" data-ref-filename="WebMenuItemTagCopy">WebMenuItemTagCopy</dfn>,</td></tr>
+<tr><th id="56">56</th><td>    <dfn class="enum" id="WebMenuItemTagGoBack" title='WebMenuItemTagGoBack' data-ref="WebMenuItemTagGoBack" data-ref-filename="WebMenuItemTagGoBack">WebMenuItemTagGoBack</dfn>,</td></tr>
+<tr><th id="57">57</th><td>    <dfn class="enum" id="WebMenuItemTagGoForward" title='WebMenuItemTagGoForward' data-ref="WebMenuItemTagGoForward" data-ref-filename="WebMenuItemTagGoForward">WebMenuItemTagGoForward</dfn>,</td></tr>
+<tr><th id="58">58</th><td>    <dfn class="enum" id="WebMenuItemTagStop" title='WebMenuItemTagStop' data-ref="WebMenuItemTagStop" data-ref-filename="WebMenuItemTagStop">WebMenuItemTagStop</dfn>,</td></tr>
+<tr><th id="59">59</th><td>    <dfn class="enum" id="WebMenuItemTagReload" title='WebMenuItemTagReload' data-ref="WebMenuItemTagReload" data-ref-filename="WebMenuItemTagReload">WebMenuItemTagReload</dfn>,</td></tr>
+<tr><th id="60">60</th><td>    <dfn class="enum" id="WebMenuItemTagCut" title='WebMenuItemTagCut' data-ref="WebMenuItemTagCut" data-ref-filename="WebMenuItemTagCut">WebMenuItemTagCut</dfn>,</td></tr>
+<tr><th id="61">61</th><td>    <dfn class="enum" id="WebMenuItemTagPaste" title='WebMenuItemTagPaste' data-ref="WebMenuItemTagPaste" data-ref-filename="WebMenuItemTagPaste">WebMenuItemTagPaste</dfn>,</td></tr>
+<tr><th id="62">62</th><td>    <dfn class="enum" id="WebMenuItemTagSpellingGuess" title='WebMenuItemTagSpellingGuess' data-ref="WebMenuItemTagSpellingGuess" data-ref-filename="WebMenuItemTagSpellingGuess">WebMenuItemTagSpellingGuess</dfn>,</td></tr>
+<tr><th id="63">63</th><td>    <dfn class="enum" id="WebMenuItemTagNoGuessesFound" title='WebMenuItemTagNoGuessesFound' data-ref="WebMenuItemTagNoGuessesFound" data-ref-filename="WebMenuItemTagNoGuessesFound">WebMenuItemTagNoGuessesFound</dfn>,</td></tr>
+<tr><th id="64">64</th><td>    <dfn class="enum" id="WebMenuItemTagIgnoreSpelling" title='WebMenuItemTagIgnoreSpelling' data-ref="WebMenuItemTagIgnoreSpelling" data-ref-filename="WebMenuItemTagIgnoreSpelling">WebMenuItemTagIgnoreSpelling</dfn>,</td></tr>
+<tr><th id="65">65</th><td>    <dfn class="enum" id="WebMenuItemTagLearnSpelling" title='WebMenuItemTagLearnSpelling' data-ref="WebMenuItemTagLearnSpelling" data-ref-filename="WebMenuItemTagLearnSpelling">WebMenuItemTagLearnSpelling</dfn>,</td></tr>
+<tr><th id="66">66</th><td>    <dfn class="enum" id="WebMenuItemTagOther" title='WebMenuItemTagOther' data-ref="WebMenuItemTagOther" data-ref-filename="WebMenuItemTagOther">WebMenuItemTagOther</dfn>,</td></tr>
+<tr><th id="67">67</th><td>    <dfn class="enum" id="WebMenuItemTagSearchInSpotlight" title='WebMenuItemTagSearchInSpotlight' data-ref="WebMenuItemTagSearchInSpotlight" data-ref-filename="WebMenuItemTagSearchInSpotlight">WebMenuItemTagSearchInSpotlight</dfn>,</td></tr>
+<tr><th id="68">68</th><td>    <dfn class="enum" id="WebMenuItemTagSearchWeb" title='WebMenuItemTagSearchWeb' data-ref="WebMenuItemTagSearchWeb" data-ref-filename="WebMenuItemTagSearchWeb">WebMenuItemTagSearchWeb</dfn>,</td></tr>
+<tr><th id="69">69</th><td>    <dfn class="enum" id="WebMenuItemTagLookUpInDictionary" title='WebMenuItemTagLookUpInDictionary' data-ref="WebMenuItemTagLookUpInDictionary" data-ref-filename="WebMenuItemTagLookUpInDictionary">WebMenuItemTagLookUpInDictionary</dfn>,</td></tr>
+<tr><th id="70">70</th><td>    <dfn class="enum" id="WebMenuItemTagOpenWithDefaultApplication" title='WebMenuItemTagOpenWithDefaultApplication' data-ref="WebMenuItemTagOpenWithDefaultApplication" data-ref-filename="WebMenuItemTagOpenWithDefaultApplication">WebMenuItemTagOpenWithDefaultApplication</dfn>,</td></tr>
+<tr><th id="71">71</th><td>    <dfn class="enum" id="WebMenuItemPDFActualSize" title='WebMenuItemPDFActualSize' data-ref="WebMenuItemPDFActualSize" data-ref-filename="WebMenuItemPDFActualSize">WebMenuItemPDFActualSize</dfn>,</td></tr>
+<tr><th id="72">72</th><td>    <dfn class="enum" id="WebMenuItemPDFZoomIn" title='WebMenuItemPDFZoomIn' data-ref="WebMenuItemPDFZoomIn" data-ref-filename="WebMenuItemPDFZoomIn">WebMenuItemPDFZoomIn</dfn>,</td></tr>
+<tr><th id="73">73</th><td>    <dfn class="enum" id="WebMenuItemPDFZoomOut" title='WebMenuItemPDFZoomOut' data-ref="WebMenuItemPDFZoomOut" data-ref-filename="WebMenuItemPDFZoomOut">WebMenuItemPDFZoomOut</dfn>,</td></tr>
+<tr><th id="74">74</th><td>    <dfn class="enum" id="WebMenuItemPDFAutoSize" title='WebMenuItemPDFAutoSize' data-ref="WebMenuItemPDFAutoSize" data-ref-filename="WebMenuItemPDFAutoSize">WebMenuItemPDFAutoSize</dfn>,</td></tr>
+<tr><th id="75">75</th><td>    <dfn class="enum" id="WebMenuItemPDFSinglePage" title='WebMenuItemPDFSinglePage' data-ref="WebMenuItemPDFSinglePage" data-ref-filename="WebMenuItemPDFSinglePage">WebMenuItemPDFSinglePage</dfn>,</td></tr>
+<tr><th id="76">76</th><td>    <dfn class="enum" id="WebMenuItemPDFFacingPages" title='WebMenuItemPDFFacingPages' data-ref="WebMenuItemPDFFacingPages" data-ref-filename="WebMenuItemPDFFacingPages">WebMenuItemPDFFacingPages</dfn>,</td></tr>
+<tr><th id="77">77</th><td>    <dfn class="enum" id="WebMenuItemPDFContinuous" title='WebMenuItemPDFContinuous' data-ref="WebMenuItemPDFContinuous" data-ref-filename="WebMenuItemPDFContinuous">WebMenuItemPDFContinuous</dfn>,</td></tr>
+<tr><th id="78">78</th><td>    <dfn class="enum" id="WebMenuItemPDFNextPage" title='WebMenuItemPDFNextPage' data-ref="WebMenuItemPDFNextPage" data-ref-filename="WebMenuItemPDFNextPage">WebMenuItemPDFNextPage</dfn>,</td></tr>
+<tr><th id="79">79</th><td>    <dfn class="enum" id="WebMenuItemPDFPreviousPage" title='WebMenuItemPDFPreviousPage' data-ref="WebMenuItemPDFPreviousPage" data-ref-filename="WebMenuItemPDFPreviousPage">WebMenuItemPDFPreviousPage</dfn>,</td></tr>
+<tr><th id="80">80</th><td>} <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#47" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_ENUM_DEPRECATED_MAC">WEBKIT_ENUM_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>);</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="83">83</th><td><i class="doc">    <span class="command">@enum</span> <span class="verb" data-ref="WebDragDestinationAction">WebDragDestinationAction</span></i></td></tr>
+<tr><th id="84">84</th><td><i class="doc">    <span class="command">@abstract</span> Actions that the destination of a drag can perform.</i></td></tr>
+<tr><th id="85">85</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebDragDestinationActionNone No action</span></i></td></tr>
+<tr><th id="86">86</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebDragDestinationActionDHTML Allows DHTML (such as JavaScript) to handle the drag</span></i></td></tr>
+<tr><th id="87">87</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebDragDestinationActionEdit Allows editable documents to be edited from the drag</span></i></td></tr>
+<tr><th id="88">88</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebDragDestinationActionLoad Allows a location change from the drag</span></i></td></tr>
+<tr><th id="89">89</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebDragDestinationActionAny Allows any of the above to occur</span></i></td></tr>
+<tr><th id="90">90</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="91">91</th><td><b>typedef</b> <span class="macro" title="enum __attribute__((flag_enum,enum_extensibility(open))) WebDragDestinationAction : NSUInteger WebDragDestinationAction; enum WebDragDestinationAction : NSUInteger" data-ref="_M/NS_OPTIONS">NS_OPTIONS</span>(NSUInteger, <dfn class="type" id="WebDragDestinationAction" title='WebDragDestinationAction' data-ref="WebDragDestinationAction" data-ref-filename="WebDragDestinationAction"><dfn class="typedef" id="WebDragDestinationAction" title='WebDragDestinationAction' data-type='enum WebDragDestinationAction' data-ref="WebDragDestinationAction" data-ref-filename="WebDragDestinationAction"><a class="type" href="#91" title='WebDragDestinationAction' data-ref="WebDragDestinationAction" data-ref-filename="WebDragDestinationAction"><dfn class="type def" id="WebDragDestinationAction" title='WebDragDestinationAction' data-ref="WebDragDestinationAction" data-ref-filename="WebDragDestinationAction">WebDragDestinationAction</dfn></a></dfn></dfn>) {</td></tr>
+<tr><th id="92">92</th><td>    <dfn class="enum" id="WebDragDestinationActionNone" title='WebDragDestinationActionNone' data-ref="WebDragDestinationActionNone" data-ref-filename="WebDragDestinationActionNone">WebDragDestinationActionNone</dfn>    = <var>0</var>,</td></tr>
+<tr><th id="93">93</th><td>    <dfn class="enum" id="WebDragDestinationActionDHTML" title='WebDragDestinationActionDHTML' data-ref="WebDragDestinationActionDHTML" data-ref-filename="WebDragDestinationActionDHTML">WebDragDestinationActionDHTML</dfn>   = <var>1</var>,</td></tr>
+<tr><th id="94">94</th><td>    <dfn class="enum" id="WebDragDestinationActionEdit" title='WebDragDestinationActionEdit' data-ref="WebDragDestinationActionEdit" data-ref-filename="WebDragDestinationActionEdit">WebDragDestinationActionEdit</dfn>    = <var>2</var>,</td></tr>
+<tr><th id="95">95</th><td>    <dfn class="enum" id="WebDragDestinationActionLoad" title='WebDragDestinationActionLoad' data-ref="WebDragDestinationActionLoad" data-ref-filename="WebDragDestinationActionLoad">WebDragDestinationActionLoad</dfn>    = <var>4</var>,</td></tr>
+<tr><th id="96">96</th><td>    <dfn class="enum" id="WebDragDestinationActionAny" title='WebDragDestinationActionAny' data-ref="WebDragDestinationActionAny" data-ref-filename="WebDragDestinationActionAny">WebDragDestinationActionAny</dfn>     = <span class="macro" title="(2147483647 *2U +1U)" data-ref="_M/UINT_MAX">UINT_MAX</span></td></tr>
+<tr><th id="97">97</th><td>} <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#47" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_ENUM_DEPRECATED_MAC">WEBKIT_ENUM_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>);</td></tr>
+<tr><th id="98">98</th><td></td></tr>
+<tr><th id="99">99</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="100">100</th><td><i class="doc">    <span class="command">@enum</span> <span class="verb" data-ref="WebDragSourceAction">WebDragSourceAction</span></i></td></tr>
+<tr><th id="101">101</th><td><i class="doc">    <span class="command">@abstract</span> Actions that the source of a drag can perform.</i></td></tr>
+<tr><th id="102">102</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebDragSourceActionNone No action</span></i></td></tr>
+<tr><th id="103">103</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebDragSourceActionDHTML Allows DHTML (such as JavaScript) to start a drag</span></i></td></tr>
+<tr><th id="104">104</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebDragSourceActionImage Allows an image drag to occur</span></i></td></tr>
+<tr><th id="105">105</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebDragSourceActionLink Allows a link drag to occur</span></i></td></tr>
+<tr><th id="106">106</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebDragSourceActionSelection Allows a selection drag to occur</span></i></td></tr>
+<tr><th id="107">107</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebDragSourceActionAny Allows any of the above to occur</span></i></td></tr>
+<tr><th id="108">108</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="109">109</th><td><b>typedef</b> <span class="macro" title="enum __attribute__((flag_enum,enum_extensibility(open))) WebDragSourceAction : NSUInteger WebDragSourceAction; enum WebDragSourceAction : NSUInteger" data-ref="_M/NS_OPTIONS">NS_OPTIONS</span>(NSUInteger, <dfn class="type" id="WebDragSourceAction" title='WebDragSourceAction' data-ref="WebDragSourceAction" data-ref-filename="WebDragSourceAction"><dfn class="typedef" id="WebDragSourceAction" title='WebDragSourceAction' data-type='enum WebDragSourceAction' data-ref="WebDragSourceAction" data-ref-filename="WebDragSourceAction"><a class="type" href="#109" title='WebDragSourceAction' data-ref="WebDragSourceAction" data-ref-filename="WebDragSourceAction"><dfn class="type def" id="WebDragSourceAction" title='WebDragSourceAction' data-ref="WebDragSourceAction" data-ref-filename="WebDragSourceAction">WebDragSourceAction</dfn></a></dfn></dfn>) {</td></tr>
+<tr><th id="110">110</th><td>    <dfn class="enum" id="WebDragSourceActionNone" title='WebDragSourceActionNone' data-ref="WebDragSourceActionNone" data-ref-filename="WebDragSourceActionNone">WebDragSourceActionNone</dfn>         = <var>0</var>,</td></tr>
+<tr><th id="111">111</th><td>    <dfn class="enum" id="WebDragSourceActionDHTML" title='WebDragSourceActionDHTML' data-ref="WebDragSourceActionDHTML" data-ref-filename="WebDragSourceActionDHTML">WebDragSourceActionDHTML</dfn>        = <var>1</var>,</td></tr>
+<tr><th id="112">112</th><td>    <dfn class="enum" id="WebDragSourceActionImage" title='WebDragSourceActionImage' data-ref="WebDragSourceActionImage" data-ref-filename="WebDragSourceActionImage">WebDragSourceActionImage</dfn>        = <var>2</var>,</td></tr>
+<tr><th id="113">113</th><td>    <dfn class="enum" id="WebDragSourceActionLink" title='WebDragSourceActionLink' data-ref="WebDragSourceActionLink" data-ref-filename="WebDragSourceActionLink">WebDragSourceActionLink</dfn>         = <var>4</var>,</td></tr>
+<tr><th id="114">114</th><td>    <dfn class="enum" id="WebDragSourceActionSelection" title='WebDragSourceActionSelection' data-ref="WebDragSourceActionSelection" data-ref-filename="WebDragSourceActionSelection">WebDragSourceActionSelection</dfn>    = <var>8</var>,</td></tr>
+<tr><th id="115">115</th><td>    <dfn class="enum" id="WebDragSourceActionAny" title='WebDragSourceActionAny' data-ref="WebDragSourceActionAny" data-ref-filename="WebDragSourceActionAny">WebDragSourceActionAny</dfn>          = <span class="macro" title="(2147483647 *2U +1U)" data-ref="_M/UINT_MAX">UINT_MAX</span></td></tr>
+<tr><th id="116">116</th><td>} <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#47" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_ENUM_DEPRECATED_MAC">WEBKIT_ENUM_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>);</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="119">119</th><td><i class="doc">    <span class="command">@protocol</span> <span class="verb">WebOpenPanelResultListener</span></i></td></tr>
+<tr><th id="120">120</th><td><i class="doc">    <span class="command">@discussion</span> This protocol is used to call back with the results of</i></td></tr>
+<tr><th id="121">121</th><td><i class="doc">    the file open panel requested by runOpenPanelForFileButtonWithResultListener:</i></td></tr>
+<tr><th id="122">122</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="123">123</th><td><a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>)</td></tr>
+<tr><th id="124">124</th><td>@protocol WebOpenPanelResultListener &lt;NSObject&gt;</td></tr>
+<tr><th id="125">125</th><td></td></tr>
+<tr><th id="126">126</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="127">127</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">chooseFilename:</span></i></td></tr>
+<tr><th id="128">128</th><td><i class="doc">    <span class="command">@abstract</span> Call this method to return a filename from the file open panel.</i></td></tr>
+<tr><th id="129">129</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">fileName</span> the path of the selected file</i></td></tr>
+<tr><th id="130">130</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="131">131</th><td>- (<em>void</em>)chooseFilename:(NSString *)<dfn class="local col8 decl" id="318fileName" title='fileName' data-type='NSString *' data-ref="318fileName" data-ref-filename="318fileName">fileName</dfn>;</td></tr>
+<tr><th id="132">132</th><td></td></tr>
+<tr><th id="133">133</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="134">134</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">chooseFilenames:</span></i></td></tr>
+<tr><th id="135">135</th><td><i class="doc">    <span class="command">@abstract</span> Call this method to return an array of filenames from the file open panel.</i></td></tr>
+<tr><th id="136">136</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">fileNames</span> an array of paths of selected files</i></td></tr>
+<tr><th id="137">137</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="138">138</th><td>- (<em>void</em>)chooseFilenames:(NSArray *)<dfn class="local col9 decl" id="319fileNames" title='fileNames' data-type='NSArray *' data-ref="319fileNames" data-ref-filename="319fileNames">fileNames</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_6)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_6</var>);</td></tr>
+<tr><th id="139">139</th><td></td></tr>
+<tr><th id="140">140</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="141">141</th><td><i class="doc">    <span class="command">@method</span> <span class="verb" data-ref="cancel">cancel</span></i></td></tr>
+<tr><th id="142">142</th><td><i class="doc">    <span class="command">@abstract</span> Call this method to indicate that the file open panel was cancelled.</i></td></tr>
+<tr><th id="143">143</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="144">144</th><td>- (<em>void</em>)cancel;</td></tr>
+<tr><th id="145">145</th><td></td></tr>
+<tr><th id="146">146</th><td><u>#<span data-ppcond="146">if</span> <span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="147">147</th><td>- (<em>void</em>)chooseFilename:(NSString *)filename displayString:(NSString *)displayString iconImage:(CGImageRef)imageRef;</td></tr>
+<tr><th id="148">148</th><td>- (<em>void</em>)chooseFilenames:(NSArray *)filenames displayString:(NSString *)displayString iconImage:(CGImageRef)imageRef;</td></tr>
+<tr><th id="149">149</th><td><u>#<span data-ppcond="146">endif</span></u></td></tr>
+<tr><th id="150">150</th><td></td></tr>
+<tr><th id="151">151</th><td>@end</td></tr>
+<tr><th id="152">152</th><td></td></tr>
+<tr><th id="153">153</th><td>@class WebFrame;</td></tr>
+<tr><th id="154">154</th><td>@class WebFrameView;</td></tr>
+<tr><th id="155">155</th><td>@class WebView;</td></tr>
+<tr><th id="156">156</th><td></td></tr>
+<tr><th id="157">157</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="158">158</th><td><i class="doc">    <span class="command">@category</span> <span class="verb">WebUIDelegate</span></i></td></tr>
+<tr><th id="159">159</th><td><i class="doc">    <span class="command">@discussion</span> A class that implements WebUIDelegate provides</i></td></tr>
+<tr><th id="160">160</th><td><i class="doc">    window-related methods that may be used by Javascript, plugins and</i></td></tr>
+<tr><th id="161">161</th><td><i class="doc">    other aspects of web pages. These methods are used to open new</i></td></tr>
+<tr><th id="162">162</th><td><i class="doc">    windows and control aspects of existing windows.</i></td></tr>
+<tr><th id="163">163</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="164">164</th><td><a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>)</td></tr>
+<tr><th id="165">165</th><td>@protocol WebUIDelegate &lt;NSObject&gt;</td></tr>
+<tr><th id="166">166</th><td></td></tr>
+<tr><th id="167">167</th><td>@optional</td></tr>
+<tr><th id="168">168</th><td></td></tr>
+<tr><th id="169">169</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="170">170</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:createWebViewWithRequest:</span></i></td></tr>
+<tr><th id="171">171</th><td><i class="doc">    <span class="command">@abstract</span> Create a new window and begin to load the specified request.</i></td></tr>
+<tr><th id="172">172</th><td><i class="doc">    <span class="command">@discussion</span> The newly created window is hidden, and the window operations delegate on the</i></td></tr>
+<tr><th id="173">173</th><td><i class="doc">    new WebViews will get a webViewShow: call.</i></td></tr>
+<tr><th id="174">174</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="175">175</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">request</span> The request to load.</i></td></tr>
+<tr><th id="176">176</th><td><i class="doc">    <span class="command">@result</span> The WebView for the new window.</i></td></tr>
+<tr><th id="177">177</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="178">178</th><td>- (WebView *)webView:(WebView *)<dfn class="local col0 decl" id="320sender" title='sender' data-type='WebView *' data-ref="320sender" data-ref-filename="320sender">sender</dfn> createWebViewWithRequest:(NSURLRequest *)<dfn class="local col1 decl" id="321request" title='request' data-type='NSURLRequest *' data-ref="321request" data-ref-filename="321request">request</dfn>;</td></tr>
+<tr><th id="179">179</th><td></td></tr>
+<tr><th id="180">180</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="181">181</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webViewShow:</span></i></td></tr>
+<tr><th id="182">182</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="183">183</th><td><i class="doc">    <span class="command">@abstract</span> Show the window that contains the top level view of the WebView,</i></td></tr>
+<tr><th id="184">184</th><td><i class="doc">    ordering it frontmost.</i></td></tr>
+<tr><th id="185">185</th><td><i class="doc">    <span class="command">@discussion</span> This will only be called just after createWindowWithRequest:</i></td></tr>
+<tr><th id="186">186</th><td><i class="doc">    is used to create a new window.</i></td></tr>
+<tr><th id="187">187</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="188">188</th><td>- (<em>void</em>)webViewShow:(WebView *)<dfn class="local col2 decl" id="322sender" title='sender' data-type='WebView *' data-ref="322sender" data-ref-filename="322sender">sender</dfn>;</td></tr>
+<tr><th id="189">189</th><td></td></tr>
+<tr><th id="190">190</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="191">191</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:createWebViewModalDialogWithRequest:</span></i></td></tr>
+<tr><th id="192">192</th><td><i class="doc">    <span class="command">@abstract</span> Create a new window and begin to load the specified request.</i></td></tr>
+<tr><th id="193">193</th><td><i class="doc">    <span class="command">@discussion</span> The newly created window is hidden, and the window operations delegate on the</i></td></tr>
+<tr><th id="194">194</th><td><i class="doc">    new WebViews will get a webViewShow: call.</i></td></tr>
+<tr><th id="195">195</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="196">196</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">request</span> The request to load.</i></td></tr>
+<tr><th id="197">197</th><td><i class="doc">    <span class="command">@result</span> The WebView for the new window.</i></td></tr>
+<tr><th id="198">198</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="199">199</th><td>- (WebView *)webView:(WebView *)<dfn class="local col3 decl" id="323sender" title='sender' data-type='WebView *' data-ref="323sender" data-ref-filename="323sender">sender</dfn> createWebViewModalDialogWithRequest:(NSURLRequest *)<dfn class="local col4 decl" id="324request" title='request' data-type='NSURLRequest *' data-ref="324request" data-ref-filename="324request">request</dfn>;</td></tr>
+<tr><th id="200">200</th><td></td></tr>
+<tr><th id="201">201</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="202">202</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webViewRunModal:</span></i></td></tr>
+<tr><th id="203">203</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="204">204</th><td><i class="doc">    <span class="command">@abstract</span> Show the window that contains the top level view of the WebView,</i></td></tr>
+<tr><th id="205">205</th><td><i class="doc">    ordering it frontmost. The window should be run modal in the application.</i></td></tr>
+<tr><th id="206">206</th><td><i class="doc">    <span class="command">@discussion</span> This will only be called just after createWebViewModalDialogWithRequest:</i></td></tr>
+<tr><th id="207">207</th><td><i class="doc">    is used to create a new window.</i></td></tr>
+<tr><th id="208">208</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="209">209</th><td>- (<em>void</em>)webViewRunModal:(WebView *)<dfn class="local col5 decl" id="325sender" title='sender' data-type='WebView *' data-ref="325sender" data-ref-filename="325sender">sender</dfn>;</td></tr>
+<tr><th id="210">210</th><td></td></tr>
+<tr><th id="211">211</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="212">212</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webViewClose:</span></i></td></tr>
+<tr><th id="213">213</th><td><i class="doc">    <span class="command">@abstract</span> Close the current window. </i></td></tr>
+<tr><th id="214">214</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="215">215</th><td><i class="doc">    <span class="command">@discussion</span> Clients showing multiple views in one window may</i></td></tr>
+<tr><th id="216">216</th><td><i class="doc">    choose to close only the one corresponding to this</i></td></tr>
+<tr><th id="217">217</th><td><i class="doc">    WebView. Other clients may choose to ignore this method</i></td></tr>
+<tr><th id="218">218</th><td><i class="doc">    entirely.</i></td></tr>
+<tr><th id="219">219</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="220">220</th><td>- (<em>void</em>)webViewClose:(WebView *)<dfn class="local col6 decl" id="326sender" title='sender' data-type='WebView *' data-ref="326sender" data-ref-filename="326sender">sender</dfn>;</td></tr>
+<tr><th id="221">221</th><td></td></tr>
+<tr><th id="222">222</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="223">223</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webViewFocus:</span></i></td></tr>
+<tr><th id="224">224</th><td><i class="doc">    <span class="command">@abstract</span> Focus the current window (i.e. makeKeyAndOrderFront:).</i></td></tr>
+<tr><th id="225">225</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="226">226</th><td><i class="doc">    <span class="command">@discussion</span> Clients showing multiple views in one window may want to</i></td></tr>
+<tr><th id="227">227</th><td><i class="doc">    also do something to focus the one corresponding to this WebView.</i></td></tr>
+<tr><th id="228">228</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="229">229</th><td>- (<em>void</em>)webViewFocus:(WebView *)<dfn class="local col7 decl" id="327sender" title='sender' data-type='WebView *' data-ref="327sender" data-ref-filename="327sender">sender</dfn>;</td></tr>
+<tr><th id="230">230</th><td></td></tr>
+<tr><th id="231">231</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="232">232</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webViewUnfocus:</span></i></td></tr>
+<tr><th id="233">233</th><td><i class="doc">    <span class="command">@abstract</span> Unfocus the current window.</i></td></tr>
+<tr><th id="234">234</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="235">235</th><td><i class="doc">    <span class="command">@discussion</span> Clients showing multiple views in one window may want to</i></td></tr>
+<tr><th id="236">236</th><td><i class="doc">    also do something to unfocus the one corresponding to this WebView.</i></td></tr>
+<tr><th id="237">237</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="238">238</th><td>- (<em>void</em>)webViewUnfocus:(WebView *)<dfn class="local col8 decl" id="328sender" title='sender' data-type='WebView *' data-ref="328sender" data-ref-filename="328sender">sender</dfn>;</td></tr>
+<tr><th id="239">239</th><td></td></tr>
+<tr><th id="240">240</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="241">241</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webViewFirstResponder:</span></i></td></tr>
+<tr><th id="242">242</th><td><i class="doc">    <span class="command">@abstract</span> Get the first responder for this window.</i></td></tr>
+<tr><th id="243">243</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="244">244</th><td><i class="doc">    <span class="command">@discussion</span> This method should return the focused control in the</i></td></tr>
+<tr><th id="245">245</th><td><i class="doc">    WebView's view, if any. If the view is out of the window</i></td></tr>
+<tr><th id="246">246</th><td><i class="doc">    hierarchy, this might return something than calling firstResponder</i></td></tr>
+<tr><th id="247">247</th><td><i class="doc">    on the real NSWindow would. It's OK to return either nil or the</i></td></tr>
+<tr><th id="248">248</th><td><i class="doc">    real first responder if some control not in the window has focus.</i></td></tr>
+<tr><th id="249">249</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="250">250</th><td>- (NSResponder *)webViewFirstResponder:(WebView *)<dfn class="local col9 decl" id="329sender" title='sender' data-type='WebView *' data-ref="329sender" data-ref-filename="329sender">sender</dfn>;</td></tr>
+<tr><th id="251">251</th><td></td></tr>
+<tr><th id="252">252</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="253">253</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:makeFirstResponder:</span></i></td></tr>
+<tr><th id="254">254</th><td><i class="doc">    <span class="command">@abstract</span> Set the first responder for this window.</i></td></tr>
+<tr><th id="255">255</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="256">256</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">responder</span> The responder to make first (will always be a view)</i></td></tr>
+<tr><th id="257">257</th><td><i class="doc">    <span class="command">@discussion</span> responder will always be a view that is in the view</i></td></tr>
+<tr><th id="258">258</th><td><i class="doc">    subhierarchy of the top-level web view for this WebView. If the</i></td></tr>
+<tr><th id="259">259</th><td><i class="doc">    WebView's top level view is currently out of the view</i></td></tr>
+<tr><th id="260">260</th><td><i class="doc">    hierarchy, it may be desirable to save the first responder</i></td></tr>
+<tr><th id="261">261</th><td><i class="doc">    elsewhere, or possibly ignore this call.</i></td></tr>
+<tr><th id="262">262</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="263">263</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col0 decl" id="330sender" title='sender' data-type='WebView *' data-ref="330sender" data-ref-filename="330sender">sender</dfn> makeFirstResponder:(NSResponder *)<dfn class="local col1 decl" id="331responder" title='responder' data-type='NSResponder *' data-ref="331responder" data-ref-filename="331responder">responder</dfn>;</td></tr>
+<tr><th id="264">264</th><td></td></tr>
+<tr><th id="265">265</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="266">266</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:setStatusText:</span></i></td></tr>
+<tr><th id="267">267</th><td><i class="doc">    <span class="command">@abstract</span> Set the window's status display, if any, to the specified string.</i></td></tr>
+<tr><th id="268">268</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="269">269</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">text</span> The status text to set</i></td></tr>
+<tr><th id="270">270</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="271">271</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col2 decl" id="332sender" title='sender' data-type='WebView *' data-ref="332sender" data-ref-filename="332sender">sender</dfn> setStatusText:(NSString *)<dfn class="local col3 decl" id="333text" title='text' data-type='NSString *' data-ref="333text" data-ref-filename="333text">text</dfn>;</td></tr>
+<tr><th id="272">272</th><td></td></tr>
+<tr><th id="273">273</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="274">274</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webViewStatusText:</span></i></td></tr>
+<tr><th id="275">275</th><td><i class="doc">    <span class="command">@abstract</span> Get the currently displayed status text.</i></td></tr>
+<tr><th id="276">276</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="277">277</th><td><i class="doc">    <span class="command">@result</span> The status text</i></td></tr>
+<tr><th id="278">278</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="279">279</th><td>- (NSString *)webViewStatusText:(WebView *)<dfn class="local col4 decl" id="334sender" title='sender' data-type='WebView *' data-ref="334sender" data-ref-filename="334sender">sender</dfn>;</td></tr>
+<tr><th id="280">280</th><td></td></tr>
+<tr><th id="281">281</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="282">282</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webViewAreToolbarsVisible:</span></i></td></tr>
+<tr><th id="283">283</th><td><i class="doc">    <span class="command">@abstract</span> Determine whether the window's toolbars are currently visible</i></td></tr>
+<tr><th id="284">284</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="285">285</th><td><i class="doc">    <span class="command">@discussion</span> This method should return YES if the window has any</i></td></tr>
+<tr><th id="286">286</th><td><i class="doc">    toolbars that are currently on, besides the status bar. If the app</i></td></tr>
+<tr><th id="287">287</th><td><i class="doc">    has more than one toolbar per window, for example a regular</i></td></tr>
+<tr><th id="288">288</th><td><i class="doc">    command toolbar and a favorites bar, it should return YES from</i></td></tr>
+<tr><th id="289">289</th><td><i class="doc">    this method if at least one is on.</i></td></tr>
+<tr><th id="290">290</th><td><i class="doc">    <span class="command">@result</span> YES if at least one toolbar is visible, otherwise NO.</i></td></tr>
+<tr><th id="291">291</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="292">292</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)webViewAreToolbarsVisible:(WebView *)<dfn class="local col5 decl" id="335sender" title='sender' data-type='WebView *' data-ref="335sender" data-ref-filename="335sender">sender</dfn>;</td></tr>
+<tr><th id="293">293</th><td></td></tr>
+<tr><th id="294">294</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="295">295</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:setToolbarsVisible:</span></i></td></tr>
+<tr><th id="296">296</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="297">297</th><td><i class="doc">    <span class="command">@abstract</span> Set whether the window's toolbars are currently visible.</i></td></tr>
+<tr><th id="298">298</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">visible</span> New value for toolbar visibility</i></td></tr>
+<tr><th id="299">299</th><td><i class="doc">    <span class="command">@discussion</span> Setting this to YES should turn on all toolbars</i></td></tr>
+<tr><th id="300">300</th><td><i class="doc">    (except for a possible status bar). Setting it to NO should turn</i></td></tr>
+<tr><th id="301">301</th><td><i class="doc">    off all toolbars (with the same exception).</i></td></tr>
+<tr><th id="302">302</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="303">303</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col6 decl" id="336sender" title='sender' data-type='WebView *' data-ref="336sender" data-ref-filename="336sender">sender</dfn> setToolbarsVisible:(<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col7 decl" id="337visible" title='visible' data-type='BOOL' data-ref="337visible" data-ref-filename="337visible">visible</dfn>;</td></tr>
+<tr><th id="304">304</th><td></td></tr>
+<tr><th id="305">305</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="306">306</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webViewIsStatusBarVisible:</span></i></td></tr>
+<tr><th id="307">307</th><td><i class="doc">    <span class="command">@abstract</span> Determine whether the status bar is visible.</i></td></tr>
+<tr><th id="308">308</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="309">309</th><td><i class="doc">    <span class="command">@result</span> YES if the status bar is visible, otherwise NO.</i></td></tr>
+<tr><th id="310">310</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="311">311</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)webViewIsStatusBarVisible:(WebView *)<dfn class="local col8 decl" id="338sender" title='sender' data-type='WebView *' data-ref="338sender" data-ref-filename="338sender">sender</dfn>;</td></tr>
+<tr><th id="312">312</th><td></td></tr>
+<tr><th id="313">313</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="314">314</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:setStatusBarVisible:</span></i></td></tr>
+<tr><th id="315">315</th><td><i class="doc">    <span class="command">@abstract</span> Set whether the status bar is currently visible.</i></td></tr>
+<tr><th id="316">316</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">visible</span> The new visibility value</i></td></tr>
+<tr><th id="317">317</th><td><i class="doc">    <span class="command">@discussion</span> Setting this to YES should show the status bar,</i></td></tr>
+<tr><th id="318">318</th><td><i class="doc">    setting it to NO should hide it.</i></td></tr>
+<tr><th id="319">319</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="320">320</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col9 decl" id="339sender" title='sender' data-type='WebView *' data-ref="339sender" data-ref-filename="339sender">sender</dfn> setStatusBarVisible:(<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col0 decl" id="340visible" title='visible' data-type='BOOL' data-ref="340visible" data-ref-filename="340visible">visible</dfn>;</td></tr>
+<tr><th id="321">321</th><td></td></tr>
+<tr><th id="322">322</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="323">323</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webViewIsResizable:</span></i></td></tr>
+<tr><th id="324">324</th><td><i class="doc">    <span class="command">@abstract</span> Determine whether the window is resizable or not.</i></td></tr>
+<tr><th id="325">325</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="326">326</th><td><i class="doc">    <span class="command">@result</span> YES if resizable, NO if not.</i></td></tr>
+<tr><th id="327">327</th><td><i class="doc">    <span class="command">@discussion</span> If there are multiple views in the same window, they</i></td></tr>
+<tr><th id="328">328</th><td><i class="doc">    have have their own separate resize controls and this may need to</i></td></tr>
+<tr><th id="329">329</th><td><i class="doc">    be handled specially.</i></td></tr>
+<tr><th id="330">330</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="331">331</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)webViewIsResizable:(WebView *)<dfn class="local col1 decl" id="341sender" title='sender' data-type='WebView *' data-ref="341sender" data-ref-filename="341sender">sender</dfn>;</td></tr>
+<tr><th id="332">332</th><td></td></tr>
+<tr><th id="333">333</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="334">334</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:setResizable:</span></i></td></tr>
+<tr><th id="335">335</th><td><i class="doc">    <span class="command">@abstract</span> Set the window to resizable or not</i></td></tr>
+<tr><th id="336">336</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="337">337</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">resizable</span> YES if the window should be made resizable, NO if not.</i></td></tr>
+<tr><th id="338">338</th><td><i class="doc">    <span class="command">@discussion</span> If there are multiple views in the same window, they</i></td></tr>
+<tr><th id="339">339</th><td><i class="doc">    have have their own separate resize controls and this may need to</i></td></tr>
+<tr><th id="340">340</th><td><i class="doc">    be handled specially.</i></td></tr>
+<tr><th id="341">341</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="342">342</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col2 decl" id="342sender" title='sender' data-type='WebView *' data-ref="342sender" data-ref-filename="342sender">sender</dfn> setResizable:(<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col3 decl" id="343resizable" title='resizable' data-type='BOOL' data-ref="343resizable" data-ref-filename="343resizable">resizable</dfn>;</td></tr>
+<tr><th id="343">343</th><td></td></tr>
+<tr><th id="344">344</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="345">345</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:setFrame:</span></i></td></tr>
+<tr><th id="346">346</th><td><i class="doc">    <span class="command">@abstract</span> Set the window's frame rect</i></td></tr>
+<tr><th id="347">347</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="348">348</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The new window frame size</i></td></tr>
+<tr><th id="349">349</th><td><i class="doc">    <span class="command">@discussion</span> Even though a caller could set the frame directly using the NSWindow,</i></td></tr>
+<tr><th id="350">350</th><td><i class="doc">    this method is provided so implementors of this protocol can do special</i></td></tr>
+<tr><th id="351">351</th><td><i class="doc">    things on programmatic move/resize, like avoiding autosaving of the size.</i></td></tr>
+<tr><th id="352">352</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="353">353</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col4 decl" id="344sender" title='sender' data-type='WebView *' data-ref="344sender" data-ref-filename="344sender">sender</dfn> setFrame:(<span class='typedef' title='NSRect' data-type='CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)<dfn class="local col5 decl" id="345frame" title='frame' data-type='NSRect' data-ref="345frame" data-ref-filename="345frame">frame</dfn>;</td></tr>
+<tr><th id="354">354</th><td></td></tr>
+<tr><th id="355">355</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="356">356</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webViewFrame:</span></i></td></tr>
+<tr><th id="357">357</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="358">358</th><td><i class="doc">    <span class="command">@abstract</span> Return the window's frame rect</i></td></tr>
+<tr><th id="359">359</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="360">360</th><td>- (<span class='typedef' title='NSRect' data-type='CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)webViewFrame:(WebView *)<dfn class="local col6 decl" id="346sender" title='sender' data-type='WebView *' data-ref="346sender" data-ref-filename="346sender">sender</dfn>;</td></tr>
+<tr><th id="361">361</th><td></td></tr>
+<tr><th id="362">362</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="363">363</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:runJavaScriptAlertPanelWithMessage:initiatedByFrame:</span></i></td></tr>
+<tr><th id="364">364</th><td><i class="doc">    <span class="command">@abstract</span> Display a JavaScript alert panel.</i></td></tr>
+<tr><th id="365">365</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="366">366</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">message</span> The message to display.</i></td></tr>
+<tr><th id="367">367</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The WebFrame whose JavaScript initiated this call.</i></td></tr>
+<tr><th id="368">368</th><td><i class="doc">    <span class="command">@discussion</span> Clients should visually indicate that this panel comes</i></td></tr>
+<tr><th id="369">369</th><td><i class="doc">    from JavaScript initiated by the specified frame. The panel should have </i></td></tr>
+<tr><th id="370">370</th><td><i class="doc">    a single OK button.</i></td></tr>
+<tr><th id="371">371</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="372">372</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col7 decl" id="347sender" title='sender' data-type='WebView *' data-ref="347sender" data-ref-filename="347sender">sender</dfn> runJavaScriptAlertPanelWithMessage:(NSString *)<dfn class="local col8 decl" id="348message" title='message' data-type='NSString *' data-ref="348message" data-ref-filename="348message">message</dfn> initiatedByFrame:(WebFrame *)<dfn class="local col9 decl" id="349frame" title='frame' data-type='WebFrame *' data-ref="349frame" data-ref-filename="349frame">frame</dfn>;</td></tr>
+<tr><th id="373">373</th><td></td></tr>
+<tr><th id="374">374</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="375">375</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:runJavaScriptConfirmPanelWithMessage:initiatedByFrame:</span></i></td></tr>
+<tr><th id="376">376</th><td><i class="doc">    <span class="command">@abstract</span> Display a JavaScript confirm panel.</i></td></tr>
+<tr><th id="377">377</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="378">378</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">message</span> The message to display.</i></td></tr>
+<tr><th id="379">379</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The WebFrame whose JavaScript initiated this call.</i></td></tr>
+<tr><th id="380">380</th><td><i class="doc">    <span class="command">@result</span> YES if the user hit OK, NO if the user chose Cancel.</i></td></tr>
+<tr><th id="381">381</th><td><i class="doc">    <span class="command">@discussion</span> Clients should visually indicate that this panel comes</i></td></tr>
+<tr><th id="382">382</th><td><i class="doc">    from JavaScript initiated by the specified frame. The panel should have </i></td></tr>
+<tr><th id="383">383</th><td><i class="doc">    two buttons, e.g. "OK" and "Cancel".</i></td></tr>
+<tr><th id="384">384</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="385">385</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)webView:(WebView *)<dfn class="local col0 decl" id="350sender" title='sender' data-type='WebView *' data-ref="350sender" data-ref-filename="350sender">sender</dfn> runJavaScriptConfirmPanelWithMessage:(NSString *)<dfn class="local col1 decl" id="351message" title='message' data-type='NSString *' data-ref="351message" data-ref-filename="351message">message</dfn> initiatedByFrame:(WebFrame *)<dfn class="local col2 decl" id="352frame" title='frame' data-type='WebFrame *' data-ref="352frame" data-ref-filename="352frame">frame</dfn>;</td></tr>
+<tr><th id="386">386</th><td></td></tr>
+<tr><th id="387">387</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="388">388</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:runJavaScriptTextInputPanelWithPrompt:defaultText:initiatedByFrame:</span></i></td></tr>
+<tr><th id="389">389</th><td><i class="doc">    <span class="command">@abstract</span> Display a JavaScript text input panel.</i></td></tr>
+<tr><th id="390">390</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="391">391</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">prompt</span> The message to display.</i></td></tr>
+<tr><th id="392">392</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">defaultText</span> The initial text for the text entry area.</i></td></tr>
+<tr><th id="393">393</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The WebFrame whose JavaScript initiated this call.</i></td></tr>
+<tr><th id="394">394</th><td><i class="doc">    <span class="command">@result</span> The typed text if the user hit OK, otherwise nil.</i></td></tr>
+<tr><th id="395">395</th><td><i class="doc">    <span class="command">@discussion</span> Clients should visually indicate that this panel comes</i></td></tr>
+<tr><th id="396">396</th><td><i class="doc">    from JavaScript initiated by the specified frame. The panel should have </i></td></tr>
+<tr><th id="397">397</th><td><i class="doc">    two buttons, e.g. "OK" and "Cancel", and an area to type text.</i></td></tr>
+<tr><th id="398">398</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="399">399</th><td>- (NSString *)webView:(WebView *)<dfn class="local col3 decl" id="353sender" title='sender' data-type='WebView *' data-ref="353sender" data-ref-filename="353sender">sender</dfn> runJavaScriptTextInputPanelWithPrompt:(NSString *)<dfn class="local col4 decl" id="354prompt" title='prompt' data-type='NSString *' data-ref="354prompt" data-ref-filename="354prompt">prompt</dfn> defaultText:(NSString *)<dfn class="local col5 decl" id="355defaultText" title='defaultText' data-type='NSString *' data-ref="355defaultText" data-ref-filename="355defaultText">defaultText</dfn> initiatedByFrame:(WebFrame *)<dfn class="local col6 decl" id="356frame" title='frame' data-type='WebFrame *' data-ref="356frame" data-ref-filename="356frame">frame</dfn>;</td></tr>
+<tr><th id="400">400</th><td></td></tr>
+<tr><th id="401">401</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="402">402</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:runBeforeUnloadConfirmPanelWithMessage:initiatedByFrame:</span></i></td></tr>
+<tr><th id="403">403</th><td><i class="doc">    <span class="command">@abstract</span> Display a confirm panel by an "before unload" event handler.</i></td></tr>
+<tr><th id="404">404</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="405">405</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">message</span> The message to display.</i></td></tr>
+<tr><th id="406">406</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The WebFrame whose JavaScript initiated this call.</i></td></tr>
+<tr><th id="407">407</th><td><i class="doc">    <span class="command">@result</span> YES if the user hit OK, NO if the user chose Cancel.</i></td></tr>
+<tr><th id="408">408</th><td><i class="doc">    <span class="command">@discussion</span> Clients should include a message in addition to the one</i></td></tr>
+<tr><th id="409">409</th><td><i class="doc">    supplied by the web page that indicates. The panel should have </i></td></tr>
+<tr><th id="410">410</th><td><i class="doc">    two buttons, e.g. "OK" and "Cancel".</i></td></tr>
+<tr><th id="411">411</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="412">412</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)webView:(WebView *)<dfn class="local col7 decl" id="357sender" title='sender' data-type='WebView *' data-ref="357sender" data-ref-filename="357sender">sender</dfn> runBeforeUnloadConfirmPanelWithMessage:(NSString *)<dfn class="local col8 decl" id="358message" title='message' data-type='NSString *' data-ref="358message" data-ref-filename="358message">message</dfn> initiatedByFrame:(WebFrame *)<dfn class="local col9 decl" id="359frame" title='frame' data-type='WebFrame *' data-ref="359frame" data-ref-filename="359frame">frame</dfn>;</td></tr>
+<tr><th id="413">413</th><td></td></tr>
+<tr><th id="414">414</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="415">415</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:runOpenPanelForFileButtonWithResultListener:</span></i></td></tr>
+<tr><th id="416">416</th><td><i class="doc">    <span class="command">@abstract</span> Display a file open panel for a file input control.</i></td></tr>
+<tr><th id="417">417</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="418">418</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">resultListener</span> The object to call back with the results.</i></td></tr>
+<tr><th id="419">419</th><td><i class="doc">    <span class="command">@discussion</span> This method is passed a callback object instead of giving a return</i></td></tr>
+<tr><th id="420">420</th><td><i class="doc">    value so that it can be handled with a sheet.</i></td></tr>
+<tr><th id="421">421</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="422">422</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col0 decl" id="360sender" title='sender' data-type='WebView *' data-ref="360sender" data-ref-filename="360sender">sender</dfn> runOpenPanelForFileButtonWithResultListener:(id&lt;WebOpenPanelResultListener&gt;)<dfn class="local col1 decl" id="361resultListener" title='resultListener' data-type='id&lt;WebOpenPanelResultListener&gt;' data-ref="361resultListener" data-ref-filename="361resultListener">resultListener</dfn>;</td></tr>
+<tr><th id="423">423</th><td></td></tr>
+<tr><th id="424">424</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="425">425</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:runOpenPanelForFileButtonWithResultListener:allowMultipleFiles</span></i></td></tr>
+<tr><th id="426">426</th><td><i class="doc">    <span class="command">@abstract</span> Display a file open panel for a file input control that may allow multiple files to be selected.</i></td></tr>
+<tr><th id="427">427</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="428">428</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">resultListener</span> The object to call back with the results.</i></td></tr>
+<tr><th id="429">429</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">allowMultipleFiles</span> YES if the open panel should allow myltiple files to be selected, NO if not.</i></td></tr>
+<tr><th id="430">430</th><td><i class="doc">    <span class="command">@discussion</span> This method is passed a callback object instead of giving a return</i></td></tr>
+<tr><th id="431">431</th><td><i class="doc">    value so that it can be handled with a sheet.</i></td></tr>
+<tr><th id="432">432</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="433">433</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col2 decl" id="362sender" title='sender' data-type='WebView *' data-ref="362sender" data-ref-filename="362sender">sender</dfn> runOpenPanelForFileButtonWithResultListener:(id&lt;WebOpenPanelResultListener&gt;)<dfn class="local col3 decl" id="363resultListener" title='resultListener' data-type='id&lt;WebOpenPanelResultListener&gt;' data-ref="363resultListener" data-ref-filename="363resultListener">resultListener</dfn> allowMultipleFiles:(<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col4 decl" id="364allowMultipleFiles" title='allowMultipleFiles' data-type='BOOL' data-ref="364allowMultipleFiles" data-ref-filename="364allowMultipleFiles">allowMultipleFiles</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#33" title="__attribute__((availability(macosx,introduced=10_6)))" data-ref="_M/WEBKIT_AVAILABLE_MAC">WEBKIT_AVAILABLE_MAC</a>(<var>10_6</var>);</td></tr>
+<tr><th id="434">434</th><td></td></tr>
+<tr><th id="435">435</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="436">436</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:mouseDidMoveOverElement:modifierFlags:</span></i></td></tr>
+<tr><th id="437">437</th><td><i class="doc">    <span class="command">@abstract</span> Update the window's feedback for mousing over links to reflect a new item the mouse is over</i></td></tr>
+<tr><th id="438">438</th><td><i class="doc">    or new modifier flags.</i></td></tr>
+<tr><th id="439">439</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="440">440</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">elementInformation</span> Dictionary that describes the element that the mouse is over, or nil.</i></td></tr>
+<tr><th id="441">441</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">modifierFlags</span> The modifier flags as in NSEvent.</i></td></tr>
+<tr><th id="442">442</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="443">443</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col5 decl" id="365sender" title='sender' data-type='WebView *' data-ref="365sender" data-ref-filename="365sender">sender</dfn> mouseDidMoveOverElement:(NSDictionary *)<dfn class="local col6 decl" id="366elementInformation" title='elementInformation' data-type='NSDictionary *' data-ref="366elementInformation" data-ref-filename="366elementInformation">elementInformation</dfn> modifierFlags:(<span class='typedef' title='NSUInteger' data-type='unsigned long' data-ref="NSUInteger" data-ref-filename="NSUInteger">NSUInteger</span>)<dfn class="local col7 decl" id="367modifierFlags" title='modifierFlags' data-type='NSUInteger' data-ref="367modifierFlags" data-ref-filename="367modifierFlags">modifierFlags</dfn>;</td></tr>
+<tr><th id="444">444</th><td></td></tr>
+<tr><th id="445">445</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="446">446</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:contextMenuItemsForElement:defaultMenuItems:</span></i></td></tr>
+<tr><th id="447">447</th><td><i class="doc">    <span class="command">@abstract</span> Returns the menu items to display in an element's contextual menu.</i></td></tr>
+<tr><th id="448">448</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method.</i></td></tr>
+<tr><th id="449">449</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">element</span> A dictionary representation of the clicked element.</i></td></tr>
+<tr><th id="450">450</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">defaultMenuItems</span> An array of default NSMenuItems to include in all contextual menus.</i></td></tr>
+<tr><th id="451">451</th><td><i class="doc">    <span class="command">@result</span> An array of NSMenuItems to include in the contextual menu.</i></td></tr>
+<tr><th id="452">452</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="453">453</th><td>- (NSArray *)webView:(WebView *)<dfn class="local col8 decl" id="368sender" title='sender' data-type='WebView *' data-ref="368sender" data-ref-filename="368sender">sender</dfn> contextMenuItemsForElement:(NSDictionary *)<dfn class="local col9 decl" id="369element" title='element' data-type='NSDictionary *' data-ref="369element" data-ref-filename="369element">element</dfn> defaultMenuItems:(NSArray *)<dfn class="local col0 decl" id="370defaultMenuItems" title='defaultMenuItems' data-type='NSArray *' data-ref="370defaultMenuItems" data-ref-filename="370defaultMenuItems">defaultMenuItems</dfn>;</td></tr>
+<tr><th id="454">454</th><td></td></tr>
+<tr><th id="455">455</th><td><u>#<span data-ppcond="455">if</span> !<span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="456">456</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="457">457</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:validateUserInterfaceItem:defaultValidation:</span></i></td></tr>
+<tr><th id="458">458</th><td><i class="doc">    <span class="command">@abstract</span> Controls UI validation</i></td></tr>
+<tr><th id="459">459</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">webView</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="460">460</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">item</span> The user interface item being validated</i></td></tr>
+<tr><th id="461">461</th><td><i class="doc">    <span class="command">@parar</span>m <span class="arg">defaultValidation</span> Whether or not the WebView thinks the item is valid</i></td></tr>
+<tr><th id="462">462</th><td><i class="doc">    <span class="command">@discussion</span> This method allows the UI delegate to control WebView's validation of user interface items.</i></td></tr>
+<tr><th id="463">463</th><td><i class="doc">    See WebView.h to see the methods to that WebView can currently validate. See NSUserInterfaceValidations and</i></td></tr>
+<tr><th id="464">464</th><td><i class="doc">    NSValidatedUserInterfaceItem for information about UI validation.</i></td></tr>
+<tr><th id="465">465</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="466">466</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)webView:(WebView *)<dfn class="local col1 decl" id="371webView" title='webView' data-type='WebView *' data-ref="371webView" data-ref-filename="371webView">webView</dfn> validateUserInterfaceItem:(id &lt;NSValidatedUserInterfaceItem&gt;)<dfn class="local col2 decl" id="372item" title='item' data-type='id&lt;NSValidatedUserInterfaceItem&gt;' data-ref="372item" data-ref-filename="372item">item</dfn> defaultValidation:(<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col3 decl" id="373defaultValidation" title='defaultValidation' data-type='BOOL' data-ref="373defaultValidation" data-ref-filename="373defaultValidation">defaultValidation</dfn>;</td></tr>
+<tr><th id="467">467</th><td><u>#<span data-ppcond="455">endif</span></u></td></tr>
+<tr><th id="468">468</th><td></td></tr>
+<tr><th id="469">469</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="470">470</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:shouldPerformAction:fromSender:</span></i></td></tr>
+<tr><th id="471">471</th><td><i class="doc">    <span class="command">@abstract</span> Controls actions</i></td></tr>
+<tr><th id="472">472</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">webView</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="473">473</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">action</span> The action being sent</i></td></tr>
+<tr><th id="474">474</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The sender of the action</i></td></tr>
+<tr><th id="475">475</th><td><i class="doc">    <span class="command">@discussion</span> This method allows the UI delegate to control WebView's behavior when an action is being sent.</i></td></tr>
+<tr><th id="476">476</th><td><i class="doc">    For example, if the action is copy:, the delegate can return YES to allow WebView to perform its default</i></td></tr>
+<tr><th id="477">477</th><td><i class="doc">    copy behavior or return NO and perform copy: in some other way. See WebView.h to see the actions that</i></td></tr>
+<tr><th id="478">478</th><td><i class="doc">    WebView can perform.</i></td></tr>
+<tr><th id="479">479</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="480">480</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)webView:(WebView *)<dfn class="local col4 decl" id="374webView" title='webView' data-type='WebView *' data-ref="374webView" data-ref-filename="374webView">webView</dfn> shouldPerformAction:(<span class='typedef' title='SEL' data-type='SEL *' data-ref="SEL" data-ref-filename="SEL">SEL</span>)<dfn class="local col5 decl" id="375action" title='action' data-type='SEL' data-ref="375action" data-ref-filename="375action">action</dfn> fromSender:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col6 decl" id="376sender" title='sender' data-type='id' data-ref="376sender" data-ref-filename="376sender">sender</dfn>;</td></tr>
+<tr><th id="481">481</th><td></td></tr>
+<tr><th id="482">482</th><td><u>#<span data-ppcond="482">if</span> !<span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="483">483</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="484">484</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:dragDestinationActionMaskForDraggingInfo:</span></i></td></tr>
+<tr><th id="485">485</th><td><i class="doc">    <span class="command">@abstract</span> Controls behavior when dragging to a WebView</i></td></tr>
+<tr><th id="486">486</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">webView</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="487">487</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">draggingInfo</span> The dragging info of the drag</i></td></tr>
+<tr><th id="488">488</th><td><i class="doc">    <span class="command">@discussion</span> This method is called periodically as something is dragged over a WebView. The UI delegate can return a mask</i></td></tr>
+<tr><th id="489">489</th><td><i class="doc">    indicating which drag destination actions can occur, WebDragDestinationActionAny to allow any kind of action or</i></td></tr>
+<tr><th id="490">490</th><td><i class="doc">    WebDragDestinationActionNone to not accept the drag.</i></td></tr>
+<tr><th id="491">491</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="492">492</th><td>- (<span class='typedef' title='NSUInteger' data-type='unsigned long' data-ref="NSUInteger" data-ref-filename="NSUInteger">NSUInteger</span>)webView:(WebView *)<dfn class="local col7 decl" id="377webView" title='webView' data-type='WebView *' data-ref="377webView" data-ref-filename="377webView">webView</dfn> dragDestinationActionMaskForDraggingInfo:(id &lt;NSDraggingInfo&gt;)<dfn class="local col8 decl" id="378draggingInfo" title='draggingInfo' data-type='id&lt;NSDraggingInfo&gt;' data-ref="378draggingInfo" data-ref-filename="378draggingInfo">draggingInfo</dfn>;</td></tr>
+<tr><th id="493">493</th><td></td></tr>
+<tr><th id="494">494</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="495">495</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:willPerformDragDestinationAction:forDraggingInfo:</span></i></td></tr>
+<tr><th id="496">496</th><td><i class="doc">    <span class="command">@abstract</span> Informs that WebView will perform a drag destination action</i></td></tr>
+<tr><th id="497">497</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">webView</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="498">498</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">action</span> The drag destination action</i></td></tr>
+<tr><th id="499">499</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">draggingInfo</span> The dragging info of the drag</i></td></tr>
+<tr><th id="500">500</th><td><i class="doc">    <span class="command">@discussion</span> This method is called after the last call to webView:dragDestinationActionMaskForDraggingInfo: after something is dropped on a WebView.</i></td></tr>
+<tr><th id="501">501</th><td><i class="doc">    This method informs the UI delegate of the drag destination action that WebView will perform.</i></td></tr>
+<tr><th id="502">502</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="503">503</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col9 decl" id="379webView" title='webView' data-type='WebView *' data-ref="379webView" data-ref-filename="379webView">webView</dfn> willPerformDragDestinationAction:(<a class="typedef" href="#91" title='WebDragDestinationAction' data-type='enum WebDragDestinationAction' data-ref="WebDragDestinationAction" data-ref-filename="WebDragDestinationAction">WebDragDestinationAction</a>)<dfn class="local col0 decl" id="380action" title='action' data-type='WebDragDestinationAction' data-ref="380action" data-ref-filename="380action">action</dfn> forDraggingInfo:(id &lt;NSDraggingInfo&gt;)<dfn class="local col1 decl" id="381draggingInfo" title='draggingInfo' data-type='id&lt;NSDraggingInfo&gt;' data-ref="381draggingInfo" data-ref-filename="381draggingInfo">draggingInfo</dfn>;</td></tr>
+<tr><th id="504">504</th><td></td></tr>
+<tr><th id="505">505</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="506">506</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:dragSourceActionMaskForPoint:</span></i></td></tr>
+<tr><th id="507">507</th><td><i class="doc">    <span class="command">@abstract</span> Controls behavior when dragging from a WebView</i></td></tr>
+<tr><th id="508">508</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">webView</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="509">509</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">point</span> The point where the drag started in the coordinates of the WebView</i></td></tr>
+<tr><th id="510">510</th><td><i class="doc">    <span class="command">@discussion</span> This method is called after the user has begun a drag from a WebView. The UI delegate can return a mask indicating</i></td></tr>
+<tr><th id="511">511</th><td><i class="doc">    which drag source actions can occur, WebDragSourceActionAny to allow any kind of action or WebDragSourceActionNone to not begin a drag.</i></td></tr>
+<tr><th id="512">512</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="513">513</th><td>- (<span class='typedef' title='NSUInteger' data-type='unsigned long' data-ref="NSUInteger" data-ref-filename="NSUInteger">NSUInteger</span>)webView:(WebView *)<dfn class="local col2 decl" id="382webView" title='webView' data-type='WebView *' data-ref="382webView" data-ref-filename="382webView">webView</dfn> dragSourceActionMaskForPoint:(<span class='typedef' title='NSPoint' data-type='CGPoint' data-ref="NSPoint" data-ref-filename="NSPoint">NSPoint</span>)<dfn class="local col3 decl" id="383point" title='point' data-type='NSPoint' data-ref="383point" data-ref-filename="383point">point</dfn>;</td></tr>
+<tr><th id="514">514</th><td></td></tr>
+<tr><th id="515">515</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="516">516</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:willPerformDragSourceAction:fromPoint:withPasteboard:</span></i></td></tr>
+<tr><th id="517">517</th><td><i class="doc">    <span class="command">@abstract</span> Informs that a drag a has begun from a WebView</i></td></tr>
+<tr><th id="518">518</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">webView</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="519">519</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">action</span> The drag source action</i></td></tr>
+<tr><th id="520">520</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">point</span> The point where the drag started in the coordinates of the WebView</i></td></tr>
+<tr><th id="521">521</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">pasteboard</span> The drag pasteboard</i></td></tr>
+<tr><th id="522">522</th><td><i class="doc">    <span class="command">@discussion</span> This method is called after webView:dragSourceActionMaskForPoint: is called after the user has begun a drag from a WebView.</i></td></tr>
+<tr><th id="523">523</th><td><i class="doc">    This method informs the UI delegate of the drag source action that will be performed and gives the delegate an opportunity to modify</i></td></tr>
+<tr><th id="524">524</th><td><i class="doc">    the contents of the dragging pasteboard.</i></td></tr>
+<tr><th id="525">525</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="526">526</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col4 decl" id="384webView" title='webView' data-type='WebView *' data-ref="384webView" data-ref-filename="384webView">webView</dfn> willPerformDragSourceAction:(<a class="typedef" href="#109" title='WebDragSourceAction' data-type='enum WebDragSourceAction' data-ref="WebDragSourceAction" data-ref-filename="WebDragSourceAction">WebDragSourceAction</a>)<dfn class="local col5 decl" id="385action" title='action' data-type='WebDragSourceAction' data-ref="385action" data-ref-filename="385action">action</dfn> fromPoint:(<span class='typedef' title='NSPoint' data-type='CGPoint' data-ref="NSPoint" data-ref-filename="NSPoint">NSPoint</span>)<dfn class="local col6 decl" id="386point" title='point' data-type='NSPoint' data-ref="386point" data-ref-filename="386point">point</dfn> withPasteboard:(NSPasteboard *)<dfn class="local col7 decl" id="387pasteboard" title='pasteboard' data-type='NSPasteboard *' data-ref="387pasteboard" data-ref-filename="387pasteboard">pasteboard</dfn>;</td></tr>
+<tr><th id="527">527</th><td><u>#<span data-ppcond="482">endif</span> /* !TARGET_OS_IPHONE */</u></td></tr>
+<tr><th id="528">528</th><td></td></tr>
+<tr><th id="529">529</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="530">530</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:printFrameView:</span></i></td></tr>
+<tr><th id="531">531</th><td><i class="doc">    <span class="command">@abstract</span> Informs that a WebFrameView needs to be printed</i></td></tr>
+<tr><th id="532">532</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="533">533</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frameView</span> The WebFrameView needing to be printed</i></td></tr>
+<tr><th id="534">534</th><td><i class="doc">    <span class="command">@discussion</span> This method is called when a script or user requests the page to be printed.</i></td></tr>
+<tr><th id="535">535</th><td><i class="doc">    In this method the delegate can prepare the WebFrameView to be printed. Some content that WebKit</i></td></tr>
+<tr><th id="536">536</th><td><i class="doc">    displays can be printed directly by the WebFrameView, other content will need to be handled by</i></td></tr>
+<tr><th id="537">537</th><td><i class="doc">    the delegate. To determine if the WebFrameView can handle printing the delegate should check</i></td></tr>
+<tr><th id="538">538</th><td><i class="doc">    WebFrameView's documentViewShouldHandlePrint, if YES then the delegate can call printDocumentView</i></td></tr>
+<tr><th id="539">539</th><td><i class="doc">    on the WebFrameView. Otherwise the delegate will need to request a NSPrintOperation from</i></td></tr>
+<tr><th id="540">540</th><td><i class="doc">    the WebFrameView's printOperationWithPrintInfo to handle the printing.</i></td></tr>
+<tr><th id="541">541</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="542">542</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col8 decl" id="388sender" title='sender' data-type='WebView *' data-ref="388sender" data-ref-filename="388sender">sender</dfn> printFrameView:(WebFrameView *)<dfn class="local col9 decl" id="389frameView" title='frameView' data-type='WebFrameView *' data-ref="389frameView" data-ref-filename="389frameView">frameView</dfn>;</td></tr>
+<tr><th id="543">543</th><td></td></tr>
+<tr><th id="544">544</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="545">545</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webViewHeaderHeight:</span></i></td></tr>
+<tr><th id="546">546</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="547">547</th><td><i class="doc">    <span class="command">@abstract</span> Reserve a height for the printed page header.</i></td></tr>
+<tr><th id="548">548</th><td><i class="doc">    <span class="command">@result</span> The height to reserve for the printed page header, return 0.0 to not reserve any space for a header.</i></td></tr>
+<tr><th id="549">549</th><td><i class="doc">    <span class="command">@discussion</span> The height returned will be used to calculate the rect passed to webView:drawHeaderInRect:.</i></td></tr>
+<tr><th id="550">550</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="551">551</th><td>- (<em>float</em>)webViewHeaderHeight:(WebView *)<dfn class="local col0 decl" id="390sender" title='sender' data-type='WebView *' data-ref="390sender" data-ref-filename="390sender">sender</dfn>;</td></tr>
+<tr><th id="552">552</th><td></td></tr>
+<tr><th id="553">553</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="554">554</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webViewFooterHeight:</span></i></td></tr>
+<tr><th id="555">555</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="556">556</th><td><i class="doc">    <span class="command">@abstract</span> Reserve a height for the printed page footer.</i></td></tr>
+<tr><th id="557">557</th><td><i class="doc">    <span class="command">@result</span> The height to reserve for the printed page footer, return 0.0 to not reserve any space for a footer.</i></td></tr>
+<tr><th id="558">558</th><td><i class="doc">    <span class="command">@discussion</span> The height returned will be used to calculate the rect passed to webView:drawFooterInRect:.</i></td></tr>
+<tr><th id="559">559</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="560">560</th><td>- (<em>float</em>)webViewFooterHeight:(WebView *)<dfn class="local col1 decl" id="391sender" title='sender' data-type='WebView *' data-ref="391sender" data-ref-filename="391sender">sender</dfn>;</td></tr>
+<tr><th id="561">561</th><td></td></tr>
+<tr><th id="562">562</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="563">563</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:drawHeaderInRect:</span></i></td></tr>
+<tr><th id="564">564</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="565">565</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">rect</span> The NSRect reserved for the header of the page</i></td></tr>
+<tr><th id="566">566</th><td><i class="doc">    <span class="command">@abstract</span> The delegate should draw a header for the sender in the supplied rect.</i></td></tr>
+<tr><th id="567">567</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="568">568</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col2 decl" id="392sender" title='sender' data-type='WebView *' data-ref="392sender" data-ref-filename="392sender">sender</dfn> drawHeaderInRect:(<span class='typedef' title='NSRect' data-type='CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)<dfn class="local col3 decl" id="393rect" title='rect' data-type='NSRect' data-ref="393rect" data-ref-filename="393rect">rect</dfn>;</td></tr>
+<tr><th id="569">569</th><td></td></tr>
+<tr><th id="570">570</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="571">571</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:drawFooterInRect:</span></i></td></tr>
+<tr><th id="572">572</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">sender</span> The WebView sending the delegate method</i></td></tr>
+<tr><th id="573">573</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">rect</span> The NSRect reserved for the footer of the page</i></td></tr>
+<tr><th id="574">574</th><td><i class="doc">    <span class="command">@abstract</span> The delegate should draw a footer for the sender in the supplied rect.</i></td></tr>
+<tr><th id="575">575</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="576">576</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col4 decl" id="394sender" title='sender' data-type='WebView *' data-ref="394sender" data-ref-filename="394sender">sender</dfn> drawFooterInRect:(<span class='typedef' title='NSRect' data-type='CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)<dfn class="local col5 decl" id="395rect" title='rect' data-type='NSRect' data-ref="395rect" data-ref-filename="395rect">rect</dfn>;</td></tr>
+<tr><th id="577">577</th><td></td></tr>
+<tr><th id="578">578</th><td><i>// The following delegate methods are deprecated in favor of the ones above that specify</i></td></tr>
+<tr><th id="579">579</th><td><i>// the WebFrame whose JavaScript initiated this call.</i></td></tr>
+<tr><th id="580">580</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col6 decl" id="396sender" title='sender' data-type='WebView *' data-ref="396sender" data-ref-filename="396sender">sender</dfn> runJavaScriptAlertPanelWithMessage:(NSString *)<dfn class="local col7 decl" id="397message" title='message' data-type='NSString *' data-ref="397message" data-ref-filename="397message">message</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_5</var>);</td></tr>
+<tr><th id="581">581</th><td>- (<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)webView:(WebView *)<dfn class="local col8 decl" id="398sender" title='sender' data-type='WebView *' data-ref="398sender" data-ref-filename="398sender">sender</dfn> runJavaScriptConfirmPanelWithMessage:(NSString *)<dfn class="local col9 decl" id="399message" title='message' data-type='NSString *' data-ref="399message" data-ref-filename="399message">message</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_5</var>);</td></tr>
+<tr><th id="582">582</th><td>- (NSString *)webView:(WebView *)<dfn class="local col0 decl" id="400sender" title='sender' data-type='WebView *' data-ref="400sender" data-ref-filename="400sender">sender</dfn> runJavaScriptTextInputPanelWithPrompt:(NSString *)<dfn class="local col1 decl" id="401prompt" title='prompt' data-type='NSString *' data-ref="401prompt" data-ref-filename="401prompt">prompt</dfn> defaultText:(NSString *)<dfn class="local col2 decl" id="402defaultText" title='defaultText' data-type='NSString *' data-ref="402defaultText" data-ref-filename="402defaultText">defaultText</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_5</var>);</td></tr>
+<tr><th id="583">583</th><td></td></tr>
+<tr><th id="584">584</th><td><i>// The following delegate methods are deprecated. Content rect calculations are now done automatically.</i></td></tr>
+<tr><th id="585">585</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col3 decl" id="403sender" title='sender' data-type='WebView *' data-ref="403sender" data-ref-filename="403sender">sender</dfn> setContentRect:(<span class='typedef' title='NSRect' data-type='CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)<dfn class="local col4 decl" id="404frame" title='frame' data-type='NSRect' data-ref="404frame" data-ref-filename="404frame">frame</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_5</var>);</td></tr>
+<tr><th id="586">586</th><td>- (<span class='typedef' title='NSRect' data-type='CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)webViewContentRect:(WebView *)<dfn class="local col5 decl" id="405sender" title='sender' data-type='WebView *' data-ref="405sender" data-ref-filename="405sender">sender</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_5</var>);</td></tr>
+<tr><th id="587">587</th><td></td></tr>
+<tr><th id="588">588</th><td>@end</td></tr>
+<tr><th id="589">589</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../DefaultDelegates/WebDefaultPolicyDelegate.m.html'>webkit/Source/WebKitLegacy/mac/DefaultDelegates/WebDefaultPolicyDelegate.m</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

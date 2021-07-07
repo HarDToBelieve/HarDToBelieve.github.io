@@ -1,0 +1,227 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>echo_control_mobile.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/aecm/echo_control_mobile.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/aecm/echo_control_mobile.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>audio_processing</a>/<a href='./'>aecm</a>/<a href='echo_control_mobile.h.html'>echo_control_mobile.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/MODULES_AUDIO_PROCESSING_AECM_ECHO_CONTROL_MOBILE_H_">MODULES_AUDIO_PROCESSING_AECM_ECHO_CONTROL_MOBILE_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/MODULES_AUDIO_PROCESSING_AECM_ECHO_CONTROL_MOBILE_H_" data-ref="_M/MODULES_AUDIO_PROCESSING_AECM_ECHO_CONTROL_MOBILE_H_">MODULES_AUDIO_PROCESSING_AECM_ECHO_CONTROL_MOBILE_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="15">15</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><b>enum</b> { <dfn class="enum" id="webrtc::AecmFalse" title='webrtc::AecmFalse' data-ref="webrtc::AecmFalse" data-ref-filename="webrtc..AecmFalse">AecmFalse</dfn> = <var>0</var>, <dfn class="enum" id="webrtc::AecmTrue" title='webrtc::AecmTrue' data-ref="webrtc::AecmTrue" data-ref-filename="webrtc..AecmTrue">AecmTrue</dfn> };</td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><i>// Errors</i></td></tr>
+<tr><th id="22">22</th><td><u>#define <dfn class="macro" id="_M/AECM_UNSPECIFIED_ERROR" data-ref="_M/AECM_UNSPECIFIED_ERROR">AECM_UNSPECIFIED_ERROR</dfn> 12000</u></td></tr>
+<tr><th id="23">23</th><td><u>#define <dfn class="macro" id="_M/AECM_UNSUPPORTED_FUNCTION_ERROR" data-ref="_M/AECM_UNSUPPORTED_FUNCTION_ERROR">AECM_UNSUPPORTED_FUNCTION_ERROR</dfn> 12001</u></td></tr>
+<tr><th id="24">24</th><td><u>#define <dfn class="macro" id="_M/AECM_UNINITIALIZED_ERROR" data-ref="_M/AECM_UNINITIALIZED_ERROR">AECM_UNINITIALIZED_ERROR</dfn> 12002</u></td></tr>
+<tr><th id="25">25</th><td><u>#define <dfn class="macro" id="_M/AECM_NULL_POINTER_ERROR" data-ref="_M/AECM_NULL_POINTER_ERROR">AECM_NULL_POINTER_ERROR</dfn> 12003</u></td></tr>
+<tr><th id="26">26</th><td><u>#define <dfn class="macro" id="_M/AECM_BAD_PARAMETER_ERROR" data-ref="_M/AECM_BAD_PARAMETER_ERROR">AECM_BAD_PARAMETER_ERROR</dfn> 12004</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><i>// Warnings</i></td></tr>
+<tr><th id="29">29</th><td><u>#define <dfn class="macro" id="_M/AECM_BAD_PARAMETER_WARNING" data-ref="_M/AECM_BAD_PARAMETER_WARNING">AECM_BAD_PARAMETER_WARNING</dfn> 12100</u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><b>typedef</b> <b>struct</b> {</td></tr>
+<tr><th id="32">32</th><td>  <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="decl field" id="webrtc::(anonymous)::cngMode" title='webrtc::(anonymous struct)::cngMode' data-ref="webrtc::(anonymous)::cngMode" data-ref-filename="webrtc..(anonymous)..cngMode">cngMode</dfn>;   <i>// AECM_FALSE, AECM_TRUE (default)</i></td></tr>
+<tr><th id="33">33</th><td>  <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="decl field" id="webrtc::(anonymous)::echoMode" title='webrtc::(anonymous struct)::echoMode' data-ref="webrtc::(anonymous)::echoMode" data-ref-filename="webrtc..(anonymous)..echoMode">echoMode</dfn>;  <i>// 0, 1, 2, 3 (default), 4</i></td></tr>
+<tr><th id="34">34</th><td>} <dfn class="typedef" id="webrtc::AecmConfig" title='webrtc::AecmConfig' data-type='struct AecmConfig' data-ref="webrtc::AecmConfig" data-ref-filename="webrtc..AecmConfig">AecmConfig</dfn>;</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><u>#<span data-ppcond="36">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="37">37</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="38">38</th><td><u>#<span data-ppcond="36">endif</span></u></td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><i>/*</i></td></tr>
+<tr><th id="41">41</th><td><i> * Allocates the memory needed by the AECM. The memory needs to be</i></td></tr>
+<tr><th id="42">42</th><td><i> * initialized separately using the WebRtcAecm_Init() function.</i></td></tr>
+<tr><th id="43">43</th><td><i> * Returns a pointer to the instance and a nullptr at failure.</i></td></tr>
+<tr><th id="44">44</th><td><i> */</i></td></tr>
+<tr><th id="45">45</th><td><em>void</em>* <dfn class="decl fn" id="webrtc::WebRtcAecm_Create" title='webrtc::WebRtcAecm_Create' data-ref="webrtc::WebRtcAecm_Create" data-ref-filename="webrtc..WebRtcAecm_Create">WebRtcAecm_Create</dfn>();</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td><i>/*</i></td></tr>
+<tr><th id="48">48</th><td><i> * This function releases the memory allocated by WebRtcAecm_Create()</i></td></tr>
+<tr><th id="49">49</th><td><i> *</i></td></tr>
+<tr><th id="50">50</th><td><i> * Inputs                       Description</i></td></tr>
+<tr><th id="51">51</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="52">52</th><td><i> * void*    aecmInst            Pointer to the AECM instance</i></td></tr>
+<tr><th id="53">53</th><td><i> */</i></td></tr>
+<tr><th id="54">54</th><td><em>void</em> <dfn class="decl fn" id="webrtc::WebRtcAecm_Free" title='webrtc::WebRtcAecm_Free' data-ref="webrtc::WebRtcAecm_Free" data-ref-filename="webrtc..WebRtcAecm_Free">WebRtcAecm_Free</dfn>(<em>void</em>* <dfn class="local col5 decl" id="55aecmInst" title='aecmInst' data-type='void *' data-ref="55aecmInst" data-ref-filename="55aecmInst">aecmInst</dfn>);</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td><i>/*</i></td></tr>
+<tr><th id="57">57</th><td><i> * Initializes an AECM instance.</i></td></tr>
+<tr><th id="58">58</th><td><i> *</i></td></tr>
+<tr><th id="59">59</th><td><i> * Inputs                       Description</i></td></tr>
+<tr><th id="60">60</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="61">61</th><td><i> * void*          aecmInst      Pointer to the AECM instance</i></td></tr>
+<tr><th id="62">62</th><td><i> * int32_t        sampFreq      Sampling frequency of data</i></td></tr>
+<tr><th id="63">63</th><td><i> *</i></td></tr>
+<tr><th id="64">64</th><td><i> * Outputs                      Description</i></td></tr>
+<tr><th id="65">65</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="66">66</th><td><i> * int32_t        return        0: OK</i></td></tr>
+<tr><th id="67">67</th><td><i> *                              1200-12004,12100: error/warning</i></td></tr>
+<tr><th id="68">68</th><td><i> */</i></td></tr>
+<tr><th id="69">69</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl fn" id="webrtc::WebRtcAecm_Init" title='webrtc::WebRtcAecm_Init' data-ref="webrtc::WebRtcAecm_Init" data-ref-filename="webrtc..WebRtcAecm_Init">WebRtcAecm_Init</dfn>(<em>void</em>* <dfn class="local col6 decl" id="56aecmInst" title='aecmInst' data-type='void *' data-ref="56aecmInst" data-ref-filename="56aecmInst">aecmInst</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col7 decl" id="57sampFreq" title='sampFreq' data-type='int32_t' data-ref="57sampFreq" data-ref-filename="57sampFreq">sampFreq</dfn>);</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><i>/*</i></td></tr>
+<tr><th id="72">72</th><td><i> * Inserts an 80 or 160 sample block of data into the farend buffer.</i></td></tr>
+<tr><th id="73">73</th><td><i> *</i></td></tr>
+<tr><th id="74">74</th><td><i> * Inputs                       Description</i></td></tr>
+<tr><th id="75">75</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="76">76</th><td><i> * void*          aecmInst      Pointer to the AECM instance</i></td></tr>
+<tr><th id="77">77</th><td><i> * int16_t*       farend        In buffer containing one frame of</i></td></tr>
+<tr><th id="78">78</th><td><i> *                              farend signal</i></td></tr>
+<tr><th id="79">79</th><td><i> * int16_t        nrOfSamples   Number of samples in farend buffer</i></td></tr>
+<tr><th id="80">80</th><td><i> *</i></td></tr>
+<tr><th id="81">81</th><td><i> * Outputs                      Description</i></td></tr>
+<tr><th id="82">82</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="83">83</th><td><i> * int32_t        return        0: OK</i></td></tr>
+<tr><th id="84">84</th><td><i> *                              1200-12004,12100: error/warning</i></td></tr>
+<tr><th id="85">85</th><td><i> */</i></td></tr>
+<tr><th id="86">86</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl fn" id="webrtc::WebRtcAecm_BufferFarend" title='webrtc::WebRtcAecm_BufferFarend' data-ref="webrtc::WebRtcAecm_BufferFarend" data-ref-filename="webrtc..WebRtcAecm_BufferFarend">WebRtcAecm_BufferFarend</dfn>(<em>void</em>* <dfn class="local col8 decl" id="58aecmInst" title='aecmInst' data-type='void *' data-ref="58aecmInst" data-ref-filename="58aecmInst">aecmInst</dfn>,</td></tr>
+<tr><th id="87">87</th><td>                                <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col9 decl" id="59farend" title='farend' data-type='const int16_t *' data-ref="59farend" data-ref-filename="59farend">farend</dfn>,</td></tr>
+<tr><th id="88">88</th><td>                                <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="60nrOfSamples" title='nrOfSamples' data-type='size_t' data-ref="60nrOfSamples" data-ref-filename="60nrOfSamples">nrOfSamples</dfn>);</td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td><i>/*</i></td></tr>
+<tr><th id="91">91</th><td><i> * Reports any errors that would arise when buffering a farend buffer.</i></td></tr>
+<tr><th id="92">92</th><td><i> *</i></td></tr>
+<tr><th id="93">93</th><td><i> * Inputs                       Description</i></td></tr>
+<tr><th id="94">94</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="95">95</th><td><i> * void*          aecmInst      Pointer to the AECM instance</i></td></tr>
+<tr><th id="96">96</th><td><i> * int16_t*       farend        In buffer containing one frame of</i></td></tr>
+<tr><th id="97">97</th><td><i> *                              farend signal</i></td></tr>
+<tr><th id="98">98</th><td><i> * int16_t        nrOfSamples   Number of samples in farend buffer</i></td></tr>
+<tr><th id="99">99</th><td><i> *</i></td></tr>
+<tr><th id="100">100</th><td><i> * Outputs                      Description</i></td></tr>
+<tr><th id="101">101</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="102">102</th><td><i> * int32_t        return        0: OK</i></td></tr>
+<tr><th id="103">103</th><td><i> *                              1200-12004,12100: error/warning</i></td></tr>
+<tr><th id="104">104</th><td><i> */</i></td></tr>
+<tr><th id="105">105</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl fn" id="webrtc::WebRtcAecm_GetBufferFarendError" title='webrtc::WebRtcAecm_GetBufferFarendError' data-ref="webrtc::WebRtcAecm_GetBufferFarendError" data-ref-filename="webrtc..WebRtcAecm_GetBufferFarendError">WebRtcAecm_GetBufferFarendError</dfn>(<em>void</em>* <dfn class="local col1 decl" id="61aecmInst" title='aecmInst' data-type='void *' data-ref="61aecmInst" data-ref-filename="61aecmInst">aecmInst</dfn>,</td></tr>
+<tr><th id="106">106</th><td>                                        <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col2 decl" id="62farend" title='farend' data-type='const int16_t *' data-ref="62farend" data-ref-filename="62farend">farend</dfn>,</td></tr>
+<tr><th id="107">107</th><td>                                        <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="63nrOfSamples" title='nrOfSamples' data-type='size_t' data-ref="63nrOfSamples" data-ref-filename="63nrOfSamples">nrOfSamples</dfn>);</td></tr>
+<tr><th id="108">108</th><td></td></tr>
+<tr><th id="109">109</th><td><i>/*</i></td></tr>
+<tr><th id="110">110</th><td><i> * Runs the AECM on an 80 or 160 sample blocks of data.</i></td></tr>
+<tr><th id="111">111</th><td><i> *</i></td></tr>
+<tr><th id="112">112</th><td><i> * Inputs                        Description</i></td></tr>
+<tr><th id="113">113</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="114">114</th><td><i> * void*          aecmInst       Pointer to the AECM instance</i></td></tr>
+<tr><th id="115">115</th><td><i> * int16_t*       nearendNoisy   In buffer containing one frame of</i></td></tr>
+<tr><th id="116">116</th><td><i> *                               reference nearend+echo signal. If</i></td></tr>
+<tr><th id="117">117</th><td><i> *                               noise reduction is active, provide</i></td></tr>
+<tr><th id="118">118</th><td><i> *                               the noisy signal here.</i></td></tr>
+<tr><th id="119">119</th><td><i> * int16_t*       nearendClean   In buffer containing one frame of</i></td></tr>
+<tr><th id="120">120</th><td><i> *                               nearend+echo signal. If noise</i></td></tr>
+<tr><th id="121">121</th><td><i> *                               reduction is active, provide the</i></td></tr>
+<tr><th id="122">122</th><td><i> *                               clean signal here. Otherwise pass a</i></td></tr>
+<tr><th id="123">123</th><td><i> *                               NULL pointer.</i></td></tr>
+<tr><th id="124">124</th><td><i> * int16_t        nrOfSamples    Number of samples in nearend buffer</i></td></tr>
+<tr><th id="125">125</th><td><i> * int16_t        msInSndCardBuf Delay estimate for sound card and</i></td></tr>
+<tr><th id="126">126</th><td><i> *                               system buffers</i></td></tr>
+<tr><th id="127">127</th><td><i> *</i></td></tr>
+<tr><th id="128">128</th><td><i> * Outputs                       Description</i></td></tr>
+<tr><th id="129">129</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="130">130</th><td><i> * int16_t*       out            Out buffer, one frame of processed nearend</i></td></tr>
+<tr><th id="131">131</th><td><i> * int32_t        return         0: OK</i></td></tr>
+<tr><th id="132">132</th><td><i> *                               1200-12004,12100: error/warning</i></td></tr>
+<tr><th id="133">133</th><td><i> */</i></td></tr>
+<tr><th id="134">134</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl fn" id="webrtc::WebRtcAecm_Process" title='webrtc::WebRtcAecm_Process' data-ref="webrtc::WebRtcAecm_Process" data-ref-filename="webrtc..WebRtcAecm_Process">WebRtcAecm_Process</dfn>(<em>void</em>* <dfn class="local col4 decl" id="64aecmInst" title='aecmInst' data-type='void *' data-ref="64aecmInst" data-ref-filename="64aecmInst">aecmInst</dfn>,</td></tr>
+<tr><th id="135">135</th><td>                           <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col5 decl" id="65nearendNoisy" title='nearendNoisy' data-type='const int16_t *' data-ref="65nearendNoisy" data-ref-filename="65nearendNoisy">nearendNoisy</dfn>,</td></tr>
+<tr><th id="136">136</th><td>                           <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col6 decl" id="66nearendClean" title='nearendClean' data-type='const int16_t *' data-ref="66nearendClean" data-ref-filename="66nearendClean">nearendClean</dfn>,</td></tr>
+<tr><th id="137">137</th><td>                           <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col7 decl" id="67out" title='out' data-type='int16_t *' data-ref="67out" data-ref-filename="67out">out</dfn>,</td></tr>
+<tr><th id="138">138</th><td>                           <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col8 decl" id="68nrOfSamples" title='nrOfSamples' data-type='size_t' data-ref="68nrOfSamples" data-ref-filename="68nrOfSamples">nrOfSamples</dfn>,</td></tr>
+<tr><th id="139">139</th><td>                           <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span> <dfn class="local col9 decl" id="69msInSndCardBuf" title='msInSndCardBuf' data-type='int16_t' data-ref="69msInSndCardBuf" data-ref-filename="69msInSndCardBuf">msInSndCardBuf</dfn>);</td></tr>
+<tr><th id="140">140</th><td></td></tr>
+<tr><th id="141">141</th><td><i>/*</i></td></tr>
+<tr><th id="142">142</th><td><i> * This function enables the user to set certain parameters on-the-fly</i></td></tr>
+<tr><th id="143">143</th><td><i> *</i></td></tr>
+<tr><th id="144">144</th><td><i> * Inputs                       Description</i></td></tr>
+<tr><th id="145">145</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="146">146</th><td><i> * void*          aecmInst      Pointer to the AECM instance</i></td></tr>
+<tr><th id="147">147</th><td><i> * AecmConfig     config        Config instance that contains all</i></td></tr>
+<tr><th id="148">148</th><td><i> *                              properties to be set</i></td></tr>
+<tr><th id="149">149</th><td><i> *</i></td></tr>
+<tr><th id="150">150</th><td><i> * Outputs                      Description</i></td></tr>
+<tr><th id="151">151</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="152">152</th><td><i> * int32_t        return        0: OK</i></td></tr>
+<tr><th id="153">153</th><td><i> *                              1200-12004,12100: error/warning</i></td></tr>
+<tr><th id="154">154</th><td><i> */</i></td></tr>
+<tr><th id="155">155</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl fn" id="webrtc::WebRtcAecm_set_config" title='webrtc::WebRtcAecm_set_config' data-ref="webrtc::WebRtcAecm_set_config" data-ref-filename="webrtc..WebRtcAecm_set_config">WebRtcAecm_set_config</dfn>(<em>void</em>* <dfn class="local col0 decl" id="70aecmInst" title='aecmInst' data-type='void *' data-ref="70aecmInst" data-ref-filename="70aecmInst">aecmInst</dfn>, <a class="typedef" href="#webrtc::AecmConfig" title='webrtc::AecmConfig' data-type='struct AecmConfig' data-ref="webrtc::AecmConfig" data-ref-filename="webrtc..AecmConfig">AecmConfig</a> <dfn class="local col1 decl" id="71config" title='config' data-type='webrtc::AecmConfig' data-ref="71config" data-ref-filename="71config">config</dfn>);</td></tr>
+<tr><th id="156">156</th><td></td></tr>
+<tr><th id="157">157</th><td><i>/*</i></td></tr>
+<tr><th id="158">158</th><td><i> * This function enables the user to set the echo path on-the-fly.</i></td></tr>
+<tr><th id="159">159</th><td><i> *</i></td></tr>
+<tr><th id="160">160</th><td><i> * Inputs                       Description</i></td></tr>
+<tr><th id="161">161</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="162">162</th><td><i> * void*        aecmInst        Pointer to the AECM instance</i></td></tr>
+<tr><th id="163">163</th><td><i> * void*        echo_path       Pointer to the echo path to be set</i></td></tr>
+<tr><th id="164">164</th><td><i> * size_t       size_bytes      Size in bytes of the echo path</i></td></tr>
+<tr><th id="165">165</th><td><i> *</i></td></tr>
+<tr><th id="166">166</th><td><i> * Outputs                      Description</i></td></tr>
+<tr><th id="167">167</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="168">168</th><td><i> * int32_t      return          0: OK</i></td></tr>
+<tr><th id="169">169</th><td><i> *                              1200-12004,12100: error/warning</i></td></tr>
+<tr><th id="170">170</th><td><i> */</i></td></tr>
+<tr><th id="171">171</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl fn" id="webrtc::WebRtcAecm_InitEchoPath" title='webrtc::WebRtcAecm_InitEchoPath' data-ref="webrtc::WebRtcAecm_InitEchoPath" data-ref-filename="webrtc..WebRtcAecm_InitEchoPath">WebRtcAecm_InitEchoPath</dfn>(<em>void</em>* <dfn class="local col2 decl" id="72aecmInst" title='aecmInst' data-type='void *' data-ref="72aecmInst" data-ref-filename="72aecmInst">aecmInst</dfn>,</td></tr>
+<tr><th id="172">172</th><td>                                <em>const</em> <em>void</em>* <dfn class="local col3 decl" id="73echo_path" title='echo_path' data-type='const void *' data-ref="73echo_path" data-ref-filename="73echo_path">echo_path</dfn>,</td></tr>
+<tr><th id="173">173</th><td>                                <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="74size_bytes" title='size_bytes' data-type='size_t' data-ref="74size_bytes" data-ref-filename="74size_bytes">size_bytes</dfn>);</td></tr>
+<tr><th id="174">174</th><td></td></tr>
+<tr><th id="175">175</th><td><i>/*</i></td></tr>
+<tr><th id="176">176</th><td><i> * This function enables the user to get the currently used echo path</i></td></tr>
+<tr><th id="177">177</th><td><i> * on-the-fly</i></td></tr>
+<tr><th id="178">178</th><td><i> *</i></td></tr>
+<tr><th id="179">179</th><td><i> * Inputs                       Description</i></td></tr>
+<tr><th id="180">180</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="181">181</th><td><i> * void*        aecmInst        Pointer to the AECM instance</i></td></tr>
+<tr><th id="182">182</th><td><i> * void*        echo_path       Pointer to echo path</i></td></tr>
+<tr><th id="183">183</th><td><i> * size_t       size_bytes      Size in bytes of the echo path</i></td></tr>
+<tr><th id="184">184</th><td><i> *</i></td></tr>
+<tr><th id="185">185</th><td><i> * Outputs                      Description</i></td></tr>
+<tr><th id="186">186</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="187">187</th><td><i> * int32_t      return          0: OK</i></td></tr>
+<tr><th id="188">188</th><td><i> *                              1200-12004,12100: error/warning</i></td></tr>
+<tr><th id="189">189</th><td><i> */</i></td></tr>
+<tr><th id="190">190</th><td><span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="decl fn" id="webrtc::WebRtcAecm_GetEchoPath" title='webrtc::WebRtcAecm_GetEchoPath' data-ref="webrtc::WebRtcAecm_GetEchoPath" data-ref-filename="webrtc..WebRtcAecm_GetEchoPath">WebRtcAecm_GetEchoPath</dfn>(<em>void</em>* <dfn class="local col5 decl" id="75aecmInst" title='aecmInst' data-type='void *' data-ref="75aecmInst" data-ref-filename="75aecmInst">aecmInst</dfn>,</td></tr>
+<tr><th id="191">191</th><td>                               <em>void</em>* <dfn class="local col6 decl" id="76echo_path" title='echo_path' data-type='void *' data-ref="76echo_path" data-ref-filename="76echo_path">echo_path</dfn>,</td></tr>
+<tr><th id="192">192</th><td>                               <span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col7 decl" id="77size_bytes" title='size_bytes' data-type='size_t' data-ref="77size_bytes" data-ref-filename="77size_bytes">size_bytes</dfn>);</td></tr>
+<tr><th id="193">193</th><td></td></tr>
+<tr><th id="194">194</th><td><i>/*</i></td></tr>
+<tr><th id="195">195</th><td><i> * This function enables the user to get the echo path size in bytes</i></td></tr>
+<tr><th id="196">196</th><td><i> *</i></td></tr>
+<tr><th id="197">197</th><td><i> * Outputs                      Description</i></td></tr>
+<tr><th id="198">198</th><td><i> * -------------------------------------------------------------------</i></td></tr>
+<tr><th id="199">199</th><td><i> * size_t       return          Size in bytes</i></td></tr>
+<tr><th id="200">200</th><td><i> */</i></td></tr>
+<tr><th id="201">201</th><td><span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl fn" id="webrtc::WebRtcAecm_echo_path_size_bytes" title='webrtc::WebRtcAecm_echo_path_size_bytes' data-ref="webrtc::WebRtcAecm_echo_path_size_bytes" data-ref-filename="webrtc..WebRtcAecm_echo_path_size_bytes">WebRtcAecm_echo_path_size_bytes</dfn>();</td></tr>
+<tr><th id="202">202</th><td></td></tr>
+<tr><th id="203">203</th><td><u>#<span data-ppcond="203">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="204">204</th><td>}</td></tr>
+<tr><th id="205">205</th><td><u>#<span data-ppcond="203">endif</span></u></td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td><u>#<span data-ppcond="11">endif</span>  // MODULES_AUDIO_PROCESSING_AECM_ECHO_CONTROL_MOBILE_H_</u></td></tr>
+<tr><th id="210">210</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='aecm_core.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/aecm/aecm_core.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

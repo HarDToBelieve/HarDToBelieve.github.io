@@ -1,0 +1,63 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>event_rate_counter.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/numerics/event_rate_counter.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::EventRateCounter "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/numerics/event_rate_counter.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>webrtc</a>/<a href='..'>rtc_base</a>/<a href='./'>numerics</a>/<a href='event_rate_counter.h.html'>event_rate_counter.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2019 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td><u>#<span data-ppcond="10">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_NUMERICS_EVENT_RATE_COUNTER_H_">RTC_BASE_NUMERICS_EVENT_RATE_COUNTER_H_</span></u></td></tr>
+<tr><th id="11">11</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_NUMERICS_EVENT_RATE_COUNTER_H_" data-ref="_M/RTC_BASE_NUMERICS_EVENT_RATE_COUNTER_H_">RTC_BASE_NUMERICS_EVENT_RATE_COUNTER_H_</dfn></u></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="sample_stats.h.html">"rtc_base/numerics/sample_stats.h"</a></u></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><i>// Calculates statistics based on events. For example for computing frame rates.</i></td></tr>
+<tr><th id="18">18</th><td><i>// Note that it doesn't provide any running statistics or reset funcitonality,</i></td></tr>
+<tr><th id="19">19</th><td><i>// so it's mostly useful for end of call statistics.</i></td></tr>
+<tr><th id="20">20</th><td><b>class</b> <dfn class="type def" id="webrtc::EventRateCounter" title='webrtc::EventRateCounter' data-ref="webrtc::EventRateCounter" data-ref-filename="webrtc..EventRateCounter">EventRateCounter</dfn> {</td></tr>
+<tr><th id="21">21</th><td> <b>public</b>:</td></tr>
+<tr><th id="22">22</th><td>  <i>// Adds an event based on it's |event_time| for correct updates of the</i></td></tr>
+<tr><th id="23">23</th><td><i>  // interval statistics, each event must be added past the previous events.</i></td></tr>
+<tr><th id="24">24</th><td>  <em>void</em> <a class="decl fn" href="event_rate_counter.cc.html#_ZN6webrtc16EventRateCounter8AddEventENS_9TimestampE" title='webrtc::EventRateCounter::AddEvent' data-ref="_ZN6webrtc16EventRateCounter8AddEventENS_9TimestampE" data-ref-filename="_ZN6webrtc16EventRateCounter8AddEventENS_9TimestampE" id="_ZN6webrtc16EventRateCounter8AddEventENS_9TimestampE">AddEvent</a>(<a class="type" href="../../api/units/timestamp.h.html#webrtc::Timestamp" title='webrtc::Timestamp' data-ref="webrtc::Timestamp" data-ref-filename="webrtc..Timestamp">Timestamp</a> <dfn class="local col0 decl" id="10event_time" title='event_time' data-type='webrtc::Timestamp' data-ref="10event_time" data-ref-filename="10event_time">event_time</dfn>);</td></tr>
+<tr><th id="25">25</th><td>  <i>// Adds the events from |other|. Note that the interval stats won't be</i></td></tr>
+<tr><th id="26">26</th><td><i>  // recalculated, only merged, so this is not equivalent to if the events would</i></td></tr>
+<tr><th id="27">27</th><td><i>  // have been added to the same counter from the start.</i></td></tr>
+<tr><th id="28">28</th><td>  <em>void</em> <a class="decl fn" href="event_rate_counter.cc.html#_ZN6webrtc16EventRateCounter9AddEventsES0_" title='webrtc::EventRateCounter::AddEvents' data-ref="_ZN6webrtc16EventRateCounter9AddEventsES0_" data-ref-filename="_ZN6webrtc16EventRateCounter9AddEventsES0_" id="_ZN6webrtc16EventRateCounter9AddEventsES0_">AddEvents</a>(<a class="type" href="#webrtc::EventRateCounter" title='webrtc::EventRateCounter' data-ref="webrtc::EventRateCounter" data-ref-filename="webrtc..EventRateCounter">EventRateCounter</a> <dfn class="local col1 decl" id="11other" title='other' data-type='webrtc::EventRateCounter' data-ref="11other" data-ref-filename="11other">other</dfn>);</td></tr>
+<tr><th id="29">29</th><td>  <em>bool</em> <a class="decl fn" href="event_rate_counter.cc.html#_ZNK6webrtc16EventRateCounter7IsEmptyEv" title='webrtc::EventRateCounter::IsEmpty' data-ref="_ZNK6webrtc16EventRateCounter7IsEmptyEv" data-ref-filename="_ZNK6webrtc16EventRateCounter7IsEmptyEv" id="_ZNK6webrtc16EventRateCounter7IsEmptyEv">IsEmpty</a>() <em>const</em>;</td></tr>
+<tr><th id="30">30</th><td>  <i>// Average number of events per second. Defaults to 0 for no events and NAN</i></td></tr>
+<tr><th id="31">31</th><td><i>  // for one event.</i></td></tr>
+<tr><th id="32">32</th><td>  <em>double</em> <a class="decl fn" href="event_rate_counter.cc.html#_ZNK6webrtc16EventRateCounter4RateEv" title='webrtc::EventRateCounter::Rate' data-ref="_ZNK6webrtc16EventRateCounter4RateEv" data-ref-filename="_ZNK6webrtc16EventRateCounter4RateEv" id="_ZNK6webrtc16EventRateCounter4RateEv">Rate</a>() <em>const</em>;</td></tr>
+<tr><th id="33">33</th><td>  <a class="type" href="sample_stats.h.html#webrtc::SampleStats" title='webrtc::SampleStats' data-ref="webrtc::SampleStats" data-ref-filename="webrtc..SampleStats">SampleStats</a>&lt;<a class="type" href="../../api/units/time_delta.h.html#webrtc::TimeDelta" title='webrtc::TimeDelta' data-ref="webrtc::TimeDelta" data-ref-filename="webrtc..TimeDelta">TimeDelta</a>&gt;&amp; <dfn class="decl def fn" id="_ZN6webrtc16EventRateCounter8intervalEv" title='webrtc::EventRateCounter::interval' data-ref="_ZN6webrtc16EventRateCounter8intervalEv" data-ref-filename="_ZN6webrtc16EventRateCounter8intervalEv">interval</dfn>() { <b>return</b> <a class="member field" href="#webrtc::EventRateCounter::interval_" title='webrtc::EventRateCounter::interval_' data-ref="webrtc::EventRateCounter::interval_" data-ref-filename="webrtc..EventRateCounter..interval_">interval_</a>; }</td></tr>
+<tr><th id="34">34</th><td>  <a class="type" href="../../api/units/time_delta.h.html#webrtc::TimeDelta" title='webrtc::TimeDelta' data-ref="webrtc::TimeDelta" data-ref-filename="webrtc..TimeDelta">TimeDelta</a> <a class="decl fn" href="event_rate_counter.cc.html#_ZNK6webrtc16EventRateCounter13TotalDurationEv" title='webrtc::EventRateCounter::TotalDuration' data-ref="_ZNK6webrtc16EventRateCounter13TotalDurationEv" data-ref-filename="_ZNK6webrtc16EventRateCounter13TotalDurationEv" id="_ZNK6webrtc16EventRateCounter13TotalDurationEv">TotalDuration</a>() <em>const</em>;</td></tr>
+<tr><th id="35">35</th><td>  <em>int</em> <dfn class="decl def fn" id="_ZNK6webrtc16EventRateCounter5CountEv" title='webrtc::EventRateCounter::Count' data-ref="_ZNK6webrtc16EventRateCounter5CountEv" data-ref-filename="_ZNK6webrtc16EventRateCounter5CountEv">Count</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#webrtc::EventRateCounter::event_count_" title='webrtc::EventRateCounter::event_count_' data-ref="webrtc::EventRateCounter::event_count_" data-ref-filename="webrtc..EventRateCounter..event_count_">event_count_</a>; }</td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td> <b>private</b>:</td></tr>
+<tr><th id="38">38</th><td>  <a class="type" href="../../api/units/timestamp.h.html#webrtc::Timestamp" title='webrtc::Timestamp' data-ref="webrtc::Timestamp" data-ref-filename="webrtc..Timestamp">Timestamp</a> <dfn class="decl field" id="webrtc::EventRateCounter::first_time_" title='webrtc::EventRateCounter::first_time_' data-ref="webrtc::EventRateCounter::first_time_" data-ref-filename="webrtc..EventRateCounter..first_time_">first_time_</dfn> = <a class="type" href="../../api/units/timestamp.h.html#webrtc::Timestamp" title='webrtc::Timestamp' data-ref="webrtc::Timestamp" data-ref-filename="webrtc..Timestamp">Timestamp</a>::<a class="ref fn" href="../units/unit_base.h.html#_ZN6webrtc14rtc_units_impl8UnitBase12PlusInfinityEv" title='webrtc::rtc_units_impl::UnitBase::PlusInfinity' data-ref="_ZN6webrtc14rtc_units_impl8UnitBase12PlusInfinityEv" data-ref-filename="_ZN6webrtc14rtc_units_impl8UnitBase12PlusInfinityEv">PlusInfinity</a>();</td></tr>
+<tr><th id="39">39</th><td>  <a class="type" href="../../api/units/timestamp.h.html#webrtc::Timestamp" title='webrtc::Timestamp' data-ref="webrtc::Timestamp" data-ref-filename="webrtc..Timestamp">Timestamp</a> <dfn class="decl field" id="webrtc::EventRateCounter::last_time_" title='webrtc::EventRateCounter::last_time_' data-ref="webrtc::EventRateCounter::last_time_" data-ref-filename="webrtc..EventRateCounter..last_time_">last_time_</dfn> = <a class="type" href="../../api/units/timestamp.h.html#webrtc::Timestamp" title='webrtc::Timestamp' data-ref="webrtc::Timestamp" data-ref-filename="webrtc..Timestamp">Timestamp</a>::<a class="ref fn" href="../units/unit_base.h.html#_ZN6webrtc14rtc_units_impl8UnitBase13MinusInfinityEv" title='webrtc::rtc_units_impl::UnitBase::MinusInfinity' data-ref="_ZN6webrtc14rtc_units_impl8UnitBase13MinusInfinityEv" data-ref-filename="_ZN6webrtc14rtc_units_impl8UnitBase13MinusInfinityEv">MinusInfinity</a>();</td></tr>
+<tr><th id="40">40</th><td>  <span class='typedef' title='int64_t' data-type='long long' data-ref="int64_t" data-ref-filename="int64_t">int64_t</span> <dfn class="decl field" id="webrtc::EventRateCounter::event_count_" title='webrtc::EventRateCounter::event_count_' data-ref="webrtc::EventRateCounter::event_count_" data-ref-filename="webrtc..EventRateCounter..event_count_">event_count_</dfn> = <var>0</var>;</td></tr>
+<tr><th id="41">41</th><td>  <a class="type" href="sample_stats.h.html#webrtc::SampleStats" title='webrtc::SampleStats' data-ref="webrtc::SampleStats" data-ref-filename="webrtc..SampleStats">SampleStats</a>&lt;<a class="type" href="../../api/units/time_delta.h.html#webrtc::TimeDelta" title='webrtc::TimeDelta' data-ref="webrtc::TimeDelta" data-ref-filename="webrtc..TimeDelta">TimeDelta</a>&gt; <dfn class="decl field" id="webrtc::EventRateCounter::interval_" title='webrtc::EventRateCounter::interval_' data-ref="webrtc::EventRateCounter::interval_" data-ref-filename="webrtc..EventRateCounter..interval_">interval_</dfn>;</td></tr>
+<tr><th id="42">42</th><td>};</td></tr>
+<tr><th id="43">43</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="44">44</th><td><u>#<span data-ppcond="10">endif</span>  // RTC_BASE_NUMERICS_EVENT_RATE_COUNTER_H_</u></td></tr>
+<tr><th id="45">45</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='event_rate_counter.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/numerics/event_rate_counter.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

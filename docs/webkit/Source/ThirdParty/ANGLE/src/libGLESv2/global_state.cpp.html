@@ -1,0 +1,260 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>global_state.cpp source code [webkit/Source/ThirdParty/ANGLE/src/libGLESv2/global_state.cpp] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/ANGLE/src/libGLESv2/global_state.cpp'; var root_path = '../../../../../..'; var data_path = '../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../..'>webkit</a>/<a href='../../../..'>Source</a>/<a href='../../..'>ThirdParty</a>/<a href='../..'>ANGLE</a>/<a href='..'>src</a>/<a href='./'>libGLESv2</a>/<a href='global_state.cpp.html'>global_state.cpp</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>//</i></td></tr>
+<tr><th id="2">2</th><td><i>// Copyright 2014 The ANGLE Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i>// Use of this source code is governed by a BSD-style license that can be</i></td></tr>
+<tr><th id="4">4</th><td><i>// found in the LICENSE file.</i></td></tr>
+<tr><th id="5">5</th><td><i>//</i></td></tr>
+<tr><th id="6">6</th><td><i></i></td></tr>
+<tr><th id="7">7</th><td><i>// global_state.cpp : Implements functions for querying the thread-local GL and EGL state.</i></td></tr>
+<tr><th id="8">8</th><td></td></tr>
+<tr><th id="9">9</th><td><u>#include <a href="global_state.h.html">"libGLESv2/global_state.h"</a></u></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#include <a href="../common/debug.h.html">"common/debug.h"</a></u></td></tr>
+<tr><th id="12">12</th><td><u>#include <a href="../common/platform.h.html">"common/platform.h"</a></u></td></tr>
+<tr><th id="13">13</th><td><u>#include <a href="../common/system_utils.h.html">"common/system_utils.h"</a></u></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="../libANGLE/ErrorStrings.h.html">"libANGLE/ErrorStrings.h"</a></u></td></tr>
+<tr><th id="15">15</th><td><u>#include <a href="resource.h.html">"libGLESv2/resource.h"</a></u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;atomic&gt;</u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><b>namespace</b> <span class="namespace">egl</span></td></tr>
+<tr><th id="20">20</th><td>{</td></tr>
+<tr><th id="21">21</th><td><b>namespace</b></td></tr>
+<tr><th id="22">22</th><td>{</td></tr>
+<tr><th id="23">23</th><td><a class="type" href="../libANGLE/Debug.h.html#egl::Debug" title='egl::Debug' data-ref="egl::Debug" data-ref-filename="egl..Debug">Debug</a> *<dfn class="tu decl def" id="egl::(anonymousnamespace)::g_Debug" title='egl::(anonymous namespace)::g_Debug' data-type='egl::Debug *' data-ref="egl::(anonymousnamespace)::g_Debug" data-ref-filename="egl..(anonymousnamespace)..g_Debug">g_Debug</dfn> = <b>nullptr</b>;</td></tr>
+<tr><th id="24">24</th><td></td></tr>
+<tr><th id="25">25</th><td><a class="macro" href="../common/angleutils.h.html#372" title="" data-ref="_M/ANGLE_REQUIRE_CONSTANT_INIT">ANGLE_REQUIRE_CONSTANT_INIT</a> <span class="namespace">std::</span><span class='type' title='std::__1::atomic' data-ref="std::__1::atomic" data-ref-filename="std..__1..atomic">atomic</span>&lt;<span class="namespace">angle::</span><a class="typedef" href="global_state.h.html#angle::GlobalMutex" title='angle::GlobalMutex' data-type='std::recursive_mutex' data-ref="angle::GlobalMutex" data-ref-filename="angle..GlobalMutex">GlobalMutex</a> *&gt; <dfn class="tu decl def" id="egl::(anonymousnamespace)::g_Mutex" title='egl::(anonymous namespace)::g_Mutex' data-type='std::atomic&lt;angle::GlobalMutex *&gt;' data-ref="egl::(anonymousnamespace)::g_Mutex" data-ref-filename="egl..(anonymousnamespace)..g_Mutex">g_Mutex</dfn><span class='ref fn' title='std::__1::atomic&lt;type-parameter-0-0 *&gt;::atomic&lt;type-parameter-0-0 *&gt;' data-ref="_ZNSt3__16atomicIPT_EC1ES2_" data-ref-filename="_ZNSt3__16atomicIPT_EC1ES2_">(</span><b>nullptr</b>);</td></tr>
+<tr><th id="26">26</th><td><b>static_assert</b>(<span class="namespace">std::</span><span class='type' title='std::__1::is_trivially_destructible' data-ref="std::__1::is_trivially_destructible" data-ref-filename="std..__1..is_trivially_destructible">is_trivially_destructible</span>&lt;<b>decltype</b>(<a class="tu ref" href="#egl::(anonymousnamespace)::g_Mutex" title='egl::(anonymous namespace)::g_Mutex' data-use='r' data-ref="egl::(anonymousnamespace)::g_Mutex" data-ref-filename="egl..(anonymousnamespace)..g_Mutex">g_Mutex</a>)&gt;::<span class='ref' title='std::__1::integral_constant::value' data-ref="std::__1::integral_constant::value" data-ref-filename="std..__1..integral_constant..value">value</span>,</td></tr>
+<tr><th id="27">27</th><td>              <q>"global mutex is not trivially destructible"</q>);</td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><em>void</em> <dfn class="tu decl def fn" id="_ZN3egl12_GLOBAL__N_132SetContextToAndroidOpenGLTLSSlotEPN2gl7ContextE" title='egl::(anonymous namespace)::SetContextToAndroidOpenGLTLSSlot' data-type='void egl::(anonymous namespace)::SetContextToAndroidOpenGLTLSSlot(gl::Context * value)' data-ref="_ZN3egl12_GLOBAL__N_132SetContextToAndroidOpenGLTLSSlotEPN2gl7ContextE" data-ref-filename="_ZN3egl12_GLOBAL__N_132SetContextToAndroidOpenGLTLSSlotEPN2gl7ContextE">SetContextToAndroidOpenGLTLSSlot</dfn>(<span class="namespace">gl::</span><a class="type" href="../libANGLE/Context.h.html#gl::Context" title='gl::Context' data-ref="gl::Context" data-ref-filename="gl..Context">Context</a> *<dfn class="local col1 decl" id="1value" title='value' data-type='gl::Context *' data-ref="1value" data-ref-filename="1value">value</dfn>)</td></tr>
+<tr><th id="30">30</th><td>{</td></tr>
+<tr><th id="31">31</th><td><u>#<span data-ppcond="31">if</span> defined(<span class="macro" data-ref="_M/ANGLE_PLATFORM_ANDROID">ANGLE_PLATFORM_ANDROID</span>)</u></td></tr>
+<tr><th id="32">32</th><td>    <b>if</b> (angle::gUseAndroidOpenGLTlsSlot)</td></tr>
+<tr><th id="33">33</th><td>    {</td></tr>
+<tr><th id="34">34</th><td>        ANGLE_ANDROID_GET_GL_TLS()[angle::kAndroidOpenGLTlsSlot] = <b>static_cast</b>&lt;<em>void</em> *&gt;(value);</td></tr>
+<tr><th id="35">35</th><td>    }</td></tr>
+<tr><th id="36">36</th><td><u>#<span data-ppcond="31">endif</span></u></td></tr>
+<tr><th id="37">37</th><td>}</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><a class="type" href="../libANGLE/Thread.h.html#egl::Thread" title='egl::Thread' data-ref="egl::Thread" data-ref-filename="egl..Thread">Thread</a> *<dfn class="tu decl def fn" id="_ZN3egl12_GLOBAL__N_121AllocateCurrentThreadEv" title='egl::(anonymous namespace)::AllocateCurrentThread' data-type='egl::Thread * egl::(anonymous namespace)::AllocateCurrentThread()' data-ref="_ZN3egl12_GLOBAL__N_121AllocateCurrentThreadEv" data-ref-filename="_ZN3egl12_GLOBAL__N_121AllocateCurrentThreadEv">AllocateCurrentThread</dfn>()</td></tr>
+<tr><th id="40">40</th><td>{</td></tr>
+<tr><th id="41">41</th><td>    <a class="ref" href="global_state.h.html#egl::gCurrentThread" title='egl::gCurrentThread' data-ref="egl::gCurrentThread" data-ref-filename="egl..gCurrentThread">gCurrentThread</a> = <b>new</b> <a class="type" href="../libANGLE/Thread.h.html#egl::Thread" title='egl::Thread' data-ref="egl::Thread" data-ref-filename="egl..Thread">Thread</a><a class="ref fn" href="../libANGLE/Thread.h.html#_ZN3egl6ThreadC1Ev" title='egl::Thread::Thread' data-ref="_ZN3egl6ThreadC1Ev" data-ref-filename="_ZN3egl6ThreadC1Ev">(</a>);</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td>    <i>// Initialize fast TLS slot</i></td></tr>
+<tr><th id="44">44</th><td>    <a class="tu ref fn" href="#_ZN3egl12_GLOBAL__N_132SetContextToAndroidOpenGLTLSSlotEPN2gl7ContextE" title='egl::(anonymous namespace)::SetContextToAndroidOpenGLTLSSlot' data-use='c' data-ref="_ZN3egl12_GLOBAL__N_132SetContextToAndroidOpenGLTLSSlotEPN2gl7ContextE" data-ref-filename="_ZN3egl12_GLOBAL__N_132SetContextToAndroidOpenGLTLSSlotEPN2gl7ContextE">SetContextToAndroidOpenGLTLSSlot</a>(<b>nullptr</b>);</td></tr>
+<tr><th id="45">45</th><td>    <span class="namespace">gl::</span><a class="ref" href="../libANGLE/Context.h.html#gl::gCurrentValidContext" title='gl::gCurrentValidContext' data-ref="gl::gCurrentValidContext" data-ref-filename="gl..gCurrentValidContext">gCurrentValidContext</a> = <b>nullptr</b>;</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td>    <b>return</b> <a class="ref" href="global_state.h.html#egl::gCurrentThread" title='egl::gCurrentThread' data-ref="egl::gCurrentThread" data-ref-filename="egl..gCurrentThread">gCurrentThread</a>;</td></tr>
+<tr><th id="48">48</th><td>}</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><em>void</em> <dfn class="tu decl def fn" id="_ZN3egl12_GLOBAL__N_113AllocateDebugEv" title='egl::(anonymous namespace)::AllocateDebug' data-type='void egl::(anonymous namespace)::AllocateDebug()' data-ref="_ZN3egl12_GLOBAL__N_113AllocateDebugEv" data-ref-filename="_ZN3egl12_GLOBAL__N_113AllocateDebugEv">AllocateDebug</dfn>()</td></tr>
+<tr><th id="51">51</th><td>{</td></tr>
+<tr><th id="52">52</th><td>    <i>// All EGL calls use a global lock, this is thread safe</i></td></tr>
+<tr><th id="53">53</th><td>    <b>if</b> (<a class="tu ref" href="#egl::(anonymousnamespace)::g_Debug" title='egl::(anonymous namespace)::g_Debug' data-use='r' data-ref="egl::(anonymousnamespace)::g_Debug" data-ref-filename="egl..(anonymousnamespace)..g_Debug">g_Debug</a> == <b>nullptr</b>)</td></tr>
+<tr><th id="54">54</th><td>    {</td></tr>
+<tr><th id="55">55</th><td>        <a class="tu ref" href="#egl::(anonymousnamespace)::g_Debug" title='egl::(anonymous namespace)::g_Debug' data-use='w' data-ref="egl::(anonymousnamespace)::g_Debug" data-ref-filename="egl..(anonymousnamespace)..g_Debug">g_Debug</a> = <b>new</b> <a class="type" href="../libANGLE/Debug.h.html#egl::Debug" title='egl::Debug' data-ref="egl::Debug" data-ref-filename="egl..Debug">Debug</a><a class="ref fn" href="../libANGLE/Debug.h.html#_ZN3egl5DebugC1Ev" title='egl::Debug::Debug' data-ref="_ZN3egl5DebugC1Ev" data-ref-filename="_ZN3egl5DebugC1Ev">(</a>);</td></tr>
+<tr><th id="56">56</th><td>    }</td></tr>
+<tr><th id="57">57</th><td>}</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><em>void</em> <dfn class="tu decl def fn" id="_ZN3egl12_GLOBAL__N_113AllocateMutexEv" title='egl::(anonymous namespace)::AllocateMutex' data-type='void egl::(anonymous namespace)::AllocateMutex()' data-ref="_ZN3egl12_GLOBAL__N_113AllocateMutexEv" data-ref-filename="_ZN3egl12_GLOBAL__N_113AllocateMutexEv">AllocateMutex</dfn>()</td></tr>
+<tr><th id="60">60</th><td>{</td></tr>
+<tr><th id="61">61</th><td>    <b>if</b> (<span class='ref fn fake' title='std::__1::__atomic_base::operator type-parameter-0-0' data-ref="_ZNKSt3__113__atomic_basecvT_Ev" data-ref-filename="_ZNKSt3__113__atomic_basecvT_Ev"></span><a class="tu ref" href="#egl::(anonymousnamespace)::g_Mutex" title='egl::(anonymous namespace)::g_Mutex' data-use='m' data-ref="egl::(anonymousnamespace)::g_Mutex" data-ref-filename="egl..(anonymousnamespace)..g_Mutex">g_Mutex</a> == <b>nullptr</b>)</td></tr>
+<tr><th id="62">62</th><td>    {</td></tr>
+<tr><th id="63">63</th><td>        <span class="namespace">std::</span><span class='type' title='std::__1::unique_ptr' data-ref="std::__1::unique_ptr" data-ref-filename="std..__1..unique_ptr">unique_ptr</span>&lt;<span class="namespace">angle::</span><a class="typedef" href="global_state.h.html#angle::GlobalMutex" title='angle::GlobalMutex' data-type='std::recursive_mutex' data-ref="angle::GlobalMutex" data-ref-filename="angle..GlobalMutex">GlobalMutex</a>&gt; <dfn class="local col2 decl" id="2newMutex" title='newMutex' data-type='std::unique_ptr&lt;angle::GlobalMutex&gt;' data-ref="2newMutex" data-ref-filename="2newMutex">newMutex</dfn><span class='ref fn' title='std::__1::unique_ptr::unique_ptr&lt;_Tp, _Dp&gt;' data-ref="_ZNSt3__110unique_ptrC1ENS_14__pointer_typeIT_T0_E4typeE" data-ref-filename="_ZNSt3__110unique_ptrC1ENS_14__pointer_typeIT_T0_E4typeE">(</span><b>new</b> <span class="namespace">angle::</span><a class="typedef" href="global_state.h.html#angle::GlobalMutex" title='angle::GlobalMutex' data-type='std::recursive_mutex' data-ref="angle::GlobalMutex" data-ref-filename="angle..GlobalMutex">GlobalMutex</a><span class='ref fn' title='std::__1::recursive_mutex::recursive_mutex' data-ref="_ZNSt3__115recursive_mutexC1Ev" data-ref-filename="_ZNSt3__115recursive_mutexC1Ev">(</span>));</td></tr>
+<tr><th id="64">64</th><td>        <span class="namespace">angle::</span><a class="typedef" href="global_state.h.html#angle::GlobalMutex" title='angle::GlobalMutex' data-type='std::recursive_mutex' data-ref="angle::GlobalMutex" data-ref-filename="angle..GlobalMutex">GlobalMutex</a> *<dfn class="local col3 decl" id="3expected" title='expected' data-type='angle::GlobalMutex *' data-ref="3expected" data-ref-filename="3expected">expected</dfn> = <b>nullptr</b>;</td></tr>
+<tr><th id="65">65</th><td>        <b>if</b> (<a class="tu ref" href="#egl::(anonymousnamespace)::g_Mutex" title='egl::(anonymous namespace)::g_Mutex' data-use='m' data-ref="egl::(anonymousnamespace)::g_Mutex" data-ref-filename="egl..(anonymousnamespace)..g_Mutex">g_Mutex</a>.<span class='ref fn' title='std::__1::__atomic_base::compare_exchange_strong' data-ref="_ZNSt3__113__atomic_base23compare_exchange_strongERT_S1_NS_12memory_orderE" data-ref-filename="_ZNSt3__113__atomic_base23compare_exchange_strongERT_S1_NS_12memory_orderE">compare_exchange_strong</span>(<span class='refarg'><a class="local col3 ref" href="#3expected" title='expected' data-ref="3expected" data-ref-filename="3expected">expected</a></span>, <a class="local col2 ref" href="#2newMutex" title='newMutex' data-ref="2newMutex" data-ref-filename="2newMutex">newMutex</a>.<span class='ref fn' title='std::__1::unique_ptr::get' data-ref="_ZNKSt3__110unique_ptr3getEv" data-ref-filename="_ZNKSt3__110unique_ptr3getEv">get</span>()))</td></tr>
+<tr><th id="66">66</th><td>        {</td></tr>
+<tr><th id="67">67</th><td>            <a class="local col2 ref" href="#2newMutex" title='newMutex' data-ref="2newMutex" data-ref-filename="2newMutex">newMutex</a>.<span class='ref fn' title='std::__1::unique_ptr::release' data-ref="_ZNSt3__110unique_ptr7releaseEv" data-ref-filename="_ZNSt3__110unique_ptr7releaseEv">release</span>();</td></tr>
+<tr><th id="68">68</th><td>        }</td></tr>
+<tr><th id="69">69</th><td>    }</td></tr>
+<tr><th id="70">70</th><td>}</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td>}  <i>// anonymous namespace</i></td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td><b>thread_local</b> <a class="type" href="../libANGLE/Thread.h.html#egl::Thread" title='egl::Thread' data-ref="egl::Thread" data-ref-filename="egl..Thread">Thread</a> *<dfn class="decl def" id="egl::gCurrentThread" title='egl::gCurrentThread' data-ref="egl::gCurrentThread" data-ref-filename="egl..gCurrentThread">gCurrentThread</dfn> = <b>nullptr</b>;</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td><span class="namespace">angle::</span><a class="typedef" href="global_state.h.html#angle::GlobalMutex" title='angle::GlobalMutex' data-type='std::recursive_mutex' data-ref="angle::GlobalMutex" data-ref-filename="angle..GlobalMutex">GlobalMutex</a> &amp;<dfn class="decl def fn" id="_ZN3egl14GetGlobalMutexEv" title='egl::GetGlobalMutex' data-ref="_ZN3egl14GetGlobalMutexEv" data-ref-filename="_ZN3egl14GetGlobalMutexEv">GetGlobalMutex</dfn>()</td></tr>
+<tr><th id="77">77</th><td>{</td></tr>
+<tr><th id="78">78</th><td>    <a class="tu ref fn" href="#_ZN3egl12_GLOBAL__N_113AllocateMutexEv" title='egl::(anonymous namespace)::AllocateMutex' data-use='c' data-ref="_ZN3egl12_GLOBAL__N_113AllocateMutexEv" data-ref-filename="_ZN3egl12_GLOBAL__N_113AllocateMutexEv">AllocateMutex</a>();</td></tr>
+<tr><th id="79">79</th><td>    <b>return</b> *<span class='ref fn fake' title='std::__1::__atomic_base::operator type-parameter-0-0' data-ref="_ZNKSt3__113__atomic_basecvT_Ev" data-ref-filename="_ZNKSt3__113__atomic_basecvT_Ev"></span><a class="tu ref" href="#egl::(anonymousnamespace)::g_Mutex" title='egl::(anonymous namespace)::g_Mutex' data-use='m' data-ref="egl::(anonymousnamespace)::g_Mutex" data-ref-filename="egl..(anonymousnamespace)..g_Mutex">g_Mutex</a>;</td></tr>
+<tr><th id="80">80</th><td>}</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td><a class="type" href="../libANGLE/Thread.h.html#egl::Thread" title='egl::Thread' data-ref="egl::Thread" data-ref-filename="egl..Thread">Thread</a> *<dfn class="decl def fn" id="_ZN3egl16GetCurrentThreadEv" title='egl::GetCurrentThread' data-ref="_ZN3egl16GetCurrentThreadEv" data-ref-filename="_ZN3egl16GetCurrentThreadEv">GetCurrentThread</dfn>()</td></tr>
+<tr><th id="83">83</th><td>{</td></tr>
+<tr><th id="84">84</th><td>    <a class="type" href="../libANGLE/Thread.h.html#egl::Thread" title='egl::Thread' data-ref="egl::Thread" data-ref-filename="egl..Thread">Thread</a> *<dfn class="local col4 decl" id="4current" title='current' data-type='egl::Thread *' data-ref="4current" data-ref-filename="4current">current</dfn> = <a class="ref" href="global_state.h.html#egl::gCurrentThread" title='egl::gCurrentThread' data-ref="egl::gCurrentThread" data-ref-filename="egl..gCurrentThread">gCurrentThread</a>;</td></tr>
+<tr><th id="85">85</th><td>    <b>return</b> (<a class="local col4 ref" href="#4current" title='current' data-ref="4current" data-ref-filename="4current">current</a> ? <a class="local col4 ref" href="#4current" title='current' data-ref="4current" data-ref-filename="4current">current</a> : <a class="tu ref fn" href="#_ZN3egl12_GLOBAL__N_121AllocateCurrentThreadEv" title='egl::(anonymous namespace)::AllocateCurrentThread' data-use='c' data-ref="_ZN3egl12_GLOBAL__N_121AllocateCurrentThreadEv" data-ref-filename="_ZN3egl12_GLOBAL__N_121AllocateCurrentThreadEv">AllocateCurrentThread</a>());</td></tr>
+<tr><th id="86">86</th><td>}</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td><a class="type" href="../libANGLE/Debug.h.html#egl::Debug" title='egl::Debug' data-ref="egl::Debug" data-ref-filename="egl..Debug">Debug</a> *<dfn class="decl def fn" id="_ZN3egl8GetDebugEv" title='egl::GetDebug' data-ref="_ZN3egl8GetDebugEv" data-ref-filename="_ZN3egl8GetDebugEv">GetDebug</dfn>()</td></tr>
+<tr><th id="89">89</th><td>{</td></tr>
+<tr><th id="90">90</th><td>    <a class="tu ref fn" href="#_ZN3egl12_GLOBAL__N_113AllocateDebugEv" title='egl::(anonymous namespace)::AllocateDebug' data-use='c' data-ref="_ZN3egl12_GLOBAL__N_113AllocateDebugEv" data-ref-filename="_ZN3egl12_GLOBAL__N_113AllocateDebugEv">AllocateDebug</a>();</td></tr>
+<tr><th id="91">91</th><td>    <b>return</b> <a class="tu ref" href="#egl::(anonymousnamespace)::g_Debug" title='egl::(anonymous namespace)::g_Debug' data-use='r' data-ref="egl::(anonymousnamespace)::g_Debug" data-ref-filename="egl..(anonymousnamespace)..g_Debug">g_Debug</a>;</td></tr>
+<tr><th id="92">92</th><td>}</td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td><em>void</em> <dfn class="decl def fn" id="_ZN3egl17SetContextCurrentEPNS_6ThreadEPN2gl7ContextE" title='egl::SetContextCurrent' data-ref="_ZN3egl17SetContextCurrentEPNS_6ThreadEPN2gl7ContextE" data-ref-filename="_ZN3egl17SetContextCurrentEPNS_6ThreadEPN2gl7ContextE">SetContextCurrent</dfn>(<a class="type" href="../libANGLE/Thread.h.html#egl::Thread" title='egl::Thread' data-ref="egl::Thread" data-ref-filename="egl..Thread">Thread</a> *<dfn class="local col5 decl" id="5thread" title='thread' data-type='egl::Thread *' data-ref="5thread" data-ref-filename="5thread">thread</dfn>, <span class="namespace">gl::</span><a class="type" href="../libANGLE/Context.h.html#gl::Context" title='gl::Context' data-ref="gl::Context" data-ref-filename="gl..Context">Context</a> *<dfn class="local col6 decl" id="6context" title='context' data-type='gl::Context *' data-ref="6context" data-ref-filename="6context">context</dfn>)</td></tr>
+<tr><th id="95">95</th><td>{</td></tr>
+<tr><th id="96">96</th><td>    <a class="macro" href="../common/debug.h.html#316" title="(gCurrentThread ? static_cast&lt;void&gt;(0) : (!((::gl::priv::ShouldCreatePlatformLogMessage(::gl::LOG_FATAL))) ? static_cast&lt;void&gt;(0) : ::gl::priv::LogMessageVoidify() &amp; (::gl::LogMessage(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/ANGLE/src/libGLESv2/global_state.cpp&quot;, __FUNCTION__, 96, ::gl::LOG_FATAL).stream()) &lt;&lt; &quot;\t! Assert failed in &quot; &lt;&lt; __FUNCTION__ &lt;&lt; &quot; (&quot; &lt;&lt; &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/ANGLE/src/libGLESv2/global_state.cpp&quot; &lt;&lt; &quot;:&quot; &lt;&lt; 96 &lt;&lt; &quot;): &quot; &lt;&lt; &quot;gCurrentThread&quot;))" data-ref="_M/ASSERT">ASSERT</a>(<a class="ref" href="global_state.h.html#egl::gCurrentThread" title='egl::gCurrentThread' data-ref="egl::gCurrentThread" data-ref-filename="egl..gCurrentThread">gCurrentThread</a>);</td></tr>
+<tr><th id="97">97</th><td>    <a class="ref" href="global_state.h.html#egl::gCurrentThread" title='egl::gCurrentThread' data-ref="egl::gCurrentThread" data-ref-filename="egl..gCurrentThread">gCurrentThread</a>-&gt;<a class="ref fn" href="../libANGLE/Thread.h.html#_ZN3egl6Thread10setCurrentEPN2gl7ContextE" title='egl::Thread::setCurrent' data-ref="_ZN3egl6Thread10setCurrentEPN2gl7ContextE" data-ref-filename="_ZN3egl6Thread10setCurrentEPN2gl7ContextE">setCurrent</a>(<a class="local col6 ref" href="#6context" title='context' data-ref="6context" data-ref-filename="6context">context</a>);</td></tr>
+<tr><th id="98">98</th><td>    <a class="tu ref fn" href="#_ZN3egl12_GLOBAL__N_132SetContextToAndroidOpenGLTLSSlotEPN2gl7ContextE" title='egl::(anonymous namespace)::SetContextToAndroidOpenGLTLSSlot' data-use='c' data-ref="_ZN3egl12_GLOBAL__N_132SetContextToAndroidOpenGLTLSSlotEPN2gl7ContextE" data-ref-filename="_ZN3egl12_GLOBAL__N_132SetContextToAndroidOpenGLTLSSlotEPN2gl7ContextE">SetContextToAndroidOpenGLTLSSlot</a>(<a class="local col6 ref" href="#6context" title='context' data-ref="6context" data-ref-filename="6context">context</a>);</td></tr>
+<tr><th id="99">99</th><td>    <span class="namespace">gl::</span><a class="ref" href="../libANGLE/Context.h.html#gl::gCurrentValidContext" title='gl::gCurrentValidContext' data-ref="gl::gCurrentValidContext" data-ref-filename="gl..gCurrentValidContext">gCurrentValidContext</a> = <a class="local col6 ref" href="#6context" title='context' data-ref="6context" data-ref-filename="6context">context</a>;</td></tr>
+<tr><th id="100">100</th><td>}</td></tr>
+<tr><th id="101">101</th><td>}  <i>// namespace egl</i></td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td><b>namespace</b> <span class="namespace">gl</span></td></tr>
+<tr><th id="104">104</th><td>{</td></tr>
+<tr><th id="105">105</th><td><em>void</em> <dfn class="decl def fn" id="_ZN2gl33GenerateContextLostErrorOnContextEPNS_7ContextE" title='gl::GenerateContextLostErrorOnContext' data-ref="_ZN2gl33GenerateContextLostErrorOnContextEPNS_7ContextE" data-ref-filename="_ZN2gl33GenerateContextLostErrorOnContextEPNS_7ContextE">GenerateContextLostErrorOnContext</dfn>(<a class="type" href="../libANGLE/Context.h.html#gl::Context" title='gl::Context' data-ref="gl::Context" data-ref-filename="gl..Context">Context</a> *<dfn class="local col7 decl" id="7context" title='context' data-type='gl::Context *' data-ref="7context" data-ref-filename="7context">context</dfn>)</td></tr>
+<tr><th id="106">106</th><td>{</td></tr>
+<tr><th id="107">107</th><td>    <b>if</b> (<a class="local col7 ref" href="#7context" title='context' data-ref="7context" data-ref-filename="7context">context</a> &amp;&amp; <a class="local col7 ref" href="#7context" title='context' data-ref="7context" data-ref-filename="7context">context</a>-&gt;<a class="ref fn" href="../libANGLE/Context.h.html#_ZNK2gl7Context13isContextLostEv" title='gl::Context::isContextLost' data-ref="_ZNK2gl7Context13isContextLostEv" data-ref-filename="_ZNK2gl7Context13isContextLostEv">isContextLost</a>())</td></tr>
+<tr><th id="108">108</th><td>    {</td></tr>
+<tr><th id="109">109</th><td>        <a class="local col7 ref" href="#7context" title='context' data-ref="7context" data-ref-filename="7context">context</a>-&gt;<a class="ref fn" href="../libANGLE/Context.h.html#_ZNK2gl7Context15validationErrorEjPKc" title='gl::Context::validationError' data-ref="_ZNK2gl7Context15validationErrorEjPKc" data-ref-filename="_ZNK2gl7Context15validationErrorEjPKc">validationError</a>(<a class="macro" href="../../include/GLES3/gl32.h.html#1626" title="0x0507" data-ref="_M/GL_CONTEXT_LOST">GL_CONTEXT_LOST</a>, <span class="namespace">err::</span><a class="ref" href="../libANGLE/ErrorStrings.h.html#gl::err::kContextLost" title='gl::err::kContextLost' data-ref="gl::err::kContextLost" data-ref-filename="gl..err..kContextLost">kContextLost</a>);</td></tr>
+<tr><th id="110">110</th><td>    }</td></tr>
+<tr><th id="111">111</th><td>}</td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td><em>void</em> <dfn class="decl def fn" id="_ZN2gl46GenerateContextLostErrorOnCurrentGlobalContextEv" title='gl::GenerateContextLostErrorOnCurrentGlobalContext' data-ref="_ZN2gl46GenerateContextLostErrorOnCurrentGlobalContextEv" data-ref-filename="_ZN2gl46GenerateContextLostErrorOnCurrentGlobalContextEv">GenerateContextLostErrorOnCurrentGlobalContext</dfn>()</td></tr>
+<tr><th id="114">114</th><td>{</td></tr>
+<tr><th id="115">115</th><td>    <a class="ref fn" href="#_ZN2gl33GenerateContextLostErrorOnContextEPNS_7ContextE" title='gl::GenerateContextLostErrorOnContext' data-ref="_ZN2gl33GenerateContextLostErrorOnContextEPNS_7ContextE" data-ref-filename="_ZN2gl33GenerateContextLostErrorOnContextEPNS_7ContextE">GenerateContextLostErrorOnContext</a>(<a class="ref fn" href="global_state.h.html#_ZN2gl16GetGlobalContextEv" title='gl::GetGlobalContext' data-ref="_ZN2gl16GetGlobalContextEv" data-ref-filename="_ZN2gl16GetGlobalContextEv">GetGlobalContext</a>());</td></tr>
+<tr><th id="116">116</th><td>}</td></tr>
+<tr><th id="117">117</th><td>}  <i>// namespace gl</i></td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td><u>#<span data-ppcond="119">ifdef</span> <span class="macro" data-ref="_M/ANGLE_PLATFORM_WINDOWS">ANGLE_PLATFORM_WINDOWS</span></u></td></tr>
+<tr><th id="120">120</th><td><b>namespace</b> egl</td></tr>
+<tr><th id="121">121</th><td>{</td></tr>
+<tr><th id="122">122</th><td></td></tr>
+<tr><th id="123">123</th><td><b>namespace</b></td></tr>
+<tr><th id="124">124</th><td>{</td></tr>
+<tr><th id="125">125</th><td></td></tr>
+<tr><th id="126">126</th><td><em>void</em> DeallocateCurrentThread()</td></tr>
+<tr><th id="127">127</th><td>{</td></tr>
+<tr><th id="128">128</th><td>    SafeDelete(gCurrentThread);</td></tr>
+<tr><th id="129">129</th><td>}</td></tr>
+<tr><th id="130">130</th><td></td></tr>
+<tr><th id="131">131</th><td><em>void</em> DeallocateDebug()</td></tr>
+<tr><th id="132">132</th><td>{</td></tr>
+<tr><th id="133">133</th><td>    SafeDelete(g_Debug);</td></tr>
+<tr><th id="134">134</th><td>}</td></tr>
+<tr><th id="135">135</th><td></td></tr>
+<tr><th id="136">136</th><td><em>void</em> DeallocateMutex()</td></tr>
+<tr><th id="137">137</th><td>{</td></tr>
+<tr><th id="138">138</th><td>    angle::GlobalMutex *mutex = g_Mutex.exchange(<b>nullptr</b>);</td></tr>
+<tr><th id="139">139</th><td>    {</td></tr>
+<tr><th id="140">140</th><td>        <i>// Wait for the mutex to become released by other threads before deleting.</i></td></tr>
+<tr><th id="141">141</th><td>        std::lock_guard&lt;angle::GlobalMutex&gt; lock(*mutex);</td></tr>
+<tr><th id="142">142</th><td>    }</td></tr>
+<tr><th id="143">143</th><td>    SafeDelete(mutex);</td></tr>
+<tr><th id="144">144</th><td>}</td></tr>
+<tr><th id="145">145</th><td></td></tr>
+<tr><th id="146">146</th><td><em>bool</em> InitializeProcess()</td></tr>
+<tr><th id="147">147</th><td>{</td></tr>
+<tr><th id="148">148</th><td>    ASSERT(g_Debug == <b>nullptr</b>);</td></tr>
+<tr><th id="149">149</th><td>    AllocateDebug();</td></tr>
+<tr><th id="150">150</th><td>    AllocateMutex();</td></tr>
+<tr><th id="151">151</th><td>    <b>return</b> AllocateCurrentThread() != <b>nullptr</b>;</td></tr>
+<tr><th id="152">152</th><td>}</td></tr>
+<tr><th id="153">153</th><td></td></tr>
+<tr><th id="154">154</th><td><em>void</em> TerminateProcess()</td></tr>
+<tr><th id="155">155</th><td>{</td></tr>
+<tr><th id="156">156</th><td>    DeallocateDebug();</td></tr>
+<tr><th id="157">157</th><td>    DeallocateMutex();</td></tr>
+<tr><th id="158">158</th><td>    DeallocateCurrentThread();</td></tr>
+<tr><th id="159">159</th><td>}</td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td>}  <i>// anonymous namespace</i></td></tr>
+<tr><th id="162">162</th><td></td></tr>
+<tr><th id="163">163</th><td>}  <i>// namespace egl</i></td></tr>
+<tr><th id="164">164</th><td></td></tr>
+<tr><th id="165">165</th><td><b>namespace</b></td></tr>
+<tr><th id="166">166</th><td>{</td></tr>
+<tr><th id="167">167</th><td><i>// The following WaitForDebugger code is based on SwiftShader. See:</i></td></tr>
+<tr><th id="168">168</th><td><i>// <a href="https://cs.chromium.org/chromium/src/third_party/swiftshader/src/Vulkan/main.cpp">https://cs.chromium.org/chromium/src/third_party/swiftshader/src/Vulkan/main.cpp</a></i></td></tr>
+<tr><th id="169">169</th><td><u>#    if defined(ANGLE_ENABLE_ASSERTS) &amp;&amp; !defined(ANGLE_ENABLE_WINDOWS_UWP)</u></td></tr>
+<tr><th id="170">170</th><td>INT_PTR CALLBACK DebuggerWaitDialogProc(HWND hwnd, UINT uMsg, WPARAM wParam, LPARAM lParam)</td></tr>
+<tr><th id="171">171</th><td>{</td></tr>
+<tr><th id="172">172</th><td>    RECT rect;</td></tr>
+<tr><th id="173">173</th><td></td></tr>
+<tr><th id="174">174</th><td>    <b>switch</b> (uMsg)</td></tr>
+<tr><th id="175">175</th><td>    {</td></tr>
+<tr><th id="176">176</th><td>        <b>case</b> WM_INITDIALOG:</td></tr>
+<tr><th id="177">177</th><td>            ::GetWindowRect(GetDesktopWindow(), &amp;rect);</td></tr>
+<tr><th id="178">178</th><td>            ::SetWindowPos(hwnd, HWND_TOP, rect.right / <var>2</var>, rect.bottom / <var>2</var>, <var>0</var>, <var>0</var>, SWP_NOSIZE);</td></tr>
+<tr><th id="179">179</th><td>            ::SetTimer(hwnd, <var>1</var>, <var>100</var>, NULL);</td></tr>
+<tr><th id="180">180</th><td>            <b>return</b> TRUE;</td></tr>
+<tr><th id="181">181</th><td>        <b>case</b> WM_COMMAND:</td></tr>
+<tr><th id="182">182</th><td>            <b>if</b> (LOWORD(wParam) == IDCANCEL)</td></tr>
+<tr><th id="183">183</th><td>            {</td></tr>
+<tr><th id="184">184</th><td>                ::EndDialog(hwnd, <var>0</var>);</td></tr>
+<tr><th id="185">185</th><td>            }</td></tr>
+<tr><th id="186">186</th><td>            <b>break</b>;</td></tr>
+<tr><th id="187">187</th><td>        <b>case</b> WM_TIMER:</td></tr>
+<tr><th id="188">188</th><td>            <b>if</b> (angle::IsDebuggerAttached())</td></tr>
+<tr><th id="189">189</th><td>            {</td></tr>
+<tr><th id="190">190</th><td>                ::EndDialog(hwnd, <var>0</var>);</td></tr>
+<tr><th id="191">191</th><td>            }</td></tr>
+<tr><th id="192">192</th><td>    }</td></tr>
+<tr><th id="193">193</th><td></td></tr>
+<tr><th id="194">194</th><td>    <b>return</b> FALSE;</td></tr>
+<tr><th id="195">195</th><td>}</td></tr>
+<tr><th id="196">196</th><td></td></tr>
+<tr><th id="197">197</th><td><em>void</em> WaitForDebugger(HINSTANCE instance)</td></tr>
+<tr><th id="198">198</th><td>{</td></tr>
+<tr><th id="199">199</th><td>    <b>if</b> (angle::IsDebuggerAttached())</td></tr>
+<tr><th id="200">200</th><td>        <b>return</b>;</td></tr>
+<tr><th id="201">201</th><td></td></tr>
+<tr><th id="202">202</th><td>    HRSRC dialog = ::FindResourceA(instance, MAKEINTRESOURCEA(IDD_DIALOG1), MAKEINTRESOURCEA(<var>5</var>));</td></tr>
+<tr><th id="203">203</th><td>    <b>if</b> (!dialog)</td></tr>
+<tr><th id="204">204</th><td>    {</td></tr>
+<tr><th id="205">205</th><td>        printf(<q>"Error finding wait for debugger dialog. Error %lu.\n"</q>, ::GetLastError());</td></tr>
+<tr><th id="206">206</th><td>        <b>return</b>;</td></tr>
+<tr><th id="207">207</th><td>    }</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td>    DLGTEMPLATE *dialogTemplate = <b>reinterpret_cast</b>&lt;DLGTEMPLATE *&gt;(::LoadResource(instance, dialog));</td></tr>
+<tr><th id="210">210</th><td>    ::DialogBoxIndirectA(instance, dialogTemplate, NULL, DebuggerWaitDialogProc);</td></tr>
+<tr><th id="211">211</th><td>}</td></tr>
+<tr><th id="212">212</th><td><u>#    else</u></td></tr>
+<tr><th id="213">213</th><td><em>void</em> WaitForDebugger(HINSTANCE instance) {}</td></tr>
+<tr><th id="214">214</th><td><u>#    endif  // defined(ANGLE_ENABLE_ASSERTS) &amp;&amp; !defined(ANGLE_ENABLE_WINDOWS_UWP)</u></td></tr>
+<tr><th id="215">215</th><td>}  <i>// namespace</i></td></tr>
+<tr><th id="216">216</th><td></td></tr>
+<tr><th id="217">217</th><td><b>extern</b> <q>"C"</q> BOOL WINAPI DllMain(HINSTANCE instance, DWORD reason, LPVOID)</td></tr>
+<tr><th id="218">218</th><td>{</td></tr>
+<tr><th id="219">219</th><td>    <b>switch</b> (reason)</td></tr>
+<tr><th id="220">220</th><td>    {</td></tr>
+<tr><th id="221">221</th><td>        <b>case</b> DLL_PROCESS_ATTACH:</td></tr>
+<tr><th id="222">222</th><td>            <b>if</b> (angle::GetEnvironmentVar(<q>"ANGLE_WAIT_FOR_DEBUGGER"</q>) == <q>"1"</q>)</td></tr>
+<tr><th id="223">223</th><td>            {</td></tr>
+<tr><th id="224">224</th><td>                WaitForDebugger(instance);</td></tr>
+<tr><th id="225">225</th><td>            }</td></tr>
+<tr><th id="226">226</th><td>            <b>return</b> <b>static_cast</b>&lt;BOOL&gt;(egl::InitializeProcess());</td></tr>
+<tr><th id="227">227</th><td></td></tr>
+<tr><th id="228">228</th><td>        <b>case</b> DLL_THREAD_ATTACH:</td></tr>
+<tr><th id="229">229</th><td>            <b>return</b> <b>static_cast</b>&lt;BOOL&gt;(egl::AllocateCurrentThread() != <b>nullptr</b>);</td></tr>
+<tr><th id="230">230</th><td></td></tr>
+<tr><th id="231">231</th><td>        <b>case</b> DLL_THREAD_DETACH:</td></tr>
+<tr><th id="232">232</th><td>            egl::DeallocateCurrentThread();</td></tr>
+<tr><th id="233">233</th><td>            <b>break</b>;</td></tr>
+<tr><th id="234">234</th><td></td></tr>
+<tr><th id="235">235</th><td>        <b>case</b> DLL_PROCESS_DETACH:</td></tr>
+<tr><th id="236">236</th><td>            egl::TerminateProcess();</td></tr>
+<tr><th id="237">237</th><td>            <b>break</b>;</td></tr>
+<tr><th id="238">238</th><td>    }</td></tr>
+<tr><th id="239">239</th><td></td></tr>
+<tr><th id="240">240</th><td>    <b>return</b> TRUE;</td></tr>
+<tr><th id="241">241</th><td>}</td></tr>
+<tr><th id="242">242</th><td><u>#<span data-ppcond="119">endif</span>  // ANGLE_PLATFORM_WINDOWS</u></td></tr>
+<tr><th id="243">243</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

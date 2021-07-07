@@ -1,0 +1,309 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>cpu-intel.c source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/cpu-intel.c] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/cpu-intel.c'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>third_party</a>/<a href='../..'>boringssl</a>/<a href='..'>src</a>/<a href='./'>crypto</a>/<a href='cpu-intel.c.html'>cpu-intel.c</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)</i></td></tr>
+<tr><th id="2">2</th><td><i> * All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * This package is an SSL implementation written</i></td></tr>
+<tr><th id="5">5</th><td><i> * by Eric Young (eay@cryptsoft.com).</i></td></tr>
+<tr><th id="6">6</th><td><i> * The implementation was written so as to conform with Netscapes SSL.</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * This library is free for commercial and non-commercial use as long as</i></td></tr>
+<tr><th id="9">9</th><td><i> * the following conditions are aheared to.  The following conditions</i></td></tr>
+<tr><th id="10">10</th><td><i> * apply to all code found in this distribution, be it the RC4, RSA,</i></td></tr>
+<tr><th id="11">11</th><td><i> * lhash, DES, etc., code; not just the SSL code.  The SSL documentation</i></td></tr>
+<tr><th id="12">12</th><td><i> * included with this distribution is covered by the same copyright terms</i></td></tr>
+<tr><th id="13">13</th><td><i> * except that the holder is Tim Hudson (tjh@cryptsoft.com).</i></td></tr>
+<tr><th id="14">14</th><td><i> *</i></td></tr>
+<tr><th id="15">15</th><td><i> * Copyright remains Eric Young's, and as such any Copyright notices in</i></td></tr>
+<tr><th id="16">16</th><td><i> * the code are not to be removed.</i></td></tr>
+<tr><th id="17">17</th><td><i> * If this package is used in a product, Eric Young should be given attribution</i></td></tr>
+<tr><th id="18">18</th><td><i> * as the author of the parts of the library used.</i></td></tr>
+<tr><th id="19">19</th><td><i> * This can be in the form of a textual message at program startup or</i></td></tr>
+<tr><th id="20">20</th><td><i> * in documentation (online or textual) provided with the package.</i></td></tr>
+<tr><th id="21">21</th><td><i> *</i></td></tr>
+<tr><th id="22">22</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="23">23</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="24">24</th><td><i> * are met:</i></td></tr>
+<tr><th id="25">25</th><td><i> * 1. Redistributions of source code must retain the copyright</i></td></tr>
+<tr><th id="26">26</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="27">27</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="28">28</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="29">29</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="30">30</th><td><i> * 3. All advertising materials mentioning features or use of this software</i></td></tr>
+<tr><th id="31">31</th><td><i> *    must display the following acknowledgement:</i></td></tr>
+<tr><th id="32">32</th><td><i> *    "This product includes cryptographic software written by</i></td></tr>
+<tr><th id="33">33</th><td><i> *     Eric Young (eay@cryptsoft.com)"</i></td></tr>
+<tr><th id="34">34</th><td><i> *    The word 'cryptographic' can be left out if the rouines from the library</i></td></tr>
+<tr><th id="35">35</th><td><i> *    being used are not cryptographic related :-).</i></td></tr>
+<tr><th id="36">36</th><td><i> * 4. If you include any Windows specific code (or a derivative thereof) from</i></td></tr>
+<tr><th id="37">37</th><td><i> *    the apps directory (application code) you must include an acknowledgement:</i></td></tr>
+<tr><th id="38">38</th><td><i> *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"</i></td></tr>
+<tr><th id="39">39</th><td><i> *</i></td></tr>
+<tr><th id="40">40</th><td><i> * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND</i></td></tr>
+<tr><th id="41">41</th><td><i> * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="42">42</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</i></td></tr>
+<tr><th id="43">43</th><td><i> * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE</i></td></tr>
+<tr><th id="44">44</th><td><i> * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL</i></td></tr>
+<tr><th id="45">45</th><td><i> * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS</i></td></tr>
+<tr><th id="46">46</th><td><i> * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)</i></td></tr>
+<tr><th id="47">47</th><td><i> * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT</i></td></tr>
+<tr><th id="48">48</th><td><i> * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY</i></td></tr>
+<tr><th id="49">49</th><td><i> * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF</i></td></tr>
+<tr><th id="50">50</th><td><i> * SUCH DAMAGE.</i></td></tr>
+<tr><th id="51">51</th><td><i> *</i></td></tr>
+<tr><th id="52">52</th><td><i> * The licence and distribution terms for any publically available version or</i></td></tr>
+<tr><th id="53">53</th><td><i> * derivative of this code cannot be changed.  i.e. this code cannot simply be</i></td></tr>
+<tr><th id="54">54</th><td><i> * copied and put under another distribution licence</i></td></tr>
+<tr><th id="55">55</th><td><i> * [including the GNU Public Licence.] */</i></td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td><u>#include <a href="../include/openssl/cpu.h.html">&lt;openssl/cpu.h&gt;</a></u></td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><u>#<span data-ppcond="60">if</span> !defined(<span class="macro" data-ref="_M/OPENSSL_NO_ASM">OPENSSL_NO_ASM</span>) &amp;&amp; (defined(<span class="macro" data-ref="_M/OPENSSL_X86">OPENSSL_X86</span>) || defined(<span class="macro" data-ref="_M/OPENSSL_X86_64">OPENSSL_X86_64</span>))</u></td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><u>#include &lt;inttypes.h&gt;</u></td></tr>
+<tr><th id="63">63</th><td><u>#include &lt;stdio.h&gt;</u></td></tr>
+<tr><th id="64">64</th><td><u>#include &lt;stdlib.h&gt;</u></td></tr>
+<tr><th id="65">65</th><td><u>#include &lt;string.h&gt;</u></td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><u>#if defined(_MSC_VER)</u></td></tr>
+<tr><th id="68">68</th><td>OPENSSL_MSVC_PRAGMA(warning(push, <var>3</var>))</td></tr>
+<tr><th id="69">69</th><td><u>#include &lt;immintrin.h&gt;</u></td></tr>
+<tr><th id="70">70</th><td><u>#include &lt;intrin.h&gt;</u></td></tr>
+<tr><th id="71">71</th><td>OPENSSL_MSVC_PRAGMA(warning(pop))</td></tr>
+<tr><th id="72">72</th><td><u>#endif</u></td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td><u>#include "internal.h"</u></td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td><i>// OPENSSL_cpuid runs the cpuid instruction. |leaf| is passed in as EAX and ECX</i></td></tr>
+<tr><th id="78">78</th><td><i>// is set to zero. It writes EAX, EBX, ECX, and EDX to |*out_eax| through</i></td></tr>
+<tr><th id="79">79</th><td><i>// |*out_edx|.</i></td></tr>
+<tr><th id="80">80</th><td><em>static</em> <em>void</em> OPENSSL_cpuid(uint32_t *out_eax, uint32_t *out_ebx,</td></tr>
+<tr><th id="81">81</th><td>                          uint32_t *out_ecx, uint32_t *out_edx, uint32_t leaf) {</td></tr>
+<tr><th id="82">82</th><td><u>#if defined(_MSC_VER)</u></td></tr>
+<tr><th id="83">83</th><td>  <em>int</em> tmp[<var>4</var>];</td></tr>
+<tr><th id="84">84</th><td>  __cpuid(tmp, (<em>int</em>)leaf);</td></tr>
+<tr><th id="85">85</th><td>  *out_eax = (uint32_t)tmp[<var>0</var>];</td></tr>
+<tr><th id="86">86</th><td>  *out_ebx = (uint32_t)tmp[<var>1</var>];</td></tr>
+<tr><th id="87">87</th><td>  *out_ecx = (uint32_t)tmp[<var>2</var>];</td></tr>
+<tr><th id="88">88</th><td>  *out_edx = (uint32_t)tmp[<var>3</var>];</td></tr>
+<tr><th id="89">89</th><td><u>#elif defined(__pic__) &amp;&amp; defined(OPENSSL_32_BIT)</u></td></tr>
+<tr><th id="90">90</th><td>  <i>// Inline assembly may not clobber the PIC register. For 32-bit, this is EBX.</i></td></tr>
+<tr><th id="91">91</th><td><i>  // See <a href="https://gcc.gnu.org/bugzilla/show_bug.cgi?id=47602">https://gcc.gnu.org/bugzilla/show_bug.cgi?id=47602</a>.</i></td></tr>
+<tr><th id="92">92</th><td>  <b>__asm__</b> <em>volatile</em> (</td></tr>
+<tr><th id="93">93</th><td>    <q>"xor %%ecx, %%ecx\n"</q></td></tr>
+<tr><th id="94">94</th><td>    <q>"mov %%ebx, %%edi\n"</q></td></tr>
+<tr><th id="95">95</th><td>    <q>"cpuid\n"</q></td></tr>
+<tr><th id="96">96</th><td>    <q>"xchg %%edi, %%ebx\n"</q></td></tr>
+<tr><th id="97">97</th><td>    : <q>"=a"</q>(*out_eax), <q>"=D"</q>(*out_ebx), <q>"=c"</q>(*out_ecx), <q>"=d"</q>(*out_edx)</td></tr>
+<tr><th id="98">98</th><td>    : <q>"a"</q>(leaf)</td></tr>
+<tr><th id="99">99</th><td>  );</td></tr>
+<tr><th id="100">100</th><td><u>#else</u></td></tr>
+<tr><th id="101">101</th><td>  <b>__asm__</b> <em>volatile</em> (</td></tr>
+<tr><th id="102">102</th><td>    <q>"xor %%ecx, %%ecx\n"</q></td></tr>
+<tr><th id="103">103</th><td>    <q>"cpuid\n"</q></td></tr>
+<tr><th id="104">104</th><td>    : <q>"=a"</q>(*out_eax), <q>"=b"</q>(*out_ebx), <q>"=c"</q>(*out_ecx), <q>"=d"</q>(*out_edx)</td></tr>
+<tr><th id="105">105</th><td>    : <q>"a"</q>(leaf)</td></tr>
+<tr><th id="106">106</th><td>  );</td></tr>
+<tr><th id="107">107</th><td><u>#endif</u></td></tr>
+<tr><th id="108">108</th><td>}</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td><i>// OPENSSL_xgetbv returns the value of an Intel Extended Control Register (XCR).</i></td></tr>
+<tr><th id="111">111</th><td><i>// Currently only XCR0 is defined by Intel so |xcr| should always be zero.</i></td></tr>
+<tr><th id="112">112</th><td><em>static</em> uint64_t OPENSSL_xgetbv(uint32_t xcr) {</td></tr>
+<tr><th id="113">113</th><td><u>#if defined(_MSC_VER)</u></td></tr>
+<tr><th id="114">114</th><td>  <b>return</b> (uint64_t)_xgetbv(xcr);</td></tr>
+<tr><th id="115">115</th><td><u>#else</u></td></tr>
+<tr><th id="116">116</th><td>  uint32_t eax, edx;</td></tr>
+<tr><th id="117">117</th><td>  <b>__asm__</b> <em>volatile</em> (<q>"xgetbv"</q> : <q>"=a"</q>(eax), <q>"=d"</q>(edx) : <q>"c"</q>(xcr));</td></tr>
+<tr><th id="118">118</th><td>  <b>return</b> (((uint64_t)edx) &lt;&lt; <var>32</var>) | eax;</td></tr>
+<tr><th id="119">119</th><td><u>#endif</u></td></tr>
+<tr><th id="120">120</th><td>}</td></tr>
+<tr><th id="121">121</th><td></td></tr>
+<tr><th id="122">122</th><td><i>// handle_cpu_env applies the value from |in| to the CPUID values in |out[0]|</i></td></tr>
+<tr><th id="123">123</th><td><i>// and |out[1]|. See the comment in |OPENSSL_cpuid_setup| about this.</i></td></tr>
+<tr><th id="124">124</th><td><em>static</em> <em>void</em> handle_cpu_env(uint32_t *out, <em>const</em> <em>char</em> *in) {</td></tr>
+<tr><th id="125">125</th><td>  <em>const</em> <em>int</em> invert = in[<var>0</var>] == <kbd>'~'</kbd>;</td></tr>
+<tr><th id="126">126</th><td>  <em>const</em> <em>int</em> or = in[<var>0</var>] == <kbd>'|'</kbd>;</td></tr>
+<tr><th id="127">127</th><td>  <em>const</em> <em>int</em> skip_first_byte = invert || or;</td></tr>
+<tr><th id="128">128</th><td>  <em>const</em> <em>int</em> hex = in[skip_first_byte] == <kbd>'0'</kbd> &amp;&amp; in[skip_first_byte+<var>1</var>] == <kbd>'x'</kbd>;</td></tr>
+<tr><th id="129">129</th><td></td></tr>
+<tr><th id="130">130</th><td>  <em>int</em> sscanf_result;</td></tr>
+<tr><th id="131">131</th><td>  uint64_t v;</td></tr>
+<tr><th id="132">132</th><td>  <b>if</b> (hex) {</td></tr>
+<tr><th id="133">133</th><td>    sscanf_result = sscanf(in + invert + <var>2</var>, <q>"%"</q> PRIx64, &amp;v);</td></tr>
+<tr><th id="134">134</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="135">135</th><td>    sscanf_result = sscanf(in + invert, <q>"%"</q> PRIu64, &amp;v);</td></tr>
+<tr><th id="136">136</th><td>  }</td></tr>
+<tr><th id="137">137</th><td></td></tr>
+<tr><th id="138">138</th><td>  <b>if</b> (!sscanf_result) {</td></tr>
+<tr><th id="139">139</th><td>    <b>return</b>;</td></tr>
+<tr><th id="140">140</th><td>  }</td></tr>
+<tr><th id="141">141</th><td></td></tr>
+<tr><th id="142">142</th><td>  <b>if</b> (invert) {</td></tr>
+<tr><th id="143">143</th><td>    out[<var>0</var>] &amp;= ~v;</td></tr>
+<tr><th id="144">144</th><td>    out[<var>1</var>] &amp;= ~(v &gt;&gt; <var>32</var>);</td></tr>
+<tr><th id="145">145</th><td>  } <b>else</b> <b>if</b> (or) {</td></tr>
+<tr><th id="146">146</th><td>    out[<var>0</var>] |= v;</td></tr>
+<tr><th id="147">147</th><td>    out[<var>1</var>] |= (v &gt;&gt; <var>32</var>);</td></tr>
+<tr><th id="148">148</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="149">149</th><td>    out[<var>0</var>] = v;</td></tr>
+<tr><th id="150">150</th><td>    out[<var>1</var>] = v &gt;&gt; <var>32</var>;</td></tr>
+<tr><th id="151">151</th><td>  }</td></tr>
+<tr><th id="152">152</th><td>}</td></tr>
+<tr><th id="153">153</th><td></td></tr>
+<tr><th id="154">154</th><td><em>void</em> OPENSSL_cpuid_setup(<em>void</em>) {</td></tr>
+<tr><th id="155">155</th><td>  <i>// Determine the vendor and maximum input value.</i></td></tr>
+<tr><th id="156">156</th><td>  uint32_t eax, ebx, ecx, edx;</td></tr>
+<tr><th id="157">157</th><td>  OPENSSL_cpuid(&amp;eax, &amp;ebx, &amp;ecx, &amp;edx, <var>0</var>);</td></tr>
+<tr><th id="158">158</th><td></td></tr>
+<tr><th id="159">159</th><td>  uint32_t num_ids = eax;</td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td>  <em>int</em> is_intel = ebx == <var>0x756e6547</var> <i>/* Genu */</i> &amp;&amp;</td></tr>
+<tr><th id="162">162</th><td>                 edx == <var>0x49656e69</var> <i>/* ineI */</i> &amp;&amp;</td></tr>
+<tr><th id="163">163</th><td>                 ecx == <var>0x6c65746e</var> <i>/* ntel */</i>;</td></tr>
+<tr><th id="164">164</th><td>  <em>int</em> is_amd = ebx == <var>0x68747541</var> <i>/* Auth */</i> &amp;&amp;</td></tr>
+<tr><th id="165">165</th><td>               edx == <var>0x69746e65</var> <i>/* enti */</i> &amp;&amp;</td></tr>
+<tr><th id="166">166</th><td>               ecx == <var>0x444d4163</var> <i>/* cAMD */</i>;</td></tr>
+<tr><th id="167">167</th><td></td></tr>
+<tr><th id="168">168</th><td>  uint32_t extended_features[<var>2</var>] = {<var>0</var>};</td></tr>
+<tr><th id="169">169</th><td>  <b>if</b> (num_ids &gt;= <var>7</var>) {</td></tr>
+<tr><th id="170">170</th><td>    OPENSSL_cpuid(&amp;eax, &amp;ebx, &amp;ecx, &amp;edx, <var>7</var>);</td></tr>
+<tr><th id="171">171</th><td>    extended_features[<var>0</var>] = ebx;</td></tr>
+<tr><th id="172">172</th><td>    extended_features[<var>1</var>] = ecx;</td></tr>
+<tr><th id="173">173</th><td>  }</td></tr>
+<tr><th id="174">174</th><td></td></tr>
+<tr><th id="175">175</th><td>  OPENSSL_cpuid(&amp;eax, &amp;ebx, &amp;ecx, &amp;edx, <var>1</var>);</td></tr>
+<tr><th id="176">176</th><td></td></tr>
+<tr><th id="177">177</th><td>  <b>if</b> (is_amd) {</td></tr>
+<tr><th id="178">178</th><td>    <i>// See <a href="https://www.amd.com/system/files/TechDocs/25481.pdf,">https://www.amd.com/system/files/TechDocs/25481.pdf,</a> page 10.</i></td></tr>
+<tr><th id="179">179</th><td>    <em>const</em> uint32_t base_family = (eax &gt;&gt; <var>8</var>) &amp; <var>15</var>;</td></tr>
+<tr><th id="180">180</th><td>    <em>const</em> uint32_t base_model = (eax &gt;&gt; <var>4</var>) &amp; <var>15</var>;</td></tr>
+<tr><th id="181">181</th><td></td></tr>
+<tr><th id="182">182</th><td>    uint32_t family = base_family;</td></tr>
+<tr><th id="183">183</th><td>    uint32_t model = base_model;</td></tr>
+<tr><th id="184">184</th><td>    <b>if</b> (base_family == <var>0xf</var>) {</td></tr>
+<tr><th id="185">185</th><td>      <em>const</em> uint32_t ext_family = (eax &gt;&gt; <var>20</var>) &amp; <var>255</var>;</td></tr>
+<tr><th id="186">186</th><td>      family += ext_family;</td></tr>
+<tr><th id="187">187</th><td>      <em>const</em> uint32_t ext_model = (eax &gt;&gt; <var>16</var>) &amp; <var>15</var>;</td></tr>
+<tr><th id="188">188</th><td>      model |= ext_model &lt;&lt; <var>4</var>;</td></tr>
+<tr><th id="189">189</th><td>    }</td></tr>
+<tr><th id="190">190</th><td></td></tr>
+<tr><th id="191">191</th><td>    <b>if</b> (family &lt; <var>0x17</var> || (family == <var>0x17</var> &amp;&amp; <var>0x70</var> &lt;= model &amp;&amp; model &lt;= <var>0x7f</var>)) {</td></tr>
+<tr><th id="192">192</th><td>      <i>// Disable RDRAND on AMD families before 0x17 (Zen) due to reported</i></td></tr>
+<tr><th id="193">193</th><td><i>      // failures after suspend.</i></td></tr>
+<tr><th id="194">194</th><td><i>      // <a href="https://bugzilla.redhat.com/show_bug.cgi?id=1150286">https://bugzilla.redhat.com/show_bug.cgi?id=1150286</a></i></td></tr>
+<tr><th id="195">195</th><td><i>      // Also disable for family 0x17, models 0x70–0x7f, due to possible RDRAND</i></td></tr>
+<tr><th id="196">196</th><td><i>      // failures there too.</i></td></tr>
+<tr><th id="197">197</th><td>      ecx &amp;= ~(<var>1u</var> &lt;&lt; <var>30</var>);</td></tr>
+<tr><th id="198">198</th><td>    }</td></tr>
+<tr><th id="199">199</th><td>  }</td></tr>
+<tr><th id="200">200</th><td></td></tr>
+<tr><th id="201">201</th><td>  <i>// Force the hyper-threading bit so that the more conservative path is always</i></td></tr>
+<tr><th id="202">202</th><td><i>  // chosen.</i></td></tr>
+<tr><th id="203">203</th><td>  edx |= <var>1u</var> &lt;&lt; <var>28</var>;</td></tr>
+<tr><th id="204">204</th><td></td></tr>
+<tr><th id="205">205</th><td>  <i>// Reserved bit #20 was historically repurposed to control the in-memory</i></td></tr>
+<tr><th id="206">206</th><td><i>  // representation of RC4 state. Always set it to zero.</i></td></tr>
+<tr><th id="207">207</th><td>  edx &amp;= ~(<var>1u</var> &lt;&lt; <var>20</var>);</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td>  <i>// Reserved bit #30 is repurposed to signal an Intel CPU.</i></td></tr>
+<tr><th id="210">210</th><td>  <b>if</b> (is_intel) {</td></tr>
+<tr><th id="211">211</th><td>    edx |= (<var>1u</var> &lt;&lt; <var>30</var>);</td></tr>
+<tr><th id="212">212</th><td></td></tr>
+<tr><th id="213">213</th><td>    <i>// Clear the XSAVE bit on Knights Landing to mimic Silvermont. This enables</i></td></tr>
+<tr><th id="214">214</th><td><i>    // some Silvermont-specific codepaths which perform better. See OpenSSL</i></td></tr>
+<tr><th id="215">215</th><td><i>    // commit 64d92d74985ebb3d0be58a9718f9e080a14a8e7f.</i></td></tr>
+<tr><th id="216">216</th><td>    <b>if</b> ((eax &amp; <var>0x0fff0ff0</var>) == <var>0x00050670</var> <i>/* Knights Landing */</i> ||</td></tr>
+<tr><th id="217">217</th><td>        (eax &amp; <var>0x0fff0ff0</var>) == <var>0x00080650</var> <i>/* Knights Mill (per SDE) */</i>) {</td></tr>
+<tr><th id="218">218</th><td>      ecx &amp;= ~(<var>1u</var> &lt;&lt; <var>26</var>);</td></tr>
+<tr><th id="219">219</th><td>    }</td></tr>
+<tr><th id="220">220</th><td>  } <b>else</b> {</td></tr>
+<tr><th id="221">221</th><td>    edx &amp;= ~(<var>1u</var> &lt;&lt; <var>30</var>);</td></tr>
+<tr><th id="222">222</th><td>  }</td></tr>
+<tr><th id="223">223</th><td></td></tr>
+<tr><th id="224">224</th><td>  <i>// The SDBG bit is repurposed to denote AMD XOP support. Don't ever use AMD</i></td></tr>
+<tr><th id="225">225</th><td><i>  // XOP code paths.</i></td></tr>
+<tr><th id="226">226</th><td>  ecx &amp;= ~(<var>1u</var> &lt;&lt; <var>11</var>);</td></tr>
+<tr><th id="227">227</th><td></td></tr>
+<tr><th id="228">228</th><td>  uint64_t xcr0 = <var>0</var>;</td></tr>
+<tr><th id="229">229</th><td>  <b>if</b> (ecx &amp; (<var>1u</var> &lt;&lt; <var>27</var>)) {</td></tr>
+<tr><th id="230">230</th><td>    <i>// XCR0 may only be queried if the OSXSAVE bit is set.</i></td></tr>
+<tr><th id="231">231</th><td>    xcr0 = OPENSSL_xgetbv(<var>0</var>);</td></tr>
+<tr><th id="232">232</th><td>  }</td></tr>
+<tr><th id="233">233</th><td>  <i>// See Intel manual, volume 1, section 14.3.</i></td></tr>
+<tr><th id="234">234</th><td>  <b>if</b> ((xcr0 &amp; <var>6</var>) != <var>6</var>) {</td></tr>
+<tr><th id="235">235</th><td>    <i>// YMM registers cannot be used.</i></td></tr>
+<tr><th id="236">236</th><td>    ecx &amp;= ~(<var>1u</var> &lt;&lt; <var>28</var>);  <i>// AVX</i></td></tr>
+<tr><th id="237">237</th><td>    ecx &amp;= ~(<var>1u</var> &lt;&lt; <var>12</var>);  <i>// FMA</i></td></tr>
+<tr><th id="238">238</th><td>    ecx &amp;= ~(<var>1u</var> &lt;&lt; <var>11</var>);  <i>// AMD XOP</i></td></tr>
+<tr><th id="239">239</th><td>    <i>// Clear AVX2 and AVX512* bits.</i></td></tr>
+<tr><th id="240">240</th><td><i>    //</i></td></tr>
+<tr><th id="241">241</th><td><i>    // TODO(davidben): Should bits 17 and 26-28 also be cleared? Upstream</i></td></tr>
+<tr><th id="242">242</th><td><i>    // doesn't clear those.</i></td></tr>
+<tr><th id="243">243</th><td>    extended_features[<var>0</var>] &amp;=</td></tr>
+<tr><th id="244">244</th><td>        ~((<var>1u</var> &lt;&lt; <var>5</var>) | (<var>1u</var> &lt;&lt; <var>16</var>) | (<var>1u</var> &lt;&lt; <var>21</var>) | (<var>1u</var> &lt;&lt; <var>30</var>) | (<var>1u</var> &lt;&lt; <var>31</var>));</td></tr>
+<tr><th id="245">245</th><td>  }</td></tr>
+<tr><th id="246">246</th><td>  <i>// See Intel manual, volume 1, section 15.2.</i></td></tr>
+<tr><th id="247">247</th><td>  <b>if</b> ((xcr0 &amp; <var>0xe6</var>) != <var>0xe6</var>) {</td></tr>
+<tr><th id="248">248</th><td>    <i>// Clear AVX512F. Note we don't touch other AVX512 extensions because they</i></td></tr>
+<tr><th id="249">249</th><td><i>    // can be used with YMM.</i></td></tr>
+<tr><th id="250">250</th><td>    extended_features[<var>0</var>] &amp;= ~(<var>1u</var> &lt;&lt; <var>16</var>);</td></tr>
+<tr><th id="251">251</th><td>  }</td></tr>
+<tr><th id="252">252</th><td></td></tr>
+<tr><th id="253">253</th><td>  <i>// Disable ADX instructions on Knights Landing. See OpenSSL commit</i></td></tr>
+<tr><th id="254">254</th><td><i>  // 64d92d74985ebb3d0be58a9718f9e080a14a8e7f.</i></td></tr>
+<tr><th id="255">255</th><td>  <b>if</b> ((ecx &amp; (<var>1u</var> &lt;&lt; <var>26</var>)) == <var>0</var>) {</td></tr>
+<tr><th id="256">256</th><td>    extended_features[<var>0</var>] &amp;= ~(<var>1u</var> &lt;&lt; <var>19</var>);</td></tr>
+<tr><th id="257">257</th><td>  }</td></tr>
+<tr><th id="258">258</th><td></td></tr>
+<tr><th id="259">259</th><td>  OPENSSL_ia32cap_P[<var>0</var>] = edx;</td></tr>
+<tr><th id="260">260</th><td>  OPENSSL_ia32cap_P[<var>1</var>] = ecx;</td></tr>
+<tr><th id="261">261</th><td>  OPENSSL_ia32cap_P[<var>2</var>] = extended_features[<var>0</var>];</td></tr>
+<tr><th id="262">262</th><td>  OPENSSL_ia32cap_P[<var>3</var>] = extended_features[<var>1</var>];</td></tr>
+<tr><th id="263">263</th><td></td></tr>
+<tr><th id="264">264</th><td>  <em>const</em> <em>char</em> *env1, *env2;</td></tr>
+<tr><th id="265">265</th><td>  env1 = getenv(<q>"OPENSSL_ia32cap"</q>);</td></tr>
+<tr><th id="266">266</th><td>  <b>if</b> (env1 == NULL) {</td></tr>
+<tr><th id="267">267</th><td>    <b>return</b>;</td></tr>
+<tr><th id="268">268</th><td>  }</td></tr>
+<tr><th id="269">269</th><td></td></tr>
+<tr><th id="270">270</th><td>  <i>// OPENSSL_ia32cap can contain zero, one or two values, separated with a ':'.</i></td></tr>
+<tr><th id="271">271</th><td><i>  // Each value is a 64-bit, unsigned value which may start with "0x" to</i></td></tr>
+<tr><th id="272">272</th><td><i>  // indicate a hex value. Prior to the 64-bit value, a '~' or '|' may be given.</i></td></tr>
+<tr><th id="273">273</th><td><i>  //</i></td></tr>
+<tr><th id="274">274</th><td><i>  // If the '~' prefix is present:</i></td></tr>
+<tr><th id="275">275</th><td><i>  //   the value is inverted and ANDed with the probed CPUID result</i></td></tr>
+<tr><th id="276">276</th><td><i>  // If the '|' prefix is present:</i></td></tr>
+<tr><th id="277">277</th><td><i>  //   the value is ORed with the probed CPUID result</i></td></tr>
+<tr><th id="278">278</th><td><i>  // Otherwise:</i></td></tr>
+<tr><th id="279">279</th><td><i>  //   the value is taken as the result of the CPUID</i></td></tr>
+<tr><th id="280">280</th><td><i>  //</i></td></tr>
+<tr><th id="281">281</th><td><i>  // The first value determines OPENSSL_ia32cap_P[0] and [1]. The second [2]</i></td></tr>
+<tr><th id="282">282</th><td><i>  // and [3].</i></td></tr>
+<tr><th id="283">283</th><td></td></tr>
+<tr><th id="284">284</th><td>  handle_cpu_env(&amp;OPENSSL_ia32cap_P[<var>0</var>], env1);</td></tr>
+<tr><th id="285">285</th><td>  env2 = strchr(env1, <kbd>':'</kbd>);</td></tr>
+<tr><th id="286">286</th><td>  <b>if</b> (env2 != NULL) {</td></tr>
+<tr><th id="287">287</th><td>    handle_cpu_env(&amp;OPENSSL_ia32cap_P[<var>2</var>], env2 + <var>1</var>);</td></tr>
+<tr><th id="288">288</th><td>  }</td></tr>
+<tr><th id="289">289</th><td>}</td></tr>
+<tr><th id="290">290</th><td></td></tr>
+<tr><th id="291">291</th><td><u>#<span data-ppcond="60">endif</span>  // !OPENSSL_NO_ASM &amp;&amp; (OPENSSL_X86 || OPENSSL_X86_64)</u></td></tr>
+<tr><th id="292">292</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

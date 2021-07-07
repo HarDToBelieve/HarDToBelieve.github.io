@@ -1,0 +1,427 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>valparam.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/libyasm/valparam.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="yasm_dir_help,yasm_directive,yasm_directive_flags,yasm_param,yasm_param_type,yasm_valparam "/>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/libyasm/valparam.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>third_party</a>/<a href='..'>yasm</a>/<a href='./'>libyasm</a>/<a href='valparam.h.html'>valparam.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="2">2</th><td><i class="doc"> *<span class="command"> \file</span> libyasm/valparam.h</i></td></tr>
+<tr><th id="3">3</th><td><i class="doc"> * <span class="command">\brief</span> YASM value/parameter interface.</i></td></tr>
+<tr><th id="4">4</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="5">5</th><td><i class="doc"> *<span class="command"> \license</span></i></td></tr>
+<tr><th id="6">6</th><td><i class="doc"> *  Copyright (C) 2001-2007  Peter Johnson</i></td></tr>
+<tr><th id="7">7</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="8">8</th><td><i class="doc"> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="9">9</th><td><i class="doc"> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="10">10</th><td><i class="doc"> * are met:</i></td></tr>
+<tr><th id="11">11</th><td><i class="doc"> *  - Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="12">12</th><td><i class="doc"> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="13">13</th><td><i class="doc"> *  - Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="14">14</th><td><i class="doc"> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="15">15</th><td><i class="doc"> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="16">16</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="17">17</th><td><i class="doc"> * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND OTHER CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="18">18</th><td><i class="doc"> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="19">19</th><td><i class="doc"> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</i></td></tr>
+<tr><th id="20">20</th><td><i class="doc"> * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR OTHER CONTRIBUTORS BE</i></td></tr>
+<tr><th id="21">21</th><td><i class="doc"> * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="22">22</th><td><i class="doc"> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="23">23</th><td><i class="doc"> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="24">24</th><td><i class="doc"> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="25">25</th><td><i class="doc"> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="26">26</th><td><i class="doc"> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE</i></td></tr>
+<tr><th id="27">27</th><td><i class="doc"> * POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="28">28</th><td><i class="doc"> *<span class="command"> \endlicense</span></i></td></tr>
+<tr><th id="29">29</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="30">30</th><td><u>#<span data-ppcond="30">ifndef</span> <span class="macro" data-ref="_M/YASM_VALPARAM_H">YASM_VALPARAM_H</span></u></td></tr>
+<tr><th id="31">31</th><td><u>#define <dfn class="macro" id="_M/YASM_VALPARAM_H" data-ref="_M/YASM_VALPARAM_H">YASM_VALPARAM_H</dfn></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><u>#<span data-ppcond="33">ifndef</span> <a class="macro" href="coretype.h.html#34" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#define YASM_LIB_DECL</u></td></tr>
+<tr><th id="35">35</th><td><u>#<span data-ppcond="33">endif</span></u></td></tr>
+<tr><th id="36">36</th><td></td></tr>
+<tr><th id="37">37</th><td><i class="doc">/** Value/parameter pair. <span class="command"> \internal</span> */</i></td></tr>
+<tr><th id="38">38</th><td><b>struct</b> <dfn class="type def" id="yasm_valparam" title='yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</dfn> {</td></tr>
+<tr><th id="39">39</th><td>    <i>/*@reldef@*/</i> <a class="macro" href="compat-queue.h.html#187" title="struct { struct yasm_valparam *stqe_next; }" data-ref="_M/STAILQ_ENTRY">STAILQ_ENTRY</a>(<a class="type" href="#yasm_valparam" title='yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a>) <dfn class="decl field" id="yasm_valparam::link" title='yasm_valparam::link' data-ref="yasm_valparam::link" data-ref-filename="yasm_valparam..link">link</dfn>;  <i class="doc">/**&lt; Next pair in list */</i></td></tr>
+<tr><th id="40">40</th><td>    <i>/*@owned@*/</i> <i>/*@null@*/</i> <em>char</em> *<dfn class="decl field" id="yasm_valparam::val" title='yasm_valparam::val' data-ref="yasm_valparam::val" data-ref-filename="yasm_valparam..val">val</dfn>;           <i class="doc">/**&lt; Value */</i></td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td>    <i class="doc">/** Parameter type. */</i></td></tr>
+<tr><th id="43">43</th><td>    <b>enum</b> <dfn class="type def" id="yasm_param_type" title='yasm_param_type' data-ref="yasm_param_type" data-ref-filename="yasm_param_type"><a class="type" href="#yasm_param_type" title='yasm_param_type' data-ref="yasm_param_type" data-ref-filename="yasm_param_type">yasm_param_type</a></dfn> {</td></tr>
+<tr><th id="44">44</th><td>        <dfn class="enum" id="YASM_PARAM_ID" title='YASM_PARAM_ID' data-ref="YASM_PARAM_ID" data-ref-filename="YASM_PARAM_ID">YASM_PARAM_ID</dfn>,                          <i class="doc">/**&lt; Identifier */</i></td></tr>
+<tr><th id="45">45</th><td>        <dfn class="enum" id="YASM_PARAM_STRING" title='YASM_PARAM_STRING' data-ref="YASM_PARAM_STRING" data-ref-filename="YASM_PARAM_STRING">YASM_PARAM_STRING</dfn>,                      <i class="doc">/**&lt; String */</i></td></tr>
+<tr><th id="46">46</th><td>        <dfn class="enum" id="YASM_PARAM_EXPR" title='YASM_PARAM_EXPR' data-ref="YASM_PARAM_EXPR" data-ref-filename="YASM_PARAM_EXPR">YASM_PARAM_EXPR</dfn>                         <i class="doc">/**&lt; Expression */</i></td></tr>
+<tr><th id="47">47</th><td>    } <dfn class="decl field" id="yasm_valparam::type" title='yasm_valparam::type' data-ref="yasm_valparam::type" data-ref-filename="yasm_valparam..type">type</dfn>;                                     <i class="doc">/**&lt; Parameter type */</i></td></tr>
+<tr><th id="48">48</th><td></td></tr>
+<tr><th id="49">49</th><td>    <i class="doc">/** Parameter value. */</i></td></tr>
+<tr><th id="50">50</th><td>    <b>union</b> <dfn class="type def" id="yasm_param" title='yasm_param' data-ref="yasm_param" data-ref-filename="yasm_param"><a class="type" href="#yasm_param" title='yasm_param' data-ref="yasm_param" data-ref-filename="yasm_param">yasm_param</a></dfn> {</td></tr>
+<tr><th id="51">51</th><td>        <i>/*@owned@*/</i> <em>char</em> *<dfn class="decl field" id="yasm_param::id" title='yasm_param::id' data-ref="yasm_param::id" data-ref-filename="yasm_param..id">id</dfn>;                   <i class="doc">/**&lt; Identifier */</i></td></tr>
+<tr><th id="52">52</th><td>        <i>/*@owned@*/</i> <em>char</em> *<dfn class="decl field" id="yasm_param::str" title='yasm_param::str' data-ref="yasm_param::str" data-ref-filename="yasm_param..str">str</dfn>;                  <i class="doc">/**&lt; String */</i></td></tr>
+<tr><th id="53">53</th><td>        <i>/*@owned@*/</i> <a class="typedef" href="coretype.h.html#yasm_expr" title='yasm_expr' data-type='struct yasm_expr' data-ref="yasm_expr" data-ref-filename="yasm_expr">yasm_expr</a> *<dfn class="decl field" id="yasm_param::e" title='yasm_param::e' data-ref="yasm_param::e" data-ref-filename="yasm_param..e">e</dfn>;               <i class="doc">/**&lt; Expression */</i></td></tr>
+<tr><th id="54">54</th><td>    } <dfn class="decl field" id="yasm_valparam::param" title='yasm_valparam::param' data-ref="yasm_valparam::param" data-ref-filename="yasm_valparam..param">param</dfn>;                                    <i class="doc">/**&lt; Parameter */</i></td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td>    <i class="doc">/** Prefix character that indicates a raw identifier.  When</i></td></tr>
+<tr><th id="57">57</th><td><i class="doc">     * yasm_vp_string() is called on a #YASM_PARAM_ID, all characters are</i></td></tr>
+<tr><th id="58">58</th><td><i class="doc">     * returned.  When yasm_vp_id() is called on a #YASM_PARAM_ID, if the</i></td></tr>
+<tr><th id="59">59</th><td><i class="doc">     * identifier begins with this character, this character is stripped</i></td></tr>
+<tr><th id="60">60</th><td><i class="doc">     * from the returned value.</i></td></tr>
+<tr><th id="61">61</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="62">62</th><td>    <em>char</em> <dfn class="decl field" id="yasm_valparam::id_prefix" title='yasm_valparam::id_prefix' data-ref="yasm_valparam::id_prefix" data-ref-filename="yasm_valparam..id_prefix">id_prefix</dfn>;</td></tr>
+<tr><th id="63">63</th><td>};</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td><i class="doc">/** Linked list of value/parameter pairs. <span class="command"> \internal</span> */</i></td></tr>
+<tr><th id="66">66</th><td><i>/*@reldef@*/</i> <a class="macro" href="compat-queue.h.html#178" title="struct yasm_valparamhead { struct yasm_valparam *stqh_first; struct yasm_valparam **stqh_last; }" data-ref="_M/STAILQ_HEAD">STAILQ_HEAD</a>(<dfn class="type def" id="yasm_valparamhead" title='yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</dfn>, <a class="type" href="#yasm_valparam" title='yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a>);</td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td><i class="doc">/** Directive list entry structure. */</i></td></tr>
+<tr><th id="69">69</th><td><b>struct</b> <dfn class="type def" id="yasm_directive" title='yasm_directive' data-ref="yasm_directive" data-ref-filename="yasm_directive">yasm_directive</dfn> {</td></tr>
+<tr><th id="70">70</th><td>    <i class="doc">/** Directive name.  GAS directives should include the ".", NASM</i></td></tr>
+<tr><th id="71">71</th><td><i class="doc">     * directives should just be the raw name (not including the []).</i></td></tr>
+<tr><th id="72">72</th><td><i class="doc">     * NULL entry required to terminate list of directives.</i></td></tr>
+<tr><th id="73">73</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="74">74</th><td>    <i>/*@null@*/</i> <em>const</em> <em>char</em> *<dfn class="decl field" id="yasm_directive::name" title='yasm_directive::name' data-ref="yasm_directive::name" data-ref-filename="yasm_directive..name">name</dfn>;</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td>    <em>const</em> <em>char</em> *<dfn class="decl field" id="yasm_directive::parser" title='yasm_directive::parser' data-ref="yasm_directive::parser" data-ref-filename="yasm_directive..parser">parser</dfn>;                     <i class="doc">/**&lt; Parser keyword */</i></td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td>    <i class="doc">/** Handler callback function for the directive.</i></td></tr>
+<tr><th id="79">79</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">object</span>            object </i></td></tr>
+<tr><th id="80">80</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">valparams</span>         value/parameters</i></td></tr>
+<tr><th id="81">81</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">objext_valparams</span>  object format-specific value/parameters</i></td></tr>
+<tr><th id="82">82</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">line</span>              virtual line (from yasm_linemap)</i></td></tr>
+<tr><th id="83">83</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="84">84</th><td>    <em>void</em> (*<dfn class="decl field" id="yasm_directive::handler" title='yasm_directive::handler' data-ref="yasm_directive::handler" data-ref-filename="yasm_directive..handler">handler</dfn>) (<a class="typedef" href="coretype.h.html#yasm_object" title='yasm_object' data-type='struct yasm_object' data-ref="yasm_object" data-ref-filename="yasm_object">yasm_object</a> *<dfn class="local col3 decl" id="243object" title='object' data-type='yasm_object *' data-ref="243object" data-ref-filename="243object">object</dfn>, <a class="typedef" href="coretype.h.html#yasm_valparamhead" title='yasm_valparamhead' data-type='struct yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</a> *<dfn class="local col4 decl" id="244valparams" title='valparams' data-type='yasm_valparamhead *' data-ref="244valparams" data-ref-filename="244valparams">valparams</dfn>,</td></tr>
+<tr><th id="85">85</th><td>                     <a class="typedef" href="coretype.h.html#yasm_valparamhead" title='yasm_valparamhead' data-type='struct yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</a> *<dfn class="local col5 decl" id="245objext_valparams" title='objext_valparams' data-type='yasm_valparamhead *' data-ref="245objext_valparams" data-ref-filename="245objext_valparams">objext_valparams</dfn>, <em>unsigned</em> <em>long</em> <dfn class="local col6 decl" id="246line" title='line' data-type='unsigned long' data-ref="246line" data-ref-filename="246line">line</dfn>);</td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td>    <i class="doc">/** Flags for pre-handler parameter checking. */</i></td></tr>
+<tr><th id="88">88</th><td>    <b>enum</b> <dfn class="type def" id="yasm_directive_flags" title='yasm_directive_flags' data-ref="yasm_directive_flags" data-ref-filename="yasm_directive_flags"><a class="type" href="#yasm_directive_flags" title='yasm_directive_flags' data-ref="yasm_directive_flags" data-ref-filename="yasm_directive_flags">yasm_directive_flags</a></dfn> {</td></tr>
+<tr><th id="89">89</th><td>        <dfn class="enum" id="YASM_DIR_ANY" title='YASM_DIR_ANY' data-ref="YASM_DIR_ANY" data-ref-filename="YASM_DIR_ANY">YASM_DIR_ANY</dfn> = <var>0</var>,           <i class="doc">/**&lt; Any valparams accepted */</i></td></tr>
+<tr><th id="90">90</th><td>        <dfn class="enum" id="YASM_DIR_ARG_REQUIRED" title='YASM_DIR_ARG_REQUIRED' data-ref="YASM_DIR_ARG_REQUIRED" data-ref-filename="YASM_DIR_ARG_REQUIRED">YASM_DIR_ARG_REQUIRED</dfn> = <var>1</var>,  <i class="doc">/**&lt; Require at least 1 valparam */</i></td></tr>
+<tr><th id="91">91</th><td>        <dfn class="enum" id="YASM_DIR_ID_REQUIRED" title='YASM_DIR_ID_REQUIRED' data-ref="YASM_DIR_ID_REQUIRED" data-ref-filename="YASM_DIR_ID_REQUIRED">YASM_DIR_ID_REQUIRED</dfn> = <var>2</var>    <i class="doc">/**&lt; First valparam must be ID */</i></td></tr>
+<tr><th id="92">92</th><td>    } <dfn class="decl field" id="yasm_directive::flags" title='yasm_directive::flags' data-ref="yasm_directive::flags" data-ref-filename="yasm_directive..flags">flags</dfn>;</td></tr>
+<tr><th id="93">93</th><td>};</td></tr>
+<tr><th id="94">94</th><td></td></tr>
+<tr><th id="95">95</th><td><i class="doc">/** Call a directive.  Performs any valparam checks asked for by the</i></td></tr>
+<tr><th id="96">96</th><td><i class="doc"> * directive prior to call.  Note that for a variety of reasons, a directive</i></td></tr>
+<tr><th id="97">97</th><td><i class="doc"> * can generate an error.</i></td></tr>
+<tr><th id="98">98</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">directive</span>             directive</i></td></tr>
+<tr><th id="99">99</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">object</span>                object </i></td></tr>
+<tr><th id="100">100</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">valparams</span>             value/parameters</i></td></tr>
+<tr><th id="101">101</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">objext_valparams</span>      object format-specific value/parameters</i></td></tr>
+<tr><th id="102">102</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">line</span>                  virtual line (from yasm_linemap)</i></td></tr>
+<tr><th id="103">103</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="104">104</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="105">105</th><td><em>void</em> <dfn class="decl fn" id="yasm_call_directive" title='yasm_call_directive' data-ref="yasm_call_directive" data-ref-filename="yasm_call_directive">yasm_call_directive</dfn>(<em>const</em> <a class="typedef" href="coretype.h.html#yasm_directive" title='yasm_directive' data-type='struct yasm_directive' data-ref="yasm_directive" data-ref-filename="yasm_directive">yasm_directive</a> *<dfn class="local col7 decl" id="247directive" title='directive' data-type='const yasm_directive *' data-ref="247directive" data-ref-filename="247directive">directive</dfn>, <a class="typedef" href="coretype.h.html#yasm_object" title='yasm_object' data-type='struct yasm_object' data-ref="yasm_object" data-ref-filename="yasm_object">yasm_object</a> *<dfn class="local col8 decl" id="248object" title='object' data-type='yasm_object *' data-ref="248object" data-ref-filename="248object">object</dfn>,</td></tr>
+<tr><th id="106">106</th><td>                         <a class="typedef" href="coretype.h.html#yasm_valparamhead" title='yasm_valparamhead' data-type='struct yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</a> *<dfn class="local col9 decl" id="249valparams" title='valparams' data-type='yasm_valparamhead *' data-ref="249valparams" data-ref-filename="249valparams">valparams</dfn>,</td></tr>
+<tr><th id="107">107</th><td>                         <a class="typedef" href="coretype.h.html#yasm_valparamhead" title='yasm_valparamhead' data-type='struct yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</a> *<dfn class="local col0 decl" id="250objext_valparams" title='objext_valparams' data-type='yasm_valparamhead *' data-ref="250objext_valparams" data-ref-filename="250objext_valparams">objext_valparams</dfn>,</td></tr>
+<tr><th id="108">108</th><td>                         <em>unsigned</em> <em>long</em> <dfn class="local col1 decl" id="251line" title='line' data-type='unsigned long' data-ref="251line" data-ref-filename="251line">line</dfn>);</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td><i class="doc">/** Create a new valparam with identifier parameter.</i></td></tr>
+<tr><th id="111">111</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">v</span>             value</i></td></tr>
+<tr><th id="112">112</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">p</span>             parameter</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">id_prefix</span>     identifier prefix for raw identifiers</i></td></tr>
+<tr><th id="114">114</th><td><i class="doc"> * <span class="command">\return</span> Newly allocated valparam.</i></td></tr>
+<tr><th id="115">115</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="116">116</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="117">117</th><td><a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="decl fn" id="yasm_vp_create_id" title='yasm_vp_create_id' data-ref="yasm_vp_create_id" data-ref-filename="yasm_vp_create_id">yasm_vp_create_id</dfn>(<i>/*@keep@*/</i> <em>char</em> *<dfn class="local col2 decl" id="252v" title='v' data-type='char *' data-ref="252v" data-ref-filename="252v">v</dfn>, <i>/*@keep@*/</i> <em>char</em> *<dfn class="local col3 decl" id="253p" title='p' data-type='char *' data-ref="253p" data-ref-filename="253p">p</dfn>,</td></tr>
+<tr><th id="118">118</th><td>                                 <em>int</em> <dfn class="local col4 decl" id="254id_prefix" title='id_prefix' data-type='int' data-ref="254id_prefix" data-ref-filename="254id_prefix">id_prefix</dfn>);</td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td><i class="doc">/** Create a new valparam with string parameter.</i></td></tr>
+<tr><th id="121">121</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">v</span>     value</i></td></tr>
+<tr><th id="122">122</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">p</span>     parameter</i></td></tr>
+<tr><th id="123">123</th><td><i class="doc"> * <span class="command">\return</span> Newly allocated valparam.</i></td></tr>
+<tr><th id="124">124</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="125">125</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="126">126</th><td><a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="decl fn" id="yasm_vp_create_string" title='yasm_vp_create_string' data-ref="yasm_vp_create_string" data-ref-filename="yasm_vp_create_string">yasm_vp_create_string</dfn>(<i>/*@keep@*/</i> <em>char</em> *<dfn class="local col5 decl" id="255v" title='v' data-type='char *' data-ref="255v" data-ref-filename="255v">v</dfn>, <i>/*@keep@*/</i> <em>char</em> *<dfn class="local col6 decl" id="256p" title='p' data-type='char *' data-ref="256p" data-ref-filename="256p">p</dfn>);</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td><i class="doc">/** Create a new valparam with expression parameter.</i></td></tr>
+<tr><th id="129">129</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">v</span>     value</i></td></tr>
+<tr><th id="130">130</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">p</span>     parameter</i></td></tr>
+<tr><th id="131">131</th><td><i class="doc"> * <span class="command">\return</span> Newly allocated valparam.</i></td></tr>
+<tr><th id="132">132</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="133">133</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="134">134</th><td><a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="decl fn" id="yasm_vp_create_expr" title='yasm_vp_create_expr' data-ref="yasm_vp_create_expr" data-ref-filename="yasm_vp_create_expr">yasm_vp_create_expr</dfn>(<i>/*@keep@*/</i> <em>char</em> *<dfn class="local col7 decl" id="257v" title='v' data-type='char *' data-ref="257v" data-ref-filename="257v">v</dfn>,</td></tr>
+<tr><th id="135">135</th><td>                                   <i>/*@keep@*/</i> <a class="typedef" href="coretype.h.html#yasm_expr" title='yasm_expr' data-type='struct yasm_expr' data-ref="yasm_expr" data-ref-filename="yasm_expr">yasm_expr</a> *<dfn class="local col8 decl" id="258p" title='p' data-type='yasm_expr *' data-ref="258p" data-ref-filename="258p">p</dfn>);</td></tr>
+<tr><th id="136">136</th><td></td></tr>
+<tr><th id="137">137</th><td><i class="doc">/** Get a valparam parameter as an expr.  If the parameter is an identifier,</i></td></tr>
+<tr><th id="138">138</th><td><i class="doc"> * it's treated as a symbol (yasm_symtab_use() is called to convert it).</i></td></tr>
+<tr><th id="139">139</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">vp</span>            valparam</i></td></tr>
+<tr><th id="140">140</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">symtab</span>        symbol table</i></td></tr>
+<tr><th id="141">141</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">line</span>          virtual line</i></td></tr>
+<tr><th id="142">142</th><td><i class="doc"> * <span class="command">\return</span> Expression, or NULL if vp is NULL or the parameter cannot be</i></td></tr>
+<tr><th id="143">143</th><td><i class="doc"> *         converted to an expression.</i></td></tr>
+<tr><th id="144">144</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="145">145</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="146">146</th><td><i>/*@null@*/</i> <i>/*@only@*/</i> <a class="typedef" href="coretype.h.html#yasm_expr" title='yasm_expr' data-type='struct yasm_expr' data-ref="yasm_expr" data-ref-filename="yasm_expr">yasm_expr</a> *<dfn class="decl fn" id="yasm_vp_expr" title='yasm_vp_expr' data-ref="yasm_vp_expr" data-ref-filename="yasm_vp_expr">yasm_vp_expr</dfn></td></tr>
+<tr><th id="147">147</th><td>    (<em>const</em> <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col9 decl" id="259vp" title='vp' data-type='const yasm_valparam *' data-ref="259vp" data-ref-filename="259vp">vp</dfn>, <a class="typedef" href="coretype.h.html#yasm_symtab" title='yasm_symtab' data-type='struct yasm_symtab' data-ref="yasm_symtab" data-ref-filename="yasm_symtab">yasm_symtab</a> *<dfn class="local col0 decl" id="260symtab" title='symtab' data-type='yasm_symtab *' data-ref="260symtab" data-ref-filename="260symtab">symtab</dfn>, <em>unsigned</em> <em>long</em> <dfn class="local col1 decl" id="261line" title='line' data-type='unsigned long' data-ref="261line" data-ref-filename="261line">line</dfn>);</td></tr>
+<tr><th id="148">148</th><td></td></tr>
+<tr><th id="149">149</th><td><i class="doc">/** Get a valparam parameter as a string.  If the parameter is an identifier,</i></td></tr>
+<tr><th id="150">150</th><td><i class="doc"> * it's treated as a string.</i></td></tr>
+<tr><th id="151">151</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">vp</span>            valparam</i></td></tr>
+<tr><th id="152">152</th><td><i class="doc"> * <span class="command">\return</span> String, or NULL if vp is NULL or the parameter cannot be realized</i></td></tr>
+<tr><th id="153">153</th><td><i class="doc"> *         as a string.</i></td></tr>
+<tr><th id="154">154</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="155">155</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="156">156</th><td><i>/*@null@*/</i> <i>/*@dependent@*/</i> <em>const</em> <em>char</em> *<dfn class="decl fn" id="yasm_vp_string" title='yasm_vp_string' data-ref="yasm_vp_string" data-ref-filename="yasm_vp_string">yasm_vp_string</dfn>(<em>const</em> <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col2 decl" id="262vp" title='vp' data-type='const yasm_valparam *' data-ref="262vp" data-ref-filename="262vp">vp</dfn>);</td></tr>
+<tr><th id="157">157</th><td></td></tr>
+<tr><th id="158">158</th><td><i class="doc">/** Get a valparam parameter as an identifier.</i></td></tr>
+<tr><th id="159">159</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">vp</span>            valparam</i></td></tr>
+<tr><th id="160">160</th><td><i class="doc"> * <span class="command">\return</span> Identifier (string), or NULL if vp is NULL or the parameter is not</i></td></tr>
+<tr><th id="161">161</th><td><i class="doc"> *         an identifier.</i></td></tr>
+<tr><th id="162">162</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="163">163</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="164">164</th><td><i>/*@null@*/</i> <i>/*@dependent@*/</i> <em>const</em> <em>char</em> *<dfn class="decl fn" id="yasm_vp_id" title='yasm_vp_id' data-ref="yasm_vp_id" data-ref-filename="yasm_vp_id">yasm_vp_id</dfn>(<em>const</em> <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col3 decl" id="263vp" title='vp' data-type='const yasm_valparam *' data-ref="263vp" data-ref-filename="263vp">vp</dfn>);</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td><i class="doc">/** Create a new linked list of valparams.</i></td></tr>
+<tr><th id="167">167</th><td><i class="doc"> * <span class="command">\return</span> Newly allocated valparam list.</i></td></tr>
+<tr><th id="168">168</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="169">169</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="170">170</th><td><a class="typedef" href="coretype.h.html#yasm_valparamhead" title='yasm_valparamhead' data-type='struct yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</a> *<dfn class="decl fn" id="yasm_vps_create" title='yasm_vps_create' data-ref="yasm_vps_create" data-ref-filename="yasm_vps_create">yasm_vps_create</dfn>(<em>void</em>);</td></tr>
+<tr><th id="171">171</th><td></td></tr>
+<tr><th id="172">172</th><td><i class="doc">/** Destroy a list of valparams (created with yasm_vps_create).</i></td></tr>
+<tr><th id="173">173</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">headp</span>         list of valparams</i></td></tr>
+<tr><th id="174">174</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="175">175</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="176">176</th><td><em>void</em> <dfn class="decl fn" id="yasm_vps_destroy" title='yasm_vps_destroy' data-ref="yasm_vps_destroy" data-ref-filename="yasm_vps_destroy">yasm_vps_destroy</dfn>(<a class="typedef" href="coretype.h.html#yasm_valparamhead" title='yasm_valparamhead' data-type='struct yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</a> *<dfn class="local col4 decl" id="264headp" title='headp' data-type='yasm_valparamhead *' data-ref="264headp" data-ref-filename="264headp">headp</dfn>);</td></tr>
+<tr><th id="177">177</th><td></td></tr>
+<tr><th id="178">178</th><td><i class="doc">/** Initialize linked list of valparams.</i></td></tr>
+<tr><th id="179">179</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">headp</span> linked list</i></td></tr>
+<tr><th id="180">180</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="181">181</th><td><em>void</em> <dfn class="decl fn" id="yasm_vps_initialize" title='yasm_vps_initialize' data-ref="yasm_vps_initialize" data-ref-filename="yasm_vps_initialize">yasm_vps_initialize</dfn>(<i>/*@out@*/</i> <a class="typedef" href="coretype.h.html#yasm_valparamhead" title='yasm_valparamhead' data-type='struct yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</a> *<dfn class="local col5 decl" id="265headp" title='headp' data-type='yasm_valparamhead *' data-ref="265headp" data-ref-filename="265headp">headp</dfn>);</td></tr>
+<tr><th id="182">182</th><td><u>#<span data-ppcond="182">ifndef</span> <span class="macro" data-ref="_M/YASM_DOXYGEN">YASM_DOXYGEN</span></u></td></tr>
+<tr><th id="183">183</th><td><u>#define <dfn class="macro" id="_M/yasm_vps_initialize" data-ref="_M/yasm_vps_initialize">yasm_vps_initialize</dfn>(headp)      STAILQ_INIT(headp)</u></td></tr>
+<tr><th id="184">184</th><td><u>#<span data-ppcond="182">endif</span></u></td></tr>
+<tr><th id="185">185</th><td></td></tr>
+<tr><th id="186">186</th><td><i class="doc">/** Destroy (free allocated memory for) linked list of valparams (created with</i></td></tr>
+<tr><th id="187">187</th><td><i class="doc"> * yasm_vps_initialize).</i></td></tr>
+<tr><th id="188">188</th><td><i class="doc"> * <span class="command">\warning</span> Deletes val/params.</i></td></tr>
+<tr><th id="189">189</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">headp</span> linked list</i></td></tr>
+<tr><th id="190">190</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="191">191</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="192">192</th><td><em>void</em> <dfn class="decl fn" id="yasm_vps_delete" title='yasm_vps_delete' data-ref="yasm_vps_delete" data-ref-filename="yasm_vps_delete">yasm_vps_delete</dfn>(<a class="typedef" href="coretype.h.html#yasm_valparamhead" title='yasm_valparamhead' data-type='struct yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</a> *<dfn class="local col6 decl" id="266headp" title='headp' data-type='yasm_valparamhead *' data-ref="266headp" data-ref-filename="266headp">headp</dfn>);</td></tr>
+<tr><th id="193">193</th><td></td></tr>
+<tr><th id="194">194</th><td><i class="doc">/** Append valparam to tail of linked list.</i></td></tr>
+<tr><th id="195">195</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">headp</span> linked list</i></td></tr>
+<tr><th id="196">196</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">vp</span>    valparam</i></td></tr>
+<tr><th id="197">197</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="198">198</th><td><em>void</em> <dfn class="decl fn" id="yasm_vps_append" title='yasm_vps_append' data-ref="yasm_vps_append" data-ref-filename="yasm_vps_append">yasm_vps_append</dfn>(<a class="typedef" href="coretype.h.html#yasm_valparamhead" title='yasm_valparamhead' data-type='struct yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</a> *<dfn class="local col7 decl" id="267headp" title='headp' data-type='yasm_valparamhead *' data-ref="267headp" data-ref-filename="267headp">headp</dfn>, <i>/*@keep@*/</i> <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col8 decl" id="268vp" title='vp' data-type='yasm_valparam *' data-ref="268vp" data-ref-filename="268vp">vp</dfn>);</td></tr>
+<tr><th id="199">199</th><td><u>#<span data-ppcond="199">ifndef</span> <span class="macro" data-ref="_M/YASM_DOXYGEN">YASM_DOXYGEN</span></u></td></tr>
+<tr><th id="200">200</th><td><u>#define <dfn class="macro" id="_M/yasm_vps_append" data-ref="_M/yasm_vps_append">yasm_vps_append</dfn>(headp, vp)      do {        \</u></td></tr>
+<tr><th id="201">201</th><td><u>        if (vp)                                     \</u></td></tr>
+<tr><th id="202">202</th><td><u>            STAILQ_INSERT_TAIL(headp, vp, link);    \</u></td></tr>
+<tr><th id="203">203</th><td><u>    } while(0)</u></td></tr>
+<tr><th id="204">204</th><td><u>#<span data-ppcond="199">endif</span></u></td></tr>
+<tr><th id="205">205</th><td></td></tr>
+<tr><th id="206">206</th><td><i class="doc">/** Get first valparam in linked list.</i></td></tr>
+<tr><th id="207">207</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">headp</span> linked list</i></td></tr>
+<tr><th id="208">208</th><td><i class="doc"> * <span class="command">\return</span> First valparam in linked list.</i></td></tr>
+<tr><th id="209">209</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="210">210</th><td><i>/*@null@*/</i> <i>/*@dependent@*/</i> <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="decl fn" id="yasm_vps_first" title='yasm_vps_first' data-ref="yasm_vps_first" data-ref-filename="yasm_vps_first">yasm_vps_first</dfn></td></tr>
+<tr><th id="211">211</th><td>    (<a class="typedef" href="coretype.h.html#yasm_valparamhead" title='yasm_valparamhead' data-type='struct yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</a> *<dfn class="local col9 decl" id="269headp" title='headp' data-type='yasm_valparamhead *' data-ref="269headp" data-ref-filename="269headp">headp</dfn>);</td></tr>
+<tr><th id="212">212</th><td><u>#<span data-ppcond="212">ifndef</span> <span class="macro" data-ref="_M/YASM_DOXYGEN">YASM_DOXYGEN</span></u></td></tr>
+<tr><th id="213">213</th><td><u>#define <dfn class="macro" id="_M/yasm_vps_first" data-ref="_M/yasm_vps_first">yasm_vps_first</dfn>(headp)       STAILQ_FIRST(headp)</u></td></tr>
+<tr><th id="214">214</th><td><u>#<span data-ppcond="212">endif</span></u></td></tr>
+<tr><th id="215">215</th><td></td></tr>
+<tr><th id="216">216</th><td><i class="doc">/** Get next valparam in linked list.</i></td></tr>
+<tr><th id="217">217</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">cur</span>   previous valparam in linked list</i></td></tr>
+<tr><th id="218">218</th><td><i class="doc"> * <span class="command">\return</span> Next valparam in linked list.</i></td></tr>
+<tr><th id="219">219</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="220">220</th><td><i>/*@null@*/</i> <i>/*@dependent@*/</i> <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="decl fn" id="yasm_vps_next" title='yasm_vps_next' data-ref="yasm_vps_next" data-ref-filename="yasm_vps_next">yasm_vps_next</dfn>(<a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col0 decl" id="270cur" title='cur' data-type='yasm_valparam *' data-ref="270cur" data-ref-filename="270cur">cur</dfn>);</td></tr>
+<tr><th id="221">221</th><td><u>#<span data-ppcond="221">ifndef</span> <span class="macro" data-ref="_M/YASM_DOXYGEN">YASM_DOXYGEN</span></u></td></tr>
+<tr><th id="222">222</th><td><u>#define <dfn class="macro" id="_M/yasm_vps_next" data-ref="_M/yasm_vps_next">yasm_vps_next</dfn>(cur)          STAILQ_NEXT(cur, link)</u></td></tr>
+<tr><th id="223">223</th><td><u>#<span data-ppcond="221">endif</span></u></td></tr>
+<tr><th id="224">224</th><td></td></tr>
+<tr><th id="225">225</th><td><i class="doc">/** Iterate through linked list of valparams.</i></td></tr>
+<tr><th id="226">226</th><td><i class="doc"> *<span class="command"> \internal</span></i></td></tr>
+<tr><th id="227">227</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">iter</span>      iterator variable</i></td></tr>
+<tr><th id="228">228</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">headp</span>     linked list</i></td></tr>
+<tr><th id="229">229</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="230">230</th><td><u>#<span data-ppcond="230">ifndef</span> <span class="macro" data-ref="_M/YASM_DOXYGEN">YASM_DOXYGEN</span></u></td></tr>
+<tr><th id="231">231</th><td><u>#define <dfn class="macro" id="_M/yasm_vps_foreach" data-ref="_M/yasm_vps_foreach">yasm_vps_foreach</dfn>(iter, headp)   STAILQ_FOREACH(iter, headp, link)</u></td></tr>
+<tr><th id="232">232</th><td><u>#<span data-ppcond="230">endif</span></u></td></tr>
+<tr><th id="233">233</th><td></td></tr>
+<tr><th id="234">234</th><td><i class="doc">/** Print linked list of valparams.  For debugging purposes.</i></td></tr>
+<tr><th id="235">235</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">f</span>     file</i></td></tr>
+<tr><th id="236">236</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">headp</span> linked list</i></td></tr>
+<tr><th id="237">237</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="238">238</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="239">239</th><td><em>void</em> <dfn class="decl fn" id="yasm_vps_print" title='yasm_vps_print' data-ref="yasm_vps_print" data-ref-filename="yasm_vps_print">yasm_vps_print</dfn>(<i>/*@null@*/</i> <em>const</em> <a class="typedef" href="coretype.h.html#yasm_valparamhead" title='yasm_valparamhead' data-type='struct yasm_valparamhead' data-ref="yasm_valparamhead" data-ref-filename="yasm_valparamhead">yasm_valparamhead</a> *<dfn class="local col1 decl" id="271headp" title='headp' data-type='const yasm_valparamhead *' data-ref="271headp" data-ref-filename="271headp">headp</dfn>, <span class='typedef' title='FILE' data-type='struct __sFILE' data-ref="FILE" data-ref-filename="FILE">FILE</span> *<dfn class="local col2 decl" id="272f" title='f' data-type='FILE *' data-ref="272f" data-ref-filename="272f">f</dfn>);</td></tr>
+<tr><th id="240">240</th><td></td></tr>
+<tr><th id="241">241</th><td><i class="doc">/** Directive valparam parse helper structure. */</i></td></tr>
+<tr><th id="242">242</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="yasm_dir_help" title='yasm_dir_help' data-ref="yasm_dir_help" data-ref-filename="yasm_dir_help"><a class="type" href="#yasm_dir_help" title='yasm_dir_help' data-ref="yasm_dir_help" data-ref-filename="yasm_dir_help">yasm_dir_help</a></dfn> {</td></tr>
+<tr><th id="243">243</th><td>    <i class="doc">/** Value portion of val=param (if needsparam=1), or standalone identifier</i></td></tr>
+<tr><th id="244">244</th><td><i class="doc">     * (if needsparam=0).</i></td></tr>
+<tr><th id="245">245</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="246">246</th><td>    <em>const</em> <em>char</em> *<dfn class="decl field" id="yasm_dir_help::name" title='yasm_dir_help::name' data-ref="yasm_dir_help::name" data-ref-filename="yasm_dir_help..name">name</dfn>;</td></tr>
+<tr><th id="247">247</th><td></td></tr>
+<tr><th id="248">248</th><td>    <i class="doc">/** 1 if value requires parameter, 0 if it must not have a parameter. */</i></td></tr>
+<tr><th id="249">249</th><td>    <em>int</em> <dfn class="decl field" id="yasm_dir_help::needsparam" title='yasm_dir_help::needsparam' data-ref="yasm_dir_help::needsparam" data-ref-filename="yasm_dir_help..needsparam">needsparam</dfn>;</td></tr>
+<tr><th id="250">250</th><td></td></tr>
+<tr><th id="251">251</th><td>    <i class="doc">/** Helper callback function if name and parameter existence match.</i></td></tr>
+<tr><th id="252">252</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">obj</span>       obj passed into yasm_dir_helper()</i></td></tr>
+<tr><th id="253">253</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">vp</span>        value/parameter</i></td></tr>
+<tr><th id="254">254</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">line</span>      line passed into yasm_dir_helper()</i></td></tr>
+<tr><th id="255">255</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">data</span>      data passed into yasm_dir_helper() plus</i></td></tr>
+<tr><th id="256">256</th><td><i class="doc">                        #yasm_dir_help.off offset</i></td></tr>
+<tr><th id="257">257</th><td><i class="doc">     * <span class="command">\param</span> <span class="arg">arg</span>       #yasm_dir_help.arg argument</i></td></tr>
+<tr><th id="258">258</th><td><i class="doc">     * <span class="command">\return</span> -1 on error, 0 otherwise.</i></td></tr>
+<tr><th id="259">259</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="260">260</th><td>    <em>int</em> (*<dfn class="decl field" id="yasm_dir_help::helper" title='yasm_dir_help::helper' data-ref="yasm_dir_help::helper" data-ref-filename="yasm_dir_help..helper">helper</dfn>) (<em>void</em> *<dfn class="local col3 decl" id="273obj" title='obj' data-type='void *' data-ref="273obj" data-ref-filename="273obj">obj</dfn>, <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col4 decl" id="274vp" title='vp' data-type='yasm_valparam *' data-ref="274vp" data-ref-filename="274vp">vp</dfn>, <em>unsigned</em> <em>long</em> <dfn class="local col5 decl" id="275line" title='line' data-type='unsigned long' data-ref="275line" data-ref-filename="275line">line</dfn>,</td></tr>
+<tr><th id="261">261</th><td>                   <em>void</em> *<dfn class="local col6 decl" id="276data" title='data' data-type='void *' data-ref="276data" data-ref-filename="276data">data</dfn>, <span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span> <dfn class="local col7 decl" id="277arg" title='arg' data-type='uintptr_t' data-ref="277arg" data-ref-filename="277arg">arg</dfn>);</td></tr>
+<tr><th id="262">262</th><td></td></tr>
+<tr><th id="263">263</th><td>    <i class="doc">/** Offset added to data pointer passed into yasm_dir_helper() before</i></td></tr>
+<tr><th id="264">264</th><td><i class="doc">     * data pointer is given to #yasm_dir_help.helper().  This is so that</i></td></tr>
+<tr><th id="265">265</th><td><i class="doc">     * a structure can be passed into yasm_dir_helper() and this can be an</i></td></tr>
+<tr><th id="266">266</th><td><i class="doc">     * offsetof() to point the helper function to a specific structure</i></td></tr>
+<tr><th id="267">267</th><td><i class="doc">     * member.</i></td></tr>
+<tr><th id="268">268</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="269">269</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="decl field" id="yasm_dir_help::off" title='yasm_dir_help::off' data-ref="yasm_dir_help::off" data-ref-filename="yasm_dir_help..off">off</dfn>;</td></tr>
+<tr><th id="270">270</th><td></td></tr>
+<tr><th id="271">271</th><td>    <i class="doc">/** Argument to pass in as the arg parameter to #yasm_dir_help.helper().</i></td></tr>
+<tr><th id="272">272</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="273">273</th><td>    <span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span> <dfn class="decl field" id="yasm_dir_help::arg" title='yasm_dir_help::arg' data-ref="yasm_dir_help::arg" data-ref-filename="yasm_dir_help..arg">arg</dfn>;</td></tr>
+<tr><th id="274">274</th><td>} <dfn class="typedef" id="yasm_dir_help" title='yasm_dir_help' data-type='struct yasm_dir_help' data-ref="yasm_dir_help" data-ref-filename="yasm_dir_help">yasm_dir_help</dfn>;</td></tr>
+<tr><th id="275">275</th><td></td></tr>
+<tr><th id="276">276</th><td><i class="doc">/** Help parse a list of directive value/parameters.  Takes an array of</i></td></tr>
+<tr><th id="277">277</th><td><i class="doc"> * #yasm_dir_help structures and tries to match val=param (or just val)</i></td></tr>
+<tr><th id="278">278</th><td><i class="doc"> * against the passed value/parameters.  When no match is found in the</i></td></tr>
+<tr><th id="279">279</th><td><i class="doc"> * array of help structures, calls helper_valparam.</i></td></tr>
+<tr><th id="280">280</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">obj</span>       object to be passed to yasm_dir_help.helper() or</i></td></tr>
+<tr><th id="281">281</th><td><i class="doc"> *                  helper_valparam() callback</i></td></tr>
+<tr><th id="282">282</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">vp_first</span>  first value/parameter to examine</i></td></tr>
+<tr><th id="283">283</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">line</span>      virtual line number; passed down to helper callback</i></td></tr>
+<tr><th id="284">284</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">help</span>      array of #yasm_dir_help structures</i></td></tr>
+<tr><th id="285">285</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">nhelp</span>     number of array elements</i></td></tr>
+<tr><th id="286">286</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">data</span>      base data pointer; if a match is found,</i></td></tr>
+<tr><th id="287">287</th><td><i class="doc"> *                  the respective #yasm_dir_help.off is added to this</i></td></tr>
+<tr><th id="288">288</th><td><i class="doc"> *                  prior to it being passed to the helper callback</i></td></tr>
+<tr><th id="289">289</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">helper_valparam</span>   catch-all callback; should return -1 on error,</i></td></tr>
+<tr><th id="290">290</th><td><i class="doc"> *                          0 if not matched, 1 if matched.</i></td></tr>
+<tr><th id="291">291</th><td><i class="doc"> * <span class="command">\return</span> -1 on error, 1 if any arguments matched (including via</i></td></tr>
+<tr><th id="292">292</th><td><i class="doc"> *         catch-all callback), 0 if no match.</i></td></tr>
+<tr><th id="293">293</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="294">294</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="295">295</th><td><em>int</em> <dfn class="decl fn" id="yasm_dir_helper" title='yasm_dir_helper' data-ref="yasm_dir_helper" data-ref-filename="yasm_dir_helper">yasm_dir_helper</dfn>(<em>void</em> *<dfn class="local col8 decl" id="278obj" title='obj' data-type='void *' data-ref="278obj" data-ref-filename="278obj">obj</dfn>, <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col9 decl" id="279vp_first" title='vp_first' data-type='yasm_valparam *' data-ref="279vp_first" data-ref-filename="279vp_first">vp_first</dfn>, <em>unsigned</em> <em>long</em> <dfn class="local col0 decl" id="280line" title='line' data-type='unsigned long' data-ref="280line" data-ref-filename="280line">line</dfn>,</td></tr>
+<tr><th id="296">296</th><td>                    <em>const</em> <a class="typedef" href="#yasm_dir_help" title='yasm_dir_help' data-type='struct yasm_dir_help' data-ref="yasm_dir_help" data-ref-filename="yasm_dir_help">yasm_dir_help</a> *<dfn class="local col1 decl" id="281help" title='help' data-type='const yasm_dir_help *' data-ref="281help" data-ref-filename="281help">help</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="282nhelp" title='nhelp' data-type='size_t' data-ref="282nhelp" data-ref-filename="282nhelp">nhelp</dfn>, <em>void</em> *<dfn class="local col3 decl" id="283data" title='data' data-type='void *' data-ref="283data" data-ref-filename="283data">data</dfn>,</td></tr>
+<tr><th id="297">297</th><td>                    <em>int</em> (*<dfn class="local col4 decl" id="284helper_valparam" title='helper_valparam' data-type='int (*)(void *, yasm_valparam *, unsigned long, void *)' data-ref="284helper_valparam" data-ref-filename="284helper_valparam">helper_valparam</dfn>) (<em>void</em> *<dfn class="local col5 decl" id="285object" title='object' data-type='void *' data-ref="285object" data-ref-filename="285object">object</dfn>,</td></tr>
+<tr><th id="298">298</th><td>                                            <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col6 decl" id="286vp" title='vp' data-type='yasm_valparam *' data-ref="286vp" data-ref-filename="286vp">vp</dfn>,</td></tr>
+<tr><th id="299">299</th><td>                                            <em>unsigned</em> <em>long</em> <dfn class="local col7 decl" id="287line" title='line' data-type='unsigned long' data-ref="287line" data-ref-filename="287line">line</dfn>,</td></tr>
+<tr><th id="300">300</th><td>                                            <em>void</em> *<dfn class="local col8 decl" id="288data" title='data' data-type='void *' data-ref="288data" data-ref-filename="288data">data</dfn>));</td></tr>
+<tr><th id="301">301</th><td></td></tr>
+<tr><th id="302">302</th><td><i class="doc">/** Standard helper for yasm_dir_helper() that simply sets a flag when called.</i></td></tr>
+<tr><th id="303">303</th><td><i class="doc"> * It does not look at the vp; rather, it uses the value of the arg parameter,</i></td></tr>
+<tr><th id="304">304</th><td><i class="doc"> * and stores an unsigned long value to data.</i></td></tr>
+<tr><th id="305">305</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">obj</span>   unused</i></td></tr>
+<tr><th id="306">306</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">vp</span>    unused</i></td></tr>
+<tr><th id="307">307</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">line</span>  unused</i></td></tr>
+<tr><th id="308">308</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">data</span>  pointer to an unsigned long</i></td></tr>
+<tr><th id="309">309</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">arg</span>   flag to set</i></td></tr>
+<tr><th id="310">310</th><td><i class="doc"> * <span class="command">\return</span> 0</i></td></tr>
+<tr><th id="311">311</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="312">312</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="313">313</th><td><em>int</em> <dfn class="decl fn" id="yasm_dir_helper_flag_set" title='yasm_dir_helper_flag_set' data-ref="yasm_dir_helper_flag_set" data-ref-filename="yasm_dir_helper_flag_set">yasm_dir_helper_flag_set</dfn>(<em>void</em> *<dfn class="local col9 decl" id="289obj" title='obj' data-type='void *' data-ref="289obj" data-ref-filename="289obj">obj</dfn>, <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col0 decl" id="290vp" title='vp' data-type='yasm_valparam *' data-ref="290vp" data-ref-filename="290vp">vp</dfn>, <em>unsigned</em> <em>long</em> <dfn class="local col1 decl" id="291line" title='line' data-type='unsigned long' data-ref="291line" data-ref-filename="291line">line</dfn>,</td></tr>
+<tr><th id="314">314</th><td>                             <em>void</em> *<dfn class="local col2 decl" id="292data" title='data' data-type='void *' data-ref="292data" data-ref-filename="292data">data</dfn>, <span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span> <dfn class="local col3 decl" id="293arg" title='arg' data-type='uintptr_t' data-ref="293arg" data-ref-filename="293arg">arg</dfn>);</td></tr>
+<tr><th id="315">315</th><td></td></tr>
+<tr><th id="316">316</th><td><i class="doc">/** Standard helper for yasm_dir_helper() that simply ORs a flag when called.</i></td></tr>
+<tr><th id="317">317</th><td><i class="doc"> * It does not look at the vp; rather, it uses the value of the arg parameter,</i></td></tr>
+<tr><th id="318">318</th><td><i class="doc"> * and ORs it with the unsigned long value in data.</i></td></tr>
+<tr><th id="319">319</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">obj</span>   unused</i></td></tr>
+<tr><th id="320">320</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">vp</span>    unused</i></td></tr>
+<tr><th id="321">321</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">line</span>  unused</i></td></tr>
+<tr><th id="322">322</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">data</span>  pointer to an unsigned long</i></td></tr>
+<tr><th id="323">323</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">arg</span>   flag to OR</i></td></tr>
+<tr><th id="324">324</th><td><i class="doc"> * <span class="command">\return</span> 0</i></td></tr>
+<tr><th id="325">325</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="326">326</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="327">327</th><td><em>int</em> <dfn class="decl fn" id="yasm_dir_helper_flag_or" title='yasm_dir_helper_flag_or' data-ref="yasm_dir_helper_flag_or" data-ref-filename="yasm_dir_helper_flag_or">yasm_dir_helper_flag_or</dfn>(<em>void</em> *<dfn class="local col4 decl" id="294obj" title='obj' data-type='void *' data-ref="294obj" data-ref-filename="294obj">obj</dfn>, <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col5 decl" id="295vp" title='vp' data-type='yasm_valparam *' data-ref="295vp" data-ref-filename="295vp">vp</dfn>, <em>unsigned</em> <em>long</em> <dfn class="local col6 decl" id="296line" title='line' data-type='unsigned long' data-ref="296line" data-ref-filename="296line">line</dfn>,</td></tr>
+<tr><th id="328">328</th><td>                            <em>void</em> *<dfn class="local col7 decl" id="297data" title='data' data-type='void *' data-ref="297data" data-ref-filename="297data">data</dfn>, <span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span> <dfn class="local col8 decl" id="298arg" title='arg' data-type='uintptr_t' data-ref="298arg" data-ref-filename="298arg">arg</dfn>);</td></tr>
+<tr><th id="329">329</th><td></td></tr>
+<tr><th id="330">330</th><td><i class="doc">/** Standard helper for yasm_dir_helper() that simply ANDs a flag when called.</i></td></tr>
+<tr><th id="331">331</th><td><i class="doc"> * It does not look at the vp; rather, it uses the value of the arg parameter,</i></td></tr>
+<tr><th id="332">332</th><td><i class="doc"> * and ANDs its inverse (~) with the unsigned long value in data.</i></td></tr>
+<tr><th id="333">333</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">obj</span>   unused</i></td></tr>
+<tr><th id="334">334</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">vp</span>    unused</i></td></tr>
+<tr><th id="335">335</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">line</span>  unused</i></td></tr>
+<tr><th id="336">336</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">data</span>  pointer to an unsigned long</i></td></tr>
+<tr><th id="337">337</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">arg</span>   flag to AND</i></td></tr>
+<tr><th id="338">338</th><td><i class="doc"> * <span class="command">\return</span> 0</i></td></tr>
+<tr><th id="339">339</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="340">340</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="341">341</th><td><em>int</em> <dfn class="decl fn" id="yasm_dir_helper_flag_and" title='yasm_dir_helper_flag_and' data-ref="yasm_dir_helper_flag_and" data-ref-filename="yasm_dir_helper_flag_and">yasm_dir_helper_flag_and</dfn>(<em>void</em> *<dfn class="local col9 decl" id="299obj" title='obj' data-type='void *' data-ref="299obj" data-ref-filename="299obj">obj</dfn>, <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col0 decl" id="300vp" title='vp' data-type='yasm_valparam *' data-ref="300vp" data-ref-filename="300vp">vp</dfn>, <em>unsigned</em> <em>long</em> <dfn class="local col1 decl" id="301line" title='line' data-type='unsigned long' data-ref="301line" data-ref-filename="301line">line</dfn>,</td></tr>
+<tr><th id="342">342</th><td>                             <em>void</em> *<dfn class="local col2 decl" id="302data" title='data' data-type='void *' data-ref="302data" data-ref-filename="302data">data</dfn>, <span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span> <dfn class="local col3 decl" id="303arg" title='arg' data-type='uintptr_t' data-ref="303arg" data-ref-filename="303arg">arg</dfn>);</td></tr>
+<tr><th id="343">343</th><td></td></tr>
+<tr><th id="344">344</th><td><i class="doc">/** Standard helper for yasm_dir_helper() that parses an expr parameter.</i></td></tr>
+<tr><th id="345">345</th><td><i class="doc"> * The #yasm_dir_help structure that uses this function should have</i></td></tr>
+<tr><th id="346">346</th><td><i class="doc"> * needsparam=1.  The obj parameter to yasm_dir_helper() when this helper</i></td></tr>
+<tr><th id="347">347</th><td><i class="doc"> * is used MUST point to a #yasm_object.  In addition, the data parameter</i></td></tr>
+<tr><th id="348">348</th><td><i class="doc"> * that is ultimately passed to this function (e.g. yasm_dir_helper() data</i></td></tr>
+<tr><th id="349">349</th><td><i class="doc"> * parameter plus #yasm_dir_help.off) must point to a #yasm_expr *</i></td></tr>
+<tr><th id="350">350</th><td><i class="doc"> * initialized to NULL.</i></td></tr>
+<tr><th id="351">351</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">obj</span>   object; must be #yasm_object</i></td></tr>
+<tr><th id="352">352</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">vp</span>    valparam</i></td></tr>
+<tr><th id="353">353</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">line</span>  virtual line number</i></td></tr>
+<tr><th id="354">354</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">data</span>  pointer to #yasm_expr *</i></td></tr>
+<tr><th id="355">355</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">arg</span>   unused argument</i></td></tr>
+<tr><th id="356">356</th><td><i class="doc"> * <span class="command">\return</span> -1 on error, 0 otherwise.</i></td></tr>
+<tr><th id="357">357</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="358">358</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="359">359</th><td><em>int</em> <dfn class="decl fn" id="yasm_dir_helper_expr" title='yasm_dir_helper_expr' data-ref="yasm_dir_helper_expr" data-ref-filename="yasm_dir_helper_expr">yasm_dir_helper_expr</dfn>(<em>void</em> *<dfn class="local col4 decl" id="304obj" title='obj' data-type='void *' data-ref="304obj" data-ref-filename="304obj">obj</dfn>, <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col5 decl" id="305vp" title='vp' data-type='yasm_valparam *' data-ref="305vp" data-ref-filename="305vp">vp</dfn>, <em>unsigned</em> <em>long</em> <dfn class="local col6 decl" id="306line" title='line' data-type='unsigned long' data-ref="306line" data-ref-filename="306line">line</dfn>,</td></tr>
+<tr><th id="360">360</th><td>                         <em>void</em> *<dfn class="local col7 decl" id="307data" title='data' data-type='void *' data-ref="307data" data-ref-filename="307data">data</dfn>, <span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span> <dfn class="local col8 decl" id="308arg" title='arg' data-type='uintptr_t' data-ref="308arg" data-ref-filename="308arg">arg</dfn>);</td></tr>
+<tr><th id="361">361</th><td></td></tr>
+<tr><th id="362">362</th><td><i class="doc">/** Standard helper for yasm_dir_helper() that parses an intnum parameter.</i></td></tr>
+<tr><th id="363">363</th><td><i class="doc"> * The #yasm_dir_help structure that uses this function should have</i></td></tr>
+<tr><th id="364">364</th><td><i class="doc"> * needsparam=1.  The obj parameter to yasm_dir_helper() when this helper</i></td></tr>
+<tr><th id="365">365</th><td><i class="doc"> * is used MUST point to a #yasm_object.  In addition, the data parameter</i></td></tr>
+<tr><th id="366">366</th><td><i class="doc"> * that is ultimately passed to this function (e.g. yasm_dir_helper() data</i></td></tr>
+<tr><th id="367">367</th><td><i class="doc"> * parameter plus #yasm_dir_help.off) must point to a #yasm_intnum *</i></td></tr>
+<tr><th id="368">368</th><td><i class="doc"> * initialized to NULL.</i></td></tr>
+<tr><th id="369">369</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">obj</span>   object; must be #yasm_object</i></td></tr>
+<tr><th id="370">370</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">vp</span>    valparam</i></td></tr>
+<tr><th id="371">371</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">line</span>  virtual line number</i></td></tr>
+<tr><th id="372">372</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">data</span>  pointer to #yasm_intnum *</i></td></tr>
+<tr><th id="373">373</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">arg</span>   unused argument</i></td></tr>
+<tr><th id="374">374</th><td><i class="doc"> * <span class="command">\return</span> -1 on error, 0 otherwise.</i></td></tr>
+<tr><th id="375">375</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="376">376</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="377">377</th><td><em>int</em> <dfn class="decl fn" id="yasm_dir_helper_intn" title='yasm_dir_helper_intn' data-ref="yasm_dir_helper_intn" data-ref-filename="yasm_dir_helper_intn">yasm_dir_helper_intn</dfn>(<em>void</em> *<dfn class="local col9 decl" id="309obj" title='obj' data-type='void *' data-ref="309obj" data-ref-filename="309obj">obj</dfn>, <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col0 decl" id="310vp" title='vp' data-type='yasm_valparam *' data-ref="310vp" data-ref-filename="310vp">vp</dfn>, <em>unsigned</em> <em>long</em> <dfn class="local col1 decl" id="311line" title='line' data-type='unsigned long' data-ref="311line" data-ref-filename="311line">line</dfn>,</td></tr>
+<tr><th id="378">378</th><td>                         <em>void</em> *<dfn class="local col2 decl" id="312data" title='data' data-type='void *' data-ref="312data" data-ref-filename="312data">data</dfn>, <span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span> <dfn class="local col3 decl" id="313arg" title='arg' data-type='uintptr_t' data-ref="313arg" data-ref-filename="313arg">arg</dfn>);</td></tr>
+<tr><th id="379">379</th><td></td></tr>
+<tr><th id="380">380</th><td><i class="doc">/** Standard helper for yasm_dir_helper() that parses an string (or</i></td></tr>
+<tr><th id="381">381</th><td><i class="doc"> * standalone identifier) parameter.</i></td></tr>
+<tr><th id="382">382</th><td><i class="doc"> * The #yasm_dir_help structure that uses this function should have</i></td></tr>
+<tr><th id="383">383</th><td><i class="doc"> * needsparam=1.  The data parameter that is ultimately passed to this</i></td></tr>
+<tr><th id="384">384</th><td><i class="doc"> * function (e.g. yasm_dir_helper() data parameter plus #yasm_dir_help.off)</i></td></tr>
+<tr><th id="385">385</th><td><i class="doc"> * must point to a char * initialized to NULL.</i></td></tr>
+<tr><th id="386">386</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">obj</span>   unused</i></td></tr>
+<tr><th id="387">387</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">vp</span>    valparam</i></td></tr>
+<tr><th id="388">388</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">line</span>  unused</i></td></tr>
+<tr><th id="389">389</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">data</span>  pointer to char *</i></td></tr>
+<tr><th id="390">390</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">arg</span>   unused</i></td></tr>
+<tr><th id="391">391</th><td><i class="doc"> * <span class="command">\return</span> -1 on error, 0 otherwise.</i></td></tr>
+<tr><th id="392">392</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="393">393</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="394">394</th><td><em>int</em> <dfn class="decl fn" id="yasm_dir_helper_string" title='yasm_dir_helper_string' data-ref="yasm_dir_helper_string" data-ref-filename="yasm_dir_helper_string">yasm_dir_helper_string</dfn>(<em>void</em> *<dfn class="local col4 decl" id="314obj" title='obj' data-type='void *' data-ref="314obj" data-ref-filename="314obj">obj</dfn>, <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col5 decl" id="315vp" title='vp' data-type='yasm_valparam *' data-ref="315vp" data-ref-filename="315vp">vp</dfn>, <em>unsigned</em> <em>long</em> <dfn class="local col6 decl" id="316line" title='line' data-type='unsigned long' data-ref="316line" data-ref-filename="316line">line</dfn>,</td></tr>
+<tr><th id="395">395</th><td>                           <em>void</em> *<dfn class="local col7 decl" id="317data" title='data' data-type='void *' data-ref="317data" data-ref-filename="317data">data</dfn>, <span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span> <dfn class="local col8 decl" id="318arg" title='arg' data-type='uintptr_t' data-ref="318arg" data-ref-filename="318arg">arg</dfn>);</td></tr>
+<tr><th id="396">396</th><td></td></tr>
+<tr><th id="397">397</th><td><i class="doc">/** Standard catch-all callback fro yasm_dir_helper().  Generates standard</i></td></tr>
+<tr><th id="398">398</th><td><i class="doc"> * warning for all valparams.</i></td></tr>
+<tr><th id="399">399</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">obj</span>   unused</i></td></tr>
+<tr><th id="400">400</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">vp</span>    valparam</i></td></tr>
+<tr><th id="401">401</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">line</span>  unused</i></td></tr>
+<tr><th id="402">402</th><td><i class="doc"> * <span class="command">\param</span> <span class="arg">data</span>  unused</i></td></tr>
+<tr><th id="403">403</th><td><i class="doc"> * <span class="command">\return</span> 0</i></td></tr>
+<tr><th id="404">404</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="405">405</th><td><a class="macro" href="coretype.h.html#34" title="" data-ref="_M/YASM_LIB_DECL">YASM_LIB_DECL</a></td></tr>
+<tr><th id="406">406</th><td><em>int</em> <dfn class="decl fn" id="yasm_dir_helper_valparam_warn" title='yasm_dir_helper_valparam_warn' data-ref="yasm_dir_helper_valparam_warn" data-ref-filename="yasm_dir_helper_valparam_warn">yasm_dir_helper_valparam_warn</dfn>(<em>void</em> *<dfn class="local col9 decl" id="319obj" title='obj' data-type='void *' data-ref="319obj" data-ref-filename="319obj">obj</dfn>, <a class="typedef" href="coretype.h.html#yasm_valparam" title='yasm_valparam' data-type='struct yasm_valparam' data-ref="yasm_valparam" data-ref-filename="yasm_valparam">yasm_valparam</a> *<dfn class="local col0 decl" id="320vp" title='vp' data-type='yasm_valparam *' data-ref="320vp" data-ref-filename="320vp">vp</dfn>,</td></tr>
+<tr><th id="407">407</th><td>                                  <em>unsigned</em> <em>long</em> <dfn class="local col1 decl" id="321line" title='line' data-type='unsigned long' data-ref="321line" data-ref-filename="321line">line</dfn>, <em>void</em> *<dfn class="local col2 decl" id="322data" title='data' data-type='void *' data-ref="322data" data-ref-filename="322data">data</dfn>);</td></tr>
+<tr><th id="408">408</th><td><u>#<span data-ppcond="30">endif</span></u></td></tr>
+<tr><th id="409">409</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../frontends/yasm/yasm.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/frontends/yasm/yasm.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

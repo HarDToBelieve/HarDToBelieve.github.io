@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>IsoHeapInlines.h source code [webkit/WebKitBuild/Debug/usr/local/include/bmalloc/IsoHeapInlines.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/usr/local/include/bmalloc/IsoHeapInlines.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>usr</a>/<a href='../..'>local</a>/<a href='..'>include</a>/<a href='./'>bmalloc</a>/<a href='IsoHeapInlines.h.html'>IsoHeapInlines.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2017-2019 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#include <a href="DeferredDecommitInlines.h.html">"DeferredDecommitInlines.h"</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="DeferredTriggerInlines.h.html">"DeferredTriggerInlines.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="EligibilityResultInlines.h.html">"EligibilityResultInlines.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="FreeListInlines.h.html">"FreeListInlines.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="IsoAllocatorInlines.h.html">"IsoAllocatorInlines.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#include <a href="IsoDeallocatorInlines.h.html">"IsoDeallocatorInlines.h"</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#include <a href="IsoDirectoryInlines.h.html">"IsoDirectoryInlines.h"</a></u></td></tr>
+<tr><th id="35">35</th><td><u>#include <a href="IsoDirectoryPageInlines.h.html">"IsoDirectoryPageInlines.h"</a></u></td></tr>
+<tr><th id="36">36</th><td><u>#include <a href="IsoHeapImplInlines.h.html">"IsoHeapImplInlines.h"</a></u></td></tr>
+<tr><th id="37">37</th><td><u>#include <a href="IsoHeap.h.html">"IsoHeap.h"</a></u></td></tr>
+<tr><th id="38">38</th><td><u>#include <a href="IsoPageInlines.h.html">"IsoPageInlines.h"</a></u></td></tr>
+<tr><th id="39">39</th><td><u>#include <a href="IsoTLSAllocatorEntryInlines.h.html">"IsoTLSAllocatorEntryInlines.h"</a></u></td></tr>
+<tr><th id="40">40</th><td><u>#include <a href="IsoTLSDeallocatorEntryInlines.h.html">"IsoTLSDeallocatorEntryInlines.h"</a></u></td></tr>
+<tr><th id="41">41</th><td><u>#include <a href="IsoTLSEntryInlines.h.html">"IsoTLSEntryInlines.h"</a></u></td></tr>
+<tr><th id="42">42</th><td><u>#include <a href="IsoTLSInlines.h.html">"IsoTLSInlines.h"</a></u></td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><b>namespace</b> <span class="namespace">bmalloc</span> { <b>namespace</b> <span class="namespace">api</span> {</td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td><u>#<span data-ppcond="46">if</span> <a class="macro" href="BPlatform.h.html#307" title="0" data-ref="_M/BENABLE_MALLOC_HEAP_BREAKDOWN">BENABLE_MALLOC_HEAP_BREAKDOWN</a></u></td></tr>
+<tr><th id="47">47</th><td><b>template</b>&lt;<b>typename</b> Type&gt;</td></tr>
+<tr><th id="48">48</th><td>IsoHeap&lt;Type&gt;::IsoHeap(<em>const</em> <em>char</em>* heapClass)</td></tr>
+<tr><th id="49">49</th><td>    : m_zone(malloc_create_zone(<var>0</var>, <var>0</var>))</td></tr>
+<tr><th id="50">50</th><td>{</td></tr>
+<tr><th id="51">51</th><td>    <b>if</b> (heapClass)</td></tr>
+<tr><th id="52">52</th><td>        malloc_set_zone_name(m_zone, heapClass);</td></tr>
+<tr><th id="53">53</th><td>}</td></tr>
+<tr><th id="54">54</th><td><u>#<span data-ppcond="46">endif</span></u></td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td><b>template</b>&lt;<b>typename</b> Type&gt;</td></tr>
+<tr><th id="57">57</th><td><em>void</em>* <a class="type" href="IsoHeap.h.html#bmalloc::api::IsoHeap" title='bmalloc::api::IsoHeap' data-ref="bmalloc::api::IsoHeap" data-ref-filename="bmalloc..api..IsoHeap">IsoHeap</a>&lt;Type&gt;::<dfn class="decl def fn" id="_ZN7bmalloc3api7IsoHeap8allocateEv" title='bmalloc::api::IsoHeap::allocate' data-ref="_ZN7bmalloc3api7IsoHeap8allocateEv" data-ref-filename="_ZN7bmalloc3api7IsoHeap8allocateEv">allocate</dfn>()</td></tr>
+<tr><th id="58">58</th><td>{</td></tr>
+<tr><th id="59">59</th><td>    <em>bool</em> <dfn class="local col0 decl" id="380abortOnFailure" title='abortOnFailure' data-type='bool' data-ref="380abortOnFailure" data-ref-filename="380abortOnFailure">abortOnFailure</dfn> = <b>true</b>;</td></tr>
+<tr><th id="60">60</th><td>    <b>return</b> <a class="type" href="IsoTLS.h.html#bmalloc::IsoTLS" title='bmalloc::IsoTLS' data-ref="bmalloc::IsoTLS" data-ref-filename="bmalloc..IsoTLS">IsoTLS</a>::allocate(*<b>this</b>, <a class="local col0 ref" href="#380abortOnFailure" title='abortOnFailure' data-ref="380abortOnFailure" data-ref-filename="380abortOnFailure">abortOnFailure</a>);</td></tr>
+<tr><th id="61">61</th><td>}</td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><b>template</b>&lt;<b>typename</b> Type&gt;</td></tr>
+<tr><th id="64">64</th><td><em>void</em>* <a class="type" href="IsoHeap.h.html#bmalloc::api::IsoHeap" title='bmalloc::api::IsoHeap' data-ref="bmalloc::api::IsoHeap" data-ref-filename="bmalloc..api..IsoHeap">IsoHeap</a>&lt;Type&gt;::<dfn class="decl def fn" id="_ZN7bmalloc3api7IsoHeap11tryAllocateEv" title='bmalloc::api::IsoHeap::tryAllocate' data-ref="_ZN7bmalloc3api7IsoHeap11tryAllocateEv" data-ref-filename="_ZN7bmalloc3api7IsoHeap11tryAllocateEv">tryAllocate</dfn>()</td></tr>
+<tr><th id="65">65</th><td>{</td></tr>
+<tr><th id="66">66</th><td>    <em>bool</em> <dfn class="local col1 decl" id="381abortOnFailure" title='abortOnFailure' data-type='bool' data-ref="381abortOnFailure" data-ref-filename="381abortOnFailure">abortOnFailure</dfn> = <b>false</b>;</td></tr>
+<tr><th id="67">67</th><td>    <b>return</b> <a class="type" href="IsoTLS.h.html#bmalloc::IsoTLS" title='bmalloc::IsoTLS' data-ref="bmalloc::IsoTLS" data-ref-filename="bmalloc..IsoTLS">IsoTLS</a>::allocate(*<b>this</b>, <a class="local col1 ref" href="#381abortOnFailure" title='abortOnFailure' data-ref="381abortOnFailure" data-ref-filename="381abortOnFailure">abortOnFailure</a>);</td></tr>
+<tr><th id="68">68</th><td>}</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td><b>template</b>&lt;<b>typename</b> Type&gt;</td></tr>
+<tr><th id="71">71</th><td><em>void</em> <a class="type" href="IsoHeap.h.html#bmalloc::api::IsoHeap" title='bmalloc::api::IsoHeap' data-ref="bmalloc::api::IsoHeap" data-ref-filename="bmalloc..api..IsoHeap">IsoHeap</a>&lt;Type&gt;::<dfn class="decl def fn" id="_ZN7bmalloc3api7IsoHeap10deallocateEPv" title='bmalloc::api::IsoHeap::deallocate' data-ref="_ZN7bmalloc3api7IsoHeap10deallocateEPv" data-ref-filename="_ZN7bmalloc3api7IsoHeap10deallocateEPv">deallocate</dfn>(<em>void</em>* <dfn class="local col2 decl" id="382p" title='p' data-type='void *' data-ref="382p" data-ref-filename="382p">p</dfn>)</td></tr>
+<tr><th id="72">72</th><td>{</td></tr>
+<tr><th id="73">73</th><td>    <a class="type" href="IsoTLS.h.html#bmalloc::IsoTLS" title='bmalloc::IsoTLS' data-ref="bmalloc::IsoTLS" data-ref-filename="bmalloc..IsoTLS">IsoTLS</a>::deallocate(*<b>this</b>, <a class="local col2 ref" href="#382p" title='p' data-ref="382p" data-ref-filename="382p">p</a>);</td></tr>
+<tr><th id="74">74</th><td>}</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td><b>template</b>&lt;<b>typename</b> Type&gt;</td></tr>
+<tr><th id="77">77</th><td><em>void</em> <a class="type" href="IsoHeap.h.html#bmalloc::api::IsoHeap" title='bmalloc::api::IsoHeap' data-ref="bmalloc::api::IsoHeap" data-ref-filename="bmalloc..api..IsoHeap">IsoHeap</a>&lt;Type&gt;::<dfn class="decl def fn" id="_ZN7bmalloc3api7IsoHeap8scavengeEv" title='bmalloc::api::IsoHeap::scavenge' data-ref="_ZN7bmalloc3api7IsoHeap8scavengeEv" data-ref-filename="_ZN7bmalloc3api7IsoHeap8scavengeEv">scavenge</dfn>()</td></tr>
+<tr><th id="78">78</th><td>{</td></tr>
+<tr><th id="79">79</th><td>    <a class="type" href="IsoTLS.h.html#bmalloc::IsoTLS" title='bmalloc::IsoTLS' data-ref="bmalloc::IsoTLS" data-ref-filename="bmalloc..IsoTLS">IsoTLS</a>::scavenge(*<b>this</b>);</td></tr>
+<tr><th id="80">80</th><td>}</td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td><b>template</b>&lt;<b>typename</b> Type&gt;</td></tr>
+<tr><th id="83">83</th><td><em>bool</em> <a class="type" href="IsoHeap.h.html#bmalloc::api::IsoHeap" title='bmalloc::api::IsoHeap' data-ref="bmalloc::api::IsoHeap" data-ref-filename="bmalloc..api..IsoHeap">IsoHeap</a>&lt;Type&gt;::<dfn class="decl def fn" id="_ZN7bmalloc3api7IsoHeap13isInitializedEv" title='bmalloc::api::IsoHeap::isInitialized' data-ref="_ZN7bmalloc3api7IsoHeap13isInitializedEv" data-ref-filename="_ZN7bmalloc3api7IsoHeap13isInitializedEv">isInitialized</dfn>()</td></tr>
+<tr><th id="84">84</th><td>{</td></tr>
+<tr><th id="85">85</th><td>    <em>auto</em>* <dfn class="local col3 decl" id="383atomic" title='atomic' data-type='auto *' data-ref="383atomic" data-ref-filename="383atomic">atomic</dfn> = <b>reinterpret_cast</b>&lt;<span class="namespace">std::</span><span class='type' title='std::__1::atomic' data-ref="std::__1::atomic" data-ref-filename="std..__1..atomic">atomic</span>&lt;<a class="type" href="IsoHeap.h.html#bmalloc::IsoHeapImpl" title='bmalloc::IsoHeapImpl' data-ref="bmalloc::IsoHeapImpl" data-ref-filename="bmalloc..IsoHeapImpl">IsoHeapImpl</a>&lt;<a class="typedef" href="IsoHeap.h.html#bmalloc::api::IsoHeap::Config" title='bmalloc::api::IsoHeap::Config' data-type='IsoConfig&lt;sizeof(Type)&gt;' data-ref="bmalloc::api::IsoHeap::Config" data-ref-filename="bmalloc..api..IsoHeap..Config">Config</a>&gt;*&gt;*&gt;(&amp;<a class="member field" href="IsoHeap.h.html#bmalloc::api::IsoHeap::m_impl" title='bmalloc::api::IsoHeap::m_impl' data-ref="bmalloc::api::IsoHeap::m_impl" data-ref-filename="bmalloc..api..IsoHeap..m_impl">m_impl</a>);</td></tr>
+<tr><th id="86">86</th><td>    <b>return</b> <a class="local col3 ref" href="#383atomic" title='atomic' data-ref="383atomic" data-ref-filename="383atomic">atomic</a>-&gt;load(<span class="namespace">std::</span><span class='enum' title='std::__1::memory_order_acquire' data-ref="std::__1::memory_order_acquire" data-ref-filename="std..__1..memory_order_acquire">memory_order_acquire</span>);</td></tr>
+<tr><th id="87">87</th><td>}</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td><b>template</b>&lt;<b>typename</b> Type&gt;</td></tr>
+<tr><th id="90">90</th><td><em>void</em> <a class="type" href="IsoHeap.h.html#bmalloc::api::IsoHeap" title='bmalloc::api::IsoHeap' data-ref="bmalloc::api::IsoHeap" data-ref-filename="bmalloc..api..IsoHeap">IsoHeap</a>&lt;Type&gt;::<dfn class="decl def fn" id="_ZN7bmalloc3api7IsoHeap10initializeEv" title='bmalloc::api::IsoHeap::initialize' data-ref="_ZN7bmalloc3api7IsoHeap10initializeEv" data-ref-filename="_ZN7bmalloc3api7IsoHeap10initializeEv">initialize</dfn>()</td></tr>
+<tr><th id="91">91</th><td>{</td></tr>
+<tr><th id="92">92</th><td>    <i>// We are using m_impl field as a guard variable of the initialization of IsoHeap.</i></td></tr>
+<tr><th id="93">93</th><td><i>    // IsoHeap::isInitialized gets m_impl with "acquire", and IsoHeap::initialize stores</i></td></tr>
+<tr><th id="94">94</th><td><i>    // the value to m_impl with "release". To make IsoHeap changes visible to any threads</i></td></tr>
+<tr><th id="95">95</th><td><i>    // when IsoHeap::isInitialized returns true, we need to store the value to m_impl *after*</i></td></tr>
+<tr><th id="96">96</th><td><i>    // all the initialization finishes.</i></td></tr>
+<tr><th id="97">97</th><td>    <em>auto</em>* <dfn class="local col4 decl" id="384heap" title='heap' data-type='auto *' data-ref="384heap" data-ref-filename="384heap">heap</dfn> = <b>new</b> <a class="type" href="IsoHeap.h.html#bmalloc::IsoHeapImpl" title='bmalloc::IsoHeapImpl' data-ref="bmalloc::IsoHeapImpl" data-ref-filename="bmalloc..IsoHeapImpl">IsoHeapImpl</a>&lt;<a class="typedef" href="IsoHeap.h.html#bmalloc::api::IsoHeap::Config" title='bmalloc::api::IsoHeap::Config' data-type='IsoConfig&lt;sizeof(Type)&gt;' data-ref="bmalloc::api::IsoHeap::Config" data-ref-filename="bmalloc..api..IsoHeap..Config">Config</a>&gt;();</td></tr>
+<tr><th id="98">98</th><td>    <a class="local col4 ref" href="#384heap" title='heap' data-ref="384heap" data-ref-filename="384heap">heap</a>-&gt;addToAllIsoHeaps();</td></tr>
+<tr><th id="99">99</th><td>    <a class="member fn" href="IsoHeap.h.html#_ZN7bmalloc3api7IsoHeap18setAllocatorOffsetEj" title='bmalloc::api::IsoHeap::setAllocatorOffset' data-ref="_ZN7bmalloc3api7IsoHeap18setAllocatorOffsetEj" data-ref-filename="_ZN7bmalloc3api7IsoHeap18setAllocatorOffsetEj">setAllocatorOffset</a>(<a class="local col4 ref" href="#384heap" title='heap' data-ref="384heap" data-ref-filename="384heap">heap</a>-&gt;allocatorOffset());</td></tr>
+<tr><th id="100">100</th><td>    <a class="member fn" href="IsoHeap.h.html#_ZN7bmalloc3api7IsoHeap20setDeallocatorOffsetEj" title='bmalloc::api::IsoHeap::setDeallocatorOffset' data-ref="_ZN7bmalloc3api7IsoHeap20setDeallocatorOffsetEj" data-ref-filename="_ZN7bmalloc3api7IsoHeap20setDeallocatorOffsetEj">setDeallocatorOffset</a>(<a class="local col4 ref" href="#384heap" title='heap' data-ref="384heap" data-ref-filename="384heap">heap</a>-&gt;deallocatorOffset());</td></tr>
+<tr><th id="101">101</th><td>    <em>auto</em>* <dfn class="local col5 decl" id="385atomic" title='atomic' data-type='auto *' data-ref="385atomic" data-ref-filename="385atomic">atomic</dfn> = <b>reinterpret_cast</b>&lt;<span class="namespace">std::</span><span class='type' title='std::__1::atomic' data-ref="std::__1::atomic" data-ref-filename="std..__1..atomic">atomic</span>&lt;<a class="type" href="IsoHeap.h.html#bmalloc::IsoHeapImpl" title='bmalloc::IsoHeapImpl' data-ref="bmalloc::IsoHeapImpl" data-ref-filename="bmalloc..IsoHeapImpl">IsoHeapImpl</a>&lt;<a class="typedef" href="IsoHeap.h.html#bmalloc::api::IsoHeap::Config" title='bmalloc::api::IsoHeap::Config' data-type='IsoConfig&lt;sizeof(Type)&gt;' data-ref="bmalloc::api::IsoHeap::Config" data-ref-filename="bmalloc..api..IsoHeap..Config">Config</a>&gt;*&gt;*&gt;(&amp;<a class="member field" href="IsoHeap.h.html#bmalloc::api::IsoHeap::m_impl" title='bmalloc::api::IsoHeap::m_impl' data-ref="bmalloc::api::IsoHeap::m_impl" data-ref-filename="bmalloc..api..IsoHeap..m_impl">m_impl</a>);</td></tr>
+<tr><th id="102">102</th><td>    <a class="local col5 ref" href="#385atomic" title='atomic' data-ref="385atomic" data-ref-filename="385atomic">atomic</a>-&gt;store(<a class="local col4 ref" href="#384heap" title='heap' data-ref="384heap" data-ref-filename="384heap">heap</a>, <span class="namespace">std::</span><span class='enum' title='std::__1::memory_order_release' data-ref="std::__1::memory_order_release" data-ref-filename="std..__1..memory_order_release">memory_order_release</span>);</td></tr>
+<tr><th id="103">103</th><td>}</td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td><b>template</b>&lt;<b>typename</b> Type&gt;</td></tr>
+<tr><th id="106">106</th><td><em>auto</em> <a class="type" href="IsoHeap.h.html#bmalloc::api::IsoHeap" title='bmalloc::api::IsoHeap' data-ref="bmalloc::api::IsoHeap" data-ref-filename="bmalloc..api..IsoHeap">IsoHeap</a>&lt;Type&gt;::<dfn class="decl def fn" id="_ZN7bmalloc3api7IsoHeap4implEv" title='bmalloc::api::IsoHeap::impl' data-ref="_ZN7bmalloc3api7IsoHeap4implEv" data-ref-filename="_ZN7bmalloc3api7IsoHeap4implEv">impl</dfn>() -&gt; <a class="type" href="IsoHeap.h.html#bmalloc::IsoHeapImpl" title='bmalloc::IsoHeapImpl' data-ref="bmalloc::IsoHeapImpl" data-ref-filename="bmalloc..IsoHeapImpl">IsoHeapImpl</a>&lt;<a class="typedef" href="IsoHeap.h.html#bmalloc::api::IsoHeap::Config" title='bmalloc::api::IsoHeap::Config' data-type='IsoConfig&lt;sizeof(Type)&gt;' data-ref="bmalloc::api::IsoHeap::Config" data-ref-filename="bmalloc..api..IsoHeap..Config">Config</a>&gt;&amp;</td></tr>
+<tr><th id="107">107</th><td>{</td></tr>
+<tr><th id="108">108</th><td>    <a class="type" href="IsoTLS.h.html#bmalloc::IsoTLS" title='bmalloc::IsoTLS' data-ref="bmalloc::IsoTLS" data-ref-filename="bmalloc..IsoTLS">IsoTLS</a>::ensureHeap(*<b>this</b>);</td></tr>
+<tr><th id="109">109</th><td>    <b>return</b> *<a class="member field" href="IsoHeap.h.html#bmalloc::api::IsoHeap::m_impl" title='bmalloc::api::IsoHeap::m_impl' data-ref="bmalloc::api::IsoHeap::m_impl" data-ref-filename="bmalloc..api..IsoHeap..m_impl">m_impl</a>;</td></tr>
+<tr><th id="110">110</th><td>}</td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td><i>// This is most appropraite for template classes.</i></td></tr>
+<tr><th id="113">113</th><td><u>#define <dfn class="macro" id="_M/MAKE_BISO_MALLOCED_INLINE" data-ref="_M/MAKE_BISO_MALLOCED_INLINE">MAKE_BISO_MALLOCED_INLINE</dfn>(isoType) \</u></td></tr>
+<tr><th id="114">114</th><td><u>public: \</u></td></tr>
+<tr><th id="115">115</th><td><u>    static ::bmalloc::api::IsoHeap&lt;isoType&gt;&amp; bisoHeap() \</u></td></tr>
+<tr><th id="116">116</th><td><u>    { \</u></td></tr>
+<tr><th id="117">117</th><td><u>        static ::bmalloc::api::IsoHeap&lt;isoType&gt; heap("WebKit_"#isoType); \</u></td></tr>
+<tr><th id="118">118</th><td><u>        return heap; \</u></td></tr>
+<tr><th id="119">119</th><td><u>    } \</u></td></tr>
+<tr><th id="120">120</th><td><u>    \</u></td></tr>
+<tr><th id="121">121</th><td><u>    void* operator new(size_t, void* p) { return p; } \</u></td></tr>
+<tr><th id="122">122</th><td><u>    void* operator new[](size_t, void* p) { return p; } \</u></td></tr>
+<tr><th id="123">123</th><td><u>    \</u></td></tr>
+<tr><th id="124">124</th><td><u>    void* operator new(size_t size) \</u></td></tr>
+<tr><th id="125">125</th><td><u>    { \</u></td></tr>
+<tr><th id="126">126</th><td><u>        RELEASE_BASSERT(size == sizeof(isoType)); \</u></td></tr>
+<tr><th id="127">127</th><td><u>        return bisoHeap().allocate(); \</u></td></tr>
+<tr><th id="128">128</th><td><u>    } \</u></td></tr>
+<tr><th id="129">129</th><td><u>    \</u></td></tr>
+<tr><th id="130">130</th><td><u>    void operator delete(void* p) \</u></td></tr>
+<tr><th id="131">131</th><td><u>    { \</u></td></tr>
+<tr><th id="132">132</th><td><u>        bisoHeap().deallocate(p); \</u></td></tr>
+<tr><th id="133">133</th><td><u>    } \</u></td></tr>
+<tr><th id="134">134</th><td><u>    \</u></td></tr>
+<tr><th id="135">135</th><td><u>    void* operator new[](size_t size) = delete; \</u></td></tr>
+<tr><th id="136">136</th><td><u>    void operator delete[](void* p) = delete; \</u></td></tr>
+<tr><th id="137">137</th><td><u>using webkitFastMalloced = int; \</u></td></tr>
+<tr><th id="138">138</th><td><u>private: \</u></td></tr>
+<tr><th id="139">139</th><td><u>using __makeBisoMallocedInlineMacroSemicolonifier BUNUSED_TYPE_ALIAS = int</u></td></tr>
+<tr><th id="140">140</th><td></td></tr>
+<tr><th id="141">141</th><td><u>#define <dfn class="macro" id="_M/MAKE_BISO_MALLOCED_IMPL" data-ref="_M/MAKE_BISO_MALLOCED_IMPL">MAKE_BISO_MALLOCED_IMPL</dfn>(isoType) \</u></td></tr>
+<tr><th id="142">142</th><td><u>::bmalloc::api::IsoHeap&lt;isoType&gt;&amp; isoType::bisoHeap() \</u></td></tr>
+<tr><th id="143">143</th><td><u>{ \</u></td></tr>
+<tr><th id="144">144</th><td><u>    static ::bmalloc::api::IsoHeap&lt;isoType&gt; heap("WebKit "#isoType); \</u></td></tr>
+<tr><th id="145">145</th><td><u>    return heap; \</u></td></tr>
+<tr><th id="146">146</th><td><u>} \</u></td></tr>
+<tr><th id="147">147</th><td><u>\</u></td></tr>
+<tr><th id="148">148</th><td><u>void* isoType::operator new(size_t size) \</u></td></tr>
+<tr><th id="149">149</th><td><u>{ \</u></td></tr>
+<tr><th id="150">150</th><td><u>    RELEASE_BASSERT(size == sizeof(isoType)); \</u></td></tr>
+<tr><th id="151">151</th><td><u>    return bisoHeap().allocate(); \</u></td></tr>
+<tr><th id="152">152</th><td><u>} \</u></td></tr>
+<tr><th id="153">153</th><td><u>\</u></td></tr>
+<tr><th id="154">154</th><td><u>void isoType::operator delete(void* p) \</u></td></tr>
+<tr><th id="155">155</th><td><u>{ \</u></td></tr>
+<tr><th id="156">156</th><td><u>    bisoHeap().deallocate(p); \</u></td></tr>
+<tr><th id="157">157</th><td><u>} \</u></td></tr>
+<tr><th id="158">158</th><td><u>\</u></td></tr>
+<tr><th id="159">159</th><td><u>struct MakeBisoMallocedImplMacroSemicolonifier##isoType { }</u></td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td><u>#define <dfn class="macro" id="_M/MAKE_BISO_MALLOCED_IMPL_TEMPLATE" data-ref="_M/MAKE_BISO_MALLOCED_IMPL_TEMPLATE">MAKE_BISO_MALLOCED_IMPL_TEMPLATE</dfn>(isoType) \</u></td></tr>
+<tr><th id="162">162</th><td><u>template&lt;&gt; \</u></td></tr>
+<tr><th id="163">163</th><td><u>::bmalloc::api::IsoHeap&lt;isoType&gt;&amp; isoType::bisoHeap() \</u></td></tr>
+<tr><th id="164">164</th><td><u>{ \</u></td></tr>
+<tr><th id="165">165</th><td><u>    static ::bmalloc::api::IsoHeap&lt;isoType&gt; heap("WebKit_"#isoType); \</u></td></tr>
+<tr><th id="166">166</th><td><u>    return heap; \</u></td></tr>
+<tr><th id="167">167</th><td><u>} \</u></td></tr>
+<tr><th id="168">168</th><td><u>\</u></td></tr>
+<tr><th id="169">169</th><td><u>template&lt;&gt; \</u></td></tr>
+<tr><th id="170">170</th><td><u>void* isoType::operator new(size_t size) \</u></td></tr>
+<tr><th id="171">171</th><td><u>{ \</u></td></tr>
+<tr><th id="172">172</th><td><u>    RELEASE_BASSERT(size == sizeof(isoType)); \</u></td></tr>
+<tr><th id="173">173</th><td><u>    return bisoHeap().allocate(); \</u></td></tr>
+<tr><th id="174">174</th><td><u>} \</u></td></tr>
+<tr><th id="175">175</th><td><u>\</u></td></tr>
+<tr><th id="176">176</th><td><u>template&lt;&gt; \</u></td></tr>
+<tr><th id="177">177</th><td><u>void isoType::operator delete(void* p) \</u></td></tr>
+<tr><th id="178">178</th><td><u>{ \</u></td></tr>
+<tr><th id="179">179</th><td><u>    bisoHeap().deallocate(p); \</u></td></tr>
+<tr><th id="180">180</th><td><u>} \</u></td></tr>
+<tr><th id="181">181</th><td><u>\</u></td></tr>
+<tr><th id="182">182</th><td><u>struct MakeBisoMallocedImplMacroSemicolonifier##isoType { }</u></td></tr>
+<tr><th id="183">183</th><td></td></tr>
+<tr><th id="184">184</th><td>} } <i>// namespace bmalloc::api</i></td></tr>
+<tr><th id="185">185</th><td></td></tr>
+<tr><th id="186">186</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/WebCore/Modules/encryptedmedia/MediaKeyMessageEvent.cpp.html'>webkit/Source/WebCore/Modules/encryptedmedia/MediaKeyMessageEvent.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

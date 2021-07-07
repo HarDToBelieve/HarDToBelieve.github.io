@@ -1,0 +1,21 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='2081' type='void SSL_CTX_sess_set_get_cb(SSL_CTX * ctx, SSL_SESSION *(*)(SSL *, const uint8_t *, int, int *) get_session_cb)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='2062'>// SSL_CTX_sess_set_get_cb sets a callback to look up a session by ID for a
+// server. The callback is passed the session ID and should return a matching
+// |SSL_SESSION| or NULL if not found. It should set |*out_copy| to zero and
+// return a new reference to the session. This callback is not used for a
+// client.
+//
+// For historical reasons, if |*out_copy| is set to one (default), the SSL
+// library will take a new reference to the returned |SSL_SESSION|, expecting
+// the callback to return a non-owning pointer. This is not recommended. If
+// |ctx| and thus the callback is used on multiple threads, the session may be
+// removed and invalidated before the SSL library calls |SSL_SESSION_up_ref|,
+// whereas the callback may synchronize internally.
+//
+// To look up a session asynchronously, the callback may return
+// |SSL_magic_pending_session_ptr|. See the documentation for that function and
+// |SSL_ERROR_PENDING_SESSION|.
+//
+// If the internal session cache is enabled, the callback is only consulted if
+// the internal cache does not return a match.</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_session.cc' l='1265' ll='1269' type='void SSL_CTX_sess_set_get_cb(SSL_CTX * ctx, SSL_SESSION *(*)(SSL *, const uint8_t *, int, int *) cb)'/>

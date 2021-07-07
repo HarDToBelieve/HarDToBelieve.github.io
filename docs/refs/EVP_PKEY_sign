@@ -1,0 +1,21 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/evp.h' l='563' type='int EVP_PKEY_sign(EVP_PKEY_CTX * ctx, uint8_t * sig, size_t * sig_len, const uint8_t * digest, size_t digest_len)'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/evp/digestsign.c' l='165' u='c' c='EVP_DigestSignFinal'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/evp/digestsign.c' l='171' u='c' c='EVP_DigestSignFinal'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/evp.h' l='547'>// EVP_PKEY_sign signs |digest_len| bytes from |digest| using |ctx|. If |sig| is
+// NULL, the maximum size of the signature is written to |out_sig_len|.
+// Otherwise, |*sig_len| must contain the number of bytes of space available at
+// |sig|. If sufficient, the signature will be written to |sig| and |*sig_len|
+// updated with the true length. This function will fail for signature
+// algorithms like Ed25519 that do not support signing pre-hashed inputs.
+//
+// WARNING: |digest| must be the output of some hash function on the data to be
+// signed. Passing unhashed inputs will not result in a secure signature scheme.
+// Use |EVP_DigestSignInit| to sign an unhashed input.
+//
+// WARNING: Setting |sig| to NULL only gives the maximum size of the
+// signature. The actual signature may be smaller.
+//
+// It returns one on success or zero on error. (Note: this differs from
+// OpenSSL, which can also return negative values to indicate an error. )</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/evp/evp_ctx.c' l='225' ll='236' type='int EVP_PKEY_sign(EVP_PKEY_CTX * ctx, uint8_t * sig, size_t * sig_len, const uint8_t * digest, size_t digest_len)'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/evp/sign.c' l='97' u='c' c='EVP_SignFinal'/>

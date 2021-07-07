@@ -1,0 +1,458 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>asn1_lib.c source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/asn1/asn1_lib.c] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/asn1/asn1_lib.c'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>third_party</a>/<a href='../../..'>boringssl</a>/<a href='../..'>src</a>/<a href='..'>crypto</a>/<a href='./'>asn1</a>/<a href='asn1_lib.c.html'>asn1_lib.c</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)</i></td></tr>
+<tr><th id="2">2</th><td><i> * All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * This package is an SSL implementation written</i></td></tr>
+<tr><th id="5">5</th><td><i> * by Eric Young (eay@cryptsoft.com).</i></td></tr>
+<tr><th id="6">6</th><td><i> * The implementation was written so as to conform with Netscapes SSL.</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * This library is free for commercial and non-commercial use as long as</i></td></tr>
+<tr><th id="9">9</th><td><i> * the following conditions are aheared to.  The following conditions</i></td></tr>
+<tr><th id="10">10</th><td><i> * apply to all code found in this distribution, be it the RC4, RSA,</i></td></tr>
+<tr><th id="11">11</th><td><i> * lhash, DES, etc., code; not just the SSL code.  The SSL documentation</i></td></tr>
+<tr><th id="12">12</th><td><i> * included with this distribution is covered by the same copyright terms</i></td></tr>
+<tr><th id="13">13</th><td><i> * except that the holder is Tim Hudson (tjh@cryptsoft.com).</i></td></tr>
+<tr><th id="14">14</th><td><i> *</i></td></tr>
+<tr><th id="15">15</th><td><i> * Copyright remains Eric Young's, and as such any Copyright notices in</i></td></tr>
+<tr><th id="16">16</th><td><i> * the code are not to be removed.</i></td></tr>
+<tr><th id="17">17</th><td><i> * If this package is used in a product, Eric Young should be given attribution</i></td></tr>
+<tr><th id="18">18</th><td><i> * as the author of the parts of the library used.</i></td></tr>
+<tr><th id="19">19</th><td><i> * This can be in the form of a textual message at program startup or</i></td></tr>
+<tr><th id="20">20</th><td><i> * in documentation (online or textual) provided with the package.</i></td></tr>
+<tr><th id="21">21</th><td><i> *</i></td></tr>
+<tr><th id="22">22</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="23">23</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="24">24</th><td><i> * are met:</i></td></tr>
+<tr><th id="25">25</th><td><i> * 1. Redistributions of source code must retain the copyright</i></td></tr>
+<tr><th id="26">26</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="27">27</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="28">28</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="29">29</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="30">30</th><td><i> * 3. All advertising materials mentioning features or use of this software</i></td></tr>
+<tr><th id="31">31</th><td><i> *    must display the following acknowledgement:</i></td></tr>
+<tr><th id="32">32</th><td><i> *    "This product includes cryptographic software written by</i></td></tr>
+<tr><th id="33">33</th><td><i> *     Eric Young (eay@cryptsoft.com)"</i></td></tr>
+<tr><th id="34">34</th><td><i> *    The word 'cryptographic' can be left out if the rouines from the library</i></td></tr>
+<tr><th id="35">35</th><td><i> *    being used are not cryptographic related :-).</i></td></tr>
+<tr><th id="36">36</th><td><i> * 4. If you include any Windows specific code (or a derivative thereof) from</i></td></tr>
+<tr><th id="37">37</th><td><i> *    the apps directory (application code) you must include an acknowledgement:</i></td></tr>
+<tr><th id="38">38</th><td><i> *    "This product includes software written by Tim Hudson (tjh@cryptsoft.com)"</i></td></tr>
+<tr><th id="39">39</th><td><i> *</i></td></tr>
+<tr><th id="40">40</th><td><i> * THIS SOFTWARE IS PROVIDED BY ERIC YOUNG ``AS IS'' AND</i></td></tr>
+<tr><th id="41">41</th><td><i> * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="42">42</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</i></td></tr>
+<tr><th id="43">43</th><td><i> * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE</i></td></tr>
+<tr><th id="44">44</th><td><i> * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL</i></td></tr>
+<tr><th id="45">45</th><td><i> * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS</i></td></tr>
+<tr><th id="46">46</th><td><i> * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)</i></td></tr>
+<tr><th id="47">47</th><td><i> * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT</i></td></tr>
+<tr><th id="48">48</th><td><i> * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY</i></td></tr>
+<tr><th id="49">49</th><td><i> * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF</i></td></tr>
+<tr><th id="50">50</th><td><i> * SUCH DAMAGE.</i></td></tr>
+<tr><th id="51">51</th><td><i> *</i></td></tr>
+<tr><th id="52">52</th><td><i> * The licence and distribution terms for any publically available version or</i></td></tr>
+<tr><th id="53">53</th><td><i> * derivative of this code cannot be changed.  i.e. this code cannot simply be</i></td></tr>
+<tr><th id="54">54</th><td><i> * copied and put under another distribution licence</i></td></tr>
+<tr><th id="55">55</th><td><i> * [including the GNU Public Licence.] */</i></td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td><u>#include <a href="../../include/openssl/asn1.h.html">&lt;openssl/asn1.h&gt;</a></u></td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><u>#include &lt;limits.h&gt;</u></td></tr>
+<tr><th id="60">60</th><td><u>#include &lt;string.h&gt;</u></td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><u>#include <a href="../../include/openssl/asn1_mac.h.html">&lt;openssl/asn1_mac.h&gt;</a></u></td></tr>
+<tr><th id="63">63</th><td><u>#include <a href="../../include/openssl/err.h.html">&lt;openssl/err.h&gt;</a></u></td></tr>
+<tr><th id="64">64</th><td><u>#include <a href="../../include/openssl/mem.h.html">&lt;openssl/mem.h&gt;</a></u></td></tr>
+<tr><th id="65">65</th><td></td></tr>
+<tr><th id="66">66</th><td><u>#include <a href="../internal.h.html">"../internal.h"</a></u></td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td><i>/* Cross-module errors from crypto/x509/i2d_pr.c. */</i></td></tr>
+<tr><th id="70">70</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, UNSUPPORTED_PUBLIC_KEY_TYPE)</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td><i>/* Cross-module errors from crypto/x509/algorithm.c. */</i></td></tr>
+<tr><th id="73">73</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, CONTEXT_NOT_INITIALISED)</td></tr>
+<tr><th id="74">74</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, DIGEST_AND_KEY_TYPE_NOT_SUPPORTED)</td></tr>
+<tr><th id="75">75</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, UNKNOWN_MESSAGE_DIGEST_ALGORITHM)</td></tr>
+<tr><th id="76">76</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, UNKNOWN_SIGNATURE_ALGORITHM)</td></tr>
+<tr><th id="77">77</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, WRONG_PUBLIC_KEY_TYPE)</td></tr>
+<tr><th id="78">78</th><td><i>/*</i></td></tr>
+<tr><th id="79">79</th><td><i> * Cross-module errors from crypto/x509/asn1_gen.c. TODO(davidben): Remove</i></td></tr>
+<tr><th id="80">80</th><td><i> * these once asn1_gen.c is gone.</i></td></tr>
+<tr><th id="81">81</th><td><i> */</i></td></tr>
+<tr><th id="82">82</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, DEPTH_EXCEEDED)</td></tr>
+<tr><th id="83">83</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, ILLEGAL_BITSTRING_FORMAT)</td></tr>
+<tr><th id="84">84</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, ILLEGAL_BOOLEAN)</td></tr>
+<tr><th id="85">85</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, ILLEGAL_FORMAT)</td></tr>
+<tr><th id="86">86</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, ILLEGAL_HEX)</td></tr>
+<tr><th id="87">87</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, ILLEGAL_IMPLICIT_TAG)</td></tr>
+<tr><th id="88">88</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, ILLEGAL_INTEGER)</td></tr>
+<tr><th id="89">89</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, ILLEGAL_NESTED_TAGGING)</td></tr>
+<tr><th id="90">90</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, ILLEGAL_NULL_VALUE)</td></tr>
+<tr><th id="91">91</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, ILLEGAL_OBJECT)</td></tr>
+<tr><th id="92">92</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, ILLEGAL_TIME_VALUE)</td></tr>
+<tr><th id="93">93</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, INTEGER_NOT_ASCII_FORMAT)</td></tr>
+<tr><th id="94">94</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, INVALID_MODIFIER)</td></tr>
+<tr><th id="95">95</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, INVALID_NUMBER)</td></tr>
+<tr><th id="96">96</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, LIST_ERROR)</td></tr>
+<tr><th id="97">97</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, MISSING_VALUE)</td></tr>
+<tr><th id="98">98</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, NOT_ASCII_FORMAT)</td></tr>
+<tr><th id="99">99</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, OBJECT_NOT_ASCII_FORMAT)</td></tr>
+<tr><th id="100">100</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, SEQUENCE_OR_SET_NEEDS_CONFIG)</td></tr>
+<tr><th id="101">101</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, TIME_NOT_ASCII_FORMAT)</td></tr>
+<tr><th id="102">102</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, UNKNOWN_FORMAT)</td></tr>
+<tr><th id="103">103</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, UNKNOWN_TAG)</td></tr>
+<tr><th id="104">104</th><td><a class="macro" href="../../include/openssl/err.h.html#459" title="" data-ref="_M/OPENSSL_DECLARE_ERROR_REASON">OPENSSL_DECLARE_ERROR_REASON</a>(ASN1, UNSUPPORTED_TYPE)</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td><em>static</em> <em>int</em> <a class="tu decl fn" href="#asn1_get_length" title='asn1_get_length' data-type='int asn1_get_length(const unsigned char ** pp, int * inf, long * rl, long max)' data-ref="asn1_get_length" data-ref-filename="asn1_get_length">asn1_get_length</a>(<em>const</em> <em>unsigned</em> <em>char</em> **<dfn class="local col1 decl" id="1pp" title='pp' data-type='const unsigned char **' data-ref="1pp" data-ref-filename="1pp">pp</dfn>, <em>int</em> *<dfn class="local col2 decl" id="2inf" title='inf' data-type='int *' data-ref="2inf" data-ref-filename="2inf">inf</dfn>, <em>long</em> *<dfn class="local col3 decl" id="3rl" title='rl' data-type='long *' data-ref="3rl" data-ref-filename="3rl">rl</dfn>,</td></tr>
+<tr><th id="107">107</th><td>                           <em>long</em> <dfn class="local col4 decl" id="4max" title='max' data-type='long' data-ref="4max" data-ref-filename="4max">max</dfn>);</td></tr>
+<tr><th id="108">108</th><td><em>static</em> <em>void</em> <a class="tu decl fn" href="#asn1_put_length" title='asn1_put_length' data-type='void asn1_put_length(unsigned char ** pp, int length)' data-ref="asn1_put_length" data-ref-filename="asn1_put_length">asn1_put_length</a>(<em>unsigned</em> <em>char</em> **<dfn class="local col5 decl" id="5pp" title='pp' data-type='unsigned char **' data-ref="5pp" data-ref-filename="5pp">pp</dfn>, <em>int</em> <dfn class="local col6 decl" id="6length" title='length' data-type='int' data-ref="6length" data-ref-filename="6length">length</dfn>);</td></tr>
+<tr><th id="109">109</th><td></td></tr>
+<tr><th id="110">110</th><td><em>int</em> <dfn class="decl def fn" id="ASN1_get_object" title='ASN1_get_object' data-ref="ASN1_get_object" data-ref-filename="ASN1_get_object">ASN1_get_object</dfn>(<em>const</em> <em>unsigned</em> <em>char</em> **<dfn class="local col7 decl" id="7pp" title='pp' data-type='const unsigned char **' data-ref="7pp" data-ref-filename="7pp">pp</dfn>, <em>long</em> *<dfn class="local col8 decl" id="8plength" title='plength' data-type='long *' data-ref="8plength" data-ref-filename="8plength">plength</dfn>, <em>int</em> *<dfn class="local col9 decl" id="9ptag" title='ptag' data-type='int *' data-ref="9ptag" data-ref-filename="9ptag">ptag</dfn>,</td></tr>
+<tr><th id="111">111</th><td>                    <em>int</em> *<dfn class="local col0 decl" id="10pclass" title='pclass' data-type='int *' data-ref="10pclass" data-ref-filename="10pclass">pclass</dfn>, <em>long</em> <dfn class="local col1 decl" id="11omax" title='omax' data-type='long' data-ref="11omax" data-ref-filename="11omax">omax</dfn>)</td></tr>
+<tr><th id="112">112</th><td>{</td></tr>
+<tr><th id="113">113</th><td>    <em>int</em> <dfn class="local col2 decl" id="12i" title='i' data-type='int' data-ref="12i" data-ref-filename="12i">i</dfn>, <dfn class="local col3 decl" id="13ret" title='ret' data-type='int' data-ref="13ret" data-ref-filename="13ret">ret</dfn>;</td></tr>
+<tr><th id="114">114</th><td>    <em>long</em> <dfn class="local col4 decl" id="14l" title='l' data-type='long' data-ref="14l" data-ref-filename="14l">l</dfn>;</td></tr>
+<tr><th id="115">115</th><td>    <em>const</em> <em>unsigned</em> <em>char</em> *<dfn class="local col5 decl" id="15p" title='p' data-type='const unsigned char *' data-ref="15p" data-ref-filename="15p">p</dfn> = *<a class="local col7 ref" href="#7pp" title='pp' data-ref="7pp" data-ref-filename="7pp">pp</a>;</td></tr>
+<tr><th id="116">116</th><td>    <em>int</em> <dfn class="local col6 decl" id="16tag" title='tag' data-type='int' data-ref="16tag" data-ref-filename="16tag">tag</dfn>, <dfn class="local col7 decl" id="17xclass" title='xclass' data-type='int' data-ref="17xclass" data-ref-filename="17xclass">xclass</dfn>, <dfn class="local col8 decl" id="18inf" title='inf' data-type='int' data-ref="18inf" data-ref-filename="18inf">inf</dfn>;</td></tr>
+<tr><th id="117">117</th><td>    <em>long</em> <dfn class="local col9 decl" id="19max" title='max' data-type='long' data-ref="19max" data-ref-filename="19max">max</dfn> = <a class="local col1 ref" href="#11omax" title='omax' data-ref="11omax" data-ref-filename="11omax">omax</a>;</td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td>    <b>if</b> (!<a class="local col9 ref" href="#19max" title='max' data-ref="19max" data-ref-filename="19max">max</a>)</td></tr>
+<tr><th id="120">120</th><td>        <b>goto</b> <a class="lbl" href="#20err" data-ref="20err" data-ref-filename="20err">err</a>;</td></tr>
+<tr><th id="121">121</th><td>    <a class="local col3 ref" href="#13ret" title='ret' data-ref="13ret" data-ref-filename="13ret">ret</a> = (*<a class="local col5 ref" href="#15p" title='p' data-ref="15p" data-ref-filename="15p">p</a> &amp; <a class="macro" href="../../include/openssl/asn1.h.html#96" title="0x20" data-ref="_M/V_ASN1_CONSTRUCTED">V_ASN1_CONSTRUCTED</a>);</td></tr>
+<tr><th id="122">122</th><td>    <a class="local col7 ref" href="#17xclass" title='xclass' data-ref="17xclass" data-ref-filename="17xclass">xclass</a> = (*<a class="local col5 ref" href="#15p" title='p' data-ref="15p" data-ref-filename="15p">p</a> &amp; <a class="macro" href="../../include/openssl/asn1.h.html#92" title="0xc0" data-ref="_M/V_ASN1_PRIVATE">V_ASN1_PRIVATE</a>);</td></tr>
+<tr><th id="123">123</th><td>    <a class="local col2 ref" href="#12i" title='i' data-ref="12i" data-ref-filename="12i">i</a> = *<a class="local col5 ref" href="#15p" title='p' data-ref="15p" data-ref-filename="15p">p</a> &amp; <a class="macro" href="../../include/openssl/asn1.h.html#103" title="0x1f" data-ref="_M/V_ASN1_PRIMITIVE_TAG">V_ASN1_PRIMITIVE_TAG</a>;</td></tr>
+<tr><th id="124">124</th><td>    <b>if</b> (<a class="local col2 ref" href="#12i" title='i' data-ref="12i" data-ref-filename="12i">i</a> == <a class="macro" href="../../include/openssl/asn1.h.html#103" title="0x1f" data-ref="_M/V_ASN1_PRIMITIVE_TAG">V_ASN1_PRIMITIVE_TAG</a>) { <i>/* high-tag */</i></td></tr>
+<tr><th id="125">125</th><td>        <a class="local col5 ref" href="#15p" title='p' data-ref="15p" data-ref-filename="15p">p</a>++;</td></tr>
+<tr><th id="126">126</th><td>        <b>if</b> (--<a class="local col9 ref" href="#19max" title='max' data-ref="19max" data-ref-filename="19max">max</a> == <var>0</var>)</td></tr>
+<tr><th id="127">127</th><td>            <b>goto</b> <a class="lbl" href="#20err" data-ref="20err" data-ref-filename="20err">err</a>;</td></tr>
+<tr><th id="128">128</th><td>        <a class="local col4 ref" href="#14l" title='l' data-ref="14l" data-ref-filename="14l">l</a> = <var>0</var>;</td></tr>
+<tr><th id="129">129</th><td>        <b>while</b> (*<a class="local col5 ref" href="#15p" title='p' data-ref="15p" data-ref-filename="15p">p</a> &amp; <var>0x80</var>) {</td></tr>
+<tr><th id="130">130</th><td>            <a class="local col4 ref" href="#14l" title='l' data-ref="14l" data-ref-filename="14l">l</a> &lt;&lt;= <var>7L</var>;</td></tr>
+<tr><th id="131">131</th><td>            <a class="local col4 ref" href="#14l" title='l' data-ref="14l" data-ref-filename="14l">l</a> |= *(<a class="local col5 ref" href="#15p" title='p' data-ref="15p" data-ref-filename="15p">p</a>++) &amp; <var>0x7f</var>;</td></tr>
+<tr><th id="132">132</th><td>            <b>if</b> (--<a class="local col9 ref" href="#19max" title='max' data-ref="19max" data-ref-filename="19max">max</a> == <var>0</var>)</td></tr>
+<tr><th id="133">133</th><td>                <b>goto</b> <a class="lbl" href="#20err" data-ref="20err" data-ref-filename="20err">err</a>;</td></tr>
+<tr><th id="134">134</th><td>            <b>if</b> (<a class="local col4 ref" href="#14l" title='l' data-ref="14l" data-ref-filename="14l">l</a> &gt; (<span class="macro" title="2147483647" data-ref="_M/INT_MAX">INT_MAX</span> &gt;&gt; <var>7L</var>))</td></tr>
+<tr><th id="135">135</th><td>                <b>goto</b> <a class="lbl" href="#20err" data-ref="20err" data-ref-filename="20err">err</a>;</td></tr>
+<tr><th id="136">136</th><td>        }</td></tr>
+<tr><th id="137">137</th><td>        <a class="local col4 ref" href="#14l" title='l' data-ref="14l" data-ref-filename="14l">l</a> &lt;&lt;= <var>7L</var>;</td></tr>
+<tr><th id="138">138</th><td>        <a class="local col4 ref" href="#14l" title='l' data-ref="14l" data-ref-filename="14l">l</a> |= *(<a class="local col5 ref" href="#15p" title='p' data-ref="15p" data-ref-filename="15p">p</a>++) &amp; <var>0x7f</var>;</td></tr>
+<tr><th id="139">139</th><td>        <a class="local col6 ref" href="#16tag" title='tag' data-ref="16tag" data-ref-filename="16tag">tag</a> = (<em>int</em>)<a class="local col4 ref" href="#14l" title='l' data-ref="14l" data-ref-filename="14l">l</a>;</td></tr>
+<tr><th id="140">140</th><td>        <b>if</b> (--<a class="local col9 ref" href="#19max" title='max' data-ref="19max" data-ref-filename="19max">max</a> == <var>0</var>)</td></tr>
+<tr><th id="141">141</th><td>            <b>goto</b> <a class="lbl" href="#20err" data-ref="20err" data-ref-filename="20err">err</a>;</td></tr>
+<tr><th id="142">142</th><td>    } <b>else</b> {</td></tr>
+<tr><th id="143">143</th><td>        <a class="local col6 ref" href="#16tag" title='tag' data-ref="16tag" data-ref-filename="16tag">tag</a> = <a class="local col2 ref" href="#12i" title='i' data-ref="12i" data-ref-filename="12i">i</a>;</td></tr>
+<tr><th id="144">144</th><td>        <a class="local col5 ref" href="#15p" title='p' data-ref="15p" data-ref-filename="15p">p</a>++;</td></tr>
+<tr><th id="145">145</th><td>        <b>if</b> (--<a class="local col9 ref" href="#19max" title='max' data-ref="19max" data-ref-filename="19max">max</a> == <var>0</var>)</td></tr>
+<tr><th id="146">146</th><td>            <b>goto</b> <a class="lbl" href="#20err" data-ref="20err" data-ref-filename="20err">err</a>;</td></tr>
+<tr><th id="147">147</th><td>    }</td></tr>
+<tr><th id="148">148</th><td></td></tr>
+<tr><th id="149">149</th><td>    <i>/* To avoid ambiguity with V_ASN1_NEG, impose a limit on universal tags. */</i></td></tr>
+<tr><th id="150">150</th><td>    <b>if</b> (<a class="local col7 ref" href="#17xclass" title='xclass' data-ref="17xclass" data-ref-filename="17xclass">xclass</a> == <a class="macro" href="../../include/openssl/asn1.h.html#89" title="0x00" data-ref="_M/V_ASN1_UNIVERSAL">V_ASN1_UNIVERSAL</a> &amp;&amp; <a class="local col6 ref" href="#16tag" title='tag' data-ref="16tag" data-ref-filename="16tag">tag</a> &gt; <a class="macro" href="../../include/openssl/asn1.h.html#109" title="0xff" data-ref="_M/V_ASN1_MAX_UNIVERSAL">V_ASN1_MAX_UNIVERSAL</a>)</td></tr>
+<tr><th id="151">151</th><td>        <b>goto</b> <a class="lbl" href="#20err" data-ref="20err" data-ref-filename="20err">err</a>;</td></tr>
+<tr><th id="152">152</th><td></td></tr>
+<tr><th id="153">153</th><td>    *<a class="local col9 ref" href="#9ptag" title='ptag' data-ref="9ptag" data-ref-filename="9ptag">ptag</a> = <a class="local col6 ref" href="#16tag" title='tag' data-ref="16tag" data-ref-filename="16tag">tag</a>;</td></tr>
+<tr><th id="154">154</th><td>    *<a class="local col0 ref" href="#10pclass" title='pclass' data-ref="10pclass" data-ref-filename="10pclass">pclass</a> = <a class="local col7 ref" href="#17xclass" title='xclass' data-ref="17xclass" data-ref-filename="17xclass">xclass</a>;</td></tr>
+<tr><th id="155">155</th><td>    <b>if</b> (!<a class="tu ref fn" href="#asn1_get_length" title='asn1_get_length' data-use='c' data-ref="asn1_get_length" data-ref-filename="asn1_get_length">asn1_get_length</a>(&amp;<a class="local col5 ref" href="#15p" title='p' data-ref="15p" data-ref-filename="15p">p</a>, &amp;<a class="local col8 ref" href="#18inf" title='inf' data-ref="18inf" data-ref-filename="18inf">inf</a>, <a class="local col8 ref" href="#8plength" title='plength' data-ref="8plength" data-ref-filename="8plength">plength</a>, <a class="local col9 ref" href="#19max" title='max' data-ref="19max" data-ref-filename="19max">max</a>))</td></tr>
+<tr><th id="156">156</th><td>        <b>goto</b> <a class="lbl" href="#20err" data-ref="20err" data-ref-filename="20err">err</a>;</td></tr>
+<tr><th id="157">157</th><td></td></tr>
+<tr><th id="158">158</th><td>    <b>if</b> (<a class="local col8 ref" href="#18inf" title='inf' data-ref="18inf" data-ref-filename="18inf">inf</a> &amp;&amp; !(<a class="local col3 ref" href="#13ret" title='ret' data-ref="13ret" data-ref-filename="13ret">ret</a> &amp; <a class="macro" href="../../include/openssl/asn1.h.html#96" title="0x20" data-ref="_M/V_ASN1_CONSTRUCTED">V_ASN1_CONSTRUCTED</a>))</td></tr>
+<tr><th id="159">159</th><td>        <b>goto</b> <a class="lbl" href="#20err" data-ref="20err" data-ref-filename="20err">err</a>;</td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td><u>#<span data-ppcond="161">if</span> 0</u></td></tr>
+<tr><th id="162">162</th><td>    fprintf(stderr, <q>"p=%d + *plength=%ld &gt; omax=%ld + *pp=%d  (%d &gt; %d)\n"</q>,</td></tr>
+<tr><th id="163">163</th><td>            (<em>int</em>)p, *plength, omax, (<em>int</em>)*pp, (<em>int</em>)(p + *plength),</td></tr>
+<tr><th id="164">164</th><td>            (<em>int</em>)(omax + *pp));</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td><u>#<span data-ppcond="161">endif</span></u></td></tr>
+<tr><th id="167">167</th><td>    <b>if</b> (*<a class="local col8 ref" href="#8plength" title='plength' data-ref="8plength" data-ref-filename="8plength">plength</a> &gt; (<a class="local col1 ref" href="#11omax" title='omax' data-ref="11omax" data-ref-filename="11omax">omax</a> - (<a class="local col5 ref" href="#15p" title='p' data-ref="15p" data-ref-filename="15p">p</a> - *<a class="local col7 ref" href="#7pp" title='pp' data-ref="7pp" data-ref-filename="7pp">pp</a>))) {</td></tr>
+<tr><th id="168">168</th><td>        <a class="macro" href="../../include/openssl/err.h.html#423" title="ERR_put_error(ERR_LIB_ASN1, 0, 177, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/asn1/asn1_lib.c&quot;, 168)" data-ref="_M/OPENSSL_PUT_ERROR">OPENSSL_PUT_ERROR</a>(ASN1, <a class="macro" href="../../include/openssl/asn1.h.html#1078" title="177" data-ref="_M/ASN1_R_TOO_LONG">ASN1_R_TOO_LONG</a>);</td></tr>
+<tr><th id="169">169</th><td>        <i>/*</i></td></tr>
+<tr><th id="170">170</th><td><i>         * Set this so that even if things are not long enough the values are</i></td></tr>
+<tr><th id="171">171</th><td><i>         * set correctly</i></td></tr>
+<tr><th id="172">172</th><td><i>         */</i></td></tr>
+<tr><th id="173">173</th><td>        <a class="local col3 ref" href="#13ret" title='ret' data-ref="13ret" data-ref-filename="13ret">ret</a> |= <var>0x80</var>;</td></tr>
+<tr><th id="174">174</th><td>    }</td></tr>
+<tr><th id="175">175</th><td>    *<a class="local col7 ref" href="#7pp" title='pp' data-ref="7pp" data-ref-filename="7pp">pp</a> = <a class="local col5 ref" href="#15p" title='p' data-ref="15p" data-ref-filename="15p">p</a>;</td></tr>
+<tr><th id="176">176</th><td>    <b>return</b> (<a class="local col3 ref" href="#13ret" title='ret' data-ref="13ret" data-ref-filename="13ret">ret</a> | <a class="local col8 ref" href="#18inf" title='inf' data-ref="18inf" data-ref-filename="18inf">inf</a>);</td></tr>
+<tr><th id="177">177</th><td> <dfn class="lbl" id="20err" data-ref="20err" data-ref-filename="20err">err</dfn>:</td></tr>
+<tr><th id="178">178</th><td>    <a class="macro" href="../../include/openssl/err.h.html#423" title="ERR_put_error(ERR_LIB_ASN1, 0, 123, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/asn1/asn1_lib.c&quot;, 178)" data-ref="_M/OPENSSL_PUT_ERROR">OPENSSL_PUT_ERROR</a>(ASN1, <a class="macro" href="../../include/openssl/asn1.h.html#1024" title="123" data-ref="_M/ASN1_R_HEADER_TOO_LONG">ASN1_R_HEADER_TOO_LONG</a>);</td></tr>
+<tr><th id="179">179</th><td>    <b>return</b> (<var>0x80</var>);</td></tr>
+<tr><th id="180">180</th><td>}</td></tr>
+<tr><th id="181">181</th><td></td></tr>
+<tr><th id="182">182</th><td><em>static</em> <em>int</em> <dfn class="tu decl def fn" id="asn1_get_length" title='asn1_get_length' data-type='int asn1_get_length(const unsigned char ** pp, int * inf, long * rl, long max)' data-ref="asn1_get_length" data-ref-filename="asn1_get_length">asn1_get_length</dfn>(<em>const</em> <em>unsigned</em> <em>char</em> **<dfn class="local col1 decl" id="21pp" title='pp' data-type='const unsigned char **' data-ref="21pp" data-ref-filename="21pp">pp</dfn>, <em>int</em> *<dfn class="local col2 decl" id="22inf" title='inf' data-type='int *' data-ref="22inf" data-ref-filename="22inf">inf</dfn>, <em>long</em> *<dfn class="local col3 decl" id="23rl" title='rl' data-type='long *' data-ref="23rl" data-ref-filename="23rl">rl</dfn>,</td></tr>
+<tr><th id="183">183</th><td>                           <em>long</em> <dfn class="local col4 decl" id="24max" title='max' data-type='long' data-ref="24max" data-ref-filename="24max">max</dfn>)</td></tr>
+<tr><th id="184">184</th><td>{</td></tr>
+<tr><th id="185">185</th><td>    <em>const</em> <em>unsigned</em> <em>char</em> *<dfn class="local col5 decl" id="25p" title='p' data-type='const unsigned char *' data-ref="25p" data-ref-filename="25p">p</dfn> = *<a class="local col1 ref" href="#21pp" title='pp' data-ref="21pp" data-ref-filename="21pp">pp</a>;</td></tr>
+<tr><th id="186">186</th><td>    <em>unsigned</em> <em>long</em> <dfn class="local col6 decl" id="26ret" title='ret' data-type='unsigned long' data-ref="26ret" data-ref-filename="26ret">ret</dfn> = <var>0</var>;</td></tr>
+<tr><th id="187">187</th><td>    <em>unsigned</em> <em>long</em> <dfn class="local col7 decl" id="27i" title='i' data-type='unsigned long' data-ref="27i" data-ref-filename="27i">i</dfn>;</td></tr>
+<tr><th id="188">188</th><td></td></tr>
+<tr><th id="189">189</th><td>    <b>if</b> (<a class="local col4 ref" href="#24max" title='max' data-ref="24max" data-ref-filename="24max">max</a>-- &lt; <var>1</var>)</td></tr>
+<tr><th id="190">190</th><td>        <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="191">191</th><td>    <b>if</b> (*<a class="local col5 ref" href="#25p" title='p' data-ref="25p" data-ref-filename="25p">p</a> == <var>0x80</var>) {</td></tr>
+<tr><th id="192">192</th><td>        *<a class="local col2 ref" href="#22inf" title='inf' data-ref="22inf" data-ref-filename="22inf">inf</a> = <var>1</var>;</td></tr>
+<tr><th id="193">193</th><td>        <a class="local col6 ref" href="#26ret" title='ret' data-ref="26ret" data-ref-filename="26ret">ret</a> = <var>0</var>;</td></tr>
+<tr><th id="194">194</th><td>        <a class="local col5 ref" href="#25p" title='p' data-ref="25p" data-ref-filename="25p">p</a>++;</td></tr>
+<tr><th id="195">195</th><td>    } <b>else</b> {</td></tr>
+<tr><th id="196">196</th><td>        *<a class="local col2 ref" href="#22inf" title='inf' data-ref="22inf" data-ref-filename="22inf">inf</a> = <var>0</var>;</td></tr>
+<tr><th id="197">197</th><td>        <a class="local col7 ref" href="#27i" title='i' data-ref="27i" data-ref-filename="27i">i</a> = *<a class="local col5 ref" href="#25p" title='p' data-ref="25p" data-ref-filename="25p">p</a> &amp; <var>0x7f</var>;</td></tr>
+<tr><th id="198">198</th><td>        <b>if</b> (*(<a class="local col5 ref" href="#25p" title='p' data-ref="25p" data-ref-filename="25p">p</a>++) &amp; <var>0x80</var>) {</td></tr>
+<tr><th id="199">199</th><td>            <b>if</b> (<a class="local col7 ref" href="#27i" title='i' data-ref="27i" data-ref-filename="27i">i</a> &gt; <b>sizeof</b>(<a class="local col6 ref" href="#26ret" title='ret' data-ref="26ret" data-ref-filename="26ret">ret</a>) || <a class="local col4 ref" href="#24max" title='max' data-ref="24max" data-ref-filename="24max">max</a> &lt; (<em>long</em>)<a class="local col7 ref" href="#27i" title='i' data-ref="27i" data-ref-filename="27i">i</a>)</td></tr>
+<tr><th id="200">200</th><td>                <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="201">201</th><td>            <b>while</b> (<a class="local col7 ref" href="#27i" title='i' data-ref="27i" data-ref-filename="27i">i</a>-- &gt; <var>0</var>) {</td></tr>
+<tr><th id="202">202</th><td>                <a class="local col6 ref" href="#26ret" title='ret' data-ref="26ret" data-ref-filename="26ret">ret</a> &lt;&lt;= <var>8L</var>;</td></tr>
+<tr><th id="203">203</th><td>                <a class="local col6 ref" href="#26ret" title='ret' data-ref="26ret" data-ref-filename="26ret">ret</a> |= *(<a class="local col5 ref" href="#25p" title='p' data-ref="25p" data-ref-filename="25p">p</a>++);</td></tr>
+<tr><th id="204">204</th><td>            }</td></tr>
+<tr><th id="205">205</th><td>        } <b>else</b></td></tr>
+<tr><th id="206">206</th><td>            <a class="local col6 ref" href="#26ret" title='ret' data-ref="26ret" data-ref-filename="26ret">ret</a> = <a class="local col7 ref" href="#27i" title='i' data-ref="27i" data-ref-filename="27i">i</a>;</td></tr>
+<tr><th id="207">207</th><td>    }</td></tr>
+<tr><th id="208">208</th><td>    <i>/*</i></td></tr>
+<tr><th id="209">209</th><td><i>     * Bound the length to comfortably fit in an int. Lengths in this module</i></td></tr>
+<tr><th id="210">210</th><td><i>     * often switch between int and long without overflow checks.</i></td></tr>
+<tr><th id="211">211</th><td><i>     */</i></td></tr>
+<tr><th id="212">212</th><td>    <b>if</b> (<a class="local col6 ref" href="#26ret" title='ret' data-ref="26ret" data-ref-filename="26ret">ret</a> &gt; <span class="macro" title="2147483647" data-ref="_M/INT_MAX">INT_MAX</span> / <var>2</var>)</td></tr>
+<tr><th id="213">213</th><td>        <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="214">214</th><td>    *<a class="local col1 ref" href="#21pp" title='pp' data-ref="21pp" data-ref-filename="21pp">pp</a> = <a class="local col5 ref" href="#25p" title='p' data-ref="25p" data-ref-filename="25p">p</a>;</td></tr>
+<tr><th id="215">215</th><td>    *<a class="local col3 ref" href="#23rl" title='rl' data-ref="23rl" data-ref-filename="23rl">rl</a> = (<em>long</em>)<a class="local col6 ref" href="#26ret" title='ret' data-ref="26ret" data-ref-filename="26ret">ret</a>;</td></tr>
+<tr><th id="216">216</th><td>    <b>return</b> <var>1</var>;</td></tr>
+<tr><th id="217">217</th><td>}</td></tr>
+<tr><th id="218">218</th><td></td></tr>
+<tr><th id="219">219</th><td><i>/*</i></td></tr>
+<tr><th id="220">220</th><td><i> * class 0 is constructed constructed == 2 for indefinite length constructed</i></td></tr>
+<tr><th id="221">221</th><td><i> */</i></td></tr>
+<tr><th id="222">222</th><td><em>void</em> <dfn class="decl def fn" id="ASN1_put_object" title='ASN1_put_object' data-ref="ASN1_put_object" data-ref-filename="ASN1_put_object">ASN1_put_object</dfn>(<em>unsigned</em> <em>char</em> **<dfn class="local col8 decl" id="28pp" title='pp' data-type='unsigned char **' data-ref="28pp" data-ref-filename="28pp">pp</dfn>, <em>int</em> <dfn class="local col9 decl" id="29constructed" title='constructed' data-type='int' data-ref="29constructed" data-ref-filename="29constructed">constructed</dfn>, <em>int</em> <dfn class="local col0 decl" id="30length" title='length' data-type='int' data-ref="30length" data-ref-filename="30length">length</dfn>, <em>int</em> <dfn class="local col1 decl" id="31tag" title='tag' data-type='int' data-ref="31tag" data-ref-filename="31tag">tag</dfn>,</td></tr>
+<tr><th id="223">223</th><td>                     <em>int</em> <dfn class="local col2 decl" id="32xclass" title='xclass' data-type='int' data-ref="32xclass" data-ref-filename="32xclass">xclass</dfn>)</td></tr>
+<tr><th id="224">224</th><td>{</td></tr>
+<tr><th id="225">225</th><td>    <em>unsigned</em> <em>char</em> *<dfn class="local col3 decl" id="33p" title='p' data-type='unsigned char *' data-ref="33p" data-ref-filename="33p">p</dfn> = *<a class="local col8 ref" href="#28pp" title='pp' data-ref="28pp" data-ref-filename="28pp">pp</a>;</td></tr>
+<tr><th id="226">226</th><td>    <em>int</em> <dfn class="local col4 decl" id="34i" title='i' data-type='int' data-ref="34i" data-ref-filename="34i">i</dfn>, <dfn class="local col5 decl" id="35ttag" title='ttag' data-type='int' data-ref="35ttag" data-ref-filename="35ttag">ttag</dfn>;</td></tr>
+<tr><th id="227">227</th><td></td></tr>
+<tr><th id="228">228</th><td>    <a class="local col4 ref" href="#34i" title='i' data-ref="34i" data-ref-filename="34i">i</a> = (<a class="local col9 ref" href="#29constructed" title='constructed' data-ref="29constructed" data-ref-filename="29constructed">constructed</a>) ? <a class="macro" href="../../include/openssl/asn1.h.html#96" title="0x20" data-ref="_M/V_ASN1_CONSTRUCTED">V_ASN1_CONSTRUCTED</a> : <var>0</var>;</td></tr>
+<tr><th id="229">229</th><td>    <a class="local col4 ref" href="#34i" title='i' data-ref="34i" data-ref-filename="34i">i</a> |= (<a class="local col2 ref" href="#32xclass" title='xclass' data-ref="32xclass" data-ref-filename="32xclass">xclass</a> &amp; <a class="macro" href="../../include/openssl/asn1.h.html#92" title="0xc0" data-ref="_M/V_ASN1_PRIVATE">V_ASN1_PRIVATE</a>);</td></tr>
+<tr><th id="230">230</th><td>    <b>if</b> (<a class="local col1 ref" href="#31tag" title='tag' data-ref="31tag" data-ref-filename="31tag">tag</a> &lt; <var>31</var>)</td></tr>
+<tr><th id="231">231</th><td>        *(<a class="local col3 ref" href="#33p" title='p' data-ref="33p" data-ref-filename="33p">p</a>++) = <a class="local col4 ref" href="#34i" title='i' data-ref="34i" data-ref-filename="34i">i</a> | (<a class="local col1 ref" href="#31tag" title='tag' data-ref="31tag" data-ref-filename="31tag">tag</a> &amp; <a class="macro" href="../../include/openssl/asn1.h.html#103" title="0x1f" data-ref="_M/V_ASN1_PRIMITIVE_TAG">V_ASN1_PRIMITIVE_TAG</a>);</td></tr>
+<tr><th id="232">232</th><td>    <b>else</b> {</td></tr>
+<tr><th id="233">233</th><td>        *(<a class="local col3 ref" href="#33p" title='p' data-ref="33p" data-ref-filename="33p">p</a>++) = <a class="local col4 ref" href="#34i" title='i' data-ref="34i" data-ref-filename="34i">i</a> | <a class="macro" href="../../include/openssl/asn1.h.html#103" title="0x1f" data-ref="_M/V_ASN1_PRIMITIVE_TAG">V_ASN1_PRIMITIVE_TAG</a>;</td></tr>
+<tr><th id="234">234</th><td>        <b>for</b> (<a class="local col4 ref" href="#34i" title='i' data-ref="34i" data-ref-filename="34i">i</a> = <var>0</var>, <a class="local col5 ref" href="#35ttag" title='ttag' data-ref="35ttag" data-ref-filename="35ttag">ttag</a> = <a class="local col1 ref" href="#31tag" title='tag' data-ref="31tag" data-ref-filename="31tag">tag</a>; <a class="local col5 ref" href="#35ttag" title='ttag' data-ref="35ttag" data-ref-filename="35ttag">ttag</a> &gt; <var>0</var>; <a class="local col4 ref" href="#34i" title='i' data-ref="34i" data-ref-filename="34i">i</a>++)</td></tr>
+<tr><th id="235">235</th><td>            <a class="local col5 ref" href="#35ttag" title='ttag' data-ref="35ttag" data-ref-filename="35ttag">ttag</a> &gt;&gt;= <var>7</var>;</td></tr>
+<tr><th id="236">236</th><td>        <a class="local col5 ref" href="#35ttag" title='ttag' data-ref="35ttag" data-ref-filename="35ttag">ttag</a> = <a class="local col4 ref" href="#34i" title='i' data-ref="34i" data-ref-filename="34i">i</a>;</td></tr>
+<tr><th id="237">237</th><td>        <b>while</b> (<a class="local col4 ref" href="#34i" title='i' data-ref="34i" data-ref-filename="34i">i</a>-- &gt; <var>0</var>) {</td></tr>
+<tr><th id="238">238</th><td>            <a class="local col3 ref" href="#33p" title='p' data-ref="33p" data-ref-filename="33p">p</a>[<a class="local col4 ref" href="#34i" title='i' data-ref="34i" data-ref-filename="34i">i</a>] = <a class="local col1 ref" href="#31tag" title='tag' data-ref="31tag" data-ref-filename="31tag">tag</a> &amp; <var>0x7f</var>;</td></tr>
+<tr><th id="239">239</th><td>            <b>if</b> (<a class="local col4 ref" href="#34i" title='i' data-ref="34i" data-ref-filename="34i">i</a> != (<a class="local col5 ref" href="#35ttag" title='ttag' data-ref="35ttag" data-ref-filename="35ttag">ttag</a> - <var>1</var>))</td></tr>
+<tr><th id="240">240</th><td>                <a class="local col3 ref" href="#33p" title='p' data-ref="33p" data-ref-filename="33p">p</a>[<a class="local col4 ref" href="#34i" title='i' data-ref="34i" data-ref-filename="34i">i</a>] |= <var>0x80</var>;</td></tr>
+<tr><th id="241">241</th><td>            <a class="local col1 ref" href="#31tag" title='tag' data-ref="31tag" data-ref-filename="31tag">tag</a> &gt;&gt;= <var>7</var>;</td></tr>
+<tr><th id="242">242</th><td>        }</td></tr>
+<tr><th id="243">243</th><td>        <a class="local col3 ref" href="#33p" title='p' data-ref="33p" data-ref-filename="33p">p</a> += <a class="local col5 ref" href="#35ttag" title='ttag' data-ref="35ttag" data-ref-filename="35ttag">ttag</a>;</td></tr>
+<tr><th id="244">244</th><td>    }</td></tr>
+<tr><th id="245">245</th><td>    <b>if</b> (<a class="local col9 ref" href="#29constructed" title='constructed' data-ref="29constructed" data-ref-filename="29constructed">constructed</a> == <var>2</var>)</td></tr>
+<tr><th id="246">246</th><td>        *(<a class="local col3 ref" href="#33p" title='p' data-ref="33p" data-ref-filename="33p">p</a>++) = <var>0x80</var>;</td></tr>
+<tr><th id="247">247</th><td>    <b>else</b></td></tr>
+<tr><th id="248">248</th><td>        <a class="tu ref fn" href="#asn1_put_length" title='asn1_put_length' data-use='c' data-ref="asn1_put_length" data-ref-filename="asn1_put_length">asn1_put_length</a>(&amp;<a class="local col3 ref" href="#33p" title='p' data-ref="33p" data-ref-filename="33p">p</a>, <a class="local col0 ref" href="#30length" title='length' data-ref="30length" data-ref-filename="30length">length</a>);</td></tr>
+<tr><th id="249">249</th><td>    *<a class="local col8 ref" href="#28pp" title='pp' data-ref="28pp" data-ref-filename="28pp">pp</a> = <a class="local col3 ref" href="#33p" title='p' data-ref="33p" data-ref-filename="33p">p</a>;</td></tr>
+<tr><th id="250">250</th><td>}</td></tr>
+<tr><th id="251">251</th><td></td></tr>
+<tr><th id="252">252</th><td><em>int</em> <dfn class="decl def fn" id="ASN1_put_eoc" title='ASN1_put_eoc' data-ref="ASN1_put_eoc" data-ref-filename="ASN1_put_eoc">ASN1_put_eoc</dfn>(<em>unsigned</em> <em>char</em> **<dfn class="local col6 decl" id="36pp" title='pp' data-type='unsigned char **' data-ref="36pp" data-ref-filename="36pp">pp</dfn>)</td></tr>
+<tr><th id="253">253</th><td>{</td></tr>
+<tr><th id="254">254</th><td>    <i>/* This function is no longer used in the library, but some external code</i></td></tr>
+<tr><th id="255">255</th><td><i>     * uses it. */</i></td></tr>
+<tr><th id="256">256</th><td>    <em>unsigned</em> <em>char</em> *<dfn class="local col7 decl" id="37p" title='p' data-type='unsigned char *' data-ref="37p" data-ref-filename="37p">p</dfn> = *<a class="local col6 ref" href="#36pp" title='pp' data-ref="36pp" data-ref-filename="36pp">pp</a>;</td></tr>
+<tr><th id="257">257</th><td>    *<a class="local col7 ref" href="#37p" title='p' data-ref="37p" data-ref-filename="37p">p</a>++ = <var>0</var>;</td></tr>
+<tr><th id="258">258</th><td>    *<a class="local col7 ref" href="#37p" title='p' data-ref="37p" data-ref-filename="37p">p</a>++ = <var>0</var>;</td></tr>
+<tr><th id="259">259</th><td>    *<a class="local col6 ref" href="#36pp" title='pp' data-ref="36pp" data-ref-filename="36pp">pp</a> = <a class="local col7 ref" href="#37p" title='p' data-ref="37p" data-ref-filename="37p">p</a>;</td></tr>
+<tr><th id="260">260</th><td>    <b>return</b> <var>2</var>;</td></tr>
+<tr><th id="261">261</th><td>}</td></tr>
+<tr><th id="262">262</th><td></td></tr>
+<tr><th id="263">263</th><td><em>static</em> <em>void</em> <dfn class="tu decl def fn" id="asn1_put_length" title='asn1_put_length' data-type='void asn1_put_length(unsigned char ** pp, int length)' data-ref="asn1_put_length" data-ref-filename="asn1_put_length">asn1_put_length</dfn>(<em>unsigned</em> <em>char</em> **<dfn class="local col8 decl" id="38pp" title='pp' data-type='unsigned char **' data-ref="38pp" data-ref-filename="38pp">pp</dfn>, <em>int</em> <dfn class="local col9 decl" id="39length" title='length' data-type='int' data-ref="39length" data-ref-filename="39length">length</dfn>)</td></tr>
+<tr><th id="264">264</th><td>{</td></tr>
+<tr><th id="265">265</th><td>    <em>unsigned</em> <em>char</em> *<dfn class="local col0 decl" id="40p" title='p' data-type='unsigned char *' data-ref="40p" data-ref-filename="40p">p</dfn> = *<a class="local col8 ref" href="#38pp" title='pp' data-ref="38pp" data-ref-filename="38pp">pp</a>;</td></tr>
+<tr><th id="266">266</th><td>    <em>int</em> <dfn class="local col1 decl" id="41i" title='i' data-type='int' data-ref="41i" data-ref-filename="41i">i</dfn>, <dfn class="local col2 decl" id="42l" title='l' data-type='int' data-ref="42l" data-ref-filename="42l">l</dfn>;</td></tr>
+<tr><th id="267">267</th><td>    <b>if</b> (<a class="local col9 ref" href="#39length" title='length' data-ref="39length" data-ref-filename="39length">length</a> &lt;= <var>127</var>)</td></tr>
+<tr><th id="268">268</th><td>        *(<a class="local col0 ref" href="#40p" title='p' data-ref="40p" data-ref-filename="40p">p</a>++) = (<em>unsigned</em> <em>char</em>)<a class="local col9 ref" href="#39length" title='length' data-ref="39length" data-ref-filename="39length">length</a>;</td></tr>
+<tr><th id="269">269</th><td>    <b>else</b> {</td></tr>
+<tr><th id="270">270</th><td>        <a class="local col2 ref" href="#42l" title='l' data-ref="42l" data-ref-filename="42l">l</a> = <a class="local col9 ref" href="#39length" title='length' data-ref="39length" data-ref-filename="39length">length</a>;</td></tr>
+<tr><th id="271">271</th><td>        <b>for</b> (<a class="local col1 ref" href="#41i" title='i' data-ref="41i" data-ref-filename="41i">i</a> = <var>0</var>; <a class="local col2 ref" href="#42l" title='l' data-ref="42l" data-ref-filename="42l">l</a> &gt; <var>0</var>; <a class="local col1 ref" href="#41i" title='i' data-ref="41i" data-ref-filename="41i">i</a>++)</td></tr>
+<tr><th id="272">272</th><td>            <a class="local col2 ref" href="#42l" title='l' data-ref="42l" data-ref-filename="42l">l</a> &gt;&gt;= <var>8</var>;</td></tr>
+<tr><th id="273">273</th><td>        *(<a class="local col0 ref" href="#40p" title='p' data-ref="40p" data-ref-filename="40p">p</a>++) = <a class="local col1 ref" href="#41i" title='i' data-ref="41i" data-ref-filename="41i">i</a> | <var>0x80</var>;</td></tr>
+<tr><th id="274">274</th><td>        <a class="local col2 ref" href="#42l" title='l' data-ref="42l" data-ref-filename="42l">l</a> = <a class="local col1 ref" href="#41i" title='i' data-ref="41i" data-ref-filename="41i">i</a>;</td></tr>
+<tr><th id="275">275</th><td>        <b>while</b> (<a class="local col1 ref" href="#41i" title='i' data-ref="41i" data-ref-filename="41i">i</a>-- &gt; <var>0</var>) {</td></tr>
+<tr><th id="276">276</th><td>            <a class="local col0 ref" href="#40p" title='p' data-ref="40p" data-ref-filename="40p">p</a>[<a class="local col1 ref" href="#41i" title='i' data-ref="41i" data-ref-filename="41i">i</a>] = <a class="local col9 ref" href="#39length" title='length' data-ref="39length" data-ref-filename="39length">length</a> &amp; <var>0xff</var>;</td></tr>
+<tr><th id="277">277</th><td>            <a class="local col9 ref" href="#39length" title='length' data-ref="39length" data-ref-filename="39length">length</a> &gt;&gt;= <var>8</var>;</td></tr>
+<tr><th id="278">278</th><td>        }</td></tr>
+<tr><th id="279">279</th><td>        <a class="local col0 ref" href="#40p" title='p' data-ref="40p" data-ref-filename="40p">p</a> += <a class="local col2 ref" href="#42l" title='l' data-ref="42l" data-ref-filename="42l">l</a>;</td></tr>
+<tr><th id="280">280</th><td>    }</td></tr>
+<tr><th id="281">281</th><td>    *<a class="local col8 ref" href="#38pp" title='pp' data-ref="38pp" data-ref-filename="38pp">pp</a> = <a class="local col0 ref" href="#40p" title='p' data-ref="40p" data-ref-filename="40p">p</a>;</td></tr>
+<tr><th id="282">282</th><td>}</td></tr>
+<tr><th id="283">283</th><td></td></tr>
+<tr><th id="284">284</th><td><em>int</em> <dfn class="decl def fn" id="ASN1_object_size" title='ASN1_object_size' data-ref="ASN1_object_size" data-ref-filename="ASN1_object_size">ASN1_object_size</dfn>(<em>int</em> <dfn class="local col3 decl" id="43constructed" title='constructed' data-type='int' data-ref="43constructed" data-ref-filename="43constructed">constructed</dfn>, <em>int</em> <dfn class="local col4 decl" id="44length" title='length' data-type='int' data-ref="44length" data-ref-filename="44length">length</dfn>, <em>int</em> <dfn class="local col5 decl" id="45tag" title='tag' data-type='int' data-ref="45tag" data-ref-filename="45tag">tag</dfn>)</td></tr>
+<tr><th id="285">285</th><td>{</td></tr>
+<tr><th id="286">286</th><td>    <em>int</em> <dfn class="local col6 decl" id="46ret" title='ret' data-type='int' data-ref="46ret" data-ref-filename="46ret">ret</dfn> = <var>1</var>;</td></tr>
+<tr><th id="287">287</th><td>    <b>if</b> (<a class="local col4 ref" href="#44length" title='length' data-ref="44length" data-ref-filename="44length">length</a> &lt; <var>0</var>)</td></tr>
+<tr><th id="288">288</th><td>        <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="289">289</th><td>    <b>if</b> (<a class="local col5 ref" href="#45tag" title='tag' data-ref="45tag" data-ref-filename="45tag">tag</a> &gt;= <var>31</var>) {</td></tr>
+<tr><th id="290">290</th><td>        <b>while</b> (<a class="local col5 ref" href="#45tag" title='tag' data-ref="45tag" data-ref-filename="45tag">tag</a> &gt; <var>0</var>) {</td></tr>
+<tr><th id="291">291</th><td>            <a class="local col5 ref" href="#45tag" title='tag' data-ref="45tag" data-ref-filename="45tag">tag</a> &gt;&gt;= <var>7</var>;</td></tr>
+<tr><th id="292">292</th><td>            <a class="local col6 ref" href="#46ret" title='ret' data-ref="46ret" data-ref-filename="46ret">ret</a>++;</td></tr>
+<tr><th id="293">293</th><td>        }</td></tr>
+<tr><th id="294">294</th><td>    }</td></tr>
+<tr><th id="295">295</th><td>    <b>if</b> (<a class="local col3 ref" href="#43constructed" title='constructed' data-ref="43constructed" data-ref-filename="43constructed">constructed</a> == <var>2</var>) {</td></tr>
+<tr><th id="296">296</th><td>        <a class="local col6 ref" href="#46ret" title='ret' data-ref="46ret" data-ref-filename="46ret">ret</a> += <var>3</var>;</td></tr>
+<tr><th id="297">297</th><td>    } <b>else</b> {</td></tr>
+<tr><th id="298">298</th><td>        <a class="local col6 ref" href="#46ret" title='ret' data-ref="46ret" data-ref-filename="46ret">ret</a>++;</td></tr>
+<tr><th id="299">299</th><td>        <b>if</b> (<a class="local col4 ref" href="#44length" title='length' data-ref="44length" data-ref-filename="44length">length</a> &gt; <var>127</var>) {</td></tr>
+<tr><th id="300">300</th><td>            <em>int</em> <dfn class="local col7 decl" id="47tmplen" title='tmplen' data-type='int' data-ref="47tmplen" data-ref-filename="47tmplen">tmplen</dfn> = <a class="local col4 ref" href="#44length" title='length' data-ref="44length" data-ref-filename="44length">length</a>;</td></tr>
+<tr><th id="301">301</th><td>            <b>while</b> (<a class="local col7 ref" href="#47tmplen" title='tmplen' data-ref="47tmplen" data-ref-filename="47tmplen">tmplen</a> &gt; <var>0</var>) {</td></tr>
+<tr><th id="302">302</th><td>                <a class="local col7 ref" href="#47tmplen" title='tmplen' data-ref="47tmplen" data-ref-filename="47tmplen">tmplen</a> &gt;&gt;= <var>8</var>;</td></tr>
+<tr><th id="303">303</th><td>                <a class="local col6 ref" href="#46ret" title='ret' data-ref="46ret" data-ref-filename="46ret">ret</a>++;</td></tr>
+<tr><th id="304">304</th><td>            }</td></tr>
+<tr><th id="305">305</th><td>        }</td></tr>
+<tr><th id="306">306</th><td>    }</td></tr>
+<tr><th id="307">307</th><td>    <b>if</b> (<a class="local col6 ref" href="#46ret" title='ret' data-ref="46ret" data-ref-filename="46ret">ret</a> &gt;= <span class="macro" title="2147483647" data-ref="_M/INT_MAX">INT_MAX</span> - <a class="local col4 ref" href="#44length" title='length' data-ref="44length" data-ref-filename="44length">length</a>)</td></tr>
+<tr><th id="308">308</th><td>        <b>return</b> -<var>1</var>;</td></tr>
+<tr><th id="309">309</th><td>    <b>return</b> <a class="local col6 ref" href="#46ret" title='ret' data-ref="46ret" data-ref-filename="46ret">ret</a> + <a class="local col4 ref" href="#44length" title='length' data-ref="44length" data-ref-filename="44length">length</a>;</td></tr>
+<tr><th id="310">310</th><td>}</td></tr>
+<tr><th id="311">311</th><td></td></tr>
+<tr><th id="312">312</th><td><em>int</em> <dfn class="decl def fn" id="ASN1_STRING_copy" title='ASN1_STRING_copy' data-ref="ASN1_STRING_copy" data-ref-filename="ASN1_STRING_copy">ASN1_STRING_copy</dfn>(<a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col8 decl" id="48dst" title='dst' data-type='ASN1_STRING *' data-ref="48dst" data-ref-filename="48dst">dst</dfn>, <em>const</em> <a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col9 decl" id="49str" title='str' data-type='const ASN1_STRING *' data-ref="49str" data-ref-filename="49str">str</dfn>)</td></tr>
+<tr><th id="313">313</th><td>{</td></tr>
+<tr><th id="314">314</th><td>    <b>if</b> (<a class="local col9 ref" href="#49str" title='str' data-ref="49str" data-ref-filename="49str">str</a> == <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>)</td></tr>
+<tr><th id="315">315</th><td>        <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="316">316</th><td>    <b>if</b> (!<a class="ref fn" href="#ASN1_STRING_set" title='ASN1_STRING_set' data-ref="ASN1_STRING_set" data-ref-filename="ASN1_STRING_set">ASN1_STRING_set</a>(<a class="local col8 ref" href="#48dst" title='dst' data-ref="48dst" data-ref-filename="48dst">dst</a>, <a class="local col9 ref" href="#49str" title='str' data-ref="49str" data-ref-filename="49str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a>, <a class="local col9 ref" href="#49str" title='str' data-ref="49str" data-ref-filename="49str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::length" title='asn1_string_st::length' data-ref="asn1_string_st::length" data-ref-filename="asn1_string_st..length">length</a>))</td></tr>
+<tr><th id="317">317</th><td>        <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="318">318</th><td>    <a class="local col8 ref" href="#48dst" title='dst' data-ref="48dst" data-ref-filename="48dst">dst</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::type" title='asn1_string_st::type' data-ref="asn1_string_st::type" data-ref-filename="asn1_string_st..type">type</a> = <a class="local col9 ref" href="#49str" title='str' data-ref="49str" data-ref-filename="49str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::type" title='asn1_string_st::type' data-ref="asn1_string_st::type" data-ref-filename="asn1_string_st..type">type</a>;</td></tr>
+<tr><th id="319">319</th><td>    <a class="local col8 ref" href="#48dst" title='dst' data-ref="48dst" data-ref-filename="48dst">dst</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::flags" title='asn1_string_st::flags' data-ref="asn1_string_st::flags" data-ref-filename="asn1_string_st..flags">flags</a> = <a class="local col9 ref" href="#49str" title='str' data-ref="49str" data-ref-filename="49str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::flags" title='asn1_string_st::flags' data-ref="asn1_string_st::flags" data-ref-filename="asn1_string_st..flags">flags</a>;</td></tr>
+<tr><th id="320">320</th><td>    <b>return</b> <var>1</var>;</td></tr>
+<tr><th id="321">321</th><td>}</td></tr>
+<tr><th id="322">322</th><td></td></tr>
+<tr><th id="323">323</th><td><a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="decl def fn" id="ASN1_STRING_dup" title='ASN1_STRING_dup' data-ref="ASN1_STRING_dup" data-ref-filename="ASN1_STRING_dup">ASN1_STRING_dup</dfn>(<em>const</em> <a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col0 decl" id="50str" title='str' data-type='const ASN1_STRING *' data-ref="50str" data-ref-filename="50str">str</dfn>)</td></tr>
+<tr><th id="324">324</th><td>{</td></tr>
+<tr><th id="325">325</th><td>    <a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col1 decl" id="51ret" title='ret' data-type='ASN1_STRING *' data-ref="51ret" data-ref-filename="51ret">ret</dfn>;</td></tr>
+<tr><th id="326">326</th><td>    <b>if</b> (!<a class="local col0 ref" href="#50str" title='str' data-ref="50str" data-ref-filename="50str">str</a>)</td></tr>
+<tr><th id="327">327</th><td>        <b>return</b> <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>;</td></tr>
+<tr><th id="328">328</th><td>    <a class="local col1 ref" href="#51ret" title='ret' data-ref="51ret" data-ref-filename="51ret">ret</a> = <a class="ref fn" href="#ASN1_STRING_new" title='ASN1_STRING_new' data-ref="ASN1_STRING_new" data-ref-filename="ASN1_STRING_new">ASN1_STRING_new</a>();</td></tr>
+<tr><th id="329">329</th><td>    <b>if</b> (!<a class="local col1 ref" href="#51ret" title='ret' data-ref="51ret" data-ref-filename="51ret">ret</a>)</td></tr>
+<tr><th id="330">330</th><td>        <b>return</b> <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>;</td></tr>
+<tr><th id="331">331</th><td>    <b>if</b> (!<a class="ref fn" href="#ASN1_STRING_copy" title='ASN1_STRING_copy' data-ref="ASN1_STRING_copy" data-ref-filename="ASN1_STRING_copy">ASN1_STRING_copy</a>(<a class="local col1 ref" href="#51ret" title='ret' data-ref="51ret" data-ref-filename="51ret">ret</a>, <a class="local col0 ref" href="#50str" title='str' data-ref="50str" data-ref-filename="50str">str</a>)) {</td></tr>
+<tr><th id="332">332</th><td>        <a class="ref fn" href="#ASN1_STRING_free" title='ASN1_STRING_free' data-ref="ASN1_STRING_free" data-ref-filename="ASN1_STRING_free">ASN1_STRING_free</a>(<a class="local col1 ref" href="#51ret" title='ret' data-ref="51ret" data-ref-filename="51ret">ret</a>);</td></tr>
+<tr><th id="333">333</th><td>        <b>return</b> <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>;</td></tr>
+<tr><th id="334">334</th><td>    }</td></tr>
+<tr><th id="335">335</th><td>    <b>return</b> <a class="local col1 ref" href="#51ret" title='ret' data-ref="51ret" data-ref-filename="51ret">ret</a>;</td></tr>
+<tr><th id="336">336</th><td>}</td></tr>
+<tr><th id="337">337</th><td></td></tr>
+<tr><th id="338">338</th><td><em>int</em> <dfn class="decl def fn" id="ASN1_STRING_set" title='ASN1_STRING_set' data-ref="ASN1_STRING_set" data-ref-filename="ASN1_STRING_set">ASN1_STRING_set</dfn>(<a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col2 decl" id="52str" title='str' data-type='ASN1_STRING *' data-ref="52str" data-ref-filename="52str">str</dfn>, <em>const</em> <em>void</em> *<dfn class="local col3 decl" id="53_data" title='_data' data-type='const void *' data-ref="53_data" data-ref-filename="53_data">_data</dfn>, <em>int</em> <dfn class="local col4 decl" id="54len" title='len' data-type='int' data-ref="54len" data-ref-filename="54len">len</dfn>)</td></tr>
+<tr><th id="339">339</th><td>{</td></tr>
+<tr><th id="340">340</th><td>    <em>unsigned</em> <em>char</em> *<dfn class="local col5 decl" id="55c" title='c' data-type='unsigned char *' data-ref="55c" data-ref-filename="55c">c</dfn>;</td></tr>
+<tr><th id="341">341</th><td>    <em>const</em> <em>char</em> *<dfn class="local col6 decl" id="56data" title='data' data-type='const char *' data-ref="56data" data-ref-filename="56data">data</dfn> = <a class="local col3 ref" href="#53_data" title='_data' data-ref="53_data" data-ref-filename="53_data">_data</a>;</td></tr>
+<tr><th id="342">342</th><td></td></tr>
+<tr><th id="343">343</th><td>    <b>if</b> (<a class="local col4 ref" href="#54len" title='len' data-ref="54len" data-ref-filename="54len">len</a> &lt; <var>0</var>) {</td></tr>
+<tr><th id="344">344</th><td>        <b>if</b> (<a class="local col6 ref" href="#56data" title='data' data-ref="56data" data-ref-filename="56data">data</a> == <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>)</td></tr>
+<tr><th id="345">345</th><td>            <b>return</b> (<var>0</var>);</td></tr>
+<tr><th id="346">346</th><td>        <b>else</b></td></tr>
+<tr><th id="347">347</th><td>            <a class="local col4 ref" href="#54len" title='len' data-ref="54len" data-ref-filename="54len">len</a> = <span class='ref fn' title='strlen' data-ref="strlen" data-ref-filename="strlen">strlen</span>(<a class="local col6 ref" href="#56data" title='data' data-ref="56data" data-ref-filename="56data">data</a>);</td></tr>
+<tr><th id="348">348</th><td>    }</td></tr>
+<tr><th id="349">349</th><td>    <b>if</b> ((<a class="local col2 ref" href="#52str" title='str' data-ref="52str" data-ref-filename="52str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::length" title='asn1_string_st::length' data-ref="asn1_string_st::length" data-ref-filename="asn1_string_st..length">length</a> &lt;= <a class="local col4 ref" href="#54len" title='len' data-ref="54len" data-ref-filename="54len">len</a>) || (<a class="local col2 ref" href="#52str" title='str' data-ref="52str" data-ref-filename="52str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a> == <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>)) {</td></tr>
+<tr><th id="350">350</th><td>        <a class="local col5 ref" href="#55c" title='c' data-ref="55c" data-ref-filename="55c">c</a> = <a class="local col2 ref" href="#52str" title='str' data-ref="52str" data-ref-filename="52str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a>;</td></tr>
+<tr><th id="351">351</th><td>        <b>if</b> (<a class="local col5 ref" href="#55c" title='c' data-ref="55c" data-ref-filename="55c">c</a> == <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>)</td></tr>
+<tr><th id="352">352</th><td>            <a class="local col2 ref" href="#52str" title='str' data-ref="52str" data-ref-filename="52str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a> = <a class="ref fn" href="../../include/openssl/mem.h.html#OPENSSL_malloc" title='OPENSSL_malloc' data-ref="OPENSSL_malloc" data-ref-filename="OPENSSL_malloc">OPENSSL_malloc</a>(<a class="local col4 ref" href="#54len" title='len' data-ref="54len" data-ref-filename="54len">len</a> + <var>1</var>);</td></tr>
+<tr><th id="353">353</th><td>        <b>else</b></td></tr>
+<tr><th id="354">354</th><td>            <a class="local col2 ref" href="#52str" title='str' data-ref="52str" data-ref-filename="52str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a> = <a class="ref fn" href="../../include/openssl/mem.h.html#OPENSSL_realloc" title='OPENSSL_realloc' data-ref="OPENSSL_realloc" data-ref-filename="OPENSSL_realloc">OPENSSL_realloc</a>(<a class="local col5 ref" href="#55c" title='c' data-ref="55c" data-ref-filename="55c">c</a>, <a class="local col4 ref" href="#54len" title='len' data-ref="54len" data-ref-filename="54len">len</a> + <var>1</var>);</td></tr>
+<tr><th id="355">355</th><td></td></tr>
+<tr><th id="356">356</th><td>        <b>if</b> (<a class="local col2 ref" href="#52str" title='str' data-ref="52str" data-ref-filename="52str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a> == <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>) {</td></tr>
+<tr><th id="357">357</th><td>            <a class="macro" href="../../include/openssl/err.h.html#423" title="ERR_put_error(ERR_LIB_ASN1, 0, (1 | 64), &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/asn1/asn1_lib.c&quot;, 357)" data-ref="_M/OPENSSL_PUT_ERROR">OPENSSL_PUT_ERROR</a>(ASN1, <a class="macro" href="../../include/openssl/err.h.html#371" title="(1 | 64)" data-ref="_M/ERR_R_MALLOC_FAILURE">ERR_R_MALLOC_FAILURE</a>);</td></tr>
+<tr><th id="358">358</th><td>            <a class="local col2 ref" href="#52str" title='str' data-ref="52str" data-ref-filename="52str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a> = <a class="local col5 ref" href="#55c" title='c' data-ref="55c" data-ref-filename="55c">c</a>;</td></tr>
+<tr><th id="359">359</th><td>            <b>return</b> (<var>0</var>);</td></tr>
+<tr><th id="360">360</th><td>        }</td></tr>
+<tr><th id="361">361</th><td>    }</td></tr>
+<tr><th id="362">362</th><td>    <a class="local col2 ref" href="#52str" title='str' data-ref="52str" data-ref-filename="52str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::length" title='asn1_string_st::length' data-ref="asn1_string_st::length" data-ref-filename="asn1_string_st..length">length</a> = <a class="local col4 ref" href="#54len" title='len' data-ref="54len" data-ref-filename="54len">len</a>;</td></tr>
+<tr><th id="363">363</th><td>    <b>if</b> (<a class="local col6 ref" href="#56data" title='data' data-ref="56data" data-ref-filename="56data">data</a> != <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>) {</td></tr>
+<tr><th id="364">364</th><td>        <a class="ref fn" href="../internal.h.html#OPENSSL_memcpy" title='OPENSSL_memcpy' data-ref="OPENSSL_memcpy" data-ref-filename="OPENSSL_memcpy">OPENSSL_memcpy</a>(<a class="local col2 ref" href="#52str" title='str' data-ref="52str" data-ref-filename="52str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a>, <a class="local col6 ref" href="#56data" title='data' data-ref="56data" data-ref-filename="56data">data</a>, <a class="local col4 ref" href="#54len" title='len' data-ref="54len" data-ref-filename="54len">len</a>);</td></tr>
+<tr><th id="365">365</th><td>        <i>/* an allowance for strings :-) */</i></td></tr>
+<tr><th id="366">366</th><td>        <a class="local col2 ref" href="#52str" title='str' data-ref="52str" data-ref-filename="52str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a>[<a class="local col4 ref" href="#54len" title='len' data-ref="54len" data-ref-filename="54len">len</a>] = <kbd>'\0'</kbd>;</td></tr>
+<tr><th id="367">367</th><td>    }</td></tr>
+<tr><th id="368">368</th><td>    <b>return</b> (<var>1</var>);</td></tr>
+<tr><th id="369">369</th><td>}</td></tr>
+<tr><th id="370">370</th><td></td></tr>
+<tr><th id="371">371</th><td><em>void</em> <dfn class="decl def fn" id="ASN1_STRING_set0" title='ASN1_STRING_set0' data-ref="ASN1_STRING_set0" data-ref-filename="ASN1_STRING_set0">ASN1_STRING_set0</dfn>(<a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col7 decl" id="57str" title='str' data-type='ASN1_STRING *' data-ref="57str" data-ref-filename="57str">str</dfn>, <em>void</em> *<dfn class="local col8 decl" id="58data" title='data' data-type='void *' data-ref="58data" data-ref-filename="58data">data</dfn>, <em>int</em> <dfn class="local col9 decl" id="59len" title='len' data-type='int' data-ref="59len" data-ref-filename="59len">len</dfn>)</td></tr>
+<tr><th id="372">372</th><td>{</td></tr>
+<tr><th id="373">373</th><td>    <a class="ref fn" href="../../include/openssl/mem.h.html#OPENSSL_free" title='OPENSSL_free' data-ref="OPENSSL_free" data-ref-filename="OPENSSL_free">OPENSSL_free</a>(<a class="local col7 ref" href="#57str" title='str' data-ref="57str" data-ref-filename="57str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a>);</td></tr>
+<tr><th id="374">374</th><td>    <a class="local col7 ref" href="#57str" title='str' data-ref="57str" data-ref-filename="57str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a> = <a class="local col8 ref" href="#58data" title='data' data-ref="58data" data-ref-filename="58data">data</a>;</td></tr>
+<tr><th id="375">375</th><td>    <a class="local col7 ref" href="#57str" title='str' data-ref="57str" data-ref-filename="57str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::length" title='asn1_string_st::length' data-ref="asn1_string_st::length" data-ref-filename="asn1_string_st..length">length</a> = <a class="local col9 ref" href="#59len" title='len' data-ref="59len" data-ref-filename="59len">len</a>;</td></tr>
+<tr><th id="376">376</th><td>}</td></tr>
+<tr><th id="377">377</th><td></td></tr>
+<tr><th id="378">378</th><td><a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="decl def fn" id="ASN1_STRING_new" title='ASN1_STRING_new' data-ref="ASN1_STRING_new" data-ref-filename="ASN1_STRING_new">ASN1_STRING_new</dfn>(<em>void</em>)</td></tr>
+<tr><th id="379">379</th><td>{</td></tr>
+<tr><th id="380">380</th><td>    <b>return</b> (<a class="ref fn" href="#ASN1_STRING_type_new" title='ASN1_STRING_type_new' data-ref="ASN1_STRING_type_new" data-ref-filename="ASN1_STRING_type_new">ASN1_STRING_type_new</a>(<a class="macro" href="../../include/openssl/asn1.h.html#129" title="4" data-ref="_M/V_ASN1_OCTET_STRING">V_ASN1_OCTET_STRING</a>));</td></tr>
+<tr><th id="381">381</th><td>}</td></tr>
+<tr><th id="382">382</th><td></td></tr>
+<tr><th id="383">383</th><td><a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="decl def fn" id="ASN1_STRING_type_new" title='ASN1_STRING_type_new' data-ref="ASN1_STRING_type_new" data-ref-filename="ASN1_STRING_type_new">ASN1_STRING_type_new</dfn>(<em>int</em> <dfn class="local col0 decl" id="60type" title='type' data-type='int' data-ref="60type" data-ref-filename="60type">type</dfn>)</td></tr>
+<tr><th id="384">384</th><td>{</td></tr>
+<tr><th id="385">385</th><td>    <a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col1 decl" id="61ret" title='ret' data-type='ASN1_STRING *' data-ref="61ret" data-ref-filename="61ret">ret</dfn>;</td></tr>
+<tr><th id="386">386</th><td></td></tr>
+<tr><th id="387">387</th><td>    <a class="local col1 ref" href="#61ret" title='ret' data-ref="61ret" data-ref-filename="61ret">ret</a> = (<a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *)<a class="ref fn" href="../../include/openssl/mem.h.html#OPENSSL_malloc" title='OPENSSL_malloc' data-ref="OPENSSL_malloc" data-ref-filename="OPENSSL_malloc">OPENSSL_malloc</a>(<b>sizeof</b>(<a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a>));</td></tr>
+<tr><th id="388">388</th><td>    <b>if</b> (<a class="local col1 ref" href="#61ret" title='ret' data-ref="61ret" data-ref-filename="61ret">ret</a> == <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>) {</td></tr>
+<tr><th id="389">389</th><td>        <a class="macro" href="../../include/openssl/err.h.html#423" title="ERR_put_error(ERR_LIB_ASN1, 0, (1 | 64), &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/asn1/asn1_lib.c&quot;, 389)" data-ref="_M/OPENSSL_PUT_ERROR">OPENSSL_PUT_ERROR</a>(ASN1, <a class="macro" href="../../include/openssl/err.h.html#371" title="(1 | 64)" data-ref="_M/ERR_R_MALLOC_FAILURE">ERR_R_MALLOC_FAILURE</a>);</td></tr>
+<tr><th id="390">390</th><td>        <b>return</b> (<span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>);</td></tr>
+<tr><th id="391">391</th><td>    }</td></tr>
+<tr><th id="392">392</th><td>    <a class="local col1 ref" href="#61ret" title='ret' data-ref="61ret" data-ref-filename="61ret">ret</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::length" title='asn1_string_st::length' data-ref="asn1_string_st::length" data-ref-filename="asn1_string_st..length">length</a> = <var>0</var>;</td></tr>
+<tr><th id="393">393</th><td>    <a class="local col1 ref" href="#61ret" title='ret' data-ref="61ret" data-ref-filename="61ret">ret</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::type" title='asn1_string_st::type' data-ref="asn1_string_st::type" data-ref-filename="asn1_string_st..type">type</a> = <a class="local col0 ref" href="#60type" title='type' data-ref="60type" data-ref-filename="60type">type</a>;</td></tr>
+<tr><th id="394">394</th><td>    <a class="local col1 ref" href="#61ret" title='ret' data-ref="61ret" data-ref-filename="61ret">ret</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a> = <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>;</td></tr>
+<tr><th id="395">395</th><td>    <a class="local col1 ref" href="#61ret" title='ret' data-ref="61ret" data-ref-filename="61ret">ret</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::flags" title='asn1_string_st::flags' data-ref="asn1_string_st::flags" data-ref-filename="asn1_string_st..flags">flags</a> = <var>0</var>;</td></tr>
+<tr><th id="396">396</th><td>    <b>return</b> (<a class="local col1 ref" href="#61ret" title='ret' data-ref="61ret" data-ref-filename="61ret">ret</a>);</td></tr>
+<tr><th id="397">397</th><td>}</td></tr>
+<tr><th id="398">398</th><td></td></tr>
+<tr><th id="399">399</th><td><em>void</em> <dfn class="decl def fn" id="ASN1_STRING_free" title='ASN1_STRING_free' data-ref="ASN1_STRING_free" data-ref-filename="ASN1_STRING_free">ASN1_STRING_free</dfn>(<a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col2 decl" id="62str" title='str' data-type='ASN1_STRING *' data-ref="62str" data-ref-filename="62str">str</dfn>)</td></tr>
+<tr><th id="400">400</th><td>{</td></tr>
+<tr><th id="401">401</th><td>    <b>if</b> (<a class="local col2 ref" href="#62str" title='str' data-ref="62str" data-ref-filename="62str">str</a> == <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>)</td></tr>
+<tr><th id="402">402</th><td>        <b>return</b>;</td></tr>
+<tr><th id="403">403</th><td>    <a class="ref fn" href="../../include/openssl/mem.h.html#OPENSSL_free" title='OPENSSL_free' data-ref="OPENSSL_free" data-ref-filename="OPENSSL_free">OPENSSL_free</a>(<a class="local col2 ref" href="#62str" title='str' data-ref="62str" data-ref-filename="62str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a>);</td></tr>
+<tr><th id="404">404</th><td>    <a class="ref fn" href="../../include/openssl/mem.h.html#OPENSSL_free" title='OPENSSL_free' data-ref="OPENSSL_free" data-ref-filename="OPENSSL_free">OPENSSL_free</a>(<a class="local col2 ref" href="#62str" title='str' data-ref="62str" data-ref-filename="62str">str</a>);</td></tr>
+<tr><th id="405">405</th><td>}</td></tr>
+<tr><th id="406">406</th><td></td></tr>
+<tr><th id="407">407</th><td><em>int</em> <dfn class="decl def fn" id="ASN1_STRING_cmp" title='ASN1_STRING_cmp' data-ref="ASN1_STRING_cmp" data-ref-filename="ASN1_STRING_cmp">ASN1_STRING_cmp</dfn>(<em>const</em> <a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col3 decl" id="63a" title='a' data-type='const ASN1_STRING *' data-ref="63a" data-ref-filename="63a">a</dfn>, <em>const</em> <a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col4 decl" id="64b" title='b' data-type='const ASN1_STRING *' data-ref="64b" data-ref-filename="64b">b</dfn>)</td></tr>
+<tr><th id="408">408</th><td>{</td></tr>
+<tr><th id="409">409</th><td>    <em>int</em> <dfn class="local col5 decl" id="65i" title='i' data-type='int' data-ref="65i" data-ref-filename="65i">i</dfn>;</td></tr>
+<tr><th id="410">410</th><td></td></tr>
+<tr><th id="411">411</th><td>    <a class="local col5 ref" href="#65i" title='i' data-ref="65i" data-ref-filename="65i">i</a> = (<a class="local col3 ref" href="#63a" title='a' data-ref="63a" data-ref-filename="63a">a</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::length" title='asn1_string_st::length' data-ref="asn1_string_st::length" data-ref-filename="asn1_string_st..length">length</a> - <a class="local col4 ref" href="#64b" title='b' data-ref="64b" data-ref-filename="64b">b</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::length" title='asn1_string_st::length' data-ref="asn1_string_st::length" data-ref-filename="asn1_string_st..length">length</a>);</td></tr>
+<tr><th id="412">412</th><td>    <b>if</b> (<a class="local col5 ref" href="#65i" title='i' data-ref="65i" data-ref-filename="65i">i</a> == <var>0</var>) {</td></tr>
+<tr><th id="413">413</th><td>        <a class="local col5 ref" href="#65i" title='i' data-ref="65i" data-ref-filename="65i">i</a> = <a class="ref fn" href="../internal.h.html#OPENSSL_memcmp" title='OPENSSL_memcmp' data-ref="OPENSSL_memcmp" data-ref-filename="OPENSSL_memcmp">OPENSSL_memcmp</a>(<a class="local col3 ref" href="#63a" title='a' data-ref="63a" data-ref-filename="63a">a</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a>, <a class="local col4 ref" href="#64b" title='b' data-ref="64b" data-ref-filename="64b">b</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a>, <a class="local col3 ref" href="#63a" title='a' data-ref="63a" data-ref-filename="63a">a</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::length" title='asn1_string_st::length' data-ref="asn1_string_st::length" data-ref-filename="asn1_string_st..length">length</a>);</td></tr>
+<tr><th id="414">414</th><td>        <b>if</b> (<a class="local col5 ref" href="#65i" title='i' data-ref="65i" data-ref-filename="65i">i</a> == <var>0</var>)</td></tr>
+<tr><th id="415">415</th><td>            <b>return</b> (<a class="local col3 ref" href="#63a" title='a' data-ref="63a" data-ref-filename="63a">a</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::type" title='asn1_string_st::type' data-ref="asn1_string_st::type" data-ref-filename="asn1_string_st..type">type</a> - <a class="local col4 ref" href="#64b" title='b' data-ref="64b" data-ref-filename="64b">b</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::type" title='asn1_string_st::type' data-ref="asn1_string_st::type" data-ref-filename="asn1_string_st..type">type</a>);</td></tr>
+<tr><th id="416">416</th><td>        <b>else</b></td></tr>
+<tr><th id="417">417</th><td>            <b>return</b> (<a class="local col5 ref" href="#65i" title='i' data-ref="65i" data-ref-filename="65i">i</a>);</td></tr>
+<tr><th id="418">418</th><td>    } <b>else</b></td></tr>
+<tr><th id="419">419</th><td>        <b>return</b> (<a class="local col5 ref" href="#65i" title='i' data-ref="65i" data-ref-filename="65i">i</a>);</td></tr>
+<tr><th id="420">420</th><td>}</td></tr>
+<tr><th id="421">421</th><td></td></tr>
+<tr><th id="422">422</th><td><em>int</em> <dfn class="decl def fn" id="ASN1_STRING_length" title='ASN1_STRING_length' data-ref="ASN1_STRING_length" data-ref-filename="ASN1_STRING_length">ASN1_STRING_length</dfn>(<em>const</em> <a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col6 decl" id="66str" title='str' data-type='const ASN1_STRING *' data-ref="66str" data-ref-filename="66str">str</dfn>)</td></tr>
+<tr><th id="423">423</th><td>{</td></tr>
+<tr><th id="424">424</th><td>    <b>return</b> <a class="local col6 ref" href="#66str" title='str' data-ref="66str" data-ref-filename="66str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::length" title='asn1_string_st::length' data-ref="asn1_string_st::length" data-ref-filename="asn1_string_st..length">length</a>;</td></tr>
+<tr><th id="425">425</th><td>}</td></tr>
+<tr><th id="426">426</th><td></td></tr>
+<tr><th id="427">427</th><td><em>int</em> <dfn class="decl def fn" id="ASN1_STRING_type" title='ASN1_STRING_type' data-ref="ASN1_STRING_type" data-ref-filename="ASN1_STRING_type">ASN1_STRING_type</dfn>(<em>const</em> <a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col7 decl" id="67str" title='str' data-type='const ASN1_STRING *' data-ref="67str" data-ref-filename="67str">str</dfn>)</td></tr>
+<tr><th id="428">428</th><td>{</td></tr>
+<tr><th id="429">429</th><td>    <b>return</b> <a class="local col7 ref" href="#67str" title='str' data-ref="67str" data-ref-filename="67str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::type" title='asn1_string_st::type' data-ref="asn1_string_st::type" data-ref-filename="asn1_string_st..type">type</a>;</td></tr>
+<tr><th id="430">430</th><td>}</td></tr>
+<tr><th id="431">431</th><td></td></tr>
+<tr><th id="432">432</th><td><em>unsigned</em> <em>char</em> *<dfn class="decl def fn" id="ASN1_STRING_data" title='ASN1_STRING_data' data-ref="ASN1_STRING_data" data-ref-filename="ASN1_STRING_data">ASN1_STRING_data</dfn>(<a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col8 decl" id="68str" title='str' data-type='ASN1_STRING *' data-ref="68str" data-ref-filename="68str">str</dfn>)</td></tr>
+<tr><th id="433">433</th><td>{</td></tr>
+<tr><th id="434">434</th><td>    <b>return</b> <a class="local col8 ref" href="#68str" title='str' data-ref="68str" data-ref-filename="68str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a>;</td></tr>
+<tr><th id="435">435</th><td>}</td></tr>
+<tr><th id="436">436</th><td></td></tr>
+<tr><th id="437">437</th><td><em>const</em> <em>unsigned</em> <em>char</em> *<dfn class="decl def fn" id="ASN1_STRING_get0_data" title='ASN1_STRING_get0_data' data-ref="ASN1_STRING_get0_data" data-ref-filename="ASN1_STRING_get0_data">ASN1_STRING_get0_data</dfn>(<em>const</em> <a class="typedef" href="../../include/openssl/base.h.html#ASN1_STRING" title='ASN1_STRING' data-type='struct asn1_string_st' data-ref="ASN1_STRING" data-ref-filename="ASN1_STRING">ASN1_STRING</a> *<dfn class="local col9 decl" id="69str" title='str' data-type='const ASN1_STRING *' data-ref="69str" data-ref-filename="69str">str</dfn>)</td></tr>
+<tr><th id="438">438</th><td>{</td></tr>
+<tr><th id="439">439</th><td>    <b>return</b> <a class="local col9 ref" href="#69str" title='str' data-ref="69str" data-ref-filename="69str">str</a>-&gt;<a class="ref field" href="../../include/openssl/asn1.h.html#asn1_string_st::data" title='asn1_string_st::data' data-ref="asn1_string_st::data" data-ref-filename="asn1_string_st..data">data</a>;</td></tr>
+<tr><th id="440">440</th><td>}</td></tr>
+<tr><th id="441">441</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

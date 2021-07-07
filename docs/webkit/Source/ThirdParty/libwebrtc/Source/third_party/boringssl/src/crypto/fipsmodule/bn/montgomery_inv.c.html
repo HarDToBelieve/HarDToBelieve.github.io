@@ -1,0 +1,204 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>montgomery_inv.c source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/bn/montgomery_inv.c] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/bn/montgomery_inv.c'; var root_path = '../../../../../../../../../../..'; var data_path = '../../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../../..'>webkit</a>/<a href='../../../../../../../../..'>Source</a>/<a href='../../../../../../../..'>ThirdParty</a>/<a href='../../../../../../..'>libwebrtc</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>third_party</a>/<a href='../../../..'>boringssl</a>/<a href='../../..'>src</a>/<a href='../..'>crypto</a>/<a href='..'>fipsmodule</a>/<a href='./'>bn</a>/<a href='montgomery_inv.c.html'>montgomery_inv.c</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/* Copyright 2016 Brian Smith.</i></td></tr>
+<tr><th id="2">2</th><td><i> *</i></td></tr>
+<tr><th id="3">3</th><td><i> * Permission to use, copy, modify, and/or distribute this software for any</i></td></tr>
+<tr><th id="4">4</th><td><i> * purpose with or without fee is hereby granted, provided that the above</i></td></tr>
+<tr><th id="5">5</th><td><i> * copyright notice and this permission notice appear in all copies.</i></td></tr>
+<tr><th id="6">6</th><td><i> *</i></td></tr>
+<tr><th id="7">7</th><td><i> * THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES</i></td></tr>
+<tr><th id="8">8</th><td><i> * WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF</i></td></tr>
+<tr><th id="9">9</th><td><i> * MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="10">10</th><td><i> * SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES</i></td></tr>
+<tr><th id="11">11</th><td><i> * WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION</i></td></tr>
+<tr><th id="12">12</th><td><i> * OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN</i></td></tr>
+<tr><th id="13">13</th><td><i> * CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE. */</i></td></tr>
+<tr><th id="14">14</th><td></td></tr>
+<tr><th id="15">15</th><td><u>#include <a href="../../../include/openssl/bn.h.html">&lt;openssl/bn.h&gt;</a></u></td></tr>
+<tr><th id="16">16</th><td></td></tr>
+<tr><th id="17">17</th><td><u>#include &lt;assert.h&gt;</u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="internal.h.html">"internal.h"</a></u></td></tr>
+<tr><th id="20">20</th><td><u>#include <a href="../../internal.h.html">"../../internal.h"</a></u></td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><em>static</em> <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <a class="tu decl fn" href="#bn_neg_inv_mod_r_u64" title='bn_neg_inv_mod_r_u64' data-type='uint64_t bn_neg_inv_mod_r_u64(uint64_t n)' data-ref="bn_neg_inv_mod_r_u64" data-ref-filename="bn_neg_inv_mod_r_u64">bn_neg_inv_mod_r_u64</a>(<span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col1 decl" id="1n" title='n' data-type='uint64_t' data-ref="1n" data-ref-filename="1n">n</dfn>);</td></tr>
+<tr><th id="24">24</th><td></td></tr>
+<tr><th id="25">25</th><td><a class="macro" href="../../../include/openssl/type_check.h.html#75" title="_Static_assert(1 == 1 || 1 == 2, &quot;BN_MONT_CTX_N0_LIMBS value is invalid&quot;)" data-ref="_M/OPENSSL_STATIC_ASSERT">OPENSSL_STATIC_ASSERT</a>(<a class="macro" href="internal.h.html#158" title="1" data-ref="_M/BN_MONT_CTX_N0_LIMBS">BN_MONT_CTX_N0_LIMBS</a> == <var>1</var> || <a class="macro" href="internal.h.html#158" title="1" data-ref="_M/BN_MONT_CTX_N0_LIMBS">BN_MONT_CTX_N0_LIMBS</a> == <var>2</var>,</td></tr>
+<tr><th id="26">26</th><td>                      <q>"BN_MONT_CTX_N0_LIMBS value is invalid"</q>);</td></tr>
+<tr><th id="27">27</th><td><a class="macro" href="../../../include/openssl/type_check.h.html#75" title="_Static_assert(sizeof(uint64_t) * 1 == sizeof(uint64_t), &quot;uint64_t is insufficient precision for n0&quot;)" data-ref="_M/OPENSSL_STATIC_ASSERT">OPENSSL_STATIC_ASSERT</a>(<b>sizeof</b>(<a class="macro" href="../../../include/openssl/bn.h.html#151" title="uint64_t" data-ref="_M/BN_ULONG">BN_ULONG</a>) * <a class="macro" href="internal.h.html#158" title="1" data-ref="_M/BN_MONT_CTX_N0_LIMBS">BN_MONT_CTX_N0_LIMBS</a> ==</td></tr>
+<tr><th id="28">28</th><td>                          <b>sizeof</b>(<span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span>),</td></tr>
+<tr><th id="29">29</th><td>                      <q>"uint64_t is insufficient precision for n0"</q>);</td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><i>// LG_LITTLE_R is log_2(r).</i></td></tr>
+<tr><th id="32">32</th><td><u>#define <dfn class="macro" id="_M/LG_LITTLE_R" data-ref="_M/LG_LITTLE_R">LG_LITTLE_R</dfn> (BN_MONT_CTX_N0_LIMBS * BN_BITS2)</u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="decl def fn" id="bn_mont_n0" title='bn_mont_n0' data-ref="bn_mont_n0" data-ref-filename="bn_mont_n0">bn_mont_n0</dfn>(<em>const</em> <a class="typedef" href="../../../include/openssl/base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="local col2 decl" id="2n" title='n' data-type='const BIGNUM *' data-ref="2n" data-ref-filename="2n">n</dfn>) {</td></tr>
+<tr><th id="35">35</th><td>  <i>// These conditions are checked by the caller, |BN_MONT_CTX_set| or</i></td></tr>
+<tr><th id="36">36</th><td><i>  // |BN_MONT_CTX_new_consttime|.</i></td></tr>
+<tr><th id="37">37</th><td>  <span class="macro" title="(__builtin_expect(!(!BN_is_zero(n)), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/bn/montgomery_inv.c&quot;, 37, &quot;!BN_is_zero(n)&quot;) : (void)0)" data-ref="_M/assert">assert</span>(!<a class="ref fn" href="../../../include/openssl/bn.h.html#BN_is_zero" title='BN_is_zero' data-ref="BN_is_zero" data-ref-filename="BN_is_zero">BN_is_zero</a>(<a class="local col2 ref" href="#2n" title='n' data-ref="2n" data-ref-filename="2n">n</a>));</td></tr>
+<tr><th id="38">38</th><td>  <span class="macro" title="(__builtin_expect(!(!BN_is_negative(n)), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/bn/montgomery_inv.c&quot;, 38, &quot;!BN_is_negative(n)&quot;) : (void)0)" data-ref="_M/assert">assert</span>(!<a class="ref fn" href="../../../include/openssl/bn.h.html#BN_is_negative" title='BN_is_negative' data-ref="BN_is_negative" data-ref-filename="BN_is_negative">BN_is_negative</a>(<a class="local col2 ref" href="#2n" title='n' data-ref="2n" data-ref-filename="2n">n</a>));</td></tr>
+<tr><th id="39">39</th><td>  <span class="macro" title="(__builtin_expect(!(BN_is_odd(n)), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/bn/montgomery_inv.c&quot;, 39, &quot;BN_is_odd(n)&quot;) : (void)0)" data-ref="_M/assert">assert</span>(<a class="ref fn" href="../../../include/openssl/bn.h.html#BN_is_odd" title='BN_is_odd' data-ref="BN_is_odd" data-ref-filename="BN_is_odd">BN_is_odd</a>(<a class="local col2 ref" href="#2n" title='n' data-ref="2n" data-ref-filename="2n">n</a>));</td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td>  <i>// r == 2**(BN_MONT_CTX_N0_LIMBS * BN_BITS2) and LG_LITTLE_R == lg(r). This</i></td></tr>
+<tr><th id="42">42</th><td><i>  // ensures that we can do integer division by |r| by simply ignoring</i></td></tr>
+<tr><th id="43">43</th><td><i>  // |BN_MONT_CTX_N0_LIMBS| limbs. Similarly, we can calculate values modulo</i></td></tr>
+<tr><th id="44">44</th><td><i>  // |r| by just looking at the lowest |BN_MONT_CTX_N0_LIMBS| limbs. This is</i></td></tr>
+<tr><th id="45">45</th><td><i>  // what makes Montgomery multiplication efficient.</i></td></tr>
+<tr><th id="46">46</th><td><i>  //</i></td></tr>
+<tr><th id="47">47</th><td><i>  // As shown in Algorithm 1 of "Fast Prime Field Elliptic Curve Cryptography</i></td></tr>
+<tr><th id="48">48</th><td><i>  // with 256 Bit Primes" by Shay Gueron and Vlad Krasnov, in the loop of a</i></td></tr>
+<tr><th id="49">49</th><td><i>  // multi-limb Montgomery multiplication of |a * b (mod n)|, given the</i></td></tr>
+<tr><th id="50">50</th><td><i>  // unreduced product |t == a * b|, we repeatedly calculate:</i></td></tr>
+<tr><th id="51">51</th><td><i>  //</i></td></tr>
+<tr><th id="52">52</th><td><i>  //    t1 := t % r         |t1| is |t|'s lowest limb (see previous paragraph).</i></td></tr>
+<tr><th id="53">53</th><td><i>  //    t2 := t1*n0*n</i></td></tr>
+<tr><th id="54">54</th><td><i>  //    t3 := t + t2</i></td></tr>
+<tr><th id="55">55</th><td><i>  //    t := t3 / r         copy all limbs of |t3| except the lowest to |t|.</i></td></tr>
+<tr><th id="56">56</th><td><i>  //</i></td></tr>
+<tr><th id="57">57</th><td><i>  // In the last step, it would only make sense to ignore the lowest limb of</i></td></tr>
+<tr><th id="58">58</th><td><i>  // |t3| if it were zero. The middle steps ensure that this is the case:</i></td></tr>
+<tr><th id="59">59</th><td><i>  //</i></td></tr>
+<tr><th id="60">60</th><td><i>  //                            t3 ==  0 (mod r)</i></td></tr>
+<tr><th id="61">61</th><td><i>  //                        t + t2 ==  0 (mod r)</i></td></tr>
+<tr><th id="62">62</th><td><i>  //                   t + t1*n0*n ==  0 (mod r)</i></td></tr>
+<tr><th id="63">63</th><td><i>  //                       t1*n0*n == -t (mod r)</i></td></tr>
+<tr><th id="64">64</th><td><i>  //                        t*n0*n == -t (mod r)</i></td></tr>
+<tr><th id="65">65</th><td><i>  //                          n0*n == -1 (mod r)</i></td></tr>
+<tr><th id="66">66</th><td><i>  //                            n0 == -1/n (mod r)</i></td></tr>
+<tr><th id="67">67</th><td><i>  //</i></td></tr>
+<tr><th id="68">68</th><td><i>  // Thus, in each iteration of the loop, we multiply by the constant factor</i></td></tr>
+<tr><th id="69">69</th><td><i>  // |n0|, the negative inverse of n (mod r).</i></td></tr>
+<tr><th id="70">70</th><td><i></i></td></tr>
+<tr><th id="71">71</th><td><i>  // n_mod_r = n % r. As explained above, this is done by taking the lowest</i></td></tr>
+<tr><th id="72">72</th><td><i>  // |BN_MONT_CTX_N0_LIMBS| limbs of |n|.</i></td></tr>
+<tr><th id="73">73</th><td>  <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col3 decl" id="3n_mod_r" title='n_mod_r' data-type='uint64_t' data-ref="3n_mod_r" data-ref-filename="3n_mod_r">n_mod_r</dfn> = <a class="local col2 ref" href="#2n" title='n' data-ref="2n" data-ref-filename="2n">n</a>-&gt;<a class="ref field" href="../../../include/openssl/bn.h.html#bignum_st::d" title='bignum_st::d' data-ref="bignum_st::d" data-ref-filename="bignum_st..d">d</a>[<var>0</var>];</td></tr>
+<tr><th id="74">74</th><td><u>#<span data-ppcond="74">if</span> <a class="macro" href="internal.h.html#158" title="1" data-ref="_M/BN_MONT_CTX_N0_LIMBS">BN_MONT_CTX_N0_LIMBS</a> == 2</u></td></tr>
+<tr><th id="75">75</th><td>  <b>if</b> (n-&gt;width &gt; <var>1</var>) {</td></tr>
+<tr><th id="76">76</th><td>    n_mod_r |= (uint64_t)n-&gt;d[<var>1</var>] &lt;&lt; BN_BITS2;</td></tr>
+<tr><th id="77">77</th><td>  }</td></tr>
+<tr><th id="78">78</th><td><u>#<span data-ppcond="74">endif</span></u></td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td>  <b>return</b> <a class="tu ref fn" href="#bn_neg_inv_mod_r_u64" title='bn_neg_inv_mod_r_u64' data-use='c' data-ref="bn_neg_inv_mod_r_u64" data-ref-filename="bn_neg_inv_mod_r_u64">bn_neg_inv_mod_r_u64</a>(<a class="local col3 ref" href="#3n_mod_r" title='n_mod_r' data-ref="3n_mod_r" data-ref-filename="3n_mod_r">n_mod_r</a>);</td></tr>
+<tr><th id="81">81</th><td>}</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// bn_neg_inv_r_mod_n_u64 calculates the -1/n mod r; i.e. it calculates |v|</i></td></tr>
+<tr><th id="84">84</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// such that u*r - v*n == 1. |r| is the constant defined in |bn_mont_n0|. |n|</i></td></tr>
+<tr><th id="85">85</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// must be odd.</i></td></tr>
+<tr><th id="86">86</th><td><i  data-doc="bn_neg_inv_mod_r_u64">//</i></td></tr>
+<tr><th id="87">87</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// This is derived from |xbinGCD| in Henry S. Warren, Jr.'s "Montgomery</i></td></tr>
+<tr><th id="88">88</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// Multiplication" (<a href="http://www.hackersdelight.org/MontgomeryMultiplication.pdf">http://www.hackersdelight.org/MontgomeryMultiplication.pdf</a>).</i></td></tr>
+<tr><th id="89">89</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// It is very similar to the MODULAR-INVERSE function in Stephen R. Dussé's and</i></td></tr>
+<tr><th id="90">90</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// Burton S. Kaliski Jr.'s "A Cryptographic Library for the Motorola DSP56000"</i></td></tr>
+<tr><th id="91">91</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// (<a href="http://link.springer.com/chapter/10.1007%2F3-540-46877-3_21">http://link.springer.com/chapter/10.1007%2F3-540-46877-3_21</a>).</i></td></tr>
+<tr><th id="92">92</th><td><i  data-doc="bn_neg_inv_mod_r_u64">//</i></td></tr>
+<tr><th id="93">93</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// This is inspired by Joppe W. Bos's "Constant Time Modular Inversion"</i></td></tr>
+<tr><th id="94">94</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// (<a href="http://www.joppebos.com/files/CTInversion.pdf">http://www.joppebos.com/files/CTInversion.pdf</a>) so that the inversion is</i></td></tr>
+<tr><th id="95">95</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// constant-time with respect to |n|. We assume uint64_t additions,</i></td></tr>
+<tr><th id="96">96</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// subtractions, shifts, and bitwise operations are all constant time, which</i></td></tr>
+<tr><th id="97">97</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// may be a large leap of faith on 32-bit targets. We avoid division and</i></td></tr>
+<tr><th id="98">98</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// multiplication, which tend to be the most problematic in terms of timing</i></td></tr>
+<tr><th id="99">99</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// leaks.</i></td></tr>
+<tr><th id="100">100</th><td><i  data-doc="bn_neg_inv_mod_r_u64">//</i></td></tr>
+<tr><th id="101">101</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// Most GCD implementations return values such that |u*r + v*n == 1|, so the</i></td></tr>
+<tr><th id="102">102</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// caller would have to negate the resultant |v| for the purpose of Montgomery</i></td></tr>
+<tr><th id="103">103</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// multiplication. This implementation does the negation implicitly by doing</i></td></tr>
+<tr><th id="104">104</th><td><i  data-doc="bn_neg_inv_mod_r_u64">// the computations as a difference instead of a sum.</i></td></tr>
+<tr><th id="105">105</th><td><em>static</em> <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="tu decl def fn" id="bn_neg_inv_mod_r_u64" title='bn_neg_inv_mod_r_u64' data-type='uint64_t bn_neg_inv_mod_r_u64(uint64_t n)' data-ref="bn_neg_inv_mod_r_u64" data-ref-filename="bn_neg_inv_mod_r_u64">bn_neg_inv_mod_r_u64</dfn>(<span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col4 decl" id="4n" title='n' data-type='uint64_t' data-ref="4n" data-ref-filename="4n">n</dfn>) {</td></tr>
+<tr><th id="106">106</th><td>  <span class="macro" title="(__builtin_expect(!(n % 2 == 1), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/bn/montgomery_inv.c&quot;, 106, &quot;n % 2 == 1&quot;) : (void)0)" data-ref="_M/assert">assert</span>(<a class="local col4 ref" href="#4n" title='n' data-ref="4n" data-ref-filename="4n">n</a> % <var>2</var> == <var>1</var>);</td></tr>
+<tr><th id="107">107</th><td></td></tr>
+<tr><th id="108">108</th><td>  <i>// alpha == 2**(lg r - 1) == r / 2.</i></td></tr>
+<tr><th id="109">109</th><td>  <em>static</em> <em>const</em> <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col5 decl" id="5alpha" title='alpha' data-type='const uint64_t' data-ref="5alpha" data-ref-filename="5alpha">alpha</dfn> = <span class="macro" title="(1ULL)" data-ref="_M/UINT64_C">UINT64_C</span>(<var>1</var>) &lt;&lt; (<a class="macro" href="#32" title="(1 * 64)" data-ref="_M/LG_LITTLE_R">LG_LITTLE_R</a> - <var>1</var>);</td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td>  <em>const</em> <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col6 decl" id="6beta" title='beta' data-type='const uint64_t' data-ref="6beta" data-ref-filename="6beta">beta</dfn> = <a class="local col4 ref" href="#4n" title='n' data-ref="4n" data-ref-filename="4n">n</a>;</td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td>  <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col7 decl" id="7u" title='u' data-type='uint64_t' data-ref="7u" data-ref-filename="7u">u</dfn> = <var>1</var>;</td></tr>
+<tr><th id="114">114</th><td>  <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col8 decl" id="8v" title='v' data-type='uint64_t' data-ref="8v" data-ref-filename="8v">v</dfn> = <var>0</var>;</td></tr>
+<tr><th id="115">115</th><td></td></tr>
+<tr><th id="116">116</th><td>  <i>// The invariant maintained from here on is:</i></td></tr>
+<tr><th id="117">117</th><td><i>  // 2**(lg r - i) == u*2*alpha - v*beta.</i></td></tr>
+<tr><th id="118">118</th><td>  <b>for</b> (<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="9i" title='i' data-type='size_t' data-ref="9i" data-ref-filename="9i">i</dfn> = <var>0</var>; <a class="local col9 ref" href="#9i" title='i' data-ref="9i" data-ref-filename="9i">i</a> &lt; <a class="macro" href="#32" title="(1 * 64)" data-ref="_M/LG_LITTLE_R">LG_LITTLE_R</a>; ++<a class="local col9 ref" href="#9i" title='i' data-ref="9i" data-ref-filename="9i">i</a>) {</td></tr>
+<tr><th id="119">119</th><td><u>#<span data-ppcond="119">if</span> <a class="macro" href="internal.h.html#151" title="64" data-ref="_M/BN_BITS2">BN_BITS2</a> == 64 &amp;&amp; defined(<a class="macro" href="internal.h.html#145" data-ref="_M/BN_ULLONG">BN_ULLONG</a>)</u></td></tr>
+<tr><th id="120">120</th><td>    <span class="macro" title="(__builtin_expect(!((uint128_t)(1) &lt;&lt; ((1 * 64) - i) == ((uint128_t)u * 2 * alpha) - ((uint128_t)v * beta)), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/bn/montgomery_inv.c&quot;, 121, &quot;(BN_ULLONG)(1) &lt;&lt; (LG_LITTLE_R - i) == ((BN_ULLONG)u * 2 * alpha) - ((BN_ULLONG)v * beta)&quot;) : (void)0)" data-ref="_M/assert">assert</span>((<a class="macro" href="internal.h.html#145" title="uint128_t" data-ref="_M/BN_ULLONG">BN_ULLONG</a>)(<var>1</var>) &lt;&lt; (<a class="macro" href="#32" title="(1 * 64)" data-ref="_M/LG_LITTLE_R">LG_LITTLE_R</a> - <a class="local col9 ref" href="#9i" title='i' data-ref="9i" data-ref-filename="9i">i</a>) ==</td></tr>
+<tr><th id="121">121</th><td>           ((<a class="macro" href="internal.h.html#145" title="uint128_t" data-ref="_M/BN_ULLONG">BN_ULLONG</a>)<a class="local col7 ref" href="#7u" title='u' data-ref="7u" data-ref-filename="7u">u</a> * <var>2</var> * <a class="local col5 ref" href="#5alpha" title='alpha' data-ref="5alpha" data-ref-filename="5alpha">alpha</a>) - ((<a class="macro" href="internal.h.html#145" title="uint128_t" data-ref="_M/BN_ULLONG">BN_ULLONG</a>)<a class="local col8 ref" href="#8v" title='v' data-ref="8v" data-ref-filename="8v">v</a> * <a class="local col6 ref" href="#6beta" title='beta' data-ref="6beta" data-ref-filename="6beta">beta</a>));</td></tr>
+<tr><th id="122">122</th><td><u>#<span data-ppcond="119">endif</span></u></td></tr>
+<tr><th id="123">123</th><td></td></tr>
+<tr><th id="124">124</th><td>    <i>// Delete a common factor of 2 in u and v if |u| is even. Otherwise, set</i></td></tr>
+<tr><th id="125">125</th><td><i>    // |u = (u + beta) / 2| and |v = (v / 2) + alpha|.</i></td></tr>
+<tr><th id="126">126</th><td></td></tr>
+<tr><th id="127">127</th><td>    <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col0 decl" id="10u_is_odd" title='u_is_odd' data-type='uint64_t' data-ref="10u_is_odd" data-ref-filename="10u_is_odd">u_is_odd</dfn> = <span class="macro" title="(0ULL)" data-ref="_M/UINT64_C">UINT64_C</span>(<var>0</var>) - (<a class="local col7 ref" href="#7u" title='u' data-ref="7u" data-ref-filename="7u">u</a> &amp; <var>1</var>);  <i>// Either 0xff..ff or 0.</i></td></tr>
+<tr><th id="128">128</th><td></td></tr>
+<tr><th id="129">129</th><td>    <i>// The addition can overflow, so use Dietz's method for it.</i></td></tr>
+<tr><th id="130">130</th><td><i>    //</i></td></tr>
+<tr><th id="131">131</th><td><i>    // Dietz calculates (x+y)/2 by (x⊕y)&gt;&gt;1 + x&amp;y. This is valid for all</i></td></tr>
+<tr><th id="132">132</th><td><i>    // (unsigned) x and y, even when x+y overflows. Evidence for 32-bit values</i></td></tr>
+<tr><th id="133">133</th><td><i>    // (embedded in 64 bits to so that overflow can be ignored):</i></td></tr>
+<tr><th id="134">134</th><td><i>    //</i></td></tr>
+<tr><th id="135">135</th><td><i>    // (declare-fun x () (_ BitVec 64))</i></td></tr>
+<tr><th id="136">136</th><td><i>    // (declare-fun y () (_ BitVec 64))</i></td></tr>
+<tr><th id="137">137</th><td><i>    // (assert (let (</i></td></tr>
+<tr><th id="138">138</th><td><i>    //    (one (_ bv1 64))</i></td></tr>
+<tr><th id="139">139</th><td><i>    //    (thirtyTwo (_ bv32 64)))</i></td></tr>
+<tr><th id="140">140</th><td><i>    //    (and</i></td></tr>
+<tr><th id="141">141</th><td><i>    //      (bvult x (bvshl one thirtyTwo))</i></td></tr>
+<tr><th id="142">142</th><td><i>    //      (bvult y (bvshl one thirtyTwo))</i></td></tr>
+<tr><th id="143">143</th><td><i>    //      (not (=</i></td></tr>
+<tr><th id="144">144</th><td><i>    //        (bvadd (bvlshr (bvxor x y) one) (bvand x y))</i></td></tr>
+<tr><th id="145">145</th><td><i>    //        (bvlshr (bvadd x y) one)))</i></td></tr>
+<tr><th id="146">146</th><td><i>    // )))</i></td></tr>
+<tr><th id="147">147</th><td><i>    // (check-sat)</i></td></tr>
+<tr><th id="148">148</th><td>    <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col1 decl" id="11beta_if_u_is_odd" title='beta_if_u_is_odd' data-type='uint64_t' data-ref="11beta_if_u_is_odd" data-ref-filename="11beta_if_u_is_odd">beta_if_u_is_odd</dfn> = <a class="local col6 ref" href="#6beta" title='beta' data-ref="6beta" data-ref-filename="6beta">beta</a> &amp; <a class="local col0 ref" href="#10u_is_odd" title='u_is_odd' data-ref="10u_is_odd" data-ref-filename="10u_is_odd">u_is_odd</a>;  <i>// Either |beta| or 0.</i></td></tr>
+<tr><th id="149">149</th><td>    <a class="local col7 ref" href="#7u" title='u' data-ref="7u" data-ref-filename="7u">u</a> = ((<a class="local col7 ref" href="#7u" title='u' data-ref="7u" data-ref-filename="7u">u</a> ^ <a class="local col1 ref" href="#11beta_if_u_is_odd" title='beta_if_u_is_odd' data-ref="11beta_if_u_is_odd" data-ref-filename="11beta_if_u_is_odd">beta_if_u_is_odd</a>) &gt;&gt; <var>1</var>) + (<a class="local col7 ref" href="#7u" title='u' data-ref="7u" data-ref-filename="7u">u</a> &amp; <a class="local col1 ref" href="#11beta_if_u_is_odd" title='beta_if_u_is_odd' data-ref="11beta_if_u_is_odd" data-ref-filename="11beta_if_u_is_odd">beta_if_u_is_odd</a>);</td></tr>
+<tr><th id="150">150</th><td></td></tr>
+<tr><th id="151">151</th><td>    <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col2 decl" id="12alpha_if_u_is_odd" title='alpha_if_u_is_odd' data-type='uint64_t' data-ref="12alpha_if_u_is_odd" data-ref-filename="12alpha_if_u_is_odd">alpha_if_u_is_odd</dfn> = <a class="local col5 ref" href="#5alpha" title='alpha' data-ref="5alpha" data-ref-filename="5alpha">alpha</a> &amp; <a class="local col0 ref" href="#10u_is_odd" title='u_is_odd' data-ref="10u_is_odd" data-ref-filename="10u_is_odd">u_is_odd</a>;  <i>// Either |alpha| or 0.</i></td></tr>
+<tr><th id="152">152</th><td>    <a class="local col8 ref" href="#8v" title='v' data-ref="8v" data-ref-filename="8v">v</a> = (<a class="local col8 ref" href="#8v" title='v' data-ref="8v" data-ref-filename="8v">v</a> &gt;&gt; <var>1</var>) + <a class="local col2 ref" href="#12alpha_if_u_is_odd" title='alpha_if_u_is_odd' data-ref="12alpha_if_u_is_odd" data-ref-filename="12alpha_if_u_is_odd">alpha_if_u_is_odd</a>;</td></tr>
+<tr><th id="153">153</th><td>  }</td></tr>
+<tr><th id="154">154</th><td></td></tr>
+<tr><th id="155">155</th><td>  <i>// The invariant now shows that u*r - v*n == 1 since r == 2 * alpha.</i></td></tr>
+<tr><th id="156">156</th><td><u>#<span data-ppcond="156">if</span> <a class="macro" href="internal.h.html#151" title="64" data-ref="_M/BN_BITS2">BN_BITS2</a> == 64 &amp;&amp; defined(<a class="macro" href="internal.h.html#145" data-ref="_M/BN_ULLONG">BN_ULLONG</a>)</u></td></tr>
+<tr><th id="157">157</th><td>  <span class="macro" title="(__builtin_expect(!(1 == ((uint128_t)u * 2 * alpha) - ((uint128_t)v * beta)), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/bn/montgomery_inv.c&quot;, 157, &quot;1 == ((BN_ULLONG)u * 2 * alpha) - ((BN_ULLONG)v * beta)&quot;) : (void)0)" data-ref="_M/assert">assert</span>(<var>1</var> == ((<a class="macro" href="internal.h.html#145" title="uint128_t" data-ref="_M/BN_ULLONG">BN_ULLONG</a>)<a class="local col7 ref" href="#7u" title='u' data-ref="7u" data-ref-filename="7u">u</a> * <var>2</var> * <a class="local col5 ref" href="#5alpha" title='alpha' data-ref="5alpha" data-ref-filename="5alpha">alpha</a>) - ((<a class="macro" href="internal.h.html#145" title="uint128_t" data-ref="_M/BN_ULLONG">BN_ULLONG</a>)<a class="local col8 ref" href="#8v" title='v' data-ref="8v" data-ref-filename="8v">v</a> * <a class="local col6 ref" href="#6beta" title='beta' data-ref="6beta" data-ref-filename="6beta">beta</a>));</td></tr>
+<tr><th id="158">158</th><td><u>#<span data-ppcond="156">endif</span></u></td></tr>
+<tr><th id="159">159</th><td></td></tr>
+<tr><th id="160">160</th><td>  <b>return</b> <a class="local col8 ref" href="#8v" title='v' data-ref="8v" data-ref-filename="8v">v</a>;</td></tr>
+<tr><th id="161">161</th><td>}</td></tr>
+<tr><th id="162">162</th><td></td></tr>
+<tr><th id="163">163</th><td><em>int</em> <dfn class="decl def fn" id="bn_mod_exp_base_2_consttime" title='bn_mod_exp_base_2_consttime' data-ref="bn_mod_exp_base_2_consttime" data-ref-filename="bn_mod_exp_base_2_consttime">bn_mod_exp_base_2_consttime</dfn>(<a class="typedef" href="../../../include/openssl/base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="local col3 decl" id="13r" title='r' data-type='BIGNUM *' data-ref="13r" data-ref-filename="13r">r</dfn>, <em>unsigned</em> <dfn class="local col4 decl" id="14p" title='p' data-type='unsigned int' data-ref="14p" data-ref-filename="14p">p</dfn>, <em>const</em> <a class="typedef" href="../../../include/openssl/base.h.html#BIGNUM" title='BIGNUM' data-type='struct bignum_st' data-ref="BIGNUM" data-ref-filename="BIGNUM">BIGNUM</a> *<dfn class="local col5 decl" id="15n" title='n' data-type='const BIGNUM *' data-ref="15n" data-ref-filename="15n">n</dfn>,</td></tr>
+<tr><th id="164">164</th><td>                                <a class="typedef" href="../../../include/openssl/base.h.html#BN_CTX" title='BN_CTX' data-type='struct bignum_ctx' data-ref="BN_CTX" data-ref-filename="BN_CTX">BN_CTX</a> *<dfn class="local col6 decl" id="16ctx" title='ctx' data-type='BN_CTX *' data-ref="16ctx" data-ref-filename="16ctx">ctx</dfn>) {</td></tr>
+<tr><th id="165">165</th><td>  <span class="macro" title="(__builtin_expect(!(!BN_is_zero(n)), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/bn/montgomery_inv.c&quot;, 165, &quot;!BN_is_zero(n)&quot;) : (void)0)" data-ref="_M/assert">assert</span>(!<a class="ref fn" href="../../../include/openssl/bn.h.html#BN_is_zero" title='BN_is_zero' data-ref="BN_is_zero" data-ref-filename="BN_is_zero">BN_is_zero</a>(<a class="local col5 ref" href="#15n" title='n' data-ref="15n" data-ref-filename="15n">n</a>));</td></tr>
+<tr><th id="166">166</th><td>  <span class="macro" title="(__builtin_expect(!(!BN_is_negative(n)), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/bn/montgomery_inv.c&quot;, 166, &quot;!BN_is_negative(n)&quot;) : (void)0)" data-ref="_M/assert">assert</span>(!<a class="ref fn" href="../../../include/openssl/bn.h.html#BN_is_negative" title='BN_is_negative' data-ref="BN_is_negative" data-ref-filename="BN_is_negative">BN_is_negative</a>(<a class="local col5 ref" href="#15n" title='n' data-ref="15n" data-ref-filename="15n">n</a>));</td></tr>
+<tr><th id="167">167</th><td>  <span class="macro" title="(__builtin_expect(!(BN_is_odd(n)), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/bn/montgomery_inv.c&quot;, 167, &quot;BN_is_odd(n)&quot;) : (void)0)" data-ref="_M/assert">assert</span>(<a class="ref fn" href="../../../include/openssl/bn.h.html#BN_is_odd" title='BN_is_odd' data-ref="BN_is_odd" data-ref-filename="BN_is_odd">BN_is_odd</a>(<a class="local col5 ref" href="#15n" title='n' data-ref="15n" data-ref-filename="15n">n</a>));</td></tr>
+<tr><th id="168">168</th><td></td></tr>
+<tr><th id="169">169</th><td>  <a class="ref fn" href="../../../include/openssl/bn.h.html#BN_zero" title='BN_zero' data-ref="BN_zero" data-ref-filename="BN_zero">BN_zero</a>(<a class="local col3 ref" href="#13r" title='r' data-ref="13r" data-ref-filename="13r">r</a>);</td></tr>
+<tr><th id="170">170</th><td></td></tr>
+<tr><th id="171">171</th><td>  <em>unsigned</em> <dfn class="local col7 decl" id="17n_bits" title='n_bits' data-type='unsigned int' data-ref="17n_bits" data-ref-filename="17n_bits">n_bits</dfn> = <a class="ref fn" href="../../../include/openssl/bn.h.html#BN_num_bits" title='BN_num_bits' data-ref="BN_num_bits" data-ref-filename="BN_num_bits">BN_num_bits</a>(<a class="local col5 ref" href="#15n" title='n' data-ref="15n" data-ref-filename="15n">n</a>);</td></tr>
+<tr><th id="172">172</th><td>  <span class="macro" title="(__builtin_expect(!(n_bits != 0), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/bn/montgomery_inv.c&quot;, 172, &quot;n_bits != 0&quot;) : (void)0)" data-ref="_M/assert">assert</span>(<a class="local col7 ref" href="#17n_bits" title='n_bits' data-ref="17n_bits" data-ref-filename="17n_bits">n_bits</a> != <var>0</var>);</td></tr>
+<tr><th id="173">173</th><td>  <span class="macro" title="(__builtin_expect(!(p &gt; n_bits), 0) ? __assert_rtn(__func__, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/fipsmodule/bn/montgomery_inv.c&quot;, 173, &quot;p &gt; n_bits&quot;) : (void)0)" data-ref="_M/assert">assert</span>(<a class="local col4 ref" href="#14p" title='p' data-ref="14p" data-ref-filename="14p">p</a> &gt; <a class="local col7 ref" href="#17n_bits" title='n_bits' data-ref="17n_bits" data-ref-filename="17n_bits">n_bits</a>);</td></tr>
+<tr><th id="174">174</th><td>  <b>if</b> (<a class="local col7 ref" href="#17n_bits" title='n_bits' data-ref="17n_bits" data-ref-filename="17n_bits">n_bits</a> == <var>1</var>) {</td></tr>
+<tr><th id="175">175</th><td>    <b>return</b> <var>1</var>;</td></tr>
+<tr><th id="176">176</th><td>  }</td></tr>
+<tr><th id="177">177</th><td></td></tr>
+<tr><th id="178">178</th><td>  <i>// Set |r| to the larger power of two smaller than |n|, then shift with</i></td></tr>
+<tr><th id="179">179</th><td><i>  // reductions the rest of the way.</i></td></tr>
+<tr><th id="180">180</th><td>  <b>if</b> (!<a class="ref fn" href="../../../include/openssl/bn.h.html#BN_set_bit" title='BN_set_bit' data-ref="BN_set_bit" data-ref-filename="BN_set_bit">BN_set_bit</a>(<a class="local col3 ref" href="#13r" title='r' data-ref="13r" data-ref-filename="13r">r</a>, <a class="local col7 ref" href="#17n_bits" title='n_bits' data-ref="17n_bits" data-ref-filename="17n_bits">n_bits</a> - <var>1</var>) ||</td></tr>
+<tr><th id="181">181</th><td>      !<a class="ref fn" href="internal.h.html#bn_mod_lshift_consttime" title='bn_mod_lshift_consttime' data-ref="bn_mod_lshift_consttime" data-ref-filename="bn_mod_lshift_consttime">bn_mod_lshift_consttime</a>(<a class="local col3 ref" href="#13r" title='r' data-ref="13r" data-ref-filename="13r">r</a>, <a class="local col3 ref" href="#13r" title='r' data-ref="13r" data-ref-filename="13r">r</a>, <a class="local col4 ref" href="#14p" title='p' data-ref="14p" data-ref-filename="14p">p</a> - (<a class="local col7 ref" href="#17n_bits" title='n_bits' data-ref="17n_bits" data-ref-filename="17n_bits">n_bits</a> - <var>1</var>), <a class="local col5 ref" href="#15n" title='n' data-ref="15n" data-ref-filename="15n">n</a>, <a class="local col6 ref" href="#16ctx" title='ctx' data-ref="16ctx" data-ref-filename="16ctx">ctx</a>)) {</td></tr>
+<tr><th id="182">182</th><td>    <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="183">183</th><td>  }</td></tr>
+<tr><th id="184">184</th><td></td></tr>
+<tr><th id="185">185</th><td>  <b>return</b> <var>1</var>;</td></tr>
+<tr><th id="186">186</th><td>}</td></tr>
+<tr><th id="187">187</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,64 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>gmm.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/vad/gmm.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="webrtc::GmmParameters "/>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/vad/gmm.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>modules</a>/<a href='..'>audio_processing</a>/<a href='./'>vad</a>/<a href='gmm.h.html'>gmm.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/MODULES_AUDIO_PROCESSING_VAD_GMM_H_">MODULES_AUDIO_PROCESSING_VAD_GMM_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/MODULES_AUDIO_PROCESSING_VAD_GMM_H_" data-ref="_M/MODULES_AUDIO_PROCESSING_VAD_GMM_H_">MODULES_AUDIO_PROCESSING_VAD_GMM_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><b>namespace</b> <span class="namespace">webrtc</span> {</td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><i>// A structure that specifies a GMM.</i></td></tr>
+<tr><th id="17">17</th><td><i>// A GMM is formulated as</i></td></tr>
+<tr><th id="18">18</th><td><i>//  f(x) = w[0] * mixture[0] + w[1] * mixture[1] + ... +</i></td></tr>
+<tr><th id="19">19</th><td><i>//         w[num_mixtures - 1] * mixture[num_mixtures - 1];</i></td></tr>
+<tr><th id="20">20</th><td><i>// Where a 'mixture' is a Gaussian density.</i></td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><b>struct</b> <dfn class="type def" id="webrtc::GmmParameters" title='webrtc::GmmParameters' data-ref="webrtc::GmmParameters" data-ref-filename="webrtc..GmmParameters">GmmParameters</dfn> {</td></tr>
+<tr><th id="23">23</th><td>  <i>// weight[n] = log(w[n]) - |dimension|/2 * log(2*pi) - 1/2 * log(det(cov[n]));</i></td></tr>
+<tr><th id="24">24</th><td><i>  // where cov[n] is the covariance matrix of mixture n;</i></td></tr>
+<tr><th id="25">25</th><td>  <em>const</em> <em>double</em>* <dfn class="decl field" id="webrtc::GmmParameters::weight" title='webrtc::GmmParameters::weight' data-ref="webrtc::GmmParameters::weight" data-ref-filename="webrtc..GmmParameters..weight">weight</dfn>;</td></tr>
+<tr><th id="26">26</th><td>  <i>// pointer to the first element of a |num_mixtures|x|dimension| matrix</i></td></tr>
+<tr><th id="27">27</th><td><i>  // where kth row is the mean of the kth mixture.</i></td></tr>
+<tr><th id="28">28</th><td>  <em>const</em> <em>double</em>* <dfn class="decl field" id="webrtc::GmmParameters::mean" title='webrtc::GmmParameters::mean' data-ref="webrtc::GmmParameters::mean" data-ref-filename="webrtc..GmmParameters..mean">mean</dfn>;</td></tr>
+<tr><th id="29">29</th><td>  <i>// pointer to the first element of a |num_mixtures|x|dimension|x|dimension|</i></td></tr>
+<tr><th id="30">30</th><td><i>  // 3D-matrix, where the kth 2D-matrix is the inverse of the covariance</i></td></tr>
+<tr><th id="31">31</th><td><i>  // matrix of the kth mixture.</i></td></tr>
+<tr><th id="32">32</th><td>  <em>const</em> <em>double</em>* <dfn class="decl field" id="webrtc::GmmParameters::covar_inverse" title='webrtc::GmmParameters::covar_inverse' data-ref="webrtc::GmmParameters::covar_inverse" data-ref-filename="webrtc..GmmParameters..covar_inverse">covar_inverse</dfn>;</td></tr>
+<tr><th id="33">33</th><td>  <i>// Dimensionality of the mixtures.</i></td></tr>
+<tr><th id="34">34</th><td>  <em>int</em> <dfn class="decl field" id="webrtc::GmmParameters::dimension" title='webrtc::GmmParameters::dimension' data-ref="webrtc::GmmParameters::dimension" data-ref-filename="webrtc..GmmParameters..dimension">dimension</dfn>;</td></tr>
+<tr><th id="35">35</th><td>  <i>// number of the mixtures.</i></td></tr>
+<tr><th id="36">36</th><td>  <em>int</em> <dfn class="decl field" id="webrtc::GmmParameters::num_mixtures" title='webrtc::GmmParameters::num_mixtures' data-ref="webrtc::GmmParameters::num_mixtures" data-ref-filename="webrtc..GmmParameters..num_mixtures">num_mixtures</dfn>;</td></tr>
+<tr><th id="37">37</th><td>};</td></tr>
+<tr><th id="38">38</th><td></td></tr>
+<tr><th id="39">39</th><td><i>// Evaluate the given GMM, according to |gmm_parameters|, at the given point</i></td></tr>
+<tr><th id="40">40</th><td><i>// |x|. If the dimensionality of the given GMM is larger that the maximum</i></td></tr>
+<tr><th id="41">41</th><td><i>// acceptable dimension by the following function -1 is returned.</i></td></tr>
+<tr><th id="42">42</th><td><em>double</em> <dfn class="decl fn" id="_ZN6webrtc11EvaluateGmmEPKdRKNS_13GmmParametersE" title='webrtc::EvaluateGmm' data-ref="_ZN6webrtc11EvaluateGmmEPKdRKNS_13GmmParametersE" data-ref-filename="_ZN6webrtc11EvaluateGmmEPKdRKNS_13GmmParametersE">EvaluateGmm</dfn>(<em>const</em> <em>double</em>* <dfn class="local col1 decl" id="1x" title='x' data-type='const double *' data-ref="1x" data-ref-filename="1x">x</dfn>, <em>const</em> <a class="type" href="#webrtc::GmmParameters" title='webrtc::GmmParameters' data-ref="webrtc::GmmParameters" data-ref-filename="webrtc..GmmParameters">GmmParameters</a>&amp; <dfn class="local col2 decl" id="2gmm_parameters" title='gmm_parameters' data-type='const webrtc::GmmParameters &amp;' data-ref="2gmm_parameters" data-ref-filename="2gmm_parameters">gmm_parameters</dfn>);</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td>}  <i>// namespace webrtc</i></td></tr>
+<tr><th id="45">45</th><td><u>#<span data-ppcond="11">endif</span>  // MODULES_AUDIO_PROCESSING_VAD_GMM_H_</u></td></tr>
+<tr><th id="46">46</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../agc/agc.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/modules/audio_processing/agc/agc.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

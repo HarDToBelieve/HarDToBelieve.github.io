@@ -1,0 +1,142 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>nasm-parser.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/modules/parsers/nasm/nasm-parser.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="nasm_parser_state,tokentype "/>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/modules/parsers/nasm/nasm-parser.h'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>third_party</a>/<a href='../../..'>yasm</a>/<a href='../..'>modules</a>/<a href='..'>parsers</a>/<a href='./'>nasm</a>/<a href='nasm-parser.h.html'>nasm-parser.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * NASM-compatible parser header file</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Copyright (C) 2002-2007  Peter Johnson</i></td></tr>
+<tr><th id="5">5</th><td><i> *</i></td></tr>
+<tr><th id="6">6</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="7">7</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="8">8</th><td><i> * are met:</i></td></tr>
+<tr><th id="9">9</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="11">11</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="12">12</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="13">13</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="14">14</th><td><i> *</i></td></tr>
+<tr><th id="15">15</th><td><i> * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND OTHER CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="16">16</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="17">17</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</i></td></tr>
+<tr><th id="18">18</th><td><i> * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR OTHER CONTRIBUTORS BE</i></td></tr>
+<tr><th id="19">19</th><td><i> * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="21">21</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="22">22</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="23">23</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="24">24</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE</i></td></tr>
+<tr><th id="25">25</th><td><i> * POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="26">26</th><td><i> */</i></td></tr>
+<tr><th id="27">27</th><td><u>#<span data-ppcond="27">ifndef</span> <span class="macro" data-ref="_M/YASM_NASM_PARSER_H">YASM_NASM_PARSER_H</span></u></td></tr>
+<tr><th id="28">28</th><td><u>#define <dfn class="macro" id="_M/YASM_NASM_PARSER_H" data-ref="_M/YASM_NASM_PARSER_H">YASM_NASM_PARSER_H</dfn></u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="nasm-parser-struct.h.html">"nasm-parser-struct.h"</a></u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><u>#define <dfn class="macro" id="_M/YYCTYPE" data-ref="_M/YYCTYPE">YYCTYPE</dfn>         unsigned char</u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><u>#define <dfn class="macro" id="_M/MAX_SAVED_LINE_LEN" data-ref="_M/MAX_SAVED_LINE_LEN">MAX_SAVED_LINE_LEN</dfn>  80</u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><b>enum</b> <dfn class="type def" id="tokentype" title='tokentype' data-ref="tokentype" data-ref-filename="tokentype">tokentype</dfn> {</td></tr>
+<tr><th id="37">37</th><td>    <dfn class="enum" id="INTNUM" title='INTNUM' data-ref="INTNUM" data-ref-filename="INTNUM">INTNUM</dfn> = <var>258</var>,</td></tr>
+<tr><th id="38">38</th><td>    <dfn class="enum" id="FLTNUM" title='FLTNUM' data-ref="FLTNUM" data-ref-filename="FLTNUM">FLTNUM</dfn>,</td></tr>
+<tr><th id="39">39</th><td>    <dfn class="enum" id="DIRECTIVE_NAME" title='DIRECTIVE_NAME' data-ref="DIRECTIVE_NAME" data-ref-filename="DIRECTIVE_NAME">DIRECTIVE_NAME</dfn>,</td></tr>
+<tr><th id="40">40</th><td>    <dfn class="enum" id="FILENAME" title='FILENAME' data-ref="FILENAME" data-ref-filename="FILENAME">FILENAME</dfn>,</td></tr>
+<tr><th id="41">41</th><td>    <dfn class="enum" id="STRING" title='STRING' data-ref="STRING" data-ref-filename="STRING">STRING</dfn>,</td></tr>
+<tr><th id="42">42</th><td>    <dfn class="enum" id="SIZE_OVERRIDE" title='SIZE_OVERRIDE' data-ref="SIZE_OVERRIDE" data-ref-filename="SIZE_OVERRIDE">SIZE_OVERRIDE</dfn>,</td></tr>
+<tr><th id="43">43</th><td>    <dfn class="enum" id="OFFSET" title='OFFSET' data-ref="OFFSET" data-ref-filename="OFFSET">OFFSET</dfn>,</td></tr>
+<tr><th id="44">44</th><td>    <dfn class="enum" id="DECLARE_DATA" title='DECLARE_DATA' data-ref="DECLARE_DATA" data-ref-filename="DECLARE_DATA">DECLARE_DATA</dfn>,</td></tr>
+<tr><th id="45">45</th><td>    <dfn class="enum" id="RESERVE_SPACE" title='RESERVE_SPACE' data-ref="RESERVE_SPACE" data-ref-filename="RESERVE_SPACE">RESERVE_SPACE</dfn>,</td></tr>
+<tr><th id="46">46</th><td>    <dfn class="enum" id="LABEL" title='LABEL' data-ref="LABEL" data-ref-filename="LABEL">LABEL</dfn>,</td></tr>
+<tr><th id="47">47</th><td>    <dfn class="enum" id="INCBIN" title='INCBIN' data-ref="INCBIN" data-ref-filename="INCBIN">INCBIN</dfn>,</td></tr>
+<tr><th id="48">48</th><td>    <dfn class="enum" id="EQU" title='EQU' data-ref="EQU" data-ref-filename="EQU">EQU</dfn>,</td></tr>
+<tr><th id="49">49</th><td>    <dfn class="enum" id="TIMES" title='TIMES' data-ref="TIMES" data-ref-filename="TIMES">TIMES</dfn>,</td></tr>
+<tr><th id="50">50</th><td>    <dfn class="enum" id="DUP" title='DUP' data-ref="DUP" data-ref-filename="DUP">DUP</dfn>,</td></tr>
+<tr><th id="51">51</th><td>    <dfn class="enum" id="SEG" title='SEG' data-ref="SEG" data-ref-filename="SEG">SEG</dfn>,</td></tr>
+<tr><th id="52">52</th><td>    <dfn class="enum" id="WRT" title='WRT' data-ref="WRT" data-ref-filename="WRT">WRT</dfn>,</td></tr>
+<tr><th id="53">53</th><td>    <dfn class="enum" id="ABS" title='ABS' data-ref="ABS" data-ref-filename="ABS">ABS</dfn>,</td></tr>
+<tr><th id="54">54</th><td>    <dfn class="enum" id="REL" title='REL' data-ref="REL" data-ref-filename="REL">REL</dfn>,</td></tr>
+<tr><th id="55">55</th><td>    <dfn class="enum" id="NOSPLIT" title='NOSPLIT' data-ref="NOSPLIT" data-ref-filename="NOSPLIT">NOSPLIT</dfn>,</td></tr>
+<tr><th id="56">56</th><td>    <dfn class="enum" id="STRICT" title='STRICT' data-ref="STRICT" data-ref-filename="STRICT">STRICT</dfn>,</td></tr>
+<tr><th id="57">57</th><td>    <dfn class="enum" id="INSN" title='INSN' data-ref="INSN" data-ref-filename="INSN">INSN</dfn>,</td></tr>
+<tr><th id="58">58</th><td>    <dfn class="enum" id="PREFIX" title='PREFIX' data-ref="PREFIX" data-ref-filename="PREFIX">PREFIX</dfn>,</td></tr>
+<tr><th id="59">59</th><td>    <dfn class="enum" id="REG" title='REG' data-ref="REG" data-ref-filename="REG">REG</dfn>,</td></tr>
+<tr><th id="60">60</th><td>    <dfn class="enum" id="REGGROUP" title='REGGROUP' data-ref="REGGROUP" data-ref-filename="REGGROUP">REGGROUP</dfn>,</td></tr>
+<tr><th id="61">61</th><td>    <dfn class="enum" id="SEGREG" title='SEGREG' data-ref="SEGREG" data-ref-filename="SEGREG">SEGREG</dfn>,</td></tr>
+<tr><th id="62">62</th><td>    <dfn class="enum" id="TARGETMOD" title='TARGETMOD' data-ref="TARGETMOD" data-ref-filename="TARGETMOD">TARGETMOD</dfn>,</td></tr>
+<tr><th id="63">63</th><td>    <dfn class="enum" id="LEFT_OP" title='LEFT_OP' data-ref="LEFT_OP" data-ref-filename="LEFT_OP">LEFT_OP</dfn>,</td></tr>
+<tr><th id="64">64</th><td>    <dfn class="enum" id="RIGHT_OP" title='RIGHT_OP' data-ref="RIGHT_OP" data-ref-filename="RIGHT_OP">RIGHT_OP</dfn>,</td></tr>
+<tr><th id="65">65</th><td>    <dfn class="enum" id="LOW" title='LOW' data-ref="LOW" data-ref-filename="LOW">LOW</dfn>,</td></tr>
+<tr><th id="66">66</th><td>    <dfn class="enum" id="HIGH" title='HIGH' data-ref="HIGH" data-ref-filename="HIGH">HIGH</dfn>,</td></tr>
+<tr><th id="67">67</th><td>    <dfn class="enum" id="SIGNDIV" title='SIGNDIV' data-ref="SIGNDIV" data-ref-filename="SIGNDIV">SIGNDIV</dfn>,</td></tr>
+<tr><th id="68">68</th><td>    <dfn class="enum" id="SIGNMOD" title='SIGNMOD' data-ref="SIGNMOD" data-ref-filename="SIGNMOD">SIGNMOD</dfn>,</td></tr>
+<tr><th id="69">69</th><td>    <dfn class="enum" id="START_SECTION_ID" title='START_SECTION_ID' data-ref="START_SECTION_ID" data-ref-filename="START_SECTION_ID">START_SECTION_ID</dfn>,</td></tr>
+<tr><th id="70">70</th><td>    <dfn class="enum" id="ID" title='ID' data-ref="ID" data-ref-filename="ID">ID</dfn>,</td></tr>
+<tr><th id="71">71</th><td>    <dfn class="enum" id="LOCAL_ID" title='LOCAL_ID' data-ref="LOCAL_ID" data-ref-filename="LOCAL_ID">LOCAL_ID</dfn>,</td></tr>
+<tr><th id="72">72</th><td>    <dfn class="enum" id="SPECIAL_ID" title='SPECIAL_ID' data-ref="SPECIAL_ID" data-ref-filename="SPECIAL_ID">SPECIAL_ID</dfn>,</td></tr>
+<tr><th id="73">73</th><td>    <dfn class="enum" id="NONLOCAL_ID" title='NONLOCAL_ID' data-ref="NONLOCAL_ID" data-ref-filename="NONLOCAL_ID">NONLOCAL_ID</dfn>,</td></tr>
+<tr><th id="74">74</th><td>    <dfn class="enum" id="LINE" title='LINE' data-ref="LINE" data-ref-filename="LINE">LINE</dfn>,</td></tr>
+<tr><th id="75">75</th><td>    <dfn class="enum" id="NONE" title='NONE' data-ref="NONE" data-ref-filename="NONE">NONE</dfn>                <i>/* special token for lookahead */</i></td></tr>
+<tr><th id="76">76</th><td>};</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td><b>enum</b> <dfn class="type def" id="nasm_parser_state" title='nasm_parser_state' data-ref="nasm_parser_state" data-ref-filename="nasm_parser_state">nasm_parser_state</dfn> {</td></tr>
+<tr><th id="79">79</th><td>    <dfn class="enum" id="INITIAL" title='INITIAL' data-ref="INITIAL" data-ref-filename="INITIAL">INITIAL</dfn>,</td></tr>
+<tr><th id="80">80</th><td>    <dfn class="enum" id="DIRECTIVE" title='DIRECTIVE' data-ref="DIRECTIVE" data-ref-filename="DIRECTIVE">DIRECTIVE</dfn>,</td></tr>
+<tr><th id="81">81</th><td>    <dfn class="enum" id="SECTION_DIRECTIVE" title='SECTION_DIRECTIVE' data-ref="SECTION_DIRECTIVE" data-ref-filename="SECTION_DIRECTIVE">SECTION_DIRECTIVE</dfn>,</td></tr>
+<tr><th id="82">82</th><td>    <dfn class="enum" id="DIRECTIVE2" title='DIRECTIVE2' data-ref="DIRECTIVE2" data-ref-filename="DIRECTIVE2">DIRECTIVE2</dfn>,</td></tr>
+<tr><th id="83">83</th><td>    <dfn class="enum" id="LINECHG" title='LINECHG' data-ref="LINECHG" data-ref-filename="LINECHG">LINECHG</dfn>,</td></tr>
+<tr><th id="84">84</th><td>    <dfn class="enum" id="LINECHG2" title='LINECHG2' data-ref="LINECHG2" data-ref-filename="LINECHG2">LINECHG2</dfn>,</td></tr>
+<tr><th id="85">85</th><td>    <dfn class="enum" id="INSTRUCTION" title='INSTRUCTION' data-ref="INSTRUCTION" data-ref-filename="INSTRUCTION">INSTRUCTION</dfn></td></tr>
+<tr><th id="86">86</th><td>};</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td><u>#define <dfn class="macro" id="_M/YYSTYPE" data-ref="_M/YYSTYPE">YYSTYPE</dfn> <a class="typedef" href="nasm-parser-struct.h.html#nasm_yystype" title='nasm_yystype' data-type='union nasm_yystype' data-ref="nasm_yystype" data-ref-filename="nasm_yystype">nasm_yystype</a></u></td></tr>
+<tr><th id="89">89</th><td></td></tr>
+<tr><th id="90">90</th><td><i>/* shorter access names to commonly used parser_nasm fields */</i></td></tr>
+<tr><th id="91">91</th><td><u>#define <dfn class="macro" id="_M/p_object" data-ref="_M/p_object">p_object</dfn>        (parser_nasm-&gt;object)</u></td></tr>
+<tr><th id="92">92</th><td><u>#define <dfn class="macro" id="_M/p_symtab" data-ref="_M/p_symtab">p_symtab</dfn>        (parser_nasm-&gt;object-&gt;symtab)</u></td></tr>
+<tr><th id="93">93</th><td><u>#define <dfn class="macro" id="_M/cursect" data-ref="_M/cursect">cursect</dfn>         (parser_nasm-&gt;object-&gt;cur_section)</u></td></tr>
+<tr><th id="94">94</th><td><u>#define <dfn class="macro" id="_M/curtok" data-ref="_M/curtok">curtok</dfn>          (parser_nasm-&gt;token)</u></td></tr>
+<tr><th id="95">95</th><td><u>#define <dfn class="macro" id="_M/curval" data-ref="_M/curval">curval</dfn>          (parser_nasm-&gt;tokval)</u></td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td><u>#define <dfn class="macro" id="_M/INTNUM_val" data-ref="_M/INTNUM_val">INTNUM_val</dfn>              (curval.intn)</u></td></tr>
+<tr><th id="98">98</th><td><u>#define <dfn class="macro" id="_M/FLTNUM_val" data-ref="_M/FLTNUM_val">FLTNUM_val</dfn>              (curval.flt)</u></td></tr>
+<tr><th id="99">99</th><td><u>#define <dfn class="macro" id="_M/DIRECTIVE_NAME_val" data-ref="_M/DIRECTIVE_NAME_val">DIRECTIVE_NAME_val</dfn>      (curval.str_val)</u></td></tr>
+<tr><th id="100">100</th><td><u>#define <dfn class="macro" id="_M/FILENAME_val" data-ref="_M/FILENAME_val">FILENAME_val</dfn>            (curval.str_val)</u></td></tr>
+<tr><th id="101">101</th><td><u>#define <dfn class="macro" id="_M/STRING_val" data-ref="_M/STRING_val">STRING_val</dfn>              (curval.str)</u></td></tr>
+<tr><th id="102">102</th><td><u>#define <dfn class="macro" id="_M/SIZE_OVERRIDE_val" data-ref="_M/SIZE_OVERRIDE_val">SIZE_OVERRIDE_val</dfn>       (curval.int_info)</u></td></tr>
+<tr><th id="103">103</th><td><u>#define <dfn class="macro" id="_M/DECLARE_DATA_val" data-ref="_M/DECLARE_DATA_val">DECLARE_DATA_val</dfn>        (curval.int_info)</u></td></tr>
+<tr><th id="104">104</th><td><u>#define <dfn class="macro" id="_M/RESERVE_SPACE_val" data-ref="_M/RESERVE_SPACE_val">RESERVE_SPACE_val</dfn>       (curval.int_info)</u></td></tr>
+<tr><th id="105">105</th><td><u>#define <dfn class="macro" id="_M/INSN_val" data-ref="_M/INSN_val">INSN_val</dfn>                (curval.bc)</u></td></tr>
+<tr><th id="106">106</th><td><u>#define <dfn class="macro" id="_M/PREFIX_val" data-ref="_M/PREFIX_val">PREFIX_val</dfn>              (curval.arch_data)</u></td></tr>
+<tr><th id="107">107</th><td><u>#define <dfn class="macro" id="_M/REG_val" data-ref="_M/REG_val">REG_val</dfn>                 (curval.arch_data)</u></td></tr>
+<tr><th id="108">108</th><td><u>#define <dfn class="macro" id="_M/REGGROUP_val" data-ref="_M/REGGROUP_val">REGGROUP_val</dfn>            (curval.arch_data)</u></td></tr>
+<tr><th id="109">109</th><td><u>#define <dfn class="macro" id="_M/SEGREG_val" data-ref="_M/SEGREG_val">SEGREG_val</dfn>              (curval.arch_data)</u></td></tr>
+<tr><th id="110">110</th><td><u>#define <dfn class="macro" id="_M/TARGETMOD_val" data-ref="_M/TARGETMOD_val">TARGETMOD_val</dfn>           (curval.arch_data)</u></td></tr>
+<tr><th id="111">111</th><td><u>#define <dfn class="macro" id="_M/ID_val" data-ref="_M/ID_val">ID_val</dfn>                  (curval.str_val)</u></td></tr>
+<tr><th id="112">112</th><td></td></tr>
+<tr><th id="113">113</th><td><u>#define <dfn class="macro" id="_M/cur_line" data-ref="_M/cur_line">cur_line</dfn>        (yasm_linemap_get_current(parser_nasm-&gt;linemap))</u></td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td><u>#define <dfn class="macro" id="_M/p_expr_new_tree" data-ref="_M/p_expr_new_tree">p_expr_new_tree</dfn>(l,o,r)  yasm_expr_create_tree(l,o,r,cur_line)</u></td></tr>
+<tr><th id="116">116</th><td><u>#define <dfn class="macro" id="_M/p_expr_new_branch" data-ref="_M/p_expr_new_branch">p_expr_new_branch</dfn>(o,r)  yasm_expr_create_branch(o,r,cur_line)</u></td></tr>
+<tr><th id="117">117</th><td><u>#define <dfn class="macro" id="_M/p_expr_new_ident" data-ref="_M/p_expr_new_ident">p_expr_new_ident</dfn>(r)     yasm_expr_create_ident(r,cur_line)</u></td></tr>
+<tr><th id="118">118</th><td></td></tr>
+<tr><th id="119">119</th><td><em>void</em> <a class="decl fn" href="nasm-parse.c.html#nasm_parser_parse" title='nasm_parser_parse' data-ref="nasm_parser_parse" data-ref-filename="nasm_parser_parse" id="nasm_parser_parse">nasm_parser_parse</a>(<a class="typedef" href="nasm-parser-struct.h.html#yasm_parser_nasm" title='yasm_parser_nasm' data-type='struct yasm_parser_nasm' data-ref="yasm_parser_nasm" data-ref-filename="yasm_parser_nasm">yasm_parser_nasm</a> *<dfn class="local col1 decl" id="1parser_nasm" title='parser_nasm' data-type='yasm_parser_nasm *' data-ref="1parser_nasm" data-ref-filename="1parser_nasm">parser_nasm</dfn>);</td></tr>
+<tr><th id="120">120</th><td><em>void</em> <dfn class="decl fn" id="nasm_parser_cleanup" title='nasm_parser_cleanup' data-ref="nasm_parser_cleanup" data-ref-filename="nasm_parser_cleanup">nasm_parser_cleanup</dfn>(<a class="typedef" href="nasm-parser-struct.h.html#yasm_parser_nasm" title='yasm_parser_nasm' data-type='struct yasm_parser_nasm' data-ref="yasm_parser_nasm" data-ref-filename="yasm_parser_nasm">yasm_parser_nasm</a> *<dfn class="local col2 decl" id="2parser_nasm" title='parser_nasm' data-type='yasm_parser_nasm *' data-ref="2parser_nasm" data-ref-filename="2parser_nasm">parser_nasm</dfn>);</td></tr>
+<tr><th id="121">121</th><td><em>int</em> <dfn class="decl fn" id="nasm_parser_lex" title='nasm_parser_lex' data-ref="nasm_parser_lex" data-ref-filename="nasm_parser_lex">nasm_parser_lex</dfn>(<a class="macro" href="#88" title="nasm_yystype" data-ref="_M/YYSTYPE">YYSTYPE</a> *<dfn class="local col3 decl" id="3lvalp" title='lvalp' data-type='nasm_yystype *' data-ref="3lvalp" data-ref-filename="3lvalp">lvalp</dfn>, <a class="typedef" href="nasm-parser-struct.h.html#yasm_parser_nasm" title='yasm_parser_nasm' data-type='struct yasm_parser_nasm' data-ref="yasm_parser_nasm" data-ref-filename="yasm_parser_nasm">yasm_parser_nasm</a> *<dfn class="local col4 decl" id="4parser_nasm" title='parser_nasm' data-type='yasm_parser_nasm *' data-ref="4parser_nasm" data-ref-filename="4parser_nasm">parser_nasm</dfn>);</td></tr>
+<tr><th id="122">122</th><td></td></tr>
+<tr><th id="123">123</th><td><u>#<span data-ppcond="27">endif</span></u></td></tr>
+<tr><th id="124">124</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='nasm-parse.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/yasm/modules/parsers/nasm/nasm-parse.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

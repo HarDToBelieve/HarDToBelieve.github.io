@@ -1,0 +1,223 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebPolicyDelegate.h source code [webkit/Source/WebKitLegacy/mac/WebView/WebPolicyDelegate.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/WebView/WebPolicyDelegate.h'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>WebView</a>/<a href='WebPolicyDelegate.h.html'>WebPolicyDelegate.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2003, 2004, 2005, 2007 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * 1.  Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="9">9</th><td><i> *     notice, this list of conditions and the following disclaimer. </i></td></tr>
+<tr><th id="10">10</th><td><i> * 2.  Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="11">11</th><td><i> *     notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="12">12</th><td><i> *     documentation and/or other materials provided with the distribution. </i></td></tr>
+<tr><th id="13">13</th><td><i> * 3.  Neither the name of Apple Inc. ("Apple") nor the names of</i></td></tr>
+<tr><th id="14">14</th><td><i> *     its contributors may be used to endorse or promote products derived</i></td></tr>
+<tr><th id="15">15</th><td><i> *     from this software without specific prior written permission. </i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</i></td></tr>
+<tr><th id="19">19</th><td><i> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</i></td></tr>
+<tr><th id="20">20</th><td><i> * DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="21">21</th><td><i> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</i></td></tr>
+<tr><th id="23">23</th><td><i> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</i></td></tr>
+<tr><th id="24">24</th><td><i> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="25">25</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF</i></td></tr>
+<tr><th id="26">26</th><td><i> * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="27">27</th><td><i> */</i></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#import &lt;Foundation/Foundation.h&gt;</u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html">&lt;WebKitLegacy/WebKitAvailability.h&gt;</a></u></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><u>#<span data-ppcond="32">if</span> !<span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="33">33</th><td><u>#import &lt;AppKit/AppKit.h&gt;</u></td></tr>
+<tr><th id="34">34</th><td><u>#<span data-ppcond="32">endif</span></u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td>@class NSError;</td></tr>
+<tr><th id="37">37</th><td>@class NSURLResponse;</td></tr>
+<tr><th id="38">38</th><td>@class NSURLRequest;</td></tr>
+<tr><th id="39">39</th><td>@class WebView;</td></tr>
+<tr><th id="40">40</th><td>@class WebFrame;</td></tr>
+<tr><th id="41">41</th><td>@class WebPolicyPrivate;</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="44">44</th><td><i class="doc">    <span class="command">@enum</span> <span class="verb" data-ref="WebNavigationType">WebNavigationType</span></i></td></tr>
+<tr><th id="45">45</th><td><i class="doc">    <span class="command">@abstract</span> The type of action that triggered a possible navigation.</i></td></tr>
+<tr><th id="46">46</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebNavigationTypeLinkClicked A link with an href was clicked.</span></i></td></tr>
+<tr><th id="47">47</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebNavigationTypeFormSubmitted A form was submitted.</span></i></td></tr>
+<tr><th id="48">48</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebNavigationTypeBackForward The user chose back or forward.</span></i></td></tr>
+<tr><th id="49">49</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebNavigationTypeReload The User hit the reload button.</span></i></td></tr>
+<tr><th id="50">50</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebNavigationTypeFormResubmitted A form was resubmitted (by virtue of doing back, forward or reload).</span></i></td></tr>
+<tr><th id="51">51</th><td><i class="doc">    <span class="command">@constant</span> <span class="verb">WebNavigationTypeOther Navigation is taking place for some other reason.</span></i></td></tr>
+<tr><th id="52">52</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td><b>typedef</b> <span class="macro" title="enum __attribute__((enum_extensibility(open))) WebNavigationType : NSInteger WebNavigationType; enum WebNavigationType : NSInteger" data-ref="_M/NS_ENUM">NS_ENUM</span>(NSInteger, <dfn class="type" id="WebNavigationType" title='WebNavigationType' data-ref="WebNavigationType" data-ref-filename="WebNavigationType"><dfn class="typedef" id="WebNavigationType" title='WebNavigationType' data-type='enum WebNavigationType' data-ref="WebNavigationType" data-ref-filename="WebNavigationType"><a class="type" href="#54" title='WebNavigationType' data-ref="WebNavigationType" data-ref-filename="WebNavigationType"><dfn class="type def" id="WebNavigationType" title='WebNavigationType' data-ref="WebNavigationType" data-ref-filename="WebNavigationType">WebNavigationType</dfn></a></dfn></dfn>) {</td></tr>
+<tr><th id="55">55</th><td>    <dfn class="enum" id="WebNavigationTypeLinkClicked" title='WebNavigationTypeLinkClicked' data-ref="WebNavigationTypeLinkClicked" data-ref-filename="WebNavigationTypeLinkClicked">WebNavigationTypeLinkClicked</dfn>,</td></tr>
+<tr><th id="56">56</th><td>    <dfn class="enum" id="WebNavigationTypeFormSubmitted" title='WebNavigationTypeFormSubmitted' data-ref="WebNavigationTypeFormSubmitted" data-ref-filename="WebNavigationTypeFormSubmitted">WebNavigationTypeFormSubmitted</dfn>,</td></tr>
+<tr><th id="57">57</th><td>    <dfn class="enum" id="WebNavigationTypeBackForward" title='WebNavigationTypeBackForward' data-ref="WebNavigationTypeBackForward" data-ref-filename="WebNavigationTypeBackForward">WebNavigationTypeBackForward</dfn>,</td></tr>
+<tr><th id="58">58</th><td>    <dfn class="enum" id="WebNavigationTypeReload" title='WebNavigationTypeReload' data-ref="WebNavigationTypeReload" data-ref-filename="WebNavigationTypeReload">WebNavigationTypeReload</dfn>,</td></tr>
+<tr><th id="59">59</th><td>    <dfn class="enum" id="WebNavigationTypeFormResubmitted" title='WebNavigationTypeFormResubmitted' data-ref="WebNavigationTypeFormResubmitted" data-ref-filename="WebNavigationTypeFormResubmitted">WebNavigationTypeFormResubmitted</dfn>,</td></tr>
+<tr><th id="60">60</th><td>    <dfn class="enum" id="WebNavigationTypeOther" title='WebNavigationTypeOther' data-ref="WebNavigationTypeOther" data-ref-filename="WebNavigationTypeOther">WebNavigationTypeOther</dfn></td></tr>
+<tr><th id="61">61</th><td>} <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#47" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_ENUM_DEPRECATED_MAC">WEBKIT_ENUM_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>);</td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><b>extern</b> NSString *<dfn class="decl" id="WebActionNavigationTypeKey" title='WebActionNavigationTypeKey' data-ref="WebActionNavigationTypeKey" data-ref-filename="WebActionNavigationTypeKey">WebActionNavigationTypeKey</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>); <i>// NSNumber (WebNavigationType)</i></td></tr>
+<tr><th id="64">64</th><td><b>extern</b> NSString *<dfn class="decl" id="WebActionElementKey" title='WebActionElementKey' data-ref="WebActionElementKey" data-ref-filename="WebActionElementKey">WebActionElementKey</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>); <i>// NSDictionary of element info</i></td></tr>
+<tr><th id="65">65</th><td><b>extern</b> NSString *<dfn class="decl" id="WebActionButtonKey" title='WebActionButtonKey' data-ref="WebActionButtonKey" data-ref-filename="WebActionButtonKey">WebActionButtonKey</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>); <i>// NSNumber (0 for left button, 1 for middle button, 2 for right button)</i></td></tr>
+<tr><th id="66">66</th><td><b>extern</b> NSString *<dfn class="decl" id="WebActionModifierFlagsKey" title='WebActionModifierFlagsKey' data-ref="WebActionModifierFlagsKey" data-ref-filename="WebActionModifierFlagsKey">WebActionModifierFlagsKey</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>); <i>// NSNumber (unsigned)</i></td></tr>
+<tr><th id="67">67</th><td><b>extern</b> NSString *<dfn class="decl" id="WebActionOriginalURLKey" title='WebActionOriginalURLKey' data-ref="WebActionOriginalURLKey" data-ref-filename="WebActionOriginalURLKey">WebActionOriginalURLKey</dfn> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>); <i>// NSURL</i></td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="70">70</th><td><i class="doc">    <span class="command">@protocol</span> <span class="verb" data-ref="WebPolicyDecisionListener">WebPolicyDecisionListener</span></i></td></tr>
+<tr><th id="71">71</th><td><i class="doc">    <span class="command">@discussion</span> This protocol is used to call back with the results of a</i></td></tr>
+<tr><th id="72">72</th><td><i class="doc">    policy decision. This provides the ability to make these decisions</i></td></tr>
+<tr><th id="73">73</th><td><i class="doc">    asyncrhonously, which means the decision can be made by prompting</i></td></tr>
+<tr><th id="74">74</th><td><i class="doc">    with a sheet, for example.</i></td></tr>
+<tr><th id="75">75</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td><a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>)</td></tr>
+<tr><th id="78">78</th><td>@protocol WebPolicyDecisionListener &lt;NSObject&gt;</td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="81">81</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">use</span></i></td></tr>
+<tr><th id="82">82</th><td><i class="doc">    <span class="command">@abstract</span> Use the resource</i></td></tr>
+<tr><th id="83">83</th><td><i class="doc">    <span class="command">@discussion</span> If there remain more policy decisions to be made, then</i></td></tr>
+<tr><th id="84">84</th><td><i class="doc">    the next policy delegate method gets to decide. This will be</i></td></tr>
+<tr><th id="85">85</th><td><i class="doc">    either the next navigation policy delegate if there is a redirect,</i></td></tr>
+<tr><th id="86">86</th><td><i class="doc">    or the content policy delegate. If there are no more policy</i></td></tr>
+<tr><th id="87">87</th><td><i class="doc">    decisions to be made, the resource will be displayed inline if</i></td></tr>
+<tr><th id="88">88</th><td><i class="doc">    possible. If there is no view available to display the resource</i></td></tr>
+<tr><th id="89">89</th><td><i class="doc">    inline, then unableToImplementPolicyWithError:frame: will be</i></td></tr>
+<tr><th id="90">90</th><td><i class="doc">    called with an appropriate error. </i></td></tr>
+<tr><th id="91">91</th><td><i class="doc"></i></td></tr>
+<tr><th id="92">92</th><td><i class="doc">    <span class="tag">&lt;p&gt;</span>If a new window is going to be created for this navigation as a</i></td></tr>
+<tr><th id="93">93</th><td><i class="doc">    result of frame targeting, then it will be created once you call</i></td></tr>
+<tr><th id="94">94</th><td><i class="doc">    this method.</i></td></tr>
+<tr><th id="95">95</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="96">96</th><td>- (<em>void</em>)use;</td></tr>
+<tr><th id="97">97</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="98">98</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">download</span></i></td></tr>
+<tr><th id="99">99</th><td><i class="doc">    <span class="command">@abstract</span> Download the resource instead of displaying it.</i></td></tr>
+<tr><th id="100">100</th><td><i class="doc">    <span class="command">@discussion</span> This method is more than just a convenience because it</i></td></tr>
+<tr><th id="101">101</th><td><i class="doc">    allows an in-progress navigation to be converted to a download</i></td></tr>
+<tr><th id="102">102</th><td><i class="doc">    based on content type, without having to stop and restart the</i></td></tr>
+<tr><th id="103">103</th><td><i class="doc">    load.</i></td></tr>
+<tr><th id="104">104</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="105">105</th><td>- (<em>void</em>)download;</td></tr>
+<tr><th id="106">106</th><td></td></tr>
+<tr><th id="107">107</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="108">108</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">ignore</span></i></td></tr>
+<tr><th id="109">109</th><td><i class="doc">    <span class="command">@abstract</span> Do nothing (but the client may choose to handle the request itself)</i></td></tr>
+<tr><th id="110">110</th><td><i class="doc">    <span class="command">@discussion</span> A policy of ignore prevents WebKit from doing anything</i></td></tr>
+<tr><th id="111">111</th><td><i class="doc">    further with the load, however, the client is still free to handle</i></td></tr>
+<tr><th id="112">112</th><td><i class="doc">    the request in some other way, such as opening a new window,</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc">    opening a new window behind the current one, opening the URL in an</i></td></tr>
+<tr><th id="114">114</th><td><i class="doc">    external app, revealing the location in Finder if a file URL, etc.</i></td></tr>
+<tr><th id="115">115</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="116">116</th><td>- (<em>void</em>)ignore;</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td>@end</td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td></td></tr>
+<tr><th id="121">121</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="122">122</th><td><i class="doc">    <span class="command">@category</span> <span class="verb">WebPolicyDelegate</span></i></td></tr>
+<tr><th id="123">123</th><td><i class="doc">    <span class="command">@discussion</span> While loading a URL, WebKit asks the WebPolicyDelegate for</i></td></tr>
+<tr><th id="124">124</th><td><i class="doc">    policies that determine the action of what to do with the URL or the data that</i></td></tr>
+<tr><th id="125">125</th><td><i class="doc">    the URL represents. Typically, the policy handler methods are called in this order:</i></td></tr>
+<tr><th id="126">126</th><td><i class="doc"></i></td></tr>
+<tr><th id="127">127</th><td><i class="doc">    decidePolicyForNewWindowAction:request:newFrameName:decisionListener: (at most once)&lt;BR&gt;</i></td></tr>
+<tr><th id="128">128</th><td><i class="doc">    decidePolicyForNavigationAction:request:frame:decisionListener: (zero or more times)&lt;BR&gt;</i></td></tr>
+<tr><th id="129">129</th><td><i class="doc">    decidePolicyForMIMEType:request:frame: (zero or more times)&lt;BR&gt;</i></td></tr>
+<tr><th id="130">130</th><td><i class="doc"></i></td></tr>
+<tr><th id="131">131</th><td><i class="doc">    New window policy is always checked. Navigation policy is checked</i></td></tr>
+<tr><th id="132">132</th><td><i class="doc">    for the initial load and every redirect unless blocked by an</i></td></tr>
+<tr><th id="133">133</th><td><i class="doc">    earlier policy. Content policy is checked once the content type is</i></td></tr>
+<tr><th id="134">134</th><td><i class="doc">    known, unless an earlier policy prevented it.</i></td></tr>
+<tr><th id="135">135</th><td><i class="doc"></i></td></tr>
+<tr><th id="136">136</th><td><i class="doc">    In rare cases, content policy might be checked more than</i></td></tr>
+<tr><th id="137">137</th><td><i class="doc">    once. This occurs when loading a "multipart/x-mixed-replace"</i></td></tr>
+<tr><th id="138">138</th><td><i class="doc">    document, also known as "server push". In this case, multiple</i></td></tr>
+<tr><th id="139">139</th><td><i class="doc">    documents come in one navigation, with each replacing the last. In</i></td></tr>
+<tr><th id="140">140</th><td><i class="doc">    this case, conent policy will be checked for each one.</i></td></tr>
+<tr><th id="141">141</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="142">142</th><td><a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/WebKitAvailability.h.html#45" title="__attribute__((availability(macosx,introduced=10_3)))" data-ref="_M/WEBKIT_DEPRECATED_MAC">WEBKIT_DEPRECATED_MAC</a>(<var>10_3</var>, <var>10_14</var>)</td></tr>
+<tr><th id="143">143</th><td>@protocol WebPolicyDelegate &lt;NSObject&gt;</td></tr>
+<tr><th id="144">144</th><td></td></tr>
+<tr><th id="145">145</th><td>@optional</td></tr>
+<tr><th id="146">146</th><td></td></tr>
+<tr><th id="147">147</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="148">148</th><td><i class="doc">   <span class="command">@method</span> <span class="verb">webView:decidePolicyForNavigationAction:request:frame:decisionListener:</span></i></td></tr>
+<tr><th id="149">149</th><td><i class="doc">   <span class="command">@abstract</span> This method is called to decide what to do with a proposed navigation.</i></td></tr>
+<tr><th id="150">150</th><td><i class="doc">   <span class="command">@param</span> <span class="arg">actionInformation</span> Dictionary that describes the action that triggered this navigation.</i></td></tr>
+<tr><th id="151">151</th><td><i class="doc">   <span class="command">@param</span> <span class="arg">request</span> The request for the proposed navigation</i></td></tr>
+<tr><th id="152">152</th><td><i class="doc">   <span class="command">@param</span> <span class="arg">frame</span> The WebFrame in which the navigation is happening</i></td></tr>
+<tr><th id="153">153</th><td><i class="doc">   <span class="command">@param</span> <span class="arg">listener</span> The object to call when the decision is made</i></td></tr>
+<tr><th id="154">154</th><td><i class="doc">   <span class="command">@discussion</span> This method will be called before loading starts, and</i></td></tr>
+<tr><th id="155">155</th><td><i class="doc">   on every redirect.</i></td></tr>
+<tr><th id="156">156</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="157">157</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col1 decl" id="1webView" title='webView' data-type='WebView *' data-ref="1webView" data-ref-filename="1webView">webView</dfn> decidePolicyForNavigationAction:(NSDictionary *)<dfn class="local col2 decl" id="2actionInformation" title='actionInformation' data-type='NSDictionary *' data-ref="2actionInformation" data-ref-filename="2actionInformation">actionInformation</dfn></td></tr>
+<tr><th id="158">158</th><td>                                                           request:(NSURLRequest *)<dfn class="local col3 decl" id="3request" title='request' data-type='NSURLRequest *' data-ref="3request" data-ref-filename="3request">request</dfn></td></tr>
+<tr><th id="159">159</th><td>                                                             frame:(WebFrame *)<dfn class="local col4 decl" id="4frame" title='frame' data-type='WebFrame *' data-ref="4frame" data-ref-filename="4frame">frame</dfn></td></tr>
+<tr><th id="160">160</th><td>                                                  decisionListener:(id&lt;WebPolicyDecisionListener&gt;)<dfn class="local col5 decl" id="5listener" title='listener' data-type='id&lt;WebPolicyDecisionListener&gt;' data-ref="5listener" data-ref-filename="5listener">listener</dfn>;</td></tr>
+<tr><th id="161">161</th><td></td></tr>
+<tr><th id="162">162</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="163">163</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:decidePolicyForNewWindowAction:request:newFrameName:decisionListener:</span></i></td></tr>
+<tr><th id="164">164</th><td><i class="doc">    <span class="command">@discussion</span> This method is called to decide what to do with an targetted nagivation that would open a new window.</i></td></tr>
+<tr><th id="165">165</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">actionInformation</span> Dictionary that describes the action that triggered this navigation.</i></td></tr>
+<tr><th id="166">166</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">request</span> The request for the proposed navigation</i></td></tr>
+<tr><th id="167">167</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frameName</span> The frame in which the navigation is taking place</i></td></tr>
+<tr><th id="168">168</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">listener</span> The object to call when the decision is made</i></td></tr>
+<tr><th id="169">169</th><td><i class="doc">    <span class="command">@discussion</span> This method is provided so that modified clicks on a targetted link which</i></td></tr>
+<tr><th id="170">170</th><td><i class="doc">    opens a new frame can prevent the new window from being opened if they decide to</i></td></tr>
+<tr><th id="171">171</th><td><i class="doc">    do something else, like download or present the new frame in a specialized way. </i></td></tr>
+<tr><th id="172">172</th><td><i class="doc"></i></td></tr>
+<tr><th id="173">173</th><td><i class="doc">    <span class="tag">&lt;p&gt;</span>If this method picks a policy of Use, the new window will be</i></td></tr>
+<tr><th id="174">174</th><td><i class="doc">    opened, and decidePolicyForNavigationAction:request:frame:decisionListner:</i></td></tr>
+<tr><th id="175">175</th><td><i class="doc">    will be called with a WebNavigationType of WebNavigationTypeOther</i></td></tr>
+<tr><th id="176">176</th><td><i class="doc">    in its action. This is to avoid possible confusion about the modifiers.</i></td></tr>
+<tr><th id="177">177</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="178">178</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col6 decl" id="6webView" title='webView' data-type='WebView *' data-ref="6webView" data-ref-filename="6webView">webView</dfn> decidePolicyForNewWindowAction:(NSDictionary *)<dfn class="local col7 decl" id="7actionInformation" title='actionInformation' data-type='NSDictionary *' data-ref="7actionInformation" data-ref-filename="7actionInformation">actionInformation</dfn></td></tr>
+<tr><th id="179">179</th><td>                                                          request:(NSURLRequest *)<dfn class="local col8 decl" id="8request" title='request' data-type='NSURLRequest *' data-ref="8request" data-ref-filename="8request">request</dfn></td></tr>
+<tr><th id="180">180</th><td>                                                     newFrameName:(NSString *)<dfn class="local col9 decl" id="9frameName" title='frameName' data-type='NSString *' data-ref="9frameName" data-ref-filename="9frameName">frameName</dfn></td></tr>
+<tr><th id="181">181</th><td>                                                 decisionListener:(id&lt;WebPolicyDecisionListener&gt;)<dfn class="local col0 decl" id="10listener" title='listener' data-type='id&lt;WebPolicyDecisionListener&gt;' data-ref="10listener" data-ref-filename="10listener">listener</dfn>;</td></tr>
+<tr><th id="182">182</th><td></td></tr>
+<tr><th id="183">183</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="184">184</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:decidePolicyForMIMEType:request:frame:</span></i></td></tr>
+<tr><th id="185">185</th><td><i class="doc">    <span class="command">@discussion</span> Returns the policy for content which has been partially loaded.</i></td></tr>
+<tr><th id="186">186</th><td><i class="doc">    Sent after webView:didStartProvisionalLoadForFrame: is sent on the WebFrameLoadDelegate.</i></td></tr>
+<tr><th id="187">187</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">type</span> MIME type for the resource.</i></td></tr>
+<tr><th id="188">188</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">request</span> A NSURLRequest for the partially loaded content.</i></td></tr>
+<tr><th id="189">189</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame which is loading the URL.</i></td></tr>
+<tr><th id="190">190</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">listener</span> The object to call when the decision is made</i></td></tr>
+<tr><th id="191">191</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="192">192</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col1 decl" id="11webView" title='webView' data-type='WebView *' data-ref="11webView" data-ref-filename="11webView">webView</dfn> decidePolicyForMIMEType:(NSString *)<dfn class="local col2 decl" id="12type" title='type' data-type='NSString *' data-ref="12type" data-ref-filename="12type">type</dfn></td></tr>
+<tr><th id="193">193</th><td>                                                   request:(NSURLRequest *)<dfn class="local col3 decl" id="13request" title='request' data-type='NSURLRequest *' data-ref="13request" data-ref-filename="13request">request</dfn></td></tr>
+<tr><th id="194">194</th><td>                                                     frame:(WebFrame *)<dfn class="local col4 decl" id="14frame" title='frame' data-type='WebFrame *' data-ref="14frame" data-ref-filename="14frame">frame</dfn></td></tr>
+<tr><th id="195">195</th><td>                                          decisionListener:(id&lt;WebPolicyDecisionListener&gt;)<dfn class="local col5 decl" id="15listener" title='listener' data-type='id&lt;WebPolicyDecisionListener&gt;' data-ref="15listener" data-ref-filename="15listener">listener</dfn>;</td></tr>
+<tr><th id="196">196</th><td></td></tr>
+<tr><th id="197">197</th><td><i class="doc">/*!</i></td></tr>
+<tr><th id="198">198</th><td><i class="doc">    <span class="command">@method</span> <span class="verb">webView:unableToImplementPolicy:error:forURL:inFrame:</span></i></td></tr>
+<tr><th id="199">199</th><td><i class="doc">    <span class="command">@discussion</span> Called when a WebPolicy could not be implemented. It is up to the client to display appropriate feedback.</i></td></tr>
+<tr><th id="200">200</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">error</span> The error that caused the policy to not be implemented.</i></td></tr>
+<tr><th id="201">201</th><td><i class="doc">    <span class="command">@param</span> <span class="arg">frame</span> The frame in which the policy could not be implemented.</i></td></tr>
+<tr><th id="202">202</th><td><i class="doc">*/</i></td></tr>
+<tr><th id="203">203</th><td>- (<em>void</em>)webView:(WebView *)<dfn class="local col6 decl" id="16webView" title='webView' data-type='WebView *' data-ref="16webView" data-ref-filename="16webView">webView</dfn> unableToImplementPolicyWithError:(NSError *)<dfn class="local col7 decl" id="17error" title='error' data-type='NSError *' data-ref="17error" data-ref-filename="17error">error</dfn> frame:(WebFrame *)<dfn class="local col8 decl" id="18frame" title='frame' data-type='WebFrame *' data-ref="18frame" data-ref-filename="18frame">frame</dfn>;</td></tr>
+<tr><th id="204">204</th><td></td></tr>
+<tr><th id="205">205</th><td>@end</td></tr>
+<tr><th id="206">206</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../DefaultDelegates/WebDefaultPolicyDelegate.m.html'>webkit/Source/WebKitLegacy/mac/DefaultDelegates/WebDefaultPolicyDelegate.m</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

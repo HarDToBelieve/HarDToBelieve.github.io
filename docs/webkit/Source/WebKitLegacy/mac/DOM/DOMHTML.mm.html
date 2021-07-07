@@ -1,0 +1,324 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>DOMHTML.mm source code [webkit/Source/WebKitLegacy/mac/DOM/DOMHTML.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/DOM/DOMHTML.mm'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>DOM</a>/<a href='DOMHTML.mm.html'>DOMHTML.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2004, 2005, 2006, 2007, 2008, 2009 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> * Copyright (C) 2006 Samuel Weinig &lt;sam.weinig@gmail.com&gt;</i></td></tr>
+<tr><th id="4">4</th><td><i> *</i></td></tr>
+<tr><th id="5">5</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="6">6</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="7">7</th><td><i> * are met:</i></td></tr>
+<tr><th id="8">8</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="9">9</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="10">10</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="11">11</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="12">12</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="13">13</th><td><i> *</i></td></tr>
+<tr><th id="14">14</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="15">15</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="16">16</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="17">17</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="19">19</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="21">21</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="22">22</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="23">23</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="24">24</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. </i></td></tr>
+<tr><th id="25">25</th><td><i> */</i></td></tr>
+<tr><th id="26">26</th><td></td></tr>
+<tr><th id="27">27</th><td><u>#import <a href="DOMDocumentFragmentInternal.h.html">"DOMDocumentFragmentInternal.h"</a></u></td></tr>
+<tr><th id="28">28</th><td><u>#import <a href="DOMExtensions.h.html">"DOMExtensions.h"</a></u></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="DOMHTMLCollectionInternal.h.html">"DOMHTMLCollectionInternal.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#import <a href="DOMHTMLDocumentInternal.h.html">"DOMHTMLDocumentInternal.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="DOMHTMLInputElementInternal.h.html">"DOMHTMLInputElementInternal.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#import <a href="DOMHTMLSelectElementInternal.h.html">"DOMHTMLSelectElementInternal.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#import <a href="DOMHTMLTextAreaElementInternal.h.html">"DOMHTMLTextAreaElementInternal.h"</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#import <a href="DOMNodeInternal.h.html">"DOMNodeInternal.h"</a></u></td></tr>
+<tr><th id="35">35</th><td><u>#import <a href="DOMPrivate.h.html">"DOMPrivate.h"</a></u></td></tr>
+<tr><th id="36">36</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/DocumentFragment.h.html">&lt;WebCore/DocumentFragment.h&gt;</a></u></td></tr>
+<tr><th id="37">37</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameView.h.html">&lt;WebCore/FrameView.h&gt;</a></u></td></tr>
+<tr><th id="38">38</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLCollection.h.html">&lt;WebCore/HTMLCollection.h&gt;</a></u></td></tr>
+<tr><th id="39">39</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLDocument.h.html">&lt;WebCore/HTMLDocument.h&gt;</a></u></td></tr>
+<tr><th id="40">40</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLInputElement.h.html">&lt;WebCore/HTMLInputElement.h&gt;</a></u></td></tr>
+<tr><th id="41">41</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLParserIdioms.h.html">&lt;WebCore/HTMLParserIdioms.h&gt;</a></u></td></tr>
+<tr><th id="42">42</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLSelectElement.h.html">&lt;WebCore/HTMLSelectElement.h&gt;</a></u></td></tr>
+<tr><th id="43">43</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLTextAreaElement.h.html">&lt;WebCore/HTMLTextAreaElement.h&gt;</a></u></td></tr>
+<tr><th id="44">44</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Range.h.html">&lt;WebCore/Range.h&gt;</a></u></td></tr>
+<tr><th id="45">45</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderTextControl.h.html">&lt;WebCore/RenderTextControl.h&gt;</a></u></td></tr>
+<tr><th id="46">46</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Settings.h.html">&lt;WebCore/Settings.h&gt;</a></u></td></tr>
+<tr><th id="47">47</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/SimpleRange.h.html">&lt;WebCore/SimpleRange.h&gt;</a></u></td></tr>
+<tr><th id="48">48</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/markup.h.html">&lt;WebCore/markup.h&gt;</a></u></td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td><u>#<span data-ppcond="50">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="51">51</th><td><u>#import "DOMHTMLElementInternal.h"</u></td></tr>
+<tr><th id="52">52</th><td><u>#import &lt;WebCore/Autocapitalize.h&gt;</u></td></tr>
+<tr><th id="53">53</th><td><u>#import &lt;WebCore/HTMLTextFormControlElement.h&gt;</u></td></tr>
+<tr><th id="54">54</th><td><u>#import &lt;WebCore/JSExecState.h&gt;</u></td></tr>
+<tr><th id="55">55</th><td><u>#import &lt;WebCore/RenderLayer.h&gt;</u></td></tr>
+<tr><th id="56">56</th><td><u>#import &lt;WebCore/RenderLayerScrollableArea.h&gt;</u></td></tr>
+<tr><th id="57">57</th><td><u>#import &lt;WebCore/WAKWindow.h&gt;</u></td></tr>
+<tr><th id="58">58</th><td><u>#import &lt;WebCore/WebCoreThreadMessage.h&gt;</u></td></tr>
+<tr><th id="59">59</th><td><u>#<span data-ppcond="50">endif</span></u></td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td><i>// FIXME: We should move all these into the various specific element source files.</i></td></tr>
+<tr><th id="62">62</th><td><i>// These were originally here because they were hand written and the rest generated,</i></td></tr>
+<tr><th id="63">63</th><td><i>// but that is no longer true.</i></td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td><u>#<span data-ppcond="65">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td>@implementation DOMHTMLElement (DOMHTMLElementExtensions)</td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td>- (<em>int</em>)scrollXOffset</td></tr>
+<tr><th id="70">70</th><td>{</td></tr>
+<tr><th id="71">71</th><td>    <em>auto</em>* renderer = core(self)-&gt;renderer();</td></tr>
+<tr><th id="72">72</th><td>    <b>if</b> (!renderer)</td></tr>
+<tr><th id="73">73</th><td>        <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td>    <b>if</b> (!is&lt;WebCore::RenderBlockFlow&gt;(*renderer))</td></tr>
+<tr><th id="76">76</th><td>        renderer = renderer-&gt;containingBlock();</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td>    <b>if</b> (!is&lt;WebCore::RenderBox&gt;(*renderer) || !renderer-&gt;hasOverflowClip())</td></tr>
+<tr><th id="79">79</th><td>        <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td>    <em>auto</em>* layer = downcast&lt;WebCore::RenderBox&gt;(*renderer).layer();</td></tr>
+<tr><th id="82">82</th><td>    <b>if</b> (!layer)</td></tr>
+<tr><th id="83">83</th><td>        <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="84">84</th><td>    <em>auto</em>* scrollableArea = layer-&gt;scrollableArea();</td></tr>
+<tr><th id="85">85</th><td>    <b>if</b> (!scrollableArea)</td></tr>
+<tr><th id="86">86</th><td>        <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td>    <b>return</b> scrollableArea-&gt;scrollOffset().x();</td></tr>
+<tr><th id="89">89</th><td>}</td></tr>
+<tr><th id="90">90</th><td></td></tr>
+<tr><th id="91">91</th><td>- (<em>int</em>)scrollYOffset</td></tr>
+<tr><th id="92">92</th><td>{</td></tr>
+<tr><th id="93">93</th><td>    <em>auto</em>* renderer = core(self)-&gt;renderer();</td></tr>
+<tr><th id="94">94</th><td>    <b>if</b> (!renderer)</td></tr>
+<tr><th id="95">95</th><td>        <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td>    <b>if</b> (!is&lt;WebCore::RenderBlockFlow&gt;(*renderer))</td></tr>
+<tr><th id="98">98</th><td>        renderer = renderer-&gt;containingBlock();</td></tr>
+<tr><th id="99">99</th><td>    <b>if</b> (!is&lt;WebCore::RenderBox&gt;(*renderer) || !renderer-&gt;hasOverflowClip())</td></tr>
+<tr><th id="100">100</th><td>        <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td>    <em>auto</em>* layer = downcast&lt;WebCore::RenderBox&gt;(*renderer).layer();</td></tr>
+<tr><th id="103">103</th><td>    <b>if</b> (!layer)</td></tr>
+<tr><th id="104">104</th><td>        <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="105">105</th><td>    <em>auto</em>* scrollableArea = layer-&gt;scrollableArea();</td></tr>
+<tr><th id="106">106</th><td>    <b>if</b> (!scrollableArea)</td></tr>
+<tr><th id="107">107</th><td>        <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="108">108</th><td></td></tr>
+<tr><th id="109">109</th><td>    <b>return</b> scrollableArea-&gt;scrollOffset().y();</td></tr>
+<tr><th id="110">110</th><td>}</td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td>- (<em>void</em>)setScrollXOffset:(<em>int</em>)x scrollYOffset:(<em>int</em>)y</td></tr>
+<tr><th id="113">113</th><td>{</td></tr>
+<tr><th id="114">114</th><td>    [self setScrollXOffset:x scrollYOffset:y adjustForIOSCaret:NO];</td></tr>
+<tr><th id="115">115</th><td>}</td></tr>
+<tr><th id="116">116</th><td></td></tr>
+<tr><th id="117">117</th><td>- (<em>void</em>)setScrollXOffset:(<em>int</em>)x scrollYOffset:(<em>int</em>)y adjustForIOSCaret:(BOOL)adjustForIOSCaret</td></tr>
+<tr><th id="118">118</th><td>{</td></tr>
+<tr><th id="119">119</th><td>    <em>auto</em>* renderer = core(self)-&gt;renderer();</td></tr>
+<tr><th id="120">120</th><td>    <b>if</b> (!renderer)</td></tr>
+<tr><th id="121">121</th><td>        <b>return</b>;</td></tr>
+<tr><th id="122">122</th><td></td></tr>
+<tr><th id="123">123</th><td>    <b>if</b> (!is&lt;WebCore::RenderBlockFlow&gt;(*renderer))</td></tr>
+<tr><th id="124">124</th><td>        renderer = renderer-&gt;containingBlock();</td></tr>
+<tr><th id="125">125</th><td>    <b>if</b> (!renderer-&gt;hasOverflowClip() || !is&lt;WebCore::RenderBox&gt;(*renderer))</td></tr>
+<tr><th id="126">126</th><td>        <b>return</b>;</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td>    <em>auto</em>* layer = downcast&lt;WebCore::RenderBox&gt;(*renderer).layer();</td></tr>
+<tr><th id="129">129</th><td>    <b>if</b> (!layer)</td></tr>
+<tr><th id="130">130</th><td>        <b>return</b>;</td></tr>
+<tr><th id="131">131</th><td>    <em>auto</em>* scrollableArea = layer-&gt;ensureLayerScrollableArea();</td></tr>
+<tr><th id="132">132</th><td></td></tr>
+<tr><th id="133">133</th><td>    <b>if</b> (adjustForIOSCaret)</td></tr>
+<tr><th id="134">134</th><td>        scrollableArea-&gt;setAdjustForIOSCaretWhenScrolling(<b>true</b>);</td></tr>
+<tr><th id="135">135</th><td></td></tr>
+<tr><th id="136">136</th><td>    <em>auto</em> scrollPositionChangeOptions = WebCore::ScrollPositionChangeOptions::createProgrammatic();</td></tr>
+<tr><th id="137">137</th><td>    scrollPositionChangeOptions.clamping = WebCore::ScrollClamping::Unclamped;</td></tr>
+<tr><th id="138">138</th><td>    scrollableArea-&gt;scrollToOffset(WebCore::ScrollOffset(x, y), scrollPositionChangeOptions);</td></tr>
+<tr><th id="139">139</th><td>    <b>if</b> (adjustForIOSCaret)</td></tr>
+<tr><th id="140">140</th><td>        scrollableArea-&gt;setAdjustForIOSCaretWhenScrolling(<b>false</b>);</td></tr>
+<tr><th id="141">141</th><td>}</td></tr>
+<tr><th id="142">142</th><td></td></tr>
+<tr><th id="143">143</th><td>- (<em>void</em>)absolutePosition:(<em>int</em> *)x :(<em>int</em> *)y :(<em>int</em> *)w :(<em>int</em> *)h</td></tr>
+<tr><th id="144">144</th><td>{</td></tr>
+<tr><th id="145">145</th><td>    <em>auto</em>* renderer = core(self)-&gt;renderBox();</td></tr>
+<tr><th id="146">146</th><td>    <b>if</b> (renderer) {</td></tr>
+<tr><th id="147">147</th><td>        <b>if</b> (w)</td></tr>
+<tr><th id="148">148</th><td>            *w = renderer-&gt;width();</td></tr>
+<tr><th id="149">149</th><td>        <b>if</b> (h)</td></tr>
+<tr><th id="150">150</th><td>            *h = renderer-&gt;width();</td></tr>
+<tr><th id="151">151</th><td>        <b>if</b> (x &amp;&amp; y) {</td></tr>
+<tr><th id="152">152</th><td>            WebCore::FloatPoint floatPoint(*x, *y);</td></tr>
+<tr><th id="153">153</th><td>            renderer-&gt;localToAbsolute(floatPoint);</td></tr>
+<tr><th id="154">154</th><td>            WebCore::IntPoint point = roundedIntPoint(floatPoint);</td></tr>
+<tr><th id="155">155</th><td>            *x = point.x();</td></tr>
+<tr><th id="156">156</th><td>            *y = point.y();</td></tr>
+<tr><th id="157">157</th><td>        }</td></tr>
+<tr><th id="158">158</th><td>    }</td></tr>
+<tr><th id="159">159</th><td>}</td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td>@end</td></tr>
+<tr><th id="162">162</th><td></td></tr>
+<tr><th id="163">163</th><td><u>#<span data-ppcond="65">endif</span> // PLATFORM(IOS_FAMILY)</u></td></tr>
+<tr><th id="164">164</th><td></td></tr>
+<tr><th id="165">165</th><td><i>//------------------------------------------------------------------------------------------</i></td></tr>
+<tr><th id="166">166</th><td><i>// DOMHTMLDocument</i></td></tr>
+<tr><th id="167">167</th><td></td></tr>
+<tr><th id="168">168</th><td>@implementation DOMHTMLDocument (DOMHTMLDocumentExtensions)</td></tr>
+<tr><th id="169">169</th><td></td></tr>
+<tr><th id="170">170</th><td>- (DOMDocumentFragment *)createDocumentFragmentWithMarkupString:(NSString *)<dfn class="local col6 decl" id="126markupString" title='markupString' data-type='NSString *' data-ref="126markupString" data-ref-filename="126markupString">markupString</dfn> baseURL:(NSURL *)<dfn class="local col7 decl" id="127baseURL" title='baseURL' data-type='NSURL *' data-ref="127baseURL" data-ref-filename="127baseURL">baseURL</dfn></td></tr>
+<tr><th id="171">171</th><td>{</td></tr>
+<tr><th id="172">172</th><td>    <b>return</b> <a class="ref fn" href="DOMDocumentFragmentInternal.h.html#_Z3kitPN7WebCore16DocumentFragmentE" title='kit' data-ref="_Z3kitPN7WebCore16DocumentFragmentE" data-ref-filename="_Z3kitPN7WebCore16DocumentFragmentE">kit</a>(<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/markup.h.html#_ZN7WebCore24createFragmentFromMarkupERNS_8DocumentERKN3WTF6StringES5_NS_19ParserContentPolicyE" title='WebCore::createFragmentFromMarkup' data-ref="_ZN7WebCore24createFragmentFromMarkupERNS_8DocumentERKN3WTF6StringES5_NS_19ParserContentPolicyE" data-ref-filename="_ZN7WebCore24createFragmentFromMarkupERNS_8DocumentERKN3WTF6StringES5_NS_19ParserContentPolicyE">createFragmentFromMarkup</a>(<span class='refarg'>*<a class="ref fn" href="DOMHTMLDocumentInternal.h.html#_Z4coreP15DOMHTMLDocument" title='core' data-ref="_Z4coreP15DOMHTMLDocument" data-ref-filename="_Z4coreP15DOMHTMLDocument">core</a>(<span class='local col4 ref' title='self' data-ref="4self" data-ref-filename="4self">self</span>)</span>, <a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZN3WTF6StringC1EP8NSString" title='WTF::String::String' data-ref="_ZN3WTF6StringC1EP8NSString" data-ref-filename="_ZN3WTF6StringC1EP8NSString"></a><a class="local col6 ref" href="#126markupString" title='markupString' data-ref="126markupString" data-ref-filename="126markupString">markupString</a>, <a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZN3WTF6StringC1EP8NSString" title='WTF::String::String' data-ref="_ZN3WTF6StringC1EP8NSString" data-ref-filename="_ZN3WTF6StringC1EP8NSString"></a>[<a class="local col7 ref" href="#127baseURL" title='baseURL' data-ref="127baseURL" data-ref-filename="127baseURL">baseURL</a> absoluteString]).<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Ref.h.html#_ZNK3WTF3Ref3ptrEv" title='WTF::Ref::ptr' data-ref="_ZNK3WTF3Ref3ptrEv" data-ref-filename="_ZNK3WTF3Ref3ptrEv">ptr</a>());</td></tr>
+<tr><th id="173">173</th><td>}</td></tr>
+<tr><th id="174">174</th><td></td></tr>
+<tr><th id="175">175</th><td>- (DOMDocumentFragment *)createDocumentFragmentWithText:(NSString *)<dfn class="local col8 decl" id="128text" title='text' data-type='NSString *' data-ref="128text" data-ref-filename="128text">text</dfn></td></tr>
+<tr><th id="176">176</th><td>{</td></tr>
+<tr><th id="177">177</th><td>    <i>// FIXME: Since this is not a contextual fragment, it won't handle whitespace properly.</i></td></tr>
+<tr><th id="178">178</th><td>    <b>return</b> <a class="ref fn" href="DOMDocumentFragmentInternal.h.html#_Z3kitPN7WebCore16DocumentFragmentE" title='kit' data-ref="_Z3kitPN7WebCore16DocumentFragmentE" data-ref-filename="_Z3kitPN7WebCore16DocumentFragmentE">kit</a>(<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/markup.h.html#_ZN7WebCore22createFragmentFromTextERKNS_11SimpleRangeERKN3WTF6StringE" title='WebCore::createFragmentFromText' data-ref="_ZN7WebCore22createFragmentFromTextERKNS_11SimpleRangeERKN3WTF6StringE" data-ref-filename="_ZN7WebCore22createFragmentFromTextERKNS_11SimpleRangeERKN3WTF6StringE">createFragmentFromText</a>(<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/SimpleRange.h.html#_ZN7WebCore30makeRangeSelectingNodeContentsERNS_4NodeE" title='WebCore::makeRangeSelectingNodeContents' data-ref="_ZN7WebCore30makeRangeSelectingNodeContentsERNS_4NodeE" data-ref-filename="_ZN7WebCore30makeRangeSelectingNodeContentsERNS_4NodeE">makeRangeSelectingNodeContents</a>(<span class='refarg'>*<a class="ref fn" href="DOMHTMLDocumentInternal.h.html#_Z4coreP15DOMHTMLDocument" title='core' data-ref="_Z4coreP15DOMHTMLDocument" data-ref-filename="_Z4coreP15DOMHTMLDocument">core</a>(<span class='local col4 ref' title='self' data-ref="4self" data-ref-filename="4self">self</span>)</span>), <a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZN3WTF6StringC1EP8NSString" title='WTF::String::String' data-ref="_ZN3WTF6StringC1EP8NSString" data-ref-filename="_ZN3WTF6StringC1EP8NSString"></a><a class="local col8 ref" href="#128text" title='text' data-ref="128text" data-ref-filename="128text">text</a>).<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Ref.h.html#_ZNK3WTF3Ref3ptrEv" title='WTF::Ref::ptr' data-ref="_ZNK3WTF3Ref3ptrEv" data-ref-filename="_ZNK3WTF3Ref3ptrEv">ptr</a>());</td></tr>
+<tr><th id="179">179</th><td>}</td></tr>
+<tr><th id="180">180</th><td></td></tr>
+<tr><th id="181">181</th><td>@end</td></tr>
+<tr><th id="182">182</th><td></td></tr>
+<tr><th id="183">183</th><td>@implementation DOMHTMLDocument (WebPrivate)</td></tr>
+<tr><th id="184">184</th><td></td></tr>
+<tr><th id="185">185</th><td>- (DOMDocumentFragment *)_createDocumentFragmentWithMarkupString:(NSString *)<dfn class="local col9 decl" id="129markupString" title='markupString' data-type='NSString *' data-ref="129markupString" data-ref-filename="129markupString">markupString</dfn> baseURLString:(NSString *)<dfn class="local col0 decl" id="130baseURLString" title='baseURLString' data-type='NSString *' data-ref="130baseURLString" data-ref-filename="130baseURLString">baseURLString</dfn></td></tr>
+<tr><th id="186">186</th><td>{</td></tr>
+<tr><th id="187">187</th><td>    NSURL *<dfn class="local col1 decl" id="131baseURL" title='baseURL' data-type='NSURL *' data-ref="131baseURL" data-ref-filename="131baseURL">baseURL</dfn> = <a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/URL.h.html#_ZNK3WTF3URLcvP5NSURLEv" title='WTF::URL::operator NSURL *' data-ref="_ZNK3WTF3URLcvP5NSURLEv" data-ref-filename="_ZNK3WTF3URLcvP5NSURLEv"></a><a class="ref fn" href="DOMHTMLDocumentInternal.h.html#_Z4coreP15DOMHTMLDocument" title='core' data-ref="_Z4coreP15DOMHTMLDocument" data-ref-filename="_Z4coreP15DOMHTMLDocument">core</a>(<span class='local col4 ref' title='self' data-ref="4self" data-ref-filename="4self">self</span>)-&gt;<a class="virtual ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Document.h.html#_ZNK7WebCore8Document11completeURLERKN3WTF6StringENS_22ScriptExecutionContext9ForceUTF8E" title='WebCore::Document::completeURL' data-ref="_ZNK7WebCore8Document11completeURLERKN3WTF6StringENS_22ScriptExecutionContext9ForceUTF8E" data-ref-filename="_ZNK7WebCore8Document11completeURLERKN3WTF6StringENS_22ScriptExecutionContext9ForceUTF8E">completeURL</a>(<span class="namespace">WebCore::</span><a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLParserIdioms.h.html#_ZN7WebCore33stripLeadingAndTrailingHTMLSpacesERKN3WTF6StringE" title='WebCore::stripLeadingAndTrailingHTMLSpaces' data-ref="_ZN7WebCore33stripLeadingAndTrailingHTMLSpacesERKN3WTF6StringE" data-ref-filename="_ZN7WebCore33stripLeadingAndTrailingHTMLSpacesERKN3WTF6StringE">stripLeadingAndTrailingHTMLSpaces</a>(<a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZN3WTF6StringC1EP8NSString" title='WTF::String::String' data-ref="_ZN3WTF6StringC1EP8NSString" data-ref-filename="_ZN3WTF6StringC1EP8NSString"></a><a class="local col0 ref" href="#130baseURLString" title='baseURLString' data-ref="130baseURLString" data-ref-filename="130baseURLString">baseURLString</a>));</td></tr>
+<tr><th id="188">188</th><td>    <b>return</b> [<span class='local col4 ref' title='self' data-ref="4self" data-ref-filename="4self">self</span> createDocumentFragmentWithMarkupString:<a class="local col9 ref" href="#129markupString" title='markupString' data-ref="129markupString" data-ref-filename="129markupString">markupString</a> baseURL:<a class="local col1 ref" href="#131baseURL" title='baseURL' data-ref="131baseURL" data-ref-filename="131baseURL">baseURL</a>];</td></tr>
+<tr><th id="189">189</th><td>}</td></tr>
+<tr><th id="190">190</th><td></td></tr>
+<tr><th id="191">191</th><td>- (DOMDocumentFragment *)_createDocumentFragmentWithText:(NSString *)<dfn class="local col2 decl" id="132text" title='text' data-type='NSString *' data-ref="132text" data-ref-filename="132text">text</dfn></td></tr>
+<tr><th id="192">192</th><td>{</td></tr>
+<tr><th id="193">193</th><td>    <b>return</b> [<span class='local col4 ref' title='self' data-ref="4self" data-ref-filename="4self">self</span> createDocumentFragmentWithText:<a class="local col2 ref" href="#132text" title='text' data-ref="132text" data-ref-filename="132text">text</a>];</td></tr>
+<tr><th id="194">194</th><td>}</td></tr>
+<tr><th id="195">195</th><td></td></tr>
+<tr><th id="196">196</th><td>@end</td></tr>
+<tr><th id="197">197</th><td></td></tr>
+<tr><th id="198">198</th><td>@implementation DOMHTMLInputElement (FormAutoFillTransition)</td></tr>
+<tr><th id="199">199</th><td></td></tr>
+<tr><th id="200">200</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)_isTextField</td></tr>
+<tr><th id="201">201</th><td>{</td></tr>
+<tr><th id="202">202</th><td>    <b>return</b> <a class="ref fn" href="DOMHTMLInputElementInternal.h.html#_Z4coreP19DOMHTMLInputElement" title='core' data-ref="_Z4coreP19DOMHTMLInputElement" data-ref-filename="_Z4coreP19DOMHTMLInputElement">core</a>(<span class='local col4 ref' title='self' data-ref="4self" data-ref-filename="4self">self</span>)-&gt;<a class="virtual ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLInputElement.h.html#_ZNK7WebCore16HTMLInputElement11isTextFieldEv" title='WebCore::HTMLInputElement::isTextField' data-ref="_ZNK7WebCore16HTMLInputElement11isTextFieldEv" data-ref-filename="_ZNK7WebCore16HTMLInputElement11isTextFieldEv">isTextField</a>();</td></tr>
+<tr><th id="203">203</th><td>}</td></tr>
+<tr><th id="204">204</th><td></td></tr>
+<tr><th id="205">205</th><td>@end</td></tr>
+<tr><th id="206">206</th><td></td></tr>
+<tr><th id="207">207</th><td>@implementation DOMHTMLSelectElement (FormAutoFillTransition)</td></tr>
+<tr><th id="208">208</th><td></td></tr>
+<tr><th id="209">209</th><td>- (<em>void</em>)_activateItemAtIndex:(<em>int</em>)<dfn class="local col3 decl" id="133index" title='index' data-type='int' data-ref="133index" data-ref-filename="133index">index</dfn></td></tr>
+<tr><th id="210">210</th><td>{</td></tr>
+<tr><th id="211">211</th><td>    <i>// Use the setSelectedIndexByUser function so a change event will be fired. &lt;rdar://problem/6760590&gt;</i></td></tr>
+<tr><th id="212">212</th><td>    <b>if</b> (<span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLSelectElement.h.html#WebCore::HTMLSelectElement" title='WebCore::HTMLSelectElement' data-ref="WebCore::HTMLSelectElement" data-ref-filename="WebCore..HTMLSelectElement">HTMLSelectElement</a>* <dfn class="local col4 decl" id="134select" title='select' data-type='WebCore::HTMLSelectElement *' data-ref="134select" data-ref-filename="134select"><a class="local col4 ref" href="#134select" title='select' data-ref="134select" data-ref-filename="134select">select</a></dfn> = <a class="ref fn" href="DOMHTMLSelectElementInternal.h.html#_Z4coreP20DOMHTMLSelectElement" title='core' data-ref="_Z4coreP20DOMHTMLSelectElement" data-ref-filename="_Z4coreP20DOMHTMLSelectElement">core</a>(<span class='local col4 ref' title='self' data-ref="4self" data-ref-filename="4self">self</span>))</td></tr>
+<tr><th id="213">213</th><td>        <a class="local col4 ref" href="#134select" title='select' data-ref="134select" data-ref-filename="134select">select</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLSelectElement.h.html#_ZN7WebCore17HTMLSelectElement20optionSelectedByUserEibb" title='WebCore::HTMLSelectElement::optionSelectedByUser' data-ref="_ZN7WebCore17HTMLSelectElement20optionSelectedByUserEibb" data-ref-filename="_ZN7WebCore17HTMLSelectElement20optionSelectedByUserEibb">optionSelectedByUser</a>(<a class="local col3 ref" href="#133index" title='index' data-ref="133index" data-ref-filename="133index">index</a>, <b>true</b>);</td></tr>
+<tr><th id="214">214</th><td>}</td></tr>
+<tr><th id="215">215</th><td></td></tr>
+<tr><th id="216">216</th><td>- (<em>void</em>)_activateItemAtIndex:(<em>int</em>)<dfn class="local col5 decl" id="135index" title='index' data-type='int' data-ref="135index" data-ref-filename="135index">index</dfn> allowMultipleSelection:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col6 decl" id="136allowMultipleSelection" title='allowMultipleSelection' data-type='BOOL' data-ref="136allowMultipleSelection" data-ref-filename="136allowMultipleSelection">allowMultipleSelection</dfn></td></tr>
+<tr><th id="217">217</th><td>{</td></tr>
+<tr><th id="218">218</th><td>    <i>// Use the setSelectedIndexByUser function so a change event will be fired. &lt;rdar://problem/6760590&gt;</i></td></tr>
+<tr><th id="219">219</th><td><i>    // If this is a &lt;select multiple&gt; the allowMultipleSelection flag will allow setting multiple</i></td></tr>
+<tr><th id="220">220</th><td><i>    // selections without clearing the other selections.</i></td></tr>
+<tr><th id="221">221</th><td>    <b>if</b> (<span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLSelectElement.h.html#WebCore::HTMLSelectElement" title='WebCore::HTMLSelectElement' data-ref="WebCore::HTMLSelectElement" data-ref-filename="WebCore..HTMLSelectElement">HTMLSelectElement</a>* <dfn class="local col7 decl" id="137select" title='select' data-type='WebCore::HTMLSelectElement *' data-ref="137select" data-ref-filename="137select"><a class="local col7 ref" href="#137select" title='select' data-ref="137select" data-ref-filename="137select">select</a></dfn> = <a class="ref fn" href="DOMHTMLSelectElementInternal.h.html#_Z4coreP20DOMHTMLSelectElement" title='core' data-ref="_Z4coreP20DOMHTMLSelectElement" data-ref-filename="_Z4coreP20DOMHTMLSelectElement">core</a>(<span class='local col4 ref' title='self' data-ref="4self" data-ref-filename="4self">self</span>))</td></tr>
+<tr><th id="222">222</th><td>        <a class="local col7 ref" href="#137select" title='select' data-ref="137select" data-ref-filename="137select">select</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLSelectElement.h.html#_ZN7WebCore17HTMLSelectElement20optionSelectedByUserEibb" title='WebCore::HTMLSelectElement::optionSelectedByUser' data-ref="_ZN7WebCore17HTMLSelectElement20optionSelectedByUserEibb" data-ref-filename="_ZN7WebCore17HTMLSelectElement20optionSelectedByUserEibb">optionSelectedByUser</a>(<a class="local col5 ref" href="#135index" title='index' data-ref="135index" data-ref-filename="135index">index</a>, <b>true</b>, <a class="local col6 ref" href="#136allowMultipleSelection" title='allowMultipleSelection' data-ref="136allowMultipleSelection" data-ref-filename="136allowMultipleSelection">allowMultipleSelection</a>);</td></tr>
+<tr><th id="223">223</th><td>}</td></tr>
+<tr><th id="224">224</th><td></td></tr>
+<tr><th id="225">225</th><td>@end</td></tr>
+<tr><th id="226">226</th><td></td></tr>
+<tr><th id="227">227</th><td><u>#<span data-ppcond="227">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY)</u></td></tr>
+<tr><th id="228">228</th><td></td></tr>
+<tr><th id="229">229</th><td>@implementation DOMHTMLInputElement (FormPromptAdditions)</td></tr>
+<tr><th id="230">230</th><td></td></tr>
+<tr><th id="231">231</th><td>- (BOOL)_isEdited</td></tr>
+<tr><th id="232">232</th><td>{</td></tr>
+<tr><th id="233">233</th><td>    <b>return</b> core(self)-&gt;lastChangeWasUserEdit();</td></tr>
+<tr><th id="234">234</th><td>}</td></tr>
+<tr><th id="235">235</th><td></td></tr>
+<tr><th id="236">236</th><td>@end</td></tr>
+<tr><th id="237">237</th><td></td></tr>
+<tr><th id="238">238</th><td>@implementation DOMHTMLTextAreaElement (FormPromptAdditions)</td></tr>
+<tr><th id="239">239</th><td></td></tr>
+<tr><th id="240">240</th><td>- (BOOL)_isEdited</td></tr>
+<tr><th id="241">241</th><td>{</td></tr>
+<tr><th id="242">242</th><td>    <b>return</b> core(self)-&gt;lastChangeWasUserEdit();</td></tr>
+<tr><th id="243">243</th><td>}</td></tr>
+<tr><th id="244">244</th><td></td></tr>
+<tr><th id="245">245</th><td>@end</td></tr>
+<tr><th id="246">246</th><td></td></tr>
+<tr><th id="247">247</th><td><em>static</em> WebAutocapitalizeType webAutocapitalizeType(WebCore::AutocapitalizeType type)</td></tr>
+<tr><th id="248">248</th><td>{</td></tr>
+<tr><th id="249">249</th><td>    <b>switch</b> (type) {</td></tr>
+<tr><th id="250">250</th><td>    <b>case</b> WebCore::AutocapitalizeType::Default:</td></tr>
+<tr><th id="251">251</th><td>        <b>return</b> WebAutocapitalizeTypeDefault;</td></tr>
+<tr><th id="252">252</th><td>    <b>case</b> WebCore::AutocapitalizeType::None:</td></tr>
+<tr><th id="253">253</th><td>        <b>return</b> WebAutocapitalizeTypeNone;</td></tr>
+<tr><th id="254">254</th><td>    <b>case</b> WebCore::AutocapitalizeType::Words:</td></tr>
+<tr><th id="255">255</th><td>        <b>return</b> WebAutocapitalizeTypeWords;</td></tr>
+<tr><th id="256">256</th><td>    <b>case</b> WebCore::AutocapitalizeType::Sentences:</td></tr>
+<tr><th id="257">257</th><td>        <b>return</b> WebAutocapitalizeTypeSentences;</td></tr>
+<tr><th id="258">258</th><td>    <b>case</b> WebCore::AutocapitalizeType::AllCharacters:</td></tr>
+<tr><th id="259">259</th><td>        <b>return</b> WebAutocapitalizeTypeAllCharacters;</td></tr>
+<tr><th id="260">260</th><td>    }</td></tr>
+<tr><th id="261">261</th><td>}</td></tr>
+<tr><th id="262">262</th><td></td></tr>
+<tr><th id="263">263</th><td>@implementation DOMHTMLInputElement (AutocapitalizeAdditions)</td></tr>
+<tr><th id="264">264</th><td></td></tr>
+<tr><th id="265">265</th><td>- (WebAutocapitalizeType)_autocapitalizeType</td></tr>
+<tr><th id="266">266</th><td>{</td></tr>
+<tr><th id="267">267</th><td>    WebCore::HTMLInputElement* inputElement = core(self);</td></tr>
+<tr><th id="268">268</th><td>    <b>return</b> webAutocapitalizeType(inputElement-&gt;autocapitalizeType());</td></tr>
+<tr><th id="269">269</th><td>}</td></tr>
+<tr><th id="270">270</th><td></td></tr>
+<tr><th id="271">271</th><td>@end</td></tr>
+<tr><th id="272">272</th><td></td></tr>
+<tr><th id="273">273</th><td>@implementation DOMHTMLTextAreaElement (AutocapitalizeAdditions)</td></tr>
+<tr><th id="274">274</th><td></td></tr>
+<tr><th id="275">275</th><td>- (WebAutocapitalizeType)_autocapitalizeType</td></tr>
+<tr><th id="276">276</th><td>{</td></tr>
+<tr><th id="277">277</th><td>    WebCore::HTMLTextAreaElement* textareaElement = core(self);</td></tr>
+<tr><th id="278">278</th><td>    <b>return</b> webAutocapitalizeType(textareaElement-&gt;autocapitalizeType());</td></tr>
+<tr><th id="279">279</th><td>}</td></tr>
+<tr><th id="280">280</th><td></td></tr>
+<tr><th id="281">281</th><td>@end</td></tr>
+<tr><th id="282">282</th><td></td></tr>
+<tr><th id="283">283</th><td>@implementation DOMHTMLInputElement (WebInputChangeEventAdditions)</td></tr>
+<tr><th id="284">284</th><td></td></tr>
+<tr><th id="285">285</th><td>- (<em>void</em>)setValueWithChangeEvent:(NSString *)newValue</td></tr>
+<tr><th id="286">286</th><td>{</td></tr>
+<tr><th id="287">287</th><td>    WebCore::JSMainThreadNullState state;</td></tr>
+<tr><th id="288">288</th><td>    core(self)-&gt;setValue(newValue, WebCore::DispatchInputAndChangeEvent);</td></tr>
+<tr><th id="289">289</th><td>}</td></tr>
+<tr><th id="290">290</th><td></td></tr>
+<tr><th id="291">291</th><td>- (<em>void</em>)setValueAsNumberWithChangeEvent:(<em>double</em>)newValueAsNumber</td></tr>
+<tr><th id="292">292</th><td>{</td></tr>
+<tr><th id="293">293</th><td>    WebCore::JSMainThreadNullState state;</td></tr>
+<tr><th id="294">294</th><td>    core(self)-&gt;setValueAsNumber(newValueAsNumber, WebCore::DispatchInputAndChangeEvent);</td></tr>
+<tr><th id="295">295</th><td>}</td></tr>
+<tr><th id="296">296</th><td></td></tr>
+<tr><th id="297">297</th><td>@end</td></tr>
+<tr><th id="298">298</th><td></td></tr>
+<tr><th id="299">299</th><td><u>#<span data-ppcond="227">endif</span></u></td></tr>
+<tr><th id="300">300</th><td></td></tr>
+<tr><th id="301">301</th><td><span class='typedef' title='Class' data-type='Class' data-ref="Class" data-ref-filename="Class">Class</span> <dfn class="decl def fn" id="_Z8kitClassPN7WebCore14HTMLCollectionE" title='kitClass' data-ref="_Z8kitClassPN7WebCore14HTMLCollectionE" data-ref-filename="_Z8kitClassPN7WebCore14HTMLCollectionE">kitClass</dfn>(<span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLCollection.h.html#WebCore::HTMLCollection" title='WebCore::HTMLCollection' data-ref="WebCore::HTMLCollection" data-ref-filename="WebCore..HTMLCollection">HTMLCollection</a>* <dfn class="local col8 decl" id="138collection" title='collection' data-type='WebCore::HTMLCollection *' data-ref="138collection" data-ref-filename="138collection">collection</dfn>)</td></tr>
+<tr><th id="302">302</th><td>{</td></tr>
+<tr><th id="303">303</th><td>    <b>if</b> (<a class="local col8 ref" href="#138collection" title='collection' data-ref="138collection" data-ref-filename="138collection">collection</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLCollection.h.html#_ZNK7WebCore14HTMLCollection4typeEv" title='WebCore::HTMLCollection::type' data-ref="_ZNK7WebCore14HTMLCollection4typeEv" data-ref-filename="_ZNK7WebCore14HTMLCollection4typeEv">type</a>() == <span class="namespace">WebCore::</span><a class="enum" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CollectionType.h.html#WebCore::SelectOptions" title='WebCore::SelectOptions' data-ref="WebCore::SelectOptions" data-ref-filename="WebCore..SelectOptions">SelectOptions</a>)</td></tr>
+<tr><th id="304">304</th><td>        <b>return</b> [DOMHTMLOptionsCollection <b>class</b>];</td></tr>
+<tr><th id="305">305</th><td>    <b>return</b> [DOMHTMLCollection <b>class</b>];</td></tr>
+<tr><th id="306">306</th><td>}</td></tr>
+<tr><th id="307">307</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../WebKitBuild/Debug/DerivedSources/WebKitLegacy/unified-sources/UnifiedSource6-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKitLegacy/unified-sources/UnifiedSource6-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

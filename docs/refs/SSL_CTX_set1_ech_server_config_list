@@ -1,0 +1,38 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='3673' type='int SSL_CTX_set1_ech_server_config_list(SSL_CTX * ctx, SSL_ECH_SERVER_CONFIG_LIST * list)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/ssl.h' l='3637'>// SSL_CTX_set1_ech_server_config_list atomically sets the refcounted |list|
+// onto |ctx|, releasing the old list. |SSL| objects associated with |ctx|, as
+// servers, will use |list| to decrypt incoming encrypted ClientHello messages.
+// It returns one on success, and zero on failure.
+//
+// If |list| does not contain any retry configs, this function will fail. Retry
+// configs are marked as such when they are added to |list| with
+// |SSL_ECH_SERVER_CONFIG_LIST_add|.
+//
+// Once |list| has been passed to this function, it is immutable. Unlike most
+// |SSL_CTX| configuration functions, this function may be called even if |ctx|
+// already has associated connections on multiple threads. This may be used to
+// rotate keys in a long-lived server process.
+//
+// The configured ECHConfig values should also be advertised out-of-band via DNS
+// (see draft-ietf-dnsop-svcb-https). Before advertising an ECHConfig in DNS,
+// deployments should ensure all instances of the service are configured with
+// the ECHConfig and corresponding private key.
+//
+// Only the most recent fully-deployed ECHConfigs should be advertised in DNS.
+// |list| may contain a newer set if those ECHConfigs are mid-deployment. It
+// should also contain older sets, until the DNS change has rolled out and the
+// old records have expired from caches.
+//
+// If there is a mismatch, |SSL| objects associated with |ctx| will complete the
+// handshake using the cleartext ClientHello and send updated ECHConfig values
+// to the client. The client will then retry to recover, but with a latency
+// penalty. This recovery flow depends on the public name in the ECHConfig.
+// Before advertising an ECHConfig in DNS, deployments must ensure all instances
+// of the service can present a valid certificate for the public name.
+//
+// BoringSSL negotiates ECH before certificate selection callbacks are called,
+// including |SSL_CTX_set_select_certificate_cb|. If ECH is negotiated, the
+// reported |SSL_CLIENT_HELLO| structure and |SSL_get_servername| function will
+// transparently reflect the inner ClientHello. Callers should select parameters
+// based on these values to correctly handle ECH as well as the recovery flow.</doc>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_lib.cc' l='2235' ll='2252' type='int SSL_CTX_set1_ech_server_config_list(SSL_CTX * ctx, SSL_ECH_SERVER_CONFIG_LIST * list)'/>

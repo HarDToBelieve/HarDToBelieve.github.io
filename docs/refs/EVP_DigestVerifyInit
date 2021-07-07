@@ -1,0 +1,22 @@
+<dec f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/evp.h' l='352' type='int EVP_DigestVerifyInit(EVP_MD_CTX * ctx, EVP_PKEY_CTX ** pctx, const EVP_MD * type, ENGINE * e, EVP_PKEY * pkey)'/>
+<def f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/evp/digestsign.c' l='126' ll='129' type='int EVP_DigestVerifyInit(EVP_MD_CTX * ctx, EVP_PKEY_CTX ** pctx, const EVP_MD * type, ENGINE * e, EVP_PKEY * pkey)'/>
+<doc f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/include/openssl/evp.h' l='336'>// Verifying
+
+// EVP_DigestVerifyInit sets up |ctx| for a signature verification operation
+// with |type| and |pkey|. The |ctx| argument must have been initialised with
+// |EVP_MD_CTX_init|. If |pctx| is not NULL, the |EVP_PKEY_CTX| of the signing
+// operation will be written to |*pctx|; this can be used to set alternative
+// signing options.
+//
+// For single-shot signing algorithms which do not use a pre-hash, such as
+// Ed25519, |type| should be NULL. The |EVP_MD_CTX| itself is unused but is
+// present so the API is uniform. See |EVP_DigestVerify|.
+//
+// This function does not mutate |pkey| for thread-safety purposes and may be
+// used concurrently with other non-mutating functions on |pkey|.
+//
+// It returns one on success, or zero on error.</doc>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/x509/algorithm.c' l='139' u='c' c='x509_digest_verify_init'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/x509/algorithm.c' l='162' u='c' c='x509_digest_verify_init'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/crypto/x509/rsa_pss.c' l='287' u='c' c='x509_rsa_pss_to_ctx'/>
+<use f='webkit/Source/ThirdParty/libwebrtc/Source/third_party/boringssl/src/ssl/ssl_privkey.cc' l='183' u='c' c='_ZN4bsslL9setup_ctxEP6ssl_stP13env_md_ctx_stP11evp_pkey_sttb'/>

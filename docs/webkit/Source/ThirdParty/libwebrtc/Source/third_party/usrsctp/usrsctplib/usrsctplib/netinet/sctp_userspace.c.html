@@ -1,0 +1,462 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>sctp_userspace.c source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/netinet/sctp_userspace.c] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/netinet/sctp_userspace.c'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>third_party</a>/<a href='../../..'>usrsctp</a>/<a href='../..'>usrsctplib</a>/<a href='..'>usrsctplib</a>/<a href='./'>netinet</a>/<a href='sctp_userspace.c.html'>sctp_userspace.c</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*-</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (c) 2011-2012 Irene Ruengeler</i></td></tr>
+<tr><th id="3">3</th><td><i> * Copyright (c) 2011-2012 Michael Tuexen</i></td></tr>
+<tr><th id="4">4</th><td><i> * All rights reserved.</i></td></tr>
+<tr><th id="5">5</th><td><i> *</i></td></tr>
+<tr><th id="6">6</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="7">7</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="8">8</th><td><i> * are met:</i></td></tr>
+<tr><th id="9">9</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="11">11</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="12">12</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="13">13</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="14">14</th><td><i> *</i></td></tr>
+<tr><th id="15">15</th><td><i> * THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND</i></td></tr>
+<tr><th id="16">16</th><td><i> * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="17">17</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</i></td></tr>
+<tr><th id="18">18</th><td><i> * ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE</i></td></tr>
+<tr><th id="19">19</th><td><i> * FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL</i></td></tr>
+<tr><th id="20">20</th><td><i> * DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS</i></td></tr>
+<tr><th id="21">21</th><td><i> * OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)</i></td></tr>
+<tr><th id="22">22</th><td><i> * HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT</i></td></tr>
+<tr><th id="23">23</th><td><i> * LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY</i></td></tr>
+<tr><th id="24">24</th><td><i> * OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF</i></td></tr>
+<tr><th id="25">25</th><td><i> * SUCH DAMAGE.</i></td></tr>
+<tr><th id="26">26</th><td><i> *</i></td></tr>
+<tr><th id="27">27</th><td><i> */</i></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#<span data-ppcond="30">ifdef</span> <span class="macro" data-ref="_M/_WIN32">_WIN32</span></u></td></tr>
+<tr><th id="31">31</th><td><u>#include &lt;netinet/sctp_pcb.h&gt;</u></td></tr>
+<tr><th id="32">32</th><td><u>#include &lt;sys/timeb.h&gt;</u></td></tr>
+<tr><th id="33">33</th><td><u>#include &lt;iphlpapi.h&gt;</u></td></tr>
+<tr><th id="34">34</th><td><u>#if !defined(__MINGW32__)</u></td></tr>
+<tr><th id="35">35</th><td><u>#pragma comment(lib, "iphlpapi.lib")</u></td></tr>
+<tr><th id="36">36</th><td><u>#endif</u></td></tr>
+<tr><th id="37">37</th><td><u>#<span data-ppcond="30">endif</span></u></td></tr>
+<tr><th id="38">38</th><td><u>#include <a href="sctp_os_userspace.h.html">&lt;netinet/sctp_os_userspace.h&gt;</a></u></td></tr>
+<tr><th id="39">39</th><td><u>#<span data-ppcond="39">if</span> defined(<span class="macro" data-ref="_M/__FreeBSD__">__FreeBSD__</span>)</u></td></tr>
+<tr><th id="40">40</th><td><u>#include &lt;pthread_np.h&gt;</u></td></tr>
+<tr><th id="41">41</th><td><u>#<span data-ppcond="39">endif</span></u></td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><u>#<span data-ppcond="43">if</span> defined(<span class="macro" data-ref="_M/__linux__">__linux__</span>)</u></td></tr>
+<tr><th id="44">44</th><td><u>#include &lt;sys/prctl.h&gt;</u></td></tr>
+<tr><th id="45">45</th><td><u>#<span data-ppcond="43">endif</span></u></td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td><u>#<span data-ppcond="47">if</span> defined(<span class="macro" data-ref="_M/_WIN32">_WIN32</span>)</u></td></tr>
+<tr><th id="48">48</th><td><i>/* Adapter to translate Unix thread start routines to Windows thread start</i></td></tr>
+<tr><th id="49">49</th><td><i> * routines.</i></td></tr>
+<tr><th id="50">50</th><td><i> */</i></td></tr>
+<tr><th id="51">51</th><td><u>#if defined(__MINGW32__)</u></td></tr>
+<tr><th id="52">52</th><td><u>#pragma GCC diagnostic push</u></td></tr>
+<tr><th id="53">53</th><td><u>#pragma GCC diagnostic ignored "-Wpedantic"</u></td></tr>
+<tr><th id="54">54</th><td><u>#endif</u></td></tr>
+<tr><th id="55">55</th><td><em>static</em> DWORD WINAPI</td></tr>
+<tr><th id="56">56</th><td>sctp_create_thread_adapter(<em>void</em> *arg) {</td></tr>
+<tr><th id="57">57</th><td>	start_routine_t start_routine = (start_routine_t)arg;</td></tr>
+<tr><th id="58">58</th><td>	<b>return</b> start_routine(NULL) == NULL;</td></tr>
+<tr><th id="59">59</th><td>}</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td><em>int</em></td></tr>
+<tr><th id="62">62</th><td>sctp_userspace_thread_create(userland_thread_t *thread, start_routine_t start_routine)</td></tr>
+<tr><th id="63">63</th><td>{</td></tr>
+<tr><th id="64">64</th><td>	*thread = CreateThread(NULL, <var>0</var>, sctp_create_thread_adapter,</td></tr>
+<tr><th id="65">65</th><td>			       (<em>void</em> *)start_routine, <var>0</var>, NULL);</td></tr>
+<tr><th id="66">66</th><td>	<b>if</b> (*thread == NULL)</td></tr>
+<tr><th id="67">67</th><td>		<b>return</b> GetLastError();</td></tr>
+<tr><th id="68">68</th><td>	<b>return</b> <var>0</var>;</td></tr>
+<tr><th id="69">69</th><td>}</td></tr>
+<tr><th id="70">70</th><td></td></tr>
+<tr><th id="71">71</th><td><u>#if defined(__MINGW32__)</u></td></tr>
+<tr><th id="72">72</th><td><u>#pragma GCC diagnostic pop</u></td></tr>
+<tr><th id="73">73</th><td><u>#endif</u></td></tr>
+<tr><th id="74">74</th><td></td></tr>
+<tr><th id="75">75</th><td><u>#<span data-ppcond="47">else</span></u></td></tr>
+<tr><th id="76">76</th><td><em>int</em></td></tr>
+<tr><th id="77">77</th><td><dfn class="decl def fn" id="sctp_userspace_thread_create" title='sctp_userspace_thread_create' data-ref="sctp_userspace_thread_create" data-ref-filename="sctp_userspace_thread_create">sctp_userspace_thread_create</dfn>(<a class="typedef" href="sctp_os_userspace.h.html#userland_thread_t" title='userland_thread_t' data-type='pthread_t' data-ref="userland_thread_t" data-ref-filename="userland_thread_t">userland_thread_t</a> *<dfn class="local col1 decl" id="1thread" title='thread' data-type='userland_thread_t *' data-ref="1thread" data-ref-filename="1thread">thread</dfn>, <a class="typedef" href="sctp_os_userspace.h.html#start_routine_t" title='start_routine_t' data-type='void *(*)(void *)' data-ref="start_routine_t" data-ref-filename="start_routine_t">start_routine_t</a> <dfn class="local col2 decl" id="2start_routine" title='start_routine' data-type='start_routine_t' data-ref="2start_routine" data-ref-filename="2start_routine">start_routine</dfn>)</td></tr>
+<tr><th id="78">78</th><td>{</td></tr>
+<tr><th id="79">79</th><td>	<b>return</b> <span class='ref fn' title='pthread_create' data-ref="pthread_create" data-ref-filename="pthread_create">pthread_create</span>(<a class="local col1 ref" href="#1thread" title='thread' data-ref="1thread" data-ref-filename="1thread">thread</a>, <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>, <a class="local col2 ref" href="#2start_routine" title='start_routine' data-ref="2start_routine" data-ref-filename="2start_routine">start_routine</a>, <span class="macro" title="((void*)0)" data-ref="_M/NULL">NULL</span>);</td></tr>
+<tr><th id="80">80</th><td>}</td></tr>
+<tr><th id="81">81</th><td><u>#<span data-ppcond="47">endif</span></u></td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td><em>void</em></td></tr>
+<tr><th id="84">84</th><td><dfn class="decl def fn" id="sctp_userspace_set_threadname" title='sctp_userspace_set_threadname' data-ref="sctp_userspace_set_threadname" data-ref-filename="sctp_userspace_set_threadname">sctp_userspace_set_threadname</dfn>(<em>const</em> <em>char</em> *<dfn class="local col3 decl" id="3name" title='name' data-type='const char *' data-ref="3name" data-ref-filename="3name">name</dfn>)</td></tr>
+<tr><th id="85">85</th><td>{</td></tr>
+<tr><th id="86">86</th><td><u>#<span data-ppcond="86">if</span> defined(<span class="macro" data-ref="_M/__APPLE__">__APPLE__</span>)</u></td></tr>
+<tr><th id="87">87</th><td>	<span class='ref fn' title='pthread_setname_np' data-ref="pthread_setname_np" data-ref-filename="pthread_setname_np">pthread_setname_np</span>(<a class="local col3 ref" href="#3name" title='name' data-ref="3name" data-ref-filename="3name">name</a>);</td></tr>
+<tr><th id="88">88</th><td><u>#<span data-ppcond="86">endif</span></u></td></tr>
+<tr><th id="89">89</th><td><u>#<span data-ppcond="89">if</span> defined(<span class="macro" data-ref="_M/__linux__">__linux__</span>)</u></td></tr>
+<tr><th id="90">90</th><td>	prctl(PR_SET_NAME, name);</td></tr>
+<tr><th id="91">91</th><td><u>#<span data-ppcond="89">endif</span></u></td></tr>
+<tr><th id="92">92</th><td><u>#<span data-ppcond="92">if</span> defined(<span class="macro" data-ref="_M/__FreeBSD__">__FreeBSD__</span>)</u></td></tr>
+<tr><th id="93">93</th><td>	pthread_set_name_np(pthread_self(), name);</td></tr>
+<tr><th id="94">94</th><td><u>#<span data-ppcond="92">endif</span></u></td></tr>
+<tr><th id="95">95</th><td>}</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td><u>#<span data-ppcond="97">if</span> !defined(<span class="macro" data-ref="_M/_WIN32">_WIN32</span>) &amp;&amp; !defined(<span class="macro" data-ref="_M/__native_client__">__native_client__</span>)</u></td></tr>
+<tr><th id="98">98</th><td><em>int</em></td></tr>
+<tr><th id="99">99</th><td><dfn class="decl def fn" id="sctp_userspace_get_mtu_from_ifn" title='sctp_userspace_get_mtu_from_ifn' data-ref="sctp_userspace_get_mtu_from_ifn" data-ref-filename="sctp_userspace_get_mtu_from_ifn">sctp_userspace_get_mtu_from_ifn</dfn>(<span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col4 decl" id="4if_index" title='if_index' data-type='uint32_t' data-ref="4if_index" data-ref-filename="4if_index">if_index</dfn>, <em>int</em> <dfn class="local col5 decl" id="5af" title='af' data-type='int' data-ref="5af" data-ref-filename="5af">af</dfn>)</td></tr>
+<tr><th id="100">100</th><td>{</td></tr>
+<tr><th id="101">101</th><td><u>#<span data-ppcond="101">if</span> defined(<span class="macro" data-ref="_M/INET">INET</span>) || defined(<span class="macro" data-ref="_M/INET6">INET6</span>)</u></td></tr>
+<tr><th id="102">102</th><td>	<b>struct</b> ifreq ifr;</td></tr>
+<tr><th id="103">103</th><td>	<em>int</em> fd;</td></tr>
+<tr><th id="104">104</th><td><u>#<span data-ppcond="101">endif</span></u></td></tr>
+<tr><th id="105">105</th><td>	<em>int</em> <dfn class="local col6 decl" id="6mtu" title='mtu' data-type='int' data-ref="6mtu" data-ref-filename="6mtu">mtu</dfn>;</td></tr>
+<tr><th id="106">106</th><td></td></tr>
+<tr><th id="107">107</th><td>	<b>switch</b> (<a class="local col5 ref" href="#5af" title='af' data-ref="5af" data-ref-filename="5af">af</a>) {</td></tr>
+<tr><th id="108">108</th><td><u>#<span data-ppcond="108">if</span> defined(<span class="macro" data-ref="_M/INET">INET</span>)</u></td></tr>
+<tr><th id="109">109</th><td>	<b>case</b> AF_INET:</td></tr>
+<tr><th id="110">110</th><td><u>#<span data-ppcond="108">endif</span></u></td></tr>
+<tr><th id="111">111</th><td><u>#<span data-ppcond="111">if</span> defined(<span class="macro" data-ref="_M/INET6">INET6</span>)</u></td></tr>
+<tr><th id="112">112</th><td>	<b>case</b> AF_INET6:</td></tr>
+<tr><th id="113">113</th><td><u>#<span data-ppcond="111">endif</span></u></td></tr>
+<tr><th id="114">114</th><td><u>#<span data-ppcond="114">if</span> defined(<span class="macro" data-ref="_M/INET">INET</span>) || defined(<span class="macro" data-ref="_M/INET6">INET6</span>)</u></td></tr>
+<tr><th id="115">115</th><td>		memset(&amp;ifr, <var>0</var>, <b>sizeof</b>(<b>struct</b> ifreq));</td></tr>
+<tr><th id="116">116</th><td>		mtu = <var>0</var>;</td></tr>
+<tr><th id="117">117</th><td>		<b>if</b> (if_indextoname(if_index, ifr.ifr_name) != NULL) {</td></tr>
+<tr><th id="118">118</th><td>			<i>/* TODO can I use the raw socket here and not have to open a new one with each query? */</i></td></tr>
+<tr><th id="119">119</th><td>			<b>if</b> ((fd = socket(af, SOCK_DGRAM, <var>0</var>)) &lt; <var>0</var>) {</td></tr>
+<tr><th id="120">120</th><td>				<b>break</b>;</td></tr>
+<tr><th id="121">121</th><td>			}</td></tr>
+<tr><th id="122">122</th><td>			<b>if</b> (ioctl(fd, SIOCGIFMTU, &amp;ifr) &gt;= <var>0</var>) {</td></tr>
+<tr><th id="123">123</th><td>				mtu = ifr.ifr_mtu;</td></tr>
+<tr><th id="124">124</th><td>			}</td></tr>
+<tr><th id="125">125</th><td>			close(fd);</td></tr>
+<tr><th id="126">126</th><td>		}</td></tr>
+<tr><th id="127">127</th><td>		<b>break</b>;</td></tr>
+<tr><th id="128">128</th><td><u>#<span data-ppcond="114">endif</span></u></td></tr>
+<tr><th id="129">129</th><td>	<b>case</b> <a class="macro" href="sctp_os_userspace.h.html#999" title="123" data-ref="_M/AF_CONN">AF_CONN</a>:</td></tr>
+<tr><th id="130">130</th><td>		<a class="local col6 ref" href="#6mtu" title='mtu' data-ref="6mtu" data-ref-filename="6mtu">mtu</a> = <var>1280</var>;</td></tr>
+<tr><th id="131">131</th><td>		<b>break</b>;</td></tr>
+<tr><th id="132">132</th><td>	<b>default</b>:</td></tr>
+<tr><th id="133">133</th><td>		<a class="local col6 ref" href="#6mtu" title='mtu' data-ref="6mtu" data-ref-filename="6mtu">mtu</a> = <var>0</var>;</td></tr>
+<tr><th id="134">134</th><td>		<b>break</b>;</td></tr>
+<tr><th id="135">135</th><td>	}</td></tr>
+<tr><th id="136">136</th><td>	<b>return</b> (<a class="local col6 ref" href="#6mtu" title='mtu' data-ref="6mtu" data-ref-filename="6mtu">mtu</a>);</td></tr>
+<tr><th id="137">137</th><td>}</td></tr>
+<tr><th id="138">138</th><td><u>#<span data-ppcond="97">endif</span></u></td></tr>
+<tr><th id="139">139</th><td></td></tr>
+<tr><th id="140">140</th><td><u>#<span data-ppcond="140">if</span> defined(<span class="macro" data-ref="_M/__native_client__">__native_client__</span>)</u></td></tr>
+<tr><th id="141">141</th><td><em>int</em></td></tr>
+<tr><th id="142">142</th><td>sctp_userspace_get_mtu_from_ifn(uint32_t if_index, <em>int</em> af)</td></tr>
+<tr><th id="143">143</th><td>{</td></tr>
+<tr><th id="144">144</th><td>	<b>return</b> <var>1280</var>;</td></tr>
+<tr><th id="145">145</th><td>}</td></tr>
+<tr><th id="146">146</th><td><u>#<span data-ppcond="140">endif</span></u></td></tr>
+<tr><th id="147">147</th><td></td></tr>
+<tr><th id="148">148</th><td><u>#<span data-ppcond="148">if</span> defined(<span class="macro" data-ref="_M/__APPLE__">__APPLE__</span>) || defined(<span class="macro" data-ref="_M/__DragonFly__">__DragonFly__</span>) || defined(<span class="macro" data-ref="_M/__linux__">__linux__</span>) || defined(<span class="macro" data-ref="_M/__native_client__">__native_client__</span>) || defined(<span class="macro" data-ref="_M/__NetBSD__">__NetBSD__</span>) || defined(<span class="macro" data-ref="_M/_WIN32">_WIN32</span>) || defined(<span class="macro" data-ref="_M/__Fuchsia__">__Fuchsia__</span>) || defined(<span class="macro" data-ref="_M/__EMSCRIPTEN__">__EMSCRIPTEN__</span>)</u></td></tr>
+<tr><th id="149">149</th><td><em>int</em></td></tr>
+<tr><th id="150">150</th><td><dfn class="decl def fn" id="timingsafe_bcmp" title='timingsafe_bcmp' data-ref="timingsafe_bcmp" data-ref-filename="timingsafe_bcmp">timingsafe_bcmp</dfn>(<em>const</em> <em>void</em> *<dfn class="local col7 decl" id="7b1" title='b1' data-type='const void *' data-ref="7b1" data-ref-filename="7b1">b1</dfn>, <em>const</em> <em>void</em> *<dfn class="local col8 decl" id="8b2" title='b2' data-type='const void *' data-ref="8b2" data-ref-filename="8b2">b2</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col9 decl" id="9n" title='n' data-type='size_t' data-ref="9n" data-ref-filename="9n">n</dfn>)</td></tr>
+<tr><th id="151">151</th><td>{</td></tr>
+<tr><th id="152">152</th><td>	<em>const</em> <em>unsigned</em> <em>char</em> *<dfn class="local col0 decl" id="10p1" title='p1' data-type='const unsigned char *' data-ref="10p1" data-ref-filename="10p1">p1</dfn> = <a class="local col7 ref" href="#7b1" title='b1' data-ref="7b1" data-ref-filename="7b1">b1</a>, *<dfn class="local col1 decl" id="11p2" title='p2' data-type='const unsigned char *' data-ref="11p2" data-ref-filename="11p2">p2</dfn> = <a class="local col8 ref" href="#8b2" title='b2' data-ref="8b2" data-ref-filename="8b2">b2</a>;</td></tr>
+<tr><th id="153">153</th><td>	<em>int</em> <dfn class="local col2 decl" id="12ret" title='ret' data-type='int' data-ref="12ret" data-ref-filename="12ret">ret</dfn> = <var>0</var>;</td></tr>
+<tr><th id="154">154</th><td></td></tr>
+<tr><th id="155">155</th><td>	<b>for</b> (; <a class="local col9 ref" href="#9n" title='n' data-ref="9n" data-ref-filename="9n">n</a> &gt; <var>0</var>; <a class="local col9 ref" href="#9n" title='n' data-ref="9n" data-ref-filename="9n">n</a>--)</td></tr>
+<tr><th id="156">156</th><td>		<a class="local col2 ref" href="#12ret" title='ret' data-ref="12ret" data-ref-filename="12ret">ret</a> |= *<a class="local col0 ref" href="#10p1" title='p1' data-ref="10p1" data-ref-filename="10p1">p1</a>++ ^ *<a class="local col1 ref" href="#11p2" title='p2' data-ref="11p2" data-ref-filename="11p2">p2</a>++;</td></tr>
+<tr><th id="157">157</th><td>	<b>return</b> (<a class="local col2 ref" href="#12ret" title='ret' data-ref="12ret" data-ref-filename="12ret">ret</a> != <var>0</var>);</td></tr>
+<tr><th id="158">158</th><td>}</td></tr>
+<tr><th id="159">159</th><td><u>#<span data-ppcond="148">endif</span></u></td></tr>
+<tr><th id="160">160</th><td></td></tr>
+<tr><th id="161">161</th><td><u>#<span data-ppcond="161">ifdef</span> <span class="macro" data-ref="_M/_WIN32">_WIN32</span></u></td></tr>
+<tr><th id="162">162</th><td><em>int</em></td></tr>
+<tr><th id="163">163</th><td>sctp_userspace_get_mtu_from_ifn(uint32_t if_index, <em>int</em> af)</td></tr>
+<tr><th id="164">164</th><td>{</td></tr>
+<tr><th id="165">165</th><td><u>#if defined(INET) || defined(INET6)</u></td></tr>
+<tr><th id="166">166</th><td>	PIP_ADAPTER_ADDRESSES pAdapterAddrs, pAdapt;</td></tr>
+<tr><th id="167">167</th><td>	DWORD AdapterAddrsSize, Err;</td></tr>
+<tr><th id="168">168</th><td><u>#endif</u></td></tr>
+<tr><th id="169">169</th><td>	<em>int</em> mtu;</td></tr>
+<tr><th id="170">170</th><td></td></tr>
+<tr><th id="171">171</th><td>	<b>switch</b> (af) {</td></tr>
+<tr><th id="172">172</th><td><u>#if defined(INET)</u></td></tr>
+<tr><th id="173">173</th><td>	<b>case</b> AF_INET:</td></tr>
+<tr><th id="174">174</th><td><u>#endif</u></td></tr>
+<tr><th id="175">175</th><td><u>#if defined(INET6)</u></td></tr>
+<tr><th id="176">176</th><td>	<b>case</b> AF_INET6:</td></tr>
+<tr><th id="177">177</th><td><u>#endif</u></td></tr>
+<tr><th id="178">178</th><td><u>#if defined(INET) || defined(INET6)</u></td></tr>
+<tr><th id="179">179</th><td>		mtu = <var>0</var>;</td></tr>
+<tr><th id="180">180</th><td>		AdapterAddrsSize = <var>0</var>;</td></tr>
+<tr><th id="181">181</th><td>		pAdapterAddrs = NULL;</td></tr>
+<tr><th id="182">182</th><td>		<b>if</b> ((Err = GetAdaptersAddresses(AF_UNSPEC, <var>0</var>, NULL, NULL, &amp;AdapterAddrsSize)) != <var>0</var>) {</td></tr>
+<tr><th id="183">183</th><td>			<b>if</b> ((Err != ERROR_BUFFER_OVERFLOW) &amp;&amp; (Err != ERROR_INSUFFICIENT_BUFFER)) {</td></tr>
+<tr><th id="184">184</th><td>				SCTPDBG(SCTP_DEBUG_USR, <q>"GetAdaptersAddresses() sizing failed with error code %d, AdapterAddrsSize = %d\n"</q>, Err, AdapterAddrsSize);</td></tr>
+<tr><th id="185">185</th><td>				mtu = -<var>1</var>;</td></tr>
+<tr><th id="186">186</th><td>				<b>goto</b> cleanup;</td></tr>
+<tr><th id="187">187</th><td>			}</td></tr>
+<tr><th id="188">188</th><td>		}</td></tr>
+<tr><th id="189">189</th><td>		<b>if</b> ((pAdapterAddrs = (PIP_ADAPTER_ADDRESSES) GlobalAlloc(GPTR, AdapterAddrsSize)) == NULL) {</td></tr>
+<tr><th id="190">190</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"Memory allocation error!\n"</q>);</td></tr>
+<tr><th id="191">191</th><td>			mtu = -<var>1</var>;</td></tr>
+<tr><th id="192">192</th><td>			<b>goto</b> cleanup;</td></tr>
+<tr><th id="193">193</th><td>		}</td></tr>
+<tr><th id="194">194</th><td>		<b>if</b> ((Err = GetAdaptersAddresses(AF_UNSPEC, <var>0</var>, NULL, pAdapterAddrs, &amp;AdapterAddrsSize)) != ERROR_SUCCESS) {</td></tr>
+<tr><th id="195">195</th><td>			SCTPDBG(SCTP_DEBUG_USR, <q>"GetAdaptersAddresses() failed with error code %d\n"</q>, Err);</td></tr>
+<tr><th id="196">196</th><td>			mtu = -<var>1</var>;</td></tr>
+<tr><th id="197">197</th><td>			<b>goto</b> cleanup;</td></tr>
+<tr><th id="198">198</th><td>		}</td></tr>
+<tr><th id="199">199</th><td>		<b>for</b> (pAdapt = pAdapterAddrs; pAdapt; pAdapt = pAdapt-&gt;Next) {</td></tr>
+<tr><th id="200">200</th><td>			<b>if</b> (pAdapt-&gt;IfIndex == if_index) {</td></tr>
+<tr><th id="201">201</th><td>				mtu = pAdapt-&gt;Mtu;</td></tr>
+<tr><th id="202">202</th><td>				<b>break</b>;</td></tr>
+<tr><th id="203">203</th><td>			}</td></tr>
+<tr><th id="204">204</th><td>		}</td></tr>
+<tr><th id="205">205</th><td>	cleanup:</td></tr>
+<tr><th id="206">206</th><td>		<b>if</b> (pAdapterAddrs != NULL) {</td></tr>
+<tr><th id="207">207</th><td>			GlobalFree(pAdapterAddrs);</td></tr>
+<tr><th id="208">208</th><td>		}</td></tr>
+<tr><th id="209">209</th><td>		<b>break</b>;</td></tr>
+<tr><th id="210">210</th><td><u>#endif</u></td></tr>
+<tr><th id="211">211</th><td>	<b>case</b> AF_CONN:</td></tr>
+<tr><th id="212">212</th><td>		mtu = <var>1280</var>;</td></tr>
+<tr><th id="213">213</th><td>		<b>break</b>;</td></tr>
+<tr><th id="214">214</th><td>	<b>default</b>:</td></tr>
+<tr><th id="215">215</th><td>		mtu = <var>0</var>;</td></tr>
+<tr><th id="216">216</th><td>		<b>break</b>;</td></tr>
+<tr><th id="217">217</th><td>	}</td></tr>
+<tr><th id="218">218</th><td>	<b>return</b> (mtu);</td></tr>
+<tr><th id="219">219</th><td>}</td></tr>
+<tr><th id="220">220</th><td></td></tr>
+<tr><th id="221">221</th><td><em>void</em></td></tr>
+<tr><th id="222">222</th><td>getwintimeofday(<b>struct</b> timeval *tv)</td></tr>
+<tr><th id="223">223</th><td>{</td></tr>
+<tr><th id="224">224</th><td>	FILETIME filetime;</td></tr>
+<tr><th id="225">225</th><td>	ULARGE_INTEGER ularge;</td></tr>
+<tr><th id="226">226</th><td></td></tr>
+<tr><th id="227">227</th><td>	GetSystemTimeAsFileTime(&amp;filetime);</td></tr>
+<tr><th id="228">228</th><td>	ularge.LowPart = filetime.dwLowDateTime;</td></tr>
+<tr><th id="229">229</th><td>	ularge.HighPart = filetime.dwHighDateTime;</td></tr>
+<tr><th id="230">230</th><td>	<i>/* Change base from Jan 1 1601 00:00:00 to Jan 1 1970 00:00:00 */</i></td></tr>
+<tr><th id="231">231</th><td><u>#if defined(__MINGW32__)</u></td></tr>
+<tr><th id="232">232</th><td>	ularge.QuadPart -= <var>116444736000000000ULL</var>;</td></tr>
+<tr><th id="233">233</th><td><u>#else</u></td></tr>
+<tr><th id="234">234</th><td>	ularge.QuadPart -= <var>116444736000000000UI64</var>;</td></tr>
+<tr><th id="235">235</th><td><u>#endif</u></td></tr>
+<tr><th id="236">236</th><td>	<i>/*</i></td></tr>
+<tr><th id="237">237</th><td><i>	 * ularge.QuadPart is now the number of 100-nanosecond intervals</i></td></tr>
+<tr><th id="238">238</th><td><i>	 * since Jan 1 1970 00:00:00.</i></td></tr>
+<tr><th id="239">239</th><td><i>	 */</i></td></tr>
+<tr><th id="240">240</th><td><u>#if defined(__MINGW32__)</u></td></tr>
+<tr><th id="241">241</th><td>	tv-&gt;tv_sec = (<em>long</em>)(ularge.QuadPart / <var>10000000ULL</var>);</td></tr>
+<tr><th id="242">242</th><td>	tv-&gt;tv_usec = (<em>long</em>)((ularge.QuadPart % <var>10000000ULL</var>) / <var>10ULL</var>);</td></tr>
+<tr><th id="243">243</th><td><u>#else</u></td></tr>
+<tr><th id="244">244</th><td>	tv-&gt;tv_sec = (<em>long</em>)(ularge.QuadPart / <var>10000000UI64</var>);</td></tr>
+<tr><th id="245">245</th><td>	tv-&gt;tv_usec = (<em>long</em>)((ularge.QuadPart % <var>10000000UI64</var>) / <var>10UI64</var>);</td></tr>
+<tr><th id="246">246</th><td><u>#endif</u></td></tr>
+<tr><th id="247">247</th><td>}</td></tr>
+<tr><th id="248">248</th><td></td></tr>
+<tr><th id="249">249</th><td><em>int</em></td></tr>
+<tr><th id="250">250</th><td>win_if_nametoindex(<em>const</em> <em>char</em> *ifname)</td></tr>
+<tr><th id="251">251</th><td>{</td></tr>
+<tr><th id="252">252</th><td>	IP_ADAPTER_ADDRESSES *addresses, *addr;</td></tr>
+<tr><th id="253">253</th><td>	ULONG status, size;</td></tr>
+<tr><th id="254">254</th><td>	<em>int</em> index = <var>0</var>;</td></tr>
+<tr><th id="255">255</th><td></td></tr>
+<tr><th id="256">256</th><td>	<b>if</b> (!ifname) {</td></tr>
+<tr><th id="257">257</th><td>		<b>return</b> <var>0</var>;</td></tr>
+<tr><th id="258">258</th><td>	}</td></tr>
+<tr><th id="259">259</th><td></td></tr>
+<tr><th id="260">260</th><td>	size = <var>0</var>;</td></tr>
+<tr><th id="261">261</th><td>	status = GetAdaptersAddresses(AF_UNSPEC, <var>0</var>, NULL, NULL, &amp;size);</td></tr>
+<tr><th id="262">262</th><td>	<b>if</b> (status != ERROR_BUFFER_OVERFLOW) {</td></tr>
+<tr><th id="263">263</th><td>		<b>return</b> <var>0</var>;</td></tr>
+<tr><th id="264">264</th><td>	}</td></tr>
+<tr><th id="265">265</th><td>	addresses = malloc(size);</td></tr>
+<tr><th id="266">266</th><td>	status = GetAdaptersAddresses(AF_UNSPEC, <var>0</var>, NULL, addresses, &amp;size);</td></tr>
+<tr><th id="267">267</th><td>	<b>if</b> (status == ERROR_SUCCESS) {</td></tr>
+<tr><th id="268">268</th><td>		<b>for</b> (addr = addresses; addr; addr = addr-&gt;Next) {</td></tr>
+<tr><th id="269">269</th><td>			<b>if</b> (addr-&gt;AdapterName &amp;&amp; !strcmp(ifname, addr-&gt;AdapterName)) {</td></tr>
+<tr><th id="270">270</th><td>				index = addr-&gt;IfIndex;</td></tr>
+<tr><th id="271">271</th><td>				<b>break</b>;</td></tr>
+<tr><th id="272">272</th><td>			}</td></tr>
+<tr><th id="273">273</th><td>		}</td></tr>
+<tr><th id="274">274</th><td>	}</td></tr>
+<tr><th id="275">275</th><td></td></tr>
+<tr><th id="276">276</th><td>	free(addresses);</td></tr>
+<tr><th id="277">277</th><td>	<b>return</b> index;</td></tr>
+<tr><th id="278">278</th><td>}</td></tr>
+<tr><th id="279">279</th><td></td></tr>
+<tr><th id="280">280</th><td><u>#if WINVER &lt; 0x0600</u></td></tr>
+<tr><th id="281">281</th><td><i>/* These functions are written based on the code at</i></td></tr>
+<tr><th id="282">282</th><td><i> * <a href="http://www.cs.wustl.edu/~schmidt/win32-cv-1.html">http://www.cs.wustl.edu/~schmidt/win32-cv-1.html</a></i></td></tr>
+<tr><th id="283">283</th><td><i> * Therefore, for the rest of the file the following applies:</i></td></tr>
+<tr><th id="284">284</th><td><i> *</i></td></tr>
+<tr><th id="285">285</th><td><i> *</i></td></tr>
+<tr><th id="286">286</th><td><i> * Copyright and Licensing Information for ACE(TM), TAO(TM), CIAO(TM),</i></td></tr>
+<tr><th id="287">287</th><td><i> * DAnCE(TM), and CoSMIC(TM)</i></td></tr>
+<tr><th id="288">288</th><td><i> *</i></td></tr>
+<tr><th id="289">289</th><td><i> * [1]ACE(TM), [2]TAO(TM), [3]CIAO(TM), DAnCE(TM), and [4]CoSMIC(TM)</i></td></tr>
+<tr><th id="290">290</th><td><i> * (henceforth referred to as "DOC software") are copyrighted by</i></td></tr>
+<tr><th id="291">291</th><td><i> * [5]Douglas C. Schmidt and his [6]research group at [7]Washington</i></td></tr>
+<tr><th id="292">292</th><td><i> * University, [8]University of California, Irvine, and [9]Vanderbilt</i></td></tr>
+<tr><th id="293">293</th><td><i> * University, Copyright (c) 1993-2012, all rights reserved. Since DOC</i></td></tr>
+<tr><th id="294">294</th><td><i> * software is open-source, freely available software, you are free to</i></td></tr>
+<tr><th id="295">295</th><td><i> * use, modify, copy, and distribute--perpetually and irrevocably--the</i></td></tr>
+<tr><th id="296">296</th><td><i> * DOC software source code and object code produced from the source, as</i></td></tr>
+<tr><th id="297">297</th><td><i> * well as copy and distribute modified versions of this software. You</i></td></tr>
+<tr><th id="298">298</th><td><i> * must, however, include this copyright statement along with any code</i></td></tr>
+<tr><th id="299">299</th><td><i> * built using DOC software that you release. No copyright statement</i></td></tr>
+<tr><th id="300">300</th><td><i> * needs to be provided if you just ship binary executables of your</i></td></tr>
+<tr><th id="301">301</th><td><i> * software products.</i></td></tr>
+<tr><th id="302">302</th><td><i> *</i></td></tr>
+<tr><th id="303">303</th><td><i> * You can use DOC software in commercial and/or binary software releases</i></td></tr>
+<tr><th id="304">304</th><td><i> * and are under no obligation to redistribute any of your source code</i></td></tr>
+<tr><th id="305">305</th><td><i> * that is built using DOC software. Note, however, that you may not</i></td></tr>
+<tr><th id="306">306</th><td><i> * misappropriate the DOC software code, such as copyrighting it yourself</i></td></tr>
+<tr><th id="307">307</th><td><i> * or claiming authorship of the DOC software code, in a way that will</i></td></tr>
+<tr><th id="308">308</th><td><i> * prevent DOC software from being distributed freely using an</i></td></tr>
+<tr><th id="309">309</th><td><i> * open-source development model. You needn't inform anyone that you're</i></td></tr>
+<tr><th id="310">310</th><td><i> * using DOC software in your software, though we encourage you to let</i></td></tr>
+<tr><th id="311">311</th><td><i> * [10]us know so we can promote your project in the [11]DOC software</i></td></tr>
+<tr><th id="312">312</th><td><i> * success stories.</i></td></tr>
+<tr><th id="313">313</th><td><i> *</i></td></tr>
+<tr><th id="314">314</th><td><i> * The [12]ACE, [13]TAO, [14]CIAO, [15]DAnCE, and [16]CoSMIC web sites</i></td></tr>
+<tr><th id="315">315</th><td><i> * are maintained by the [17]DOC Group at the [18]Institute for Software</i></td></tr>
+<tr><th id="316">316</th><td><i> * Integrated Systems (ISIS) and the [19]Center for Distributed Object</i></td></tr>
+<tr><th id="317">317</th><td><i> * Computing of Washington University, St. Louis for the development of</i></td></tr>
+<tr><th id="318">318</th><td><i> * open-source software as part of the open-source software community.</i></td></tr>
+<tr><th id="319">319</th><td><i> * Submissions are provided by the submitter ``as is'' with no warranties</i></td></tr>
+<tr><th id="320">320</th><td><i> * whatsoever, including any warranty of merchantability, noninfringement</i></td></tr>
+<tr><th id="321">321</th><td><i> * of third party intellectual property, or fitness for any particular</i></td></tr>
+<tr><th id="322">322</th><td><i> * purpose. In no event shall the submitter be liable for any direct,</i></td></tr>
+<tr><th id="323">323</th><td><i> * indirect, special, exemplary, punitive, or consequential damages,</i></td></tr>
+<tr><th id="324">324</th><td><i> * including without limitation, lost profits, even if advised of the</i></td></tr>
+<tr><th id="325">325</th><td><i> * possibility of such damages. Likewise, DOC software is provided as is</i></td></tr>
+<tr><th id="326">326</th><td><i> * with no warranties of any kind, including the warranties of design,</i></td></tr>
+<tr><th id="327">327</th><td><i> * merchantability, and fitness for a particular purpose,</i></td></tr>
+<tr><th id="328">328</th><td><i> * noninfringement, or arising from a course of dealing, usage or trade</i></td></tr>
+<tr><th id="329">329</th><td><i> * practice. Washington University, UC Irvine, Vanderbilt University,</i></td></tr>
+<tr><th id="330">330</th><td><i> * their employees, and students shall have no liability with respect to</i></td></tr>
+<tr><th id="331">331</th><td><i> * the infringement of copyrights, trade secrets or any patents by DOC</i></td></tr>
+<tr><th id="332">332</th><td><i> * software or any part thereof. Moreover, in no event will Washington</i></td></tr>
+<tr><th id="333">333</th><td><i> * University, UC Irvine, or Vanderbilt University, their employees, or</i></td></tr>
+<tr><th id="334">334</th><td><i> * students be liable for any lost revenue or profits or other special,</i></td></tr>
+<tr><th id="335">335</th><td><i> * indirect and consequential damages.</i></td></tr>
+<tr><th id="336">336</th><td><i> *</i></td></tr>
+<tr><th id="337">337</th><td><i> * DOC software is provided with no support and without any obligation on</i></td></tr>
+<tr><th id="338">338</th><td><i> * the part of Washington University, UC Irvine, Vanderbilt University,</i></td></tr>
+<tr><th id="339">339</th><td><i> * their employees, or students to assist in its use, correction,</i></td></tr>
+<tr><th id="340">340</th><td><i> * modification, or enhancement. A [20]number of companies around the</i></td></tr>
+<tr><th id="341">341</th><td><i> * world provide commercial support for DOC software, however. DOC</i></td></tr>
+<tr><th id="342">342</th><td><i> * software is Y2K-compliant, as long as the underlying OS platform is</i></td></tr>
+<tr><th id="343">343</th><td><i> * Y2K-compliant. Likewise, DOC software is compliant with the new US</i></td></tr>
+<tr><th id="344">344</th><td><i> * daylight savings rule passed by Congress as "The Energy Policy Act of</i></td></tr>
+<tr><th id="345">345</th><td><i> * 2005," which established new daylight savings times (DST) rules for</i></td></tr>
+<tr><th id="346">346</th><td><i> * the United States that expand DST as of March 2007. Since DOC software</i></td></tr>
+<tr><th id="347">347</th><td><i> * obtains time/date and calendaring information from operating systems</i></td></tr>
+<tr><th id="348">348</th><td><i> * users will not be affected by the new DST rules as long as they</i></td></tr>
+<tr><th id="349">349</th><td><i> * upgrade their operating systems accordingly.</i></td></tr>
+<tr><th id="350">350</th><td><i> *</i></td></tr>
+<tr><th id="351">351</th><td><i> * The names ACE(TM), TAO(TM), CIAO(TM), DAnCE(TM), CoSMIC(TM),</i></td></tr>
+<tr><th id="352">352</th><td><i> * Washington University, UC Irvine, and Vanderbilt University, may not</i></td></tr>
+<tr><th id="353">353</th><td><i> * be used to endorse or promote products or services derived from this</i></td></tr>
+<tr><th id="354">354</th><td><i> * source without express written permission from Washington University,</i></td></tr>
+<tr><th id="355">355</th><td><i> * UC Irvine, or Vanderbilt University. This license grants no permission</i></td></tr>
+<tr><th id="356">356</th><td><i> * to call products or services derived from this source ACE(TM),</i></td></tr>
+<tr><th id="357">357</th><td><i> * TAO(TM), CIAO(TM), DAnCE(TM), or CoSMIC(TM), nor does it grant</i></td></tr>
+<tr><th id="358">358</th><td><i> * permission for the name Washington University, UC Irvine, or</i></td></tr>
+<tr><th id="359">359</th><td><i> * Vanderbilt University to appear in their names.</i></td></tr>
+<tr><th id="360">360</th><td><i> *</i></td></tr>
+<tr><th id="361">361</th><td><i> * If you have any suggestions, additions, comments, or questions, please</i></td></tr>
+<tr><th id="362">362</th><td><i> * let [21]me know.</i></td></tr>
+<tr><th id="363">363</th><td><i> *</i></td></tr>
+<tr><th id="364">364</th><td><i> * [22]Douglas C. Schmidt</i></td></tr>
+<tr><th id="365">365</th><td><i> *</i></td></tr>
+<tr><th id="366">366</th><td><i> * References</i></td></tr>
+<tr><th id="367">367</th><td><i> *</i></td></tr>
+<tr><th id="368">368</th><td><i> *  1. <a href="http://www.cs.wustl.edu/~schmidt/ACE.html">http://www.cs.wustl.edu/~schmidt/ACE.html</a></i></td></tr>
+<tr><th id="369">369</th><td><i> *  2. <a href="http://www.cs.wustl.edu/~schmidt/TAO.html">http://www.cs.wustl.edu/~schmidt/TAO.html</a></i></td></tr>
+<tr><th id="370">370</th><td><i> *  3. <a href="http://www.dre.vanderbilt.edu/CIAO/">http://www.dre.vanderbilt.edu/CIAO/</a></i></td></tr>
+<tr><th id="371">371</th><td><i> *  4. <a href="http://www.dre.vanderbilt.edu/cosmic/">http://www.dre.vanderbilt.edu/cosmic/</a></i></td></tr>
+<tr><th id="372">372</th><td><i> *  5. <a href="http://www.dre.vanderbilt.edu/~schmidt/">http://www.dre.vanderbilt.edu/~schmidt/</a></i></td></tr>
+<tr><th id="373">373</th><td><i> *  6. <a href="http://www.cs.wustl.edu/~schmidt/ACE-members.html">http://www.cs.wustl.edu/~schmidt/ACE-members.html</a></i></td></tr>
+<tr><th id="374">374</th><td><i> *  7. <a href="http://www.wustl.edu/">http://www.wustl.edu/</a></i></td></tr>
+<tr><th id="375">375</th><td><i> *  8. <a href="http://www.uci.edu/">http://www.uci.edu/</a></i></td></tr>
+<tr><th id="376">376</th><td><i> *  9. <a href="http://www.vanderbilt.edu/">http://www.vanderbilt.edu/</a></i></td></tr>
+<tr><th id="377">377</th><td><i> * 10. mailto:doc_group@cs.wustl.edu</i></td></tr>
+<tr><th id="378">378</th><td><i> * 11. <a href="http://www.cs.wustl.edu/~schmidt/ACE-users.html">http://www.cs.wustl.edu/~schmidt/ACE-users.html</a></i></td></tr>
+<tr><th id="379">379</th><td><i> * 12. <a href="http://www.cs.wustl.edu/~schmidt/ACE.html">http://www.cs.wustl.edu/~schmidt/ACE.html</a></i></td></tr>
+<tr><th id="380">380</th><td><i> * 13. <a href="http://www.cs.wustl.edu/~schmidt/TAO.html">http://www.cs.wustl.edu/~schmidt/TAO.html</a></i></td></tr>
+<tr><th id="381">381</th><td><i> * 14. <a href="http://www.dre.vanderbilt.edu/CIAO/">http://www.dre.vanderbilt.edu/CIAO/</a></i></td></tr>
+<tr><th id="382">382</th><td><i> * 15. <a href="http://www.dre.vanderbilt.edu/~schmidt/DOC_ROOT/DAnCE/">http://www.dre.vanderbilt.edu/~schmidt/DOC_ROOT/DAnCE/</a></i></td></tr>
+<tr><th id="383">383</th><td><i> * 16. <a href="http://www.dre.vanderbilt.edu/cosmic/">http://www.dre.vanderbilt.edu/cosmic/</a></i></td></tr>
+<tr><th id="384">384</th><td><i> * 17. <a href="http://www.dre.vanderbilt.edu/">http://www.dre.vanderbilt.edu/</a></i></td></tr>
+<tr><th id="385">385</th><td><i> * 18. <a href="http://www.isis.vanderbilt.edu/">http://www.isis.vanderbilt.edu/</a></i></td></tr>
+<tr><th id="386">386</th><td><i> * 19. <a href="http://www.cs.wustl.edu/~schmidt/doc-center.html">http://www.cs.wustl.edu/~schmidt/doc-center.html</a></i></td></tr>
+<tr><th id="387">387</th><td><i> * 20. <a href="http://www.cs.wustl.edu/~schmidt/commercial-support.html">http://www.cs.wustl.edu/~schmidt/commercial-support.html</a></i></td></tr>
+<tr><th id="388">388</th><td><i> * 21. mailto:d.schmidt@vanderbilt.edu</i></td></tr>
+<tr><th id="389">389</th><td><i> * 22. <a href="http://www.dre.vanderbilt.edu/~schmidt/">http://www.dre.vanderbilt.edu/~schmidt/</a></i></td></tr>
+<tr><th id="390">390</th><td><i> * 23. <a href="http://www.cs.wustl.edu/ACE.html">http://www.cs.wustl.edu/ACE.html</a></i></td></tr>
+<tr><th id="391">391</th><td><i> */</i></td></tr>
+<tr><th id="392">392</th><td></td></tr>
+<tr><th id="393">393</th><td><em>void</em></td></tr>
+<tr><th id="394">394</th><td>InitializeXPConditionVariable(userland_cond_t *cv)</td></tr>
+<tr><th id="395">395</th><td>{</td></tr>
+<tr><th id="396">396</th><td>	cv-&gt;waiters_count = <var>0</var>;</td></tr>
+<tr><th id="397">397</th><td>	InitializeCriticalSection(&amp;(cv-&gt;waiters_count_lock));</td></tr>
+<tr><th id="398">398</th><td>	cv-&gt;events_[C_SIGNAL] = CreateEvent (NULL, FALSE, FALSE, NULL);</td></tr>
+<tr><th id="399">399</th><td>	cv-&gt;events_[C_BROADCAST] = CreateEvent (NULL, TRUE, FALSE, NULL);</td></tr>
+<tr><th id="400">400</th><td>}</td></tr>
+<tr><th id="401">401</th><td></td></tr>
+<tr><th id="402">402</th><td><em>void</em></td></tr>
+<tr><th id="403">403</th><td>DeleteXPConditionVariable(userland_cond_t *cv)</td></tr>
+<tr><th id="404">404</th><td>{</td></tr>
+<tr><th id="405">405</th><td>	CloseHandle(cv-&gt;events_[C_BROADCAST]);</td></tr>
+<tr><th id="406">406</th><td>	CloseHandle(cv-&gt;events_[C_SIGNAL]);</td></tr>
+<tr><th id="407">407</th><td>	DeleteCriticalSection(&amp;(cv-&gt;waiters_count_lock));</td></tr>
+<tr><th id="408">408</th><td>}</td></tr>
+<tr><th id="409">409</th><td></td></tr>
+<tr><th id="410">410</th><td><em>int</em></td></tr>
+<tr><th id="411">411</th><td>SleepXPConditionVariable(userland_cond_t *cv, userland_mutex_t *mtx)</td></tr>
+<tr><th id="412">412</th><td>{</td></tr>
+<tr><th id="413">413</th><td>	<em>int</em> result, last_waiter;</td></tr>
+<tr><th id="414">414</th><td></td></tr>
+<tr><th id="415">415</th><td>	EnterCriticalSection(&amp;cv-&gt;waiters_count_lock);</td></tr>
+<tr><th id="416">416</th><td>	cv-&gt;waiters_count++;</td></tr>
+<tr><th id="417">417</th><td>	LeaveCriticalSection(&amp;cv-&gt;waiters_count_lock);</td></tr>
+<tr><th id="418">418</th><td>	LeaveCriticalSection (mtx);</td></tr>
+<tr><th id="419">419</th><td>	result = WaitForMultipleObjects(<var>2</var>, cv-&gt;events_, FALSE, INFINITE);</td></tr>
+<tr><th id="420">420</th><td>	<b>if</b> (result==-<var>1</var>) {</td></tr>
+<tr><th id="421">421</th><td>		result = GetLastError();</td></tr>
+<tr><th id="422">422</th><td>	}</td></tr>
+<tr><th id="423">423</th><td>	EnterCriticalSection(&amp;cv-&gt;waiters_count_lock);</td></tr>
+<tr><th id="424">424</th><td>	cv-&gt;waiters_count--;</td></tr>
+<tr><th id="425">425</th><td>	last_waiter = result == (C_SIGNAL + C_BROADCAST &amp;&amp; (cv-&gt;waiters_count == <var>0</var>));</td></tr>
+<tr><th id="426">426</th><td>	LeaveCriticalSection(&amp;cv-&gt;waiters_count_lock);</td></tr>
+<tr><th id="427">427</th><td>	<b>if</b> (last_waiter)</td></tr>
+<tr><th id="428">428</th><td>		ResetEvent(cv-&gt;events_[C_BROADCAST]);</td></tr>
+<tr><th id="429">429</th><td>	EnterCriticalSection (mtx);</td></tr>
+<tr><th id="430">430</th><td>	<b>return</b> result;</td></tr>
+<tr><th id="431">431</th><td>}</td></tr>
+<tr><th id="432">432</th><td></td></tr>
+<tr><th id="433">433</th><td><em>void</em></td></tr>
+<tr><th id="434">434</th><td>WakeAllXPConditionVariable(userland_cond_t *cv)</td></tr>
+<tr><th id="435">435</th><td>{</td></tr>
+<tr><th id="436">436</th><td>	<em>int</em> have_waiters;</td></tr>
+<tr><th id="437">437</th><td>	EnterCriticalSection(&amp;cv-&gt;waiters_count_lock);</td></tr>
+<tr><th id="438">438</th><td>	have_waiters = cv-&gt;waiters_count &gt; <var>0</var>;</td></tr>
+<tr><th id="439">439</th><td>	LeaveCriticalSection(&amp;cv-&gt;waiters_count_lock);</td></tr>
+<tr><th id="440">440</th><td>	<b>if</b> (have_waiters)</td></tr>
+<tr><th id="441">441</th><td>		SetEvent (cv-&gt;events_[C_BROADCAST]);</td></tr>
+<tr><th id="442">442</th><td>}</td></tr>
+<tr><th id="443">443</th><td><u>#endif</u></td></tr>
+<tr><th id="444">444</th><td><u>#<span data-ppcond="161">endif</span></u></td></tr>
+<tr><th id="445">445</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

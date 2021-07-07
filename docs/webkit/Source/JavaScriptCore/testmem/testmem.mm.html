@@ -1,0 +1,130 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>testmem.mm source code [webkit/Source/JavaScriptCore/testmem/testmem.mm] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="Footprint,main "/>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/JavaScriptCore/testmem/testmem.mm'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>JavaScriptCore</a>/<a href='./'>testmem</a>/<a href='testmem.mm.html'>testmem.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2018 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. ``AS IS'' AND ANY</i></td></tr>
+<tr><th id="14">14</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE</i></td></tr>
+<tr><th id="15">15</th><td><i> * IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED.  IN NO EVENT SHALL APPLE INC. OR</i></td></tr>
+<tr><th id="17">17</th><td><i> * CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="19">19</th><td><i> * PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR</i></td></tr>
+<tr><th id="20">20</th><td><i> * PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY</i></td></tr>
+<tr><th id="21">21</th><td><i> * OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE</i></td></tr>
+<tr><th id="23">23</th><td><i> * OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import <a href="../config.h.html">"config.h"</a></u></td></tr>
+<tr><th id="27">27</th><td><u>#import <a href="../API/JavaScriptCore.h.html">&lt;JavaScriptCore/JavaScriptCore.h&gt;</a></u></td></tr>
+<tr><th id="28">28</th><td><u>#import &lt;inttypes.h&gt;</u></td></tr>
+<tr><th id="29">29</th><td><u>#import &lt;stdio.h&gt;</u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#<span data-ppcond="31">if</span> <span class="macro" title="" data-ref="_M/__has_include">__has_include</span>(&lt;libproc.h&gt;)</u></td></tr>
+<tr><th id="32">32</th><td><u>#define <dfn class="macro" id="_M/HAS_LIBPROC" data-ref="_M/HAS_LIBPROC">HAS_LIBPROC</dfn> 1</u></td></tr>
+<tr><th id="33">33</th><td><u>#import &lt;libproc.h&gt;</u></td></tr>
+<tr><th id="34">34</th><td><u>#<span data-ppcond="31">else</span></u></td></tr>
+<tr><th id="35">35</th><td><u>#define HAS_LIBPROC 0</u></td></tr>
+<tr><th id="36">36</th><td><u>#<span data-ppcond="31">endif</span></u></td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><u>#<span data-ppcond="38">if</span> <a class="macro" href="#32" title="1" data-ref="_M/HAS_LIBPROC">HAS_LIBPROC</a> &amp;&amp; <span class="macro" title="5" data-ref="_M/RUSAGE_INFO_CURRENT">RUSAGE_INFO_CURRENT</span> &gt;= 4 &amp;&amp; <a class="macro" href="../API/JSBase.h.html#149" title="1" data-ref="_M/JSC_OBJC_API_ENABLED">JSC_OBJC_API_ENABLED</a></u></td></tr>
+<tr><th id="39">39</th><td><em>static</em> <em>void</em> <dfn class="tu decl def fn" id="_ZL11descriptionv" title='description' data-type='void description()' data-ref="_ZL11descriptionv" data-ref-filename="_ZL11descriptionv">description</dfn>()</td></tr>
+<tr><th id="40">40</th><td>{</td></tr>
+<tr><th id="41">41</th><td>    <span class='ref fn' title='printf' data-ref="printf" data-ref-filename="printf">printf</span>(<q>"usage \n testmem &lt;path-to-file-to-run&gt; [iterations]\n"</q>);</td></tr>
+<tr><th id="42">42</th><td>}</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><b>struct</b> <dfn class="type def" id="Footprint" title='Footprint' data-ref="Footprint" data-ref-filename="Footprint">Footprint</dfn> {</td></tr>
+<tr><th id="45">45</th><td>    <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="tu decl field" id="Footprint::current" title='Footprint::current' data-type='uint64_t' data-ref="Footprint::current" data-ref-filename="Footprint..current">current</dfn>;</td></tr>
+<tr><th id="46">46</th><td>    <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="tu decl field" id="Footprint::peak" title='Footprint::peak' data-type='uint64_t' data-ref="Footprint::peak" data-ref-filename="Footprint..peak">peak</dfn>;</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td>    <em>static</em> <a class="type" href="#Footprint" title='Footprint' data-ref="Footprint" data-ref-filename="Footprint">Footprint</a> <dfn class="tu decl def fn" id="_ZN9Footprint3nowEv" title='Footprint::now' data-type='static Footprint Footprint::now()' data-ref="_ZN9Footprint3nowEv" data-ref-filename="_ZN9Footprint3nowEv">now</dfn>()</td></tr>
+<tr><th id="49">49</th><td>    {</td></tr>
+<tr><th id="50">50</th><td>        <span class='type' title='rusage_info_v4' data-ref="rusage_info_v4" data-ref-filename="rusage_info_v4">rusage_info_v4</span> <span class='ref fn fake' title='rusage_info_v4::rusage_info_v4' data-ref="_ZN14rusage_info_v4C1Ev" data-ref-filename="_ZN14rusage_info_v4C1Ev"></span><dfn class="local col1 decl" id="1rusage" title='rusage' data-type='rusage_info_v4' data-ref="1rusage" data-ref-filename="1rusage">rusage</dfn>;</td></tr>
+<tr><th id="51">51</th><td>        <b>if</b> (<span class='ref fn' title='proc_pid_rusage' data-ref="proc_pid_rusage" data-ref-filename="proc_pid_rusage">proc_pid_rusage</span>(<span class='ref fn' title='getpid' data-ref="getpid" data-ref-filename="getpid">getpid</span>(), <span class="macro" title="4" data-ref="_M/RUSAGE_INFO_V4">RUSAGE_INFO_V4</span>, (<span class='typedef' title='rusage_info_t' data-type='void *' data-ref="rusage_info_t" data-ref-filename="rusage_info_t">rusage_info_t</span> *)&amp;<a class="local col1 ref" href="#1rusage" title='rusage' data-ref="1rusage" data-ref-filename="1rusage">rusage</a>)) {</td></tr>
+<tr><th id="52">52</th><td>            <span class='ref fn' title='printf' data-ref="printf" data-ref-filename="printf">printf</span>(<q>"Failure when calling rusage\n"</q>);</td></tr>
+<tr><th id="53">53</th><td>            <span class='ref fn' title='exit' data-ref="exit" data-ref-filename="exit">exit</span>(<var>1</var>);</td></tr>
+<tr><th id="54">54</th><td>        }</td></tr>
+<tr><th id="55">55</th><td></td></tr>
+<tr><th id="56">56</th><td>        <b>return</b> { <a class="local col1 ref" href="#1rusage" title='rusage' data-ref="1rusage" data-ref-filename="1rusage">rusage</a>.<span class='ref field' title='rusage_info_v4::ri_phys_footprint' data-ref="rusage_info_v4::ri_phys_footprint" data-ref-filename="rusage_info_v4..ri_phys_footprint">ri_phys_footprint</span>, <a class="local col1 ref" href="#1rusage" title='rusage' data-ref="1rusage" data-ref-filename="1rusage">rusage</a>.<span class='ref field' title='rusage_info_v4::ri_lifetime_max_phys_footprint' data-ref="rusage_info_v4::ri_lifetime_max_phys_footprint" data-ref-filename="rusage_info_v4..ri_lifetime_max_phys_footprint">ri_lifetime_max_phys_footprint</span> };</td></tr>
+<tr><th id="57">57</th><td>    }</td></tr>
+<tr><th id="58">58</th><td>};</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><em>int</em> <dfn class="decl def fn" id="main" title='main' data-ref="main" data-ref-filename="main">main</dfn>(<em>int</em> <dfn class="local col2 decl" id="2argc" title='argc' data-type='int' data-ref="2argc" data-ref-filename="2argc">argc</dfn>, <em>char</em>* <dfn class="local col3 decl" id="3argv" title='argv' data-type='char **' data-ref="3argv" data-ref-filename="3argv">argv</dfn>[])</td></tr>
+<tr><th id="61">61</th><td>{</td></tr>
+<tr><th id="62">62</th><td>    <b>if</b> (<a class="local col2 ref" href="#2argc" title='argc' data-ref="2argc" data-ref-filename="2argc">argc</a> &lt; <var>2</var>) {</td></tr>
+<tr><th id="63">63</th><td>        <a class="tu ref fn" href="#_ZL11descriptionv" title='description' data-use='c' data-ref="_ZL11descriptionv" data-ref-filename="_ZL11descriptionv">description</a>();</td></tr>
+<tr><th id="64">64</th><td>        <span class='ref fn' title='exit' data-ref="exit" data-ref-filename="exit">exit</span>(<var>1</var>);</td></tr>
+<tr><th id="65">65</th><td>    }</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td>    <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col4 decl" id="4iterations" title='iterations' data-type='size_t' data-ref="4iterations" data-ref-filename="4iterations">iterations</dfn> = <var>20</var>;</td></tr>
+<tr><th id="68">68</th><td>    <b>if</b> (<a class="local col2 ref" href="#2argc" title='argc' data-ref="2argc" data-ref-filename="2argc">argc</a> &gt;= <var>3</var>) {</td></tr>
+<tr><th id="69">69</th><td>        <em>int</em> <dfn class="local col5 decl" id="5iters" title='iters' data-type='int' data-ref="5iters" data-ref-filename="5iters">iters</dfn> = <span class='ref fn' title='atoi' data-ref="atoi" data-ref-filename="atoi">atoi</span>(<a class="local col3 ref" href="#3argv" title='argv' data-ref="3argv" data-ref-filename="3argv">argv</a>[<var>2</var>]);</td></tr>
+<tr><th id="70">70</th><td>        <b>if</b> (<a class="local col5 ref" href="#5iters" title='iters' data-ref="5iters" data-ref-filename="5iters">iters</a> &lt; <var>0</var>) {</td></tr>
+<tr><th id="71">71</th><td>            <span class='ref fn' title='printf' data-ref="printf" data-ref-filename="printf">printf</span>(<q>"Iterations argument must be &gt;= 0"</q>);</td></tr>
+<tr><th id="72">72</th><td>            <span class='ref fn' title='exit' data-ref="exit" data-ref-filename="exit">exit</span>(<var>1</var>);</td></tr>
+<tr><th id="73">73</th><td>        }</td></tr>
+<tr><th id="74">74</th><td>        <a class="local col4 ref" href="#4iterations" title='iterations' data-ref="4iterations" data-ref-filename="4iterations">iterations</a> = <a class="local col5 ref" href="#5iters" title='iters' data-ref="5iters" data-ref-filename="5iters">iters</a>;</td></tr>
+<tr><th id="75">75</th><td>    }</td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td>    NSString *<dfn class="local col6 decl" id="6path" title='path' data-type='NSString *__strong' data-ref="6path" data-ref-filename="6path">path</dfn> = [NSString stringWithUTF8String:<a class="local col3 ref" href="#3argv" title='argv' data-ref="3argv" data-ref-filename="3argv">argv</a>[<var>1</var>]];</td></tr>
+<tr><th id="78">78</th><td>    NSString *<dfn class="local col7 decl" id="7script" title='script' data-type='NSString *__strong' data-ref="7script" data-ref-filename="7script">script</dfn> = [[NSString alloc] initWithContentsOfFile:<a class="local col6 ref" href="#6path" title='path' data-ref="6path" data-ref-filename="6path">path</a> encoding:<span class='enum' title='NSUTF8StringEncoding' data-ref="NSUTF8StringEncoding" data-ref-filename="NSUTF8StringEncoding">NSUTF8StringEncoding</span> error:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="79">79</th><td>    <b>if</b> (!<a class="local col7 ref" href="#7script" title='script' data-ref="7script" data-ref-filename="7script">script</a>) {</td></tr>
+<tr><th id="80">80</th><td>        <span class='ref fn' title='printf' data-ref="printf" data-ref-filename="printf">printf</span>(<q>"Can't open file: %s\n"</q>, <a class="local col3 ref" href="#3argv" title='argv' data-ref="3argv" data-ref-filename="3argv">argv</a>[<var>1</var>]);</td></tr>
+<tr><th id="81">81</th><td>        <span class='ref fn' title='exit' data-ref="exit" data-ref-filename="exit">exit</span>(<var>1</var>);</td></tr>
+<tr><th id="82">82</th><td>    }</td></tr>
+<tr><th id="83">83</th><td></td></tr>
+<tr><th id="84">84</th><td>    <em>auto</em> <dfn class="local col8 decl" id="8startTime" title='startTime' data-type='double' data-ref="8startTime" data-ref-filename="8startTime">startTime</dfn> = <span class='ref fn' title='CFAbsoluteTimeGetCurrent' data-ref="CFAbsoluteTimeGetCurrent" data-ref-filename="CFAbsoluteTimeGetCurrent">CFAbsoluteTimeGetCurrent</span>();</td></tr>
+<tr><th id="85">85</th><td>    JSVirtualMachine* <dfn class="local col9 decl" id="9vm" title='vm' data-type='JSVirtualMachine *__strong' data-ref="9vm" data-ref-filename="9vm">vm</dfn> = [[JSVirtualMachine alloc] init];</td></tr>
+<tr><th id="86">86</th><td>    <b>for</b> (<span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col0 decl" id="10i" title='i' data-type='size_t' data-ref="10i" data-ref-filename="10i">i</dfn> = <var>0</var>; <a class="local col0 ref" href="#10i" title='i' data-ref="10i" data-ref-filename="10i">i</a> &lt; <a class="local col4 ref" href="#4iterations" title='iterations' data-ref="4iterations" data-ref-filename="4iterations">iterations</a>; ++<a class="local col0 ref" href="#10i" title='i' data-ref="10i" data-ref-filename="10i">i</a>) {</td></tr>
+<tr><th id="87">87</th><td>        @autoreleasepool {</td></tr>
+<tr><th id="88">88</th><td>            JSContext *<dfn class="local col1 decl" id="11context" title='context' data-type='JSContext *__strong' data-ref="11context" data-ref-filename="11context">context</dfn> = [[JSContext alloc] initWithVirtualMachine:<a class="local col9 ref" href="#9vm" title='vm' data-ref="9vm" data-ref-filename="9vm">vm</a>];</td></tr>
+<tr><th id="89">89</th><td>            <a class="local col1 ref" href="#11context" title='context' data-ref="11context" data-ref-filename="11context">context</a>.exceptionHandler = ^(JSContext*, JSValue*) {</td></tr>
+<tr><th id="90">90</th><td>                <span class='ref fn' title='printf' data-ref="printf" data-ref-filename="printf">printf</span>(<q>"Unexpected exception thrown\n"</q>);</td></tr>
+<tr><th id="91">91</th><td>                <span class='ref fn' title='exit' data-ref="exit" data-ref-filename="exit">exit</span>(<var>1</var>);</td></tr>
+<tr><th id="92">92</th><td>            };</td></tr>
+<tr><th id="93">93</th><td>            [<a class="local col1 ref" href="#11context" title='context' data-ref="11context" data-ref-filename="11context">context</a> evaluateScript:<a class="local col7 ref" href="#7script" title='script' data-ref="7script" data-ref-filename="7script">script</a>];</td></tr>
+<tr><th id="94">94</th><td>        }</td></tr>
+<tr><th id="95">95</th><td>    }</td></tr>
+<tr><th id="96">96</th><td>    <em>auto</em> <dfn class="local col2 decl" id="12time" title='time' data-type='double' data-ref="12time" data-ref-filename="12time">time</dfn> = <span class='ref fn' title='CFAbsoluteTimeGetCurrent' data-ref="CFAbsoluteTimeGetCurrent" data-ref-filename="CFAbsoluteTimeGetCurrent">CFAbsoluteTimeGetCurrent</span>() - <a class="local col8 ref" href="#8startTime" title='startTime' data-ref="8startTime" data-ref-filename="8startTime">startTime</a>;</td></tr>
+<tr><th id="97">97</th><td>    <em>auto</em> <dfn class="local col3 decl" id="13footprint" title='footprint' data-type='Footprint' data-ref="13footprint" data-ref-filename="13footprint">footprint</dfn> = <a class="type" href="#Footprint" title='Footprint' data-ref="Footprint" data-ref-filename="Footprint">Footprint</a>::<a class="tu ref fn" href="#_ZN9Footprint3nowEv" title='Footprint::now' data-use='c' data-ref="_ZN9Footprint3nowEv" data-ref-filename="_ZN9Footprint3nowEv">now</a>();</td></tr>
+<tr><th id="98">98</th><td></td></tr>
+<tr><th id="99">99</th><td>    <span class='ref fn' title='printf' data-ref="printf" data-ref-filename="printf">printf</span>(<q>"time: %lf\n"</q>, <a class="local col2 ref" href="#12time" title='time' data-ref="12time" data-ref-filename="12time">time</a>); <i>// Seconds</i></td></tr>
+<tr><th id="100">100</th><td>    <span class='ref fn' title='printf' data-ref="printf" data-ref-filename="printf">printf</span>(<q>"peak footprint: %"</q> <span class="macro" title="&quot;ll&quot; &quot;u&quot;" data-ref="_M/PRIu64">PRIu64</span> <q>"\n"</q>, <a class="local col3 ref" href="#13footprint" title='footprint' data-ref="13footprint" data-ref-filename="13footprint">footprint</a>.<a class="tu ref field" href="#Footprint::peak" title='Footprint::peak' data-use='r' data-ref="Footprint::peak" data-ref-filename="Footprint..peak">peak</a>); <i>// Bytes</i></td></tr>
+<tr><th id="101">101</th><td>    <span class='ref fn' title='printf' data-ref="printf" data-ref-filename="printf">printf</span>(<q>"footprint at end: %"</q> <span class="macro" title="&quot;ll&quot; &quot;u&quot;" data-ref="_M/PRIu64">PRIu64</span> <q>"\n"</q>, <a class="local col3 ref" href="#13footprint" title='footprint' data-ref="13footprint" data-ref-filename="13footprint">footprint</a>.<a class="tu ref field" href="#Footprint::current" title='Footprint::current' data-use='r' data-ref="Footprint::current" data-ref-filename="Footprint..current">current</a>); <i>// Bytes</i></td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td>    <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="104">104</th><td>}</td></tr>
+<tr><th id="105">105</th><td><u>#<span data-ppcond="38">else</span></u></td></tr>
+<tr><th id="106">106</th><td><em>int</em> main(<em>int</em>, <em>char</em>*[])</td></tr>
+<tr><th id="107">107</th><td>{</td></tr>
+<tr><th id="108">108</th><td>    printf(<q>"You need to compile this file with an SDK that has RUSAGE_INFO_V4 or later\n"</q>);</td></tr>
+<tr><th id="109">109</th><td>    <b>return</b> <var>1</var>;</td></tr>
+<tr><th id="110">110</th><td>}</td></tr>
+<tr><th id="111">111</th><td><u>#<span data-ppcond="38">endif</span></u></td></tr>
+<tr><th id="112">112</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

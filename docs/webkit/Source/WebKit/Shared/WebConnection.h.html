@@ -1,0 +1,86 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebConnection.h source code [webkit/Source/WebKit/Shared/WebConnection.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="WebKit::WebConnection "/>
+<link rel="stylesheet" href="../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKit/Shared/WebConnection.h'; var root_path = '../../../..'; var data_path = '../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../..'>webkit</a>/<a href='../..'>Source</a>/<a href='..'>WebKit</a>/<a href='./'>Shared</a>/<a href='WebConnection.h.html'>WebConnection.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2011 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="26">ifndef</span> <span class="macro" data-ref="_M/WebConnection_h">WebConnection_h</span></u></td></tr>
+<tr><th id="27">27</th><td><u>#define <dfn class="macro" id="_M/WebConnection_h" data-ref="_M/WebConnection_h">WebConnection_h</dfn></u></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#include <a href="API/APIObject.h.html">"APIObject.h"</a></u></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="../Platform/IPC/MessageReceiver.h.html">"MessageReceiver.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="../Platform/IPC/MessageSender.h.html">"MessageSender.h"</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="UserData.h.html">"UserData.h"</a></u></td></tr>
+<tr><th id="33">33</th><td><u>#include <a href="WebConnectionClient.h.html">"WebConnectionClient.h"</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#include <a href="../../../WebKitBuild/Debug/usr/local/include/wtf/RefPtr.h.html">&lt;wtf/RefPtr.h&gt;</a></u></td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><b>namespace</b> <span class="namespace">WebKit</span> {</td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><b>class</b> <a class="type" href="UserData.h.html#WebKit::UserData" title='WebKit::UserData' data-ref="WebKit::UserData" data-ref-filename="WebKit..UserData" id="WebKit::UserData">UserData</a>;</td></tr>
+<tr><th id="39">39</th><td><b>class</b> <dfn class="type def" id="WebKit::WebConnection" title='WebKit::WebConnection' data-ref="WebKit::WebConnection" data-ref-filename="WebKit..WebConnection">WebConnection</dfn> : <b>public</b> <span class="namespace">API::</span><a class="type" href="API/APIObject.h.html#API::ObjectImpl" title='API::ObjectImpl' data-ref="API::ObjectImpl" data-ref-filename="API..ObjectImpl">ObjectImpl</a>&lt;<span class="namespace">API::</span><a class="type" href="API/APIObject.h.html#API::Object" title='API::Object' data-ref="API::Object" data-ref-filename="API..Object">Object</a>::<a class="type" href="API/APIObject.h.html#API::Object::Type" title='API::Object::Type' data-ref="API::Object::Type" data-ref-filename="API..Object..Type">Type</a>::<a class="enum" href="API/APIObject.h.html#API::Object::Type::Connection" title='API::Object::Type::Connection' data-ref="API::Object::Type::Connection" data-ref-filename="API..Object..Type..Connection">Connection</a>&gt;, <b>public</b> <span class="namespace">IPC::</span><a class="type" href="../Platform/IPC/MessageReceiver.h.html#IPC::MessageReceiver" title='IPC::MessageReceiver' data-ref="IPC::MessageReceiver" data-ref-filename="IPC..MessageReceiver">MessageReceiver</a>, <b>public</b> <span class="namespace">IPC::</span><a class="type" href="../Platform/IPC/MessageSender.h.html#IPC::MessageSender" title='IPC::MessageSender' data-ref="IPC::MessageSender" data-ref-filename="IPC..MessageSender">MessageSender</a> {</td></tr>
+<tr><th id="40">40</th><td><b>public</b>:</td></tr>
+<tr><th id="41">41</th><td>    <b>virtual</b> <dfn class="virtual decl fn" id="_ZN6WebKit13WebConnectionD1Ev" title='WebKit::WebConnection::~WebConnection' data-ref="_ZN6WebKit13WebConnectionD1Ev" data-ref-filename="_ZN6WebKit13WebConnectionD1Ev">~WebConnection</dfn>();</td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN6WebKit13WebConnection26initializeConnectionClientEPK22WKConnectionClientBase" title='WebKit::WebConnection::initializeConnectionClient' data-ref="_ZN6WebKit13WebConnection26initializeConnectionClientEPK22WKConnectionClientBase" data-ref-filename="_ZN6WebKit13WebConnection26initializeConnectionClientEPK22WKConnectionClientBase">initializeConnectionClient</dfn>(<em>const</em> <a class="typedef" href="API/c/WKConnectionRef.h.html#WKConnectionClientBase" title='WKConnectionClientBase' data-type='struct WKConnectionClientBase' data-ref="WKConnectionClientBase" data-ref-filename="WKConnectionClientBase">WKConnectionClientBase</a>*);</td></tr>
+<tr><th id="44">44</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN6WebKit13WebConnection11postMessageERKN3WTF6StringEPN3API6ObjectE" title='WebKit::WebConnection::postMessage' data-ref="_ZN6WebKit13WebConnection11postMessageERKN3WTF6StringEPN3API6ObjectE" data-ref-filename="_ZN6WebKit13WebConnection11postMessageERKN3WTF6StringEPN3API6ObjectE">postMessage</dfn>(<em>const</em> <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#WTF::String" title='WTF::String' data-ref="WTF::String" data-ref-filename="WTF..String">String</a>&amp;, <span class="namespace">API::</span><a class="type" href="API/APIObject.h.html#API::Object" title='API::Object' data-ref="API::Object" data-ref-filename="API..Object">Object</a>*);</td></tr>
+<tr><th id="45">45</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN6WebKit13WebConnection8didCloseEv" title='WebKit::WebConnection::didClose' data-ref="_ZN6WebKit13WebConnection8didCloseEv" data-ref-filename="_ZN6WebKit13WebConnection8didCloseEv">didClose</dfn>();</td></tr>
+<tr><th id="46">46</th><td></td></tr>
+<tr><th id="47">47</th><td><b>protected</b>:</td></tr>
+<tr><th id="48">48</th><td>    <b>explicit</b> <dfn class="decl fn" id="_ZN6WebKit13WebConnectionC1Ev" title='WebKit::WebConnection::WebConnection' data-ref="_ZN6WebKit13WebConnectionC1Ev" data-ref-filename="_ZN6WebKit13WebConnectionC1Ev">WebConnection</dfn>();</td></tr>
+<tr><th id="49">49</th><td></td></tr>
+<tr><th id="50">50</th><td>    <b>virtual</b> <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RefPtr" title='WTF::RefPtr' data-ref="WTF::RefPtr" data-ref-filename="WTF..RefPtr">RefPtr</a>&lt;<span class="namespace">API::</span><a class="type" href="API/APIObject.h.html#API::Object" title='API::Object' data-ref="API::Object" data-ref-filename="API..Object">Object</a>&gt; <dfn class="virtual decl fn" id="_ZN6WebKit13WebConnection25transformHandlesToObjectsEPN3API6ObjectE" title='WebKit::WebConnection::transformHandlesToObjects' data-ref="_ZN6WebKit13WebConnection25transformHandlesToObjectsEPN3API6ObjectE" data-ref-filename="_ZN6WebKit13WebConnection25transformHandlesToObjectsEPN3API6ObjectE">transformHandlesToObjects</dfn>(<span class="namespace">API::</span><a class="type" href="API/APIObject.h.html#API::Object" title='API::Object' data-ref="API::Object" data-ref-filename="API..Object">Object</a>*) = <var>0</var>;</td></tr>
+<tr><th id="51">51</th><td>    <b>virtual</b> <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RefPtr" title='WTF::RefPtr' data-ref="WTF::RefPtr" data-ref-filename="WTF..RefPtr">RefPtr</a>&lt;<span class="namespace">API::</span><a class="type" href="API/APIObject.h.html#API::Object" title='API::Object' data-ref="API::Object" data-ref-filename="API..Object">Object</a>&gt; <dfn class="virtual decl fn" id="_ZN6WebKit13WebConnection25transformObjectsToHandlesEPN3API6ObjectE" title='WebKit::WebConnection::transformObjectsToHandles' data-ref="_ZN6WebKit13WebConnection25transformObjectsToHandlesEPN3API6ObjectE" data-ref-filename="_ZN6WebKit13WebConnection25transformObjectsToHandlesEPN3API6ObjectE">transformObjectsToHandles</dfn>(<span class="namespace">API::</span><a class="type" href="API/APIObject.h.html#API::Object" title='API::Object' data-ref="API::Object" data-ref-filename="API..Object">Object</a>*) = <var>0</var>;</td></tr>
+<tr><th id="52">52</th><td></td></tr>
+<tr><th id="53">53</th><td>    <i>// IPC::MessageReceiver</i></td></tr>
+<tr><th id="54">54</th><td><i>    // Implemented in generated WebConnectionMessageReceiver.cpp</i></td></tr>
+<tr><th id="55">55</th><td>    <em>void</em> <dfn class="virtual decl fn" id="_ZN6WebKit13WebConnection17didReceiveMessageERN3IPC10ConnectionERNS1_7DecoderE" title='WebKit::WebConnection::didReceiveMessage' data-ref="_ZN6WebKit13WebConnection17didReceiveMessageERN3IPC10ConnectionERNS1_7DecoderE" data-ref-filename="_ZN6WebKit13WebConnection17didReceiveMessageERN3IPC10ConnectionERNS1_7DecoderE">didReceiveMessage</dfn>(<span class="namespace">IPC::</span><a class="type" href="../Platform/IPC/Connection.h.html#IPC::Connection" title='IPC::Connection' data-ref="IPC::Connection" data-ref-filename="IPC..Connection">Connection</a>&amp;, <span class="namespace">IPC::</span><a class="type" href="../Platform/IPC/Decoder.h.html#IPC::Decoder" title='IPC::Decoder' data-ref="IPC::Decoder" data-ref-filename="IPC..Decoder">Decoder</a>&amp;) override;</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td>    <i>// Mesage handling implementation functions.</i></td></tr>
+<tr><th id="58">58</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN6WebKit13WebConnection13handleMessageERKN3WTF6StringERKNS_8UserDataE" title='WebKit::WebConnection::handleMessage' data-ref="_ZN6WebKit13WebConnection13handleMessageERKN3WTF6StringERKNS_8UserDataE" data-ref-filename="_ZN6WebKit13WebConnection13handleMessageERKN3WTF6StringERKNS_8UserDataE">handleMessage</dfn>(<em>const</em> <a class="type" href="../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#WTF::String" title='WTF::String' data-ref="WTF::String" data-ref-filename="WTF..String">String</a>&amp; <dfn class="local col9 decl" id="3759messageName" title='messageName' data-type='const WTF::String &amp;' data-ref="3759messageName" data-ref-filename="3759messageName">messageName</dfn>, <em>const</em> <a class="type" href="UserData.h.html#WebKit::UserData" title='WebKit::UserData' data-ref="WebKit::UserData" data-ref-filename="WebKit..UserData">UserData</a>&amp; <dfn class="local col0 decl" id="3760messageBody" title='messageBody' data-type='const WebKit::UserData &amp;' data-ref="3760messageBody" data-ref-filename="3760messageBody">messageBody</dfn>);</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td>    <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZNK6WebKit13WebConnection18hasValidConnectionEv" title='WebKit::WebConnection::hasValidConnection' data-ref="_ZNK6WebKit13WebConnection18hasValidConnectionEv" data-ref-filename="_ZNK6WebKit13WebConnection18hasValidConnectionEv">hasValidConnection</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td>    <a class="type" href="WebConnectionClient.h.html#WebKit::WebConnectionClient" title='WebKit::WebConnectionClient' data-ref="WebKit::WebConnectionClient" data-ref-filename="WebKit..WebConnectionClient">WebConnectionClient</a> <dfn class="decl field" id="WebKit::WebConnection::m_client" title='WebKit::WebConnection::m_client' data-ref="WebKit::WebConnection::m_client" data-ref-filename="WebKit..WebConnection..m_client">m_client</dfn>;</td></tr>
+<tr><th id="63">63</th><td>};</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td>} <i>// namespace WebKit</i></td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><u>#<span data-ppcond="26">endif</span> // WebConnection_h</u></td></tr>
+<tr><th id="68">68</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../UIProcess/Automation/WebAutomationSession.cpp.html'>webkit/Source/WebKit/UIProcess/Automation/WebAutomationSession.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

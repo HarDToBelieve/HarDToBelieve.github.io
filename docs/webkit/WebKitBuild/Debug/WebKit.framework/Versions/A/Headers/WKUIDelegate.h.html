@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WKUIDelegate.h source code [webkit/WebKitBuild/Debug/WebKit.framework/Versions/A/Headers/WKUIDelegate.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/WebKit.framework/Versions/A/Headers/WKUIDelegate.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>WebKit.framework</a>/<a href='../..'>Versions</a>/<a href='..'>A</a>/<a href='./'>Headers</a>/<a href='WKUIDelegate.h.html'>WKUIDelegate.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2014 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#import <a href="WKFoundation.h.html">&lt;WebKit/WKFoundation.h&gt;</a></u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#import &lt;Foundation/Foundation.h&gt;</u></td></tr>
+<tr><th id="29">29</th><td><u>#import <a href="WKPreviewActionItem.h.html">&lt;WebKit/WKPreviewActionItem.h&gt;</a></u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_BEGIN">NS_ASSUME_NONNULL_BEGIN</span></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td>@class WKFrameInfo;</td></tr>
+<tr><th id="34">34</th><td>@class WKNavigationAction;</td></tr>
+<tr><th id="35">35</th><td>@class WKOpenPanelParameters;</td></tr>
+<tr><th id="36">36</th><td>@class WKPreviewElementInfo;</td></tr>
+<tr><th id="37">37</th><td>@class WKSecurityOrigin;</td></tr>
+<tr><th id="38">38</th><td>@class WKWebView;</td></tr>
+<tr><th id="39">39</th><td>@class WKWebViewConfiguration;</td></tr>
+<tr><th id="40">40</th><td>@class WKWindowFeatures;</td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td><u>#<span data-ppcond="42">if</span> <span class="macro" title="0" data-ref="_M/TARGET_OS_IOS">TARGET_OS_IOS</span></u></td></tr>
+<tr><th id="43">43</th><td>@class WKContextMenuElementInfo;</td></tr>
+<tr><th id="44">44</th><td>@class UIContextMenuConfiguration;</td></tr>
+<tr><th id="45">45</th><td>@protocol UIContextMenuInteractionCommitAnimating;</td></tr>
+<tr><th id="46">46</th><td><u>#<span data-ppcond="42">endif</span></u></td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td><b>typedef</b> <span class="macro" title="enum __attribute__((enum_extensibility(open))) WKPermissionDecision : NSInteger WKPermissionDecision; enum WKPermissionDecision : NSInteger" data-ref="_M/NS_ENUM">NS_ENUM</span>(NSInteger, <dfn class="type" id="WKPermissionDecision" title='WKPermissionDecision' data-ref="WKPermissionDecision" data-ref-filename="WKPermissionDecision"><dfn class="typedef" id="WKPermissionDecision" title='WKPermissionDecision' data-type='enum WKPermissionDecision' data-ref="WKPermissionDecision" data-ref-filename="WKPermissionDecision"><a class="type" href="#48" title='WKPermissionDecision' data-ref="WKPermissionDecision" data-ref-filename="WKPermissionDecision"><dfn class="type def" id="WKPermissionDecision" title='WKPermissionDecision' data-ref="WKPermissionDecision" data-ref-filename="WKPermissionDecision">WKPermissionDecision</dfn></a></dfn></dfn>) {</td></tr>
+<tr><th id="49">49</th><td>    <dfn class="enum" id="WKPermissionDecisionPrompt" title='WKPermissionDecisionPrompt' data-ref="WKPermissionDecisionPrompt" data-ref-filename="WKPermissionDecisionPrompt">WKPermissionDecisionPrompt</dfn>,</td></tr>
+<tr><th id="50">50</th><td>    <dfn class="enum" id="WKPermissionDecisionGrant" title='WKPermissionDecisionGrant' data-ref="WKPermissionDecisionGrant" data-ref-filename="WKPermissionDecisionGrant">WKPermissionDecisionGrant</dfn>,</td></tr>
+<tr><th id="51">51</th><td>    <dfn class="enum" id="WKPermissionDecisionDeny" title='WKPermissionDecisionDeny' data-ref="WKPermissionDecisionDeny" data-ref-filename="WKPermissionDecisionDeny">WKPermissionDecisionDeny</dfn>,</td></tr>
+<tr><th id="52">52</th><td>} <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td><b>typedef</b> <span class="macro" title="enum __attribute__((enum_extensibility(open))) WKMediaCaptureType : NSInteger WKMediaCaptureType; enum WKMediaCaptureType : NSInteger" data-ref="_M/NS_ENUM">NS_ENUM</span>(NSInteger, <dfn class="type" id="WKMediaCaptureType" title='WKMediaCaptureType' data-ref="WKMediaCaptureType" data-ref-filename="WKMediaCaptureType"><dfn class="typedef" id="WKMediaCaptureType" title='WKMediaCaptureType' data-type='enum WKMediaCaptureType' data-ref="WKMediaCaptureType" data-ref-filename="WKMediaCaptureType"><a class="type" href="#54" title='WKMediaCaptureType' data-ref="WKMediaCaptureType" data-ref-filename="WKMediaCaptureType"><dfn class="type def" id="WKMediaCaptureType" title='WKMediaCaptureType' data-ref="WKMediaCaptureType" data-ref-filename="WKMediaCaptureType">WKMediaCaptureType</dfn></a></dfn></dfn>) {</td></tr>
+<tr><th id="55">55</th><td>    <dfn class="enum" id="WKMediaCaptureTypeCamera" title='WKMediaCaptureTypeCamera' data-ref="WKMediaCaptureTypeCamera" data-ref-filename="WKMediaCaptureTypeCamera">WKMediaCaptureTypeCamera</dfn>,</td></tr>
+<tr><th id="56">56</th><td>    <dfn class="enum" id="WKMediaCaptureTypeMicrophone" title='WKMediaCaptureTypeMicrophone' data-ref="WKMediaCaptureTypeMicrophone" data-ref-filename="WKMediaCaptureTypeMicrophone">WKMediaCaptureTypeMicrophone</dfn>,</td></tr>
+<tr><th id="57">57</th><td>    <dfn class="enum" id="WKMediaCaptureTypeCameraAndMicrophone" title='WKMediaCaptureTypeCameraAndMicrophone' data-ref="WKMediaCaptureTypeCameraAndMicrophone" data-ref-filename="WKMediaCaptureTypeCameraAndMicrophone">WKMediaCaptureTypeCameraAndMicrophone</dfn>,</td></tr>
+<tr><th id="58">58</th><td>} <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="59">59</th><td></td></tr>
+<tr><th id="60">60</th><td><i class="doc">/*! A class conforming to the WKUIDelegate protocol provides methods for</i></td></tr>
+<tr><th id="61">61</th><td><i class="doc"> presenting native UI on behalf of a webpage.</i></td></tr>
+<tr><th id="62">62</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="63">63</th><td>@protocol WKUIDelegate &lt;NSObject&gt;</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td>@optional</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><i class="doc">/*! <span class="command">@abstract</span> Creates a new web view.</i></td></tr>
+<tr><th id="68">68</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="69">69</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">configuration</span> The configuration to use when creating the new web</i></td></tr>
+<tr><th id="70">70</th><td><i class="doc"> view. This configuration is a copy of webView.configuration.</i></td></tr>
+<tr><th id="71">71</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">navigationAction</span> The navigation action causing the new web view to</i></td></tr>
+<tr><th id="72">72</th><td><i class="doc"> be created.</i></td></tr>
+<tr><th id="73">73</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">windowFeatures</span> Window features requested by the webpage.</i></td></tr>
+<tr><th id="74">74</th><td><i class="doc"> <span class="command">@result</span> A new web view or nil.</i></td></tr>
+<tr><th id="75">75</th><td><i class="doc"> <span class="command">@discussion</span> The web view returned must be created with the specified configuration. WebKit will load the request in the returned web view.</i></td></tr>
+<tr><th id="76">76</th><td><i class="doc"></i></td></tr>
+<tr><th id="77">77</th><td><i class="doc"> If you do not implement this method, the web view will cancel the navigation.</i></td></tr>
+<tr><th id="78">78</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="79">79</th><td>- (nullable WKWebView *)webView:(WKWebView *)<dfn class="local col5 decl" id="175webView" title='webView' data-type='WKWebView * _Nonnull' data-ref="175webView" data-ref-filename="175webView">webView</dfn> createWebViewWithConfiguration:(WKWebViewConfiguration *)<dfn class="local col6 decl" id="176configuration" title='configuration' data-type='WKWebViewConfiguration * _Nonnull' data-ref="176configuration" data-ref-filename="176configuration">configuration</dfn> forNavigationAction:(WKNavigationAction *)<dfn class="local col7 decl" id="177navigationAction" title='navigationAction' data-type='WKNavigationAction * _Nonnull' data-ref="177navigationAction" data-ref-filename="177navigationAction">navigationAction</dfn> windowFeatures:(WKWindowFeatures *)<dfn class="local col8 decl" id="178windowFeatures" title='windowFeatures' data-type='WKWindowFeatures * _Nonnull' data-ref="178windowFeatures" data-ref-filename="178windowFeatures">windowFeatures</dfn>;</td></tr>
+<tr><th id="80">80</th><td></td></tr>
+<tr><th id="81">81</th><td><i class="doc">/*! <span class="command">@abstract</span> Notifies your app that the DOM window object's close() method completed successfully.</i></td></tr>
+<tr><th id="82">82</th><td><i class="doc">  <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="83">83</th><td><i class="doc">  <span class="command">@discussion</span> Your app should remove the web view from the view hierarchy and update</i></td></tr>
+<tr><th id="84">84</th><td><i class="doc">  the UI as needed, such as by closing the containing browser tab or window.</i></td></tr>
+<tr><th id="85">85</th><td><i class="doc">  */</i></td></tr>
+<tr><th id="86">86</th><td>- (<em>void</em>)webViewDidClose:(WKWebView *)<dfn class="local col9 decl" id="179webView" title='webView' data-type='WKWebView * _Nonnull' data-ref="179webView" data-ref-filename="179webView">webView</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.11</var>), ios(<var>9.0</var>));</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td><i class="doc">/*! <span class="command">@abstract</span> Displays a JavaScript alert panel.</i></td></tr>
+<tr><th id="89">89</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="90">90</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">message</span> The message to display.</i></td></tr>
+<tr><th id="91">91</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">frame</span> Information about the frame whose JavaScript initiated this</i></td></tr>
+<tr><th id="92">92</th><td><i class="doc"> call.</i></td></tr>
+<tr><th id="93">93</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">completionHandler</span> The completion handler to call after the alert</i></td></tr>
+<tr><th id="94">94</th><td><i class="doc"> panel has been dismissed.</i></td></tr>
+<tr><th id="95">95</th><td><i class="doc"> <span class="command">@discussion</span> For user security, your app should call attention to the fact</i></td></tr>
+<tr><th id="96">96</th><td><i class="doc"> that a specific website controls the content in this panel. A simple forumla</i></td></tr>
+<tr><th id="97">97</th><td><i class="doc"> for identifying the controlling website is frame.request.URL.host.</i></td></tr>
+<tr><th id="98">98</th><td><i class="doc"> The panel should have a single OK button.</i></td></tr>
+<tr><th id="99">99</th><td><i class="doc"></i></td></tr>
+<tr><th id="100">100</th><td><i class="doc"> If you do not implement this method, the web view will behave as if the user selected the OK button.</i></td></tr>
+<tr><th id="101">101</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="102">102</th><td>- (<em>void</em>)webView:(WKWebView *)<dfn class="local col0 decl" id="180webView" title='webView' data-type='WKWebView * _Nonnull' data-ref="180webView" data-ref-filename="180webView">webView</dfn> runJavaScriptAlertPanelWithMessage:(NSString *)<dfn class="local col1 decl" id="181message" title='message' data-type='NSString * _Nonnull' data-ref="181message" data-ref-filename="181message">message</dfn> initiatedByFrame:(WKFrameInfo *)<dfn class="local col2 decl" id="182frame" title='frame' data-type='WKFrameInfo * _Nonnull' data-ref="182frame" data-ref-filename="182frame">frame</dfn> completionHandler:(<em>void</em> (^)(<em>void</em>))<dfn class="local col3 decl" id="183completionHandler" title='completionHandler' data-type='void (^ _Nonnull)(void)' data-ref="183completionHandler" data-ref-filename="183completionHandler">completionHandler</dfn>;</td></tr>
+<tr><th id="103">103</th><td></td></tr>
+<tr><th id="104">104</th><td><i class="doc">/*! <span class="command">@abstract</span> Displays a JavaScript confirm panel.</i></td></tr>
+<tr><th id="105">105</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="106">106</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">message</span> The message to display.</i></td></tr>
+<tr><th id="107">107</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">frame</span> Information about the frame whose JavaScript initiated this call.</i></td></tr>
+<tr><th id="108">108</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">completionHandler</span> The completion handler to call after the confirm</i></td></tr>
+<tr><th id="109">109</th><td><i class="doc"> panel has been dismissed. Pass YES if the user chose OK, NO if the user</i></td></tr>
+<tr><th id="110">110</th><td><i class="doc"> chose Cancel.</i></td></tr>
+<tr><th id="111">111</th><td><i class="doc"> <span class="command">@discussion</span> For user security, your app should call attention to the fact</i></td></tr>
+<tr><th id="112">112</th><td><i class="doc"> that a specific website controls the content in this panel. A simple forumla</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc"> for identifying the controlling website is frame.request.URL.host.</i></td></tr>
+<tr><th id="114">114</th><td><i class="doc"> The panel should have two buttons, such as OK and Cancel.</i></td></tr>
+<tr><th id="115">115</th><td><i class="doc"></i></td></tr>
+<tr><th id="116">116</th><td><i class="doc"> If you do not implement this method, the web view will behave as if the user selected the Cancel button.</i></td></tr>
+<tr><th id="117">117</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="118">118</th><td>- (<em>void</em>)webView:(WKWebView *)<dfn class="local col4 decl" id="184webView" title='webView' data-type='WKWebView * _Nonnull' data-ref="184webView" data-ref-filename="184webView">webView</dfn> runJavaScriptConfirmPanelWithMessage:(NSString *)<dfn class="local col5 decl" id="185message" title='message' data-type='NSString * _Nonnull' data-ref="185message" data-ref-filename="185message">message</dfn> initiatedByFrame:(WKFrameInfo *)<dfn class="local col6 decl" id="186frame" title='frame' data-type='WKFrameInfo * _Nonnull' data-ref="186frame" data-ref-filename="186frame">frame</dfn> completionHandler:(<em>void</em> (^)(<span class='typedef' title='BOOL' data-type='_Bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col8 decl" id="188result" title='result' data-type='BOOL' data-ref="188result" data-ref-filename="188result">result</dfn>))<dfn class="local col7 decl" id="187completionHandler" title='completionHandler' data-type='void (^ _Nonnull)(BOOL)' data-ref="187completionHandler" data-ref-filename="187completionHandler">completionHandler</dfn>;</td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td><i class="doc">/*! <span class="command">@abstract</span> Displays a JavaScript text input panel.</i></td></tr>
+<tr><th id="121">121</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="122">122</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">prompt</span> The prompt to display.</i></td></tr>
+<tr><th id="123">123</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">defaultText</span> The initial text to display in the text entry field.</i></td></tr>
+<tr><th id="124">124</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">frame</span> Information about the frame whose JavaScript initiated this call.</i></td></tr>
+<tr><th id="125">125</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">completionHandler</span> The completion handler to call after the text</i></td></tr>
+<tr><th id="126">126</th><td><i class="doc"> input panel has been dismissed. Pass the entered text if the user chose</i></td></tr>
+<tr><th id="127">127</th><td><i class="doc"> OK, otherwise nil.</i></td></tr>
+<tr><th id="128">128</th><td><i class="doc"> <span class="command">@discussion</span> For user security, your app should call attention to the fact</i></td></tr>
+<tr><th id="129">129</th><td><i class="doc"> that a specific website controls the content in this panel. A simple forumla</i></td></tr>
+<tr><th id="130">130</th><td><i class="doc"> for identifying the controlling website is frame.request.URL.host.</i></td></tr>
+<tr><th id="131">131</th><td><i class="doc"> The panel should have two buttons, such as OK and Cancel, and a field in</i></td></tr>
+<tr><th id="132">132</th><td><i class="doc"> which to enter text.</i></td></tr>
+<tr><th id="133">133</th><td><i class="doc"></i></td></tr>
+<tr><th id="134">134</th><td><i class="doc"> If you do not implement this method, the web view will behave as if the user selected the Cancel button.</i></td></tr>
+<tr><th id="135">135</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="136">136</th><td>- (<em>void</em>)webView:(WKWebView *)<dfn class="local col9 decl" id="189webView" title='webView' data-type='WKWebView * _Nonnull' data-ref="189webView" data-ref-filename="189webView">webView</dfn> runJavaScriptTextInputPanelWithPrompt:(NSString *)<dfn class="local col0 decl" id="190prompt" title='prompt' data-type='NSString * _Nonnull' data-ref="190prompt" data-ref-filename="190prompt">prompt</dfn> defaultText:(nullable NSString *)<dfn class="local col1 decl" id="191defaultText" title='defaultText' data-type='NSString * _Nullable' data-ref="191defaultText" data-ref-filename="191defaultText">defaultText</dfn> initiatedByFrame:(WKFrameInfo *)<dfn class="local col2 decl" id="192frame" title='frame' data-type='WKFrameInfo * _Nonnull' data-ref="192frame" data-ref-filename="192frame">frame</dfn> completionHandler:(<em>void</em> (^)(NSString * <b>_Nullable</b> <dfn class="local col4 decl" id="194result" title='result' data-type='NSString * _Nullable' data-ref="194result" data-ref-filename="194result">result</dfn>))<dfn class="local col3 decl" id="193completionHandler" title='completionHandler' data-type='void (^ _Nonnull)(NSString * _Nullable)' data-ref="193completionHandler" data-ref-filename="193completionHandler">completionHandler</dfn>;</td></tr>
+<tr><th id="137">137</th><td></td></tr>
+<tr><th id="138">138</th><td></td></tr>
+<tr><th id="139">139</th><td><i class="doc">/*! <span class="command">@abstract</span> A delegate to request permission for microphone audio and camera video access.</i></td></tr>
+<tr><th id="140">140</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="141">141</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">origin</span> The origin of the page.</i></td></tr>
+<tr><th id="142">142</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">frame</span> Information about the frame whose JavaScript initiated this call.</i></td></tr>
+<tr><th id="143">143</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">type</span> The type of capture (camera, microphone).</i></td></tr>
+<tr><th id="144">144</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">decisionHandler</span> The completion handler to call once the decision is made</i></td></tr>
+<tr><th id="145">145</th><td><i class="doc"> <span class="command">@discussion</span> If not implemented, the result is the same as calling the decisionHandler with WKPermissionDecisionPrompt.</i></td></tr>
+<tr><th id="146">146</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="147">147</th><td>- (<em>void</em>)webView:(WKWebView *)<dfn class="local col5 decl" id="195webView" title='webView' data-type='WKWebView * _Nonnull' data-ref="195webView" data-ref-filename="195webView">webView</dfn> requestMediaCapturePermissionForOrigin:(WKSecurityOrigin *)<dfn class="local col6 decl" id="196origin" title='origin' data-type='WKSecurityOrigin * _Nonnull' data-ref="196origin" data-ref-filename="196origin">origin</dfn> initiatedByFrame:(WKFrameInfo *)<dfn class="local col7 decl" id="197frame" title='frame' data-type='WKFrameInfo * _Nonnull' data-ref="197frame" data-ref-filename="197frame">frame</dfn> type:(<a class="typedef" href="#54" title='WKMediaCaptureType' data-type='enum WKMediaCaptureType' data-ref="WKMediaCaptureType" data-ref-filename="WKMediaCaptureType">WKMediaCaptureType</a>)<dfn class="local col8 decl" id="198type" title='type' data-type='WKMediaCaptureType' data-ref="198type" data-ref-filename="198type">type</dfn> decisionHandler:(<em>void</em> (^)(<a class="typedef" href="#48" title='WKPermissionDecision' data-type='enum WKPermissionDecision' data-ref="WKPermissionDecision" data-ref-filename="WKPermissionDecision">WKPermissionDecision</a> <dfn class="local col0 decl" id="200decision" title='decision' data-type='WKPermissionDecision' data-ref="200decision" data-ref-filename="200decision">decision</dfn>))<dfn class="local col9 decl" id="199decisionHandler" title='decisionHandler' data-type='void (^ _Nonnull)(WKPermissionDecision)' data-ref="199decisionHandler" data-ref-filename="199decisionHandler">decisionHandler</dfn> <a class="macro" href="WKFoundation.h.html#38" title="" data-ref="_M/WK_SWIFT_ASYNC_NAME">WK_SWIFT_ASYNC_NAME</a>(webView(_:decideMediaCapturePermissionsFor:initiatedBy:type:)) <a class="macro" href="WKFoundation.h.html#44" title="" data-ref="_M/WK_SWIFT_ASYNC">WK_SWIFT_ASYNC</a>(<var>5</var>) <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>12.0</var>), ios(<var>15.0</var>));</td></tr>
+<tr><th id="148">148</th><td></td></tr>
+<tr><th id="149">149</th><td><i class="doc">/*! <span class="command">@abstract</span> Allows your app to determine whether or not the given security origin should have access to the device's orientation and motion.</i></td></tr>
+<tr><th id="150">150</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">securityOrigin</span> The security origin which requested access to the device's orientation and motion.</i></td></tr>
+<tr><th id="151">151</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">frame</span> The frame that initiated the request.</i></td></tr>
+<tr><th id="152">152</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">decisionHandler</span> The decision handler to call once the app has made its decision.</i></td></tr>
+<tr><th id="153">153</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="154">154</th><td>- (<em>void</em>)webView:(WKWebView *)<dfn class="local col1 decl" id="201webView" title='webView' data-type='WKWebView * _Nonnull' data-ref="201webView" data-ref-filename="201webView">webView</dfn> requestDeviceOrientationAndMotionPermissionForOrigin:(WKSecurityOrigin *)<dfn class="local col2 decl" id="202origin" title='origin' data-type='WKSecurityOrigin * _Nonnull' data-ref="202origin" data-ref-filename="202origin">origin</dfn> initiatedByFrame:(WKFrameInfo *)<dfn class="local col3 decl" id="203frame" title='frame' data-type='WKFrameInfo * _Nonnull' data-ref="203frame" data-ref-filename="203frame">frame</dfn> decisionHandler:(<em>void</em> (^)(<a class="typedef" href="#48" title='WKPermissionDecision' data-type='enum WKPermissionDecision' data-ref="WKPermissionDecision" data-ref-filename="WKPermissionDecision">WKPermissionDecision</a> <dfn class="local col5 decl" id="205decision" title='decision' data-type='WKPermissionDecision' data-ref="205decision" data-ref-filename="205decision">decision</dfn>))<dfn class="local col4 decl" id="204decisionHandler" title='decisionHandler' data-type='void (^ _Nonnull)(WKPermissionDecision)' data-ref="204decisionHandler" data-ref-filename="204decisionHandler">decisionHandler</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(ios(<var>15.0</var>)) <a class="macro" href="WKFoundation.h.html#48" title="" data-ref="_M/WK_API_UNAVAILABLE">WK_API_UNAVAILABLE</a>(macos);</td></tr>
+<tr><th id="155">155</th><td></td></tr>
+<tr><th id="156">156</th><td><u>#<span data-ppcond="156">if</span> <span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="157">157</th><td></td></tr>
+<tr><th id="158">158</th><td><i class="doc">/*! <span class="command">@abstract</span> Allows your app to determine whether or not the given element should show a preview.</i></td></tr>
+<tr><th id="159">159</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="160">160</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">elementInfo</span> The elementInfo for the element the user has started touching.</i></td></tr>
+<tr><th id="161">161</th><td><i class="doc"> <span class="command">@discussion</span> To disable previews entirely for the given element, return NO. Returning NO will prevent </i></td></tr>
+<tr><th id="162">162</th><td><i class="doc"> webView:previewingViewControllerForElement:defaultActions: and webView:commitPreviewingViewController:</i></td></tr>
+<tr><th id="163">163</th><td><i class="doc"> from being invoked.</i></td></tr>
+<tr><th id="164">164</th><td><i class="doc"> </i></td></tr>
+<tr><th id="165">165</th><td><i class="doc"> This method will only be invoked for elements that have default preview in WebKit, which is</i></td></tr>
+<tr><th id="166">166</th><td><i class="doc"> limited to links. In the future, it could be invoked for additional elements.</i></td></tr>
+<tr><th id="167">167</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="168">168</th><td>- (BOOL)webView:(WKWebView *)webView shouldPreviewElement:(WKPreviewElementInfo *)elementInfo WK_API_DEPRECATED_WITH_REPLACEMENT(<q>"webView:contextMenuConfigurationForElement:completionHandler:"</q>, ios(<var>10.0</var>, <var>13.0</var>));</td></tr>
+<tr><th id="169">169</th><td></td></tr>
+<tr><th id="170">170</th><td><i class="doc">/*! <span class="command">@abstract</span> Allows your app to provide a custom view controller to show when the given element is peeked.</i></td></tr>
+<tr><th id="171">171</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="172">172</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">elementInfo</span> The elementInfo for the element the user is peeking.</i></td></tr>
+<tr><th id="173">173</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">defaultActions</span> An array of the actions that WebKit would use as previewActionItems for this element by </i></td></tr>
+<tr><th id="174">174</th><td><i class="doc"> default. These actions would be used if allowsLinkPreview is YES but these delegate methods have not been </i></td></tr>
+<tr><th id="175">175</th><td><i class="doc"> implemented, or if this delegate method returns nil.</i></td></tr>
+<tr><th id="176">176</th><td><i class="doc"> <span class="command">@discussion</span> Returning a view controller will result in that view controller being displayed as a peek preview.</i></td></tr>
+<tr><th id="177">177</th><td><i class="doc"> To use the defaultActions, your app is responsible for returning whichever of those actions it wants in your </i></td></tr>
+<tr><th id="178">178</th><td><i class="doc"> view controller's implementation of -previewActionItems.</i></td></tr>
+<tr><th id="179">179</th><td><i class="doc"> </i></td></tr>
+<tr><th id="180">180</th><td><i class="doc"> Returning nil will result in WebKit's default preview behavior. webView:commitPreviewingViewController: will only be invoked</i></td></tr>
+<tr><th id="181">181</th><td><i class="doc"> if a non-nil view controller was returned.</i></td></tr>
+<tr><th id="182">182</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="183">183</th><td>- (nullable UIViewController *)webView:(WKWebView *)webView previewingViewControllerForElement:(WKPreviewElementInfo *)elementInfo defaultActions:(NSArray&lt;id &lt;WKPreviewActionItem&gt;&gt; *)previewActions WK_API_DEPRECATED_WITH_REPLACEMENT(<q>"webView:contextMenuConfigurationForElement:completionHandler:"</q>, ios(<var>10.0</var>, <var>13.0</var>));</td></tr>
+<tr><th id="184">184</th><td></td></tr>
+<tr><th id="185">185</th><td><i class="doc">/*! <span class="command">@abstract</span> Allows your app to pop to the view controller it created.</i></td></tr>
+<tr><th id="186">186</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="187">187</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">previewingViewController</span> The view controller that is being popped.</i></td></tr>
+<tr><th id="188">188</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="189">189</th><td>- (<em>void</em>)webView:(WKWebView *)webView commitPreviewingViewController:(UIViewController *)previewingViewController WK_API_DEPRECATED_WITH_REPLACEMENT(<q>"webView:contextMenuForElement:willCommitWithAnimator:"</q>, ios(<var>10.0</var>, <var>13.0</var>));</td></tr>
+<tr><th id="190">190</th><td><u>#<span data-ppcond="156">endif</span> // TARGET_OS_IPHONE</u></td></tr>
+<tr><th id="191">191</th><td></td></tr>
+<tr><th id="192">192</th><td><u>#<span data-ppcond="192">if</span> <span class="macro" title="0" data-ref="_M/TARGET_OS_IOS">TARGET_OS_IOS</span></u></td></tr>
+<tr><th id="193">193</th><td></td></tr>
+<tr><th id="194">194</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="195">195</th><td><i class="doc"> * <span class="command">@abstract</span> Called when a context menu interaction begins.</i></td></tr>
+<tr><th id="196">196</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="197">197</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="198">198</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">elementInfo</span> The elementInfo for the element the user is touching.</i></td></tr>
+<tr><th id="199">199</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">completionHandler</span> A completion handler to call once a it has been decided whether or not to show a context menu.</i></td></tr>
+<tr><th id="200">200</th><td><i class="doc"> * Pass a valid UIContextMenuConfiguration to show a context menu, or pass nil to not show a context menu.</i></td></tr>
+<tr><th id="201">201</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="202">202</th><td></td></tr>
+<tr><th id="203">203</th><td>- (<em>void</em>)webView:(WKWebView *)webView contextMenuConfigurationForElement:(WKContextMenuElementInfo *)elementInfo completionHandler:(<em>void</em> (^)(UIContextMenuConfiguration * <b>_Nullable</b> configuration))completionHandler WK_SWIFT_ASYNC_NAME(webView(_:contextMenuConfigurationFor:)) WK_API_AVAILABLE(ios(<var>13.0</var>));</td></tr>
+<tr><th id="204">204</th><td></td></tr>
+<tr><th id="205">205</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="206">206</th><td><i class="doc"> * <span class="command">@abstract</span> Called when the context menu will be presented.</i></td></tr>
+<tr><th id="207">207</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="208">208</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="209">209</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">elementInfo</span> The elementInfo for the element the user is touching.</i></td></tr>
+<tr><th id="210">210</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="211">211</th><td></td></tr>
+<tr><th id="212">212</th><td>- (<em>void</em>)webView:(WKWebView *)webView contextMenuWillPresentForElement:(WKContextMenuElementInfo *)elementInfo WK_API_AVAILABLE(ios(<var>13.0</var>));</td></tr>
+<tr><th id="213">213</th><td></td></tr>
+<tr><th id="214">214</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="215">215</th><td><i class="doc"> * <span class="command">@abstract</span> Called when the context menu configured by the UIContextMenuConfiguration from</i></td></tr>
+<tr><th id="216">216</th><td><i class="doc"> * webView:contextMenuConfigurationForElement:completionHandler: is committed. That is, when</i></td></tr>
+<tr><th id="217">217</th><td><i class="doc"> * the user has selected the view provided in the UIContextMenuContentPreviewProvider.</i></td></tr>
+<tr><th id="218">218</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="219">219</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="220">220</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">elementInfo</span> The elementInfo for the element the user is touching.</i></td></tr>
+<tr><th id="221">221</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">animator</span> The animator to use for the commit animation.</i></td></tr>
+<tr><th id="222">222</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="223">223</th><td></td></tr>
+<tr><th id="224">224</th><td>- (<em>void</em>)webView:(WKWebView *)webView contextMenuForElement:(WKContextMenuElementInfo *)elementInfo willCommitWithAnimator:(id &lt;UIContextMenuInteractionCommitAnimating&gt;)animator WK_API_AVAILABLE(ios(<var>13.0</var>));</td></tr>
+<tr><th id="225">225</th><td></td></tr>
+<tr><th id="226">226</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="227">227</th><td><i class="doc"> * <span class="command">@abstract</span> Called when the context menu ends, either by being dismissed or when a menu action is taken.</i></td></tr>
+<tr><th id="228">228</th><td><i class="doc"> *</i></td></tr>
+<tr><th id="229">229</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="230">230</th><td><i class="doc"> * <span class="command">@param</span> <span class="arg">elementInfo</span> The elementInfo for the element the user is touching.</i></td></tr>
+<tr><th id="231">231</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="232">232</th><td></td></tr>
+<tr><th id="233">233</th><td>- (<em>void</em>)webView:(WKWebView *)webView contextMenuDidEndForElement:(WKContextMenuElementInfo *)elementInfo WK_API_AVAILABLE(ios(<var>13.0</var>));</td></tr>
+<tr><th id="234">234</th><td></td></tr>
+<tr><th id="235">235</th><td><u>#<span data-ppcond="192">endif</span> // TARGET_OS_IOS</u></td></tr>
+<tr><th id="236">236</th><td></td></tr>
+<tr><th id="237">237</th><td><u>#<span data-ppcond="237">if</span> !<span class="macro" title="0" data-ref="_M/TARGET_OS_IPHONE">TARGET_OS_IPHONE</span></u></td></tr>
+<tr><th id="238">238</th><td></td></tr>
+<tr><th id="239">239</th><td><i class="doc">/*! <span class="command">@abstract</span> Displays a file upload panel.</i></td></tr>
+<tr><th id="240">240</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">webView</span> The web view invoking the delegate method.</i></td></tr>
+<tr><th id="241">241</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">parameters</span> Parameters describing the file upload control.</i></td></tr>
+<tr><th id="242">242</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">frame</span> Information about the frame whose file upload control initiated this call.</i></td></tr>
+<tr><th id="243">243</th><td><i class="doc"> <span class="command">@param</span> <span class="arg">completionHandler</span> The completion handler to call after open panel has been dismissed. Pass the selected URLs if the user chose OK, otherwise nil.</i></td></tr>
+<tr><th id="244">244</th><td><i class="doc"></i></td></tr>
+<tr><th id="245">245</th><td><i class="doc"> If you do not implement this method, the web view will behave as if the user selected the Cancel button.</i></td></tr>
+<tr><th id="246">246</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="247">247</th><td>- (<em>void</em>)webView:(WKWebView *)<dfn class="local col6 decl" id="206webView" title='webView' data-type='WKWebView * _Nonnull' data-ref="206webView" data-ref-filename="206webView">webView</dfn> runOpenPanelWithParameters:(WKOpenPanelParameters *)<dfn class="local col7 decl" id="207parameters" title='parameters' data-type='WKOpenPanelParameters * _Nonnull' data-ref="207parameters" data-ref-filename="207parameters">parameters</dfn> initiatedByFrame:(WKFrameInfo *)<dfn class="local col8 decl" id="208frame" title='frame' data-type='WKFrameInfo * _Nonnull' data-ref="208frame" data-ref-filename="208frame">frame</dfn> completionHandler:(<em>void</em> (^)(NSArray&lt;NSURL *&gt; * <b>_Nullable</b> <dfn class="local col0 decl" id="210URLs" title='URLs' data-type='NSArray&lt;NSURL *&gt; * _Nullable' data-ref="210URLs" data-ref-filename="210URLs">URLs</dfn>))<dfn class="local col9 decl" id="209completionHandler" title='completionHandler' data-type='void (^ _Nonnull)(NSArray&lt;NSURL *&gt; * _Nullable)' data-ref="209completionHandler" data-ref-filename="209completionHandler">completionHandler</dfn> <a class="macro" href="WKFoundation.h.html#47" title="" data-ref="_M/WK_API_AVAILABLE">WK_API_AVAILABLE</a>(macos(<var>10.12</var>));</td></tr>
+<tr><th id="248">248</th><td></td></tr>
+<tr><th id="249">249</th><td><u>#<span data-ppcond="237">endif</span></u></td></tr>
+<tr><th id="250">250</th><td></td></tr>
+<tr><th id="251">251</th><td>@end</td></tr>
+<tr><th id="252">252</th><td></td></tr>
+<tr><th id="253">253</th><td><span class="macro" title="" data-ref="_M/NS_ASSUME_NONNULL_END">NS_ASSUME_NONNULL_END</span></td></tr>
+<tr><th id="254">254</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Tools/MiniBrowser/mac/AppDelegate.m.html'>webkit/Tools/MiniBrowser/mac/AppDelegate.m</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

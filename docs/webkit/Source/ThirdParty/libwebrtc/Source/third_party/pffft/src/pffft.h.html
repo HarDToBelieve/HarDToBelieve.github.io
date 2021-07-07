@@ -1,0 +1,216 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>pffft.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/pffft/src/pffft.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/pffft/src/pffft.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>third_party</a>/<a href='..'>pffft</a>/<a href='./'>src</a>/<a href='pffft.h.html'>pffft.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/* Copyright (c) 2013  Julien Pommier ( pommier@modartt.com ) </i></td></tr>
+<tr><th id="2">2</th><td><i></i></td></tr>
+<tr><th id="3">3</th><td><i>   Based on original fortran 77 code from FFTPACKv4 from NETLIB,</i></td></tr>
+<tr><th id="4">4</th><td><i>   authored by Dr Paul Swarztrauber of NCAR, in 1985.</i></td></tr>
+<tr><th id="5">5</th><td><i></i></td></tr>
+<tr><th id="6">6</th><td><i>   As confirmed by the NCAR fftpack software curators, the following</i></td></tr>
+<tr><th id="7">7</th><td><i>   FFTPACKv5 license applies to FFTPACKv4 sources. My changes are</i></td></tr>
+<tr><th id="8">8</th><td><i>   released under the same terms.</i></td></tr>
+<tr><th id="9">9</th><td><i></i></td></tr>
+<tr><th id="10">10</th><td><i>   FFTPACK license:</i></td></tr>
+<tr><th id="11">11</th><td><i></i></td></tr>
+<tr><th id="12">12</th><td><i>   <a href="http://www.cisl.ucar.edu/css/software/fftpack5/ftpk.html">http://www.cisl.ucar.edu/css/software/fftpack5/ftpk.html</a></i></td></tr>
+<tr><th id="13">13</th><td><i></i></td></tr>
+<tr><th id="14">14</th><td><i>   Copyright (c) 2004 the University Corporation for Atmospheric</i></td></tr>
+<tr><th id="15">15</th><td><i>   Research ("UCAR"). All rights reserved. Developed by NCAR's</i></td></tr>
+<tr><th id="16">16</th><td><i>   Computational and Information Systems Laboratory, UCAR,</i></td></tr>
+<tr><th id="17">17</th><td><i>   www.cisl.ucar.edu.</i></td></tr>
+<tr><th id="18">18</th><td><i></i></td></tr>
+<tr><th id="19">19</th><td><i>   Redistribution and use of the Software in source and binary forms,</i></td></tr>
+<tr><th id="20">20</th><td><i>   with or without modification, is permitted provided that the</i></td></tr>
+<tr><th id="21">21</th><td><i>   following conditions are met:</i></td></tr>
+<tr><th id="22">22</th><td><i></i></td></tr>
+<tr><th id="23">23</th><td><i>   - Neither the names of NCAR's Computational and Information Systems</i></td></tr>
+<tr><th id="24">24</th><td><i>   Laboratory, the University Corporation for Atmospheric Research,</i></td></tr>
+<tr><th id="25">25</th><td><i>   nor the names of its sponsors or contributors may be used to</i></td></tr>
+<tr><th id="26">26</th><td><i>   endorse or promote products derived from this Software without</i></td></tr>
+<tr><th id="27">27</th><td><i>   specific prior written permission.  </i></td></tr>
+<tr><th id="28">28</th><td><i></i></td></tr>
+<tr><th id="29">29</th><td><i>   - Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="30">30</th><td><i>   notices, this list of conditions, and the disclaimer below.</i></td></tr>
+<tr><th id="31">31</th><td><i></i></td></tr>
+<tr><th id="32">32</th><td><i>   - Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="33">33</th><td><i>   notice, this list of conditions, and the disclaimer below in the</i></td></tr>
+<tr><th id="34">34</th><td><i>   documentation and/or other materials provided with the</i></td></tr>
+<tr><th id="35">35</th><td><i>   distribution.</i></td></tr>
+<tr><th id="36">36</th><td><i></i></td></tr>
+<tr><th id="37">37</th><td><i>   THIS SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,</i></td></tr>
+<tr><th id="38">38</th><td><i>   EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO THE WARRANTIES OF</i></td></tr>
+<tr><th id="39">39</th><td><i>   MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND</i></td></tr>
+<tr><th id="40">40</th><td><i>   NONINFRINGEMENT. IN NO EVENT SHALL THE CONTRIBUTORS OR COPYRIGHT</i></td></tr>
+<tr><th id="41">41</th><td><i>   HOLDERS BE LIABLE FOR ANY CLAIM, INDIRECT, INCIDENTAL, SPECIAL,</i></td></tr>
+<tr><th id="42">42</th><td><i>   EXEMPLARY, OR CONSEQUENTIAL DAMAGES OR OTHER LIABILITY, WHETHER IN AN</i></td></tr>
+<tr><th id="43">43</th><td><i>   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN</i></td></tr>
+<tr><th id="44">44</th><td><i>   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS WITH THE</i></td></tr>
+<tr><th id="45">45</th><td><i>   SOFTWARE.</i></td></tr>
+<tr><th id="46">46</th><td><i>*/</i></td></tr>
+<tr><th id="47">47</th><td>   </td></tr>
+<tr><th id="48">48</th><td><i>/*</i></td></tr>
+<tr><th id="49">49</th><td><i>   PFFFT : a Pretty Fast FFT.</i></td></tr>
+<tr><th id="50">50</th><td><i></i></td></tr>
+<tr><th id="51">51</th><td><i>   This is basically an adaptation of the single precision fftpack</i></td></tr>
+<tr><th id="52">52</th><td><i>   (v4) as found on netlib taking advantage of SIMD instruction found</i></td></tr>
+<tr><th id="53">53</th><td><i>   on cpus such as intel x86 (SSE1), powerpc (Altivec), and arm (NEON).</i></td></tr>
+<tr><th id="54">54</th><td><i>   </i></td></tr>
+<tr><th id="55">55</th><td><i>   For architectures where no SIMD instruction is available, the code</i></td></tr>
+<tr><th id="56">56</th><td><i>   falls back to a scalar version.  </i></td></tr>
+<tr><th id="57">57</th><td><i></i></td></tr>
+<tr><th id="58">58</th><td><i>   Restrictions: </i></td></tr>
+<tr><th id="59">59</th><td><i></i></td></tr>
+<tr><th id="60">60</th><td><i>   - 1D transforms only, with 32-bit single precision.</i></td></tr>
+<tr><th id="61">61</th><td><i></i></td></tr>
+<tr><th id="62">62</th><td><i>   - supports only transforms for inputs of length N of the form</i></td></tr>
+<tr><th id="63">63</th><td><i>   N=(2^a)*(3^b)*(5^c), a &gt;= 5, b &gt;=0, c &gt;= 0 (32, 48, 64, 96, 128,</i></td></tr>
+<tr><th id="64">64</th><td><i>   144, 160, etc are all acceptable lengths). Performance is best for</i></td></tr>
+<tr><th id="65">65</th><td><i>   128&lt;=N&lt;=8192.</i></td></tr>
+<tr><th id="66">66</th><td><i></i></td></tr>
+<tr><th id="67">67</th><td><i>   - all (float*) pointers in the functions below are expected to</i></td></tr>
+<tr><th id="68">68</th><td><i>   have an "simd-compatible" alignment, that is 16 bytes on x86 and</i></td></tr>
+<tr><th id="69">69</th><td><i>   powerpc CPUs.</i></td></tr>
+<tr><th id="70">70</th><td><i>  </i></td></tr>
+<tr><th id="71">71</th><td><i>   You can allocate such buffers with the functions</i></td></tr>
+<tr><th id="72">72</th><td><i>   pffft_aligned_malloc / pffft_aligned_free (or with stuff like</i></td></tr>
+<tr><th id="73">73</th><td><i>   posix_memalign..)</i></td></tr>
+<tr><th id="74">74</th><td><i></i></td></tr>
+<tr><th id="75">75</th><td><i>*/</i></td></tr>
+<tr><th id="76">76</th><td></td></tr>
+<tr><th id="77">77</th><td><u>#<span data-ppcond="77">ifndef</span> <span class="macro" data-ref="_M/PFFFT_H">PFFFT_H</span></u></td></tr>
+<tr><th id="78">78</th><td><u>#define <dfn class="macro" id="_M/PFFFT_H" data-ref="_M/PFFFT_H">PFFFT_H</dfn></u></td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td><u>#include &lt;stddef.h&gt; // for size_t</u></td></tr>
+<tr><th id="81">81</th><td></td></tr>
+<tr><th id="82">82</th><td><u>#<span data-ppcond="82">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="83">83</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="84">84</th><td><u>#<span data-ppcond="82">endif</span></u></td></tr>
+<tr><th id="85">85</th><td></td></tr>
+<tr><th id="86">86</th><td><u>#<span data-ppcond="86">ifndef</span> <span class="macro" data-ref="_M/PFFFT_SIMD_DISABLE">PFFFT_SIMD_DISABLE</span></u></td></tr>
+<tr><th id="87">87</th><td><i>// Detects compiler bugs with respect to simd instruction.</i></td></tr>
+<tr><th id="88">88</th><td><em>void</em> <a class="decl fn" href="pffft.c.html#validate_pffft_simd" title='validate_pffft_simd' data-ref="validate_pffft_simd" data-ref-filename="validate_pffft_simd" id="validate_pffft_simd">validate_pffft_simd</a>(<em>void</em>);</td></tr>
+<tr><th id="89">89</th><td><u>#<span data-ppcond="86">endif</span></u></td></tr>
+<tr><th id="90">90</th><td></td></tr>
+<tr><th id="91">91</th><td><i>/* opaque struct holding internal stuff (precomputed twiddle factors)</i></td></tr>
+<tr><th id="92">92</th><td><i>   this struct can be shared by many threads as it contains only</i></td></tr>
+<tr><th id="93">93</th><td><i>   read-only data.</i></td></tr>
+<tr><th id="94">94</th><td><i>*/</i></td></tr>
+<tr><th id="95">95</th><td><b>typedef</b> <b>struct</b> <a class="type" href="pffft.c.html#PFFFT_Setup" title='PFFFT_Setup' data-ref="PFFFT_Setup" data-ref-filename="PFFFT_Setup" id="PFFFT_Setup"><a class="type" href="pffft.c.html#PFFFT_Setup" title='PFFFT_Setup' data-ref="PFFFT_Setup" data-ref-filename="PFFFT_Setup">PFFFT_Setup</a></a> <dfn class="typedef" id="PFFFT_Setup" title='PFFFT_Setup' data-type='struct PFFFT_Setup' data-ref="PFFFT_Setup" data-ref-filename="PFFFT_Setup">PFFFT_Setup</dfn>;</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td><i>/* direction of the transform */</i></td></tr>
+<tr><th id="98">98</th><td><b>typedef</b> <b>enum</b> { <dfn class="enum" id="PFFFT_FORWARD" title='PFFFT_FORWARD' data-ref="PFFFT_FORWARD" data-ref-filename="PFFFT_FORWARD">PFFFT_FORWARD</dfn>, <dfn class="enum" id="PFFFT_BACKWARD" title='PFFFT_BACKWARD' data-ref="PFFFT_BACKWARD" data-ref-filename="PFFFT_BACKWARD">PFFFT_BACKWARD</dfn> } <dfn class="typedef" id="pffft_direction_t" title='pffft_direction_t' data-type='enum pffft_direction_t' data-ref="pffft_direction_t" data-ref-filename="pffft_direction_t">pffft_direction_t</dfn>;</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td><i>/* type of transform */</i></td></tr>
+<tr><th id="101">101</th><td><b>typedef</b> <b>enum</b> { <dfn class="enum" id="PFFFT_REAL" title='PFFFT_REAL' data-ref="PFFFT_REAL" data-ref-filename="PFFFT_REAL">PFFFT_REAL</dfn>, <dfn class="enum" id="PFFFT_COMPLEX" title='PFFFT_COMPLEX' data-ref="PFFFT_COMPLEX" data-ref-filename="PFFFT_COMPLEX">PFFFT_COMPLEX</dfn> } <dfn class="typedef" id="pffft_transform_t" title='pffft_transform_t' data-type='enum pffft_transform_t' data-ref="pffft_transform_t" data-ref-filename="pffft_transform_t">pffft_transform_t</dfn>;</td></tr>
+<tr><th id="102">102</th><td></td></tr>
+<tr><th id="103">103</th><td><i>/*</i></td></tr>
+<tr><th id="104">104</th><td><i>  prepare for performing transforms of size N -- the returned</i></td></tr>
+<tr><th id="105">105</th><td><i>  PFFFT_Setup structure is read-only so it can safely be shared by</i></td></tr>
+<tr><th id="106">106</th><td><i>  multiple concurrent threads.</i></td></tr>
+<tr><th id="107">107</th><td><i>*/</i></td></tr>
+<tr><th id="108">108</th><td><a class="typedef" href="#PFFFT_Setup" title='PFFFT_Setup' data-type='struct PFFFT_Setup' data-ref="PFFFT_Setup" data-ref-filename="PFFFT_Setup">PFFFT_Setup</a>* <a class="decl fn" href="pffft.c.html#pffft_new_setup" title='pffft_new_setup' data-ref="pffft_new_setup" data-ref-filename="pffft_new_setup" id="pffft_new_setup">pffft_new_setup</a>(<em>int</em> <dfn class="local col1 decl" id="1N" title='N' data-type='int' data-ref="1N" data-ref-filename="1N">N</dfn>, <a class="typedef" href="#pffft_transform_t" title='pffft_transform_t' data-type='enum pffft_transform_t' data-ref="pffft_transform_t" data-ref-filename="pffft_transform_t">pffft_transform_t</a> <dfn class="local col2 decl" id="2transform" title='transform' data-type='pffft_transform_t' data-ref="2transform" data-ref-filename="2transform">transform</dfn>);</td></tr>
+<tr><th id="109">109</th><td><em>void</em> <a class="decl fn" href="pffft.c.html#pffft_destroy_setup" title='pffft_destroy_setup' data-ref="pffft_destroy_setup" data-ref-filename="pffft_destroy_setup" id="pffft_destroy_setup">pffft_destroy_setup</a>(<a class="typedef" href="#PFFFT_Setup" title='PFFFT_Setup' data-type='struct PFFFT_Setup' data-ref="PFFFT_Setup" data-ref-filename="PFFFT_Setup">PFFFT_Setup</a>*);</td></tr>
+<tr><th id="110">110</th><td><i>/*</i></td></tr>
+<tr><th id="111">111</th><td><i>   Perform a Fourier transform , The z-domain data is stored in the</i></td></tr>
+<tr><th id="112">112</th><td><i>   most efficient order for transforming it back, or using it for</i></td></tr>
+<tr><th id="113">113</th><td><i>   convolution. If you need to have its content sorted in the</i></td></tr>
+<tr><th id="114">114</th><td><i>   "usual" way, that is as an array of interleaved complex numbers,</i></td></tr>
+<tr><th id="115">115</th><td><i>   either use pffft_transform_ordered , or call pffft_zreorder after</i></td></tr>
+<tr><th id="116">116</th><td><i>   the forward fft, and before the backward fft.</i></td></tr>
+<tr><th id="117">117</th><td><i></i></td></tr>
+<tr><th id="118">118</th><td><i>   Transforms are not scaled: PFFFT_BACKWARD(PFFFT_FORWARD(x)) = N*x.</i></td></tr>
+<tr><th id="119">119</th><td><i>   Typically you will want to scale the backward transform by 1/N.</i></td></tr>
+<tr><th id="120">120</th><td><i></i></td></tr>
+<tr><th id="121">121</th><td><i>   The 'work' pointer should point to an area of N (2*N for complex</i></td></tr>
+<tr><th id="122">122</th><td><i>   fft) floats, properly aligned. If 'work' is NULL, then stack will</i></td></tr>
+<tr><th id="123">123</th><td><i>   be used instead (this is probably the best strategy for small</i></td></tr>
+<tr><th id="124">124</th><td><i>   FFTs, say for N &lt; 16384).</i></td></tr>
+<tr><th id="125">125</th><td><i></i></td></tr>
+<tr><th id="126">126</th><td><i>   input and output may alias.</i></td></tr>
+<tr><th id="127">127</th><td><i>*/</i></td></tr>
+<tr><th id="128">128</th><td><em>void</em> <a class="decl fn" href="pffft.c.html#pffft_transform" title='pffft_transform' data-ref="pffft_transform" data-ref-filename="pffft_transform" id="pffft_transform">pffft_transform</a>(<a class="typedef" href="#PFFFT_Setup" title='PFFFT_Setup' data-type='struct PFFFT_Setup' data-ref="PFFFT_Setup" data-ref-filename="PFFFT_Setup">PFFFT_Setup</a>* <dfn class="local col3 decl" id="3setup" title='setup' data-type='PFFFT_Setup *' data-ref="3setup" data-ref-filename="3setup">setup</dfn>,</td></tr>
+<tr><th id="129">129</th><td>                     <em>const</em> <em>float</em>* <dfn class="local col4 decl" id="4input" title='input' data-type='const float *' data-ref="4input" data-ref-filename="4input">input</dfn>,</td></tr>
+<tr><th id="130">130</th><td>                     <em>float</em>* <dfn class="local col5 decl" id="5output" title='output' data-type='float *' data-ref="5output" data-ref-filename="5output">output</dfn>,</td></tr>
+<tr><th id="131">131</th><td>                     <em>float</em>* <dfn class="local col6 decl" id="6work" title='work' data-type='float *' data-ref="6work" data-ref-filename="6work">work</dfn>,</td></tr>
+<tr><th id="132">132</th><td>                     <a class="typedef" href="#pffft_direction_t" title='pffft_direction_t' data-type='enum pffft_direction_t' data-ref="pffft_direction_t" data-ref-filename="pffft_direction_t">pffft_direction_t</a> <dfn class="local col7 decl" id="7direction" title='direction' data-type='pffft_direction_t' data-ref="7direction" data-ref-filename="7direction">direction</dfn>);</td></tr>
+<tr><th id="133">133</th><td></td></tr>
+<tr><th id="134">134</th><td><i>/*</i></td></tr>
+<tr><th id="135">135</th><td><i>   Similar to pffft_transform, but makes sure that the output is</i></td></tr>
+<tr><th id="136">136</th><td><i>   ordered as expected (interleaved complex numbers).  This is</i></td></tr>
+<tr><th id="137">137</th><td><i>   similar to calling pffft_transform and then pffft_zreorder.</i></td></tr>
+<tr><th id="138">138</th><td><i></i></td></tr>
+<tr><th id="139">139</th><td><i>   input and output may alias.</i></td></tr>
+<tr><th id="140">140</th><td><i>*/</i></td></tr>
+<tr><th id="141">141</th><td><em>void</em> <a class="decl fn" href="pffft.c.html#pffft_transform_ordered" title='pffft_transform_ordered' data-ref="pffft_transform_ordered" data-ref-filename="pffft_transform_ordered" id="pffft_transform_ordered">pffft_transform_ordered</a>(<a class="typedef" href="#PFFFT_Setup" title='PFFFT_Setup' data-type='struct PFFFT_Setup' data-ref="PFFFT_Setup" data-ref-filename="PFFFT_Setup">PFFFT_Setup</a>* <dfn class="local col8 decl" id="8setup" title='setup' data-type='PFFFT_Setup *' data-ref="8setup" data-ref-filename="8setup">setup</dfn>,</td></tr>
+<tr><th id="142">142</th><td>                             <em>const</em> <em>float</em>* <dfn class="local col9 decl" id="9input" title='input' data-type='const float *' data-ref="9input" data-ref-filename="9input">input</dfn>,</td></tr>
+<tr><th id="143">143</th><td>                             <em>float</em>* <dfn class="local col0 decl" id="10output" title='output' data-type='float *' data-ref="10output" data-ref-filename="10output">output</dfn>,</td></tr>
+<tr><th id="144">144</th><td>                             <em>float</em>* <dfn class="local col1 decl" id="11work" title='work' data-type='float *' data-ref="11work" data-ref-filename="11work">work</dfn>,</td></tr>
+<tr><th id="145">145</th><td>                             <a class="typedef" href="#pffft_direction_t" title='pffft_direction_t' data-type='enum pffft_direction_t' data-ref="pffft_direction_t" data-ref-filename="pffft_direction_t">pffft_direction_t</a> <dfn class="local col2 decl" id="12direction" title='direction' data-type='pffft_direction_t' data-ref="12direction" data-ref-filename="12direction">direction</dfn>);</td></tr>
+<tr><th id="146">146</th><td></td></tr>
+<tr><th id="147">147</th><td><i>/*</i></td></tr>
+<tr><th id="148">148</th><td><i>   call pffft_zreorder(.., PFFFT_FORWARD) after pffft_transform(...,</i></td></tr>
+<tr><th id="149">149</th><td><i>   PFFFT_FORWARD) if you want to have the frequency components in</i></td></tr>
+<tr><th id="150">150</th><td><i>   the correct "canonical" order, as interleaved complex numbers.</i></td></tr>
+<tr><th id="151">151</th><td><i></i></td></tr>
+<tr><th id="152">152</th><td><i>   (for real transforms, both 0-frequency and half frequency</i></td></tr>
+<tr><th id="153">153</th><td><i>   components, which are real, are assembled in the first entry as</i></td></tr>
+<tr><th id="154">154</th><td><i>   F(0)+i*F(n/2+1). Note that the original fftpack did place</i></td></tr>
+<tr><th id="155">155</th><td><i>   F(n/2+1) at the end of the arrays).</i></td></tr>
+<tr><th id="156">156</th><td><i></i></td></tr>
+<tr><th id="157">157</th><td><i>   input and output should not alias.</i></td></tr>
+<tr><th id="158">158</th><td><i>*/</i></td></tr>
+<tr><th id="159">159</th><td><em>void</em> <a class="decl fn" href="pffft.c.html#pffft_zreorder" title='pffft_zreorder' data-ref="pffft_zreorder" data-ref-filename="pffft_zreorder" id="pffft_zreorder">pffft_zreorder</a>(<a class="typedef" href="#PFFFT_Setup" title='PFFFT_Setup' data-type='struct PFFFT_Setup' data-ref="PFFFT_Setup" data-ref-filename="PFFFT_Setup">PFFFT_Setup</a>* <dfn class="local col3 decl" id="13setup" title='setup' data-type='PFFFT_Setup *' data-ref="13setup" data-ref-filename="13setup">setup</dfn>,</td></tr>
+<tr><th id="160">160</th><td>                    <em>const</em> <em>float</em>* <dfn class="local col4 decl" id="14input" title='input' data-type='const float *' data-ref="14input" data-ref-filename="14input">input</dfn>,</td></tr>
+<tr><th id="161">161</th><td>                    <em>float</em>* <dfn class="local col5 decl" id="15output" title='output' data-type='float *' data-ref="15output" data-ref-filename="15output">output</dfn>,</td></tr>
+<tr><th id="162">162</th><td>                    <a class="typedef" href="#pffft_direction_t" title='pffft_direction_t' data-type='enum pffft_direction_t' data-ref="pffft_direction_t" data-ref-filename="pffft_direction_t">pffft_direction_t</a> <dfn class="local col6 decl" id="16direction" title='direction' data-type='pffft_direction_t' data-ref="16direction" data-ref-filename="16direction">direction</dfn>);</td></tr>
+<tr><th id="163">163</th><td></td></tr>
+<tr><th id="164">164</th><td><i>/*</i></td></tr>
+<tr><th id="165">165</th><td><i>   Perform a multiplication of the frequency components of dft_a and</i></td></tr>
+<tr><th id="166">166</th><td><i>   dft_b and accumulate them into dft_ab. The arrays should have</i></td></tr>
+<tr><th id="167">167</th><td><i>   been obtained with pffft_transform(.., PFFFT_FORWARD) and should</i></td></tr>
+<tr><th id="168">168</th><td><i>   *not* have been reordered with pffft_zreorder (otherwise just</i></td></tr>
+<tr><th id="169">169</th><td><i>   perform the operation yourself as the dft coefs are stored as</i></td></tr>
+<tr><th id="170">170</th><td><i>   interleaved complex numbers).</i></td></tr>
+<tr><th id="171">171</th><td><i></i></td></tr>
+<tr><th id="172">172</th><td><i>   the operation performed is: dft_ab += (dft_a * fdt_b)*scaling</i></td></tr>
+<tr><th id="173">173</th><td><i></i></td></tr>
+<tr><th id="174">174</th><td><i>   The dft_a, dft_b and dft_ab pointers may alias.</i></td></tr>
+<tr><th id="175">175</th><td><i>*/</i></td></tr>
+<tr><th id="176">176</th><td><em>void</em> <a class="decl fn" href="pffft.c.html#pffft_zconvolve_accumulate" title='pffft_zconvolve_accumulate' data-ref="pffft_zconvolve_accumulate" data-ref-filename="pffft_zconvolve_accumulate" id="pffft_zconvolve_accumulate">pffft_zconvolve_accumulate</a>(<a class="typedef" href="#PFFFT_Setup" title='PFFFT_Setup' data-type='struct PFFFT_Setup' data-ref="PFFFT_Setup" data-ref-filename="PFFFT_Setup">PFFFT_Setup</a>* <dfn class="local col7 decl" id="17setup" title='setup' data-type='PFFFT_Setup *' data-ref="17setup" data-ref-filename="17setup">setup</dfn>,</td></tr>
+<tr><th id="177">177</th><td>                                <em>const</em> <em>float</em>* <dfn class="local col8 decl" id="18dft_a" title='dft_a' data-type='const float *' data-ref="18dft_a" data-ref-filename="18dft_a">dft_a</dfn>,</td></tr>
+<tr><th id="178">178</th><td>                                <em>const</em> <em>float</em>* <dfn class="local col9 decl" id="19dft_b" title='dft_b' data-type='const float *' data-ref="19dft_b" data-ref-filename="19dft_b">dft_b</dfn>,</td></tr>
+<tr><th id="179">179</th><td>                                <em>float</em>* <dfn class="local col0 decl" id="20dft_ab" title='dft_ab' data-type='float *' data-ref="20dft_ab" data-ref-filename="20dft_ab">dft_ab</dfn>,</td></tr>
+<tr><th id="180">180</th><td>                                <em>float</em> <dfn class="local col1 decl" id="21scaling" title='scaling' data-type='float' data-ref="21scaling" data-ref-filename="21scaling">scaling</dfn>);</td></tr>
+<tr><th id="181">181</th><td></td></tr>
+<tr><th id="182">182</th><td><i>/*</i></td></tr>
+<tr><th id="183">183</th><td><i>  the float buffers must have the correct alignment (16-byte boundary</i></td></tr>
+<tr><th id="184">184</th><td><i>  on intel and powerpc). This function may be used to obtain such</i></td></tr>
+<tr><th id="185">185</th><td><i>  correctly aligned buffers.</i></td></tr>
+<tr><th id="186">186</th><td><i>*/</i></td></tr>
+<tr><th id="187">187</th><td><em>void</em>* <a class="decl fn" href="pffft.c.html#pffft_aligned_malloc" title='pffft_aligned_malloc' data-ref="pffft_aligned_malloc" data-ref-filename="pffft_aligned_malloc" id="pffft_aligned_malloc">pffft_aligned_malloc</a>(<span class='typedef' title='size_t' data-type='unsigned long' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col2 decl" id="22nb_bytes" title='nb_bytes' data-type='size_t' data-ref="22nb_bytes" data-ref-filename="22nb_bytes">nb_bytes</dfn>);</td></tr>
+<tr><th id="188">188</th><td><em>void</em> <a class="decl fn" href="pffft.c.html#pffft_aligned_free" title='pffft_aligned_free' data-ref="pffft_aligned_free" data-ref-filename="pffft_aligned_free" id="pffft_aligned_free">pffft_aligned_free</a>(<em>void</em>*);</td></tr>
+<tr><th id="189">189</th><td></td></tr>
+<tr><th id="190">190</th><td><i>/* return 4 or 1 wether support SSE/Altivec instructions was enable when</i></td></tr>
+<tr><th id="191">191</th><td><i> * building pffft.c */</i></td></tr>
+<tr><th id="192">192</th><td><em>int</em> <a class="decl fn" href="pffft.c.html#pffft_simd_size" title='pffft_simd_size' data-ref="pffft_simd_size" data-ref-filename="pffft_simd_size" id="pffft_simd_size">pffft_simd_size</a>(<em>void</em>);</td></tr>
+<tr><th id="193">193</th><td></td></tr>
+<tr><th id="194">194</th><td><u>#<span data-ppcond="194">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="195">195</th><td>}</td></tr>
+<tr><th id="196">196</th><td><u>#<span data-ppcond="194">endif</span></u></td></tr>
+<tr><th id="197">197</th><td></td></tr>
+<tr><th id="198">198</th><td><u>#<span data-ppcond="77">endif</span> // PFFFT_H</u></td></tr>
+<tr><th id="199">199</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='pffft.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/pffft/src/pffft.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

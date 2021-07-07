@@ -1,0 +1,415 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>android_util.cpp source code [webkit/Source/ThirdParty/ANGLE/src/common/android_util.cpp] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="ANativeWindowBuffer,android_native_base_t,native_handle "/>
+<link rel="stylesheet" href="../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/ANGLE/src/common/android_util.cpp'; var root_path = '../../../../../..'; var data_path = '../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../..'>webkit</a>/<a href='../../../..'>Source</a>/<a href='../../..'>ThirdParty</a>/<a href='../..'>ANGLE</a>/<a href='..'>src</a>/<a href='./'>common</a>/<a href='android_util.cpp.html'>android_util.cpp</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>//</i></td></tr>
+<tr><th id="2">2</th><td><i>// Copyright 2018 The ANGLE Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i>// Use of this source code is governed by a BSD-style license that can be</i></td></tr>
+<tr><th id="4">4</th><td><i>// found in the LICENSE file.</i></td></tr>
+<tr><th id="5">5</th><td><i>//</i></td></tr>
+<tr><th id="6">6</th><td><i></i></td></tr>
+<tr><th id="7">7</th><td><i>// android_util.cpp: Utilities for the using the Android platform</i></td></tr>
+<tr><th id="8">8</th><td></td></tr>
+<tr><th id="9">9</th><td><u>#include <a href="android_util.h.html">"common/android_util.h"</a></u></td></tr>
+<tr><th id="10">10</th><td><u>#include <a href="debug.h.html">"common/debug.h"</a></u></td></tr>
+<tr><th id="11">11</th><td></td></tr>
+<tr><th id="12">12</th><td><u>#include &lt;cstdint&gt;</u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#<span data-ppcond="14">if</span> defined(<span class="macro" data-ref="_M/ANGLE_PLATFORM_ANDROID">ANGLE_PLATFORM_ANDROID</span>) &amp;&amp; __ANDROID_API__ &gt;= 26</u></td></tr>
+<tr><th id="15">15</th><td><u>#    define ANGLE_AHARDWARE_BUFFER_SUPPORT</u></td></tr>
+<tr><th id="16">16</th><td><i>// NDK header file for access to Android Hardware Buffers</i></td></tr>
+<tr><th id="17">17</th><td><u>#    include &lt;android/hardware_buffer.h&gt;</u></td></tr>
+<tr><th id="18">18</th><td><u>#<span data-ppcond="14">endif</span></u></td></tr>
+<tr><th id="19">19</th><td></td></tr>
+<tr><th id="20">20</th><td><i>// Taken from cutils/native_handle.h:</i></td></tr>
+<tr><th id="21">21</th><td><i>// <a href="https://android.googlesource.com/platform/system/core/+/master/libcutils/include/cutils/native_handle.h">https://android.googlesource.com/platform/system/core/+/master/libcutils/include/cutils/native_handle.h</a></i></td></tr>
+<tr><th id="22">22</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="native_handle" title='native_handle' data-ref="native_handle" data-ref-filename="native_handle"><a class="type" href="#native_handle" title='native_handle' data-ref="native_handle" data-ref-filename="native_handle">native_handle</a></dfn></td></tr>
+<tr><th id="23">23</th><td>{</td></tr>
+<tr><th id="24">24</th><td>    <em>int</em> <dfn class="tu decl field" id="native_handle::version" title='native_handle::version' data-type='int' data-ref="native_handle::version" data-ref-filename="native_handle..version">version</dfn>; <i  data-doc="native_handle::version">/* sizeof(native_handle_t) */</i></td></tr>
+<tr><th id="25">25</th><td>    <em>int</em> <dfn class="tu decl field" id="native_handle::numFds" title='native_handle::numFds' data-type='int' data-ref="native_handle::numFds" data-ref-filename="native_handle..numFds">numFds</dfn>;  <i  data-doc="native_handle::numFds">/* number of file-descriptors at &amp;data[0] */</i></td></tr>
+<tr><th id="26">26</th><td>    <em>int</em> <dfn class="tu decl field" id="native_handle::numInts" title='native_handle::numInts' data-type='int' data-ref="native_handle::numInts" data-ref-filename="native_handle..numInts">numInts</dfn>; <i  data-doc="native_handle::numInts">/* number of ints at &amp;data[numFds] */</i></td></tr>
+<tr><th id="27">27</th><td><u>#<span data-ppcond="27">if</span> defined(<span class="macro" data-ref="_M/__clang__">__clang__</span>)</u></td></tr>
+<tr><th id="28">28</th><td><u>#    pragma clang diagnostic push</u></td></tr>
+<tr><th id="29">29</th><td><u>#    pragma clang diagnostic ignored "-Wzero-length-array"</u></td></tr>
+<tr><th id="30">30</th><td><u>#<span data-ppcond="27">elif</span> defined(_MSC_VER)</u></td></tr>
+<tr><th id="31">31</th><td><u>#    pragma warning(push)</u></td></tr>
+<tr><th id="32">32</th><td><u>#    pragma warning(disable : 4200)</u></td></tr>
+<tr><th id="33">33</th><td><u>#<span data-ppcond="27">endif</span></u></td></tr>
+<tr><th id="34">34</th><td>    <em>int</em> <dfn class="tu decl field" id="native_handle::data" title='native_handle::data' data-type='int [0]' data-ref="native_handle::data" data-ref-filename="native_handle..data">data</dfn>[<var>0</var>]; <i  data-doc="native_handle::data">/* numFds + numInts ints */</i></td></tr>
+<tr><th id="35">35</th><td><u>#<span data-ppcond="35">if</span> defined(<span class="macro" data-ref="_M/__clang__">__clang__</span>)</u></td></tr>
+<tr><th id="36">36</th><td><u>#    pragma clang diagnostic pop</u></td></tr>
+<tr><th id="37">37</th><td><u>#<span data-ppcond="35">elif</span> defined(_MSC_VER)</u></td></tr>
+<tr><th id="38">38</th><td><u>#    pragma warning(pop)</u></td></tr>
+<tr><th id="39">39</th><td><u>#<span data-ppcond="35">endif</span></u></td></tr>
+<tr><th id="40">40</th><td>} <dfn class="typedef" id="native_handle_t" title='native_handle_t' data-type='struct native_handle' data-ref="native_handle_t" data-ref-filename="native_handle_t">native_handle_t</dfn>;</td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td><i>// Taken from nativebase/nativebase.h</i></td></tr>
+<tr><th id="43">43</th><td><i>// <a href="https://android.googlesource.com/platform/frameworks/native/+/master/libs/nativebase/include/nativebase/nativebase.h">https://android.googlesource.com/platform/frameworks/native/+/master/libs/nativebase/include/nativebase/nativebase.h</a></i></td></tr>
+<tr><th id="44">44</th><td><b>typedef</b> <em>const</em> <a class="typedef" href="#native_handle_t" title='native_handle_t' data-type='struct native_handle' data-ref="native_handle_t" data-ref-filename="native_handle_t">native_handle_t</a> *<dfn class="typedef" id="buffer_handle_t" title='buffer_handle_t' data-type='const native_handle_t *' data-ref="buffer_handle_t" data-ref-filename="buffer_handle_t">buffer_handle_t</dfn>;</td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="android_native_base_t" title='android_native_base_t' data-ref="android_native_base_t" data-ref-filename="android_native_base_t"><a class="type" href="#android_native_base_t" title='android_native_base_t' data-ref="android_native_base_t" data-ref-filename="android_native_base_t">android_native_base_t</a></dfn></td></tr>
+<tr><th id="47">47</th><td>{</td></tr>
+<tr><th id="48">48</th><td>    <i  data-doc="android_native_base_t::magic">/* a magic value defined by the actual EGL native type */</i></td></tr>
+<tr><th id="49">49</th><td>    <em>int</em> <dfn class="tu decl field" id="android_native_base_t::magic" title='android_native_base_t::magic' data-type='int' data-ref="android_native_base_t::magic" data-ref-filename="android_native_base_t..magic">magic</dfn>;</td></tr>
+<tr><th id="50">50</th><td>    <i  data-doc="android_native_base_t::version">/* the sizeof() of the actual EGL native type */</i></td></tr>
+<tr><th id="51">51</th><td>    <em>int</em> <dfn class="tu decl field" id="android_native_base_t::version" title='android_native_base_t::version' data-type='int' data-ref="android_native_base_t::version" data-ref-filename="android_native_base_t..version">version</dfn>;</td></tr>
+<tr><th id="52">52</th><td>    <em>void</em> *<dfn class="tu decl field" id="android_native_base_t::reserved" title='android_native_base_t::reserved' data-type='void *[4]' data-ref="android_native_base_t::reserved" data-ref-filename="android_native_base_t..reserved">reserved</dfn>[<var>4</var>];</td></tr>
+<tr><th id="53">53</th><td>    <i  data-doc="android_native_base_t::incRef">/* reference-counting interface */</i></td></tr>
+<tr><th id="54">54</th><td>    <em>void</em> (*<dfn class="tu decl field" id="android_native_base_t::incRef" title='android_native_base_t::incRef' data-type='void (*)(struct android_native_base_t *)' data-ref="android_native_base_t::incRef" data-ref-filename="android_native_base_t..incRef">incRef</dfn>)(<b>struct</b> <a class="type" href="#android_native_base_t" title='android_native_base_t' data-ref="android_native_base_t" data-ref-filename="android_native_base_t">android_native_base_t</a> *<dfn class="local col7 decl" id="17base" title='base' data-type='struct android_native_base_t *' data-ref="17base" data-ref-filename="17base">base</dfn>);</td></tr>
+<tr><th id="55">55</th><td>    <em>void</em> (*<dfn class="tu decl field" id="android_native_base_t::decRef" title='android_native_base_t::decRef' data-type='void (*)(struct android_native_base_t *)' data-ref="android_native_base_t::decRef" data-ref-filename="android_native_base_t..decRef">decRef</dfn>)(<b>struct</b> <a class="type" href="#android_native_base_t" title='android_native_base_t' data-ref="android_native_base_t" data-ref-filename="android_native_base_t">android_native_base_t</a> *<dfn class="local col8 decl" id="18base" title='base' data-type='struct android_native_base_t *' data-ref="18base" data-ref-filename="18base">base</dfn>);</td></tr>
+<tr><th id="56">56</th><td>} <dfn class="typedef" id="android_native_base_t" title='android_native_base_t' data-type='struct android_native_base_t' data-ref="android_native_base_t" data-ref-filename="android_native_base_t">android_native_base_t</dfn>;</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td><b>typedef</b> <b>struct</b> <dfn class="type def" id="ANativeWindowBuffer" title='ANativeWindowBuffer' data-ref="ANativeWindowBuffer" data-ref-filename="ANativeWindowBuffer"><a class="type" href="#ANativeWindowBuffer" title='ANativeWindowBuffer' data-ref="ANativeWindowBuffer" data-ref-filename="ANativeWindowBuffer">ANativeWindowBuffer</a></dfn></td></tr>
+<tr><th id="59">59</th><td>{</td></tr>
+<tr><th id="60">60</th><td>    <b>struct</b> <a class="type" href="#android_native_base_t" title='android_native_base_t' data-ref="android_native_base_t" data-ref-filename="android_native_base_t">android_native_base_t</a> <dfn class="decl field" id="ANativeWindowBuffer::common" title='ANativeWindowBuffer::common' data-ref="ANativeWindowBuffer::common" data-ref-filename="ANativeWindowBuffer..common">common</dfn>;</td></tr>
+<tr><th id="61">61</th><td>    <em>int</em> <dfn class="decl field" id="ANativeWindowBuffer::width" title='ANativeWindowBuffer::width' data-ref="ANativeWindowBuffer::width" data-ref-filename="ANativeWindowBuffer..width">width</dfn>;</td></tr>
+<tr><th id="62">62</th><td>    <em>int</em> <dfn class="decl field" id="ANativeWindowBuffer::height" title='ANativeWindowBuffer::height' data-ref="ANativeWindowBuffer::height" data-ref-filename="ANativeWindowBuffer..height">height</dfn>;</td></tr>
+<tr><th id="63">63</th><td>    <em>int</em> <dfn class="decl field" id="ANativeWindowBuffer::stride" title='ANativeWindowBuffer::stride' data-ref="ANativeWindowBuffer::stride" data-ref-filename="ANativeWindowBuffer..stride">stride</dfn>;</td></tr>
+<tr><th id="64">64</th><td>    <em>int</em> <dfn class="decl field" id="ANativeWindowBuffer::format" title='ANativeWindowBuffer::format' data-ref="ANativeWindowBuffer::format" data-ref-filename="ANativeWindowBuffer..format">format</dfn>;</td></tr>
+<tr><th id="65">65</th><td>    <em>int</em> <dfn class="decl field" id="ANativeWindowBuffer::usage_deprecated" title='ANativeWindowBuffer::usage_deprecated' data-ref="ANativeWindowBuffer::usage_deprecated" data-ref-filename="ANativeWindowBuffer..usage_deprecated">usage_deprecated</dfn>;</td></tr>
+<tr><th id="66">66</th><td>    <span class='typedef' title='uintptr_t' data-type='unsigned long' data-ref="uintptr_t" data-ref-filename="uintptr_t">uintptr_t</span> <dfn class="decl field" id="ANativeWindowBuffer::layerCount" title='ANativeWindowBuffer::layerCount' data-ref="ANativeWindowBuffer::layerCount" data-ref-filename="ANativeWindowBuffer..layerCount">layerCount</dfn>;</td></tr>
+<tr><th id="67">67</th><td>    <em>void</em> *<dfn class="decl field" id="ANativeWindowBuffer::reserved" title='ANativeWindowBuffer::reserved' data-ref="ANativeWindowBuffer::reserved" data-ref-filename="ANativeWindowBuffer..reserved">reserved</dfn>[<var>1</var>];</td></tr>
+<tr><th id="68">68</th><td>    <em>const</em> <a class="typedef" href="#native_handle_t" title='native_handle_t' data-type='struct native_handle' data-ref="native_handle_t" data-ref-filename="native_handle_t">native_handle_t</a> *<dfn class="decl field" id="ANativeWindowBuffer::handle" title='ANativeWindowBuffer::handle' data-ref="ANativeWindowBuffer::handle" data-ref-filename="ANativeWindowBuffer..handle">handle</dfn>;</td></tr>
+<tr><th id="69">69</th><td>    <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="decl field" id="ANativeWindowBuffer::usage" title='ANativeWindowBuffer::usage' data-ref="ANativeWindowBuffer::usage" data-ref-filename="ANativeWindowBuffer..usage">usage</dfn>;</td></tr>
+<tr><th id="70">70</th><td>    <i>// we needed extra space for storing the 64-bits usage flags</i></td></tr>
+<tr><th id="71">71</th><td><i>    // the number of slots to use from reserved_proc depends on the</i></td></tr>
+<tr><th id="72">72</th><td><i>    // architecture.</i></td></tr>
+<tr><th id="73">73</th><td>    <em>void</em> *<dfn class="decl field" id="ANativeWindowBuffer::reserved_proc" title='ANativeWindowBuffer::reserved_proc' data-ref="ANativeWindowBuffer::reserved_proc" data-ref-filename="ANativeWindowBuffer..reserved_proc">reserved_proc</dfn>[<var>8</var> - (<b>sizeof</b>(<span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span>) / <b>sizeof</b>(<em>void</em> *))];</td></tr>
+<tr><th id="74">74</th><td>} <dfn class="typedef" id="ANativeWindowBuffer_t" title='ANativeWindowBuffer_t' data-type='struct ANativeWindowBuffer' data-ref="ANativeWindowBuffer_t" data-ref-filename="ANativeWindowBuffer_t">ANativeWindowBuffer_t</dfn>;</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td><i>// Taken from android/hardware_buffer.h</i></td></tr>
+<tr><th id="77">77</th><td><i>// <a href="https://android.googlesource.com/platform/frameworks/native/+/master/libs/nativewindow/include/android/hardware_buffer.h">https://android.googlesource.com/platform/frameworks/native/+/master/libs/nativewindow/include/android/hardware_buffer.h</a></i></td></tr>
+<tr><th id="78">78</th><td><i></i></td></tr>
+<tr><th id="79">79</th><td><i>// AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM,</i></td></tr>
+<tr><th id="80">80</th><td><i>// AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM formats were deprecated and re-added explicitly.</i></td></tr>
+<tr><th id="81">81</th><td><i></i></td></tr>
+<tr><th id="82">82</th><td><i>// clang-format off</i></td></tr>
+<tr><th id="83">83</th><td><i class="doc">/**</i></td></tr>
+<tr><th id="84">84</th><td><i class="doc"> * Buffer pixel formats.</i></td></tr>
+<tr><th id="85">85</th><td><i class="doc"> */</i></td></tr>
+<tr><th id="86">86</th><td><b>enum</b> {</td></tr>
+<tr><th id="87">87</th><td></td></tr>
+<tr><th id="88">88</th><td><u>#<span data-ppcond="88">ifndef</span> <span class="macro" data-ref="_M/ANGLE_AHARDWARE_BUFFER_SUPPORT">ANGLE_AHARDWARE_BUFFER_SUPPORT</span></u></td></tr>
+<tr><th id="89">89</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="90">90</th><td><i class="doc">     * Corresponding formats:</i></td></tr>
+<tr><th id="91">91</th><td><i class="doc">     *   Vulkan: VK_FORMAT_R8G8B8A8_UNORM</i></td></tr>
+<tr><th id="92">92</th><td><i class="doc">     *   OpenGL ES: GL_RGBA8</i></td></tr>
+<tr><th id="93">93</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="94">94</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM" title='AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM">AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM</dfn>           = <var>1</var>,</td></tr>
+<tr><th id="95">95</th><td></td></tr>
+<tr><th id="96">96</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="97">97</th><td><i class="doc">     * 32 bits per pixel, 8 bits per channel format where alpha values are</i></td></tr>
+<tr><th id="98">98</th><td><i class="doc">     * ignored (always opaque).</i></td></tr>
+<tr><th id="99">99</th><td><i class="doc">     * Corresponding formats:</i></td></tr>
+<tr><th id="100">100</th><td><i class="doc">     *   Vulkan: VK_FORMAT_R8G8B8A8_UNORM</i></td></tr>
+<tr><th id="101">101</th><td><i class="doc">     *   OpenGL ES: GL_RGB8</i></td></tr>
+<tr><th id="102">102</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="103">103</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM" title='AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM">AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM</dfn>           = <var>2</var>,</td></tr>
+<tr><th id="104">104</th><td></td></tr>
+<tr><th id="105">105</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="106">106</th><td><i class="doc">     * Corresponding formats:</i></td></tr>
+<tr><th id="107">107</th><td><i class="doc">     *   Vulkan: VK_FORMAT_R8G8B8_UNORM</i></td></tr>
+<tr><th id="108">108</th><td><i class="doc">     *   OpenGL ES: GL_RGB8</i></td></tr>
+<tr><th id="109">109</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="110">110</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM" title='AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM">AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM</dfn>             = <var>3</var>,</td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="113">113</th><td><i class="doc">     * Corresponding formats:</i></td></tr>
+<tr><th id="114">114</th><td><i class="doc">     *   Vulkan: VK_FORMAT_R5G6B5_UNORM_PACK16</i></td></tr>
+<tr><th id="115">115</th><td><i class="doc">     *   OpenGL ES: GL_RGB565</i></td></tr>
+<tr><th id="116">116</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="117">117</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM" title='AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM">AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM</dfn>             = <var>4</var>,</td></tr>
+<tr><th id="118">118</th><td><u>#<span data-ppcond="88">endif</span>  // ANGLE_AHARDWARE_BUFFER_SUPPORT</u></td></tr>
+<tr><th id="119">119</th><td></td></tr>
+<tr><th id="120">120</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM" title='AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM">AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM</dfn>           = <var>5</var>,</td></tr>
+<tr><th id="121">121</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM" title='AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM">AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM</dfn>           = <var>6</var>,</td></tr>
+<tr><th id="122">122</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM" title='AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM">AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM</dfn>           = <var>7</var>,</td></tr>
+<tr><th id="123">123</th><td></td></tr>
+<tr><th id="124">124</th><td><u>#<span data-ppcond="124">ifndef</span> <span class="macro" data-ref="_M/ANGLE_AHARDWARE_BUFFER_SUPPORT">ANGLE_AHARDWARE_BUFFER_SUPPORT</span></u></td></tr>
+<tr><th id="125">125</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="126">126</th><td><i class="doc">     * Corresponding formats:</i></td></tr>
+<tr><th id="127">127</th><td><i class="doc">     *   Vulkan: VK_FORMAT_R16G16B16A16_SFLOAT</i></td></tr>
+<tr><th id="128">128</th><td><i class="doc">     *   OpenGL ES: GL_RGBA16F</i></td></tr>
+<tr><th id="129">129</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="130">130</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT" title='AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT' data-ref="AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT" data-ref-filename="AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT">AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT</dfn>       = <var>0x16</var>,</td></tr>
+<tr><th id="131">131</th><td></td></tr>
+<tr><th id="132">132</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="133">133</th><td><i class="doc">     * Corresponding formats:</i></td></tr>
+<tr><th id="134">134</th><td><i class="doc">     *   Vulkan: VK_FORMAT_A2B10G10R10_UNORM_PACK32</i></td></tr>
+<tr><th id="135">135</th><td><i class="doc">     *   OpenGL ES: GL_RGB10_A2</i></td></tr>
+<tr><th id="136">136</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="137">137</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM" title='AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM">AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM</dfn>        = <var>0x2b</var>,</td></tr>
+<tr><th id="138">138</th><td></td></tr>
+<tr><th id="139">139</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="140">140</th><td><i class="doc">     * An opaque binary blob format that must have height 1, with width equal to</i></td></tr>
+<tr><th id="141">141</th><td><i class="doc">     * the buffer size in bytes.</i></td></tr>
+<tr><th id="142">142</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="143">143</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_BLOB" title='AHARDWAREBUFFER_FORMAT_BLOB' data-ref="AHARDWAREBUFFER_FORMAT_BLOB" data-ref-filename="AHARDWAREBUFFER_FORMAT_BLOB">AHARDWAREBUFFER_FORMAT_BLOB</dfn>                     = <var>0x21</var>,</td></tr>
+<tr><th id="144">144</th><td></td></tr>
+<tr><th id="145">145</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="146">146</th><td><i class="doc">     * Corresponding formats:</i></td></tr>
+<tr><th id="147">147</th><td><i class="doc">     *   Vulkan: VK_FORMAT_D16_UNORM</i></td></tr>
+<tr><th id="148">148</th><td><i class="doc">     *   OpenGL ES: GL_DEPTH_COMPONENT16</i></td></tr>
+<tr><th id="149">149</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="150">150</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_D16_UNORM" title='AHARDWAREBUFFER_FORMAT_D16_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_D16_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_D16_UNORM">AHARDWAREBUFFER_FORMAT_D16_UNORM</dfn>                = <var>0x30</var>,</td></tr>
+<tr><th id="151">151</th><td></td></tr>
+<tr><th id="152">152</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="153">153</th><td><i class="doc">     * Corresponding formats:</i></td></tr>
+<tr><th id="154">154</th><td><i class="doc">     *   Vulkan: VK_FORMAT_X8_D24_UNORM_PACK32</i></td></tr>
+<tr><th id="155">155</th><td><i class="doc">     *   OpenGL ES: GL_DEPTH_COMPONENT24</i></td></tr>
+<tr><th id="156">156</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="157">157</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_D24_UNORM" title='AHARDWAREBUFFER_FORMAT_D24_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_D24_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_D24_UNORM">AHARDWAREBUFFER_FORMAT_D24_UNORM</dfn>                = <var>0x31</var>,</td></tr>
+<tr><th id="158">158</th><td></td></tr>
+<tr><th id="159">159</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="160">160</th><td><i class="doc">     * Corresponding formats:</i></td></tr>
+<tr><th id="161">161</th><td><i class="doc">     *   Vulkan: VK_FORMAT_D24_UNORM_S8_UINT</i></td></tr>
+<tr><th id="162">162</th><td><i class="doc">     *   OpenGL ES: GL_DEPTH24_STENCIL8</i></td></tr>
+<tr><th id="163">163</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="164">164</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT" title='AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT' data-ref="AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT" data-ref-filename="AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT">AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT</dfn>        = <var>0x32</var>,</td></tr>
+<tr><th id="165">165</th><td></td></tr>
+<tr><th id="166">166</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="167">167</th><td><i class="doc">     * Corresponding formats:</i></td></tr>
+<tr><th id="168">168</th><td><i class="doc">     *   Vulkan: VK_FORMAT_D32_SFLOAT</i></td></tr>
+<tr><th id="169">169</th><td><i class="doc">     *   OpenGL ES: GL_DEPTH_COMPONENT32F</i></td></tr>
+<tr><th id="170">170</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="171">171</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_D32_FLOAT" title='AHARDWAREBUFFER_FORMAT_D32_FLOAT' data-ref="AHARDWAREBUFFER_FORMAT_D32_FLOAT" data-ref-filename="AHARDWAREBUFFER_FORMAT_D32_FLOAT">AHARDWAREBUFFER_FORMAT_D32_FLOAT</dfn>                = <var>0x33</var>,</td></tr>
+<tr><th id="172">172</th><td></td></tr>
+<tr><th id="173">173</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="174">174</th><td><i class="doc">     * Corresponding formats:</i></td></tr>
+<tr><th id="175">175</th><td><i class="doc">     *   Vulkan: VK_FORMAT_D32_SFLOAT_S8_UINT</i></td></tr>
+<tr><th id="176">176</th><td><i class="doc">     *   OpenGL ES: GL_DEPTH32F_STENCIL8</i></td></tr>
+<tr><th id="177">177</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="178">178</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT" title='AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT' data-ref="AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT" data-ref-filename="AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT">AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT</dfn>        = <var>0x34</var>,</td></tr>
+<tr><th id="179">179</th><td></td></tr>
+<tr><th id="180">180</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="181">181</th><td><i class="doc">     * Corresponding formats:</i></td></tr>
+<tr><th id="182">182</th><td><i class="doc">     *   Vulkan: VK_FORMAT_S8_UINT</i></td></tr>
+<tr><th id="183">183</th><td><i class="doc">     *   OpenGL ES: GL_STENCIL_INDEX8</i></td></tr>
+<tr><th id="184">184</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="185">185</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_S8_UINT" title='AHARDWAREBUFFER_FORMAT_S8_UINT' data-ref="AHARDWAREBUFFER_FORMAT_S8_UINT" data-ref-filename="AHARDWAREBUFFER_FORMAT_S8_UINT">AHARDWAREBUFFER_FORMAT_S8_UINT</dfn>                  = <var>0x35</var>,</td></tr>
+<tr><th id="186">186</th><td></td></tr>
+<tr><th id="187">187</th><td>    <i class="doc">/**</i></td></tr>
+<tr><th id="188">188</th><td><i class="doc">     * YUV 420 888 format.</i></td></tr>
+<tr><th id="189">189</th><td><i class="doc">     * Must have an even width and height. Can be accessed in OpenGL</i></td></tr>
+<tr><th id="190">190</th><td><i class="doc">     * shaders through an external sampler. Does not support mip-maps</i></td></tr>
+<tr><th id="191">191</th><td><i class="doc">     * cube-maps or multi-layered textures.</i></td></tr>
+<tr><th id="192">192</th><td><i class="doc">     */</i></td></tr>
+<tr><th id="193">193</th><td>    <dfn class="enum" id="AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420" title='AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420' data-ref="AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420" data-ref-filename="AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420">AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420</dfn>             = <var>0x23</var>,</td></tr>
+<tr><th id="194">194</th><td></td></tr>
+<tr><th id="195">195</th><td><u>#<span data-ppcond="124">endif</span>  // ANGLE_AHARDWARE_BUFFER_SUPPORT</u></td></tr>
+<tr><th id="196">196</th><td>};</td></tr>
+<tr><th id="197">197</th><td><i>// clang-format on</i></td></tr>
+<tr><th id="198">198</th><td></td></tr>
+<tr><th id="199">199</th><td><b>namespace</b></td></tr>
+<tr><th id="200">200</th><td>{</td></tr>
+<tr><th id="201">201</th><td></td></tr>
+<tr><th id="202">202</th><td><i  data-doc="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset">// In the Android system:</i></td></tr>
+<tr><th id="203">203</th><td><i  data-doc="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset">// - AHardwareBuffer is essentially a typedef of GraphicBuffer. Conversion functions simply</i></td></tr>
+<tr><th id="204">204</th><td><i  data-doc="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset">// reinterpret_cast.</i></td></tr>
+<tr><th id="205">205</th><td><i  data-doc="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset">// - GraphicBuffer inherits from two base classes, ANativeWindowBuffer and RefBase.</i></td></tr>
+<tr><th id="206">206</th><td><i  data-doc="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset">//</i></td></tr>
+<tr><th id="207">207</th><td><i  data-doc="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset">// GraphicBuffer implements a getter for ANativeWindowBuffer (getNativeBuffer) by static_casting</i></td></tr>
+<tr><th id="208">208</th><td><i  data-doc="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset">// itself to its base class ANativeWindowBuffer. The offset of the ANativeWindowBuffer pointer</i></td></tr>
+<tr><th id="209">209</th><td><i  data-doc="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset">// from the GraphicBuffer pointer is 16 bytes. This is likely due to two pointers: The vtable of</i></td></tr>
+<tr><th id="210">210</th><td><i  data-doc="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset">// GraphicBuffer and the one pointer member of the RefBase class.</i></td></tr>
+<tr><th id="211">211</th><td><i  data-doc="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset">//</i></td></tr>
+<tr><th id="212">212</th><td><i  data-doc="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset">// This is not future proof at all. We need to look into getting utilities added to Android to</i></td></tr>
+<tr><th id="213">213</th><td><i  data-doc="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset">// perform this cast for us.</i></td></tr>
+<tr><th id="214">214</th><td><b>constexpr</b> <em>int</em> <dfn class="tu decl def" id="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset" title='(anonymous namespace)::kAHardwareBufferToANativeWindowBufferOffset' data-type='const int' data-ref="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset" data-ref-filename="(anonymousnamespace)..kAHardwareBufferToANativeWindowBufferOffset">kAHardwareBufferToANativeWindowBufferOffset</dfn> = <b>static_cast</b>&lt;<em>int</em>&gt;(<b>sizeof</b>(<em>void</em> *)) * <var>2</var>;</td></tr>
+<tr><th id="215">215</th><td></td></tr>
+<tr><th id="216">216</th><td><b>template</b> &lt;<b>typename</b> T1, <b>typename</b> T2&gt;</td></tr>
+<tr><th id="217">217</th><td>T1 *<dfn class="tu decl def fn" id="_ZN12_GLOBAL__N_113offsetPointerEPT0_i" title='(anonymous namespace)::offsetPointer' data-type='T1 * (anonymous namespace)::offsetPointer(T2 * ptr, int bytes)' data-ref="_ZN12_GLOBAL__N_113offsetPointerEPT0_i" data-ref-filename="_ZN12_GLOBAL__N_113offsetPointerEPT0_i">offsetPointer</dfn>(T2 *<dfn class="local col9 decl" id="19ptr" title='ptr' data-type='T2 *' data-ref="19ptr" data-ref-filename="19ptr">ptr</dfn>, <em>int</em> <dfn class="local col0 decl" id="20bytes" title='bytes' data-type='int' data-ref="20bytes" data-ref-filename="20bytes">bytes</dfn>)</td></tr>
+<tr><th id="218">218</th><td>{</td></tr>
+<tr><th id="219">219</th><td>    <b>return</b> <b>reinterpret_cast</b>&lt;T1 *&gt;(<b>reinterpret_cast</b>&lt;<span class='typedef' title='intptr_t' data-type='__darwin_intptr_t' data-ref="intptr_t" data-ref-filename="intptr_t">intptr_t</span>&gt;(<a class="local col9 ref" href="#19ptr" title='ptr' data-ref="19ptr" data-ref-filename="19ptr">ptr</a>) + <a class="local col0 ref" href="#20bytes" title='bytes' data-ref="20bytes" data-ref-filename="20bytes">bytes</a>);</td></tr>
+<tr><th id="220">220</th><td>}</td></tr>
+<tr><th id="221">221</th><td></td></tr>
+<tr><th id="222">222</th><td>}  <i>// anonymous namespace</i></td></tr>
+<tr><th id="223">223</th><td></td></tr>
+<tr><th id="224">224</th><td><b>namespace</b> <span class="namespace">angle</span></td></tr>
+<tr><th id="225">225</th><td>{</td></tr>
+<tr><th id="226">226</th><td></td></tr>
+<tr><th id="227">227</th><td><b>namespace</b> <span class="namespace">android</span></td></tr>
+<tr><th id="228">228</th><td>{</td></tr>
+<tr><th id="229">229</th><td></td></tr>
+<tr><th id="230">230</th><td><a class="type" href="#ANativeWindowBuffer" title='ANativeWindowBuffer' data-ref="ANativeWindowBuffer" data-ref-filename="ANativeWindowBuffer">ANativeWindowBuffer</a> *<dfn class="decl def fn" id="_ZN5angle7android33ClientBufferToANativeWindowBufferEPv" title='angle::android::ClientBufferToANativeWindowBuffer' data-ref="_ZN5angle7android33ClientBufferToANativeWindowBufferEPv" data-ref-filename="_ZN5angle7android33ClientBufferToANativeWindowBufferEPv">ClientBufferToANativeWindowBuffer</dfn>(<a class="typedef" href="../../include/EGL/egl.h.html#EGLClientBuffer" title='EGLClientBuffer' data-type='void *' data-ref="EGLClientBuffer" data-ref-filename="EGLClientBuffer">EGLClientBuffer</a> <dfn class="local col1 decl" id="21clientBuffer" title='clientBuffer' data-type='EGLClientBuffer' data-ref="21clientBuffer" data-ref-filename="21clientBuffer">clientBuffer</dfn>)</td></tr>
+<tr><th id="231">231</th><td>{</td></tr>
+<tr><th id="232">232</th><td>    <b>return</b> <b>reinterpret_cast</b>&lt;<a class="type" href="#ANativeWindowBuffer" title='ANativeWindowBuffer' data-ref="ANativeWindowBuffer" data-ref-filename="ANativeWindowBuffer">ANativeWindowBuffer</a> *&gt;(<a class="local col1 ref" href="#21clientBuffer" title='clientBuffer' data-ref="21clientBuffer" data-ref-filename="21clientBuffer">clientBuffer</a>);</td></tr>
+<tr><th id="233">233</th><td>}</td></tr>
+<tr><th id="234">234</th><td></td></tr>
+<tr><th id="235">235</th><td><span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="decl def fn" id="_ZN5angle7android11GetAHBUsageEi" title='angle::android::GetAHBUsage' data-ref="_ZN5angle7android11GetAHBUsageEi" data-ref-filename="_ZN5angle7android11GetAHBUsageEi">GetAHBUsage</dfn>(<em>int</em> <dfn class="local col2 decl" id="22eglNativeBufferUsage" title='eglNativeBufferUsage' data-type='int' data-ref="22eglNativeBufferUsage" data-ref-filename="22eglNativeBufferUsage">eglNativeBufferUsage</dfn>)</td></tr>
+<tr><th id="236">236</th><td>{</td></tr>
+<tr><th id="237">237</th><td>    <span class='typedef' title='uint64_t' data-type='unsigned long long' data-ref="uint64_t" data-ref-filename="uint64_t">uint64_t</span> <dfn class="local col3 decl" id="23ahbUsage" title='ahbUsage' data-type='uint64_t' data-ref="23ahbUsage" data-ref-filename="23ahbUsage">ahbUsage</dfn> = <var>0</var>;</td></tr>
+<tr><th id="238">238</th><td><u>#<span data-ppcond="238">if</span> defined(<span class="macro" data-ref="_M/ANGLE_AHARDWARE_BUFFER_SUPPORT">ANGLE_AHARDWARE_BUFFER_SUPPORT</span>)</u></td></tr>
+<tr><th id="239">239</th><td>    <b>if</b> (eglNativeBufferUsage &amp; EGL_NATIVE_BUFFER_USAGE_PROTECTED_BIT_ANDROID)</td></tr>
+<tr><th id="240">240</th><td>    {</td></tr>
+<tr><th id="241">241</th><td>        ahbUsage |= AHARDWAREBUFFER_USAGE_PROTECTED_CONTENT;</td></tr>
+<tr><th id="242">242</th><td>    }</td></tr>
+<tr><th id="243">243</th><td>    <b>if</b> (eglNativeBufferUsage &amp; EGL_NATIVE_BUFFER_USAGE_RENDERBUFFER_BIT_ANDROID)</td></tr>
+<tr><th id="244">244</th><td>    {</td></tr>
+<tr><th id="245">245</th><td>        ahbUsage |= AHARDWAREBUFFER_USAGE_GPU_FRAMEBUFFER;</td></tr>
+<tr><th id="246">246</th><td>    }</td></tr>
+<tr><th id="247">247</th><td>    <b>if</b> (eglNativeBufferUsage &amp; EGL_NATIVE_BUFFER_USAGE_TEXTURE_BIT_ANDROID)</td></tr>
+<tr><th id="248">248</th><td>    {</td></tr>
+<tr><th id="249">249</th><td>        ahbUsage |= AHARDWAREBUFFER_USAGE_GPU_SAMPLED_IMAGE;</td></tr>
+<tr><th id="250">250</th><td>    }</td></tr>
+<tr><th id="251">251</th><td><u>#<span data-ppcond="238">endif</span>  // ANGLE_AHARDWARE_BUFFER_SUPPORT</u></td></tr>
+<tr><th id="252">252</th><td>    <b>return</b> <a class="local col3 ref" href="#23ahbUsage" title='ahbUsage' data-ref="23ahbUsage" data-ref-filename="23ahbUsage">ahbUsage</a>;</td></tr>
+<tr><th id="253">253</th><td>}</td></tr>
+<tr><th id="254">254</th><td></td></tr>
+<tr><th id="255">255</th><td><a class="typedef" href="../../include/EGL/egl.h.html#EGLClientBuffer" title='EGLClientBuffer' data-type='void *' data-ref="EGLClientBuffer" data-ref-filename="EGLClientBuffer">EGLClientBuffer</a> <dfn class="decl def fn" id="_ZN5angle7android40CreateEGLClientBufferFromAHardwareBufferEiiiii" title='angle::android::CreateEGLClientBufferFromAHardwareBuffer' data-ref="_ZN5angle7android40CreateEGLClientBufferFromAHardwareBufferEiiiii" data-ref-filename="_ZN5angle7android40CreateEGLClientBufferFromAHardwareBufferEiiiii">CreateEGLClientBufferFromAHardwareBuffer</dfn>(<em>int</em> <dfn class="local col4 decl" id="24width" title='width' data-type='int' data-ref="24width" data-ref-filename="24width">width</dfn>,</td></tr>
+<tr><th id="256">256</th><td>                                                         <em>int</em> <dfn class="local col5 decl" id="25height" title='height' data-type='int' data-ref="25height" data-ref-filename="25height">height</dfn>,</td></tr>
+<tr><th id="257">257</th><td>                                                         <em>int</em> <dfn class="local col6 decl" id="26depth" title='depth' data-type='int' data-ref="26depth" data-ref-filename="26depth">depth</dfn>,</td></tr>
+<tr><th id="258">258</th><td>                                                         <em>int</em> <dfn class="local col7 decl" id="27androidFormat" title='androidFormat' data-type='int' data-ref="27androidFormat" data-ref-filename="27androidFormat">androidFormat</dfn>,</td></tr>
+<tr><th id="259">259</th><td>                                                         <em>int</em> <dfn class="local col8 decl" id="28usage" title='usage' data-type='int' data-ref="28usage" data-ref-filename="28usage">usage</dfn>)</td></tr>
+<tr><th id="260">260</th><td>{</td></tr>
+<tr><th id="261">261</th><td><u>#<span data-ppcond="261">if</span> defined(<span class="macro" data-ref="_M/ANGLE_AHARDWARE_BUFFER_SUPPORT">ANGLE_AHARDWARE_BUFFER_SUPPORT</span>)</u></td></tr>
+<tr><th id="262">262</th><td></td></tr>
+<tr><th id="263">263</th><td>    <i>// The height and width are number of pixels of size format</i></td></tr>
+<tr><th id="264">264</th><td>    AHardwareBuffer_Desc aHardwareBufferDescription = {};</td></tr>
+<tr><th id="265">265</th><td>    aHardwareBufferDescription.width                = <b>static_cast</b>&lt;uint32_t&gt;(width);</td></tr>
+<tr><th id="266">266</th><td>    aHardwareBufferDescription.height               = <b>static_cast</b>&lt;uint32_t&gt;(height);</td></tr>
+<tr><th id="267">267</th><td>    aHardwareBufferDescription.layers               = <b>static_cast</b>&lt;uint32_t&gt;(depth);</td></tr>
+<tr><th id="268">268</th><td>    aHardwareBufferDescription.format               = androidFormat;</td></tr>
+<tr><th id="269">269</th><td>    aHardwareBufferDescription.usage                = GetAHBUsage(usage);</td></tr>
+<tr><th id="270">270</th><td></td></tr>
+<tr><th id="271">271</th><td>    <i>// Allocate memory from Android Hardware Buffer</i></td></tr>
+<tr><th id="272">272</th><td>    AHardwareBuffer *aHardwareBuffer = <b>nullptr</b>;</td></tr>
+<tr><th id="273">273</th><td>    <em>int</em> res = AHardwareBuffer_allocate(&amp;aHardwareBufferDescription, &amp;aHardwareBuffer);</td></tr>
+<tr><th id="274">274</th><td>    <b>if</b> (res != <var>0</var>)</td></tr>
+<tr><th id="275">275</th><td>    {</td></tr>
+<tr><th id="276">276</th><td>        <b>return</b> <b>nullptr</b>;</td></tr>
+<tr><th id="277">277</th><td>    }</td></tr>
+<tr><th id="278">278</th><td></td></tr>
+<tr><th id="279">279</th><td>    <b>return</b> AHardwareBufferToClientBuffer(aHardwareBuffer);</td></tr>
+<tr><th id="280">280</th><td><u>#<span data-ppcond="261">endif</span>  // ANGLE_AHARDWARE_BUFFER_SUPPORT</u></td></tr>
+<tr><th id="281">281</th><td>    <b>return</b> <b>nullptr</b>;</td></tr>
+<tr><th id="282">282</th><td>}</td></tr>
+<tr><th id="283">283</th><td></td></tr>
+<tr><th id="284">284</th><td><em>void</em> <dfn class="decl def fn" id="_ZN5angle7android32GetANativeWindowBufferPropertiesEPK19ANativeWindowBufferPiS4_S4_S4_" title='angle::android::GetANativeWindowBufferProperties' data-ref="_ZN5angle7android32GetANativeWindowBufferPropertiesEPK19ANativeWindowBufferPiS4_S4_S4_" data-ref-filename="_ZN5angle7android32GetANativeWindowBufferPropertiesEPK19ANativeWindowBufferPiS4_S4_S4_">GetANativeWindowBufferProperties</dfn>(<em>const</em> <a class="type" href="#ANativeWindowBuffer" title='ANativeWindowBuffer' data-ref="ANativeWindowBuffer" data-ref-filename="ANativeWindowBuffer">ANativeWindowBuffer</a> *<dfn class="local col9 decl" id="29buffer" title='buffer' data-type='const ANativeWindowBuffer *' data-ref="29buffer" data-ref-filename="29buffer">buffer</dfn>,</td></tr>
+<tr><th id="285">285</th><td>                                      <em>int</em> *<dfn class="local col0 decl" id="30width" title='width' data-type='int *' data-ref="30width" data-ref-filename="30width">width</dfn>,</td></tr>
+<tr><th id="286">286</th><td>                                      <em>int</em> *<dfn class="local col1 decl" id="31height" title='height' data-type='int *' data-ref="31height" data-ref-filename="31height">height</dfn>,</td></tr>
+<tr><th id="287">287</th><td>                                      <em>int</em> *<dfn class="local col2 decl" id="32depth" title='depth' data-type='int *' data-ref="32depth" data-ref-filename="32depth">depth</dfn>,</td></tr>
+<tr><th id="288">288</th><td>                                      <em>int</em> *<dfn class="local col3 decl" id="33pixelFormat" title='pixelFormat' data-type='int *' data-ref="33pixelFormat" data-ref-filename="33pixelFormat">pixelFormat</dfn>)</td></tr>
+<tr><th id="289">289</th><td>{</td></tr>
+<tr><th id="290">290</th><td>    *<a class="local col0 ref" href="#30width" title='width' data-ref="30width" data-ref-filename="30width">width</a>       = <a class="local col9 ref" href="#29buffer" title='buffer' data-ref="29buffer" data-ref-filename="29buffer">buffer</a>-&gt;<a class="ref field" href="#ANativeWindowBuffer::width" title='ANativeWindowBuffer::width' data-ref="ANativeWindowBuffer::width" data-ref-filename="ANativeWindowBuffer..width">width</a>;</td></tr>
+<tr><th id="291">291</th><td>    *<a class="local col1 ref" href="#31height" title='height' data-ref="31height" data-ref-filename="31height">height</a>      = <a class="local col9 ref" href="#29buffer" title='buffer' data-ref="29buffer" data-ref-filename="29buffer">buffer</a>-&gt;<a class="ref field" href="#ANativeWindowBuffer::height" title='ANativeWindowBuffer::height' data-ref="ANativeWindowBuffer::height" data-ref-filename="ANativeWindowBuffer..height">height</a>;</td></tr>
+<tr><th id="292">292</th><td>    *<a class="local col2 ref" href="#32depth" title='depth' data-ref="32depth" data-ref-filename="32depth">depth</a>       = <b>static_cast</b>&lt;<em>int</em>&gt;(<a class="local col9 ref" href="#29buffer" title='buffer' data-ref="29buffer" data-ref-filename="29buffer">buffer</a>-&gt;<a class="ref field" href="#ANativeWindowBuffer::layerCount" title='ANativeWindowBuffer::layerCount' data-ref="ANativeWindowBuffer::layerCount" data-ref-filename="ANativeWindowBuffer..layerCount">layerCount</a>);</td></tr>
+<tr><th id="293">293</th><td>    *<a class="local col1 ref" href="#31height" title='height' data-ref="31height" data-ref-filename="31height">height</a>      = <a class="local col9 ref" href="#29buffer" title='buffer' data-ref="29buffer" data-ref-filename="29buffer">buffer</a>-&gt;<a class="ref field" href="#ANativeWindowBuffer::height" title='ANativeWindowBuffer::height' data-ref="ANativeWindowBuffer::height" data-ref-filename="ANativeWindowBuffer..height">height</a>;</td></tr>
+<tr><th id="294">294</th><td>    *<a class="local col3 ref" href="#33pixelFormat" title='pixelFormat' data-ref="33pixelFormat" data-ref-filename="33pixelFormat">pixelFormat</a> = <a class="local col9 ref" href="#29buffer" title='buffer' data-ref="29buffer" data-ref-filename="29buffer">buffer</a>-&gt;<a class="ref field" href="#ANativeWindowBuffer::format" title='ANativeWindowBuffer::format' data-ref="ANativeWindowBuffer::format" data-ref-filename="ANativeWindowBuffer..format">format</a>;</td></tr>
+<tr><th id="295">295</th><td>}</td></tr>
+<tr><th id="296">296</th><td></td></tr>
+<tr><th id="297">297</th><td><a class="typedef" href="../../include/GLES/gl.h.html#GLenum" title='GLenum' data-type='unsigned int' data-ref="GLenum" data-ref-filename="GLenum">GLenum</a> <dfn class="decl def fn" id="_ZN5angle7android35NativePixelFormatToGLInternalFormatEi" title='angle::android::NativePixelFormatToGLInternalFormat' data-ref="_ZN5angle7android35NativePixelFormatToGLInternalFormatEi" data-ref-filename="_ZN5angle7android35NativePixelFormatToGLInternalFormatEi">NativePixelFormatToGLInternalFormat</dfn>(<em>int</em> <dfn class="local col4 decl" id="34pixelFormat" title='pixelFormat' data-type='int' data-ref="34pixelFormat" data-ref-filename="34pixelFormat">pixelFormat</dfn>)</td></tr>
+<tr><th id="298">298</th><td>{</td></tr>
+<tr><th id="299">299</th><td>    <b>switch</b> (<a class="local col4 ref" href="#34pixelFormat" title='pixelFormat' data-ref="34pixelFormat" data-ref-filename="34pixelFormat">pixelFormat</a>)</td></tr>
+<tr><th id="300">300</th><td>    {</td></tr>
+<tr><th id="301">301</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM" title='AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM">AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM</a>:</td></tr>
+<tr><th id="302">302</th><td>            <b>return</b> <a class="macro" href="../../include/GLES3/gl32.h.html#688" title="0x8058" data-ref="_M/GL_RGBA8">GL_RGBA8</a>;</td></tr>
+<tr><th id="303">303</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM" title='AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM">AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM</a>:</td></tr>
+<tr><th id="304">304</th><td>            <b>return</b> <a class="macro" href="../../include/GLES3/gl32.h.html#687" title="0x8051" data-ref="_M/GL_RGB8">GL_RGB8</a>;</td></tr>
+<tr><th id="305">305</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM" title='AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM">AHARDWAREBUFFER_FORMAT_R8G8B8_UNORM</a>:</td></tr>
+<tr><th id="306">306</th><td>            <b>return</b> <a class="macro" href="../../include/GLES3/gl32.h.html#687" title="0x8051" data-ref="_M/GL_RGB8">GL_RGB8</a>;</td></tr>
+<tr><th id="307">307</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM" title='AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM">AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM</a>:</td></tr>
+<tr><th id="308">308</th><td>            <b>return</b> <a class="macro" href="../../include/GLES2/gl2.h.html#354" title="0x8D62" data-ref="_M/GL_RGB565">GL_RGB565</a>;</td></tr>
+<tr><th id="309">309</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM" title='AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM">AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM</a>:</td></tr>
+<tr><th id="310">310</th><td>            <b>return</b> <a class="macro" href="../../include/GLES/glext.h.html#588" title="0x93A1" data-ref="_M/GL_BGRA8_EXT">GL_BGRA8_EXT</a>;</td></tr>
+<tr><th id="311">311</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM" title='AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM">AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM</a>:</td></tr>
+<tr><th id="312">312</th><td>            <b>return</b> <a class="macro" href="../../include/GLES2/gl2.h.html#353" title="0x8057" data-ref="_M/GL_RGB5_A1">GL_RGB5_A1</a>;</td></tr>
+<tr><th id="313">313</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM" title='AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM">AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM</a>:</td></tr>
+<tr><th id="314">314</th><td>            <b>return</b> <a class="macro" href="../../include/GLES2/gl2.h.html#352" title="0x8056" data-ref="_M/GL_RGBA4">GL_RGBA4</a>;</td></tr>
+<tr><th id="315">315</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT" title='AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT' data-ref="AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT" data-ref-filename="AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT">AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT</a>:</td></tr>
+<tr><th id="316">316</th><td>            <b>return</b> <a class="macro" href="../../include/GLES3/gl32.h.html#761" title="0x881A" data-ref="_M/GL_RGBA16F">GL_RGBA16F</a>;</td></tr>
+<tr><th id="317">317</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM" title='AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM">AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM</a>:</td></tr>
+<tr><th id="318">318</th><td>            <b>return</b> <a class="macro" href="../../include/GLES3/gl32.h.html#689" title="0x8059" data-ref="_M/GL_RGB10_A2">GL_RGB10_A2</a>;</td></tr>
+<tr><th id="319">319</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_BLOB" title='AHARDWAREBUFFER_FORMAT_BLOB' data-ref="AHARDWAREBUFFER_FORMAT_BLOB" data-ref-filename="AHARDWAREBUFFER_FORMAT_BLOB">AHARDWAREBUFFER_FORMAT_BLOB</a>:</td></tr>
+<tr><th id="320">320</th><td>            <b>return</b> <a class="macro" href="../../include/GLES2/gl2.h.html#373" title="0" data-ref="_M/GL_NONE">GL_NONE</a>;</td></tr>
+<tr><th id="321">321</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_D16_UNORM" title='AHARDWAREBUFFER_FORMAT_D16_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_D16_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_D16_UNORM">AHARDWAREBUFFER_FORMAT_D16_UNORM</a>:</td></tr>
+<tr><th id="322">322</th><td>            <b>return</b> <a class="macro" href="../../include/GLES2/gl2.h.html#355" title="0x81A5" data-ref="_M/GL_DEPTH_COMPONENT16">GL_DEPTH_COMPONENT16</a>;</td></tr>
+<tr><th id="323">323</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_D24_UNORM" title='AHARDWAREBUFFER_FORMAT_D24_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_D24_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_D24_UNORM">AHARDWAREBUFFER_FORMAT_D24_UNORM</a>:</td></tr>
+<tr><th id="324">324</th><td>            <b>return</b> <a class="macro" href="../../include/GLES3/gl32.h.html#705" title="0x81A6" data-ref="_M/GL_DEPTH_COMPONENT24">GL_DEPTH_COMPONENT24</a>;</td></tr>
+<tr><th id="325">325</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT" title='AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT' data-ref="AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT" data-ref-filename="AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT">AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT</a>:</td></tr>
+<tr><th id="326">326</th><td>            <b>return</b> <a class="macro" href="../../include/GLES3/gl32.h.html#836" title="0x88F0" data-ref="_M/GL_DEPTH24_STENCIL8">GL_DEPTH24_STENCIL8</a>;</td></tr>
+<tr><th id="327">327</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_D32_FLOAT" title='AHARDWAREBUFFER_FORMAT_D32_FLOAT' data-ref="AHARDWAREBUFFER_FORMAT_D32_FLOAT" data-ref-filename="AHARDWAREBUFFER_FORMAT_D32_FLOAT">AHARDWAREBUFFER_FORMAT_D32_FLOAT</a>:</td></tr>
+<tr><th id="328">328</th><td>            <b>return</b> <a class="macro" href="../../include/GLES3/gl32.h.html#820" title="0x8CAC" data-ref="_M/GL_DEPTH_COMPONENT32F">GL_DEPTH_COMPONENT32F</a>;</td></tr>
+<tr><th id="329">329</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT" title='AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT' data-ref="AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT" data-ref-filename="AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT">AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT</a>:</td></tr>
+<tr><th id="330">330</th><td>            <b>return</b> <a class="macro" href="../../include/GLES3/gl32.h.html#821" title="0x8CAD" data-ref="_M/GL_DEPTH32F_STENCIL8">GL_DEPTH32F_STENCIL8</a>;</td></tr>
+<tr><th id="331">331</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_S8_UINT" title='AHARDWAREBUFFER_FORMAT_S8_UINT' data-ref="AHARDWAREBUFFER_FORMAT_S8_UINT" data-ref-filename="AHARDWAREBUFFER_FORMAT_S8_UINT">AHARDWAREBUFFER_FORMAT_S8_UINT</a>:</td></tr>
+<tr><th id="332">332</th><td>            <b>return</b> <a class="macro" href="../../include/GLES2/gl2.h.html#356" title="0x8D48" data-ref="_M/GL_STENCIL_INDEX8">GL_STENCIL_INDEX8</a>;</td></tr>
+<tr><th id="333">333</th><td>        <b>case</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420" title='AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420' data-ref="AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420" data-ref-filename="AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420">AHARDWAREBUFFER_FORMAT_Y8Cb8Cr8_420</a>:</td></tr>
+<tr><th id="334">334</th><td>            <b>return</b> <a class="macro" href="../../include/GLES3/gl32.h.html#687" title="0x8051" data-ref="_M/GL_RGB8">GL_RGB8</a>;</td></tr>
+<tr><th id="335">335</th><td>        <b>default</b>:</td></tr>
+<tr><th id="336">336</th><td>            <i>// Treat unknown formats as RGB. They are vendor-specific YUV formats that would sample</i></td></tr>
+<tr><th id="337">337</th><td><i>            // as RGB.</i></td></tr>
+<tr><th id="338">338</th><td>            <a class="macro" href="debug.h.html#252" title="!((::gl::priv::ShouldCreatePlatformLogMessage(::gl::LOG_WARN))) ? static_cast&lt;void&gt;(0) : ::gl::priv::LogMessageVoidify() &amp; (::gl::LogMessage(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/ANGLE/src/common/android_util.cpp&quot;, __FUNCTION__, 338, ::gl::LOG_WARN).stream())" data-ref="_M/WARN">WARN</a>() <span class='ref fn' title='std::__1::operator&lt;&lt;' data-ref="_ZNSt3__1lsERNS_13basic_ostreamIcT_EEPKc" data-ref-filename="_ZNSt3__1lsERNS_13basic_ostreamIcT_EEPKc">&lt;&lt;</span> <q>"Unknown pixelFormat: "</q> <span class='ref fn' title='std::__1::basic_ostream::operator&lt;&lt;' data-ref="_ZNSt3__113basic_ostreamlsEi" data-ref-filename="_ZNSt3__113basic_ostreamlsEi">&lt;&lt;</span> <a class="local col4 ref" href="#34pixelFormat" title='pixelFormat' data-ref="34pixelFormat" data-ref-filename="34pixelFormat">pixelFormat</a> <span class='ref fn' title='std::__1::operator&lt;&lt;' data-ref="_ZNSt3__1lsERNS_13basic_ostreamIcT_EEPKc" data-ref-filename="_ZNSt3__1lsERNS_13basic_ostreamIcT_EEPKc">&lt;&lt;</span> <q>". Treating as RGB8"</q>;</td></tr>
+<tr><th id="339">339</th><td>            <b>return</b> <a class="macro" href="../../include/GLES3/gl32.h.html#687" title="0x8051" data-ref="_M/GL_RGB8">GL_RGB8</a>;</td></tr>
+<tr><th id="340">340</th><td>    }</td></tr>
+<tr><th id="341">341</th><td>}</td></tr>
+<tr><th id="342">342</th><td></td></tr>
+<tr><th id="343">343</th><td><em>int</em> <dfn class="decl def fn" id="_ZN5angle7android35GLInternalFormatToNativePixelFormatEj" title='angle::android::GLInternalFormatToNativePixelFormat' data-ref="_ZN5angle7android35GLInternalFormatToNativePixelFormatEj" data-ref-filename="_ZN5angle7android35GLInternalFormatToNativePixelFormatEj">GLInternalFormatToNativePixelFormat</dfn>(<a class="typedef" href="../../include/GLES/gl.h.html#GLenum" title='GLenum' data-type='unsigned int' data-ref="GLenum" data-ref-filename="GLenum">GLenum</a> <dfn class="local col5 decl" id="35internalFormat" title='internalFormat' data-type='GLenum' data-ref="35internalFormat" data-ref-filename="35internalFormat">internalFormat</dfn>)</td></tr>
+<tr><th id="344">344</th><td>{</td></tr>
+<tr><th id="345">345</th><td>    <b>switch</b> (<a class="local col5 ref" href="#35internalFormat" title='internalFormat' data-ref="35internalFormat" data-ref-filename="35internalFormat">internalFormat</a>)</td></tr>
+<tr><th id="346">346</th><td>    {</td></tr>
+<tr><th id="347">347</th><td>        <b>case</b> <a class="macro" href="../../include/GLES3/gl32.h.html#688" title="0x8058" data-ref="_M/GL_RGBA8">GL_RGBA8</a>:</td></tr>
+<tr><th id="348">348</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM" title='AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM">AHARDWAREBUFFER_FORMAT_R8G8B8A8_UNORM</a>;</td></tr>
+<tr><th id="349">349</th><td>        <b>case</b> <a class="macro" href="../../include/GLES3/gl32.h.html#687" title="0x8051" data-ref="_M/GL_RGB8">GL_RGB8</a>:</td></tr>
+<tr><th id="350">350</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM" title='AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM">AHARDWAREBUFFER_FORMAT_R8G8B8X8_UNORM</a>;</td></tr>
+<tr><th id="351">351</th><td>        <b>case</b> <a class="macro" href="../../include/GLES2/gl2.h.html#354" title="0x8D62" data-ref="_M/GL_RGB565">GL_RGB565</a>:</td></tr>
+<tr><th id="352">352</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM" title='AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM">AHARDWAREBUFFER_FORMAT_R5G6B5_UNORM</a>;</td></tr>
+<tr><th id="353">353</th><td>        <b>case</b> <a class="macro" href="../../include/GLES/glext.h.html#588" title="0x93A1" data-ref="_M/GL_BGRA8_EXT">GL_BGRA8_EXT</a>:</td></tr>
+<tr><th id="354">354</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM" title='AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM">AHARDWAREBUFFER_FORMAT_B8G8R8A8_UNORM</a>;</td></tr>
+<tr><th id="355">355</th><td>        <b>case</b> <a class="macro" href="../../include/GLES2/gl2.h.html#353" title="0x8057" data-ref="_M/GL_RGB5_A1">GL_RGB5_A1</a>:</td></tr>
+<tr><th id="356">356</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM" title='AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM">AHARDWAREBUFFER_FORMAT_B5G5R5A1_UNORM</a>;</td></tr>
+<tr><th id="357">357</th><td>        <b>case</b> <a class="macro" href="../../include/GLES2/gl2.h.html#352" title="0x8056" data-ref="_M/GL_RGBA4">GL_RGBA4</a>:</td></tr>
+<tr><th id="358">358</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM" title='AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM">AHARDWAREBUFFER_FORMAT_B4G4R4A4_UNORM</a>;</td></tr>
+<tr><th id="359">359</th><td>        <b>case</b> <a class="macro" href="../../include/GLES3/gl32.h.html#761" title="0x881A" data-ref="_M/GL_RGBA16F">GL_RGBA16F</a>:</td></tr>
+<tr><th id="360">360</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT" title='AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT' data-ref="AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT" data-ref-filename="AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT">AHARDWAREBUFFER_FORMAT_R16G16B16A16_FLOAT</a>;</td></tr>
+<tr><th id="361">361</th><td>        <b>case</b> <a class="macro" href="../../include/GLES3/gl32.h.html#689" title="0x8059" data-ref="_M/GL_RGB10_A2">GL_RGB10_A2</a>:</td></tr>
+<tr><th id="362">362</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM" title='AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM">AHARDWAREBUFFER_FORMAT_R10G10B10A2_UNORM</a>;</td></tr>
+<tr><th id="363">363</th><td>        <b>case</b> <a class="macro" href="../../include/GLES2/gl2.h.html#373" title="0" data-ref="_M/GL_NONE">GL_NONE</a>:</td></tr>
+<tr><th id="364">364</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_BLOB" title='AHARDWAREBUFFER_FORMAT_BLOB' data-ref="AHARDWAREBUFFER_FORMAT_BLOB" data-ref-filename="AHARDWAREBUFFER_FORMAT_BLOB">AHARDWAREBUFFER_FORMAT_BLOB</a>;</td></tr>
+<tr><th id="365">365</th><td>        <b>case</b> <a class="macro" href="../../include/GLES2/gl2.h.html#355" title="0x81A5" data-ref="_M/GL_DEPTH_COMPONENT16">GL_DEPTH_COMPONENT16</a>:</td></tr>
+<tr><th id="366">366</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_D16_UNORM" title='AHARDWAREBUFFER_FORMAT_D16_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_D16_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_D16_UNORM">AHARDWAREBUFFER_FORMAT_D16_UNORM</a>;</td></tr>
+<tr><th id="367">367</th><td>        <b>case</b> <a class="macro" href="../../include/GLES3/gl32.h.html#705" title="0x81A6" data-ref="_M/GL_DEPTH_COMPONENT24">GL_DEPTH_COMPONENT24</a>:</td></tr>
+<tr><th id="368">368</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_D24_UNORM" title='AHARDWAREBUFFER_FORMAT_D24_UNORM' data-ref="AHARDWAREBUFFER_FORMAT_D24_UNORM" data-ref-filename="AHARDWAREBUFFER_FORMAT_D24_UNORM">AHARDWAREBUFFER_FORMAT_D24_UNORM</a>;</td></tr>
+<tr><th id="369">369</th><td>        <b>case</b> <a class="macro" href="../../include/GLES3/gl32.h.html#836" title="0x88F0" data-ref="_M/GL_DEPTH24_STENCIL8">GL_DEPTH24_STENCIL8</a>:</td></tr>
+<tr><th id="370">370</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT" title='AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT' data-ref="AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT" data-ref-filename="AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT">AHARDWAREBUFFER_FORMAT_D24_UNORM_S8_UINT</a>;</td></tr>
+<tr><th id="371">371</th><td>        <b>case</b> <a class="macro" href="../../include/GLES3/gl32.h.html#820" title="0x8CAC" data-ref="_M/GL_DEPTH_COMPONENT32F">GL_DEPTH_COMPONENT32F</a>:</td></tr>
+<tr><th id="372">372</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_D32_FLOAT" title='AHARDWAREBUFFER_FORMAT_D32_FLOAT' data-ref="AHARDWAREBUFFER_FORMAT_D32_FLOAT" data-ref-filename="AHARDWAREBUFFER_FORMAT_D32_FLOAT">AHARDWAREBUFFER_FORMAT_D32_FLOAT</a>;</td></tr>
+<tr><th id="373">373</th><td>        <b>case</b> <a class="macro" href="../../include/GLES3/gl32.h.html#821" title="0x8CAD" data-ref="_M/GL_DEPTH32F_STENCIL8">GL_DEPTH32F_STENCIL8</a>:</td></tr>
+<tr><th id="374">374</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT" title='AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT' data-ref="AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT" data-ref-filename="AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT">AHARDWAREBUFFER_FORMAT_D32_FLOAT_S8_UINT</a>;</td></tr>
+<tr><th id="375">375</th><td>        <b>case</b> <a class="macro" href="../../include/GLES2/gl2.h.html#356" title="0x8D48" data-ref="_M/GL_STENCIL_INDEX8">GL_STENCIL_INDEX8</a>:</td></tr>
+<tr><th id="376">376</th><td>            <b>return</b> <a class="enum" href="#AHARDWAREBUFFER_FORMAT_S8_UINT" title='AHARDWAREBUFFER_FORMAT_S8_UINT' data-ref="AHARDWAREBUFFER_FORMAT_S8_UINT" data-ref-filename="AHARDWAREBUFFER_FORMAT_S8_UINT">AHARDWAREBUFFER_FORMAT_S8_UINT</a>;</td></tr>
+<tr><th id="377">377</th><td>        <b>default</b>:</td></tr>
+<tr><th id="378">378</th><td>            <a class="macro" href="debug.h.html#252" title="!((::gl::priv::ShouldCreatePlatformLogMessage(::gl::LOG_WARN))) ? static_cast&lt;void&gt;(0) : ::gl::priv::LogMessageVoidify() &amp; (::gl::LogMessage(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/ANGLE/src/common/android_util.cpp&quot;, __FUNCTION__, 378, ::gl::LOG_WARN).stream())" data-ref="_M/WARN">WARN</a>() <span class='ref fn' title='std::__1::operator&lt;&lt;' data-ref="_ZNSt3__1lsERNS_13basic_ostreamIcT_EEPKc" data-ref-filename="_ZNSt3__1lsERNS_13basic_ostreamIcT_EEPKc">&lt;&lt;</span> <q>"Unknown internalFormat: "</q> <span class='ref fn' title='std::__1::basic_ostream::operator&lt;&lt;' data-ref="_ZNSt3__113basic_ostreamlsEj" data-ref-filename="_ZNSt3__113basic_ostreamlsEj">&lt;&lt;</span> <a class="local col5 ref" href="#35internalFormat" title='internalFormat' data-ref="35internalFormat" data-ref-filename="35internalFormat">internalFormat</a> <span class='ref fn' title='std::__1::operator&lt;&lt;' data-ref="_ZNSt3__1lsERNS_13basic_ostreamIcT_EEPKc" data-ref-filename="_ZNSt3__1lsERNS_13basic_ostreamIcT_EEPKc">&lt;&lt;</span> <q>". Treating as 0"</q>;</td></tr>
+<tr><th id="379">379</th><td>            <b>return</b> <var>0</var>;</td></tr>
+<tr><th id="380">380</th><td>    }</td></tr>
+<tr><th id="381">381</th><td>}</td></tr>
+<tr><th id="382">382</th><td></td></tr>
+<tr><th id="383">383</th><td><a class="type" href="../../include/EGL/eglext.h.html#AHardwareBuffer" title='AHardwareBuffer' data-ref="AHardwareBuffer" data-ref-filename="AHardwareBuffer">AHardwareBuffer</a> *<dfn class="decl def fn" id="_ZN5angle7android36ANativeWindowBufferToAHardwareBufferEP19ANativeWindowBuffer" title='angle::android::ANativeWindowBufferToAHardwareBuffer' data-ref="_ZN5angle7android36ANativeWindowBufferToAHardwareBufferEP19ANativeWindowBuffer" data-ref-filename="_ZN5angle7android36ANativeWindowBufferToAHardwareBufferEP19ANativeWindowBuffer">ANativeWindowBufferToAHardwareBuffer</dfn>(<a class="type" href="#ANativeWindowBuffer" title='ANativeWindowBuffer' data-ref="ANativeWindowBuffer" data-ref-filename="ANativeWindowBuffer">ANativeWindowBuffer</a> *<dfn class="local col6 decl" id="36windowBuffer" title='windowBuffer' data-type='ANativeWindowBuffer *' data-ref="36windowBuffer" data-ref-filename="36windowBuffer">windowBuffer</dfn>)</td></tr>
+<tr><th id="384">384</th><td>{</td></tr>
+<tr><th id="385">385</th><td>    <b>return</b> <a class="tu ref fn" href="#_ZN12_GLOBAL__N_113offsetPointerEPT0_i" title='(anonymous namespace)::offsetPointer' data-use='c' data-ref="_ZN12_GLOBAL__N_113offsetPointerEPT0_i" data-ref-filename="_ZN12_GLOBAL__N_113offsetPointerEPT0_i">offsetPointer</a>&lt;<a class="type" href="../../include/EGL/eglext.h.html#AHardwareBuffer" title='AHardwareBuffer' data-ref="AHardwareBuffer" data-ref-filename="AHardwareBuffer">AHardwareBuffer</a>&gt;(<a class="local col6 ref" href="#36windowBuffer" title='windowBuffer' data-ref="36windowBuffer" data-ref-filename="36windowBuffer">windowBuffer</a>,</td></tr>
+<tr><th id="386">386</th><td>                                          -<a class="tu ref" href="#(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset" title='(anonymous namespace)::kAHardwareBufferToANativeWindowBufferOffset' data-use='r' data-ref="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset" data-ref-filename="(anonymousnamespace)..kAHardwareBufferToANativeWindowBufferOffset">kAHardwareBufferToANativeWindowBufferOffset</a>);</td></tr>
+<tr><th id="387">387</th><td>}</td></tr>
+<tr><th id="388">388</th><td></td></tr>
+<tr><th id="389">389</th><td><a class="typedef" href="../../include/EGL/egl.h.html#EGLClientBuffer" title='EGLClientBuffer' data-type='void *' data-ref="EGLClientBuffer" data-ref-filename="EGLClientBuffer">EGLClientBuffer</a> <dfn class="decl def fn" id="_ZN5angle7android29AHardwareBufferToClientBufferEPK15AHardwareBuffer" title='angle::android::AHardwareBufferToClientBuffer' data-ref="_ZN5angle7android29AHardwareBufferToClientBufferEPK15AHardwareBuffer" data-ref-filename="_ZN5angle7android29AHardwareBufferToClientBufferEPK15AHardwareBuffer">AHardwareBufferToClientBuffer</dfn>(<em>const</em> <a class="type" href="../../include/EGL/eglext.h.html#AHardwareBuffer" title='AHardwareBuffer' data-ref="AHardwareBuffer" data-ref-filename="AHardwareBuffer">AHardwareBuffer</a> *<dfn class="local col7 decl" id="37hardwareBuffer" title='hardwareBuffer' data-type='const AHardwareBuffer *' data-ref="37hardwareBuffer" data-ref-filename="37hardwareBuffer">hardwareBuffer</dfn>)</td></tr>
+<tr><th id="390">390</th><td>{</td></tr>
+<tr><th id="391">391</th><td>    <b>return</b> <a class="tu ref fn" href="#_ZN12_GLOBAL__N_113offsetPointerEPT0_i" title='(anonymous namespace)::offsetPointer' data-use='c' data-ref="_ZN12_GLOBAL__N_113offsetPointerEPT0_i" data-ref-filename="_ZN12_GLOBAL__N_113offsetPointerEPT0_i">offsetPointer</a>&lt;<a class="typedef" href="../../include/EGL/egl.h.html#EGLClientBuffer" title='EGLClientBuffer' data-type='void *' data-ref="EGLClientBuffer" data-ref-filename="EGLClientBuffer">EGLClientBuffer</a>&gt;(<a class="local col7 ref" href="#37hardwareBuffer" title='hardwareBuffer' data-ref="37hardwareBuffer" data-ref-filename="37hardwareBuffer">hardwareBuffer</a>,</td></tr>
+<tr><th id="392">392</th><td>                                          <a class="tu ref" href="#(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset" title='(anonymous namespace)::kAHardwareBufferToANativeWindowBufferOffset' data-use='r' data-ref="(anonymousnamespace)::kAHardwareBufferToANativeWindowBufferOffset" data-ref-filename="(anonymousnamespace)..kAHardwareBufferToANativeWindowBufferOffset">kAHardwareBufferToANativeWindowBufferOffset</a>);</td></tr>
+<tr><th id="393">393</th><td>}</td></tr>
+<tr><th id="394">394</th><td></td></tr>
+<tr><th id="395">395</th><td>}  <i>// namespace android</i></td></tr>
+<tr><th id="396">396</th><td>}  <i>// namespace angle</i></td></tr>
+<tr><th id="397">397</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

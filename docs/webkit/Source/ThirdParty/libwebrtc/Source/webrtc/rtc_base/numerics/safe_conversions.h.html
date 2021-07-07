@@ -1,0 +1,92 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>safe_conversions.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/numerics/safe_conversions.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/numerics/safe_conversions.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>libwebrtc</a>/<a href='../../..'>Source</a>/<a href='../..'>webrtc</a>/<a href='..'>rtc_base</a>/<a href='./'>numerics</a>/<a href='safe_conversions.h.html'>safe_conversions.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright 2014 The WebRTC Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td><i></i></td></tr>
+<tr><th id="11">11</th><td><i>// Borrowed from Chromium's src/base/numerics/safe_conversions.h.</i></td></tr>
+<tr><th id="12">12</th><td></td></tr>
+<tr><th id="13">13</th><td><u>#<span data-ppcond="13">ifndef</span> <span class="macro" data-ref="_M/RTC_BASE_NUMERICS_SAFE_CONVERSIONS_H_">RTC_BASE_NUMERICS_SAFE_CONVERSIONS_H_</span></u></td></tr>
+<tr><th id="14">14</th><td><u>#define <dfn class="macro" id="_M/RTC_BASE_NUMERICS_SAFE_CONVERSIONS_H_" data-ref="_M/RTC_BASE_NUMERICS_SAFE_CONVERSIONS_H_">RTC_BASE_NUMERICS_SAFE_CONVERSIONS_H_</dfn></u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#include &lt;limits&gt;</u></td></tr>
+<tr><th id="17">17</th><td></td></tr>
+<tr><th id="18">18</th><td><u>#include <a href="../checks.h.html">"rtc_base/checks.h"</a></u></td></tr>
+<tr><th id="19">19</th><td><u>#include <a href="safe_conversions_impl.h.html">"rtc_base/numerics/safe_conversions_impl.h"</a></u></td></tr>
+<tr><th id="20">20</th><td></td></tr>
+<tr><th id="21">21</th><td><b>namespace</b> <span class="namespace">rtc</span> {</td></tr>
+<tr><th id="22">22</th><td></td></tr>
+<tr><th id="23">23</th><td><i>// Convenience function that returns true if the supplied value is in range</i></td></tr>
+<tr><th id="24">24</th><td><i>// for the destination type.</i></td></tr>
+<tr><th id="25">25</th><td><b>template</b> &lt;<b>typename</b> Dst, <b>typename</b> Src&gt;</td></tr>
+<tr><th id="26">26</th><td><b>inline</b> <b>constexpr</b> <em>bool</em> <dfn class="decl def fn" id="_ZN3rtc28IsValueInRangeForNumericTypeET0_" title='rtc::IsValueInRangeForNumericType' data-ref="_ZN3rtc28IsValueInRangeForNumericTypeET0_" data-ref-filename="_ZN3rtc28IsValueInRangeForNumericTypeET0_">IsValueInRangeForNumericType</dfn>(Src <dfn class="local col1 decl" id="71value" title='value' data-type='Src' data-ref="71value" data-ref-filename="71value">value</dfn>) {</td></tr>
+<tr><th id="27">27</th><td>  <b>return</b> <span class="namespace">internal::</span>RangeCheck&lt;Dst&gt;(<a class="local col1 ref" href="#71value" title='value' data-ref="71value" data-ref-filename="71value">value</a>) == <span class="namespace">internal::</span><a class="enum" href="safe_conversions_impl.h.html#rtc::internal::TYPE_VALID" title='rtc::internal::TYPE_VALID' data-ref="rtc::internal::TYPE_VALID" data-ref-filename="rtc..internal..TYPE_VALID">TYPE_VALID</a>;</td></tr>
+<tr><th id="28">28</th><td>}</td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><i>// checked_cast&lt;&gt; and dchecked_cast&lt;&gt; are analogous to static_cast&lt;&gt; for</i></td></tr>
+<tr><th id="31">31</th><td><i>// numeric types, except that they [D]CHECK that the specified numeric</i></td></tr>
+<tr><th id="32">32</th><td><i>// conversion will not overflow or underflow. NaN source will always trigger</i></td></tr>
+<tr><th id="33">33</th><td><i>// the [D]CHECK.</i></td></tr>
+<tr><th id="34">34</th><td><b>template</b> &lt;<b>typename</b> Dst, <b>typename</b> Src&gt;</td></tr>
+<tr><th id="35">35</th><td><b>inline</b> <b>constexpr</b> Dst <dfn class="decl def fn" id="_ZN3rtc12checked_castET0_" title='rtc::checked_cast' data-ref="_ZN3rtc12checked_castET0_" data-ref-filename="_ZN3rtc12checked_castET0_">checked_cast</dfn>(Src <dfn class="local col2 decl" id="72value" title='value' data-type='Src' data-ref="72value" data-ref-filename="72value">value</dfn>) {</td></tr>
+<tr><th id="36">36</th><td>  <a class="macro" href="../checks.h.html#386" title="(IsValueInRangeForNumericType&lt;Dst&gt;(value)) ? static_cast&lt;void&gt;(0) : ::rtc::webrtc_checks_impl::FatalLogCall&lt;false&gt;( &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/numerics/safe_conversions.h&quot;, 36, &quot;IsValueInRangeForNumericType&lt;Dst&gt;(value)&quot;) &amp; ::rtc::webrtc_checks_impl::LogStreamer&lt;&gt;()" data-ref="_M/RTC_CHECK">RTC_CHECK</a>(IsValueInRangeForNumericType&lt;Dst&gt;(<a class="local col2 ref" href="#72value" title='value' data-ref="72value" data-ref-filename="72value">value</a>));</td></tr>
+<tr><th id="37">37</th><td>  <b>return</b> <b>static_cast</b>&lt;Dst&gt;(<a class="local col2 ref" href="#72value" title='value' data-ref="72value" data-ref-filename="72value">value</a>);</td></tr>
+<tr><th id="38">38</th><td>}</td></tr>
+<tr><th id="39">39</th><td><b>template</b> &lt;<b>typename</b> Dst, <b>typename</b> Src&gt;</td></tr>
+<tr><th id="40">40</th><td><b>inline</b> <b>constexpr</b> Dst <dfn class="decl def fn" id="_ZN3rtc13dchecked_castET0_" title='rtc::dchecked_cast' data-ref="_ZN3rtc13dchecked_castET0_" data-ref-filename="_ZN3rtc13dchecked_castET0_">dchecked_cast</dfn>(Src <dfn class="local col3 decl" id="73value" title='value' data-type='Src' data-ref="73value" data-ref-filename="73value">value</dfn>) {</td></tr>
+<tr><th id="41">41</th><td>  <a class="macro" href="../checks.h.html#429" title="(IsValueInRangeForNumericType&lt;Dst&gt;(value)) ? static_cast&lt;void&gt;(0) : ::rtc::webrtc_checks_impl::FatalLogCall&lt;false&gt;( &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/numerics/safe_conversions.h&quot;, 41, &quot;IsValueInRangeForNumericType&lt;Dst&gt;(value)&quot;) &amp; ::rtc::webrtc_checks_impl::LogStreamer&lt;&gt;()" data-ref="_M/RTC_DCHECK">RTC_DCHECK</a>(IsValueInRangeForNumericType&lt;Dst&gt;(<a class="local col3 ref" href="#73value" title='value' data-ref="73value" data-ref-filename="73value">value</a>));</td></tr>
+<tr><th id="42">42</th><td>  <b>return</b> <b>static_cast</b>&lt;Dst&gt;(<a class="local col3 ref" href="#73value" title='value' data-ref="73value" data-ref-filename="73value">value</a>);</td></tr>
+<tr><th id="43">43</th><td>}</td></tr>
+<tr><th id="44">44</th><td></td></tr>
+<tr><th id="45">45</th><td><i>// saturated_cast&lt;&gt; is analogous to static_cast&lt;&gt; for numeric types, except</i></td></tr>
+<tr><th id="46">46</th><td><i>// that the specified numeric conversion will saturate rather than overflow or</i></td></tr>
+<tr><th id="47">47</th><td><i>// underflow. NaN assignment to an integral will trigger a RTC_CHECK condition.</i></td></tr>
+<tr><th id="48">48</th><td><b>template</b> &lt;<b>typename</b> Dst, <b>typename</b> Src&gt;</td></tr>
+<tr><th id="49">49</th><td><b>inline</b> <b>constexpr</b> Dst <dfn class="decl def fn" id="_ZN3rtc14saturated_castET0_" title='rtc::saturated_cast' data-ref="_ZN3rtc14saturated_castET0_" data-ref-filename="_ZN3rtc14saturated_castET0_">saturated_cast</dfn>(Src <dfn class="local col4 decl" id="74value" title='value' data-type='Src' data-ref="74value" data-ref-filename="74value">value</dfn>) {</td></tr>
+<tr><th id="50">50</th><td>  <i>// Optimization for floating point values, which already saturate.</i></td></tr>
+<tr><th id="51">51</th><td>  <b>if</b> (<span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;Dst&gt;::is_iec559)</td></tr>
+<tr><th id="52">52</th><td>    <b>return</b> <b>static_cast</b>&lt;Dst&gt;(<a class="local col4 ref" href="#74value" title='value' data-ref="74value" data-ref-filename="74value">value</a>);</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td>  <b>switch</b> (<span class="namespace">internal::</span>RangeCheck&lt;Dst&gt;(<a class="local col4 ref" href="#74value" title='value' data-ref="74value" data-ref-filename="74value">value</a>)) {</td></tr>
+<tr><th id="55">55</th><td>    <b>case</b> <span class="namespace">internal::</span><a class="enum" href="safe_conversions_impl.h.html#rtc::internal::TYPE_VALID" title='rtc::internal::TYPE_VALID' data-ref="rtc::internal::TYPE_VALID" data-ref-filename="rtc..internal..TYPE_VALID">TYPE_VALID</a>:</td></tr>
+<tr><th id="56">56</th><td>      <b>return</b> <b>static_cast</b>&lt;Dst&gt;(<a class="local col4 ref" href="#74value" title='value' data-ref="74value" data-ref-filename="74value">value</a>);</td></tr>
+<tr><th id="57">57</th><td></td></tr>
+<tr><th id="58">58</th><td>    <b>case</b> <span class="namespace">internal::</span><a class="enum" href="safe_conversions_impl.h.html#rtc::internal::TYPE_UNDERFLOW" title='rtc::internal::TYPE_UNDERFLOW' data-ref="rtc::internal::TYPE_UNDERFLOW" data-ref-filename="rtc..internal..TYPE_UNDERFLOW">TYPE_UNDERFLOW</a>:</td></tr>
+<tr><th id="59">59</th><td>      <b>return</b> <span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;Dst&gt;::min();</td></tr>
+<tr><th id="60">60</th><td></td></tr>
+<tr><th id="61">61</th><td>    <b>case</b> <span class="namespace">internal::</span><a class="enum" href="safe_conversions_impl.h.html#rtc::internal::TYPE_OVERFLOW" title='rtc::internal::TYPE_OVERFLOW' data-ref="rtc::internal::TYPE_OVERFLOW" data-ref-filename="rtc..internal..TYPE_OVERFLOW">TYPE_OVERFLOW</a>:</td></tr>
+<tr><th id="62">62</th><td>      <b>return</b> <span class="namespace">std::</span><span class='type' title='std::__1::numeric_limits' data-ref="std::__1::numeric_limits" data-ref-filename="std..__1..numeric_limits">numeric_limits</span>&lt;Dst&gt;::max();</td></tr>
+<tr><th id="63">63</th><td></td></tr>
+<tr><th id="64">64</th><td>    <i>// Should fail only on attempting to assign NaN to a saturated integer.</i></td></tr>
+<tr><th id="65">65</th><td>    <b>case</b> <span class="namespace">internal::</span><a class="enum" href="safe_conversions_impl.h.html#rtc::internal::TYPE_INVALID" title='rtc::internal::TYPE_INVALID' data-ref="rtc::internal::TYPE_INVALID" data-ref-filename="rtc..internal..TYPE_INVALID">TYPE_INVALID</a>:</td></tr>
+<tr><th id="66">66</th><td>      <a class="macro" href="../checks.h.html#451" title="do { ::rtc::webrtc_checks_impl::UnreachableCodeReached( &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/numerics/safe_conversions.h&quot;, 66); } while (0)" data-ref="_M/RTC_CHECK_NOTREACHED">RTC_CHECK_NOTREACHED</a>();</td></tr>
+<tr><th id="67">67</th><td>  }</td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td>  <a class="macro" href="../checks.h.html#451" title="do { ::rtc::webrtc_checks_impl::UnreachableCodeReached( &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/ThirdParty/libwebrtc/Source/webrtc/rtc_base/numerics/safe_conversions.h&quot;, 69); } while (0)" data-ref="_M/RTC_CHECK_NOTREACHED">RTC_CHECK_NOTREACHED</a>();</td></tr>
+<tr><th id="70">70</th><td>}</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td>}  <i>// namespace rtc</i></td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td><u>#<span data-ppcond="13">endif</span>  // RTC_BASE_NUMERICS_SAFE_CONVERSIONS_H_</u></td></tr>
+<tr><th id="75">75</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../api/audio/audio_frame.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/api/audio/audio_frame.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

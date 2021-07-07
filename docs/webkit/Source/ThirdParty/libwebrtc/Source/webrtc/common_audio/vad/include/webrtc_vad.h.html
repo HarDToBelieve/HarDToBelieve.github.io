@@ -1,0 +1,105 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>webrtc_vad.h source code [webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/vad/include/webrtc_vad.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/webrtc/common_audio/vad/include/webrtc_vad.h'; var root_path = '../../../../../../../../..'; var data_path = '../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../..'>webkit</a>/<a href='../../../../../../..'>Source</a>/<a href='../../../../../..'>ThirdParty</a>/<a href='../../../../..'>libwebrtc</a>/<a href='../../../..'>Source</a>/<a href='../../..'>webrtc</a>/<a href='../..'>common_audio</a>/<a href='..'>vad</a>/<a href='./'>include</a>/<a href='webrtc_vad.h.html'>webrtc_vad.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> *  Copyright (c) 2012 The WebRTC project authors. All Rights Reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> *  Use of this source code is governed by a BSD-style license</i></td></tr>
+<tr><th id="5">5</th><td><i> *  that can be found in the LICENSE file in the root of the source</i></td></tr>
+<tr><th id="6">6</th><td><i> *  tree. An additional intellectual property rights grant can be found</i></td></tr>
+<tr><th id="7">7</th><td><i> *  in the file PATENTS.  All contributing project authors may</i></td></tr>
+<tr><th id="8">8</th><td><i> *  be found in the AUTHORS file in the root of the source tree.</i></td></tr>
+<tr><th id="9">9</th><td><i> */</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><i>/*</i></td></tr>
+<tr><th id="12">12</th><td><i> * This header file includes the VAD API calls. Specific function calls are</i></td></tr>
+<tr><th id="13">13</th><td><i> * given below.</i></td></tr>
+<tr><th id="14">14</th><td><i> */</i></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><u>#<span data-ppcond="16">ifndef</span> <span class="macro" data-ref="_M/COMMON_AUDIO_VAD_INCLUDE_WEBRTC_VAD_H_">COMMON_AUDIO_VAD_INCLUDE_WEBRTC_VAD_H_</span>  // NOLINT</u></td></tr>
+<tr><th id="17">17</th><td><u>#define <dfn class="macro" id="_M/COMMON_AUDIO_VAD_INCLUDE_WEBRTC_VAD_H_" data-ref="_M/COMMON_AUDIO_VAD_INCLUDE_WEBRTC_VAD_H_">COMMON_AUDIO_VAD_INCLUDE_WEBRTC_VAD_H_</dfn></u></td></tr>
+<tr><th id="18">18</th><td></td></tr>
+<tr><th id="19">19</th><td><u>#include &lt;stddef.h&gt;</u></td></tr>
+<tr><th id="20">20</th><td><u>#include &lt;stdint.h&gt;</u></td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><b>typedef</b> <b>struct</b> <dfn class="type" id="WebRtcVadInst" title='WebRtcVadInst' data-ref="WebRtcVadInst" data-ref-filename="WebRtcVadInst"><a class="type" href="#WebRtcVadInst" title='WebRtcVadInst' data-ref="WebRtcVadInst" data-ref-filename="WebRtcVadInst">WebRtcVadInst</a></dfn> <dfn class="typedef" id="VadInst" title='VadInst' data-type='struct WebRtcVadInst' data-ref="VadInst" data-ref-filename="VadInst">VadInst</dfn>;</td></tr>
+<tr><th id="23">23</th><td></td></tr>
+<tr><th id="24">24</th><td><u>#<span data-ppcond="24">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="25">25</th><td><b>extern</b> <q>"C"</q> {</td></tr>
+<tr><th id="26">26</th><td><u>#<span data-ppcond="24">endif</span></u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><i>// Creates an instance to the VAD structure.</i></td></tr>
+<tr><th id="29">29</th><td><a class="typedef" href="#VadInst" title='VadInst' data-type='struct WebRtcVadInst' data-ref="VadInst" data-ref-filename="VadInst">VadInst</a>* <dfn class="decl fn" id="WebRtcVad_Create" title='WebRtcVad_Create' data-ref="WebRtcVad_Create" data-ref-filename="WebRtcVad_Create">WebRtcVad_Create</dfn>(<em>void</em>);</td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><i>// Frees the dynamic memory of a specified VAD instance.</i></td></tr>
+<tr><th id="32">32</th><td><i>//</i></td></tr>
+<tr><th id="33">33</th><td><i>// - handle [i] : Pointer to VAD instance that should be freed.</i></td></tr>
+<tr><th id="34">34</th><td><em>void</em> <dfn class="decl fn" id="WebRtcVad_Free" title='WebRtcVad_Free' data-ref="WebRtcVad_Free" data-ref-filename="WebRtcVad_Free">WebRtcVad_Free</dfn>(<a class="typedef" href="#VadInst" title='VadInst' data-type='struct WebRtcVadInst' data-ref="VadInst" data-ref-filename="VadInst">VadInst</a>* <dfn class="local col6 decl" id="26handle" title='handle' data-type='VadInst *' data-ref="26handle" data-ref-filename="26handle">handle</dfn>);</td></tr>
+<tr><th id="35">35</th><td></td></tr>
+<tr><th id="36">36</th><td><i>// Initializes a VAD instance.</i></td></tr>
+<tr><th id="37">37</th><td><i>//</i></td></tr>
+<tr><th id="38">38</th><td><i>// - handle [i/o] : Instance that should be initialized.</i></td></tr>
+<tr><th id="39">39</th><td><i>//</i></td></tr>
+<tr><th id="40">40</th><td><i>// returns        : 0 - (OK),</i></td></tr>
+<tr><th id="41">41</th><td><i>//                 -1 - (null pointer or Default mode could not be set).</i></td></tr>
+<tr><th id="42">42</th><td><em>int</em> <dfn class="decl fn" id="WebRtcVad_Init" title='WebRtcVad_Init' data-ref="WebRtcVad_Init" data-ref-filename="WebRtcVad_Init">WebRtcVad_Init</dfn>(<a class="typedef" href="#VadInst" title='VadInst' data-type='struct WebRtcVadInst' data-ref="VadInst" data-ref-filename="VadInst">VadInst</a>* <dfn class="local col7 decl" id="27handle" title='handle' data-type='VadInst *' data-ref="27handle" data-ref-filename="27handle">handle</dfn>);</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><i>// Sets the VAD operating mode. A more aggressive (higher mode) VAD is more</i></td></tr>
+<tr><th id="45">45</th><td><i>// restrictive in reporting speech. Put in other words the probability of being</i></td></tr>
+<tr><th id="46">46</th><td><i>// speech when the VAD returns 1 is increased with increasing mode. As a</i></td></tr>
+<tr><th id="47">47</th><td><i>// consequence also the missed detection rate goes up.</i></td></tr>
+<tr><th id="48">48</th><td><i>//</i></td></tr>
+<tr><th id="49">49</th><td><i>// - handle [i/o] : VAD instance.</i></td></tr>
+<tr><th id="50">50</th><td><i>// - mode   [i]   : Aggressiveness mode (0, 1, 2, or 3).</i></td></tr>
+<tr><th id="51">51</th><td><i>//</i></td></tr>
+<tr><th id="52">52</th><td><i>// returns        : 0 - (OK),</i></td></tr>
+<tr><th id="53">53</th><td><i>//                 -1 - (null pointer, mode could not be set or the VAD instance</i></td></tr>
+<tr><th id="54">54</th><td><i>//                       has not been initialized).</i></td></tr>
+<tr><th id="55">55</th><td><em>int</em> <dfn class="decl fn" id="WebRtcVad_set_mode" title='WebRtcVad_set_mode' data-ref="WebRtcVad_set_mode" data-ref-filename="WebRtcVad_set_mode">WebRtcVad_set_mode</dfn>(<a class="typedef" href="#VadInst" title='VadInst' data-type='struct WebRtcVadInst' data-ref="VadInst" data-ref-filename="VadInst">VadInst</a>* <dfn class="local col8 decl" id="28handle" title='handle' data-type='VadInst *' data-ref="28handle" data-ref-filename="28handle">handle</dfn>, <em>int</em> <dfn class="local col9 decl" id="29mode" title='mode' data-type='int' data-ref="29mode" data-ref-filename="29mode">mode</dfn>);</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td><i>// Calculates a VAD decision for the |audio_frame|. For valid sampling rates</i></td></tr>
+<tr><th id="58">58</th><td><i>// frame lengths, see the description of WebRtcVad_ValidRatesAndFrameLengths().</i></td></tr>
+<tr><th id="59">59</th><td><i>//</i></td></tr>
+<tr><th id="60">60</th><td><i>// - handle       [i/o] : VAD Instance. Needs to be initialized by</i></td></tr>
+<tr><th id="61">61</th><td><i>//                        WebRtcVad_Init() before call.</i></td></tr>
+<tr><th id="62">62</th><td><i>// - fs           [i]   : Sampling frequency (Hz): 8000, 16000, or 32000</i></td></tr>
+<tr><th id="63">63</th><td><i>// - audio_frame  [i]   : Audio frame buffer.</i></td></tr>
+<tr><th id="64">64</th><td><i>// - frame_length [i]   : Length of audio frame buffer in number of samples.</i></td></tr>
+<tr><th id="65">65</th><td><i>//</i></td></tr>
+<tr><th id="66">66</th><td><i>// returns              : 1 - (Active Voice),</i></td></tr>
+<tr><th id="67">67</th><td><i>//                        0 - (Non-active Voice),</i></td></tr>
+<tr><th id="68">68</th><td><i>//                       -1 - (Error)</i></td></tr>
+<tr><th id="69">69</th><td><em>int</em> <dfn class="decl fn" id="WebRtcVad_Process" title='WebRtcVad_Process' data-ref="WebRtcVad_Process" data-ref-filename="WebRtcVad_Process">WebRtcVad_Process</dfn>(<a class="typedef" href="#VadInst" title='VadInst' data-type='struct WebRtcVadInst' data-ref="VadInst" data-ref-filename="VadInst">VadInst</a>* <dfn class="local col0 decl" id="30handle" title='handle' data-type='VadInst *' data-ref="30handle" data-ref-filename="30handle">handle</dfn>,</td></tr>
+<tr><th id="70">70</th><td>                      <em>int</em> <dfn class="local col1 decl" id="31fs" title='fs' data-type='int' data-ref="31fs" data-ref-filename="31fs">fs</dfn>,</td></tr>
+<tr><th id="71">71</th><td>                      <em>const</em> <span class='typedef' title='int16_t' data-type='short' data-ref="int16_t" data-ref-filename="int16_t">int16_t</span>* <dfn class="local col2 decl" id="32audio_frame" title='audio_frame' data-type='const int16_t *' data-ref="32audio_frame" data-ref-filename="32audio_frame">audio_frame</dfn>,</td></tr>
+<tr><th id="72">72</th><td>                      <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col3 decl" id="33frame_length" title='frame_length' data-type='size_t' data-ref="33frame_length" data-ref-filename="33frame_length">frame_length</dfn>);</td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td><i>// Checks for valid combinations of |rate| and |frame_length|. We support 10,</i></td></tr>
+<tr><th id="75">75</th><td><i>// 20 and 30 ms frames and the rates 8000, 16000 and 32000 Hz.</i></td></tr>
+<tr><th id="76">76</th><td><i>//</i></td></tr>
+<tr><th id="77">77</th><td><i>// - rate         [i] : Sampling frequency (Hz).</i></td></tr>
+<tr><th id="78">78</th><td><i>// - frame_length [i] : Speech frame buffer length in number of samples.</i></td></tr>
+<tr><th id="79">79</th><td><i>//</i></td></tr>
+<tr><th id="80">80</th><td><i>// returns            : 0 - (valid combination), -1 - (invalid combination)</i></td></tr>
+<tr><th id="81">81</th><td><em>int</em> <dfn class="decl fn" id="WebRtcVad_ValidRateAndFrameLength" title='WebRtcVad_ValidRateAndFrameLength' data-ref="WebRtcVad_ValidRateAndFrameLength" data-ref-filename="WebRtcVad_ValidRateAndFrameLength">WebRtcVad_ValidRateAndFrameLength</dfn>(<em>int</em> <dfn class="local col4 decl" id="34rate" title='rate' data-type='int' data-ref="34rate" data-ref-filename="34rate">rate</dfn>, <span class='typedef' title='size_t' data-type='__darwin_size_t' data-ref="size_t" data-ref-filename="size_t">size_t</span> <dfn class="local col5 decl" id="35frame_length" title='frame_length' data-type='size_t' data-ref="35frame_length" data-ref-filename="35frame_length">frame_length</dfn>);</td></tr>
+<tr><th id="82">82</th><td></td></tr>
+<tr><th id="83">83</th><td><u>#<span data-ppcond="83">ifdef</span> <span class="macro" data-ref="_M/__cplusplus">__cplusplus</span></u></td></tr>
+<tr><th id="84">84</th><td>}</td></tr>
+<tr><th id="85">85</th><td><u>#<span data-ppcond="83">endif</span></u></td></tr>
+<tr><th id="86">86</th><td></td></tr>
+<tr><th id="87">87</th><td><u>#<span data-ppcond="16">endif</span>  // COMMON_AUDIO_VAD_INCLUDE_WEBRTC_VAD_H_  // NOLINT</u></td></tr>
+<tr><th id="88">88</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../audio/audio_send_stream.cc.html'>webkit/Source/ThirdParty/libwebrtc/Source/webrtc/audio/audio_send_stream.cc</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

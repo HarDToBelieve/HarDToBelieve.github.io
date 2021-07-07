@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>sctp_input.h source code [webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/netinet/sctp_input.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/netinet/sctp_input.h'; var root_path = '../../../../../../../../../..'; var data_path = '../../../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../../../..'>webkit</a>/<a href='../../../../../../../..'>Source</a>/<a href='../../../../../../..'>ThirdParty</a>/<a href='../../../../../..'>libwebrtc</a>/<a href='../../../../..'>Source</a>/<a href='../../../..'>third_party</a>/<a href='../../..'>usrsctp</a>/<a href='../..'>usrsctplib</a>/<a href='..'>usrsctplib</a>/<a href='./'>netinet</a>/<a href='sctp_input.h.html'>sctp_input.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*-</i></td></tr>
+<tr><th id="2">2</th><td><i> * SPDX-License-Identifier: BSD-3-Clause</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Copyright (c) 2001-2007, by Cisco Systems, Inc. All rights reserved.</i></td></tr>
+<tr><th id="5">5</th><td><i> * Copyright (c) 2008-2012, by Randall Stewart. All rights reserved.</i></td></tr>
+<tr><th id="6">6</th><td><i> * Copyright (c) 2008-2012, by Michael Tuexen. All rights reserved.</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="9">9</th><td><i> * modification, are permitted provided that the following conditions are met:</i></td></tr>
+<tr><th id="10">10</th><td><i> *</i></td></tr>
+<tr><th id="11">11</th><td><i> * a) Redistributions of source code must retain the above copyright notice,</i></td></tr>
+<tr><th id="12">12</th><td><i> *    this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="13">13</th><td><i> *</i></td></tr>
+<tr><th id="14">14</th><td><i> * b) Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="15">15</th><td><i> *    notice, this list of conditions and the following disclaimer in</i></td></tr>
+<tr><th id="16">16</th><td><i> *    the documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="17">17</th><td><i> *</i></td></tr>
+<tr><th id="18">18</th><td><i> * c) Neither the name of Cisco Systems, Inc. nor the names of its</i></td></tr>
+<tr><th id="19">19</th><td><i> *    contributors may be used to endorse or promote products derived</i></td></tr>
+<tr><th id="20">20</th><td><i> *    from this software without specific prior written permission.</i></td></tr>
+<tr><th id="21">21</th><td><i> *</i></td></tr>
+<tr><th id="22">22</th><td><i> * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS</i></td></tr>
+<tr><th id="23">23</th><td><i> * "AS IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="24">24</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE</i></td></tr>
+<tr><th id="25">25</th><td><i> * ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE</i></td></tr>
+<tr><th id="26">26</th><td><i> * LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="27">27</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="28">28</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="29">29</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="30">30</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="31">31</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="32">32</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="33">33</th><td><i> */</i></td></tr>
+<tr><th id="34">34</th><td></td></tr>
+<tr><th id="35">35</th><td><u>#<span data-ppcond="35">if</span> defined(<span class="macro" data-ref="_M/__FreeBSD__">__FreeBSD__</span>) &amp;&amp; !defined(<span class="macro" data-ref="_M/__Userspace__">__Userspace__</span>)</u></td></tr>
+<tr><th id="36">36</th><td><u>#include &lt;sys/cdefs.h&gt;</u></td></tr>
+<tr><th id="37">37</th><td>__FBSDID(<q>"$FreeBSD: head/sys/netinet/sctp_input.h 365071 2020-09-01 21:19:14Z mjg $"</q>);</td></tr>
+<tr><th id="38">38</th><td><u>#<span data-ppcond="35">endif</span></u></td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><u>#<span data-ppcond="40">ifndef</span> <span class="macro" data-ref="_M/_NETINET_SCTP_INPUT_H_">_NETINET_SCTP_INPUT_H_</span></u></td></tr>
+<tr><th id="41">41</th><td><u>#define <dfn class="macro" id="_M/_NETINET_SCTP_INPUT_H_" data-ref="_M/_NETINET_SCTP_INPUT_H_">_NETINET_SCTP_INPUT_H_</dfn></u></td></tr>
+<tr><th id="42">42</th><td></td></tr>
+<tr><th id="43">43</th><td><u>#<span data-ppcond="43">if</span> defined(<span class="macro" data-ref="_M/_KERNEL">_KERNEL</span>) || defined(<span class="macro" data-ref="_M/__Userspace__">__Userspace__</span>)</u></td></tr>
+<tr><th id="44">44</th><td><em>void</em></td></tr>
+<tr><th id="45">45</th><td><dfn class="decl fn" id="sctp_common_input_processing" title='sctp_common_input_processing' data-ref="sctp_common_input_processing" data-ref-filename="sctp_common_input_processing">sctp_common_input_processing</dfn>(<b>struct</b> <a class="type" href="../user_mbuf.h.html#mbuf" title='mbuf' data-ref="mbuf" data-ref-filename="mbuf">mbuf</a> **, <em>int</em>, <em>int</em>, <em>int</em>,</td></tr>
+<tr><th id="46">46</th><td>                             <b>struct</b> <span class='type' title='sockaddr' data-ref="sockaddr" data-ref-filename="sockaddr">sockaddr</span> *, <b>struct</b> <span class='type' title='sockaddr' data-ref="sockaddr" data-ref-filename="sockaddr">sockaddr</span> *,</td></tr>
+<tr><th id="47">47</th><td>                             <b>struct</b> <a class="type" href="sctp.h.html#sctphdr" title='sctphdr' data-ref="sctphdr" data-ref-filename="sctphdr">sctphdr</a> *, <b>struct</b> <a class="type" href="sctp.h.html#sctp_chunkhdr" title='sctp_chunkhdr' data-ref="sctp_chunkhdr" data-ref-filename="sctp_chunkhdr">sctp_chunkhdr</a> *,</td></tr>
+<tr><th id="48">48</th><td>                             <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>,</td></tr>
+<tr><th id="49">49</th><td>                             <span class='typedef' title='uint8_t' data-type='unsigned char' data-ref="uint8_t" data-ref-filename="uint8_t">uint8_t</span>,</td></tr>
+<tr><th id="50">50</th><td><u>#<span data-ppcond="50">if</span> defined(<span class="macro" data-ref="_M/__FreeBSD__">__FreeBSD__</span>) &amp;&amp; !defined(<span class="macro" data-ref="_M/__Userspace__">__Userspace__</span>)</u></td></tr>
+<tr><th id="51">51</th><td>                             uint8_t, uint32_t, uint16_t,</td></tr>
+<tr><th id="52">52</th><td><u>#<span data-ppcond="50">endif</span></u></td></tr>
+<tr><th id="53">53</th><td>                             <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span>, <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span>);</td></tr>
+<tr><th id="54">54</th><td></td></tr>
+<tr><th id="55">55</th><td><b>struct</b> <a class="type" href="sctp_header.h.html#sctp_stream_reset_request" title='sctp_stream_reset_request' data-ref="sctp_stream_reset_request" data-ref-filename="sctp_stream_reset_request">sctp_stream_reset_request</a> *</td></tr>
+<tr><th id="56">56</th><td><dfn class="decl fn" id="sctp_find_stream_reset" title='sctp_find_stream_reset' data-ref="sctp_find_stream_reset" data-ref-filename="sctp_find_stream_reset">sctp_find_stream_reset</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *<dfn class="local col1 decl" id="1stcb" title='stcb' data-type='struct sctp_tcb *' data-ref="1stcb" data-ref-filename="1stcb">stcb</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col2 decl" id="2seq" title='seq' data-type='uint32_t' data-ref="2seq" data-ref-filename="2seq">seq</dfn>,</td></tr>
+<tr><th id="57">57</th><td>    <b>struct</b> <a class="type" href="sctp_structs.h.html#sctp_tmit_chunk" title='sctp_tmit_chunk' data-ref="sctp_tmit_chunk" data-ref-filename="sctp_tmit_chunk">sctp_tmit_chunk</a> **<dfn class="local col3 decl" id="3bchk" title='bchk' data-type='struct sctp_tmit_chunk **' data-ref="3bchk" data-ref-filename="3bchk">bchk</dfn>);</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td><em>void</em></td></tr>
+<tr><th id="60">60</th><td><dfn class="decl fn" id="sctp_reset_in_stream" title='sctp_reset_in_stream' data-ref="sctp_reset_in_stream" data-ref-filename="sctp_reset_in_stream">sctp_reset_in_stream</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *<dfn class="local col4 decl" id="4stcb" title='stcb' data-type='struct sctp_tcb *' data-ref="4stcb" data-ref-filename="4stcb">stcb</dfn>, <span class='typedef' title='uint32_t' data-type='unsigned int' data-ref="uint32_t" data-ref-filename="uint32_t">uint32_t</span> <dfn class="local col5 decl" id="5number_entries" title='number_entries' data-type='uint32_t' data-ref="5number_entries" data-ref-filename="5number_entries">number_entries</dfn>, </td></tr>
+<tr><th id="61">61</th><td>                     <span class='typedef' title='uint16_t' data-type='unsigned short' data-ref="uint16_t" data-ref-filename="uint16_t">uint16_t</span> *<dfn class="local col6 decl" id="6list" title='list' data-type='uint16_t *' data-ref="6list" data-ref-filename="6list">list</dfn>);</td></tr>
+<tr><th id="62">62</th><td></td></tr>
+<tr><th id="63">63</th><td><em>int</em> <dfn class="decl fn" id="sctp_is_there_unsent_data" title='sctp_is_there_unsent_data' data-ref="sctp_is_there_unsent_data" data-ref-filename="sctp_is_there_unsent_data">sctp_is_there_unsent_data</dfn>(<b>struct</b> <a class="type" href="sctp_pcb.h.html#sctp_tcb" title='sctp_tcb' data-ref="sctp_tcb" data-ref-filename="sctp_tcb">sctp_tcb</a> *<dfn class="local col7 decl" id="7stcb" title='stcb' data-type='struct sctp_tcb *' data-ref="7stcb" data-ref-filename="7stcb">stcb</dfn>, <em>int</em> <dfn class="local col8 decl" id="8so_locked" title='so_locked' data-type='int' data-ref="8so_locked" data-ref-filename="8so_locked">so_locked</dfn>);</td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td><u>#<span data-ppcond="43">endif</span></u></td></tr>
+<tr><th id="66">66</th><td><u>#<span data-ppcond="40">endif</span></u></td></tr>
+<tr><th id="67">67</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='sctp_cc_functions.c.html'>webkit/Source/ThirdParty/libwebrtc/Source/third_party/usrsctp/usrsctplib/usrsctplib/netinet/sctp_cc_functions.c</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

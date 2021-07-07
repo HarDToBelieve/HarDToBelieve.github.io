@@ -1,0 +1,104 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>RemoteControllableTarget.h source code [webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/RemoteControllableTarget.h] - Woboq Code Browser</title>
+<meta name="woboq:interestingDefinitions" content="Inspector::RemoteControllableTarget "/>
+<link rel="stylesheet" href="../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/RemoteControllableTarget.h'; var root_path = '../../../../../../..'; var data_path = '../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../..'>webkit</a>/<a href='../../../../..'>WebKitBuild</a>/<a href='../../../..'>Debug</a>/<a href='../../..'>JavaScriptCore.framework</a>/<a href='../..'>Versions</a>/<a href='..'>A</a>/<a href='./'>PrivateHeaders</a>/<a href='RemoteControllableTarget.h.html'>RemoteControllableTarget.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2015 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="28">if</span> <a class="macro" href="../../../../usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(REMOTE_INSPECTOR)</u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#include <a href="JSExportMacros.h.html">"JSExportMacros.h"</a></u></td></tr>
+<tr><th id="31">31</th><td><u>#include <a href="../../../../usr/local/include/wtf/TypeCasts.h.html">&lt;wtf/TypeCasts.h&gt;</a></u></td></tr>
+<tr><th id="32">32</th><td><u>#include <a href="../../../../usr/local/include/wtf/text/WTFString.h.html">&lt;wtf/text/WTFString.h&gt;</a></u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+<tr><th id="34">34</th><td><u>#<span data-ppcond="34">if</span> <a class="macro" href="../../../../usr/local/include/wtf/PlatformUse.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/USE">USE</a>(CF)</u></td></tr>
+<tr><th id="35">35</th><td><u>#include &lt;CoreFoundation/CFRunLoop.h&gt;</u></td></tr>
+<tr><th id="36">36</th><td><u>#<span data-ppcond="34">endif</span></u></td></tr>
+<tr><th id="37">37</th><td></td></tr>
+<tr><th id="38">38</th><td><b>namespace</b> <span class="namespace">Inspector</span> {</td></tr>
+<tr><th id="39">39</th><td></td></tr>
+<tr><th id="40">40</th><td><b>class</b> <dfn class="type" id="Inspector::FrontendChannel" title='Inspector::FrontendChannel' data-ref="Inspector::FrontendChannel" data-ref-filename="Inspector..FrontendChannel">FrontendChannel</dfn>;</td></tr>
+<tr><th id="41">41</th><td></td></tr>
+<tr><th id="42">42</th><td><b>using</b> <dfn class="typedef" id="Inspector::TargetID" title='Inspector::TargetID' data-type='unsigned int' data-ref="Inspector::TargetID" data-ref-filename="Inspector..TargetID">TargetID</dfn> = <em>unsigned</em>;</td></tr>
+<tr><th id="43">43</th><td></td></tr>
+<tr><th id="44">44</th><td><b>class</b> <a class="macro" href="JSExportMacros.h.html#39" title="__attribute__((visibility(&quot;default&quot;)))" data-ref="_M/JS_EXPORT_PRIVATE">JS_EXPORT_PRIVATE</a> <dfn class="type def" id="Inspector::RemoteControllableTarget" title='Inspector::RemoteControllableTarget' data-ref="Inspector::RemoteControllableTarget" data-ref-filename="Inspector..RemoteControllableTarget">RemoteControllableTarget</dfn> {</td></tr>
+<tr><th id="45">45</th><td><b>public</b>:</td></tr>
+<tr><th id="46">46</th><td>    <b>virtual</b> <dfn class="virtual decl fn" id="_ZN9Inspector24RemoteControllableTargetD1Ev" title='Inspector::RemoteControllableTarget::~RemoteControllableTarget' data-ref="_ZN9Inspector24RemoteControllableTargetD1Ev" data-ref-filename="_ZN9Inspector24RemoteControllableTargetD1Ev">~RemoteControllableTarget</dfn>();</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN9Inspector24RemoteControllableTarget4initEv" title='Inspector::RemoteControllableTarget::init' data-ref="_ZN9Inspector24RemoteControllableTarget4initEv" data-ref-filename="_ZN9Inspector24RemoteControllableTarget4initEv">init</dfn>();</td></tr>
+<tr><th id="49">49</th><td>    <em>void</em> <dfn class="decl fn" id="_ZN9Inspector24RemoteControllableTarget6updateEv" title='Inspector::RemoteControllableTarget::update' data-ref="_ZN9Inspector24RemoteControllableTarget6updateEv" data-ref-filename="_ZN9Inspector24RemoteControllableTarget6updateEv">update</dfn>();</td></tr>
+<tr><th id="50">50</th><td></td></tr>
+<tr><th id="51">51</th><td>    <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN9Inspector24RemoteControllableTarget7connectERNS_15FrontendChannelEbb" title='Inspector::RemoteControllableTarget::connect' data-ref="_ZN9Inspector24RemoteControllableTarget7connectERNS_15FrontendChannelEbb" data-ref-filename="_ZN9Inspector24RemoteControllableTarget7connectERNS_15FrontendChannelEbb">connect</dfn>(<a class="type" href="#Inspector::FrontendChannel" title='Inspector::FrontendChannel' data-ref="Inspector::FrontendChannel" data-ref-filename="Inspector..FrontendChannel">FrontendChannel</a>&amp;, <em>bool</em> <dfn class="local col8 decl" id="68isAutomaticConnection" title='isAutomaticConnection' data-type='bool' data-ref="68isAutomaticConnection" data-ref-filename="68isAutomaticConnection">isAutomaticConnection</dfn> = <b>false</b>, <em>bool</em> <dfn class="local col9 decl" id="69immediatelyPause" title='immediatelyPause' data-type='bool' data-ref="69immediatelyPause" data-ref-filename="69immediatelyPause">immediatelyPause</dfn> = <b>false</b>) = <var>0</var>;</td></tr>
+<tr><th id="52">52</th><td>    <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN9Inspector24RemoteControllableTarget10disconnectERNS_15FrontendChannelE" title='Inspector::RemoteControllableTarget::disconnect' data-ref="_ZN9Inspector24RemoteControllableTarget10disconnectERNS_15FrontendChannelE" data-ref-filename="_ZN9Inspector24RemoteControllableTarget10disconnectERNS_15FrontendChannelE">disconnect</dfn>(<a class="type" href="#Inspector::FrontendChannel" title='Inspector::FrontendChannel' data-ref="Inspector::FrontendChannel" data-ref-filename="Inspector..FrontendChannel">FrontendChannel</a>&amp;) = <var>0</var>;</td></tr>
+<tr><th id="53">53</th><td></td></tr>
+<tr><th id="54">54</th><td>    <a class="typedef" href="#Inspector::TargetID" title='Inspector::TargetID' data-type='unsigned int' data-ref="Inspector::TargetID" data-ref-filename="Inspector..TargetID">TargetID</a> <dfn class="decl def fn" id="_ZNK9Inspector24RemoteControllableTarget16targetIdentifierEv" title='Inspector::RemoteControllableTarget::targetIdentifier' data-ref="_ZNK9Inspector24RemoteControllableTarget16targetIdentifierEv" data-ref-filename="_ZNK9Inspector24RemoteControllableTarget16targetIdentifierEv">targetIdentifier</dfn>() <em>const</em> { <b>return</b> <a class="member field" href="#Inspector::RemoteControllableTarget::m_identifier" title='Inspector::RemoteControllableTarget::m_identifier' data-ref="Inspector::RemoteControllableTarget::m_identifier" data-ref-filename="Inspector..RemoteControllableTarget..m_identifier">m_identifier</a>; }</td></tr>
+<tr><th id="55">55</th><td>    <em>void</em> <dfn class="decl def fn" id="_ZN9Inspector24RemoteControllableTarget19setTargetIdentifierEj" title='Inspector::RemoteControllableTarget::setTargetIdentifier' data-ref="_ZN9Inspector24RemoteControllableTarget19setTargetIdentifierEj" data-ref-filename="_ZN9Inspector24RemoteControllableTarget19setTargetIdentifierEj">setTargetIdentifier</dfn>(<a class="typedef" href="#Inspector::TargetID" title='Inspector::TargetID' data-type='unsigned int' data-ref="Inspector::TargetID" data-ref-filename="Inspector..TargetID">TargetID</a> <dfn class="local col0 decl" id="70identifier" title='identifier' data-type='Inspector::TargetID' data-ref="70identifier" data-ref-filename="70identifier">identifier</dfn>) { <a class="member field" href="#Inspector::RemoteControllableTarget::m_identifier" title='Inspector::RemoteControllableTarget::m_identifier' data-ref="Inspector::RemoteControllableTarget::m_identifier" data-ref-filename="Inspector..RemoteControllableTarget..m_identifier">m_identifier</a> = <a class="local col0 ref" href="#70identifier" title='identifier' data-ref="70identifier" data-ref-filename="70identifier">identifier</a>; }</td></tr>
+<tr><th id="56">56</th><td></td></tr>
+<tr><th id="57">57</th><td>    <b>enum</b> <b>class</b> <dfn class="type def" id="Inspector::RemoteControllableTarget::Type" title='Inspector::RemoteControllableTarget::Type' data-ref="Inspector::RemoteControllableTarget::Type" data-ref-filename="Inspector..RemoteControllableTarget..Type">Type</dfn> {</td></tr>
+<tr><th id="58">58</th><td>        <dfn class="enum" id="Inspector::RemoteControllableTarget::Type::Automation" title='Inspector::RemoteControllableTarget::Type::Automation' data-ref="Inspector::RemoteControllableTarget::Type::Automation" data-ref-filename="Inspector..RemoteControllableTarget..Type..Automation">Automation</dfn>,</td></tr>
+<tr><th id="59">59</th><td>        <dfn class="enum" id="Inspector::RemoteControllableTarget::Type::ITML" title='Inspector::RemoteControllableTarget::Type::ITML' data-ref="Inspector::RemoteControllableTarget::Type::ITML" data-ref-filename="Inspector..RemoteControllableTarget..Type..ITML">ITML</dfn>,</td></tr>
+<tr><th id="60">60</th><td>        <dfn class="enum" id="Inspector::RemoteControllableTarget::Type::JavaScript" title='Inspector::RemoteControllableTarget::Type::JavaScript' data-ref="Inspector::RemoteControllableTarget::Type::JavaScript" data-ref-filename="Inspector..RemoteControllableTarget..Type..JavaScript">JavaScript</dfn>,</td></tr>
+<tr><th id="61">61</th><td>        <dfn class="enum" id="Inspector::RemoteControllableTarget::Type::Page" title='Inspector::RemoteControllableTarget::Type::Page' data-ref="Inspector::RemoteControllableTarget::Type::Page" data-ref-filename="Inspector..RemoteControllableTarget..Type..Page">Page</dfn>,</td></tr>
+<tr><th id="62">62</th><td>        <dfn class="enum" id="Inspector::RemoteControllableTarget::Type::ServiceWorker" title='Inspector::RemoteControllableTarget::Type::ServiceWorker' data-ref="Inspector::RemoteControllableTarget::Type::ServiceWorker" data-ref-filename="Inspector..RemoteControllableTarget..Type..ServiceWorker">ServiceWorker</dfn>,</td></tr>
+<tr><th id="63">63</th><td>        <dfn class="enum" id="Inspector::RemoteControllableTarget::Type::WebPage" title='Inspector::RemoteControllableTarget::Type::WebPage' data-ref="Inspector::RemoteControllableTarget::Type::WebPage" data-ref-filename="Inspector..RemoteControllableTarget..Type..WebPage">WebPage</dfn>,</td></tr>
+<tr><th id="64">64</th><td>    };</td></tr>
+<tr><th id="65">65</th><td>    <b>virtual</b> <a class="type" href="#Inspector::RemoteControllableTarget::Type" title='Inspector::RemoteControllableTarget::Type' data-ref="Inspector::RemoteControllableTarget::Type" data-ref-filename="Inspector..RemoteControllableTarget..Type">Type</a> <dfn class="virtual decl fn" id="_ZNK9Inspector24RemoteControllableTarget4typeEv" title='Inspector::RemoteControllableTarget::type' data-ref="_ZNK9Inspector24RemoteControllableTarget4typeEv" data-ref-filename="_ZNK9Inspector24RemoteControllableTarget4typeEv">type</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="66">66</th><td>    <b>virtual</b> <em>bool</em> <dfn class="virtual decl fn" id="_ZNK9Inspector24RemoteControllableTarget20remoteControlAllowedEv" title='Inspector::RemoteControllableTarget::remoteControlAllowed' data-ref="_ZNK9Inspector24RemoteControllableTarget20remoteControlAllowedEv" data-ref-filename="_ZNK9Inspector24RemoteControllableTarget20remoteControlAllowedEv">remoteControlAllowed</dfn>() <em>const</em> = <var>0</var>;</td></tr>
+<tr><th id="67">67</th><td>    <b>virtual</b> <em>void</em> <dfn class="virtual decl fn" id="_ZN9Inspector24RemoteControllableTarget25dispatchMessageFromRemoteERKN3WTF6StringE" title='Inspector::RemoteControllableTarget::dispatchMessageFromRemote' data-ref="_ZN9Inspector24RemoteControllableTarget25dispatchMessageFromRemoteERKN3WTF6StringE" data-ref-filename="_ZN9Inspector24RemoteControllableTarget25dispatchMessageFromRemoteERKN3WTF6StringE">dispatchMessageFromRemote</dfn>(<em>const</em> <a class="type" href="../../../../usr/local/include/wtf/text/WTFString.h.html#WTF::String" title='WTF::String' data-ref="WTF::String" data-ref-filename="WTF..String">String</a>&amp; <dfn class="local col1 decl" id="71message" title='message' data-type='const WTF::String &amp;' data-ref="71message" data-ref-filename="71message">message</dfn>) = <var>0</var>;</td></tr>
+<tr><th id="68">68</th><td></td></tr>
+<tr><th id="69">69</th><td><u>#<span data-ppcond="69">if</span> <a class="macro" href="../../../../usr/local/include/wtf/PlatformUse.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/USE">USE</a>(CF)</u></td></tr>
+<tr><th id="70">70</th><td>    <i>// The dispatch block will be scheduled on a global run loop if null is returned.</i></td></tr>
+<tr><th id="71">71</th><td>    <b>virtual</b> <span class='typedef' title='CFRunLoopRef' data-type='struct __CFRunLoop *' data-ref="CFRunLoopRef" data-ref-filename="CFRunLoopRef">CFRunLoopRef</span> <dfn class="virtual decl def fn" id="_ZNK9Inspector24RemoteControllableTarget13targetRunLoopEv" title='Inspector::RemoteControllableTarget::targetRunLoop' data-ref="_ZNK9Inspector24RemoteControllableTarget13targetRunLoopEv" data-ref-filename="_ZNK9Inspector24RemoteControllableTarget13targetRunLoopEv">targetRunLoop</dfn>() <em>const</em> { <b>return</b> <b>nullptr</b>; }</td></tr>
+<tr><th id="72">72</th><td><u>#<span data-ppcond="69">endif</span></u></td></tr>
+<tr><th id="73">73</th><td></td></tr>
+<tr><th id="74">74</th><td><b>private</b>:</td></tr>
+<tr><th id="75">75</th><td>    <a class="typedef" href="#Inspector::TargetID" title='Inspector::TargetID' data-type='unsigned int' data-ref="Inspector::TargetID" data-ref-filename="Inspector..TargetID">TargetID</a> <dfn class="decl field" id="Inspector::RemoteControllableTarget::m_identifier" title='Inspector::RemoteControllableTarget::m_identifier' data-ref="Inspector::RemoteControllableTarget::m_identifier" data-ref-filename="Inspector..RemoteControllableTarget..m_identifier">m_identifier</dfn> { <var>0</var> };</td></tr>
+<tr><th id="76">76</th><td>};</td></tr>
+<tr><th id="77">77</th><td></td></tr>
+<tr><th id="78">78</th><td>} <i>// namespace Inspector</i></td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td><u>#define <dfn class="macro" id="_M/SPECIALIZE_TYPE_TRAITS_CONTROLLABLE_TARGET" data-ref="_M/SPECIALIZE_TYPE_TRAITS_CONTROLLABLE_TARGET">SPECIALIZE_TYPE_TRAITS_CONTROLLABLE_TARGET</dfn>(ToClassName, ToClassType) \</u></td></tr>
+<tr><th id="81">81</th><td><u>SPECIALIZE_TYPE_TRAITS_BEGIN(ToClassName) \</u></td></tr>
+<tr><th id="82">82</th><td><u>    static bool isType(const Inspector::RemoteControllableTarget&amp; target) { return target.type() == Inspector::RemoteControllableTarget::Type::ToClassType; } \</u></td></tr>
+<tr><th id="83">83</th><td><u>SPECIALIZE_TYPE_TRAITS_END()</u></td></tr>
+<tr><th id="84">84</th><td></td></tr>
+<tr><th id="85">85</th><td><u>#<span data-ppcond="28">endif</span> // ENABLE(REMOTE_INSPECTOR)</u></td></tr>
+<tr><th id="86">86</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../../../Source/WebCore/testing/ServiceWorkerInternals.cpp.html'>webkit/Source/WebCore/testing/ServiceWorkerInternals.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

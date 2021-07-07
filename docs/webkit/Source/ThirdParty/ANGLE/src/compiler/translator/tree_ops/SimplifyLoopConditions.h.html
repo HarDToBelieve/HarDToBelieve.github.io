@@ -1,0 +1,50 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>SimplifyLoopConditions.h source code [webkit/Source/ThirdParty/ANGLE/src/compiler/translator/tree_ops/SimplifyLoopConditions.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/ThirdParty/ANGLE/src/compiler/translator/tree_ops/SimplifyLoopConditions.h'; var root_path = '../../../../../../../..'; var data_path = '../../../../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../../../../..'>webkit</a>/<a href='../../../../../..'>Source</a>/<a href='../../../../..'>ThirdParty</a>/<a href='../../../..'>ANGLE</a>/<a href='../../..'>src</a>/<a href='../..'>compiler</a>/<a href='..'>translator</a>/<a href='./'>tree_ops</a>/<a href='SimplifyLoopConditions.h.html'>SimplifyLoopConditions.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>//</i></td></tr>
+<tr><th id="2">2</th><td><i>// Copyright 2016 The ANGLE Project Authors. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i>// Use of this source code is governed by a BSD-style license that can be</i></td></tr>
+<tr><th id="4">4</th><td><i>// found in the LICENSE file.</i></td></tr>
+<tr><th id="5">5</th><td><i>//</i></td></tr>
+<tr><th id="6">6</th><td><i>// SimplifyLoopConditions is an AST traverser that converts loop conditions and loop expressions</i></td></tr>
+<tr><th id="7">7</th><td><i>// to regular statements inside the loop. This way further transformations that generate statements</i></td></tr>
+<tr><th id="8">8</th><td><i>// from loop conditions and loop expressions work correctly.</i></td></tr>
+<tr><th id="9">9</th><td><i>//</i></td></tr>
+<tr><th id="10">10</th><td></td></tr>
+<tr><th id="11">11</th><td><u>#<span data-ppcond="11">ifndef</span> <span class="macro" data-ref="_M/COMPILER_TRANSLATOR_TREEOPS_SIMPLIFYLOOPCONDITIONS_H_">COMPILER_TRANSLATOR_TREEOPS_SIMPLIFYLOOPCONDITIONS_H_</span></u></td></tr>
+<tr><th id="12">12</th><td><u>#define <dfn class="macro" id="_M/COMPILER_TRANSLATOR_TREEOPS_SIMPLIFYLOOPCONDITIONS_H_" data-ref="_M/COMPILER_TRANSLATOR_TREEOPS_SIMPLIFYLOOPCONDITIONS_H_">COMPILER_TRANSLATOR_TREEOPS_SIMPLIFYLOOPCONDITIONS_H_</dfn></u></td></tr>
+<tr><th id="13">13</th><td></td></tr>
+<tr><th id="14">14</th><td><u>#include <a href="../../../common/angleutils.h.html">"common/angleutils.h"</a></u></td></tr>
+<tr><th id="15">15</th><td></td></tr>
+<tr><th id="16">16</th><td><b>namespace</b> <span class="namespace">sh</span></td></tr>
+<tr><th id="17">17</th><td>{</td></tr>
+<tr><th id="18">18</th><td><b>class</b> <a class="type" href="../Compiler.h.html#sh::TCompiler" title='sh::TCompiler' data-ref="sh::TCompiler" data-ref-filename="sh..TCompiler" id="sh::TCompiler">TCompiler</a>;</td></tr>
+<tr><th id="19">19</th><td><b>class</b> <a class="type" href="../IntermNode.h.html#sh::TIntermNode" title='sh::TIntermNode' data-ref="sh::TIntermNode" data-ref-filename="sh..TIntermNode" id="sh::TIntermNode">TIntermNode</a>;</td></tr>
+<tr><th id="20">20</th><td><b>class</b> <a class="type" href="../SymbolTable.h.html#sh::TSymbolTable" title='sh::TSymbolTable' data-ref="sh::TSymbolTable" data-ref-filename="sh..TSymbolTable" id="sh::TSymbolTable">TSymbolTable</a>;</td></tr>
+<tr><th id="21">21</th><td></td></tr>
+<tr><th id="22">22</th><td><a class="macro" href="../../../common/angleutils.h.html#358" title="[[nodiscard]]" data-ref="_M/ANGLE_NO_DISCARD">ANGLE_NO_DISCARD</a> <em>bool</em> <dfn class="decl fn" id="_ZN2sh22SimplifyLoopConditionsEPNS_9TCompilerEPNS_11TIntermNodeEPNS_12TSymbolTableE" title='sh::SimplifyLoopConditions' data-ref="_ZN2sh22SimplifyLoopConditionsEPNS_9TCompilerEPNS_11TIntermNodeEPNS_12TSymbolTableE" data-ref-filename="_ZN2sh22SimplifyLoopConditionsEPNS_9TCompilerEPNS_11TIntermNodeEPNS_12TSymbolTableE">SimplifyLoopConditions</dfn>(<a class="type" href="../Compiler.h.html#sh::TCompiler" title='sh::TCompiler' data-ref="sh::TCompiler" data-ref-filename="sh..TCompiler">TCompiler</a> *<dfn class="local col0 decl" id="680compiler" title='compiler' data-type='sh::TCompiler *' data-ref="680compiler" data-ref-filename="680compiler">compiler</dfn>,</td></tr>
+<tr><th id="23">23</th><td>                                             <a class="type" href="../IntermNode.h.html#sh::TIntermNode" title='sh::TIntermNode' data-ref="sh::TIntermNode" data-ref-filename="sh..TIntermNode">TIntermNode</a> *<dfn class="local col1 decl" id="681root" title='root' data-type='sh::TIntermNode *' data-ref="681root" data-ref-filename="681root">root</dfn>,</td></tr>
+<tr><th id="24">24</th><td>                                             <a class="type" href="../SymbolTable.h.html#sh::TSymbolTable" title='sh::TSymbolTable' data-ref="sh::TSymbolTable" data-ref-filename="sh..TSymbolTable">TSymbolTable</a> *<dfn class="local col2 decl" id="682symbolTable" title='symbolTable' data-type='sh::TSymbolTable *' data-ref="682symbolTable" data-ref-filename="682symbolTable">symbolTable</dfn>);</td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><a class="macro" href="../../../common/angleutils.h.html#358" title="[[nodiscard]]" data-ref="_M/ANGLE_NO_DISCARD">ANGLE_NO_DISCARD</a> <em>bool</em> <dfn class="decl fn" id="_ZN2sh22SimplifyLoopConditionsEPNS_9TCompilerEPNS_11TIntermNodeEjPNS_12TSymbolTableE" title='sh::SimplifyLoopConditions' data-ref="_ZN2sh22SimplifyLoopConditionsEPNS_9TCompilerEPNS_11TIntermNodeEjPNS_12TSymbolTableE" data-ref-filename="_ZN2sh22SimplifyLoopConditionsEPNS_9TCompilerEPNS_11TIntermNodeEjPNS_12TSymbolTableE">SimplifyLoopConditions</dfn>(<a class="type" href="../Compiler.h.html#sh::TCompiler" title='sh::TCompiler' data-ref="sh::TCompiler" data-ref-filename="sh..TCompiler">TCompiler</a> *<dfn class="local col3 decl" id="683compiler" title='compiler' data-type='sh::TCompiler *' data-ref="683compiler" data-ref-filename="683compiler">compiler</dfn>,</td></tr>
+<tr><th id="27">27</th><td>                                             <a class="type" href="../IntermNode.h.html#sh::TIntermNode" title='sh::TIntermNode' data-ref="sh::TIntermNode" data-ref-filename="sh..TIntermNode">TIntermNode</a> *<dfn class="local col4 decl" id="684root" title='root' data-type='sh::TIntermNode *' data-ref="684root" data-ref-filename="684root">root</dfn>,</td></tr>
+<tr><th id="28">28</th><td>                                             <em>unsigned</em> <em>int</em> <dfn class="local col5 decl" id="685conditionsToSimplify" title='conditionsToSimplify' data-type='unsigned int' data-ref="685conditionsToSimplify" data-ref-filename="685conditionsToSimplify">conditionsToSimplify</dfn>,</td></tr>
+<tr><th id="29">29</th><td>                                             <a class="type" href="../SymbolTable.h.html#sh::TSymbolTable" title='sh::TSymbolTable' data-ref="sh::TSymbolTable" data-ref-filename="sh..TSymbolTable">TSymbolTable</a> *<dfn class="local col6 decl" id="686symbolTable" title='symbolTable' data-type='sh::TSymbolTable *' data-ref="686symbolTable" data-ref-filename="686symbolTable">symbolTable</dfn>);</td></tr>
+<tr><th id="30">30</th><td>}  <i>// namespace sh</i></td></tr>
+<tr><th id="31">31</th><td></td></tr>
+<tr><th id="32">32</th><td><u>#<span data-ppcond="11">endif</span>  // COMPILER_TRANSLATOR_TREEOPS_SIMPLIFYLOOPCONDITIONS_H_</u></td></tr>
+<tr><th id="33">33</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../Compiler.cpp.html'>webkit/Source/ThirdParty/ANGLE/src/compiler/translator/Compiler.cpp</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

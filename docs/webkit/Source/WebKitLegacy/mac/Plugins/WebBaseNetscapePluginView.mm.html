@@ -1,0 +1,920 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>WebBaseNetscapePluginView.mm source code [webkit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKitLegacy</a>/<a href='..'>mac</a>/<a href='./'>Plugins</a>/<a href='WebBaseNetscapePluginView.mm.html'>WebBaseNetscapePluginView.mm</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2005-2017 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> *</i></td></tr>
+<tr><th id="8">8</th><td><i> * 1.  Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="9">9</th><td><i> *     notice, this list of conditions and the following disclaimer. </i></td></tr>
+<tr><th id="10">10</th><td><i> * 2.  Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="11">11</th><td><i> *     notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="12">12</th><td><i> *     documentation and/or other materials provided with the distribution. </i></td></tr>
+<tr><th id="13">13</th><td><i> * 3.  Neither the name of Apple Inc. ("Apple") nor the names of</i></td></tr>
+<tr><th id="14">14</th><td><i> *     its contributors may be used to endorse or promote products derived</i></td></tr>
+<tr><th id="15">15</th><td><i> *     from this software without specific prior written permission. </i></td></tr>
+<tr><th id="16">16</th><td><i> *</i></td></tr>
+<tr><th id="17">17</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE AND ITS CONTRIBUTORS "AS IS" AND ANY</i></td></tr>
+<tr><th id="18">18</th><td><i> * EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED</i></td></tr>
+<tr><th id="19">19</th><td><i> * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE</i></td></tr>
+<tr><th id="20">20</th><td><i> * DISCLAIMED. IN NO EVENT SHALL APPLE OR ITS CONTRIBUTORS BE LIABLE FOR ANY</i></td></tr>
+<tr><th id="21">21</th><td><i> * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES</i></td></tr>
+<tr><th id="22">22</th><td><i> * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;</i></td></tr>
+<tr><th id="23">23</th><td><i> * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND</i></td></tr>
+<tr><th id="24">24</th><td><i> * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT</i></td></tr>
+<tr><th id="25">25</th><td><i> * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF</i></td></tr>
+<tr><th id="26">26</th><td><i> * THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="27">27</th><td><i> */</i></td></tr>
+<tr><th id="28">28</th><td></td></tr>
+<tr><th id="29">29</th><td><u>#<span data-ppcond="29">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(NETSCAPE_PLUGIN_API)</u></td></tr>
+<tr><th id="30">30</th><td></td></tr>
+<tr><th id="31">31</th><td><u>#import <a href="WebBaseNetscapePluginView.h.html">"WebBaseNetscapePluginView.h"</a></u></td></tr>
+<tr><th id="32">32</th><td></td></tr>
+<tr><th id="33">33</th><td><u>#import <a href="../../WebCoreSupport/NetworkStorageSessionMap.h.html">"NetworkStorageSessionMap.h"</a></u></td></tr>
+<tr><th id="34">34</th><td><u>#import <a href="../WebView/WebFrameInternal.h.html">"WebFrameInternal.h"</a></u></td></tr>
+<tr><th id="35">35</th><td><u>#import <a href="../Misc/WebKitLogging.h.html">"WebKitLogging.h"</a></u></td></tr>
+<tr><th id="36">36</th><td><u>#import <a href="../Misc/WebKitNSStringExtras.h.html">"WebKitNSStringExtras.h"</a></u></td></tr>
+<tr><th id="37">37</th><td><u>#import <a href="../Misc/WebNSURLExtras.h.html">"WebNSURLExtras.h"</a></u></td></tr>
+<tr><th id="38">38</th><td><u>#import <a href="../Misc/WebNSURLRequestExtras.h.html">"WebNSURLRequestExtras.h"</a></u></td></tr>
+<tr><th id="39">39</th><td><u>#import <a href="../WebView/WebView.h.html">"WebView.h"</a></u></td></tr>
+<tr><th id="40">40</th><td><u>#import <a href="../WebView/WebViewInternal.h.html">"WebViewInternal.h"</a></u></td></tr>
+<tr><th id="41">41</th><td><u>#import <a href="../../../../WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/InitializeThreading.h.html">&lt;JavaScriptCore/InitializeThreading.h&gt;</a></u></td></tr>
+<tr><th id="42">42</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/AuthenticationMac.h.html">&lt;WebCore/AuthenticationMac.h&gt;</a></u></td></tr>
+<tr><th id="43">43</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/BitmapImage.h.html">&lt;WebCore/BitmapImage.h&gt;</a></u></td></tr>
+<tr><th id="44">44</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Credential.h.html">&lt;WebCore/Credential.h&gt;</a></u></td></tr>
+<tr><th id="45">45</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CredentialStorage.h.html">&lt;WebCore/CredentialStorage.h&gt;</a></u></td></tr>
+<tr><th id="46">46</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Document.h.html">&lt;WebCore/Document.h&gt;</a></u></td></tr>
+<tr><th id="47">47</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Element.h.html">&lt;WebCore/Element.h&gt;</a></u></td></tr>
+<tr><th id="48">48</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Frame.h.html">&lt;WebCore/Frame.h&gt;</a></u></td></tr>
+<tr><th id="49">49</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoader.h.html">&lt;WebCore/FrameLoader.h&gt;</a></u></td></tr>
+<tr><th id="50">50</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLPlugInElement.h.html">&lt;WebCore/HTMLPlugInElement.h&gt;</a></u></td></tr>
+<tr><th id="51">51</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/NetworkStorageSession.h.html">&lt;WebCore/NetworkStorageSession.h&gt;</a></u></td></tr>
+<tr><th id="52">52</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Page.h.html">&lt;WebCore/Page.h&gt;</a></u></td></tr>
+<tr><th id="53">53</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ProtectionSpace.h.html">&lt;WebCore/ProtectionSpace.h&gt;</a></u></td></tr>
+<tr><th id="54">54</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderEmbeddedObject.h.html">&lt;WebCore/RenderEmbeddedObject.h&gt;</a></u></td></tr>
+<tr><th id="55">55</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderView.h.html">&lt;WebCore/RenderView.h&gt;</a></u></td></tr>
+<tr><th id="56">56</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/SecurityOrigin.h.html">&lt;WebCore/SecurityOrigin.h&gt;</a></u></td></tr>
+<tr><th id="57">57</th><td><u>#import <a href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/WebCoreJITOperations.h.html">&lt;WebCore/WebCoreJITOperations.h&gt;</a></u></td></tr>
+<tr><th id="58">58</th><td><u>#import <a href="../DOM/DOMPrivate.h.html">&lt;WebKitLegacy/DOMPrivate.h&gt;</a></u></td></tr>
+<tr><th id="59">59</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cg/CoreGraphicsSPI.h.html">&lt;pal/spi/cg/CoreGraphicsSPI.h&gt;</a></u></td></tr>
+<tr><th id="60">60</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html">&lt;wtf/Assertions.h&gt;</a></u></td></tr>
+<tr><th id="61">61</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/MainThread.h.html">&lt;wtf/MainThread.h&gt;</a></u></td></tr>
+<tr><th id="62">62</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RunLoop.h.html">&lt;wtf/RunLoop.h&gt;</a></u></td></tr>
+<tr><th id="63">63</th><td><u>#import <a href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html">&lt;wtf/text/CString.h&gt;</a></u></td></tr>
+<tr><th id="64">64</th><td></td></tr>
+<tr><th id="65">65</th><td><u>#define <dfn class="macro" id="_M/LoginWindowDidSwitchFromUserNotification" data-ref="_M/LoginWindowDidSwitchFromUserNotification">LoginWindowDidSwitchFromUserNotification</dfn>    @"WebLoginWindowDidSwitchFromUserNotification"</u></td></tr>
+<tr><th id="66">66</th><td><u>#define <dfn class="macro" id="_M/LoginWindowDidSwitchToUserNotification" data-ref="_M/LoginWindowDidSwitchToUserNotification">LoginWindowDidSwitchToUserNotification</dfn>      @"WebLoginWindowDidSwitchToUserNotification"</u></td></tr>
+<tr><th id="67">67</th><td></td></tr>
+<tr><th id="68">68</th><td><b>using</b> <b>namespace</b> <span class="namespace">WebCore</span>;</td></tr>
+<tr><th id="69">69</th><td></td></tr>
+<tr><th id="70">70</th><td>@implementation WebBaseNetscapePluginView</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td>+ (<em>void</em>)initialize</td></tr>
+<tr><th id="73">73</th><td>{</td></tr>
+<tr><th id="74">74</th><td>    <span class="namespace">JSC::</span><a class="ref fn" href="../../../../WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/InitializeThreading.h.html#_ZN3JSC10initializeEv" title='JSC::initialize' data-ref="_ZN3JSC10initializeEv" data-ref-filename="_ZN3JSC10initializeEv">initialize</a>();</td></tr>
+<tr><th id="75">75</th><td>    <span class="namespace">WTF::</span><a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/MainThread.h.html#_ZN3WTF20initializeMainThreadEv" title='WTF::initializeMainThread' data-ref="_ZN3WTF20initializeMainThreadEv" data-ref-filename="_ZN3WTF20initializeMainThreadEv">initializeMainThread</a>();</td></tr>
+<tr><th id="76">76</th><td>    <span class="namespace">WebCore::</span><a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/WebCoreJITOperations.h.html#_ZN7WebCore21populateJITOperationsEv" title='WebCore::populateJITOperations' data-ref="_ZN7WebCore21populateJITOperationsEv" data-ref-filename="_ZN7WebCore21populateJITOperationsEv">populateJITOperations</a>();</td></tr>
+<tr><th id="77">77</th><td>    <span class="namespace">WebKit::</span><a class="ref fn" href="#_ZN6WebKit27sendUserChangeNotificationsEv" title='WebKit::sendUserChangeNotifications' data-ref="_ZN6WebKit27sendUserChangeNotificationsEv" data-ref-filename="_ZN6WebKit27sendUserChangeNotificationsEv">sendUserChangeNotifications</a>();</td></tr>
+<tr><th id="78">78</th><td>}</td></tr>
+<tr><th id="79">79</th><td></td></tr>
+<tr><th id="80">80</th><td>- (<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)initWithFrame:(<span class='typedef' title='NSRect' data-type='struct CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)<dfn class="local col1 decl" id="1frame" title='frame' data-type='NSRect' data-ref="1frame" data-ref-filename="1frame">frame</dfn></td></tr>
+<tr><th id="81">81</th><td>      pluginPackage:(WebNetscapePluginPackage *)<dfn class="local col2 decl" id="2pluginPackage" title='pluginPackage' data-type='WebNetscapePluginPackage *' data-ref="2pluginPackage" data-ref-filename="2pluginPackage">pluginPackage</dfn></td></tr>
+<tr><th id="82">82</th><td>                URL:(NSURL *)<dfn class="local col3 decl" id="3URL" title='URL' data-type='NSURL *' data-ref="3URL" data-ref-filename="3URL">URL</dfn></td></tr>
+<tr><th id="83">83</th><td>            baseURL:(NSURL *)<dfn class="local col4 decl" id="4baseURL" title='baseURL' data-type='NSURL *' data-ref="4baseURL" data-ref-filename="4baseURL">baseURL</dfn></td></tr>
+<tr><th id="84">84</th><td>           MIMEType:(NSString *)<dfn class="local col5 decl" id="5MIME" title='MIME' data-type='NSString *' data-ref="5MIME" data-ref-filename="5MIME">MIME</dfn></td></tr>
+<tr><th id="85">85</th><td>      attributeKeys:(NSArray *)<dfn class="local col6 decl" id="6keys" title='keys' data-type='NSArray *' data-ref="6keys" data-ref-filename="6keys">keys</dfn></td></tr>
+<tr><th id="86">86</th><td>    attributeValues:(NSArray *)<dfn class="local col7 decl" id="7values" title='values' data-type='NSArray *' data-ref="7values" data-ref-filename="7values">values</dfn></td></tr>
+<tr><th id="87">87</th><td>       loadManually:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col8 decl" id="8loadManually" title='loadManually' data-type='BOOL' data-ref="8loadManually" data-ref-filename="8loadManually">loadManually</dfn></td></tr>
+<tr><th id="88">88</th><td>            element:(<a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RefPtr" title='WTF::RefPtr' data-ref="WTF::RefPtr" data-ref-filename="WTF..RefPtr">RefPtr</a>&lt;<span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLPlugInElement.h.html#WebCore::HTMLPlugInElement" title='WebCore::HTMLPlugInElement' data-ref="WebCore::HTMLPlugInElement" data-ref-filename="WebCore..HTMLPlugInElement">HTMLPlugInElement</a>&gt;&amp;&amp;)<dfn class="local col9 decl" id="9element" title='element' data-type='RefPtr&lt;WebCore::HTMLPlugInElement&gt; &amp;&amp;' data-ref="9element" data-ref-filename="9element">element</dfn></td></tr>
+<tr><th id="89">89</th><td>{</td></tr>
+<tr><th id="90">90</th><td>    <span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> = [super initWithFrame:<span class='ref fn fake' title='CGRect::CGRect' data-ref="_ZN6CGRectC1ERKS_" data-ref-filename="_ZN6CGRectC1ERKS_"></span><a class="local col1 ref" href="#1frame" title='frame' data-ref="1frame" data-ref-filename="1frame">frame</a>];</td></tr>
+<tr><th id="91">91</th><td>    <b>if</b> (!<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span>)</td></tr>
+<tr><th id="92">92</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="93">93</th><td>    </td></tr>
+<tr><th id="94">94</th><td>    _pluginPackage <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF9RetainPtraSEPNSt3__114remove_pointerIT_E4typeE" title='WTF::RetainPtr::operator=' data-ref="_ZN3WTF9RetainPtraSEPNSt3__114remove_pointerIT_E4typeE" data-ref-filename="_ZN3WTF9RetainPtraSEPNSt3__114remove_pointerIT_E4typeE">=</a> <a class="local col2 ref" href="#2pluginPackage" title='pluginPackage' data-ref="2pluginPackage" data-ref-filename="2pluginPackage">pluginPackage</a>;</td></tr>
+<tr><th id="95">95</th><td>    _element <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RefPtr.h.html#_ZN3WTF6RefPtraSEONS_6RefPtrIT_T0_T1_EE" title='WTF::RefPtr::operator=' data-ref="_ZN3WTF6RefPtraSEONS_6RefPtrIT_T0_T1_EE" data-ref-filename="_ZN3WTF6RefPtraSEONS_6RefPtrIT_T0_T1_EE">=</a> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/StdLibExtras.h.html#568" title="std::move&lt;WTF::CheckMoveParameter&gt;(element)" data-ref="_M/WTFMove">WTFMove</a>(<span class='refarg'><a class="local col9 ref" href="#9element" title='element' data-ref="9element" data-ref-filename="9element">element</a></span>);</td></tr>
+<tr><th id="96">96</th><td>    _sourceURL <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF9RetainPtraSEONS_9RetainPtrITL0__EE" title='WTF::RetainPtr::operator=' data-ref="_ZN3WTF9RetainPtraSEONS_9RetainPtrITL0__EE" data-ref-filename="_ZN3WTF9RetainPtraSEONS_9RetainPtrITL0__EE">=</a> <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF7adoptNSET_" title='WTF::adoptNS' data-ref="_ZN3WTF7adoptNSET_" data-ref-filename="_ZN3WTF7adoptNSET_">adoptNS</a>([<a class="local col3 ref" href="#3URL" title='URL' data-ref="3URL" data-ref-filename="3URL">URL</a> copy]);</td></tr>
+<tr><th id="97">97</th><td>    _baseURL <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF9RetainPtraSEONS_9RetainPtrITL0__EE" title='WTF::RetainPtr::operator=' data-ref="_ZN3WTF9RetainPtraSEONS_9RetainPtrITL0__EE" data-ref-filename="_ZN3WTF9RetainPtraSEONS_9RetainPtrITL0__EE">=</a> <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF7adoptNSET_" title='WTF::adoptNS' data-ref="_ZN3WTF7adoptNSET_" data-ref-filename="_ZN3WTF7adoptNSET_">adoptNS</a>([<a class="local col4 ref" href="#4baseURL" title='baseURL' data-ref="4baseURL" data-ref-filename="4baseURL">baseURL</a> copy]);</td></tr>
+<tr><th id="98">98</th><td>    _MIMEType <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF9RetainPtraSEONS_9RetainPtrITL0__EE" title='WTF::RetainPtr::operator=' data-ref="_ZN3WTF9RetainPtraSEONS_9RetainPtrITL0__EE" data-ref-filename="_ZN3WTF9RetainPtraSEONS_9RetainPtrITL0__EE">=</a> <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF7adoptNSET_" title='WTF::adoptNS' data-ref="_ZN3WTF7adoptNSET_" data-ref-filename="_ZN3WTF7adoptNSET_">adoptNS</a>([<a class="local col5 ref" href="#5MIME" title='MIME' data-ref="5MIME" data-ref-filename="5MIME">MIME</a> copy]);</td></tr>
+<tr><th id="99">99</th><td></td></tr>
+<tr><th id="100">100</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> setAttributeKeys:<a class="local col6 ref" href="#6keys" title='keys' data-ref="6keys" data-ref-filename="6keys">keys</a> andValues:<a class="local col7 ref" href="#7values" title='values' data-ref="7values" data-ref-filename="7values">values</a>];</td></tr>
+<tr><th id="101">101</th><td></td></tr>
+<tr><th id="102">102</th><td>    <b>if</b> (<a class="local col8 ref" href="#8loadManually" title='loadManually' data-ref="8loadManually" data-ref-filename="8loadManually">loadManually</a>)</td></tr>
+<tr><th id="103">103</th><td>        _mode = <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#659" title="2" data-ref="_M/NP_FULL">NP_FULL</a>;</td></tr>
+<tr><th id="104">104</th><td>    <b>else</b></td></tr>
+<tr><th id="105">105</th><td>        _mode = <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#658" title="1" data-ref="_M/NP_EMBED">NP_EMBED</a>;</td></tr>
+<tr><th id="106">106</th><td>    </td></tr>
+<tr><th id="107">107</th><td>    _loadManually = <a class="local col8 ref" href="#8loadManually" title='loadManually' data-ref="8loadManually" data-ref-filename="8loadManually">loadManually</a>;</td></tr>
+<tr><th id="108">108</th><td>    <b>return</b> <span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span>;</td></tr>
+<tr><th id="109">109</th><td>}</td></tr>
+<tr><th id="110">110</th><td></td></tr>
+<tr><th id="111">111</th><td>- (<em>void</em>)dealloc</td></tr>
+<tr><th id="112">112</th><td>{</td></tr>
+<tr><th id="113">113</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!(!_isStarted)) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm&quot;, 113, __PRETTY_FUNCTION__, &quot;!_isStarted&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(113, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm&quot;, __PRETTY_FUNCTION__, 2945); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>(!_isStarted);</td></tr>
+<tr><th id="114">114</th><td></td></tr>
+<tr><th id="115">115</th><td>    [super dealloc];</td></tr>
+<tr><th id="116">116</th><td>}</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td>- (WebNetscapePluginPackage *)pluginPackage</td></tr>
+<tr><th id="119">119</th><td>{</td></tr>
+<tr><th id="120">120</th><td>    <b>return</b> _pluginPackage.<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZNK3WTF9RetainPtr3getEv" title='WTF::RetainPtr::get' data-ref="_ZNK3WTF9RetainPtr3getEv" data-ref-filename="_ZNK3WTF9RetainPtr3getEv">get</a>();</td></tr>
+<tr><th id="121">121</th><td>}</td></tr>
+<tr><th id="122">122</th><td>    </td></tr>
+<tr><th id="123">123</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)isFlipped</td></tr>
+<tr><th id="124">124</th><td>{</td></tr>
+<tr><th id="125">125</th><td>    <b>return</b> <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="126">126</th><td>}</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td>- (NSURL *)URLWithCString:(<em>const</em> <em>char</em> *)<dfn class="local col1 decl" id="11cString" title='cString' data-type='const char *' data-ref="11cString" data-ref-filename="11cString">cString</dfn></td></tr>
+<tr><th id="129">129</th><td>{</td></tr>
+<tr><th id="130">130</th><td>    <b>if</b> (!<a class="local col1 ref" href="#11cString" title='cString' data-ref="11cString" data-ref-filename="11cString">cString</a>)</td></tr>
+<tr><th id="131">131</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="132">132</th><td>    </td></tr>
+<tr><th id="133">133</th><td>    NSString *<dfn class="local col2 decl" id="12string" title='string' data-type='NSString *' data-ref="12string" data-ref-filename="12string">string</dfn> = [NSString stringWithCString:<a class="local col1 ref" href="#11cString" title='cString' data-ref="11cString" data-ref-filename="11cString">cString</a> encoding:<span class='enum' title='NSISOLatin1StringEncoding' data-ref="NSISOLatin1StringEncoding" data-ref-filename="NSISOLatin1StringEncoding">NSISOLatin1StringEncoding</span>];</td></tr>
+<tr><th id="134">134</th><td>    <a class="local col2 ref" href="#12string" title='string' data-ref="12string" data-ref-filename="12string">string</a> = [<a class="local col2 ref" href="#12string" title='string' data-ref="12string" data-ref-filename="12string">string</a> stringByReplacingOccurrencesOfString:@<q>"\r"</q> withString:@<q>""</q>];</td></tr>
+<tr><th id="135">135</th><td>    <a class="local col2 ref" href="#12string" title='string' data-ref="12string" data-ref-filename="12string">string</a> = [<a class="local col2 ref" href="#12string" title='string' data-ref="12string" data-ref-filename="12string">string</a> stringByReplacingOccurrencesOfString:@<q>"\n"</q> withString:@<q>""</q>];</td></tr>
+<tr><th id="136">136</th><td>    <b>return</b> [NSURL _web_URLWithDataAsString:<a class="local col2 ref" href="#12string" title='string' data-ref="12string" data-ref-filename="12string">string</a> relativeToURL:_baseURL.<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZNK3WTF9RetainPtr3getEv" title='WTF::RetainPtr::get' data-ref="_ZNK3WTF9RetainPtr3getEv" data-ref-filename="_ZNK3WTF9RetainPtr3getEv">get</a>()];</td></tr>
+<tr><th id="137">137</th><td>}</td></tr>
+<tr><th id="138">138</th><td></td></tr>
+<tr><th id="139">139</th><td>- (NSMutableURLRequest *)requestWithURLCString:(<em>const</em> <em>char</em> *)<dfn class="local col3 decl" id="13URLCString" title='URLCString' data-type='const char *' data-ref="13URLCString" data-ref-filename="13URLCString">URLCString</dfn></td></tr>
+<tr><th id="140">140</th><td>{</td></tr>
+<tr><th id="141">141</th><td>    NSURL *<dfn class="local col4 decl" id="14URL" title='URL' data-type='NSURL *' data-ref="14URL" data-ref-filename="14URL">URL</dfn> = [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> URLWithCString:<a class="local col3 ref" href="#13URLCString" title='URLCString' data-ref="13URLCString" data-ref-filename="13URLCString">URLCString</a>];</td></tr>
+<tr><th id="142">142</th><td>    <b>if</b> (!<a class="local col4 ref" href="#14URL" title='URL' data-ref="14URL" data-ref-filename="14URL">URL</a>)</td></tr>
+<tr><th id="143">143</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="144">144</th><td>    </td></tr>
+<tr><th id="145">145</th><td>    NSMutableURLRequest *<dfn class="local col5 decl" id="15request" title='request' data-type='NSMutableURLRequest *' data-ref="15request" data-ref-filename="15request">request</dfn> = [NSMutableURLRequest requestWithURL:<a class="local col4 ref" href="#14URL" title='URL' data-ref="14URL" data-ref-filename="14URL">URL</a>];</td></tr>
+<tr><th id="146">146</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Frame.h.html#WebCore::Frame" title='WebCore::Frame' data-ref="WebCore::Frame" data-ref-filename="WebCore..Frame">Frame</a>* <dfn class="local col6 decl" id="16frame" title='frame' data-type='WebCore::Frame *' data-ref="16frame" data-ref-filename="16frame">frame</dfn> = <a class="ref fn" href="../WebView/WebFrameInternal.h.html#_Z4coreP8WebFrame" title='core' data-ref="_Z4coreP8WebFrame" data-ref-filename="_Z4coreP8WebFrame">core</a>([<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webFrame]);</td></tr>
+<tr><th id="147">147</th><td>    <b>if</b> (!<a class="local col6 ref" href="#16frame" title='frame' data-ref="16frame" data-ref-filename="16frame">frame</a>)</td></tr>
+<tr><th id="148">148</th><td>        <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="149">149</th><td>    [<a class="local col5 ref" href="#15request" title='request' data-ref="15request" data-ref-filename="15request">request</a> _web_setHTTPReferrer:<a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZNK3WTF6StringcvP8NSStringEv" title='WTF::String::operator NSString *' data-ref="_ZNK3WTF6StringcvP8NSStringEv" data-ref-filename="_ZNK3WTF6StringcvP8NSStringEv"></a><a class="local col6 ref" href="#16frame" title='frame' data-ref="16frame" data-ref-filename="16frame">frame</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Frame.h.html#_ZN7WebCore5Frame6loaderEv" title='WebCore::Frame::loader' data-ref="_ZN7WebCore5Frame6loaderEv" data-ref-filename="_ZN7WebCore5Frame6loaderEv">loader</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameLoader.h.html#_ZNK7WebCore11FrameLoader16outgoingReferrerEv" title='WebCore::FrameLoader::outgoingReferrer' data-ref="_ZNK7WebCore11FrameLoader16outgoingReferrerEv" data-ref-filename="_ZNK7WebCore11FrameLoader16outgoingReferrerEv">outgoingReferrer</a>()];</td></tr>
+<tr><th id="150">150</th><td>    <b>return</b> <a class="local col5 ref" href="#15request" title='request' data-ref="15request" data-ref-filename="15request">request</a>;</td></tr>
+<tr><th id="151">151</th><td>}</td></tr>
+<tr><th id="152">152</th><td></td></tr>
+<tr><th id="153">153</th><td><i>// Methods that subclasses must override</i></td></tr>
+<tr><th id="154">154</th><td>- (<em>void</em>)setAttributeKeys:(NSArray *)<dfn class="local col7 decl" id="17keys" title='keys' data-type='NSArray *' data-ref="17keys" data-ref-filename="17keys">keys</dfn> andValues:(NSArray *)<dfn class="local col8 decl" id="18values" title='values' data-type='NSArray *' data-ref="18values" data-ref-filename="18values">values</dfn></td></tr>
+<tr><th id="155">155</th><td>{</td></tr>
+<tr><th id="156">156</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="157">157</th><td>}</td></tr>
+<tr><th id="158">158</th><td></td></tr>
+<tr><th id="159">159</th><td>- (<em>void</em>)handleMouseMoved:(NSEvent *)<dfn class="local col9 decl" id="19event" title='event' data-type='NSEvent *' data-ref="19event" data-ref-filename="19event">event</dfn></td></tr>
+<tr><th id="160">160</th><td>{</td></tr>
+<tr><th id="161">161</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="162">162</th><td>}</td></tr>
+<tr><th id="163">163</th><td></td></tr>
+<tr><th id="164">164</th><td>- (<em>void</em>)handleMouseEntered:(NSEvent *)<dfn class="local col0 decl" id="20event" title='event' data-type='NSEvent *' data-ref="20event" data-ref-filename="20event">event</dfn></td></tr>
+<tr><th id="165">165</th><td>{</td></tr>
+<tr><th id="166">166</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="167">167</th><td>}</td></tr>
+<tr><th id="168">168</th><td></td></tr>
+<tr><th id="169">169</th><td>- (<em>void</em>)handleMouseExited:(NSEvent *)<dfn class="local col1 decl" id="21event" title='event' data-type='NSEvent *' data-ref="21event" data-ref-filename="21event">event</dfn></td></tr>
+<tr><th id="170">170</th><td>{</td></tr>
+<tr><th id="171">171</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="172">172</th><td>}</td></tr>
+<tr><th id="173">173</th><td></td></tr>
+<tr><th id="174">174</th><td>- (<em>void</em>)focusChanged</td></tr>
+<tr><th id="175">175</th><td>{</td></tr>
+<tr><th id="176">176</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="177">177</th><td>}</td></tr>
+<tr><th id="178">178</th><td></td></tr>
+<tr><th id="179">179</th><td>- (<em>void</em>)windowFocusChanged:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col2 decl" id="22hasFocus" title='hasFocus' data-type='BOOL' data-ref="22hasFocus" data-ref-filename="22hasFocus">hasFocus</dfn></td></tr>
+<tr><th id="180">180</th><td>{</td></tr>
+<tr><th id="181">181</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="182">182</th><td>}</td></tr>
+<tr><th id="183">183</th><td></td></tr>
+<tr><th id="184">184</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)createPlugin</td></tr>
+<tr><th id="185">185</th><td>{</td></tr>
+<tr><th id="186">186</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="187">187</th><td>    <b>return</b> <span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>;</td></tr>
+<tr><th id="188">188</th><td>}</td></tr>
+<tr><th id="189">189</th><td></td></tr>
+<tr><th id="190">190</th><td>- (<em>void</em>)loadStream</td></tr>
+<tr><th id="191">191</th><td>{</td></tr>
+<tr><th id="192">192</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="193">193</th><td>}</td></tr>
+<tr><th id="194">194</th><td></td></tr>
+<tr><th id="195">195</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)shouldStop</td></tr>
+<tr><th id="196">196</th><td>{</td></tr>
+<tr><th id="197">197</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="198">198</th><td>    <b>return</b> <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="199">199</th><td>}</td></tr>
+<tr><th id="200">200</th><td></td></tr>
+<tr><th id="201">201</th><td>- (<em>void</em>)destroyPlugin</td></tr>
+<tr><th id="202">202</th><td>{</td></tr>
+<tr><th id="203">203</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="204">204</th><td>}</td></tr>
+<tr><th id="205">205</th><td></td></tr>
+<tr><th id="206">206</th><td>- (<em>void</em>)updateAndSetWindow</td></tr>
+<tr><th id="207">207</th><td>{</td></tr>
+<tr><th id="208">208</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="209">209</th><td>}</td></tr>
+<tr><th id="210">210</th><td></td></tr>
+<tr><th id="211">211</th><td>- (<em>void</em>)sendModifierEventWithKeyCode:(<em>int</em>)<dfn class="local col3 decl" id="23keyCode" title='keyCode' data-type='int' data-ref="23keyCode" data-ref-filename="23keyCode">keyCode</dfn> character:(<em>char</em>)<dfn class="local col4 decl" id="24character" title='character' data-type='char' data-ref="24character" data-ref-filename="24character">character</dfn></td></tr>
+<tr><th id="212">212</th><td>{</td></tr>
+<tr><th id="213">213</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="214">214</th><td>}</td></tr>
+<tr><th id="215">215</th><td></td></tr>
+<tr><th id="216">216</th><td>- (<em>void</em>)privateBrowsingModeDidChange</td></tr>
+<tr><th id="217">217</th><td>{</td></tr>
+<tr><th id="218">218</th><td>}</td></tr>
+<tr><th id="219">219</th><td></td></tr>
+<tr><th id="220">220</th><td>- (<em>void</em>)removeTrackingRect</td></tr>
+<tr><th id="221">221</th><td>{</td></tr>
+<tr><th id="222">222</th><td>    <b>if</b> (_trackingTag) {</td></tr>
+<tr><th id="223">223</th><td>        [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> removeTrackingRect:_trackingTag];</td></tr>
+<tr><th id="224">224</th><td>        _trackingTag = <var>0</var>;</td></tr>
+<tr><th id="225">225</th><td>        </td></tr>
+<tr><th id="226">226</th><td>        <i>// Do the following after setting trackingTag to 0 so we don't re-enter.</i></td></tr>
+<tr><th id="227">227</th><td><i>        </i></td></tr>
+<tr><th id="228">228</th><td><i>        // Balance the retain in resetTrackingRect. Use autorelease in case we hold </i></td></tr>
+<tr><th id="229">229</th><td><i>        // the last reference to the window during tear-down, to avoid crashing AppKit. </i></td></tr>
+<tr><th id="230">230</th><td>        [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window] autorelease];</td></tr>
+<tr><th id="231">231</th><td>    }</td></tr>
+<tr><th id="232">232</th><td>}</td></tr>
+<tr><th id="233">233</th><td></td></tr>
+<tr><th id="234">234</th><td>- (<em>void</em>)resetTrackingRect</td></tr>
+<tr><th id="235">235</th><td>{</td></tr>
+<tr><th id="236">236</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> removeTrackingRect];</td></tr>
+<tr><th id="237">237</th><td>    <b>if</b> (_isStarted) {</td></tr>
+<tr><th id="238">238</th><td>        <i>// Retain the window so that removeTrackingRect can work after the window is closed.</i></td></tr>
+<tr><th id="239">239</th><td>        [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window] retain];</td></tr>
+<tr><th id="240">240</th><td>        _trackingTag = [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> addTrackingRect:[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> bounds] owner:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> userData:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span> assumeInside:<span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>];</td></tr>
+<tr><th id="241">241</th><td>    }</td></tr>
+<tr><th id="242">242</th><td>}</td></tr>
+<tr><th id="243">243</th><td></td></tr>
+<tr><th id="244">244</th><td>- (<em>void</em>)stopTimers</td></tr>
+<tr><th id="245">245</th><td>{</td></tr>
+<tr><th id="246">246</th><td>    _shouldFireTimers = <span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>;</td></tr>
+<tr><th id="247">247</th><td>}</td></tr>
+<tr><th id="248">248</th><td></td></tr>
+<tr><th id="249">249</th><td>- (<em>void</em>)startTimers</td></tr>
+<tr><th id="250">250</th><td>{</td></tr>
+<tr><th id="251">251</th><td>    _shouldFireTimers = <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="252">252</th><td>}</td></tr>
+<tr><th id="253">253</th><td></td></tr>
+<tr><th id="254">254</th><td>- (<em>void</em>)restartTimers</td></tr>
+<tr><th id="255">255</th><td>{</td></tr>
+<tr><th id="256">256</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> stopTimers];</td></tr>
+<tr><th id="257">257</th><td>    </td></tr>
+<tr><th id="258">258</th><td>    <b>if</b> (!_isStarted || [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window] isMiniaturized])</td></tr>
+<tr><th id="259">259</th><td>        <b>return</b>;</td></tr>
+<tr><th id="260">260</th><td>    </td></tr>
+<tr><th id="261">261</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> startTimers];</td></tr>
+<tr><th id="262">262</th><td>}</td></tr>
+<tr><th id="263">263</th><td></td></tr>
+<tr><th id="264">264</th><td>- (<span class='typedef' title='NSRect' data-type='struct CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)_windowClipRect</td></tr>
+<tr><th id="265">265</th><td>{</td></tr>
+<tr><th id="266">266</th><td>    <em>auto</em>* <dfn class="local col5 decl" id="25renderer" title='renderer' data-type='WebCore::RenderElement *' data-ref="25renderer" data-ref-filename="25renderer">renderer</dfn> = _element<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RefPtr.h.html#_ZNK3WTF6RefPtrptEv" title='WTF::RefPtr::operator-&gt;' data-ref="_ZNK3WTF6RefPtrptEv" data-ref-filename="_ZNK3WTF6RefPtrptEv">-&gt;</a><a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ContainerNode.h.html#_ZNK7WebCore13ContainerNode8rendererEv" title='WebCore::ContainerNode::renderer' data-ref="_ZNK7WebCore13ContainerNode8rendererEv" data-ref-filename="_ZNK7WebCore13ContainerNode8rendererEv">renderer</a>();</td></tr>
+<tr><th id="267">267</th><td>    <b>if</b> (!<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/TypeCasts.h.html#_ZN3WTF2isEPT0_" title='WTF::is' data-ref="_ZN3WTF2isEPT0_" data-ref-filename="_ZN3WTF2isEPT0_">is</a>&lt;<a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderEmbeddedObject.h.html#WebCore::RenderEmbeddedObject" title='WebCore::RenderEmbeddedObject' data-ref="WebCore::RenderEmbeddedObject" data-ref-filename="WebCore..RenderEmbeddedObject">RenderEmbeddedObject</a>&gt;(<a class="local col5 ref" href="#25renderer" title='renderer' data-ref="25renderer" data-ref-filename="25renderer">renderer</a>))</td></tr>
+<tr><th id="268">268</th><td>        <b>return</b> <span class='ref fn fake' title='CGRect::CGRect' data-ref="_ZN6CGRectC1ERKS_" data-ref-filename="_ZN6CGRectC1ERKS_"></span><span class='ref' title='NSZeroRect' data-ref="NSZeroRect" data-ref-filename="NSZeroRect">NSZeroRect</span>;</td></tr>
+<tr><th id="269">269</th><td>    <b>return</b> <a class="ref fn fake" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/IntRect.h.html#_ZNK7WebCore7IntRectcv6CGRectEv" title='WebCore::IntRect::operator CGRect' data-ref="_ZNK7WebCore7IntRectcv6CGRectEv" data-ref-filename="_ZNK7WebCore7IntRectcv6CGRectEv"></a><a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/TypeCasts.h.html#_ZN3WTF8downcastERT0_" title='WTF::downcast' data-ref="_ZN3WTF8downcastERT0_" data-ref-filename="_ZN3WTF8downcastERT0_">downcast</a>&lt;<a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderEmbeddedObject.h.html#WebCore::RenderEmbeddedObject" title='WebCore::RenderEmbeddedObject' data-ref="WebCore::RenderEmbeddedObject" data-ref-filename="WebCore..RenderEmbeddedObject">RenderEmbeddedObject</a>&gt;(<span class='refarg'>*<a class="local col5 ref" href="#25renderer" title='renderer' data-ref="25renderer" data-ref-filename="25renderer">renderer</a></span>).<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderWidget.h.html#_ZNK7WebCore12RenderWidget14windowClipRectEv" title='WebCore::RenderWidget::windowClipRect' data-ref="_ZNK7WebCore12RenderWidget14windowClipRectEv" data-ref-filename="_ZNK7WebCore12RenderWidget14windowClipRectEv">windowClipRect</a>();</td></tr>
+<tr><th id="270">270</th><td>}</td></tr>
+<tr><th id="271">271</th><td></td></tr>
+<tr><th id="272">272</th><td>- (<span class='typedef' title='NSRect' data-type='struct CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)visibleRect</td></tr>
+<tr><th id="273">273</th><td>{</td></tr>
+<tr><th id="274">274</th><td>    <i>// WebCore may impose an additional clip (via CSS overflow or clip properties).  Fetch</i></td></tr>
+<tr><th id="275">275</th><td><i>    // that clip now.    </i></td></tr>
+<tr><th id="276">276</th><td>    <b>return</b> <span class='ref fn' title='NSIntersectionRect' data-ref="NSIntersectionRect" data-ref-filename="NSIntersectionRect">NSIntersectionRect</span>([<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> convertRect:[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> _windowClipRect] fromView:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>], [super visibleRect]);</td></tr>
+<tr><th id="277">277</th><td>}</td></tr>
+<tr><th id="278">278</th><td></td></tr>
+<tr><th id="279">279</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)acceptsFirstResponder</td></tr>
+<tr><th id="280">280</th><td>{</td></tr>
+<tr><th id="281">281</th><td>    <b>return</b> <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="282">282</th><td>}</td></tr>
+<tr><th id="283">283</th><td></td></tr>
+<tr><th id="284">284</th><td>- (<em>void</em>)sendActivateEvent:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col6 decl" id="26activate" title='activate' data-type='BOOL' data-ref="26activate" data-ref-filename="26activate">activate</dfn></td></tr>
+<tr><th id="285">285</th><td>{</td></tr>
+<tr><th id="286">286</th><td>    <b>if</b> (!_isStarted)</td></tr>
+<tr><th id="287">287</th><td>        <b>return</b>;</td></tr>
+<tr><th id="288">288</th><td>    </td></tr>
+<tr><th id="289">289</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> windowFocusChanged:<a class="local col6 ref" href="#26activate" title='activate' data-ref="26activate" data-ref-filename="26activate">activate</a>];</td></tr>
+<tr><th id="290">290</th><td>}</td></tr>
+<tr><th id="291">291</th><td></td></tr>
+<tr><th id="292">292</th><td>- (<em>void</em>)setHasFocus:(<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)<dfn class="local col7 decl" id="27flag" title='flag' data-type='BOOL' data-ref="27flag" data-ref-filename="27flag">flag</dfn></td></tr>
+<tr><th id="293">293</th><td>{</td></tr>
+<tr><th id="294">294</th><td>    <b>if</b> (!_isStarted)</td></tr>
+<tr><th id="295">295</th><td>        <b>return</b>;</td></tr>
+<tr><th id="296">296</th><td>    </td></tr>
+<tr><th id="297">297</th><td>    <b>if</b> (_hasFocus == <a class="local col7 ref" href="#27flag" title='flag' data-ref="27flag" data-ref-filename="27flag">flag</a>)</td></tr>
+<tr><th id="298">298</th><td>        <b>return</b>;</td></tr>
+<tr><th id="299">299</th><td>    </td></tr>
+<tr><th id="300">300</th><td>    _hasFocus = <a class="local col7 ref" href="#27flag" title='flag' data-ref="27flag" data-ref-filename="27flag">flag</a>;</td></tr>
+<tr><th id="301">301</th><td>    </td></tr>
+<tr><th id="302">302</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> focusChanged];</td></tr>
+<tr><th id="303">303</th><td>}</td></tr>
+<tr><th id="304">304</th><td></td></tr>
+<tr><th id="305">305</th><td>- (<em>void</em>)addWindowObservers</td></tr>
+<tr><th id="306">306</th><td>{</td></tr>
+<tr><th id="307">307</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!([self window])) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm&quot;, 307, __PRETTY_FUNCTION__, &quot;[self window]&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(307, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm&quot;, __PRETTY_FUNCTION__, 2947); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>([<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window]);</td></tr>
+<tr><th id="308">308</th><td>    </td></tr>
+<tr><th id="309">309</th><td>    NSWindow *<dfn class="local col8 decl" id="28theWindow" title='theWindow' data-type='NSWindow *' data-ref="28theWindow" data-ref-filename="28theWindow">theWindow</dfn> = [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window];</td></tr>
+<tr><th id="310">310</th><td>    </td></tr>
+<tr><th id="311">311</th><td>    NSNotificationCenter *<dfn class="local col9 decl" id="29notificationCenter" title='notificationCenter' data-type='NSNotificationCenter *' data-ref="29notificationCenter" data-ref-filename="29notificationCenter">notificationCenter</dfn> = [NSNotificationCenter defaultCenter];</td></tr>
+<tr><th id="312">312</th><td>    [<a class="local col9 ref" href="#29notificationCenter" title='notificationCenter' data-ref="29notificationCenter" data-ref-filename="29notificationCenter">notificationCenter</a> addObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> selector:@selector(windowWillClose:) </td></tr>
+<tr><th id="313">313</th><td>                               name:<span class='ref' title='NSWindowWillCloseNotification' data-ref="NSWindowWillCloseNotification" data-ref-filename="NSWindowWillCloseNotification">NSWindowWillCloseNotification</span> object:<a class="local col8 ref" href="#28theWindow" title='theWindow' data-ref="28theWindow" data-ref-filename="28theWindow">theWindow</a>]; </td></tr>
+<tr><th id="314">314</th><td>    [<a class="local col9 ref" href="#29notificationCenter" title='notificationCenter' data-ref="29notificationCenter" data-ref-filename="29notificationCenter">notificationCenter</a> addObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> selector:@selector(windowBecameKey:)</td></tr>
+<tr><th id="315">315</th><td>                               name:<span class='ref' title='NSWindowDidBecomeKeyNotification' data-ref="NSWindowDidBecomeKeyNotification" data-ref-filename="NSWindowDidBecomeKeyNotification">NSWindowDidBecomeKeyNotification</span> object:<a class="local col8 ref" href="#28theWindow" title='theWindow' data-ref="28theWindow" data-ref-filename="28theWindow">theWindow</a>];</td></tr>
+<tr><th id="316">316</th><td>    [<a class="local col9 ref" href="#29notificationCenter" title='notificationCenter' data-ref="29notificationCenter" data-ref-filename="29notificationCenter">notificationCenter</a> addObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> selector:@selector(windowResignedKey:)</td></tr>
+<tr><th id="317">317</th><td>                               name:<span class='ref' title='NSWindowDidResignKeyNotification' data-ref="NSWindowDidResignKeyNotification" data-ref-filename="NSWindowDidResignKeyNotification">NSWindowDidResignKeyNotification</span> object:<a class="local col8 ref" href="#28theWindow" title='theWindow' data-ref="28theWindow" data-ref-filename="28theWindow">theWindow</a>];</td></tr>
+<tr><th id="318">318</th><td>    [<a class="local col9 ref" href="#29notificationCenter" title='notificationCenter' data-ref="29notificationCenter" data-ref-filename="29notificationCenter">notificationCenter</a> addObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> selector:@selector(windowDidMiniaturize:)</td></tr>
+<tr><th id="319">319</th><td>                               name:<span class='ref' title='NSWindowDidMiniaturizeNotification' data-ref="NSWindowDidMiniaturizeNotification" data-ref-filename="NSWindowDidMiniaturizeNotification">NSWindowDidMiniaturizeNotification</span> object:<a class="local col8 ref" href="#28theWindow" title='theWindow' data-ref="28theWindow" data-ref-filename="28theWindow">theWindow</a>];</td></tr>
+<tr><th id="320">320</th><td>    [<a class="local col9 ref" href="#29notificationCenter" title='notificationCenter' data-ref="29notificationCenter" data-ref-filename="29notificationCenter">notificationCenter</a> addObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> selector:@selector(windowDidDeminiaturize:)</td></tr>
+<tr><th id="321">321</th><td>                               name:<span class='ref' title='NSWindowDidDeminiaturizeNotification' data-ref="NSWindowDidDeminiaturizeNotification" data-ref-filename="NSWindowDidDeminiaturizeNotification">NSWindowDidDeminiaturizeNotification</span> object:<a class="local col8 ref" href="#28theWindow" title='theWindow' data-ref="28theWindow" data-ref-filename="28theWindow">theWindow</a>];</td></tr>
+<tr><th id="322">322</th><td>    </td></tr>
+<tr><th id="323">323</th><td>    [<a class="local col9 ref" href="#29notificationCenter" title='notificationCenter' data-ref="29notificationCenter" data-ref-filename="29notificationCenter">notificationCenter</a> addObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> selector:@selector(loginWindowDidSwitchFromUser:)</td></tr>
+<tr><th id="324">324</th><td>                               name:<a class="macro" href="#65" title="@&quot;WebLoginWindowDidSwitchFromUserNotification&quot;" data-ref="_M/LoginWindowDidSwitchFromUserNotification">LoginWindowDidSwitchFromUserNotification</a> object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="325">325</th><td>    [<a class="local col9 ref" href="#29notificationCenter" title='notificationCenter' data-ref="29notificationCenter" data-ref-filename="29notificationCenter">notificationCenter</a> addObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> selector:@selector(loginWindowDidSwitchToUser:)</td></tr>
+<tr><th id="326">326</th><td>                               name:<a class="macro" href="#66" title="@&quot;WebLoginWindowDidSwitchToUserNotification&quot;" data-ref="_M/LoginWindowDidSwitchToUserNotification">LoginWindowDidSwitchToUserNotification</a> object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="327">327</th><td>}</td></tr>
+<tr><th id="328">328</th><td></td></tr>
+<tr><th id="329">329</th><td>- (<em>void</em>)removeWindowObservers</td></tr>
+<tr><th id="330">330</th><td>{</td></tr>
+<tr><th id="331">331</th><td>    NSNotificationCenter *<dfn class="local col0 decl" id="30notificationCenter" title='notificationCenter' data-type='NSNotificationCenter *' data-ref="30notificationCenter" data-ref-filename="30notificationCenter">notificationCenter</dfn> = [NSNotificationCenter defaultCenter];</td></tr>
+<tr><th id="332">332</th><td>    [<a class="local col0 ref" href="#30notificationCenter" title='notificationCenter' data-ref="30notificationCenter" data-ref-filename="30notificationCenter">notificationCenter</a> removeObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> name:<span class='ref' title='NSWindowWillCloseNotification' data-ref="NSWindowWillCloseNotification" data-ref-filename="NSWindowWillCloseNotification">NSWindowWillCloseNotification</span>        object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>]; </td></tr>
+<tr><th id="333">333</th><td>    [<a class="local col0 ref" href="#30notificationCenter" title='notificationCenter' data-ref="30notificationCenter" data-ref-filename="30notificationCenter">notificationCenter</a> removeObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> name:<span class='ref' title='NSWindowDidBecomeKeyNotification' data-ref="NSWindowDidBecomeKeyNotification" data-ref-filename="NSWindowDidBecomeKeyNotification">NSWindowDidBecomeKeyNotification</span>     object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="334">334</th><td>    [<a class="local col0 ref" href="#30notificationCenter" title='notificationCenter' data-ref="30notificationCenter" data-ref-filename="30notificationCenter">notificationCenter</a> removeObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> name:<span class='ref' title='NSWindowDidResignKeyNotification' data-ref="NSWindowDidResignKeyNotification" data-ref-filename="NSWindowDidResignKeyNotification">NSWindowDidResignKeyNotification</span>     object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="335">335</th><td>    [<a class="local col0 ref" href="#30notificationCenter" title='notificationCenter' data-ref="30notificationCenter" data-ref-filename="30notificationCenter">notificationCenter</a> removeObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> name:<span class='ref' title='NSWindowDidMiniaturizeNotification' data-ref="NSWindowDidMiniaturizeNotification" data-ref-filename="NSWindowDidMiniaturizeNotification">NSWindowDidMiniaturizeNotification</span>   object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="336">336</th><td>    [<a class="local col0 ref" href="#30notificationCenter" title='notificationCenter' data-ref="30notificationCenter" data-ref-filename="30notificationCenter">notificationCenter</a> removeObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> name:<span class='ref' title='NSWindowDidDeminiaturizeNotification' data-ref="NSWindowDidDeminiaturizeNotification" data-ref-filename="NSWindowDidDeminiaturizeNotification">NSWindowDidDeminiaturizeNotification</span> object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="337">337</th><td>    [<a class="local col0 ref" href="#30notificationCenter" title='notificationCenter' data-ref="30notificationCenter" data-ref-filename="30notificationCenter">notificationCenter</a> removeObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> name:<a class="macro" href="#65" title="@&quot;WebLoginWindowDidSwitchFromUserNotification&quot;" data-ref="_M/LoginWindowDidSwitchFromUserNotification">LoginWindowDidSwitchFromUserNotification</a>   object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="338">338</th><td>    [<a class="local col0 ref" href="#30notificationCenter" title='notificationCenter' data-ref="30notificationCenter" data-ref-filename="30notificationCenter">notificationCenter</a> removeObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> name:<a class="macro" href="#66" title="@&quot;WebLoginWindowDidSwitchToUserNotification&quot;" data-ref="_M/LoginWindowDidSwitchToUserNotification">LoginWindowDidSwitchToUserNotification</a>     object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="339">339</th><td>}</td></tr>
+<tr><th id="340">340</th><td></td></tr>
+<tr><th id="341">341</th><td>- (<em>void</em>)start</td></tr>
+<tr><th id="342">342</th><td>{</td></tr>
+<tr><th id="343">343</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!([self currentWindow])) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm&quot;, 343, __PRETTY_FUNCTION__, &quot;[self currentWindow]&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(343, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm&quot;, __PRETTY_FUNCTION__, 2949); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>([<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> currentWindow]);</td></tr>
+<tr><th id="344">344</th><td>    </td></tr>
+<tr><th id="345">345</th><td>    <b>if</b> (_isStarted)</td></tr>
+<tr><th id="346">346</th><td>        <b>return</b>;</td></tr>
+<tr><th id="347">347</th><td>    </td></tr>
+<tr><th id="348">348</th><td>    <b>if</b> (_triedAndFailedToCreatePlugin)</td></tr>
+<tr><th id="349">349</th><td>        <b>return</b>;</td></tr>
+<tr><th id="350">350</th><td>    </td></tr>
+<tr><th id="351">351</th><td>    <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#347" title="do { if (!([self webView])) { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm&quot;, 351, __PRETTY_FUNCTION__, &quot;[self webView]&quot;); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(351, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm&quot;, __PRETTY_FUNCTION__, 2951); } while (false); } } while (0)" data-ref="_M/ASSERT">ASSERT</a>([<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webView]);</td></tr>
+<tr><th id="352">352</th><td>    </td></tr>
+<tr><th id="353">353</th><td>    <b>if</b> (![[[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webView] preferences] arePlugInsEnabled])</td></tr>
+<tr><th id="354">354</th><td>        <b>return</b>;</td></tr>
+<tr><th id="355">355</th><td>   </td></tr>
+<tr><th id="356">356</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Frame.h.html#WebCore::Frame" title='WebCore::Frame' data-ref="WebCore::Frame" data-ref-filename="WebCore..Frame">Frame</a>* <dfn class="local col1 decl" id="31frame" title='frame' data-type='WebCore::Frame *' data-ref="31frame" data-ref-filename="31frame">frame</dfn> = <a class="ref fn" href="../WebView/WebFrameInternal.h.html#_Z4coreP8WebFrame" title='core' data-ref="_Z4coreP8WebFrame" data-ref-filename="_Z4coreP8WebFrame">core</a>([<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webFrame]);</td></tr>
+<tr><th id="357">357</th><td>    <b>if</b> (!<a class="local col1 ref" href="#31frame" title='frame' data-ref="31frame" data-ref-filename="31frame">frame</a>)</td></tr>
+<tr><th id="358">358</th><td>        <b>return</b>;</td></tr>
+<tr><th id="359">359</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Page.h.html#WebCore::Page" title='WebCore::Page' data-ref="WebCore::Page" data-ref-filename="WebCore..Page">Page</a>* <dfn class="local col2 decl" id="32page" title='page' data-type='WebCore::Page *' data-ref="32page" data-ref-filename="32page">page</dfn> = <a class="local col1 ref" href="#31frame" title='frame' data-ref="31frame" data-ref-filename="31frame">frame</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Frame.h.html#_ZNK7WebCore5Frame4pageEv" title='WebCore::Frame::page' data-ref="_ZNK7WebCore5Frame4pageEv" data-ref-filename="_ZNK7WebCore5Frame4pageEv">page</a>();</td></tr>
+<tr><th id="360">360</th><td>    <b>if</b> (!<a class="local col2 ref" href="#32page" title='page' data-ref="32page" data-ref-filename="32page">page</a>)</td></tr>
+<tr><th id="361">361</th><td>        <b>return</b>;</td></tr>
+<tr><th id="362">362</th><td>    </td></tr>
+<tr><th id="363">363</th><td>    <em>bool</em> <dfn class="local col3 decl" id="33wasDeferring" title='wasDeferring' data-type='bool' data-ref="33wasDeferring" data-ref-filename="33wasDeferring">wasDeferring</dfn> = <a class="local col2 ref" href="#32page" title='page' data-ref="32page" data-ref-filename="32page">page</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Page.h.html#_ZNK7WebCore4Page13defersLoadingEv" title='WebCore::Page::defersLoading' data-ref="_ZNK7WebCore4Page13defersLoadingEv" data-ref-filename="_ZNK7WebCore4Page13defersLoadingEv">defersLoading</a>();</td></tr>
+<tr><th id="364">364</th><td>    <b>if</b> (!<a class="local col3 ref" href="#33wasDeferring" title='wasDeferring' data-ref="33wasDeferring" data-ref-filename="33wasDeferring">wasDeferring</a>)</td></tr>
+<tr><th id="365">365</th><td>        <a class="local col2 ref" href="#32page" title='page' data-ref="32page" data-ref-filename="32page">page</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Page.h.html#_ZN7WebCore4Page16setDefersLoadingEb" title='WebCore::Page::setDefersLoading' data-ref="_ZN7WebCore4Page16setDefersLoadingEb" data-ref-filename="_ZN7WebCore4Page16setDefersLoadingEb">setDefersLoading</a>(<b>true</b>);</td></tr>
+<tr><th id="366">366</th><td></td></tr>
+<tr><th id="367">367</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col4 decl" id="34result" title='result' data-type='BOOL' data-ref="34result" data-ref-filename="34result">result</dfn> = [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> createPlugin];</td></tr>
+<tr><th id="368">368</th><td>    </td></tr>
+<tr><th id="369">369</th><td>    <b>if</b> (!<a class="local col3 ref" href="#33wasDeferring" title='wasDeferring' data-ref="33wasDeferring" data-ref-filename="33wasDeferring">wasDeferring</a>)</td></tr>
+<tr><th id="370">370</th><td>        <a class="local col2 ref" href="#32page" title='page' data-ref="32page" data-ref-filename="32page">page</a>-&gt;<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Page.h.html#_ZN7WebCore4Page16setDefersLoadingEb" title='WebCore::Page::setDefersLoading' data-ref="_ZN7WebCore4Page16setDefersLoadingEb" data-ref-filename="_ZN7WebCore4Page16setDefersLoadingEb">setDefersLoading</a>(<b>false</b>);</td></tr>
+<tr><th id="371">371</th><td></td></tr>
+<tr><th id="372">372</th><td>    <b>if</b> (!<a class="local col4 ref" href="#34result" title='result' data-ref="34result" data-ref-filename="34result">result</a>) {</td></tr>
+<tr><th id="373">373</th><td>        _triedAndFailedToCreatePlugin = <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="374">374</th><td>        <b>return</b>;</td></tr>
+<tr><th id="375">375</th><td>    }</td></tr>
+<tr><th id="376">376</th><td>    </td></tr>
+<tr><th id="377">377</th><td>    _isStarted = <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="378">378</th><td></td></tr>
+<tr><th id="379">379</th><td>    [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webView] addPluginInstanceView:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span>];</td></tr>
+<tr><th id="380">380</th><td></td></tr>
+<tr><th id="381">381</th><td>    <b>if</b> ([<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> currentWindow])</td></tr>
+<tr><th id="382">382</th><td>        [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> updateAndSetWindow];</td></tr>
+<tr><th id="383">383</th><td></td></tr>
+<tr><th id="384">384</th><td>    <b>if</b> ([<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window]) {</td></tr>
+<tr><th id="385">385</th><td>        [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> addWindowObservers];</td></tr>
+<tr><th id="386">386</th><td>        <b>if</b> ([[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window] isKeyWindow]) {</td></tr>
+<tr><th id="387">387</th><td>            [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> sendActivateEvent:<span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>];</td></tr>
+<tr><th id="388">388</th><td>        }</td></tr>
+<tr><th id="389">389</th><td>        [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> restartTimers];</td></tr>
+<tr><th id="390">390</th><td>    }</td></tr>
+<tr><th id="391">391</th><td>    </td></tr>
+<tr><th id="392">392</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> resetTrackingRect];</td></tr>
+<tr><th id="393">393</th><td>    </td></tr>
+<tr><th id="394">394</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> loadStream];</td></tr>
+<tr><th id="395">395</th><td>}</td></tr>
+<tr><th id="396">396</th><td></td></tr>
+<tr><th id="397">397</th><td>- (<em>void</em>)stop</td></tr>
+<tr><th id="398">398</th><td>{</td></tr>
+<tr><th id="399">399</th><td>    <b>if</b> (![<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> shouldStop])</td></tr>
+<tr><th id="400">400</th><td>        <b>return</b>;</td></tr>
+<tr><th id="401">401</th><td>    </td></tr>
+<tr><th id="402">402</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> removeTrackingRect];</td></tr>
+<tr><th id="403">403</th><td>    </td></tr>
+<tr><th id="404">404</th><td>    <b>if</b> (!_isStarted)</td></tr>
+<tr><th id="405">405</th><td>        <b>return</b>;</td></tr>
+<tr><th id="406">406</th><td></td></tr>
+<tr><th id="407">407</th><td>    _isStarted = <span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>;</td></tr>
+<tr><th id="408">408</th><td>    </td></tr>
+<tr><th id="409">409</th><td>    [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webView] removePluginInstanceView:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span>];</td></tr>
+<tr><th id="410">410</th><td>    </td></tr>
+<tr><th id="411">411</th><td>    <i>// Stop the timers</i></td></tr>
+<tr><th id="412">412</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> stopTimers];</td></tr>
+<tr><th id="413">413</th><td>    </td></tr>
+<tr><th id="414">414</th><td>    <i>// Stop notifications and callbacks.</i></td></tr>
+<tr><th id="415">415</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> removeWindowObservers];</td></tr>
+<tr><th id="416">416</th><td>    </td></tr>
+<tr><th id="417">417</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> destroyPlugin];</td></tr>
+<tr><th id="418">418</th><td>}</td></tr>
+<tr><th id="419">419</th><td></td></tr>
+<tr><th id="420">420</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)shouldClipOutPlugin</td></tr>
+<tr><th id="421">421</th><td>{</td></tr>
+<tr><th id="422">422</th><td>    NSWindow *<dfn class="local col5 decl" id="35window" title='window' data-type='NSWindow *' data-ref="35window" data-ref-filename="35window">window</dfn> = [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window];</td></tr>
+<tr><th id="423">423</th><td>    <b>return</b> !<a class="local col5 ref" href="#35window" title='window' data-ref="35window" data-ref-filename="35window">window</a> || [<a class="local col5 ref" href="#35window" title='window' data-ref="35window" data-ref-filename="35window">window</a> isMiniaturized] || [<span class='ref' title='NSApp' data-ref="NSApp" data-ref-filename="NSApp">NSApp</span> isHidden] || ![<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> isDescendantOf:[[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window] contentView]] || [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> isHiddenOrHasHiddenAncestor];</td></tr>
+<tr><th id="424">424</th><td>}</td></tr>
+<tr><th id="425">425</th><td></td></tr>
+<tr><th id="426">426</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)supportsSnapshotting</td></tr>
+<tr><th id="427">427</th><td>{</td></tr>
+<tr><th id="428">428</th><td>    <b>return</b> [_pluginPackage.<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZNK3WTF9RetainPtr3getEv" title='WTF::RetainPtr::get' data-ref="_ZNK3WTF9RetainPtr3getEv" data-ref-filename="_ZNK3WTF9RetainPtr3getEv">get</a>() supportsSnapshotting];</td></tr>
+<tr><th id="429">429</th><td>}</td></tr>
+<tr><th id="430">430</th><td></td></tr>
+<tr><th id="431">431</th><td>- (<em>void</em>)cacheSnapshot</td></tr>
+<tr><th id="432">432</th><td>{</td></tr>
+<tr><th id="433">433</th><td>    <span class='typedef' title='NSSize' data-type='struct CGSize' data-ref="NSSize" data-ref-filename="NSSize">NSSize</span> <dfn class="local col6 decl" id="36boundsSize" title='boundsSize' data-type='NSSize' data-ref="36boundsSize" data-ref-filename="36boundsSize">boundsSize</dfn> = <span class='ref fn fake' title='CGSize::CGSize' data-ref="_ZN6CGSizeC1EOS_" data-ref-filename="_ZN6CGSizeC1EOS_"></span>[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> bounds].<span class='ref field' title='CGRect::size' data-ref="CGRect::size" data-ref-filename="CGRect..size">size</span>;</td></tr>
+<tr><th id="434">434</th><td>    <b>if</b> (!<a class="local col6 ref" href="#36boundsSize" title='boundsSize' data-ref="36boundsSize" data-ref-filename="36boundsSize">boundsSize</a>.<span class='ref field' title='CGSize::height' data-ref="CGSize::height" data-ref-filename="CGSize..height">height</span> || !<a class="local col6 ref" href="#36boundsSize" title='boundsSize' data-ref="36boundsSize" data-ref-filename="36boundsSize">boundsSize</a>.<span class='ref field' title='CGSize::width' data-ref="CGSize::width" data-ref-filename="CGSize..width">width</span>)</td></tr>
+<tr><th id="435">435</th><td>        <b>return</b>;</td></tr>
+<tr><th id="436">436</th><td></td></tr>
+<tr><th id="437">437</th><td>    <em>auto</em> <dfn class="local col7 decl" id="37snapshot" title='snapshot' data-type='WTF::RetainPtr&lt;NSImage&gt;' data-ref="37snapshot" data-ref-filename="37snapshot">snapshot</dfn> = <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF7adoptNSET_" title='WTF::adoptNS' data-ref="_ZN3WTF7adoptNSET_" data-ref-filename="_ZN3WTF7adoptNSET_">adoptNS</a>([[NSImage alloc] initWithSize:<span class='ref fn fake' title='CGSize::CGSize' data-ref="_ZN6CGSizeC1ERKS_" data-ref-filename="_ZN6CGSizeC1ERKS_"></span><a class="local col6 ref" href="#36boundsSize" title='boundsSize' data-ref="36boundsSize" data-ref-filename="36boundsSize">boundsSize</a>]);</td></tr>
+<tr><th id="438">438</th><td>        </td></tr>
+<tr><th id="439">439</th><td>    _snapshotting = <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="440">440</th><td>    [<a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv" title='WTF::RetainPtr::operator typename remove_pointer&lt;type-parameter-0-0&gt;::type *' data-ref="_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv" data-ref-filename="_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv"></a><a class="local col7 ref" href="#37snapshot" title='snapshot' data-ref="37snapshot" data-ref-filename="37snapshot">snapshot</a> lockFocus];</td></tr>
+<tr><th id="441">441</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> drawRect:[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> bounds]];</td></tr>
+<tr><th id="442">442</th><td>    [<a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv" title='WTF::RetainPtr::operator typename remove_pointer&lt;type-parameter-0-0&gt;::type *' data-ref="_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv" data-ref-filename="_ZNK3WTF9RetainPtrcvPNSt3__114remove_pointerIT_E4typeEEv"></a><a class="local col7 ref" href="#37snapshot" title='snapshot' data-ref="37snapshot" data-ref-filename="37snapshot">snapshot</a> unlockFocus];</td></tr>
+<tr><th id="443">443</th><td>    _snapshotting = <span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>;</td></tr>
+<tr><th id="444">444</th><td>    </td></tr>
+<tr><th id="445">445</th><td>    _cachedSnapshot <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF9RetainPtraSEONS_9RetainPtrIT_EE" title='WTF::RetainPtr::operator=' data-ref="_ZN3WTF9RetainPtraSEONS_9RetainPtrIT_EE" data-ref-filename="_ZN3WTF9RetainPtraSEONS_9RetainPtrIT_EE">=</a> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/StdLibExtras.h.html#568" title="std::move&lt;WTF::CheckMoveParameter&gt;(snapshot)" data-ref="_M/WTFMove">WTFMove</a>(<span class='refarg'><a class="local col7 ref" href="#37snapshot" title='snapshot' data-ref="37snapshot" data-ref-filename="37snapshot">snapshot</a></span>);</td></tr>
+<tr><th id="446">446</th><td>}</td></tr>
+<tr><th id="447">447</th><td></td></tr>
+<tr><th id="448">448</th><td>- (<em>void</em>)clearCachedSnapshot</td></tr>
+<tr><th id="449">449</th><td>{</td></tr>
+<tr><th id="450">450</th><td>    _cachedSnapshot.<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF9RetainPtr5clearEv" title='WTF::RetainPtr::clear' data-ref="_ZN3WTF9RetainPtr5clearEv" data-ref-filename="_ZN3WTF9RetainPtr5clearEv">clear</a>();</td></tr>
+<tr><th id="451">451</th><td>}</td></tr>
+<tr><th id="452">452</th><td></td></tr>
+<tr><th id="453">453</th><td>- (<em>void</em>)viewWillMoveToWindow:(NSWindow *)<dfn class="local col8 decl" id="38newWindow" title='newWindow' data-type='NSWindow * _Nullable' data-ref="38newWindow" data-ref-filename="38newWindow">newWindow</dfn></td></tr>
+<tr><th id="454">454</th><td>{</td></tr>
+<tr><th id="455">455</th><td>    <i>// We must remove the tracking rect before we move to the new window.</i></td></tr>
+<tr><th id="456">456</th><td><i>    // Once we move to the new window, it will be too late.</i></td></tr>
+<tr><th id="457">457</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> removeTrackingRect];</td></tr>
+<tr><th id="458">458</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> removeWindowObservers];</td></tr>
+<tr><th id="459">459</th><td>    </td></tr>
+<tr><th id="460">460</th><td>    <i>// Workaround for: &lt;rdar://problem/3822871&gt; resignFirstResponder is not sent to first responder view when it is removed from the window</i></td></tr>
+<tr><th id="461">461</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> setHasFocus:<span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>];</td></tr>
+<tr><th id="462">462</th><td>    </td></tr>
+<tr><th id="463">463</th><td>    <b>if</b> (!<a class="local col8 ref" href="#38newWindow" title='newWindow' data-ref="38newWindow" data-ref-filename="38newWindow">newWindow</a>) {</td></tr>
+<tr><th id="464">464</th><td>        <b>if</b> ([[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webView] hostWindow]) {</td></tr>
+<tr><th id="465">465</th><td>            <i>// View will be moved out of the actual window but it still has a host window.</i></td></tr>
+<tr><th id="466">466</th><td>            [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> stopTimers];</td></tr>
+<tr><th id="467">467</th><td>        } <b>else</b> {</td></tr>
+<tr><th id="468">468</th><td>            <i>// View will have no associated windows.</i></td></tr>
+<tr><th id="469">469</th><td>            [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> stop];</td></tr>
+<tr><th id="470">470</th><td>            </td></tr>
+<tr><th id="471">471</th><td>            <i>// Stop observing WebPreferencesChangedInternalNotification -- we only need to observe this when installed in the view hierarchy.</i></td></tr>
+<tr><th id="472">472</th><td><i>            // When not in the view hierarchy, -viewWillMoveToWindow: and -viewDidMoveToWindow will start/stop the plugin as needed.</i></td></tr>
+<tr><th id="473">473</th><td>            [[NSNotificationCenter defaultCenter] removeObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> name:<a class="ref" href="../WebView/WebPreferencesPrivate.h.html#WebPreferencesChangedInternalNotification" title='WebPreferencesChangedInternalNotification' data-ref="WebPreferencesChangedInternalNotification" data-ref-filename="WebPreferencesChangedInternalNotification">WebPreferencesChangedInternalNotification</a> object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="474">474</th><td>        }</td></tr>
+<tr><th id="475">475</th><td>    }</td></tr>
+<tr><th id="476">476</th><td>}</td></tr>
+<tr><th id="477">477</th><td></td></tr>
+<tr><th id="478">478</th><td>- (<em>void</em>)viewWillMoveToSuperview:(NSView *)<dfn class="local col9 decl" id="39newSuperview" title='newSuperview' data-type='NSView * _Nullable' data-ref="39newSuperview" data-ref-filename="39newSuperview">newSuperview</dfn></td></tr>
+<tr><th id="479">479</th><td>{</td></tr>
+<tr><th id="480">480</th><td>    <b>if</b> (!<a class="local col9 ref" href="#39newSuperview" title='newSuperview' data-ref="39newSuperview" data-ref-filename="39newSuperview">newSuperview</a>) {</td></tr>
+<tr><th id="481">481</th><td>        <i>// Stop the plug-in when it is removed from its superview.  It is not sufficient to do this in -viewWillMoveToWindow:nil, because</i></td></tr>
+<tr><th id="482">482</th><td><i>        // the WebView might still has a hostWindow at that point, which prevents the plug-in from being destroyed.</i></td></tr>
+<tr><th id="483">483</th><td><i>        // There is no need to start the plug-in when moving into a superview.  -viewDidMoveToWindow takes care of that.</i></td></tr>
+<tr><th id="484">484</th><td>        [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> stop];</td></tr>
+<tr><th id="485">485</th><td>        </td></tr>
+<tr><th id="486">486</th><td>        <i>// Stop observing WebPreferencesChangedInternalNotification -- we only need to observe this when installed in the view hierarchy.</i></td></tr>
+<tr><th id="487">487</th><td><i>        // When not in the view hierarchy, -viewWillMoveToWindow: and -viewDidMoveToWindow will start/stop the plugin as needed.</i></td></tr>
+<tr><th id="488">488</th><td>        [[NSNotificationCenter defaultCenter] removeObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> name:<a class="ref" href="../WebView/WebPreferencesPrivate.h.html#WebPreferencesChangedInternalNotification" title='WebPreferencesChangedInternalNotification' data-ref="WebPreferencesChangedInternalNotification" data-ref-filename="WebPreferencesChangedInternalNotification">WebPreferencesChangedInternalNotification</a> object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="489">489</th><td>    }</td></tr>
+<tr><th id="490">490</th><td>}</td></tr>
+<tr><th id="491">491</th><td></td></tr>
+<tr><th id="492">492</th><td>- (<em>void</em>)viewDidMoveToWindow</td></tr>
+<tr><th id="493">493</th><td>{</td></tr>
+<tr><th id="494">494</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> resetTrackingRect];</td></tr>
+<tr><th id="495">495</th><td>    </td></tr>
+<tr><th id="496">496</th><td>    <b>if</b> ([<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window]) {</td></tr>
+<tr><th id="497">497</th><td>        <i>// While in the view hierarchy, observe WebPreferencesChangedInternalNotification so that we can start/stop depending</i></td></tr>
+<tr><th id="498">498</th><td><i>        // on whether plugins are enabled.</i></td></tr>
+<tr><th id="499">499</th><td>        [[NSNotificationCenter defaultCenter] addObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span></td></tr>
+<tr><th id="500">500</th><td>                                                 selector:@selector(preferencesHaveChanged:)</td></tr>
+<tr><th id="501">501</th><td>                                                     name:<a class="ref" href="../WebView/WebPreferencesPrivate.h.html#WebPreferencesChangedInternalNotification" title='WebPreferencesChangedInternalNotification' data-ref="WebPreferencesChangedInternalNotification" data-ref-filename="WebPreferencesChangedInternalNotification">WebPreferencesChangedInternalNotification</a></td></tr>
+<tr><th id="502">502</th><td>                                                   object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="503">503</th><td></td></tr>
+<tr><th id="504">504</th><td>        _isPrivateBrowsingEnabled = [[[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webView] preferences] privateBrowsingEnabled];</td></tr>
+<tr><th id="505">505</th><td>        </td></tr>
+<tr><th id="506">506</th><td>        <i>// View moved to an actual window. Start it if not already started.</i></td></tr>
+<tr><th id="507">507</th><td>        [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> start];</td></tr>
+<tr><th id="508">508</th><td></td></tr>
+<tr><th id="509">509</th><td>        <i>// Starting the plug-in can result in it removing itself from the window so we need to ensure that we're still in</i></td></tr>
+<tr><th id="510">510</th><td><i>        // place before doing anything that requires a window.</i></td></tr>
+<tr><th id="511">511</th><td>        <b>if</b> ([<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window]) {</td></tr>
+<tr><th id="512">512</th><td>            [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> restartTimers];</td></tr>
+<tr><th id="513">513</th><td>            [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> addWindowObservers];</td></tr>
+<tr><th id="514">514</th><td>        }</td></tr>
+<tr><th id="515">515</th><td>    } <b>else</b> <b>if</b> ([[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webView] hostWindow]) {</td></tr>
+<tr><th id="516">516</th><td>        <i>// View moved out of an actual window, but still has a host window.</i></td></tr>
+<tr><th id="517">517</th><td><i>        // Call setWindow to explicitly "clip out" the plug-in from sight.</i></td></tr>
+<tr><th id="518">518</th><td><i>        // FIXME: It would be nice to do this where we call stopNullEvents in viewWillMoveToWindow.</i></td></tr>
+<tr><th id="519">519</th><td>        [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> updateAndSetWindow];</td></tr>
+<tr><th id="520">520</th><td>    }</td></tr>
+<tr><th id="521">521</th><td>}</td></tr>
+<tr><th id="522">522</th><td></td></tr>
+<tr><th id="523">523</th><td>- (<em>void</em>)viewWillMoveToHostWindow:(NSWindow *)<dfn class="local col0 decl" id="40hostWindow" title='hostWindow' data-type='NSWindow *' data-ref="40hostWindow" data-ref-filename="40hostWindow">hostWindow</dfn></td></tr>
+<tr><th id="524">524</th><td>{</td></tr>
+<tr><th id="525">525</th><td>    <b>if</b> (!<a class="local col0 ref" href="#40hostWindow" title='hostWindow' data-ref="40hostWindow" data-ref-filename="40hostWindow">hostWindow</a> &amp;&amp; ![<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window]) {</td></tr>
+<tr><th id="526">526</th><td>        <i>// View will have no associated windows.</i></td></tr>
+<tr><th id="527">527</th><td>        [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> stop];</td></tr>
+<tr><th id="528">528</th><td>        </td></tr>
+<tr><th id="529">529</th><td>        <i>// Remove WebPreferencesChangedInternalNotification observer -- we will observe once again when we move back into the window</i></td></tr>
+<tr><th id="530">530</th><td>        [[NSNotificationCenter defaultCenter] removeObserver:<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> name:<a class="ref" href="../WebView/WebPreferencesPrivate.h.html#WebPreferencesChangedInternalNotification" title='WebPreferencesChangedInternalNotification' data-ref="WebPreferencesChangedInternalNotification" data-ref-filename="WebPreferencesChangedInternalNotification">WebPreferencesChangedInternalNotification</a> object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="531">531</th><td>    }</td></tr>
+<tr><th id="532">532</th><td>}</td></tr>
+<tr><th id="533">533</th><td></td></tr>
+<tr><th id="534">534</th><td>- (<em>void</em>)viewDidMoveToHostWindow</td></tr>
+<tr><th id="535">535</th><td>{</td></tr>
+<tr><th id="536">536</th><td>    <b>if</b> ([[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webView] hostWindow]) {</td></tr>
+<tr><th id="537">537</th><td>        <i>// View now has an associated window. Start it if not already started.</i></td></tr>
+<tr><th id="538">538</th><td>        [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> start];</td></tr>
+<tr><th id="539">539</th><td>    }</td></tr>
+<tr><th id="540">540</th><td>}</td></tr>
+<tr><th id="541">541</th><td></td></tr>
+<tr><th id="542">542</th><td><i>// MARK: NOTIFICATIONS</i></td></tr>
+<tr><th id="543">543</th><td></td></tr>
+<tr><th id="544">544</th><td>- (<em>void</em>)windowWillClose:(NSNotification *)<dfn class="local col1 decl" id="41notification" title='notification' data-type='NSNotification *' data-ref="41notification" data-ref-filename="41notification">notification</dfn> </td></tr>
+<tr><th id="545">545</th><td>{</td></tr>
+<tr><th id="546">546</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> stop]; </td></tr>
+<tr><th id="547">547</th><td>} </td></tr>
+<tr><th id="548">548</th><td></td></tr>
+<tr><th id="549">549</th><td>- (<em>void</em>)windowBecameKey:(NSNotification *)<dfn class="local col2 decl" id="42notification" title='notification' data-type='NSNotification *' data-ref="42notification" data-ref-filename="42notification">notification</dfn></td></tr>
+<tr><th id="550">550</th><td>{</td></tr>
+<tr><th id="551">551</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> sendActivateEvent:<span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>];</td></tr>
+<tr><th id="552">552</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> invalidatePluginContentRect:[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> bounds]];</td></tr>
+<tr><th id="553">553</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> restartTimers];</td></tr>
+<tr><th id="554">554</th><td>}</td></tr>
+<tr><th id="555">555</th><td></td></tr>
+<tr><th id="556">556</th><td>- (<em>void</em>)windowResignedKey:(NSNotification *)<dfn class="local col3 decl" id="43notification" title='notification' data-type='NSNotification *' data-ref="43notification" data-ref-filename="43notification">notification</dfn></td></tr>
+<tr><th id="557">557</th><td>{</td></tr>
+<tr><th id="558">558</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> sendActivateEvent:<span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>];</td></tr>
+<tr><th id="559">559</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> invalidatePluginContentRect:[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> bounds]];</td></tr>
+<tr><th id="560">560</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> restartTimers];</td></tr>
+<tr><th id="561">561</th><td>}</td></tr>
+<tr><th id="562">562</th><td></td></tr>
+<tr><th id="563">563</th><td>- (<em>void</em>)windowDidMiniaturize:(NSNotification *)<dfn class="local col4 decl" id="44notification" title='notification' data-type='NSNotification *' data-ref="44notification" data-ref-filename="44notification">notification</dfn></td></tr>
+<tr><th id="564">564</th><td>{</td></tr>
+<tr><th id="565">565</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> stopTimers];</td></tr>
+<tr><th id="566">566</th><td>}</td></tr>
+<tr><th id="567">567</th><td></td></tr>
+<tr><th id="568">568</th><td>- (<em>void</em>)windowDidDeminiaturize:(NSNotification *)<dfn class="local col5 decl" id="45notification" title='notification' data-type='NSNotification *' data-ref="45notification" data-ref-filename="45notification">notification</dfn></td></tr>
+<tr><th id="569">569</th><td>{</td></tr>
+<tr><th id="570">570</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> restartTimers];</td></tr>
+<tr><th id="571">571</th><td>}</td></tr>
+<tr><th id="572">572</th><td></td></tr>
+<tr><th id="573">573</th><td>- (<em>void</em>)loginWindowDidSwitchFromUser:(NSNotification *)<dfn class="local col6 decl" id="46notification" title='notification' data-type='NSNotification *' data-ref="46notification" data-ref-filename="46notification">notification</dfn></td></tr>
+<tr><th id="574">574</th><td>{</td></tr>
+<tr><th id="575">575</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> stopTimers];</td></tr>
+<tr><th id="576">576</th><td>}</td></tr>
+<tr><th id="577">577</th><td></td></tr>
+<tr><th id="578">578</th><td>-(<em>void</em>)loginWindowDidSwitchToUser:(NSNotification *)<dfn class="local col7 decl" id="47notification" title='notification' data-type='NSNotification *' data-ref="47notification" data-ref-filename="47notification">notification</dfn></td></tr>
+<tr><th id="579">579</th><td>{</td></tr>
+<tr><th id="580">580</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> restartTimers];</td></tr>
+<tr><th id="581">581</th><td>}</td></tr>
+<tr><th id="582">582</th><td></td></tr>
+<tr><th id="583">583</th><td>- (<em>void</em>)preferencesHaveChanged:(NSNotification *)<dfn class="local col8 decl" id="48notification" title='notification' data-type='NSNotification *' data-ref="48notification" data-ref-filename="48notification">notification</dfn></td></tr>
+<tr><th id="584">584</th><td>{</td></tr>
+<tr><th id="585">585</th><td>    WebPreferences *<dfn class="local col9 decl" id="49preferences" title='preferences' data-type='WebPreferences *' data-ref="49preferences" data-ref-filename="49preferences">preferences</dfn> = [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webView] preferences];</td></tr>
+<tr><th id="586">586</th><td></td></tr>
+<tr><th id="587">587</th><td>    <b>if</b> ([<a class="local col8 ref" href="#48notification" title='notification' data-ref="48notification" data-ref-filename="48notification">notification</a> object] != <a class="local col9 ref" href="#49preferences" title='preferences' data-ref="49preferences" data-ref-filename="49preferences">preferences</a>)</td></tr>
+<tr><th id="588">588</th><td>        <b>return</b>;</td></tr>
+<tr><th id="589">589</th><td>    </td></tr>
+<tr><th id="590">590</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col0 decl" id="50arePlugInsEnabled" title='arePlugInsEnabled' data-type='BOOL' data-ref="50arePlugInsEnabled" data-ref-filename="50arePlugInsEnabled">arePlugInsEnabled</dfn> = [<a class="local col9 ref" href="#49preferences" title='preferences' data-ref="49preferences" data-ref-filename="49preferences">preferences</a> arePlugInsEnabled];</td></tr>
+<tr><th id="591">591</th><td>    <b>if</b> (_isStarted != <a class="local col0 ref" href="#50arePlugInsEnabled" title='arePlugInsEnabled' data-ref="50arePlugInsEnabled" data-ref-filename="50arePlugInsEnabled">arePlugInsEnabled</a>) {</td></tr>
+<tr><th id="592">592</th><td>        <b>if</b> (<a class="local col0 ref" href="#50arePlugInsEnabled" title='arePlugInsEnabled' data-ref="50arePlugInsEnabled" data-ref-filename="50arePlugInsEnabled">arePlugInsEnabled</a>) {</td></tr>
+<tr><th id="593">593</th><td>            <b>if</b> ([<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> currentWindow]) {</td></tr>
+<tr><th id="594">594</th><td>                [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> start];</td></tr>
+<tr><th id="595">595</th><td>            }</td></tr>
+<tr><th id="596">596</th><td>        } <b>else</b> {</td></tr>
+<tr><th id="597">597</th><td>            [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> stop];</td></tr>
+<tr><th id="598">598</th><td>            [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> invalidatePluginContentRect:[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> bounds]];</td></tr>
+<tr><th id="599">599</th><td>        }</td></tr>
+<tr><th id="600">600</th><td>    }</td></tr>
+<tr><th id="601">601</th><td>    </td></tr>
+<tr><th id="602">602</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col1 decl" id="51isPrivateBrowsingEnabled" title='isPrivateBrowsingEnabled' data-type='BOOL' data-ref="51isPrivateBrowsingEnabled" data-ref-filename="51isPrivateBrowsingEnabled">isPrivateBrowsingEnabled</dfn> = [<a class="local col9 ref" href="#49preferences" title='preferences' data-ref="49preferences" data-ref-filename="49preferences">preferences</a> privateBrowsingEnabled];</td></tr>
+<tr><th id="603">603</th><td>    <b>if</b> (<a class="local col1 ref" href="#51isPrivateBrowsingEnabled" title='isPrivateBrowsingEnabled' data-ref="51isPrivateBrowsingEnabled" data-ref-filename="51isPrivateBrowsingEnabled">isPrivateBrowsingEnabled</a> != _isPrivateBrowsingEnabled) {</td></tr>
+<tr><th id="604">604</th><td>        _isPrivateBrowsingEnabled = <a class="local col1 ref" href="#51isPrivateBrowsingEnabled" title='isPrivateBrowsingEnabled' data-ref="51isPrivateBrowsingEnabled" data-ref-filename="51isPrivateBrowsingEnabled">isPrivateBrowsingEnabled</a>;</td></tr>
+<tr><th id="605">605</th><td>        [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> privateBrowsingModeDidChange];</td></tr>
+<tr><th id="606">606</th><td>    }</td></tr>
+<tr><th id="607">607</th><td>}</td></tr>
+<tr><th id="608">608</th><td></td></tr>
+<tr><th id="609">609</th><td><a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#498" title="" data-ref="_M/ALLOW_DEPRECATED_IMPLEMENTATIONS_BEGIN">ALLOW_DEPRECATED_IMPLEMENTATIONS_BEGIN</a></td></tr>
+<tr><th id="610">610</th><td>- (<em>void</em>)renewGState</td></tr>
+<tr><th id="611">611</th><td><a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#499" title="" data-ref="_M/ALLOW_DEPRECATED_IMPLEMENTATIONS_END">ALLOW_DEPRECATED_IMPLEMENTATIONS_END</a></td></tr>
+<tr><th id="612">612</th><td>{</td></tr>
+<tr><th id="613">613</th><td>    [super renewGState];</td></tr>
+<tr><th id="614">614</th><td>    </td></tr>
+<tr><th id="615">615</th><td>    <i>// -renewGState is called whenever the view's geometry changes.  It's a little hacky to override this method, but</i></td></tr>
+<tr><th id="616">616</th><td><i>    // much safer than walking up the view hierarchy and observing frame/bounds changed notifications, since you don't</i></td></tr>
+<tr><th id="617">617</th><td><i>    // have to track subsequent changes to the view hierarchy and add/remove notification observers.</i></td></tr>
+<tr><th id="618">618</th><td><i>    // NSOpenGLView uses the exact same technique to reshape its OpenGL surface.</i></td></tr>
+<tr><th id="619">619</th><td><i>    </i></td></tr>
+<tr><th id="620">620</th><td><i>    // All of the work this method does may safely be skipped if the view is not in a window.  When the view</i></td></tr>
+<tr><th id="621">621</th><td><i>    // is moved back into a window, everything should be set up correctly.</i></td></tr>
+<tr><th id="622">622</th><td>    <b>if</b> (![<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window])</td></tr>
+<tr><th id="623">623</th><td>        <b>return</b>;</td></tr>
+<tr><th id="624">624</th><td>    </td></tr>
+<tr><th id="625">625</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> updateAndSetWindow];</td></tr>
+<tr><th id="626">626</th><td>    </td></tr>
+<tr><th id="627">627</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> resetTrackingRect];</td></tr>
+<tr><th id="628">628</th><td>    </td></tr>
+<tr><th id="629">629</th><td>    <i>// Check to see if the plugin view is completely obscured (scrolled out of view, for example).</i></td></tr>
+<tr><th id="630">630</th><td><i>    // For performance reasons, we send null events at a lower rate to plugins which are obscured.</i></td></tr>
+<tr><th id="631">631</th><td>    <span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span> <dfn class="local col2 decl" id="52oldIsObscured" title='oldIsObscured' data-type='BOOL' data-ref="52oldIsObscured" data-ref-filename="52oldIsObscured">oldIsObscured</dfn> = _isCompletelyObscured;</td></tr>
+<tr><th id="632">632</th><td>    _isCompletelyObscured = <span class='ref fn' title='NSIsEmptyRect' data-ref="NSIsEmptyRect" data-ref-filename="NSIsEmptyRect">NSIsEmptyRect</span>([<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> visibleRect]);</td></tr>
+<tr><th id="633">633</th><td>    <b>if</b> (_isCompletelyObscured != <a class="local col2 ref" href="#52oldIsObscured" title='oldIsObscured' data-ref="52oldIsObscured" data-ref-filename="52oldIsObscured">oldIsObscured</a>)</td></tr>
+<tr><th id="634">634</th><td>        [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> restartTimers];</td></tr>
+<tr><th id="635">635</th><td>}</td></tr>
+<tr><th id="636">636</th><td></td></tr>
+<tr><th id="637">637</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)becomeFirstResponder</td></tr>
+<tr><th id="638">638</th><td>{</td></tr>
+<tr><th id="639">639</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> setHasFocus:<span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>];</td></tr>
+<tr><th id="640">640</th><td>    <b>return</b> <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="641">641</th><td>}</td></tr>
+<tr><th id="642">642</th><td></td></tr>
+<tr><th id="643">643</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)resignFirstResponder</td></tr>
+<tr><th id="644">644</th><td>{</td></tr>
+<tr><th id="645">645</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> setHasFocus:<span class="macro" title="__objc_no" data-ref="_M/NO">NO</span>];    </td></tr>
+<tr><th id="646">646</th><td>    <b>return</b> <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="647">647</th><td>}</td></tr>
+<tr><th id="648">648</th><td></td></tr>
+<tr><th id="649">649</th><td>- (WebDataSource *)dataSource</td></tr>
+<tr><th id="650">650</th><td>{</td></tr>
+<tr><th id="651">651</th><td>    <b>return</b> [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webFrame] _dataSource];</td></tr>
+<tr><th id="652">652</th><td>}</td></tr>
+<tr><th id="653">653</th><td></td></tr>
+<tr><th id="654">654</th><td>- (WebFrame *)webFrame</td></tr>
+<tr><th id="655">655</th><td>{</td></tr>
+<tr><th id="656">656</th><td>    <b>return</b> <a class="ref fn" href="../WebView/WebFrameInternal.h.html#_Z3kitPN7WebCore5FrameE" title='kit' data-ref="_Z3kitPN7WebCore5FrameE" data-ref-filename="_Z3kitPN7WebCore5FrameE">kit</a>(_element<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RefPtr.h.html#_ZNK3WTF6RefPtrptEv" title='WTF::RefPtr::operator-&gt;' data-ref="_ZNK3WTF6RefPtrptEv" data-ref-filename="_ZNK3WTF6RefPtrptEv">-&gt;</a><a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/Node.h.html#_ZNK7WebCore4Node8documentEv" title='WebCore::Node::document' data-ref="_ZNK7WebCore4Node8documentEv" data-ref-filename="_ZNK7WebCore4Node8documentEv">document</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FrameDestructionObserver.h.html#_ZNK7WebCore24FrameDestructionObserver5frameEv" title='WebCore::FrameDestructionObserver::frame' data-ref="_ZNK7WebCore24FrameDestructionObserver5frameEv" data-ref-filename="_ZNK7WebCore24FrameDestructionObserver5frameEv">frame</a>());</td></tr>
+<tr><th id="657">657</th><td>}</td></tr>
+<tr><th id="658">658</th><td></td></tr>
+<tr><th id="659">659</th><td>- (WebView *)webView</td></tr>
+<tr><th id="660">660</th><td>{</td></tr>
+<tr><th id="661">661</th><td>    <b>return</b> [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webFrame] webView];</td></tr>
+<tr><th id="662">662</th><td>}</td></tr>
+<tr><th id="663">663</th><td></td></tr>
+<tr><th id="664">664</th><td>- (NSWindow *)currentWindow</td></tr>
+<tr><th id="665">665</th><td>{</td></tr>
+<tr><th id="666">666</th><td>    <b>return</b> [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window] ? [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> window] : [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> webView] hostWindow];</td></tr>
+<tr><th id="667">667</th><td>}</td></tr>
+<tr><th id="668">668</th><td></td></tr>
+<tr><th id="669">669</th><td>- (<a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/NakedPtr.h.html#WTF::NakedPtr" title='WTF::NakedPtr' data-ref="WTF::NakedPtr" data-ref-filename="WTF..NakedPtr">NakedPtr</a>&lt;<span class="namespace">WebCore::</span><a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/HTMLPlugInElement.h.html#WebCore::HTMLPlugInElement" title='WebCore::HTMLPlugInElement' data-ref="WebCore::HTMLPlugInElement" data-ref-filename="WebCore..HTMLPlugInElement">HTMLPlugInElement</a>&gt;)element</td></tr>
+<tr><th id="670">670</th><td>{</td></tr>
+<tr><th id="671">671</th><td>    <b>return</b> <a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/NakedPtr.h.html#_ZN3WTF8NakedPtrC1EPT_" title='WTF::NakedPtr::NakedPtr&lt;T&gt;' data-ref="_ZN3WTF8NakedPtrC1EPT_" data-ref-filename="_ZN3WTF8NakedPtrC1EPT_"></a>_element.<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RefPtr.h.html#_ZNK3WTF6RefPtr3getEv" title='WTF::RefPtr::get' data-ref="_ZNK3WTF6RefPtr3getEv" data-ref-filename="_ZNK3WTF6RefPtr3getEv">get</a>();</td></tr>
+<tr><th id="672">672</th><td>}</td></tr>
+<tr><th id="673">673</th><td></td></tr>
+<tr><th id="674">674</th><td>- (<em>void</em>)cut:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col3 decl" id="53sender" title='sender' data-type='id' data-ref="53sender" data-ref-filename="53sender">sender</dfn></td></tr>
+<tr><th id="675">675</th><td>{</td></tr>
+<tr><th id="676">676</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> sendModifierEventWithKeyCode:<var>7</var> character:<kbd>'x'</kbd>];</td></tr>
+<tr><th id="677">677</th><td>}</td></tr>
+<tr><th id="678">678</th><td></td></tr>
+<tr><th id="679">679</th><td>- (<em>void</em>)copy:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col4 decl" id="54sender" title='sender' data-type='id' data-ref="54sender" data-ref-filename="54sender">sender</dfn></td></tr>
+<tr><th id="680">680</th><td>{</td></tr>
+<tr><th id="681">681</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> sendModifierEventWithKeyCode:<var>8</var> character:<kbd>'c'</kbd>];</td></tr>
+<tr><th id="682">682</th><td>}</td></tr>
+<tr><th id="683">683</th><td></td></tr>
+<tr><th id="684">684</th><td>- (<em>void</em>)paste:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col5 decl" id="55sender" title='sender' data-type='id' data-ref="55sender" data-ref-filename="55sender">sender</dfn></td></tr>
+<tr><th id="685">685</th><td>{</td></tr>
+<tr><th id="686">686</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> sendModifierEventWithKeyCode:<var>9</var> character:<kbd>'v'</kbd>];</td></tr>
+<tr><th id="687">687</th><td>}</td></tr>
+<tr><th id="688">688</th><td></td></tr>
+<tr><th id="689">689</th><td>- (<em>void</em>)selectAll:(<span class='typedef' title='id' data-type='id' data-ref="id" data-ref-filename="id">id</span>)<dfn class="local col6 decl" id="56sender" title='sender' data-type='id _Nullable' data-ref="56sender" data-ref-filename="56sender">sender</dfn></td></tr>
+<tr><th id="690">690</th><td>{</td></tr>
+<tr><th id="691">691</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> sendModifierEventWithKeyCode:<var>0</var> character:<kbd>'a'</kbd>];</td></tr>
+<tr><th id="692">692</th><td>}</td></tr>
+<tr><th id="693">693</th><td></td></tr>
+<tr><th id="694">694</th><td><i>// AppKit doesn't call mouseDown or mouseUp on right-click. Simulate control-click</i></td></tr>
+<tr><th id="695">695</th><td><i>// mouseDown and mouseUp so plug-ins get the right-click event as they do in Carbon (3125743).</i></td></tr>
+<tr><th id="696">696</th><td>- (<em>void</em>)rightMouseDown:(NSEvent *)<dfn class="local col7 decl" id="57theEvent" title='theEvent' data-type='NSEvent * _Nonnull' data-ref="57theEvent" data-ref-filename="57theEvent">theEvent</dfn></td></tr>
+<tr><th id="697">697</th><td>{</td></tr>
+<tr><th id="698">698</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> mouseDown:<a class="local col7 ref" href="#57theEvent" title='theEvent' data-ref="57theEvent" data-ref-filename="57theEvent">theEvent</a>];</td></tr>
+<tr><th id="699">699</th><td>}</td></tr>
+<tr><th id="700">700</th><td></td></tr>
+<tr><th id="701">701</th><td>- (<em>void</em>)rightMouseUp:(NSEvent *)<dfn class="local col8 decl" id="58theEvent" title='theEvent' data-type='NSEvent * _Nonnull' data-ref="58theEvent" data-ref-filename="58theEvent">theEvent</dfn></td></tr>
+<tr><th id="702">702</th><td>{</td></tr>
+<tr><th id="703">703</th><td>    [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> mouseUp:<a class="local col8 ref" href="#58theEvent" title='theEvent' data-ref="58theEvent" data-ref-filename="58theEvent">theEvent</a>];</td></tr>
+<tr><th id="704">704</th><td>}</td></tr>
+<tr><th id="705">705</th><td></td></tr>
+<tr><th id="706">706</th><td></td></tr>
+<tr><th id="707">707</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)convertFromX:(<em>double</em>)<dfn class="local col9 decl" id="59sourceX" title='sourceX' data-type='double' data-ref="59sourceX" data-ref-filename="59sourceX">sourceX</dfn> andY:(<em>double</em>)<dfn class="local col0 decl" id="60sourceY" title='sourceY' data-type='double' data-ref="60sourceY" data-ref-filename="60sourceY">sourceY</dfn> space:(<a class="typedef" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#NPCoordinateSpace" title='NPCoordinateSpace' data-type='enum NPCoordinateSpace' data-ref="NPCoordinateSpace" data-ref-filename="NPCoordinateSpace">NPCoordinateSpace</a>)<dfn class="local col1 decl" id="61sourceSpace" title='sourceSpace' data-type='NPCoordinateSpace' data-ref="61sourceSpace" data-ref-filename="61sourceSpace">sourceSpace</dfn></td></tr>
+<tr><th id="708">708</th><td>                 toX:(<em>double</em> *)<dfn class="local col2 decl" id="62destX" title='destX' data-type='double *' data-ref="62destX" data-ref-filename="62destX">destX</dfn> andY:(<em>double</em> *)<dfn class="local col3 decl" id="63destY" title='destY' data-type='double *' data-ref="63destY" data-ref-filename="63destY">destY</dfn> space:(<a class="typedef" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#NPCoordinateSpace" title='NPCoordinateSpace' data-type='enum NPCoordinateSpace' data-ref="NPCoordinateSpace" data-ref-filename="NPCoordinateSpace">NPCoordinateSpace</a>)<dfn class="local col4 decl" id="64destSpace" title='destSpace' data-type='NPCoordinateSpace' data-ref="64destSpace" data-ref-filename="64destSpace">destSpace</dfn></td></tr>
+<tr><th id="709">709</th><td>{</td></tr>
+<tr><th id="710">710</th><td>    <i>// Nothing to do</i></td></tr>
+<tr><th id="711">711</th><td>    <b>if</b> (<a class="local col1 ref" href="#61sourceSpace" title='sourceSpace' data-ref="61sourceSpace" data-ref-filename="61sourceSpace">sourceSpace</a> == <a class="local col4 ref" href="#64destSpace" title='destSpace' data-ref="64destSpace" data-ref-filename="64destSpace">destSpace</a>) {</td></tr>
+<tr><th id="712">712</th><td>        <b>if</b> (<a class="local col2 ref" href="#62destX" title='destX' data-ref="62destX" data-ref-filename="62destX">destX</a>)</td></tr>
+<tr><th id="713">713</th><td>            *<a class="local col2 ref" href="#62destX" title='destX' data-ref="62destX" data-ref-filename="62destX">destX</a> = <a class="local col9 ref" href="#59sourceX" title='sourceX' data-ref="59sourceX" data-ref-filename="59sourceX">sourceX</a>;</td></tr>
+<tr><th id="714">714</th><td>        <b>if</b> (<a class="local col3 ref" href="#63destY" title='destY' data-ref="63destY" data-ref-filename="63destY">destY</a>)</td></tr>
+<tr><th id="715">715</th><td>            *<a class="local col3 ref" href="#63destY" title='destY' data-ref="63destY" data-ref-filename="63destY">destY</a> = <a class="local col0 ref" href="#60sourceY" title='sourceY' data-ref="60sourceY" data-ref-filename="60sourceY">sourceY</a>;</td></tr>
+<tr><th id="716">716</th><td>        <b>return</b> <span class="macro" title="__objc_yes" data-ref="_M/YES">YES</span>;</td></tr>
+<tr><th id="717">717</th><td>    }</td></tr>
+<tr><th id="718">718</th><td>    </td></tr>
+<tr><th id="719">719</th><td>    <span class='typedef' title='NSPoint' data-type='struct CGPoint' data-ref="NSPoint" data-ref-filename="NSPoint">NSPoint</span> <dfn class="local col5 decl" id="65sourcePoint" title='sourcePoint' data-type='NSPoint' data-ref="65sourcePoint" data-ref-filename="65sourcePoint">sourcePoint</dfn> = <span class='ref fn' title='NSMakePoint' data-ref="_ZL11NSMakePointdd" data-ref-filename="_ZL11NSMakePointdd">NSMakePoint</span>(<a class="local col9 ref" href="#59sourceX" title='sourceX' data-ref="59sourceX" data-ref-filename="59sourceX">sourceX</a>, <a class="local col0 ref" href="#60sourceY" title='sourceY' data-ref="60sourceY" data-ref-filename="60sourceY">sourceY</a>);</td></tr>
+<tr><th id="720">720</th><td>    </td></tr>
+<tr><th id="721">721</th><td>    <span class='typedef' title='NSPoint' data-type='struct CGPoint' data-ref="NSPoint" data-ref-filename="NSPoint">NSPoint</span> <span class='ref fn fake' title='CGPoint::CGPoint' data-ref="_ZN7CGPointC1Ev" data-ref-filename="_ZN7CGPointC1Ev"></span><dfn class="local col6 decl" id="66sourcePointInScreenSpace" title='sourcePointInScreenSpace' data-type='NSPoint' data-ref="66sourcePointInScreenSpace" data-ref-filename="66sourcePointInScreenSpace">sourcePointInScreenSpace</dfn>;</td></tr>
+<tr><th id="722">722</th><td>    </td></tr>
+<tr><th id="723">723</th><td>    <i>// First convert to screen space</i></td></tr>
+<tr><th id="724">724</th><td>    <b>switch</b> (<a class="local col1 ref" href="#61sourceSpace" title='sourceSpace' data-ref="61sourceSpace" data-ref-filename="61sourceSpace">sourceSpace</a>) {</td></tr>
+<tr><th id="725">725</th><td>        <b>case</b> <a class="enum" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#NPCoordinateSpacePlugin" title='NPCoordinateSpacePlugin' data-ref="NPCoordinateSpacePlugin" data-ref-filename="NPCoordinateSpacePlugin">NPCoordinateSpacePlugin</a>:</td></tr>
+<tr><th id="726">726</th><td>            <a class="local col6 ref" href="#66sourcePointInScreenSpace" title='sourcePointInScreenSpace' data-ref="66sourcePointInScreenSpace" data-ref-filename="66sourcePointInScreenSpace">sourcePointInScreenSpace</a> <span class='ref fn' title='CGPoint::operator=' data-ref="_ZN7CGPointaSEOS_" data-ref-filename="_ZN7CGPointaSEOS_">=</span> [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> convertPoint:<span class='ref fn fake' title='CGPoint::CGPoint' data-ref="_ZN7CGPointC1ERKS_" data-ref-filename="_ZN7CGPointC1ERKS_"></span><a class="local col5 ref" href="#65sourcePoint" title='sourcePoint' data-ref="65sourcePoint" data-ref-filename="65sourcePoint">sourcePoint</a> toView:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="727">727</th><td>            <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#495" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_BEGIN">ALLOW_DEPRECATED_DECLARATIONS_BEGIN</a></td></tr>
+<tr><th id="728">728</th><td>            <a class="local col6 ref" href="#66sourcePointInScreenSpace" title='sourcePointInScreenSpace' data-ref="66sourcePointInScreenSpace" data-ref-filename="66sourcePointInScreenSpace">sourcePointInScreenSpace</a> <span class='ref fn' title='CGPoint::operator=' data-ref="_ZN7CGPointaSEOS_" data-ref-filename="_ZN7CGPointaSEOS_">=</span> [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> currentWindow] convertBaseToScreen:<span class='ref fn fake' title='CGPoint::CGPoint' data-ref="_ZN7CGPointC1ERKS_" data-ref-filename="_ZN7CGPointC1ERKS_"></span><a class="local col6 ref" href="#66sourcePointInScreenSpace" title='sourcePointInScreenSpace' data-ref="66sourcePointInScreenSpace" data-ref-filename="66sourcePointInScreenSpace">sourcePointInScreenSpace</a>];</td></tr>
+<tr><th id="729">729</th><td>            <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#496" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_END">ALLOW_DEPRECATED_DECLARATIONS_END</a></td></tr>
+<tr><th id="730">730</th><td>            <b>break</b>;</td></tr>
+<tr><th id="731">731</th><td>            </td></tr>
+<tr><th id="732">732</th><td>        <b>case</b> <a class="enum" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#NPCoordinateSpaceWindow" title='NPCoordinateSpaceWindow' data-ref="NPCoordinateSpaceWindow" data-ref-filename="NPCoordinateSpaceWindow">NPCoordinateSpaceWindow</a>:</td></tr>
+<tr><th id="733">733</th><td>            <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#495" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_BEGIN">ALLOW_DEPRECATED_DECLARATIONS_BEGIN</a></td></tr>
+<tr><th id="734">734</th><td>            <a class="local col6 ref" href="#66sourcePointInScreenSpace" title='sourcePointInScreenSpace' data-ref="66sourcePointInScreenSpace" data-ref-filename="66sourcePointInScreenSpace">sourcePointInScreenSpace</a> <span class='ref fn' title='CGPoint::operator=' data-ref="_ZN7CGPointaSEOS_" data-ref-filename="_ZN7CGPointaSEOS_">=</span> [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> currentWindow] convertBaseToScreen:<span class='ref fn fake' title='CGPoint::CGPoint' data-ref="_ZN7CGPointC1ERKS_" data-ref-filename="_ZN7CGPointC1ERKS_"></span><a class="local col5 ref" href="#65sourcePoint" title='sourcePoint' data-ref="65sourcePoint" data-ref-filename="65sourcePoint">sourcePoint</a>];</td></tr>
+<tr><th id="735">735</th><td>            <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#496" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_END">ALLOW_DEPRECATED_DECLARATIONS_END</a></td></tr>
+<tr><th id="736">736</th><td>            <b>break</b>;</td></tr>
+<tr><th id="737">737</th><td>            </td></tr>
+<tr><th id="738">738</th><td>        <b>case</b> <a class="enum" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#NPCoordinateSpaceFlippedWindow" title='NPCoordinateSpaceFlippedWindow' data-ref="NPCoordinateSpaceFlippedWindow" data-ref-filename="NPCoordinateSpaceFlippedWindow">NPCoordinateSpaceFlippedWindow</a>:</td></tr>
+<tr><th id="739">739</th><td>            <a class="local col5 ref" href="#65sourcePoint" title='sourcePoint' data-ref="65sourcePoint" data-ref-filename="65sourcePoint">sourcePoint</a>.<span class='ref field' title='CGPoint::y' data-ref="CGPoint::y" data-ref-filename="CGPoint..y">y</span> = [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> currentWindow] frame].<span class='ref field' title='CGRect::size' data-ref="CGRect::size" data-ref-filename="CGRect..size">size</span>.<span class='ref field' title='CGSize::height' data-ref="CGSize::height" data-ref-filename="CGSize..height">height</span> - <a class="local col5 ref" href="#65sourcePoint" title='sourcePoint' data-ref="65sourcePoint" data-ref-filename="65sourcePoint">sourcePoint</a>.<span class='ref field' title='CGPoint::y' data-ref="CGPoint::y" data-ref-filename="CGPoint..y">y</span>;</td></tr>
+<tr><th id="740">740</th><td>            <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#495" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_BEGIN">ALLOW_DEPRECATED_DECLARATIONS_BEGIN</a></td></tr>
+<tr><th id="741">741</th><td>            <a class="local col6 ref" href="#66sourcePointInScreenSpace" title='sourcePointInScreenSpace' data-ref="66sourcePointInScreenSpace" data-ref-filename="66sourcePointInScreenSpace">sourcePointInScreenSpace</a> <span class='ref fn' title='CGPoint::operator=' data-ref="_ZN7CGPointaSEOS_" data-ref-filename="_ZN7CGPointaSEOS_">=</span> [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> currentWindow] convertBaseToScreen:<span class='ref fn fake' title='CGPoint::CGPoint' data-ref="_ZN7CGPointC1ERKS_" data-ref-filename="_ZN7CGPointC1ERKS_"></span><a class="local col5 ref" href="#65sourcePoint" title='sourcePoint' data-ref="65sourcePoint" data-ref-filename="65sourcePoint">sourcePoint</a>];</td></tr>
+<tr><th id="742">742</th><td>            <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#496" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_END">ALLOW_DEPRECATED_DECLARATIONS_END</a></td></tr>
+<tr><th id="743">743</th><td>            <b>break</b>;</td></tr>
+<tr><th id="744">744</th><td>            </td></tr>
+<tr><th id="745">745</th><td>        <b>case</b> <a class="enum" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#NPCoordinateSpaceScreen" title='NPCoordinateSpaceScreen' data-ref="NPCoordinateSpaceScreen" data-ref-filename="NPCoordinateSpaceScreen">NPCoordinateSpaceScreen</a>:</td></tr>
+<tr><th id="746">746</th><td>            <a class="local col6 ref" href="#66sourcePointInScreenSpace" title='sourcePointInScreenSpace' data-ref="66sourcePointInScreenSpace" data-ref-filename="66sourcePointInScreenSpace">sourcePointInScreenSpace</a> <span class='ref fn' title='CGPoint::operator=' data-ref="_ZN7CGPointaSERKS_" data-ref-filename="_ZN7CGPointaSERKS_">=</span> <a class="local col5 ref" href="#65sourcePoint" title='sourcePoint' data-ref="65sourcePoint" data-ref-filename="65sourcePoint">sourcePoint</a>;</td></tr>
+<tr><th id="747">747</th><td>            <b>break</b>;</td></tr>
+<tr><th id="748">748</th><td>            </td></tr>
+<tr><th id="749">749</th><td>        <b>case</b> <a class="enum" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#NPCoordinateSpaceFlippedScreen" title='NPCoordinateSpaceFlippedScreen' data-ref="NPCoordinateSpaceFlippedScreen" data-ref-filename="NPCoordinateSpaceFlippedScreen">NPCoordinateSpaceFlippedScreen</a>:</td></tr>
+<tr><th id="750">750</th><td>            <a class="local col5 ref" href="#65sourcePoint" title='sourcePoint' data-ref="65sourcePoint" data-ref-filename="65sourcePoint">sourcePoint</a>.<span class='ref field' title='CGPoint::y' data-ref="CGPoint::y" data-ref-filename="CGPoint..y">y</span> = [(NSScreen *)[[NSScreen screens] objectAtIndex:<var>0</var>] frame].<span class='ref field' title='CGRect::size' data-ref="CGRect::size" data-ref-filename="CGRect..size">size</span>.<span class='ref field' title='CGSize::height' data-ref="CGSize::height" data-ref-filename="CGSize..height">height</span> - <a class="local col5 ref" href="#65sourcePoint" title='sourcePoint' data-ref="65sourcePoint" data-ref-filename="65sourcePoint">sourcePoint</a>.<span class='ref field' title='CGPoint::y' data-ref="CGPoint::y" data-ref-filename="CGPoint..y">y</span>;</td></tr>
+<tr><th id="751">751</th><td>            <a class="local col6 ref" href="#66sourcePointInScreenSpace" title='sourcePointInScreenSpace' data-ref="66sourcePointInScreenSpace" data-ref-filename="66sourcePointInScreenSpace">sourcePointInScreenSpace</a> <span class='ref fn' title='CGPoint::operator=' data-ref="_ZN7CGPointaSERKS_" data-ref-filename="_ZN7CGPointaSERKS_">=</span> <a class="local col5 ref" href="#65sourcePoint" title='sourcePoint' data-ref="65sourcePoint" data-ref-filename="65sourcePoint">sourcePoint</a>;</td></tr>
+<tr><th id="752">752</th><td>            <b>break</b>;</td></tr>
+<tr><th id="753">753</th><td>        <b>default</b>:</td></tr>
+<tr><th id="754">754</th><td>            <b>return</b> <span class="macro" title="0" data-ref="_M/FALSE">FALSE</span>;</td></tr>
+<tr><th id="755">755</th><td>    }</td></tr>
+<tr><th id="756">756</th><td>    </td></tr>
+<tr><th id="757">757</th><td>    <span class='typedef' title='NSPoint' data-type='struct CGPoint' data-ref="NSPoint" data-ref-filename="NSPoint">NSPoint</span> <span class='ref fn fake' title='CGPoint::CGPoint' data-ref="_ZN7CGPointC1Ev" data-ref-filename="_ZN7CGPointC1Ev"></span><dfn class="local col7 decl" id="67destPoint" title='destPoint' data-type='NSPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</dfn>;</td></tr>
+<tr><th id="758">758</th><td>    </td></tr>
+<tr><th id="759">759</th><td>    <i>// Then convert back to the destination space</i></td></tr>
+<tr><th id="760">760</th><td>    <b>switch</b> (<a class="local col4 ref" href="#64destSpace" title='destSpace' data-ref="64destSpace" data-ref-filename="64destSpace">destSpace</a>) {</td></tr>
+<tr><th id="761">761</th><td>        <b>case</b> <a class="enum" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#NPCoordinateSpacePlugin" title='NPCoordinateSpacePlugin' data-ref="NPCoordinateSpacePlugin" data-ref-filename="NPCoordinateSpacePlugin">NPCoordinateSpacePlugin</a>:</td></tr>
+<tr><th id="762">762</th><td>            <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#495" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_BEGIN">ALLOW_DEPRECATED_DECLARATIONS_BEGIN</a></td></tr>
+<tr><th id="763">763</th><td>            <a class="local col7 ref" href="#67destPoint" title='destPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</a> <span class='ref fn' title='CGPoint::operator=' data-ref="_ZN7CGPointaSEOS_" data-ref-filename="_ZN7CGPointaSEOS_">=</span> [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> currentWindow] convertScreenToBase:<span class='ref fn fake' title='CGPoint::CGPoint' data-ref="_ZN7CGPointC1ERKS_" data-ref-filename="_ZN7CGPointC1ERKS_"></span><a class="local col6 ref" href="#66sourcePointInScreenSpace" title='sourcePointInScreenSpace' data-ref="66sourcePointInScreenSpace" data-ref-filename="66sourcePointInScreenSpace">sourcePointInScreenSpace</a>];</td></tr>
+<tr><th id="764">764</th><td>            <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#496" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_END">ALLOW_DEPRECATED_DECLARATIONS_END</a></td></tr>
+<tr><th id="765">765</th><td>            <a class="local col7 ref" href="#67destPoint" title='destPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</a> <span class='ref fn' title='CGPoint::operator=' data-ref="_ZN7CGPointaSEOS_" data-ref-filename="_ZN7CGPointaSEOS_">=</span> [<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> convertPoint:<span class='ref fn fake' title='CGPoint::CGPoint' data-ref="_ZN7CGPointC1ERKS_" data-ref-filename="_ZN7CGPointC1ERKS_"></span><a class="local col7 ref" href="#67destPoint" title='destPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</a> fromView:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="766">766</th><td>            <b>break</b>;</td></tr>
+<tr><th id="767">767</th><td>            </td></tr>
+<tr><th id="768">768</th><td>        <b>case</b> <a class="enum" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#NPCoordinateSpaceWindow" title='NPCoordinateSpaceWindow' data-ref="NPCoordinateSpaceWindow" data-ref-filename="NPCoordinateSpaceWindow">NPCoordinateSpaceWindow</a>:</td></tr>
+<tr><th id="769">769</th><td>            <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#495" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_BEGIN">ALLOW_DEPRECATED_DECLARATIONS_BEGIN</a></td></tr>
+<tr><th id="770">770</th><td>            <a class="local col7 ref" href="#67destPoint" title='destPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</a> <span class='ref fn' title='CGPoint::operator=' data-ref="_ZN7CGPointaSEOS_" data-ref-filename="_ZN7CGPointaSEOS_">=</span> [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> currentWindow] convertScreenToBase:<span class='ref fn fake' title='CGPoint::CGPoint' data-ref="_ZN7CGPointC1ERKS_" data-ref-filename="_ZN7CGPointC1ERKS_"></span><a class="local col6 ref" href="#66sourcePointInScreenSpace" title='sourcePointInScreenSpace' data-ref="66sourcePointInScreenSpace" data-ref-filename="66sourcePointInScreenSpace">sourcePointInScreenSpace</a>];</td></tr>
+<tr><th id="771">771</th><td>            <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#496" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_END">ALLOW_DEPRECATED_DECLARATIONS_END</a></td></tr>
+<tr><th id="772">772</th><td>            <b>break</b>;</td></tr>
+<tr><th id="773">773</th><td>            </td></tr>
+<tr><th id="774">774</th><td>        <b>case</b> <a class="enum" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#NPCoordinateSpaceFlippedWindow" title='NPCoordinateSpaceFlippedWindow' data-ref="NPCoordinateSpaceFlippedWindow" data-ref-filename="NPCoordinateSpaceFlippedWindow">NPCoordinateSpaceFlippedWindow</a>:</td></tr>
+<tr><th id="775">775</th><td>            <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#495" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_BEGIN">ALLOW_DEPRECATED_DECLARATIONS_BEGIN</a></td></tr>
+<tr><th id="776">776</th><td>            <a class="local col7 ref" href="#67destPoint" title='destPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</a> <span class='ref fn' title='CGPoint::operator=' data-ref="_ZN7CGPointaSEOS_" data-ref-filename="_ZN7CGPointaSEOS_">=</span> [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> currentWindow] convertScreenToBase:<span class='ref fn fake' title='CGPoint::CGPoint' data-ref="_ZN7CGPointC1ERKS_" data-ref-filename="_ZN7CGPointC1ERKS_"></span><a class="local col6 ref" href="#66sourcePointInScreenSpace" title='sourcePointInScreenSpace' data-ref="66sourcePointInScreenSpace" data-ref-filename="66sourcePointInScreenSpace">sourcePointInScreenSpace</a>];</td></tr>
+<tr><th id="777">777</th><td>            <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Compiler.h.html#496" title="" data-ref="_M/ALLOW_DEPRECATED_DECLARATIONS_END">ALLOW_DEPRECATED_DECLARATIONS_END</a></td></tr>
+<tr><th id="778">778</th><td>            <a class="local col7 ref" href="#67destPoint" title='destPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</a>.<span class='ref field' title='CGPoint::y' data-ref="CGPoint::y" data-ref-filename="CGPoint..y">y</span> = [[<span class='local col0 ref' title='self' data-ref="10self" data-ref-filename="10self">self</span> currentWindow] frame].<span class='ref field' title='CGRect::size' data-ref="CGRect::size" data-ref-filename="CGRect..size">size</span>.<span class='ref field' title='CGSize::height' data-ref="CGSize::height" data-ref-filename="CGSize..height">height</span> - <a class="local col7 ref" href="#67destPoint" title='destPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</a>.<span class='ref field' title='CGPoint::y' data-ref="CGPoint::y" data-ref-filename="CGPoint..y">y</span>;</td></tr>
+<tr><th id="779">779</th><td>            <b>break</b>;</td></tr>
+<tr><th id="780">780</th><td>            </td></tr>
+<tr><th id="781">781</th><td>        <b>case</b> <a class="enum" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#NPCoordinateSpaceScreen" title='NPCoordinateSpaceScreen' data-ref="NPCoordinateSpaceScreen" data-ref-filename="NPCoordinateSpaceScreen">NPCoordinateSpaceScreen</a>:</td></tr>
+<tr><th id="782">782</th><td>            <a class="local col7 ref" href="#67destPoint" title='destPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</a> <span class='ref fn' title='CGPoint::operator=' data-ref="_ZN7CGPointaSERKS_" data-ref-filename="_ZN7CGPointaSERKS_">=</span> <a class="local col6 ref" href="#66sourcePointInScreenSpace" title='sourcePointInScreenSpace' data-ref="66sourcePointInScreenSpace" data-ref-filename="66sourcePointInScreenSpace">sourcePointInScreenSpace</a>;</td></tr>
+<tr><th id="783">783</th><td>            <b>break</b>;</td></tr>
+<tr><th id="784">784</th><td>            </td></tr>
+<tr><th id="785">785</th><td>        <b>case</b> <a class="enum" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#NPCoordinateSpaceFlippedScreen" title='NPCoordinateSpaceFlippedScreen' data-ref="NPCoordinateSpaceFlippedScreen" data-ref-filename="NPCoordinateSpaceFlippedScreen">NPCoordinateSpaceFlippedScreen</a>:</td></tr>
+<tr><th id="786">786</th><td>            <a class="local col7 ref" href="#67destPoint" title='destPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</a> <span class='ref fn' title='CGPoint::operator=' data-ref="_ZN7CGPointaSERKS_" data-ref-filename="_ZN7CGPointaSERKS_">=</span> <a class="local col6 ref" href="#66sourcePointInScreenSpace" title='sourcePointInScreenSpace' data-ref="66sourcePointInScreenSpace" data-ref-filename="66sourcePointInScreenSpace">sourcePointInScreenSpace</a>;</td></tr>
+<tr><th id="787">787</th><td>            <a class="local col7 ref" href="#67destPoint" title='destPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</a>.<span class='ref field' title='CGPoint::y' data-ref="CGPoint::y" data-ref-filename="CGPoint..y">y</span> = [(NSScreen *)[[NSScreen screens] objectAtIndex:<var>0</var>] frame].<span class='ref field' title='CGRect::size' data-ref="CGRect::size" data-ref-filename="CGRect..size">size</span>.<span class='ref field' title='CGSize::height' data-ref="CGSize::height" data-ref-filename="CGSize..height">height</span> - <a class="local col7 ref" href="#67destPoint" title='destPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</a>.<span class='ref field' title='CGPoint::y' data-ref="CGPoint::y" data-ref-filename="CGPoint..y">y</span>;</td></tr>
+<tr><th id="788">788</th><td>            <b>break</b>;</td></tr>
+<tr><th id="789">789</th><td>            </td></tr>
+<tr><th id="790">790</th><td>        <b>default</b>:</td></tr>
+<tr><th id="791">791</th><td>            <b>return</b> <span class="macro" title="0" data-ref="_M/FALSE">FALSE</span>;</td></tr>
+<tr><th id="792">792</th><td>    }</td></tr>
+<tr><th id="793">793</th><td>    </td></tr>
+<tr><th id="794">794</th><td>    <b>if</b> (<a class="local col2 ref" href="#62destX" title='destX' data-ref="62destX" data-ref-filename="62destX">destX</a>)</td></tr>
+<tr><th id="795">795</th><td>        *<a class="local col2 ref" href="#62destX" title='destX' data-ref="62destX" data-ref-filename="62destX">destX</a> = <a class="local col7 ref" href="#67destPoint" title='destPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</a>.<span class='ref field' title='CGPoint::x' data-ref="CGPoint::x" data-ref-filename="CGPoint..x">x</span>;</td></tr>
+<tr><th id="796">796</th><td>    <b>if</b> (<a class="local col3 ref" href="#63destY" title='destY' data-ref="63destY" data-ref-filename="63destY">destY</a>)</td></tr>
+<tr><th id="797">797</th><td>        *<a class="local col3 ref" href="#63destY" title='destY' data-ref="63destY" data-ref-filename="63destY">destY</a> = <a class="local col7 ref" href="#67destPoint" title='destPoint' data-ref="67destPoint" data-ref-filename="67destPoint">destPoint</a>.<span class='ref field' title='CGPoint::y' data-ref="CGPoint::y" data-ref-filename="CGPoint..y">y</span>;</td></tr>
+<tr><th id="798">798</th><td>    </td></tr>
+<tr><th id="799">799</th><td>    <b>return</b> <span class="macro" title="1" data-ref="_M/TRUE">TRUE</span>;</td></tr>
+<tr><th id="800">800</th><td>}</td></tr>
+<tr><th id="801">801</th><td></td></tr>
+<tr><th id="802">802</th><td></td></tr>
+<tr><th id="803">803</th><td>- (<em>void</em>)invalidatePluginContentRect:(<span class='typedef' title='NSRect' data-type='struct CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)<dfn class="local col8 decl" id="68rect" title='rect' data-type='NSRect' data-ref="68rect" data-ref-filename="68rect">rect</dfn></td></tr>
+<tr><th id="804">804</th><td>{</td></tr>
+<tr><th id="805">805</th><td>    <em>auto</em>* <dfn class="local col9 decl" id="69renderer" title='renderer' data-type='WebCore::RenderElement *' data-ref="69renderer" data-ref-filename="69renderer">renderer</dfn> = _element<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RefPtr.h.html#_ZNK3WTF6RefPtrptEv" title='WTF::RefPtr::operator-&gt;' data-ref="_ZNK3WTF6RefPtrptEv" data-ref-filename="_ZNK3WTF6RefPtrptEv">-&gt;</a><a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ContainerNode.h.html#_ZNK7WebCore13ContainerNode8rendererEv" title='WebCore::ContainerNode::renderer' data-ref="_ZNK7WebCore13ContainerNode8rendererEv" data-ref-filename="_ZNK7WebCore13ContainerNode8rendererEv">renderer</a>();</td></tr>
+<tr><th id="806">806</th><td>    <b>if</b> (!<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/TypeCasts.h.html#_ZN3WTF2isEPT0_" title='WTF::is' data-ref="_ZN3WTF2isEPT0_" data-ref-filename="_ZN3WTF2isEPT0_">is</a>&lt;<a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderEmbeddedObject.h.html#WebCore::RenderEmbeddedObject" title='WebCore::RenderEmbeddedObject' data-ref="WebCore::RenderEmbeddedObject" data-ref-filename="WebCore..RenderEmbeddedObject">RenderEmbeddedObject</a>&gt;(<a class="local col9 ref" href="#69renderer" title='renderer' data-ref="69renderer" data-ref-filename="69renderer">renderer</a>))</td></tr>
+<tr><th id="807">807</th><td>        <b>return</b>;</td></tr>
+<tr><th id="808">808</th><td>    <em>auto</em>&amp; <dfn class="local col0 decl" id="70object" title='object' data-type='WebCore::RenderEmbeddedObject &amp;' data-ref="70object" data-ref-filename="70object">object</dfn> = <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/TypeCasts.h.html#_ZN3WTF8downcastERT0_" title='WTF::downcast' data-ref="_ZN3WTF8downcastERT0_" data-ref-filename="_ZN3WTF8downcastERT0_">downcast</a>&lt;<a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderEmbeddedObject.h.html#WebCore::RenderEmbeddedObject" title='WebCore::RenderEmbeddedObject' data-ref="WebCore::RenderEmbeddedObject" data-ref-filename="WebCore..RenderEmbeddedObject">RenderEmbeddedObject</a>&gt;(<span class='refarg'>*<a class="local col9 ref" href="#69renderer" title='renderer' data-ref="69renderer" data-ref-filename="69renderer">renderer</a></span>);</td></tr>
+<tr><th id="809">809</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/IntRect.h.html#WebCore::IntRect" title='WebCore::IntRect' data-ref="WebCore::IntRect" data-ref-filename="WebCore..IntRect">IntRect</a> <dfn class="local col1 decl" id="71contentRect" title='contentRect' data-type='WebCore::IntRect' data-ref="71contentRect" data-ref-filename="71contentRect">contentRect</dfn><a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/IntRect.h.html#_ZN7WebCore7IntRectC1ERKNS_9FloatRectE" title='WebCore::IntRect::IntRect' data-ref="_ZN7WebCore7IntRectC1ERKNS_9FloatRectE" data-ref-filename="_ZN7WebCore7IntRectC1ERKNS_9FloatRectE">(</a><a class="ref fn fake" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/FloatRect.h.html#_ZN7WebCore9FloatRectC1ERK6CGRect" title='WebCore::FloatRect::FloatRect' data-ref="_ZN7WebCore9FloatRectC1ERK6CGRect" data-ref-filename="_ZN7WebCore9FloatRectC1ERK6CGRect"></a><a class="local col8 ref" href="#68rect" title='rect' data-ref="68rect" data-ref-filename="68rect">rect</a>);</td></tr>
+<tr><th id="810">810</th><td>    <a class="local col1 ref" href="#71contentRect" title='contentRect' data-ref="71contentRect" data-ref-filename="71contentRect">contentRect</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/IntRect.h.html#_ZN7WebCore7IntRect4moveEii" title='WebCore::IntRect::move' data-ref="_ZN7WebCore7IntRect4moveEii" data-ref-filename="_ZN7WebCore7IntRect4moveEii">move</a>(<a class="ref fn fake" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/LayoutUnit.h.html#_ZNK7WebCore10LayoutUnitcviEv" title='WebCore::LayoutUnit::operator int' data-ref="_ZNK7WebCore10LayoutUnitcviEv" data-ref-filename="_ZNK7WebCore10LayoutUnitcviEv"></a><a class="local col0 ref" href="#70object" title='object' data-ref="70object" data-ref-filename="70object">object</a>.<a class="virtual ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderBoxModelObject.h.html#_ZNK7WebCore20RenderBoxModelObject10borderLeftEv" title='WebCore::RenderBoxModelObject::borderLeft' data-ref="_ZNK7WebCore20RenderBoxModelObject10borderLeftEv" data-ref-filename="_ZNK7WebCore20RenderBoxModelObject10borderLeftEv">borderLeft</a>() <a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/LayoutUnit.h.html#_ZN7WebCoreplERKNS_10LayoutUnitES2_" title='WebCore::operator+' data-ref="_ZN7WebCoreplERKNS_10LayoutUnitES2_" data-ref-filename="_ZN7WebCoreplERKNS_10LayoutUnitES2_">+</a> <a class="local col0 ref" href="#70object" title='object' data-ref="70object" data-ref-filename="70object">object</a>.<a class="virtual ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderBoxModelObject.h.html#_ZNK7WebCore20RenderBoxModelObject11paddingLeftEv" title='WebCore::RenderBoxModelObject::paddingLeft' data-ref="_ZNK7WebCore20RenderBoxModelObject11paddingLeftEv" data-ref-filename="_ZNK7WebCore20RenderBoxModelObject11paddingLeftEv">paddingLeft</a>(), <a class="ref fn fake" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/LayoutUnit.h.html#_ZNK7WebCore10LayoutUnitcviEv" title='WebCore::LayoutUnit::operator int' data-ref="_ZNK7WebCore10LayoutUnitcviEv" data-ref-filename="_ZNK7WebCore10LayoutUnitcviEv"></a><a class="local col0 ref" href="#70object" title='object' data-ref="70object" data-ref-filename="70object">object</a>.<a class="virtual ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderBoxModelObject.h.html#_ZNK7WebCore20RenderBoxModelObject9borderTopEv" title='WebCore::RenderBoxModelObject::borderTop' data-ref="_ZNK7WebCore20RenderBoxModelObject9borderTopEv" data-ref-filename="_ZNK7WebCore20RenderBoxModelObject9borderTopEv">borderTop</a>() <a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/LayoutUnit.h.html#_ZN7WebCoreplERKNS_10LayoutUnitES2_" title='WebCore::operator+' data-ref="_ZN7WebCoreplERKNS_10LayoutUnitES2_" data-ref-filename="_ZN7WebCoreplERKNS_10LayoutUnitES2_">+</a> <a class="local col0 ref" href="#70object" title='object' data-ref="70object" data-ref-filename="70object">object</a>.<a class="virtual ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderBoxModelObject.h.html#_ZNK7WebCore20RenderBoxModelObject10paddingTopEv" title='WebCore::RenderBoxModelObject::paddingTop' data-ref="_ZNK7WebCore20RenderBoxModelObject10paddingTopEv" data-ref-filename="_ZNK7WebCore20RenderBoxModelObject10paddingTopEv">paddingTop</a>());</td></tr>
+<tr><th id="811">811</th><td>    <a class="local col0 ref" href="#70object" title='object' data-ref="70object" data-ref-filename="70object">object</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderObject.h.html#_ZNK7WebCore12RenderObject16repaintRectangleERKNS_10LayoutRectEb" title='WebCore::RenderObject::repaintRectangle' data-ref="_ZNK7WebCore12RenderObject16repaintRectangleERKNS_10LayoutRectEb" data-ref-filename="_ZNK7WebCore12RenderObject16repaintRectangleERKNS_10LayoutRectEb">repaintRectangle</a>(<a class="ref fn fake" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/LayoutRect.h.html#_ZN7WebCore10LayoutRectC1ERKNS_7IntRectE" title='WebCore::LayoutRect::LayoutRect' data-ref="_ZN7WebCore10LayoutRectC1ERKNS_7IntRectE" data-ref-filename="_ZN7WebCore10LayoutRectC1ERKNS_7IntRectE"></a><a class="local col1 ref" href="#71contentRect" title='contentRect' data-ref="71contentRect" data-ref-filename="71contentRect">contentRect</a>);</td></tr>
+<tr><th id="812">812</th><td>}</td></tr>
+<tr><th id="813">813</th><td></td></tr>
+<tr><th id="814">814</th><td>- (<span class='typedef' title='NSRect' data-type='struct CGRect' data-ref="NSRect" data-ref-filename="NSRect">NSRect</span>)actualVisibleRectInWindow</td></tr>
+<tr><th id="815">815</th><td>{</td></tr>
+<tr><th id="816">816</th><td>    <em>auto</em>* <dfn class="local col2 decl" id="72renderer" title='renderer' data-type='WebCore::RenderElement *' data-ref="72renderer" data-ref-filename="72renderer">renderer</dfn> = _element<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RefPtr.h.html#_ZNK3WTF6RefPtrptEv" title='WTF::RefPtr::operator-&gt;' data-ref="_ZNK3WTF6RefPtrptEv" data-ref-filename="_ZNK3WTF6RefPtrptEv">-&gt;</a><a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ContainerNode.h.html#_ZNK7WebCore13ContainerNode8rendererEv" title='WebCore::ContainerNode::renderer' data-ref="_ZNK7WebCore13ContainerNode8rendererEv" data-ref-filename="_ZNK7WebCore13ContainerNode8rendererEv">renderer</a>();</td></tr>
+<tr><th id="817">817</th><td>    <b>if</b> (!<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/TypeCasts.h.html#_ZN3WTF2isEPT0_" title='WTF::is' data-ref="_ZN3WTF2isEPT0_" data-ref-filename="_ZN3WTF2isEPT0_">is</a>&lt;<a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderEmbeddedObject.h.html#WebCore::RenderEmbeddedObject" title='WebCore::RenderEmbeddedObject' data-ref="WebCore::RenderEmbeddedObject" data-ref-filename="WebCore..RenderEmbeddedObject">RenderEmbeddedObject</a>&gt;(<a class="local col2 ref" href="#72renderer" title='renderer' data-ref="72renderer" data-ref-filename="72renderer">renderer</a>))</td></tr>
+<tr><th id="818">818</th><td>        <b>return</b> <span class='ref fn fake' title='CGRect::CGRect' data-ref="_ZN6CGRectC1ERKS_" data-ref-filename="_ZN6CGRectC1ERKS_"></span><span class='ref' title='NSZeroRect' data-ref="NSZeroRect" data-ref-filename="NSZeroRect">NSZeroRect</span>;</td></tr>
+<tr><th id="819">819</th><td>    <em>auto</em>&amp; <dfn class="local col3 decl" id="73object" title='object' data-type='WebCore::RenderEmbeddedObject &amp;' data-ref="73object" data-ref-filename="73object">object</dfn> = <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/TypeCasts.h.html#_ZN3WTF8downcastERT0_" title='WTF::downcast' data-ref="_ZN3WTF8downcastERT0_" data-ref-filename="_ZN3WTF8downcastERT0_">downcast</a>&lt;<a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderEmbeddedObject.h.html#WebCore::RenderEmbeddedObject" title='WebCore::RenderEmbeddedObject' data-ref="WebCore::RenderEmbeddedObject" data-ref-filename="WebCore..RenderEmbeddedObject">RenderEmbeddedObject</a>&gt;(<span class='refarg'>*<a class="local col2 ref" href="#72renderer" title='renderer' data-ref="72renderer" data-ref-filename="72renderer">renderer</a></span>);</td></tr>
+<tr><th id="820">820</th><td>    <em>auto</em> <dfn class="local col4 decl" id="74widgetRect" title='widgetRect' data-type='WebCore::IntRect' data-ref="74widgetRect" data-ref-filename="74widgetRect">widgetRect</dfn> = <a class="local col3 ref" href="#73object" title='object' data-ref="73object" data-ref-filename="73object">object</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderObject.h.html#_ZNK7WebCore12RenderObject4viewEv" title='WebCore::RenderObject::view' data-ref="_ZNK7WebCore12RenderObject4viewEv" data-ref-filename="_ZNK7WebCore12RenderObject4viewEv">view</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderView.h.html#_ZNK7WebCore10RenderView9frameViewEv" title='WebCore::RenderView::frameView' data-ref="_ZNK7WebCore10RenderView9frameViewEv" data-ref-filename="_ZNK7WebCore10RenderView9frameViewEv">frameView</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ScrollView.h.html#_ZNK7WebCore10ScrollView16contentsToWindowERKNS_7IntRectE" title='WebCore::ScrollView::contentsToWindow' data-ref="_ZNK7WebCore10ScrollView16contentsToWindowERKNS_7IntRectE" data-ref-filename="_ZNK7WebCore10ScrollView16contentsToWindowERKNS_7IntRectE">contentsToWindow</a>(<a class="local col3 ref" href="#73object" title='object' data-ref="73object" data-ref-filename="73object">object</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderObject.h.html#_ZNK7WebCore12RenderObject39pixelSnappedAbsoluteClippedOverflowRectEv" title='WebCore::RenderObject::pixelSnappedAbsoluteClippedOverflowRect' data-ref="_ZNK7WebCore12RenderObject39pixelSnappedAbsoluteClippedOverflowRectEv" data-ref-filename="_ZNK7WebCore12RenderObject39pixelSnappedAbsoluteClippedOverflowRectEv">pixelSnappedAbsoluteClippedOverflowRect</a>());</td></tr>
+<tr><th id="821">821</th><td>    <b>return</b> <a class="ref fn fake" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/IntRect.h.html#_ZNK7WebCore7IntRectcv6CGRectEv" title='WebCore::IntRect::operator CGRect' data-ref="_ZNK7WebCore7IntRectcv6CGRectEv" data-ref-filename="_ZNK7WebCore7IntRectcv6CGRectEv"></a><a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/IntRect.h.html#_ZN7WebCore12intersectionERKNS_7IntRectES2_" title='WebCore::intersection' data-ref="_ZN7WebCore12intersectionERKNS_7IntRectES2_" data-ref-filename="_ZN7WebCore12intersectionERKNS_7IntRectES2_">intersection</a>(<a class="local col3 ref" href="#73object" title='object' data-ref="73object" data-ref-filename="73object">object</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/RenderWidget.h.html#_ZNK7WebCore12RenderWidget14windowClipRectEv" title='WebCore::RenderWidget::windowClipRect' data-ref="_ZNK7WebCore12RenderWidget14windowClipRectEv" data-ref-filename="_ZNK7WebCore12RenderWidget14windowClipRectEv">windowClipRect</a>(), <a class="local col4 ref" href="#74widgetRect" title='widgetRect' data-ref="74widgetRect" data-ref-filename="74widgetRect">widgetRect</a>);</td></tr>
+<tr><th id="822">822</th><td>}</td></tr>
+<tr><th id="823">823</th><td></td></tr>
+<tr><th id="824">824</th><td>- (CALayer *)pluginLayer</td></tr>
+<tr><th id="825">825</th><td>{</td></tr>
+<tr><th id="826">826</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="827">827</th><td>    <b>return</b> <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="828">828</th><td>}</td></tr>
+<tr><th id="829">829</th><td></td></tr>
+<tr><th id="830">830</th><td>- (<span class='typedef' title='BOOL' data-type='bool' data-ref="BOOL" data-ref-filename="BOOL">BOOL</span>)getFormValue:(NSString **)<dfn class="local col5 decl" id="75value" title='value' data-type='NSString **' data-ref="75value" data-ref-filename="75value">value</dfn></td></tr>
+<tr><th id="831">831</th><td>{</td></tr>
+<tr><th id="832">832</th><td>    <i>// This needs to be overridden by subclasses.</i></td></tr>
+<tr><th id="833">833</th><td>    <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="834">834</th><td>}</td></tr>
+<tr><th id="835">835</th><td></td></tr>
+<tr><th id="836">836</th><td>@end</td></tr>
+<tr><th id="837">837</th><td></td></tr>
+<tr><th id="838">838</th><td><b>namespace</b> <span class="namespace">WebKit</span> {</td></tr>
+<tr><th id="839">839</th><td></td></tr>
+<tr><th id="840">840</th><td><em>bool</em> <dfn class="decl def fn" id="_ZN6WebKit21getAuthenticationInfoEPKcS1_iS1_S1_RN3WTF7CStringES4_" title='WebKit::getAuthenticationInfo' data-ref="_ZN6WebKit21getAuthenticationInfoEPKcS1_iS1_S1_RN3WTF7CStringES4_" data-ref-filename="_ZN6WebKit21getAuthenticationInfoEPKcS1_iS1_S1_RN3WTF7CStringES4_">getAuthenticationInfo</dfn>(<em>const</em> <em>char</em>* <dfn class="local col6 decl" id="76protocolStr" title='protocolStr' data-type='const char *' data-ref="76protocolStr" data-ref-filename="76protocolStr">protocolStr</dfn>, <em>const</em> <em>char</em>* <dfn class="local col7 decl" id="77hostStr" title='hostStr' data-type='const char *' data-ref="77hostStr" data-ref-filename="77hostStr">hostStr</dfn>, <span class='typedef' title='int32_t' data-type='int' data-ref="int32_t" data-ref-filename="int32_t">int32_t</span> <dfn class="local col8 decl" id="78port" title='port' data-type='int32_t' data-ref="78port" data-ref-filename="78port">port</dfn>, <em>const</em> <em>char</em>* <dfn class="local col9 decl" id="79schemeStr" title='schemeStr' data-type='const char *' data-ref="79schemeStr" data-ref-filename="79schemeStr">schemeStr</dfn>, <em>const</em> <em>char</em>* <dfn class="local col0 decl" id="80realmStr" title='realmStr' data-type='const char *' data-ref="80realmStr" data-ref-filename="80realmStr">realmStr</dfn>, <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html#WTF::CString" title='WTF::CString' data-ref="WTF::CString" data-ref-filename="WTF..CString">CString</a>&amp; <dfn class="local col1 decl" id="81username" title='username' data-type='WTF::CString &amp;' data-ref="81username" data-ref-filename="81username">username</dfn>, <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html#WTF::CString" title='WTF::CString' data-ref="WTF::CString" data-ref-filename="WTF..CString">CString</a>&amp; <dfn class="local col2 decl" id="82password" title='password' data-type='WTF::CString &amp;' data-ref="82password" data-ref-filename="82password">password</dfn>)</td></tr>
+<tr><th id="841">841</th><td>{</td></tr>
+<tr><th id="842">842</th><td>    <b>if</b> (!<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringCommon.h.html#_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_" title='WTF::equalLettersIgnoringASCIICase' data-ref="_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_" data-ref-filename="_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_">equalLettersIgnoringASCIICase</a>(<a class="local col6 ref" href="#76protocolStr" title='protocolStr' data-ref="76protocolStr" data-ref-filename="76protocolStr">protocolStr</a>, <q>"http"</q>) &amp;&amp; !<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringCommon.h.html#_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_" title='WTF::equalLettersIgnoringASCIICase' data-ref="_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_" data-ref-filename="_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_">equalLettersIgnoringASCIICase</a>(<a class="local col6 ref" href="#76protocolStr" title='protocolStr' data-ref="76protocolStr" data-ref-filename="76protocolStr">protocolStr</a>, <q>"https"</q>))</td></tr>
+<tr><th id="843">843</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="844">844</th><td></td></tr>
+<tr><th id="845">845</th><td>    NSString *<dfn class="local col3 decl" id="83host" title='host' data-type='NSString *' data-ref="83host" data-ref-filename="83host">host</dfn> = [NSString stringWithUTF8String:<a class="local col7 ref" href="#77hostStr" title='hostStr' data-ref="77hostStr" data-ref-filename="77hostStr">hostStr</a>];</td></tr>
+<tr><th id="846">846</th><td>    <b>if</b> (!<a class="local col7 ref" href="#77hostStr" title='hostStr' data-ref="77hostStr" data-ref-filename="77hostStr">hostStr</a>)</td></tr>
+<tr><th id="847">847</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="848">848</th><td>    </td></tr>
+<tr><th id="849">849</th><td>    NSString *<dfn class="local col4 decl" id="84protocol" title='protocol' data-type='NSString *' data-ref="84protocol" data-ref-filename="84protocol">protocol</dfn> = [NSString stringWithUTF8String:<a class="local col6 ref" href="#76protocolStr" title='protocolStr' data-ref="76protocolStr" data-ref-filename="76protocolStr">protocolStr</a>];</td></tr>
+<tr><th id="850">850</th><td>    <b>if</b> (!<a class="local col4 ref" href="#84protocol" title='protocol' data-ref="84protocol" data-ref-filename="84protocol">protocol</a>)</td></tr>
+<tr><th id="851">851</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="852">852</th><td>    </td></tr>
+<tr><th id="853">853</th><td>    NSString *<dfn class="local col5 decl" id="85realm" title='realm' data-type='NSString *' data-ref="85realm" data-ref-filename="85realm">realm</dfn> = [NSString stringWithUTF8String:<a class="local col0 ref" href="#80realmStr" title='realmStr' data-ref="80realmStr" data-ref-filename="80realmStr">realmStr</a>];</td></tr>
+<tr><th id="854">854</th><td>    <b>if</b> (!<a class="local col5 ref" href="#85realm" title='realm' data-ref="85realm" data-ref-filename="85realm">realm</a>)</td></tr>
+<tr><th id="855">855</th><td>        <b>return</b> <a class="macro" href="../../../../WebKitBuild/Debug/WebKitLegacy.framework/Versions/A/PrivateHeaders/npapi.h.html#692" title="(0 + 1)" data-ref="_M/NPERR_GENERIC_ERROR">NPERR_GENERIC_ERROR</a>;</td></tr>
+<tr><th id="856">856</th><td>    </td></tr>
+<tr><th id="857">857</th><td>    NSString *<dfn class="local col6 decl" id="86authenticationMethod" title='authenticationMethod' data-type='NSString *' data-ref="86authenticationMethod" data-ref-filename="86authenticationMethod">authenticationMethod</dfn> = <span class='ref' title='NSURLAuthenticationMethodDefault' data-ref="NSURLAuthenticationMethodDefault" data-ref-filename="NSURLAuthenticationMethodDefault">NSURLAuthenticationMethodDefault</span>;</td></tr>
+<tr><th id="858">858</th><td>    <b>if</b> (<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringCommon.h.html#_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_" title='WTF::equalLettersIgnoringASCIICase' data-ref="_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_" data-ref-filename="_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_">equalLettersIgnoringASCIICase</a>(<a class="local col6 ref" href="#76protocolStr" title='protocolStr' data-ref="76protocolStr" data-ref-filename="76protocolStr">protocolStr</a>, <q>"http"</q>)) {</td></tr>
+<tr><th id="859">859</th><td>        <b>if</b> (<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringCommon.h.html#_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_" title='WTF::equalLettersIgnoringASCIICase' data-ref="_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_" data-ref-filename="_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_">equalLettersIgnoringASCIICase</a>(<a class="local col9 ref" href="#79schemeStr" title='schemeStr' data-ref="79schemeStr" data-ref-filename="79schemeStr">schemeStr</a>, <q>"basic"</q>))</td></tr>
+<tr><th id="860">860</th><td>            <a class="local col6 ref" href="#86authenticationMethod" title='authenticationMethod' data-ref="86authenticationMethod" data-ref-filename="86authenticationMethod">authenticationMethod</a> = <span class='ref' title='NSURLAuthenticationMethodHTTPBasic' data-ref="NSURLAuthenticationMethodHTTPBasic" data-ref-filename="NSURLAuthenticationMethodHTTPBasic">NSURLAuthenticationMethodHTTPBasic</span>;</td></tr>
+<tr><th id="861">861</th><td>        <b>else</b> <b>if</b> (<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/StringCommon.h.html#_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_" title='WTF::equalLettersIgnoringASCIICase' data-ref="_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_" data-ref-filename="_ZN3WTF29equalLettersIgnoringASCIICaseEPKcRAT__S0_">equalLettersIgnoringASCIICase</a>(<a class="local col9 ref" href="#79schemeStr" title='schemeStr' data-ref="79schemeStr" data-ref-filename="79schemeStr">schemeStr</a>, <q>"digest"</q>))</td></tr>
+<tr><th id="862">862</th><td>            <a class="local col6 ref" href="#86authenticationMethod" title='authenticationMethod' data-ref="86authenticationMethod" data-ref-filename="86authenticationMethod">authenticationMethod</a> = <span class='ref' title='NSURLAuthenticationMethodHTTPDigest' data-ref="NSURLAuthenticationMethodHTTPDigest" data-ref-filename="NSURLAuthenticationMethodHTTPDigest">NSURLAuthenticationMethodHTTPDigest</span>;</td></tr>
+<tr><th id="863">863</th><td>    }</td></tr>
+<tr><th id="864">864</th><td>    </td></tr>
+<tr><th id="865">865</th><td>    <a class="type" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Forward.h.html#WTF::RetainPtr" title='WTF::RetainPtr' data-ref="WTF::RetainPtr" data-ref-filename="WTF..RetainPtr">RetainPtr</a>&lt;NSURLProtectionSpace&gt; <dfn class="local col7 decl" id="87protectionSpace" title='protectionSpace' data-type='RetainPtr&lt;NSURLProtectionSpace&gt;' data-ref="87protectionSpace" data-ref-filename="87protectionSpace">protectionSpace</dfn> = <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZN3WTF7adoptNSET_" title='WTF::adoptNS' data-ref="_ZN3WTF7adoptNSET_" data-ref-filename="_ZN3WTF7adoptNSET_">adoptNS</a>([[NSURLProtectionSpace alloc] initWithHost:<a class="local col3 ref" href="#83host" title='host' data-ref="83host" data-ref-filename="83host">host</a> port:<a class="local col8 ref" href="#78port" title='port' data-ref="78port" data-ref-filename="78port">port</a> protocol:<a class="local col4 ref" href="#84protocol" title='protocol' data-ref="84protocol" data-ref-filename="84protocol">protocol</a> realm:<a class="local col5 ref" href="#85realm" title='realm' data-ref="85realm" data-ref-filename="85realm">realm</a> authenticationMethod:<a class="local col6 ref" href="#86authenticationMethod" title='authenticationMethod' data-ref="86authenticationMethod" data-ref-filename="86authenticationMethod">authenticationMethod</a>]);</td></tr>
+<tr><th id="866">866</th><td>    </td></tr>
+<tr><th id="867">867</th><td>    NSURLCredential *<dfn class="local col8 decl" id="88credential" title='credential' data-type='NSURLCredential *' data-ref="88credential" data-ref-filename="88credential">credential</dfn> = <a class="type" href="../../WebCoreSupport/NetworkStorageSessionMap.h.html#NetworkStorageSessionMap" title='NetworkStorageSessionMap' data-ref="NetworkStorageSessionMap" data-ref-filename="NetworkStorageSessionMap">NetworkStorageSessionMap</a>::<a class="ref fn" href="../../WebCoreSupport/NetworkStorageSessionMap.h.html#_ZN24NetworkStorageSessionMap21defaultStorageSessionEv" title='NetworkStorageSessionMap::defaultStorageSession' data-ref="_ZN24NetworkStorageSessionMap21defaultStorageSessionEv" data-ref-filename="_ZN24NetworkStorageSessionMap21defaultStorageSessionEv">defaultStorageSession</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/NetworkStorageSession.h.html#_ZN7WebCore21NetworkStorageSession17credentialStorageEv" title='WebCore::NetworkStorageSession::credentialStorage' data-ref="_ZN7WebCore21NetworkStorageSession17credentialStorageEv" data-ref-filename="_ZN7WebCore21NetworkStorageSession17credentialStorageEv">credentialStorage</a>().<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CredentialStorage.h.html#_ZN7WebCore17CredentialStorage3getERKN3WTF6StringERKNS_15ProtectionSpaceE" title='WebCore::CredentialStorage::get' data-ref="_ZN7WebCore17CredentialStorage3getERKN3WTF6StringERKNS_15ProtectionSpaceE" data-ref-filename="_ZN7WebCore17CredentialStorage3getERKN3WTF6StringERKNS_15ProtectionSpaceE">get</a>(<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/WTFString.h.html#_ZN3WTF11emptyStringEv" title='WTF::emptyString' data-ref="_ZN3WTF11emptyStringEv" data-ref-filename="_ZN3WTF11emptyStringEv">emptyString</a>(), <a class="type" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ProtectionSpaceCocoa.h.html#WebCore::ProtectionSpace" title='WebCore::ProtectionSpace' data-ref="WebCore::ProtectionSpace" data-ref-filename="WebCore..ProtectionSpace">ProtectionSpace</a><a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/ProtectionSpaceCocoa.h.html#_ZN7WebCore15ProtectionSpaceC1EP20NSURLProtectionSpace" title='WebCore::ProtectionSpace::ProtectionSpace' data-ref="_ZN7WebCore15ProtectionSpaceC1EP20NSURLProtectionSpace" data-ref-filename="_ZN7WebCore15ProtectionSpaceC1EP20NSURLProtectionSpace">(</a><a class="local col7 ref" href="#87protectionSpace" title='protectionSpace' data-ref="87protectionSpace" data-ref-filename="87protectionSpace">protectionSpace</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZNK3WTF9RetainPtr3getEv" title='WTF::RetainPtr::get' data-ref="_ZNK3WTF9RetainPtr3getEv" data-ref-filename="_ZNK3WTF9RetainPtr3getEv">get</a>())).<a class="ref fn" href="../../../../WebKitBuild/Debug/WebCore.framework/Versions/A/PrivateHeaders/CredentialCocoa.h.html#_ZNK7WebCore10Credential12nsCredentialEv" title='WebCore::Credential::nsCredential' data-ref="_ZNK7WebCore10Credential12nsCredentialEv" data-ref-filename="_ZNK7WebCore10Credential12nsCredentialEv">nsCredential</a>();</td></tr>
+<tr><th id="868">868</th><td>    <b>if</b> (!<a class="local col8 ref" href="#88credential" title='credential' data-ref="88credential" data-ref-filename="88credential">credential</a>)</td></tr>
+<tr><th id="869">869</th><td>        <a class="local col8 ref" href="#88credential" title='credential' data-ref="88credential" data-ref-filename="88credential">credential</a> = [[NSURLCredentialStorage sharedCredentialStorage] defaultCredentialForProtectionSpace:<a class="local col7 ref" href="#87protectionSpace" title='protectionSpace' data-ref="87protectionSpace" data-ref-filename="87protectionSpace">protectionSpace</a>.<a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/RetainPtr.h.html#_ZNK3WTF9RetainPtr3getEv" title='WTF::RetainPtr::get' data-ref="_ZNK3WTF9RetainPtr3getEv" data-ref-filename="_ZNK3WTF9RetainPtr3getEv">get</a>()];</td></tr>
+<tr><th id="870">870</th><td>    <b>if</b> (!<a class="local col8 ref" href="#88credential" title='credential' data-ref="88credential" data-ref-filename="88credential">credential</a>)</td></tr>
+<tr><th id="871">871</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="872">872</th><td>  </td></tr>
+<tr><th id="873">873</th><td>    <b>if</b> (![<a class="local col8 ref" href="#88credential" title='credential' data-ref="88credential" data-ref-filename="88credential">credential</a> hasPassword])</td></tr>
+<tr><th id="874">874</th><td>        <b>return</b> <b>false</b>;</td></tr>
+<tr><th id="875">875</th><td>    </td></tr>
+<tr><th id="876">876</th><td>    <a class="local col1 ref" href="#81username" title='username' data-ref="81username" data-ref-filename="81username">username</a> <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html#59" title='WTF::CString::operator=' data-ref="_ZN3WTF7CStringaSEOS0_" data-ref-filename="_ZN3WTF7CStringaSEOS0_">=</a> <a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html#_ZN3WTF7CStringC1EPKc" title='WTF::CString::CString' data-ref="_ZN3WTF7CStringC1EPKc" data-ref-filename="_ZN3WTF7CStringC1EPKc"></a>[[<a class="local col8 ref" href="#88credential" title='credential' data-ref="88credential" data-ref-filename="88credential">credential</a> user] UTF8String];</td></tr>
+<tr><th id="877">877</th><td>    <a class="local col2 ref" href="#82password" title='password' data-ref="82password" data-ref-filename="82password">password</a> <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html#59" title='WTF::CString::operator=' data-ref="_ZN3WTF7CStringaSEOS0_" data-ref-filename="_ZN3WTF7CStringaSEOS0_">=</a> <a class="ref fn fake" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/text/CString.h.html#_ZN3WTF7CStringC1EPKc" title='WTF::CString::CString' data-ref="_ZN3WTF7CStringC1EPKc" data-ref-filename="_ZN3WTF7CStringC1EPKc"></a>[[<a class="local col8 ref" href="#88credential" title='credential' data-ref="88credential" data-ref-filename="88credential">credential</a> password] UTF8String];</td></tr>
+<tr><th id="878">878</th><td>    </td></tr>
+<tr><th id="879">879</th><td>    <b>return</b> <b>true</b>;</td></tr>
+<tr><th id="880">880</th><td>}</td></tr>
+<tr><th id="881">881</th><td></td></tr>
+<tr><th id="882">882</th><td><em>void</em> <dfn class="decl def fn" id="_ZN6WebKit27sendUserChangeNotificationsEv" title='WebKit::sendUserChangeNotifications' data-ref="_ZN6WebKit27sendUserChangeNotificationsEv" data-ref-filename="_ZN6WebKit27sendUserChangeNotificationsEv">sendUserChangeNotifications</dfn>()</td></tr>
+<tr><th id="883">883</th><td>{</td></tr>
+<tr><th id="884">884</th><td>    <em>auto</em> <dfn class="local col9 decl" id="89consoleConnectionChangeNotifyProc" title='consoleConnectionChangeNotifyProc' data-type='(lambda at /Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm:884:46)' data-ref="89consoleConnectionChangeNotifyProc" data-ref-filename="89consoleConnectionChangeNotifyProc">consoleConnectionChangeNotifyProc</dfn> = [](<a class="typedef" href="../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cg/CoreGraphicsSPI.h.html#195" title='CGSNotificationType' data-type='enum CGSNotificationType' data-ref="CGSNotificationType" data-ref-filename="CGSNotificationType">CGSNotificationType</a> <dfn class="local col0 decl" id="90type" title='type' data-type='CGSNotificationType' data-ref="90type" data-ref-filename="90type">type</dfn>, <a class="typedef" href="../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cg/CoreGraphicsSPI.h.html#CGSNotificationData" title='CGSNotificationData' data-type='void *' data-ref="CGSNotificationData" data-ref-filename="CGSNotificationData">CGSNotificationData</a>, <a class="typedef" href="../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cg/CoreGraphicsSPI.h.html#CGSByteCount" title='CGSByteCount' data-type='uint32_t' data-ref="CGSByteCount" data-ref-filename="CGSByteCount">CGSByteCount</a>, <a class="typedef" href="../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cg/CoreGraphicsSPI.h.html#CGSNotificationArg" title='CGSNotificationArg' data-type='void *' data-ref="CGSNotificationArg" data-ref-filename="CGSNotificationArg">CGSNotificationArg</a>) {</td></tr>
+<tr><th id="885">885</th><td>        NSString *<dfn class="local col1 decl" id="91notificationName" title='notificationName' data-type='NSString *' data-ref="91notificationName" data-ref-filename="91notificationName">notificationName</dfn> = <span class="macro" title="nullptr" data-ref="_M/nil">nil</span>;</td></tr>
+<tr><th id="886">886</th><td>        <b>if</b> (<a class="local col0 ref" href="#90type" title='type' data-ref="90type" data-ref-filename="90type">type</a> == <a class="ref" href="../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cg/CoreGraphicsSPI.h.html#kCGSessionConsoleConnect" title='kCGSessionConsoleConnect' data-ref="kCGSessionConsoleConnect" data-ref-filename="kCGSessionConsoleConnect">kCGSessionConsoleConnect</a>)</td></tr>
+<tr><th id="887">887</th><td>            <a class="local col1 ref" href="#91notificationName" title='notificationName' data-ref="91notificationName" data-ref-filename="91notificationName">notificationName</a> = <a class="macro" href="#66" title="@&quot;WebLoginWindowDidSwitchToUserNotification&quot;" data-ref="_M/LoginWindowDidSwitchToUserNotification">LoginWindowDidSwitchToUserNotification</a>;</td></tr>
+<tr><th id="888">888</th><td>        <b>else</b> <b>if</b> (<a class="local col0 ref" href="#90type" title='type' data-ref="90type" data-ref-filename="90type">type</a> == <a class="ref" href="../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cg/CoreGraphicsSPI.h.html#kCGSessionConsoleDisconnect" title='kCGSessionConsoleDisconnect' data-ref="kCGSessionConsoleDisconnect" data-ref-filename="kCGSessionConsoleDisconnect">kCGSessionConsoleDisconnect</a>)</td></tr>
+<tr><th id="889">889</th><td>            <a class="local col1 ref" href="#91notificationName" title='notificationName' data-ref="91notificationName" data-ref-filename="91notificationName">notificationName</a> = <a class="macro" href="#65" title="@&quot;WebLoginWindowDidSwitchFromUserNotification&quot;" data-ref="_M/LoginWindowDidSwitchFromUserNotification">LoginWindowDidSwitchFromUserNotification</a>;</td></tr>
+<tr><th id="890">890</th><td>        <b>else</b></td></tr>
+<tr><th id="891">891</th><td>            <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/Assertions.h.html#368" title="do { WTFReportAssertionFailure(&quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm&quot;, 891, __PRETTY_FUNCTION__, 0); do { WTF::isIntegralOrPointerType(); compilerFenceForCrash(); WTFCrashWithInfo(891, &quot;/Volumes/ExternalSSD/Projects/webkit/WebKit/Source/WebKitLegacy/mac/Plugins/WebBaseNetscapePluginView.mm&quot;, __PRETTY_FUNCTION__, 2953); } while (false); } while (0)" data-ref="_M/ASSERT_NOT_REACHED">ASSERT_NOT_REACHED</a>();</td></tr>
+<tr><th id="892">892</th><td>        [[NSNotificationCenter defaultCenter] postNotificationName:<a class="local col1 ref" href="#91notificationName" title='notificationName' data-ref="91notificationName" data-ref-filename="91notificationName">notificationName</a> object:<span class="macro" title="nullptr" data-ref="_M/nil">nil</span>];</td></tr>
+<tr><th id="893">893</th><td>    };</td></tr>
+<tr><th id="894">894</th><td></td></tr>
+<tr><th id="895">895</th><td>    <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cg/CoreGraphicsSPI.h.html#CGSRegisterNotifyProc" title='CGSRegisterNotifyProc' data-ref="CGSRegisterNotifyProc" data-ref-filename="CGSRegisterNotifyProc">CGSRegisterNotifyProc</a>(<a class="tu ref fn fake" href="#884" title='WebKit::sendUserChangeNotifications()::(anonymous class)::operator void (*)(CGSNotificationType, void *, unsigned int, void *)' data-use='c' data-ref="_ZZN6WebKit27sendUserChangeNotificationsEvENK3$_0cvPFv19CGSNotificationTypePvjS2_EEv" data-ref-filename="_ZZN6WebKit27sendUserChangeNotificationsEvENK3$_0cvPFv19CGSNotificationTypePvjS2_EEv"></a><a class="local col9 ref" href="#89consoleConnectionChangeNotifyProc" title='consoleConnectionChangeNotifyProc' data-ref="89consoleConnectionChangeNotifyProc" data-ref-filename="89consoleConnectionChangeNotifyProc">consoleConnectionChangeNotifyProc</a>, <a class="ref" href="../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cg/CoreGraphicsSPI.h.html#kCGSessionConsoleConnect" title='kCGSessionConsoleConnect' data-ref="kCGSessionConsoleConnect" data-ref-filename="kCGSessionConsoleConnect">kCGSessionConsoleConnect</a>, <b>nullptr</b>);</td></tr>
+<tr><th id="896">896</th><td>    <a class="ref fn" href="../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cg/CoreGraphicsSPI.h.html#CGSRegisterNotifyProc" title='CGSRegisterNotifyProc' data-ref="CGSRegisterNotifyProc" data-ref-filename="CGSRegisterNotifyProc">CGSRegisterNotifyProc</a>(<a class="tu ref fn fake" href="#884" title='WebKit::sendUserChangeNotifications()::(anonymous class)::operator void (*)(CGSNotificationType, void *, unsigned int, void *)' data-use='c' data-ref="_ZZN6WebKit27sendUserChangeNotificationsEvENK3$_0cvPFv19CGSNotificationTypePvjS2_EEv" data-ref-filename="_ZZN6WebKit27sendUserChangeNotificationsEvENK3$_0cvPFv19CGSNotificationTypePvjS2_EEv"></a><a class="local col9 ref" href="#89consoleConnectionChangeNotifyProc" title='consoleConnectionChangeNotifyProc' data-ref="89consoleConnectionChangeNotifyProc" data-ref-filename="89consoleConnectionChangeNotifyProc">consoleConnectionChangeNotifyProc</a>, <a class="ref" href="../../../../WebKitBuild/Debug/usr/local/include/pal/spi/cg/CoreGraphicsSPI.h.html#kCGSessionConsoleDisconnect" title='kCGSessionConsoleDisconnect' data-ref="kCGSessionConsoleDisconnect" data-ref-filename="kCGSessionConsoleDisconnect">kCGSessionConsoleDisconnect</a>, <b>nullptr</b>);</td></tr>
+<tr><th id="897">897</th><td>}</td></tr>
+<tr><th id="898">898</th><td></td></tr>
+<tr><th id="899">899</th><td>} <i>// namespace WebKit</i></td></tr>
+<tr><th id="900">900</th><td></td></tr>
+<tr><th id="901">901</th><td><u>#<span data-ppcond="29">endif</span> //  ENABLE(NETSCAPE_PLUGIN_API)</u></td></tr>
+<tr><th id="902">902</th><td></td></tr>
+<tr><th id="903">903</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

@@ -1,0 +1,154 @@
+<!doctype html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>DragDropInteractionState.h source code [webkit/Source/WebKit/UIProcess/ios/DragDropInteractionState.h] - Woboq Code Browser</title>
+<link rel="stylesheet" href="../../../../../../data/qtcreator.css" title="QtCreator"/>
+<link rel="alternate stylesheet" href="../../../../../../data/kdevelop.css" title="KDevelop"/>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="../../../../../../data/jquery/jquery-ui.min.js"></script>
+<script>var file = 'webkit/Source/WebKit/UIProcess/ios/DragDropInteractionState.h'; var root_path = '../../../../..'; var data_path = '../../../../../../data'; var ecma_script_api_version = 2;</script>
+<script src='../../../../../../data/codebrowser.js'></script>
+</head>
+<body><div id='header'><h1 id='breadcrumb'><span>Browse the source code of </span><a href='../../../..'>webkit</a>/<a href='../../..'>Source</a>/<a href='../..'>WebKit</a>/<a href='..'>UIProcess</a>/<a href='./'>ios</a>/<a href='DragDropInteractionState.h.html'>DragDropInteractionState.h</a></h1></div>
+<hr/><div id='content'><table class="code">
+<tr><th id="1">1</th><td><i>/*</i></td></tr>
+<tr><th id="2">2</th><td><i> * Copyright (C) 2017 Apple Inc. All rights reserved.</i></td></tr>
+<tr><th id="3">3</th><td><i> *</i></td></tr>
+<tr><th id="4">4</th><td><i> * Redistribution and use in source and binary forms, with or without</i></td></tr>
+<tr><th id="5">5</th><td><i> * modification, are permitted provided that the following conditions</i></td></tr>
+<tr><th id="6">6</th><td><i> * are met:</i></td></tr>
+<tr><th id="7">7</th><td><i> * 1. Redistributions of source code must retain the above copyright</i></td></tr>
+<tr><th id="8">8</th><td><i> *    notice, this list of conditions and the following disclaimer.</i></td></tr>
+<tr><th id="9">9</th><td><i> * 2. Redistributions in binary form must reproduce the above copyright</i></td></tr>
+<tr><th id="10">10</th><td><i> *    notice, this list of conditions and the following disclaimer in the</i></td></tr>
+<tr><th id="11">11</th><td><i> *    documentation and/or other materials provided with the distribution.</i></td></tr>
+<tr><th id="12">12</th><td><i> *</i></td></tr>
+<tr><th id="13">13</th><td><i> * THIS SOFTWARE IS PROVIDED BY APPLE INC. AND ITS CONTRIBUTORS ``AS IS''</i></td></tr>
+<tr><th id="14">14</th><td><i> * AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,</i></td></tr>
+<tr><th id="15">15</th><td><i> * THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR</i></td></tr>
+<tr><th id="16">16</th><td><i> * PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL APPLE INC. OR ITS CONTRIBUTORS</i></td></tr>
+<tr><th id="17">17</th><td><i> * BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR</i></td></tr>
+<tr><th id="18">18</th><td><i> * CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF</i></td></tr>
+<tr><th id="19">19</th><td><i> * SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS</i></td></tr>
+<tr><th id="20">20</th><td><i> * INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN</i></td></tr>
+<tr><th id="21">21</th><td><i> * CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)</i></td></tr>
+<tr><th id="22">22</th><td><i> * ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF</i></td></tr>
+<tr><th id="23">23</th><td><i> * THE POSSIBILITY OF SUCH DAMAGE.</i></td></tr>
+<tr><th id="24">24</th><td><i> */</i></td></tr>
+<tr><th id="25">25</th><td></td></tr>
+<tr><th id="26">26</th><td><u>#pragma once</u></td></tr>
+<tr><th id="27">27</th><td></td></tr>
+<tr><th id="28">28</th><td><u>#<span data-ppcond="28">if</span> <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformLegacy.h.html#38" title="(defined WTF_PLATFORM_IOS_FAMILY &amp;&amp; WTF_PLATFORM_IOS_FAMILY)" data-ref="_M/PLATFORM">PLATFORM</a>(IOS_FAMILY) &amp;&amp; <a class="macro" href="../../../../WebKitBuild/Debug/usr/local/include/wtf/PlatformEnable.h.html#36" title="(defined 1 &amp;&amp; 1)" data-ref="_M/ENABLE">ENABLE</a>(DRAG_SUPPORT)</u></td></tr>
+<tr><th id="29">29</th><td></td></tr>
+<tr><th id="30">30</th><td><u>#import "UIKitSPI.h"</u></td></tr>
+<tr><th id="31">31</th><td><u>#import &lt;WebCore/DragActions.h&gt;</u></td></tr>
+<tr><th id="32">32</th><td><u>#import &lt;WebCore/DragData.h&gt;</u></td></tr>
+<tr><th id="33">33</th><td><u>#import &lt;WebCore/Path.h&gt;</u></td></tr>
+<tr><th id="34">34</th><td><u>#import &lt;WebCore/TextIndicator.h&gt;</u></td></tr>
+<tr><th id="35">35</th><td><u>#import &lt;WebCore/WebItemProviderPasteboard.h&gt;</u></td></tr>
+<tr><th id="36">36</th><td><u>#import &lt;wtf/BlockPtr.h&gt;</u></td></tr>
+<tr><th id="37">37</th><td><u>#import &lt;wtf/RetainPtr.h&gt;</u></td></tr>
+<tr><th id="38">38</th><td><u>#import &lt;wtf/URL.h&gt;</u></td></tr>
+<tr><th id="39">39</th><td><u>#import &lt;wtf/Vector.h&gt;</u></td></tr>
+<tr><th id="40">40</th><td></td></tr>
+<tr><th id="41">41</th><td><b>namespace</b> WebCore {</td></tr>
+<tr><th id="42">42</th><td><b>struct</b> DragItem;</td></tr>
+<tr><th id="43">43</th><td><b>struct</b> TextIndicatorData;</td></tr>
+<tr><th id="44">44</th><td>}</td></tr>
+<tr><th id="45">45</th><td></td></tr>
+<tr><th id="46">46</th><td><b>namespace</b> WebKit {</td></tr>
+<tr><th id="47">47</th><td></td></tr>
+<tr><th id="48">48</th><td><b>struct</b> DragSourceState {</td></tr>
+<tr><th id="49">49</th><td>    OptionSet&lt;WebCore::DragSourceAction&gt; action;</td></tr>
+<tr><th id="50">50</th><td>    CGPoint adjustedOrigin { CGPointZero };</td></tr>
+<tr><th id="51">51</th><td>    CGRect dragPreviewFrameInRootViewCoordinates { CGRectZero };</td></tr>
+<tr><th id="52">52</th><td>    RetainPtr&lt;UIImage&gt; image;</td></tr>
+<tr><th id="53">53</th><td>    std::optional&lt;WebCore::TextIndicatorData&gt; indicatorData;</td></tr>
+<tr><th id="54">54</th><td>    std::optional&lt;WebCore::Path&gt; visiblePath;</td></tr>
+<tr><th id="55">55</th><td>    String linkTitle;</td></tr>
+<tr><th id="56">56</th><td>    URL linkURL;</td></tr>
+<tr><th id="57">57</th><td>    <em>bool</em> possiblyNeedsDragPreviewUpdate { <b>true</b> };</td></tr>
+<tr><th id="58">58</th><td></td></tr>
+<tr><th id="59">59</th><td>    NSInteger itemIdentifier { <var>0</var> };</td></tr>
+<tr><th id="60">60</th><td>};</td></tr>
+<tr><th id="61">61</th><td></td></tr>
+<tr><th id="62">62</th><td><b>struct</b> ItemAndPreview {</td></tr>
+<tr><th id="63">63</th><td>    RetainPtr&lt;UIDragItem&gt; item;</td></tr>
+<tr><th id="64">64</th><td>    RetainPtr&lt;UITargetedDragPreview&gt; preview;</td></tr>
+<tr><th id="65">65</th><td>};</td></tr>
+<tr><th id="66">66</th><td></td></tr>
+<tr><th id="67">67</th><td><b>struct</b> ItemAndPreviewProvider {</td></tr>
+<tr><th id="68">68</th><td>    RetainPtr&lt;UIDragItem&gt; item;</td></tr>
+<tr><th id="69">69</th><td>    BlockPtr&lt;<em>void</em>(UITargetedDragPreview *)&gt; provider;</td></tr>
+<tr><th id="70">70</th><td>};</td></tr>
+<tr><th id="71">71</th><td></td></tr>
+<tr><th id="72">72</th><td><b>class</b> DragDropInteractionState {</td></tr>
+<tr><th id="73">73</th><td><b>public</b>:</td></tr>
+<tr><th id="74">74</th><td>    <em>bool</em> anyActiveDragSourceIs(WebCore::DragSourceAction) <em>const</em>;</td></tr>
+<tr><th id="75">75</th><td></td></tr>
+<tr><th id="76">76</th><td>    <i>// These helper methods are unique to UIDragInteraction.</i></td></tr>
+<tr><th id="77">77</th><td>    <em>void</em> prepareForDragSession(id &lt;UIDragSession&gt;, dispatch_block_t completionHandler);</td></tr>
+<tr><th id="78">78</th><td>    <em>void</em> dragSessionWillBegin();</td></tr>
+<tr><th id="79">79</th><td>    <em>void</em> stageDragItem(<em>const</em> WebCore::DragItem&amp;, UIImage *);</td></tr>
+<tr><th id="80">80</th><td>    <em>bool</em> hasStagedDragSource() <em>const</em>;</td></tr>
+<tr><th id="81">81</th><td>    <em>const</em> DragSourceState&amp; stagedDragSource() <em>const</em> { <b>return</b> m_stagedDragSource.value(); }</td></tr>
+<tr><th id="82">82</th><td>    <b>enum</b> <b>class</b> DidBecomeActive { No, Yes };</td></tr>
+<tr><th id="83">83</th><td>    <em>void</em> clearStagedDragSource(DidBecomeActive = DidBecomeActive::No);</td></tr>
+<tr><th id="84">84</th><td>    UITargetedDragPreview *previewForDragItem(UIDragItem *, UIView *contentView, UIView *previewContainer) <em>const</em>;</td></tr>
+<tr><th id="85">85</th><td>    <em>void</em> dragSessionWillDelaySetDownAnimation(dispatch_block_t completion);</td></tr>
+<tr><th id="86">86</th><td>    <em>bool</em> shouldRequestAdditionalItemForDragSession(id &lt;UIDragSession&gt;) <em>const</em>;</td></tr>
+<tr><th id="87">87</th><td>    <em>void</em> dragSessionWillRequestAdditionalItem(<em>void</em> (^completion)(NSArray &lt;UIDragItem *&gt; *));</td></tr>
+<tr><th id="88">88</th><td></td></tr>
+<tr><th id="89">89</th><td>    <i>// These helper methods are unique to UIDropInteraction.</i></td></tr>
+<tr><th id="90">90</th><td>    <em>void</em> dropSessionDidEnterOrUpdate(id &lt;UIDropSession&gt;, <em>const</em> WebCore::DragData&amp;);</td></tr>
+<tr><th id="91">91</th><td>    <em>void</em> dropSessionDidExit() { m_dropSession = nil; }</td></tr>
+<tr><th id="92">92</th><td>    <em>void</em> dropSessionWillPerformDrop() { m_isPerformingDrop = <b>true</b>; }</td></tr>
+<tr><th id="93">93</th><td></td></tr>
+<tr><th id="94">94</th><td>    <i>// This is invoked when both drag and drop interactions are no longer active.</i></td></tr>
+<tr><th id="95">95</th><td>    <em>void</em> dragAndDropSessionsDidEnd();</td></tr>
+<tr><th id="96">96</th><td></td></tr>
+<tr><th id="97">97</th><td>    CGPoint adjustedPositionForDragEnd() <em>const</em> { <b>return</b> m_adjustedPositionForDragEnd; }</td></tr>
+<tr><th id="98">98</th><td>    <em>bool</em> didBeginDragging() <em>const</em> { <b>return</b> m_didBeginDragging; }</td></tr>
+<tr><th id="99">99</th><td>    <em>bool</em> isPerformingDrop() <em>const</em> { <b>return</b> m_isPerformingDrop; }</td></tr>
+<tr><th id="100">100</th><td>    id&lt;UIDragSession&gt; dragSession() <em>const</em> { <b>return</b> m_dragSession.get(); }</td></tr>
+<tr><th id="101">101</th><td>    id&lt;UIDropSession&gt; dropSession() <em>const</em> { <b>return</b> m_dropSession.get(); }</td></tr>
+<tr><th id="102">102</th><td>    BlockPtr&lt;<em>void</em>()&gt; takeDragStartCompletionBlock() { <b>return</b> WTFMove(m_dragStartCompletionBlock); }</td></tr>
+<tr><th id="103">103</th><td>    BlockPtr&lt;<em>void</em>()&gt; takeDragCancelSetDownBlock() { <b>return</b> WTFMove(m_dragCancelSetDownBlock); }</td></tr>
+<tr><th id="104">104</th><td>    BlockPtr&lt;<em>void</em>(NSArray&lt;UIDragItem *&gt; *)&gt; takeAddDragItemCompletionBlock() { <b>return</b> WTFMove(m_addDragItemCompletionBlock); }</td></tr>
+<tr><th id="105">105</th><td></td></tr>
+<tr><th id="106">106</th><td>    <em>void</em> setDefaultDropPreview(UIDragItem *, UITargetedDragPreview *);</td></tr>
+<tr><th id="107">107</th><td>    <em>void</em> prepareForDelayedDropPreview(UIDragItem *, <em>void</em>(^provider)(UITargetedDragPreview *preview));</td></tr>
+<tr><th id="108">108</th><td>    <em>void</em> deliverDelayedDropPreview(UIView *contentView, UIView *previewContainer, <em>const</em> WebCore::TextIndicatorData&amp;);</td></tr>
+<tr><th id="109">109</th><td>    <em>void</em> deliverDelayedDropPreview(UIView *contentView, CGRect unobscuredContentRect, NSArray&lt;UIDragItem *&gt; *, <em>const</em> Vector&lt;WebCore::IntRect&gt;&amp; placeholderRects);</td></tr>
+<tr><th id="110">110</th><td>    <em>void</em> clearAllDelayedItemPreviewProviders();</td></tr>
+<tr><th id="111">111</th><td></td></tr>
+<tr><th id="112">112</th><td><b>private</b>:</td></tr>
+<tr><th id="113">113</th><td>    <em>void</em> updatePreviewsForActiveDragSources();</td></tr>
+<tr><th id="114">114</th><td>    std::optional&lt;DragSourceState&gt; activeDragSourceForItem(UIDragItem *) <em>const</em>;</td></tr>
+<tr><th id="115">115</th><td>    UITargetedDragPreview *defaultDropPreview(UIDragItem *) <em>const</em>;</td></tr>
+<tr><th id="116">116</th><td>    BlockPtr&lt;<em>void</em>(UITargetedDragPreview *)&gt; dropPreviewProvider(UIDragItem *);</td></tr>
+<tr><th id="117">117</th><td></td></tr>
+<tr><th id="118">118</th><td>    CGPoint m_lastGlobalPosition { CGPointZero };</td></tr>
+<tr><th id="119">119</th><td>    CGPoint m_adjustedPositionForDragEnd { CGPointZero };</td></tr>
+<tr><th id="120">120</th><td>    <em>bool</em> m_didBeginDragging { <b>false</b> };</td></tr>
+<tr><th id="121">121</th><td>    <em>bool</em> m_isPerformingDrop { <b>false</b> };</td></tr>
+<tr><th id="122">122</th><td>    RetainPtr&lt;id &lt;UIDragSession&gt;&gt; m_dragSession;</td></tr>
+<tr><th id="123">123</th><td>    RetainPtr&lt;id &lt;UIDropSession&gt;&gt; m_dropSession;</td></tr>
+<tr><th id="124">124</th><td>    BlockPtr&lt;<em>void</em>()&gt; m_dragStartCompletionBlock;</td></tr>
+<tr><th id="125">125</th><td>    BlockPtr&lt;<em>void</em>()&gt; m_dragCancelSetDownBlock;</td></tr>
+<tr><th id="126">126</th><td>    BlockPtr&lt;<em>void</em>(NSArray&lt;UIDragItem *&gt; *)&gt; m_addDragItemCompletionBlock;</td></tr>
+<tr><th id="127">127</th><td></td></tr>
+<tr><th id="128">128</th><td>    std::optional&lt;DragSourceState&gt; m_stagedDragSource;</td></tr>
+<tr><th id="129">129</th><td>    Vector&lt;DragSourceState&gt; m_activeDragSources;</td></tr>
+<tr><th id="130">130</th><td>    Vector&lt;ItemAndPreviewProvider&gt; m_delayedItemPreviewProviders;</td></tr>
+<tr><th id="131">131</th><td>    Vector&lt;ItemAndPreview&gt; m_defaultDropPreviews;</td></tr>
+<tr><th id="132">132</th><td>};</td></tr>
+<tr><th id="133">133</th><td></td></tr>
+<tr><th id="134">134</th><td>} <i>// namespace WebKit</i></td></tr>
+<tr><th id="135">135</th><td></td></tr>
+<tr><th id="136">136</th><td><u>#<span data-ppcond="28">endif</span> // PLATFORM(IOS_FAMILY) &amp;&amp; ENABLE(DRAG_SUPPORT)</u></td></tr>
+<tr><th id="137">137</th><td></td></tr>
+</table><hr/><p id='footer'>
+Generated while processing <a href='../../../../WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource45-mm.mm.html'>webkit/WebKitBuild/Debug/DerivedSources/WebKit2/unified-sources/UnifiedSource45-mm.mm</a><br/>Generated on <em>2021-Jul-06</em> from project webkit<br />Powered by <a href='https://woboq.com'><img alt='Woboq' src='https://code.woboq.org/woboq-16.png' width='41' height='16' /></a> <a href='https://code.woboq.org'>Code Browser</a> 2.1
+<br/>Generator usage only permitted with license.</p>
+</div></body></html>

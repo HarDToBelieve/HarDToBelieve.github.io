@@ -1,0 +1,68 @@
+<dec f='webkit/Source/JavaScriptCore/runtime/ArrayConventions.h' l='57'/>
+<doc f='webkit/Source/JavaScriptCore/runtime/ArrayConventions.h' l='29'>// Overview of JSArray
+//
+// Properties of JSArray objects may be stored in one of three locations:
+//   * The regular JSObject property map.
+//   * A storage vector.
+//   * A sparse map of array entries.
+//
+// Properties with non-numeric identifiers, with identifiers that are not representable
+// as an unsigned integer, or where the value is greater than  MAX_ARRAY_INDEX
+// (specifically, this is only one property - the value 0xFFFFFFFFU as an unsigned 32-bit
+// integer) are not considered array indices and will be stored in the JSObject property map.
+//
+// All properties with a numeric identifier, representable as an unsigned integer i,
+// where (i &lt;= MAX_ARRAY_INDEX), are an array index and will be stored in either the
+// storage vector or the sparse map. An array index i will be handled in the following
+// fashion:
+//
+//   * Where (i &lt; MIN_SPARSE_ARRAY_INDEX) the value will be stored in the storage vector,
+//     unless the array is in SparseMode in which case all properties go into the map.
+//   * Where (MIN_SPARSE_ARRAY_INDEX &lt;= i &lt;= MAX_STORAGE_VECTOR_INDEX) the value will either
+//     be stored in the storage vector or in the sparse array, depending on the density of
+//     data that would be stored in the vector (a vector being used where at least
+//     (1 / minDensityMultiplier) of the entries would be populated).
+//   * Where (MAX_STORAGE_VECTOR_INDEX &lt; i &lt;= MAX_ARRAY_INDEX) the value will always be stored
+//     in the sparse array.
+
+// Define the maximum storage vector length to be 2^32 / sizeof(JSValue) / 2 to ensure that
+// there is no risk of overflow.</doc>
+<use f='webkit/Source/JavaScriptCore/runtime/JSObject.h' l='1076' u='c'/>
+<use f='webkit/Source/JavaScriptCore/runtime/JSArray.h' l='243' u='c'/>
+<use f='webkit/Source/JavaScriptCore/dfg/DFGSpeculativeJIT.cpp' l='9042' u='c'/>
+<use f='webkit/Source/JavaScriptCore/ftl/FTLLowerDFGToB3.cpp' l='7708' u='c'/>
+<use f='webkit/Source/JavaScriptCore/ftl/FTLLowerDFGToB3.cpp' l='7762' u='c'/>
+<use f='webkit/Source/JavaScriptCore/ftl/FTLLowerDFGToB3.cpp' l='7836' u='c'/>
+<use f='webkit/Source/JavaScriptCore/ftl/FTLLowerDFGToB3.cpp' l='16209' u='c'/>
+<use f='webkit/Source/JavaScriptCore/ftl/FTLLowerDFGToB3.cpp' l='16218' u='c'/>
+<dec f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/ArrayConventions.h' l='57'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSObject.h' l='1076' u='c'/>
+<use f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/JSArray.h' l='243' u='c'/>
+<doc f='webkit/WebKitBuild/Debug/JavaScriptCore.framework/Versions/A/PrivateHeaders/ArrayConventions.h' l='29'>// Overview of JSArray
+//
+// Properties of JSArray objects may be stored in one of three locations:
+//   * The regular JSObject property map.
+//   * A storage vector.
+//   * A sparse map of array entries.
+//
+// Properties with non-numeric identifiers, with identifiers that are not representable
+// as an unsigned integer, or where the value is greater than  MAX_ARRAY_INDEX
+// (specifically, this is only one property - the value 0xFFFFFFFFU as an unsigned 32-bit
+// integer) are not considered array indices and will be stored in the JSObject property map.
+//
+// All properties with a numeric identifier, representable as an unsigned integer i,
+// where (i &lt;= MAX_ARRAY_INDEX), are an array index and will be stored in either the
+// storage vector or the sparse map. An array index i will be handled in the following
+// fashion:
+//
+//   * Where (i &lt; MIN_SPARSE_ARRAY_INDEX) the value will be stored in the storage vector,
+//     unless the array is in SparseMode in which case all properties go into the map.
+//   * Where (MIN_SPARSE_ARRAY_INDEX &lt;= i &lt;= MAX_STORAGE_VECTOR_INDEX) the value will either
+//     be stored in the storage vector or in the sparse array, depending on the density of
+//     data that would be stored in the vector (a vector being used where at least
+//     (1 / minDensityMultiplier) of the entries would be populated).
+//   * Where (MAX_STORAGE_VECTOR_INDEX &lt; i &lt;= MAX_ARRAY_INDEX) the value will always be stored
+//     in the sparse array.
+
+// Define the maximum storage vector length to be 2^32 / sizeof(JSValue) / 2 to ensure that
+// there is no risk of overflow.</doc>
